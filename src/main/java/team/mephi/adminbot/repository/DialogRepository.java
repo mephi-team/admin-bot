@@ -10,16 +10,16 @@ import java.util.List;
 
 @Repository
 public interface DialogRepository extends JpaRepository<Dialog, Long> {
-    long countByCreatedAtAfter(LocalDateTime dateTime);
+    long countByLastMessageAtAfter(LocalDateTime dateTime);
 
-    @Query("SELECT d FROM Dialog d WHERE d.startedAt >= :oneWeekAgo")
+    @Query("SELECT d FROM Dialog d WHERE d.lastMessageAt >= :oneWeekAgo")
     List<Dialog> findLastWeekDialogs(LocalDateTime oneWeekAgo);
 
     // Загружаем диалоги с пользователями (без сообщений — lazy loading)
-    @Query("SELECT d FROM Dialog d ORDER BY d.startedAt DESC")
+    @Query("SELECT d FROM Dialog d ORDER BY d.lastMessageAt DESC")
     List<Dialog> findAllWithUsers();
 
     // Поиск по имени пользователя или содержимому сообщений (упрощённо — только по имени)
-    @Query("SELECT d FROM Dialog d WHERE LOWER(d.userName) LIKE LOWER(CONCAT('%', :query, '%'))")
+    @Query("SELECT d FROM Dialog d LEFT JOIN FETCH d.user WHERE LOWER(d.user.name) LIKE LOWER(CONCAT('%', :query, '%'))")
     List<Dialog> searchByUserName(String query);
 }

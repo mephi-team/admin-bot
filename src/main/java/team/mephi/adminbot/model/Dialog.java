@@ -14,18 +14,23 @@ public class Dialog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Column(nullable = false)
-    private String userName;
+    private LocalDateTime lastMessageAt = LocalDateTime.now();
+
+    @Column(nullable = false)
+    private Integer unreadCount = 0;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "direction_id", nullable = false)
+    private Direction direction;
+
+    @Column(nullable = false)
+    private String status;
 
     @OneToMany(mappedBy = "dialog", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Message> messages;
-
-    @Column(nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
-
-    @Column(nullable = false)
-    private LocalDateTime startedAt = LocalDateTime.now();
 }

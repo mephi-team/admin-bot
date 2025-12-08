@@ -33,7 +33,7 @@ public class AnalyticsController {
 
         // Извлекаем даты
         List<LocalDate> dates = dialogs.stream()
-                .map(d -> d.getStartedAt().toLocalDate())
+                .map(d -> d.getLastMessageAt().toLocalDate())
                 .collect(Collectors.toList());
 
         // Создаём таблицу в Tablesaw

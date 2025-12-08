@@ -28,7 +28,7 @@ public class MainController {
         long totalUsers = userRepository.count();
 
         // Активные диалоги (за последние 24 часа)
-        long activeDialogs = dialogRepository.countByCreatedAtAfter(LocalDateTime.now().minusHours(24));
+        long activeDialogs = dialogRepository.countByLastMessageAtAfter(LocalDateTime.now().minusHours(24));
 
         // Новые вопросы (за последнюю неделю)
         long newQuestions = questionRepository.countByCreatedAtAfter(LocalDateTime.now().minusDays(7));

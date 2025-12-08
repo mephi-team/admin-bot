@@ -5,10 +5,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import team.mephi.adminbot.model.*;
-import team.mephi.adminbot.repository.BroadcastRepository;
-import team.mephi.adminbot.repository.DialogRepository;
-import team.mephi.adminbot.repository.QuestionRepository;
-import team.mephi.adminbot.repository.UserRepository;
+import team.mephi.adminbot.repository.*;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -19,6 +16,9 @@ import java.util.Random;
 
 @Configuration
 public class DataInitializer {
+
+    @Autowired
+    private DirectionRepository directionRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -35,6 +35,7 @@ public class DataInitializer {
     @Bean
     public ApplicationRunner initTestData() {
         return args -> {
+            boolean hasDirections = directionRepository.count() > 0;
             boolean hasUsers = userRepository.count() > 0;
             boolean hasDialogs = dialogRepository.count() > 0;
             boolean hasQuestions = questionRepository.count() > 0;
@@ -43,6 +44,7 @@ public class DataInitializer {
             if (!hasUsers || !hasDialogs || !hasQuestions || !hasBroadcasts) {
                 System.out.println("🔁 Предзаполнение БД тестовыми данными...");
 
+                if (!hasDirections) initDirections();
                 if (!hasUsers) initUsers();
                 if (!hasQuestions) initQuestions();
                 if (!hasBroadcasts) initBroadcasts();
@@ -51,6 +53,18 @@ public class DataInitializer {
                 System.out.println("✅ Тестовые данные успешно созданы.");
             }
         };
+    }
+
+    private void initDirections() {
+        List<Direction> directions = Arrays.asList(
+                Direction.builder().code("java").name("Java").build(),
+                Direction.builder().code("analytics").name("Analytics").build(),
+                Direction.builder().code("python").name("Python").build(),
+                Direction.builder().code("cpp").name("C++").build(),
+                Direction.builder().code("js").name("JavaScrypt").build()
+        );
+        directionRepository.saveAll(directions);
+        System.out.println("  → Создано 5 направлений");
     }
 
     private void initUsers() {
@@ -97,10 +111,12 @@ public class DataInitializer {
         for (User user : users) {
             // Создаём 1–3 диалога на пользователя
             int dialogCount = 1 + random.nextInt(3);
+            long direction = 1 + random.nextLong(4);
             for (int i = 0; i < dialogCount; i++) {
                 Dialog dialog = new Dialog();
-                dialog.setUserId(user.getExternalId());
-                dialog.setUserName(user.getName());
+                dialog.setUser(user);
+                dialog.setDirection(directionRepository.findById(direction).orElseThrow());
+                dialog.setStatus("active");
 
                 // Случайная дата за последние 10 дней
                 long randomDays = random.nextInt(10);
@@ -109,7 +125,7 @@ public class DataInitializer {
                         .minusDays(randomDays)
                         .minusHours(randomHours)
                         .truncatedTo(ChronoUnit.MINUTES);
-                dialog.setStartedAt(startedAt);
+                dialog.setLastMessageAt(startedAt);
 
                 // Сообщения в диалоге
                 List<Message> messages = new ArrayList<>();
@@ -125,19 +141,21 @@ public class DataInitializer {
                 Message userMsg = new Message();
                 userMsg.setDialog(dialog);
                 userMsg.setText(question);
-                userMsg.setSender("user");
-                userMsg.setTimestamp(startedAt);
+                userMsg.setSenderType("user");
+                userMsg.setSender(user);
+                userMsg.setStatus("active");
                 messages.add(userMsg);
 
                 // Ответ от бота (с небольшой задержкой)
                 Message botMsg = new Message();
                 botMsg.setDialog(dialog);
                 botMsg.setText(answer);
-                botMsg.setSender("bot");
-                botMsg.setTimestamp(startedAt.plusSeconds(2));
+                botMsg.setSenderType("bot");
+                botMsg.setStatus("active");
                 messages.add(botMsg);
 
                 dialog.setMessages(messages);
+                dialog.setUnreadCount(messages.size());
                 dialogRepository.save(dialog);
             }
         }

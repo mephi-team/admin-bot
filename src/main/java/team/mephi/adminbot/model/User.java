@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -33,6 +35,12 @@ public class User {
 
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "id", fetch = FetchType.LAZY)
+    private List<Dialog> dialogs = new ArrayList<>();
+
+    @OneToMany(mappedBy = "id", fetch = FetchType.LAZY)
+    private List<Message> messages = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {
