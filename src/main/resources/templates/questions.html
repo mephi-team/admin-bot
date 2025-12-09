@@ -4,47 +4,58 @@
     <meta charset="UTF-8">
     <title>Вопросы — Админка Flexiq</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="../../static/css/main.css" rel="stylesheet" th:href="@{/css/main.css}"/>
 </head>
-<body class="bg-light">
-<div class="container py-4">
-    <h1 class="mb-4">Часто задаваемые вопросы (FAQ)</h1>
+<body class="debug-border-red d-flex flex-column vh-100 overflow-hidden">
+<div th:replace="~{fragments/common :: header}">Debug header</div>
+<div class="container-fluid h-100 overflow-hidden">
+    <div class="debug-border-black row h-100 overflow-hidden">
+        <div class="col-sm-1 h-100 p-0">
+            <div th:replace="~{dialogs/common :: dialogs-left-panel}">Debug left panel</div>
+        </div>
+        <div class="col debug-border-blue flex-grow-1 d-flex flex-column p-0 h-100 overflow-hidden">
+            <h1 class="mb-4">Часто задаваемые вопросы (FAQ)</h1>
 
-    <!-- Форма добавления -->
-    <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-            Добавить новый вопрос
-        </div>
-        <div class="card-body">
-            <form method="post" th:action="@{/questions}" th:object="${newQuestion}">
-                <div class="mb-3">
-                    <label class="form-label" for="questionText">Вопрос</label>
-                    <textarea class="form-control" id="questionText" required rows="2"
-                              th:field="*{questionText}"></textarea>
+            <!-- Форма добавления -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    Добавить новый вопрос
                 </div>
-                <div class="mb-3">
-                    <label class="form-label" for="answerText">Ответ</label>
-                    <textarea class="form-control" id="answerText" required rows="3"
-                              th:field="*{answerText}"></textarea>
+                <div class="card-body">
+                    <form method="post" th:action="@{/questions}" th:object="${newQuestion}">
+                        <div class="mb-3">
+                            <label class="form-label" for="questionText">Вопрос</label>
+                            <textarea class="form-control" id="questionText" required rows="2"
+                                      th:field="*{questionText}"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="answerText">Ответ</label>
+                            <textarea class="form-control" id="answerText" required rows="3"
+                                      th:field="*{answerText}"></textarea>
+                        </div>
+                        <button class="btn btn-success" type="submit">Сохранить</button>
+                    </form>
                 </div>
-                <button class="btn btn-success" type="submit">Сохранить</button>
-            </form>
-        </div>
-    </div>
+            </div>
 
-    <!-- Список вопросов -->
-    <div class="card">
-        <div class="card-header bg-secondary text-white">
-            Существующие вопросы
-        </div>
-        <div class="card-body">
-            <div class="text-muted" th:if="${questions.empty}">
-                Нет сохранённых вопросов.
+            <!-- Список вопросов -->
+            <div class="card">
+                <div class="card-header bg-secondary text-white">
+                    Существующие вопросы
+                </div>
+                <div class="card-body">
+                    <div class="text-muted" th:if="${questions.isEmpty()}">
+                        Нет сохранённых вопросов.
+                    </div>
+                    <div class="border-bottom pb-3 mb-3" th:each="q : ${questions}">
+                        <h5 th:text="${q.questionText}"></h5>
+                        <p class="text-muted" th:text="${q.answerText}"></p>
+                    </div>
+                </div>
             </div>
-            <div class="border-bottom pb-3 mb-3" th:each="q : ${questions}">
-                <h5 th:text="${q.questionText}"></h5>
-                <p class="text-muted" th:text="${q.answerText}"></p>
-            </div>
         </div>
+        <div class="col-sm-1"></div>
     </div>
 </div>
 </body>

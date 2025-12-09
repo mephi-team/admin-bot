@@ -11,15 +11,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "directions")
-public class Direction {
+@Table(name = "roles")
+public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false)
-    private String code;
+    private Long code;
 
     @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false)
+    private String description;
 }

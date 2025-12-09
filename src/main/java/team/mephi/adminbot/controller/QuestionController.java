@@ -23,6 +23,7 @@ public class QuestionController {
         List<Question> questions = questionRepository.findAll();
         model.addAttribute("questions", questions);
         model.addAttribute("newQuestion", new Question());
+        model.addAttribute("currentUri", "questions");
         return "questions";
     }
 

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Диалоги — Админка Flexiq</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="../../static/css/main.css" rel="stylesheet" th:href="@{/css/main.css}"/>
+    <style>
+
+    </style>
+</head>
+<body class="debug-border-red d-flex flex-column vh-100 overflow-hidden">
+<div th:replace="~{fragments/common :: header}">Debug header</div>
+<div class="container-fluid h-100 overflow-hidden">
+    <div class="debug-border-black row h-100 overflow-hidden">
+        <div class="col-sm-1 h-100 p-0">
+            <div th:replace="~{dialogs/common :: dialogs-left-panel}">Debug left panel</div>
+        </div>
+        <div class="col debug-border-blue flex-grow-1 d-flex flex-column p-0 h-100 overflow-hidden">
+            <div th:replace="~{dialogs/common :: dialogs-header}">Debug Dialog title</div>
+
+            <div class="row debug-border-purple flex-grow-1 h-100 overflow-hidden">
+                <!-- Левая панель: список диалогов -->
+                <div class="col-md-4 col-12" th:replace="~{dialogs/common :: dialogs-list}">Debug dialog list</div>
+
+                <!-- Правая панель: переписка -->
+                <div class="col-md-8 col-12 d-flex flex-column">
+                    <div class="p-4 mb-4 border rounded-4 flex-grow-1 d-flex flex-column">
+                        <span class="text-secondary">Выберите диалог, чтобы продолжить общение</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-1"></div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

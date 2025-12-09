@@ -4,94 +4,120 @@
     <meta charset="UTF-8">
     <title>Главная — Админка Flexiq</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="../../static/css/main.css" rel="stylesheet" th:href="@{/css/main.css}"/>
     <style>
-        .stat-card { border-left: 4px solid #0d6efd; }
-        .stat-card.users { border-left-color: #20c997; }
-        .stat-card.dialogs { border-left-color: #fd7e14; }
-        .stat-card.questions { border-left-color: #d63384; }
-        .stat-value { font-size: 2rem; font-weight: bold; }
+        .stat-card {
+            border-left: 4px solid #0d6efd;
+        }
+
+        .stat-card.users {
+            border-left-color: #20c997;
+        }
+
+        .stat-card.dialogs {
+            border-left-color: #fd7e14;
+        }
+
+        .stat-card.questions {
+            border-left-color: #d63384;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+        }
     </style>
 </head>
-<body class="bg-light">
-<div class="container py-4">
-    <h1 class="mb-4">Панель управления чат-ботом</h1>
+<body class="debug-border-red d-flex flex-column vh-100 overflow-hidden">
+<div th:replace="~{fragments/common :: header}">Debug header</div>
+<div class="container-fluid h-100 overflow-hidden">
+    <div class="debug-border-black row h-100 overflow-hidden">
+        <div class="col-sm-1 h-100 p-0"></div>
+        <div class="col debug-border-blue flex-grow-1 d-flex flex-column p-0 h-100 overflow-hidden">
+            <h1 class="mb-4">Панель управления чат-ботом</h1>
 
-    <!-- Статистика -->
-    <div class="row g-4">
-        <!-- Пользователи -->
-        <div class="col-md-4">
-            <div class="card stat-card users shadow-sm">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="card-title text-muted mb-1">Всего пользователей</h6>
-                            <div class="stat-value" th:text="${totalUsers}">0</div>
+            <!-- Статистика -->
+            <div class="row g-4">
+                <!-- Пользователи -->
+                <div class="col-md-4">
+                    <div class="card stat-card users shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="card-title text-muted mb-1">Всего пользователей</h6>
+                                    <div class="stat-value" th:text="${totalUsers}">0</div>
+                                </div>
+                                <div class="bg-primary bg-opacity-10 p-3 rounded">
+                                    <svg class="bi bi-people" fill="currentColor" height="24" viewBox="0 0 16 16"
+                                         width="24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8Zm-7.978-1L7 12.978V9.5c0-.552.448-1 1-1h1c.552 0 1 .448 1 1v3.478l-.022.022H8Zm4-4a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3Z"/>
+                                    </svg>
+                                </div>
+                            </div>
                         </div>
-                        <div class="bg-primary bg-opacity-10 p-3 rounded">
-                            <svg class="bi bi-people" fill="currentColor" height="24" viewBox="0 0 16 16"
-                                 width="24" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8Zm-7.978-1L7 12.978V9.5c0-.552.448-1 1-1h1c.552 0 1 .448 1 1v3.478l-.022.022H8Zm4-4a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3Z"/>
-                            </svg>
+                    </div>
+                </div>
+
+                <!-- Диалоги -->
+                <div class="col-md-4">
+                    <div class="card stat-card dialogs shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="card-title text-muted mb-1">Активных диалогов (24ч)</h6>
+                                    <div class="stat-value" th:text="${activeDialogs}">0</div>
+                                </div>
+                                <div class="bg-warning bg-opacity-10 p-3 rounded">
+                                    <svg class="bi bi-chat-left-dots" fill="currentColor" height="24"
+                                         viewBox="0 0 16 16"
+                                         width="24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 5.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zM2 7.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Вопросы -->
+                <div class="col-md-4">
+                    <div class="card stat-card questions shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="card-title text-muted mb-1">Новых вопросов (7 дн.)</h6>
+                                    <div class="stat-value" th:text="${newQuestions}">0</div>
+                                </div>
+                                <div class="bg-danger bg-opacity-10 p-3 rounded">
+                                    <svg class="bi bi-question-circle" fill="currentColor" height="24"
+                                         viewBox="0 0 16 16"
+                                         width="24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                        <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.425.638-2.668 1.734a.237.237 0 0 0 .237.288zm3.523-1.19a.5.5 0 0 1 .5.5v.105c0 .438-.273.647-.965 1.134-.692.487-1.314.995-1.314 2.056 0 1.511 1.276 2.241 2.673 2.241.75 0 1.5-.297 1.734-.843a.5.5 0 0 1 .5-.25h.811a.5.5 0 0 1 .5.5v.105c0 .438-.273.647-.965 1.134-.692.487-1.314.995-1.314 2.056 0 1.511 1.276 2.241 2.673 2.241 1.397 0 2.241-.73 2.241-2.241 0-.836-.374-1.333-.965-1.734.273-.635.273-.927.273-1.371 0-.718-.273-.927-.965-1.486-.692-.463-1.244-.977-1.244-2.056 0-1.511 1.276-2.241 2.673-2.241.75 0 1.5.297 1.734.843a.5.5 0 0 1-.5.25h-.811z"/>
+                                    </svg>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Диалоги -->
-        <div class="col-md-4">
-            <div class="card stat-card dialogs shadow-sm">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="card-title text-muted mb-1">Активных диалогов (24ч)</h6>
-                            <div class="stat-value" th:text="${activeDialogs}">0</div>
-                        </div>
-                        <div class="bg-warning bg-opacity-10 p-3 rounded">
-                            <svg class="bi bi-chat-left-dots" fill="currentColor" height="24" viewBox="0 0 16 16"
-                                 width="24" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 5.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zM2 7.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>
-                            </svg>
-                        </div>
+            <!-- Быстрые ссылки -->
+            <div class="row mt-5">
+                <div class="col-12">
+                    <h5>Быстрый доступ</h5>
+                    <div class="d-flex gap-3 flex-wrap">
+                        <a class="btn btn-outline-primary" href="/users">Пользователи</a>
+                        <a class="btn btn-outline-primary" href="/dialogs">Диалоги</a>
+                        <a class="btn btn-outline-primary" href="/questions">Вопросы</a>
+                        <a class="btn btn-outline-primary" href="/broadcasts">Рассылки</a>
+                        <a class="btn btn-outline-primary" href="/analytics">Аналитика</a>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- Вопросы -->
-        <div class="col-md-4">
-            <div class="card stat-card questions shadow-sm">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="card-title text-muted mb-1">Новых вопросов (7 дн.)</h6>
-                            <div class="stat-value" th:text="${newQuestions}">0</div>
-                        </div>
-                        <div class="bg-danger bg-opacity-10 p-3 rounded">
-                            <svg class="bi bi-question-circle" fill="currentColor" height="24" viewBox="0 0 16 16"
-                                 width="24" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.425.638-2.668 1.734a.237.237 0 0 0 .237.288zm3.523-1.19a.5.5 0 0 1 .5.5v.105c0 .438-.273.647-.965 1.134-.692.487-1.314.995-1.314 2.056 0 1.511 1.276 2.241 2.673 2.241.75 0 1.5-.297 1.734-.843a.5.5 0 0 1 .5-.25h.811a.5.5 0 0 1 .5.5v.105c0 .438-.273.647-.965 1.134-.692.487-1.314.995-1.314 2.056 0 1.511 1.276 2.241 2.673 2.241 1.397 0 2.241-.73 2.241-2.241 0-.836-.374-1.333-.965-1.734.273-.635.273-.927.273-1.371 0-.718-.273-.927-.965-1.486-.692-.463-1.244-.977-1.244-2.056 0-1.511 1.276-2.241 2.673-2.241.75 0 1.5.297 1.734.843a.5.5 0 0 1-.5.25h-.811z"/>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Быстрые ссылки -->
-    <div class="row mt-5">
-        <div class="col-12">
-            <h5>Быстрый доступ</h5>
-            <div class="d-flex gap-3 flex-wrap">
-                <a class="btn btn-outline-primary" href="/users">Пользователи</a>
-                <a class="btn btn-outline-primary" href="/dialogs">Диалоги</a>
-                <a class="btn btn-outline-primary" href="/questions">Вопросы</a>
-                <a class="btn btn-outline-primary" href="/broadcasts">Рассылки</a>
-                <a class="btn btn-outline-primary" href="/analytics">Аналитика</a>
-            </div>
-        </div>
+        <div class="col-sm-1"></div>
     </div>
 </div>
 </body>

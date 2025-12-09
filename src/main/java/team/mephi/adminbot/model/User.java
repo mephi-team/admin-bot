@@ -28,6 +28,12 @@ public class User {
     private String name;
 
     @Column(nullable = false)
+    private String firstName;
+
+    @Column(nullable = false)
+    private String lastName;
+
+    @Column(nullable = false)
     private String status; // например: "active", "blocked"
 
     @Column(nullable = false)
@@ -41,6 +47,10 @@ public class User {
 
     @OneToMany(mappedBy = "id", fetch = FetchType.LAZY)
     private List<Message> messages = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_code", nullable = false)
+    private Role role;
 
     @PrePersist
     protected void onCreate() {
