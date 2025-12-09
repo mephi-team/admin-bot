@@ -2,15 +2,11 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Рассылки — Админка Flexiq</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet">
     <link href="../../static/css/main.css" rel="stylesheet" th:href="@{/css/main.css}"/>
-    <style>
-        .broadcast-card {
-            border-left: 4px solid #6f42c1;
-        }
-    </style>
 </head>
 <body class="debug-border-red d-flex flex-column vh-100 overflow-hidden">
 <div th:replace="~{fragments/common :: header}">Debug header</div>
@@ -20,54 +16,82 @@
             <div th:replace="~{dialogs/common :: dialogs-left-panel}">Debug left panel</div>
         </div>
         <div class="col debug-border-blue flex-grow-1 d-flex flex-column p-0 h-100 overflow-hidden">
-            <h1 class="mb-4">Рассылки</h1>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="mb-4">Рассылки</h1>
+                <a class="btn btn-primary" href="/broadcasts/create">
+                    <i class="bi bi-plus-lg me-2"></i>Новая рассылка
+                </a>
+            </div>
 
-            <!-- Форма создания рассылки -->
-            <div class="card mb-4">
-                <div class="card-header bg-purple text-white" style="background-color: #6f42c1 !important;">
-                    Создать новую рассылку
-                </div>
-                <div class="card-body">
-                    <form method="post" th:action="@{/broadcasts}" th:object="${newBroadcast}">
-                        <div class="mb-3">
-                            <label class="form-label" for="messageText">Текст рассылки</label>
-                            <textarea class="form-control" id="messageText"
-                                      placeholder="Введите текст, который получат все пользователи..." required rows="4"
-                                      th:field="*{messageText}"></textarea>
-                        </div>
-                        <button class="btn btn-primary" type="submit">Сохранить рассылку</button>
-                        <div class="mt-2 text-muted small">
-                            <em>Рассылка будет отправлена чат-ботом позже. Здесь вы только формируете сообщение.</em>
-                        </div>
-                    </form>
+            <!-- Фильтры -->
+            <div class="d-flex gap-3 mb-3">
+                <button class="btn btn-primary">Отправленные (5)</button>
+                <button class="btn btn-outline-secondary">Шаблоны (2)</button>
+                <button class="btn btn-outline-secondary">Черновики (1)</button>
+            </div>
+
+            <!-- Поиск -->
+            <div class="mb-3">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                    <input class="form-control" placeholder="Найти рассылку" type="text">
                 </div>
             </div>
 
-            <!-- История рассылок -->
-            <div class="card">
-                <div class="card-header bg-secondary text-white">
-                    История рассылок
-                </div>
-                <div class="card-body">
-                    <div class="text-muted" th:if="${broadcasts.isEmpty()}">
-                        Нет сохранённых рассылок.
-                    </div>
+            <!-- Таблица -->
 
-                    <div class="broadcast-card p-3 mb-3 border" th:each="b : ${broadcasts}">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div>
-                                <div class="fw-bold mb-1">Рассылка №<span th:text="${b.id}">1</span></div>
-                                <div class="text-break" th:text="${b.messageText}">Текст рассылки...</div>
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                    <tr>
+                        <th scope="col">
+                            <div class="d-flex align-items-center">
+                                <input class="form-check-input me-2" type="checkbox">
                             </div>
-                            <small class="text-muted" th:text="${#temporals.format(b.createdAt, 'dd.MM.yyyy HH:mm')}">08.12.2025
-                                14:30</small>
-                        </div>
-                    </div>
-                </div>
+                        </th>
+                        <th scope="col">
+                            <div class="d-flex align-items-center">
+                                <span>Дата</span>
+                                <i class="bi bi-arrow-up-down ms-2 text-muted" style="font-size: 0.8rem;"></i>
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="d-flex align-items-center">
+                                Пользователи
+                                <i class="bi bi-arrow-up-down ms-2 text-muted" style="font-size: 0.8rem;"></i>
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="d-flex align-items-center">
+                                Направление
+                                <i class="bi bi-arrow-up-down ms-2 text-muted" style="font-size: 0.8rem;"></i>
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="d-flex align-items-center">
+                                Куратор
+                                <i class="bi bi-arrow-up-down ms-2 text-muted" style="font-size: 0.8rem;"></i>
+                            </div>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="b : ${broadcasts}">
+                        <td><input class="form-check-input" id="check-__${b.id}__" type="checkbox"></td>
+                        <td th:text="${#temporals.format(b.createdAt, 'dd.MM.yyyy HH:mm')}">17.05.2025 15:35</td>
+                        <td th:text="${b.users.description}">Студенты</td>
+                        <td th:text="${b.direction.name}">Аналитика</td>
+                        <td th:text="${(b.createdBy.lastName + ' ' + #strings.substring(b.createdBy.firstName, 0, 1) + '.')}">
+                            Иванов К.
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
         <div class="col-sm-1"></div>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

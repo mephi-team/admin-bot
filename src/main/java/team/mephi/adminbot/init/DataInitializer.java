@@ -62,11 +62,11 @@ public class DataInitializer {
 
     private void initRoles() {
         List<Role> roles = Arrays.asList(
-                Role.builder().name("student").description("Студент").build(),
-                Role.builder().name("candidate").description("Кандидат").build(),
+                Role.builder().name("student").description("Студенты").build(),
+                Role.builder().name("candidate").description("Кандидаты").build(),
                 Role.builder().name("visitor").description("Посетитель").build(),
-                Role.builder().name("free_listener ").description("Вольный слушатель").build(),
-                Role.builder().name("middle_candidate").description("").build()
+                Role.builder().name("free_listener ").description("Слушатели").build(),
+                Role.builder().name("middle_candidate").description("Миддл-кандидаты").build()
         );
         roleRepository.saveAll(roles);
         System.out.println("  → Создано 5 ролей");
@@ -117,10 +117,32 @@ public class DataInitializer {
     }
 
     private void initBroadcasts() {
+        Random random = new Random();
+
+        Role studentRole = roleRepository.findByName("student")
+                .orElseThrow(() -> new RuntimeException("Роль 'student' не найдена"));
+        Role candidateRole = roleRepository.findByName("candidate")
+                .orElseThrow(() -> new RuntimeException("Роль 'candidate' не найдена"));
+
         List<Broadcast> broadcasts = Arrays.asList(
-                Broadcast.builder().messageText("Добро пожаловать в Flexiq! Начните обучение уже сегодня.").build(),
-                Broadcast.builder().messageText("Напоминаем: завтра стартует новый поток по Java-разработке!").build(),
-                Broadcast.builder().messageText("Специальное предложение: скидка 15% на все курсы до конца недели.").build()
+                Broadcast.builder()
+                        .createdBy(userRepository.findById(1L + random.nextLong(userRepository.count())).orElseThrow())
+                        .users(studentRole)
+                        .direction(directionRepository.findById(1L + random.nextLong(directionRepository.count())).orElseThrow())
+                        .messageText("Добро пожаловать в Flexiq! Начните обучение уже сегодня.")
+                        .build(),
+                Broadcast.builder()
+                        .createdBy(userRepository.findById(1L + random.nextLong(userRepository.count())).orElseThrow())
+                        .users(candidateRole)
+                        .direction(directionRepository.findById(1L + random.nextLong(directionRepository.count())).orElseThrow())
+                        .messageText("Напоминаем: завтра стартует новый поток по Java-разработке!")
+                        .build(),
+                Broadcast.builder()
+                        .createdBy(userRepository.findById(1L + random.nextLong(userRepository.count())).orElseThrow())
+                        .users(studentRole)
+                        .direction(directionRepository.findById(1L + random.nextLong(directionRepository.count())).orElseThrow())
+                        .messageText("Специальное предложение: скидка 15% на все курсы до конца недели.")
+                        .build()
         );
         broadcasts.forEach(b -> b.setCreatedAt(LocalDateTime.now().minusDays(new Random().nextInt(5))));
         broadcastRepository.saveAll(broadcasts);
@@ -156,7 +178,7 @@ public class DataInitializer {
     private void createDialogForUser(User user, List<Question> allQuestions, Random random, boolean forceToday) {
         Dialog dialog = new Dialog();
         dialog.setUser(user);
-        dialog.setDirection(directionRepository.findById(1L + random.nextInt(5)).orElseThrow());
+        dialog.setDirection(directionRepository.findById(1L + random.nextLong(directionRepository.count())).orElseThrow());
         dialog.setStatus("active");
 
         List<Message> messages = new ArrayList<>();
