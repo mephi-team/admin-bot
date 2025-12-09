@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import team.mephi.adminbot.model.Dialog;
 import team.mephi.adminbot.repository.DialogRepository;
 import tech.tablesaw.api.DateColumn;
@@ -24,7 +25,7 @@ public class AnalyticsController {
     private DialogRepository dialogRepository;
 
     @GetMapping("/analytics")
-    public String analyticsPage(Model model) {
+    public String analyticsPage(@RequestParam(defaultValue = "activity") String type, Model model) {
         YearMonth currentMonth = YearMonth.now();
 
         // Получаем диалоги за последнюю неделю
@@ -70,6 +71,7 @@ public class AnalyticsController {
 
         model.addAttribute("chartLabels", labels);
         model.addAttribute("chartData", counts);
+        model.addAttribute("type", type);
         return "analytics";
     }
 }

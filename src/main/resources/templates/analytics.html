@@ -16,14 +16,23 @@
         <div class="col debug-border-blue flex-grow-1 d-flex flex-column p-0 h-100 overflow-hidden">
             <h1 class="mb-4">Аналитика</h1>
 
-            <div class="card">
-                <div class="card-header bg-info text-white">
-                    Активность диалогов (последние 7 дней)
-                </div>
-                <div class="card-body">
-                    <canvas height="200" id="dialogChart" width="400"></canvas>
-                </div>
+            <!-- Фильтры -->
+            <div class="d-flex gap-3 mb-3">
+                <a class="btn btn-outline-primary"
+                   th:classappend="${type == 'activity'} ? 'active'"
+                   th:href="@{/analytics(type='activity')}">Активность</a>
+                <a class="btn btn-outline-primary"
+                   th:classappend="${type == 'preorders'} ? 'active'"
+                   th:href="@{/analytics(type='preorders')}">Предзаявки</a>
+                <a class="btn btn-outline-primary"
+                   th:classappend="${type == 'orders'} ? 'active'"
+                   th:href="@{/analytics(type='orders')}">Заявки</a>
+                <a class="btn btn-outline-primary"
+                   th:classappend="${type == 'utm'} ? 'active'"
+                   th:href="@{/analytics(type='utm')}">UTM метки</a>
             </div>
+
+            <canvas height="200" id="dialogChart" width="400"></canvas>
         </div>
         <div class="col-sm-1"></div>
     </div>
