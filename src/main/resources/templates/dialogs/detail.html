@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Диалоги — Админка Flexiq</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="../../static/css/main.css" rel="stylesheet" th:href="@{/css/main.css}"/>
+    <style>
+
+    </style>
+</head>
+<body class="debug-border-red d-flex flex-column vh-100 overflow-hidden">
+<div th:replace="fragments/common :: header">...</div>
+<div class="container-fluid h-100 overflow-hidden">
+    <div class="debug-border-black row h-100 overflow-hidden">
+        <div class="col-sm-1 h-100 p-0">
+            <div th:replace="dialogs/common :: dialogs-left-panel">...</div>
+        </div>
+        <div class="col debug-border-blue flex-grow-1 d-flex flex-column p-0 h-100 overflow-hidden">
+            <div th:replace="dialogs/common :: dialogs-header">...</div>
+
+            <div class="row debug-border-purple flex-grow-1 h-100 overflow-hidden">
+                <!-- Левая панель: список диалогов -->
+                <div class="col-md-4 col-12 debug-border-orange d-flex flex-column h-100">
+                    <!-- Поиск -->
+                    <div class="input-group mb-2">
+                        <span class="input-group-text"><i class="bi bi-search"></i></span>
+                        <input class="form-control border-start-0" placeholder="Найти диалог или пользователя..."
+                               type="text">
+                    </div>
+
+                    <!-- Фильтры -->
+                    <div class="d-flex mb-2">
+                        <button class="btn btn-outline-primary rounded-pill active border-0 me-2">Все</button>
+                        <button class="btn btn-outline-primary rounded-pill border-0 me-2">Кандидаты</button>
+                        <button class="btn btn-outline-primary rounded-pill border-0">Студенты</button>
+                    </div>
+
+                    <!-- Список диалогов -->
+                    <div class="flex-grow-1 overflow-auto debug-border-green flex-grow-1">
+                        <div th:each="dialog : ${dialogs}">
+                            <a class="dialog-item text-body"
+                               th:classappend="${dialog.id == id} ? 'bg-primary bg-opacity-10'"
+                               th:href="@{/dialogs/{id}(id=${dialog.id})}">
+                                <div class="d-flex align-items-start">
+                                    <div class="flex-grow-1 overflow-hidden"
+                                         th:with="messageCount=${#lists.size(dialog.messages)}">
+                                        <div class="d-flex justify-content-between">
+                                            <strong>
+                                                <span th:text="${dialog.user.lastName}">Александров</span>
+                                                <span th:text="${dialog.user.firstName}">Иван</span>
+                                            </strong>
+                                            <small>
+                                                        <span th:if="${#temporals.format(dialog.lastMessageAt, 'yyyy-MM-dd') == #temporals.format(today, 'yyyy-MM-dd')}"
+                                                              th:text="${#temporals.format(dialog.lastMessageAt, 'HH:mm')}">14:25</span>
+                                                <span th:text="${#temporals.format(dialog.lastMessageAt, 'dd MMMM')}"
+                                                      th:unless="${#temporals.format(dialog.lastMessageAt, 'yyyy-MM-dd') == #temporals.format(today, 'yyyy-MM-dd')}">25 Мая</span>
+                                            </small>
+                                        </div>
+                                        <div class="text-muted small">
+                                                <span class="text-lowercase"
+                                                      th:text="${dialog.user.role.description}">студент</span>
+                                            | @<span th:text="${dialog.user.externalId}">username</span>
+                                        </div>
+                                        <div class="text-truncate mt-1" th:if="${messageCount > 0}"
+                                             th:with="lastMsg=${dialog.messages[__${messageCount}__ - 1]}">
+                                                    <span class="text-primary me-1" th:text="${lastMsg.senderType == 'user' ?
+                                                        (lastMsg.sender.lastName + ' ' + #strings.substring(lastMsg.sender.firstName, 0, 1) + '.') :
+                                                        'Администратор'}">Иванов А.</span>
+                                            <span th:text="${lastMsg.text}">Пропускаю занятия...</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Правая панель: переписка -->
+                <div class="col-md-8 col-12 d-flex flex-column overflow-hidden h-100">
+                    <div class="p-4 mb-4 border rounded-4 flex-grow-1 d-flex flex-column overflow-hidden">
+                        <!-- Заголовок диалога -->
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h5>
+                                        <span th:text="${dialog.user.name}">Александров Иван</span>,
+                                        @<span th:text="${dialog.user.externalId}">username</span>
+                                    </h5>
+                                    <div class="text-muted small">
+                                        <span th:text="${dialog.user.role.description}">Студент</span>
+                                        | <span th:text="${dialog.direction.name}">Аналитика</span>, Весенний набор 2025
+                                    </div>
+                                </div>
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="dropdown">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li><a class="dropdown-item" href="#">Заблокировать</a></li>
+                                        <li><a class="dropdown-item" href="#">Просмотреть профиль</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Переписка -->
+                        <div class="overflow-auto p-1 flex-grow-1">
+                            <div th:each="group : ${messageGroups}">
+                                <!-- Разделитель даты -->
+                                <div class="text-center my-3">
+                                    <small class="text-muted px-2 py-1 rounded"
+                                           th:text="${group.dateLabel}">Сегодня</small>
+                                </div>
+                                <!-- Сообщения -->
+                                <div class="d-flex mb-3" th:each="msg : ${group.messages}">
+                                    <div th:class="${msg.senderType == 'user'} ? 'message message-user ms-auto' : 'message message-bot'">
+                                        <span th:text="${msg.text}">Текст сообщения</span>
+                                        <div class="message-time"
+                                             th:text="${#temporals.format(msg.createdAt, 'HH:mm')}">14:25
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Поле ввода -->
+                    <div class="mt-auto mb-3">
+                            <textarea class="form-control mb-2 rounded-4" placeholder="Текст сообщения" rows="4"
+                                      style="resize: none;"></textarea>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-outline-secondary border-0"><i class="bi bi-type-bold"></i>
+                                </button>
+                                <button class="btn btn-outline-secondary border-0"><i class="bi bi-type-italic"></i>
+                                </button>
+                                <button class="btn btn-outline-secondary border-0"><i class="bi bi-type-underline"></i>
+                                </button>
+                                <button class="btn btn-outline-secondary border-0"><i class="bi bi-emoji-smile"></i>
+                                </button>
+                                <button class="btn btn-outline-secondary border-0"><i class="bi bi-link-45deg"></i>
+                                </button>
+                                <button class="btn btn-outline-secondary border-0"><i
+                                        class="bi bi-file-earmark-richtext"></i>
+                                </button>
+                                <button class="btn btn-outline-secondary border-0"><i class="bi bi-paperclip"></i>
+                                </button>
+                            </div>
+                            <button class="btn btn-primary btn-sm">
+                                Отправить
+                                <i class="bi bi-send ms-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-1"></div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

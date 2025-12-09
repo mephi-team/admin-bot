@@ -1,0 +1,64 @@
+:root {
+    --sidebar-bg: #e9f0fa;
+    --sidebar-border: #d1e0f7;
+    --message-user: #f1f6ff;
+    --message-bot: #eaeaee;
+    --text-muted: #6c757d;
+    --debug-border: 0px; /* измените на 1px для отладки */
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body, h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+}
+
+.input-group-text {
+    background-color: #fff;
+}
+
+.debug-border-red { border: var(--debug-border) solid red !important; }
+.debug-border-blue { border: var(--debug-border) solid blue !important; }
+.debug-border-purple { border: var(--debug-border) solid purple !important; }
+.debug-border-orange { border: var(--debug-border) solid orange !important; }
+.debug-border-green { border: var(--debug-border) solid green !important; }
+.debug-border-black { border: var(--debug-border) solid black !important; }
+
+/* Стили чата */
+.message {
+    max-width: 70%;
+    padding: 16px;
+    border-radius: 24px;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+.message-user {
+    background-color: var(--message-user);
+    margin-left: auto;
+    border-bottom-right-radius: 0;
+}
+.message-bot {
+    background-color: var(--message-bot);
+    margin-right: auto;
+    border-bottom-left-radius: 0;
+}
+.message-time {
+    font-size: 0.75rem;
+    color: #6c757d;
+    margin-top: 4px;
+    text-align: right;
+}
+
+.dialog-item {
+    display: block;
+    padding: 0.75rem;
+    text-decoration: none;
+    transition: background-color 0.15s;
+    border-radius: 12px;
+    border: var(--debug-border) solid red;
+}
+.dialog-item:hover {
+    background-color: #f8f9fa;
+}
