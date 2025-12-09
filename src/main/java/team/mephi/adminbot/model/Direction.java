@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "directions")
 public class Direction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
