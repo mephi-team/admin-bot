@@ -22,6 +22,7 @@ public class BroadcastController {
         List<Broadcast> broadcasts = broadcastRepository.findAllByOrderByCreatedAtDesc();
         model.addAttribute("broadcasts", broadcasts);
         model.addAttribute("newBroadcast", Broadcast.builder().build());
+        model.addAttribute("currentUri", "broadcasts");
         return "broadcasts";
     }
 

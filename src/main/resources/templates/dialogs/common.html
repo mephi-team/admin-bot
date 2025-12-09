@@ -3,15 +3,76 @@
 <body>
 
 <div class="row" th:fragment="dialogs-header">
-    <h3>Диалоги</h3>
+    <h1>Диалоги</h1>
 </div>
 
 <div class="h-100 p-1 d-flex flex-column gap-2 " style="width:50px; background-color: #d3e1f9;"
      th:fragment="dialogs-left-panel">
     <a class="btn btn-outline-secondary border-0"><i class="bi bi-list"></i></a>
-    <a class="btn btn-outline-secondary border-0 active" href="/dialogs"><i class="bi bi-chat-right-text"></i></a>
-    <a class="btn btn-outline-secondary border-0" href="/broadcasts"><i class="bi bi-envelope"></i></a>
-    <a class="btn btn-outline-secondary border-0" href="/questions"><i class="bi bi-patch-question"></i></a>
+    <!--/*@thymesVar id="currentUri" type="java.lang.String"*/-->
+    <a class="btn btn-outline-secondary border-0" href="/dialogs"
+       th:classappend="${currentUri == 'dialogs'} ? 'active' : ''"><i class="bi bi-chat-right-text"></i></a>
+    <a class="btn btn-outline-secondary border-0" href="/broadcasts"
+       th:classappend="${currentUri == 'broadcasts'} ? 'active' : ''"><i class="bi bi-envelope"></i></a>
+    <a class="btn btn-outline-secondary border-0" href="/questions"
+       th:classappend="${currentUri == 'questions'} ? 'active' : ''"><i class="bi bi-patch-question"></i></a>
+</div>
+
+<div class="col-md-4 col-12 debug-border-orange d-flex flex-column h-100" th:fragment="dialogs-list">
+    <!-- Поиск -->
+    <div class="input-group mb-2">
+        <span class="input-group-text"><i class="bi bi-search"></i></span>
+        <input class="form-control border-start-0" placeholder="Найти диалог или пользователя..."
+               type="text">
+    </div>
+
+    <!-- Фильтры -->
+    <div class="d-flex mb-2">
+        <button class="btn btn-outline-primary rounded-pill active border-0 me-2">Все</button>
+        <button class="btn btn-outline-primary rounded-pill border-0 me-2">Кандидаты</button>
+        <button class="btn btn-outline-primary rounded-pill border-0">Студенты</button>
+    </div>
+
+    <!-- Список диалогов -->
+    <div class="flex-grow-1 overflow-auto debug-border-green">
+        <!--/*@thymesVar id="dialogs" type="java.util.List<team.mephi.adminbot.model.Dialog>"*/-->
+        <div th:each="dialog : ${dialogs}">
+            <!--/*@thymesVar id="pathId" type="java.lang.Long"*/-->
+            <a class="dialog-item text-body"
+               th:classappend="${dialog.id == pathId} ? 'bg-primary bg-opacity-10'"
+               th:href="@{/dialogs/{id}(id=${dialog.id})}">
+                <div class="d-flex align-items-start">
+                    <div class="flex-grow-1 overflow-hidden"
+                         th:with="messageCount=${#lists.size(dialog.messages)}">
+                        <div class="d-flex justify-content-between">
+                            <strong>
+                                <span th:text="${dialog.user.lastName}">Александров</span>
+                                <span th:text="${dialog.user.firstName}">Иван</span>
+                            </strong>
+                            <small>
+                                                        <span th:if="${#temporals.format(dialog.lastMessageAt, 'yyyy-MM-dd') == #temporals.format(today, 'yyyy-MM-dd')}"
+                                                              th:text="${#temporals.format(dialog.lastMessageAt, 'HH:mm')}">14:25</span>
+                                <span th:text="${#temporals.format(dialog.lastMessageAt, 'dd MMMM')}"
+                                      th:unless="${#temporals.format(dialog.lastMessageAt, 'yyyy-MM-dd') == #temporals.format(today, 'yyyy-MM-dd')}">25 Мая</span>
+                            </small>
+                        </div>
+                        <div class="text-muted small">
+                                                <span class="text-lowercase"
+                                                      th:text="${dialog.user.role.description}">студент</span>
+                            | @<span th:text="${dialog.user.externalId}">username</span>
+                        </div>
+                        <div class="text-truncate mt-1" th:if="${messageCount > 0}"
+                             th:with="lastMsg=${dialog.messages[__${messageCount}__ - 1]}">
+                                                    <span class="text-primary me-1" th:text="${lastMsg.senderType == 'user' ?
+                                                        (lastMsg.sender.lastName + ' ' + #strings.substring(lastMsg.sender.firstName, 0, 1) + '.') :
+                                                        'Администратор'}">Иванов А.</span>
+                            <span th:text="${lastMsg.text}">Пропускаю занятия...</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
 </div>
 
 </body>

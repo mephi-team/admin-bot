@@ -12,71 +12,18 @@
     </style>
 </head>
 <body class="debug-border-red d-flex flex-column vh-100 overflow-hidden">
-<div th:replace="fragments/common :: header">...</div>
+<div th:replace="~{fragments/common :: header}">Debug header</div>
 <div class="container-fluid h-100 overflow-hidden">
     <div class="debug-border-black row h-100 overflow-hidden">
         <div class="col-sm-1 h-100 p-0">
-            <div th:replace="dialogs/common :: dialogs-left-panel">...</div>
+            <div th:replace="~{dialogs/common :: dialogs-left-panel}">Debug left panel</div>
         </div>
         <div class="col debug-border-blue flex-grow-1 d-flex flex-column p-0 h-100 overflow-hidden">
-            <div th:replace="dialogs/common :: dialogs-header">...</div>
+            <div th:replace="~{dialogs/common :: dialogs-header}">Debug Dialog title</div>
 
             <div class="row debug-border-purple flex-grow-1 h-100 overflow-hidden">
                 <!-- Левая панель: список диалогов -->
-                <div class="col-md-4 col-12 debug-border-orange d-flex flex-column h-100">
-                    <!-- Поиск -->
-                    <div class="input-group mb-2">
-                        <span class="input-group-text"><i class="bi bi-search"></i></span>
-                        <input class="form-control border-start-0" placeholder="Найти диалог или пользователя..."
-                               type="text">
-                    </div>
-
-                    <!-- Фильтры -->
-                    <div class="d-flex mb-2">
-                        <button class="btn btn-outline-primary rounded-pill active border-0 me-2">Все</button>
-                        <button class="btn btn-outline-primary rounded-pill border-0 me-2">Кандидаты</button>
-                        <button class="btn btn-outline-primary rounded-pill border-0">Студенты</button>
-                    </div>
-
-                    <!-- Список диалогов -->
-                    <div class="flex-grow-1 overflow-auto debug-border-green flex-grow-1">
-                        <div th:each="dialog : ${dialogs}">
-                            <a class="dialog-item text-body"
-                               th:classappend="${dialog.id == id} ? 'bg-primary bg-opacity-10'"
-                               th:href="@{/dialogs/{id}(id=${dialog.id})}">
-                                <div class="d-flex align-items-start">
-                                    <div class="flex-grow-1 overflow-hidden"
-                                         th:with="messageCount=${#lists.size(dialog.messages)}">
-                                        <div class="d-flex justify-content-between">
-                                            <strong>
-                                                <span th:text="${dialog.user.lastName}">Александров</span>
-                                                <span th:text="${dialog.user.firstName}">Иван</span>
-                                            </strong>
-                                            <small>
-                                                        <span th:if="${#temporals.format(dialog.lastMessageAt, 'yyyy-MM-dd') == #temporals.format(today, 'yyyy-MM-dd')}"
-                                                              th:text="${#temporals.format(dialog.lastMessageAt, 'HH:mm')}">14:25</span>
-                                                <span th:text="${#temporals.format(dialog.lastMessageAt, 'dd MMMM')}"
-                                                      th:unless="${#temporals.format(dialog.lastMessageAt, 'yyyy-MM-dd') == #temporals.format(today, 'yyyy-MM-dd')}">25 Мая</span>
-                                            </small>
-                                        </div>
-                                        <div class="text-muted small">
-                                                <span class="text-lowercase"
-                                                      th:text="${dialog.user.role.description}">студент</span>
-                                            | @<span th:text="${dialog.user.externalId}">username</span>
-                                        </div>
-                                        <div class="text-truncate mt-1" th:if="${messageCount > 0}"
-                                             th:with="lastMsg=${dialog.messages[__${messageCount}__ - 1]}">
-                                                    <span class="text-primary me-1" th:text="${lastMsg.senderType == 'user' ?
-                                                        (lastMsg.sender.lastName + ' ' + #strings.substring(lastMsg.sender.firstName, 0, 1) + '.') :
-                                                        'Администратор'}">Иванов А.</span>
-                                            <span th:text="${lastMsg.text}">Пропускаю занятия...</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+                <div class="col-md-4 col-12" th:replace="~{dialogs/common :: dialogs-list}">Debug dialog list</div>
 
                 <!-- Правая панель: переписка -->
                 <div class="col-md-8 col-12 d-flex flex-column">

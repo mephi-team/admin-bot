@@ -37,11 +37,12 @@ public class DialogController {
         model.addAttribute("dialogs", dialogs);
         model.addAttribute("searchQuery", search != null ? search : "");
         model.addAttribute("today", LocalDate.now());
+        model.addAttribute("currentUri", "dialogs");
         return "dialogs/list";
     }
 
-    @GetMapping("/dialogs/{id}")
-    public String viewDialog(@PathVariable Long id, @RequestParam(required = false) String search, Model model) {
+    @GetMapping("/dialogs/{pathId}")
+    public String viewDialog(@PathVariable Long pathId, @RequestParam(required = false) String search, Model model) {
         List<Dialog> dialogs;
         if (search != null && !search.trim().isEmpty()) {
             dialogs = dialogRepository.searchByUserName(search.trim());
@@ -51,13 +52,14 @@ public class DialogController {
 
         model.addAttribute("dialogs", dialogs);
 
-        Dialog dialog = dialogRepository.findById(id).orElseThrow();
+        Dialog dialog = dialogRepository.findById(pathId).orElseThrow();
 
         List<MessagesGroup> messageGroups = groupMessagesByDate(dialog.getMessages());
 
         model.addAttribute("dialog", dialog);
         model.addAttribute("messageGroups", messageGroups);
         model.addAttribute("today", LocalDate.now());
+        model.addAttribute("currentUri", "dialogs");
         return "dialogs/detail"; // ← шаблон деталей
     }
 
@@ -69,7 +71,7 @@ public class DialogController {
         // Сортируем по времени (на случай, если порядок нарушен)
         List<Message> sorted = messages.stream()
                 .sorted(Comparator.comparing(Message::getCreatedAt))
-                .collect(Collectors.toList());
+                .toList();
 
         // Группируем по дате (LocalDate)
         Map<LocalDate, List<Message>> grouped = sorted.stream()
@@ -83,7 +85,7 @@ public class DialogController {
         LocalDate today = LocalDate.now();
         LocalDate yesterday = today.minusDays(1);
 
-        DateTimeFormatter russianMonthFormatter = DateTimeFormatter.ofPattern("d MMMM", new Locale("ru"));
+        DateTimeFormatter russianMonthFormatter = DateTimeFormatter.ofPattern("d MMMM", Locale.of("ru"));
 
         List<MessagesGroup> result = new ArrayList<>();
         for (Map.Entry<LocalDate, List<Message>> entry : grouped.entrySet()) {

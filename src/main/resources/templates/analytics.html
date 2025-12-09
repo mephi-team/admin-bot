@@ -9,17 +9,23 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="debug-border-red d-flex flex-column vh-100 overflow-hidden">
-<div th:replace="fragments/common :: header">...</div>
-<div class="container py-4">
-    <h1 class="mb-4">Аналитика</h1>
+<div th:replace="~{fragments/common :: header}">Debug header</div>
+<div class="container-fluid h-100 overflow-hidden">
+    <div class="debug-border-black row h-100 overflow-hidden">
+        <div class="col-sm-1 h-100 p-0"></div>
+        <div class="col debug-border-blue flex-grow-1 d-flex flex-column p-0 h-100 overflow-hidden">
+            <h1 class="mb-4">Аналитика</h1>
 
-    <div class="card">
-        <div class="card-header bg-info text-white">
-            Активность диалогов (последние 7 дней)
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    Активность диалогов (последние 7 дней)
+                </div>
+                <div class="card-body">
+                    <canvas height="200" id="dialogChart" width="400"></canvas>
+                </div>
+            </div>
         </div>
-        <div class="card-body">
-            <canvas height="200" id="dialogChart" width="400"></canvas>
-        </div>
+        <div class="col-sm-1"></div>
     </div>
 </div>
 
@@ -52,7 +58,7 @@
             scales: {
                 y: {
                     beginAtZero: true,
-                    ticks: { stepSize: 1 }
+                    ticks: {stepSize: 1}
                 }
             }
         }
