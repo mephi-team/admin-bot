@@ -15,48 +15,63 @@
             <div th:replace="~{dialogs/common :: dialogs-left-panel}">Debug left panel</div>
         </div>
         <div class="col debug-border-blue flex-grow-1 d-flex flex-column p-0 h-100 overflow-hidden">
-            <h1 class="mb-4">Часто задаваемые вопросы (FAQ)</h1>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="mb-4">Вопросы</h1>
+            </div>
 
-            <!-- Форма добавления -->
-            <div class="card mb-4">
-                <div class="card-header bg-primary text-white">
-                    Добавить новый вопрос
-                </div>
-                <div class="card-body">
-                    <form method="post" th:action="@{/questions}" th:object="${newQuestion}">
-                        <div class="mb-3">
-                            <label class="form-label" for="questionText">Вопрос</label>
-                            <textarea class="form-control" id="questionText" required rows="2"
-                                      th:field="*{questionText}"></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="answerText">Ответ</label>
-                            <textarea class="form-control" id="answerText" required rows="3"
-                                      th:field="*{answerText}"></textarea>
-                        </div>
-                        <button class="btn btn-success" type="submit">Сохранить</button>
-                    </form>
+            <!-- Поиск -->
+            <div class="mb-3">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                    <input class="form-control" placeholder="Найти вопрос" type="text">
                 </div>
             </div>
 
-            <!-- Список вопросов -->
-            <div class="card">
-                <div class="card-header bg-secondary text-white">
-                    Существующие вопросы
-                </div>
-                <div class="card-body">
-                    <div class="text-muted" th:if="${questions.isEmpty()}">
-                        Нет сохранённых вопросов.
-                    </div>
-                    <div class="border-bottom pb-3 mb-3" th:each="q : ${questions}">
-                        <h5 th:text="${q.questionText}"></h5>
-                        <p class="text-muted" th:text="${q.answerText}"></p>
-                    </div>
-                </div>
+            <!-- Таблица -->
+
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                    <tr>
+                        <th scope="col">
+                            <div class="d-flex align-items-center">
+                                <input class="form-check-input me-2" type="checkbox">
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="d-flex align-items-center">
+                                <span>Вопрос</span>
+                                <i class="bi bi-arrow-up-down ms-2 text-muted" style="font-size: 0.8rem;"></i>
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="d-flex align-items-center">
+                                Дата
+                                <i class="bi bi-arrow-up-down ms-2 text-muted" style="font-size: 0.8rem;"></i>
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="d-flex align-items-center">
+                                Ответ
+                                <i class="bi bi-arrow-up-down ms-2 text-muted" style="font-size: 0.8rem;"></i>
+                            </div>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="q : ${questions}">
+                        <td><input class="form-check-input" id="check-__${q.id}__" type="checkbox"></td>
+                        <td th:text="${q.questionText}">Вопрос</td>
+                        <td th:text="${#temporals.format(q.createdAt, 'dd.MM.yyyy HH:mm')}">17.05.2025 15:35</td>
+                        <td th:text="${q.answerText}">Ответ</td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
         <div class="col-sm-1"></div>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -13,11 +13,23 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "broadcasts")
+@Table(name = "mailings")
 public class Broadcast {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "users", nullable = false)
+    private Role users;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "direction", nullable = false)
+    private Direction direction;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by", nullable = false)
+    private User createdBy;
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String messageText;
