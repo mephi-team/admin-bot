@@ -19,15 +19,28 @@ public class UserController {
     @GetMapping("/users")
     public String usersPage(
             @RequestParam(defaultValue = "all") String status,
+            @RequestParam(name = "q", required = false) String query,
             Model model) {
 
         List<User> users;
-        if ("active".equals(status)) {
-            users = userRepository.findByStatus("active");
-        } else if ("blocked".equals(status)) {
-            users = userRepository.findByStatus("blocked");
+        boolean searching = query != null && !query.isBlank();
+
+        if (!searching) {
+            // стандартный фильтр без поиска
+            if (status.equals("active")) {
+                users = userRepository.findByStatus("active");
+            } else if (status.equals("blocked")) {
+                users = userRepository.findByStatus("blocked");
+            } else {
+                users = userRepository.findAll();
+            }
         } else {
-            users = userRepository.findAll();
+            // поиск с учётом статуса
+            if (status.equals("all")) {
+                users = userRepository.searchAll(query);
+            } else {
+                users = userRepository.searchByStatus(status, query);
+            }
         }
 
         model.addAttribute("users", users);
