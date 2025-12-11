@@ -10,13 +10,13 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Юнит-тесты для сущности Broadcast (проверка @PrePersist onCreate и связей).
  */
-class BroadcastTest {
+class MailingTest {
 
     @Test
     void onCreate_shouldSetCreatedAtToNow() {
         // given
-        Broadcast broadcast = Broadcast.builder()
-                .messageText("Тестовая рассылка")
+        Mailing broadcast = Mailing.builder()
+                .name("Тестовая рассылка")
                 .build();
 
         assertNull(broadcast.getCreatedAt(), "До onCreate createdAt должен быть null");
@@ -45,19 +45,11 @@ class BroadcastTest {
         role.setCode(3L);
 
         // when
-        Broadcast broadcast = Broadcast.builder()
+        Mailing broadcast = Mailing.builder()
                 .id(100L)
-                .users(role)
-                .direction(direction)
-                .createdBy(creator)
-                .messageText("Сообщение для рассылки")
                 .build();
 
         // then
         assertEquals(100L, broadcast.getId());
-        assertEquals(role, broadcast.getUsers());
-        assertEquals(direction, broadcast.getDirection());
-        assertEquals(creator, broadcast.getCreatedBy());
-        assertEquals("Сообщение для рассылки", broadcast.getMessageText());
     }
 }

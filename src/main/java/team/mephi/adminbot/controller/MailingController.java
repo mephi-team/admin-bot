@@ -6,30 +6,30 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import team.mephi.adminbot.model.Broadcast;
-import team.mephi.adminbot.repository.BroadcastRepository;
+import team.mephi.adminbot.model.Mailing;
+import team.mephi.adminbot.repository.MailingRepository;
 
 import java.util.List;
 
 @Controller
-public class BroadcastController {
+public class MailingController {
 
     @Autowired
-    private BroadcastRepository broadcastRepository;
+    private MailingRepository mailingRepository;
 
     @GetMapping("/broadcasts")
     public String broadcastsPage(Model model) {
-        List<Broadcast> broadcasts = broadcastRepository.findAllByOrderByCreatedAtDesc();
+        List<Mailing> broadcasts = mailingRepository.findAllByOrderByCreatedAtDesc();
         model.addAttribute("broadcasts", broadcasts);
-        model.addAttribute("newBroadcast", Broadcast.builder().build());
+        model.addAttribute("newBroadcast", Mailing.builder().build());
         model.addAttribute("currentUri", "broadcasts");
         return "broadcasts";
     }
 
     @PostMapping("/broadcasts")
-    public String createBroadcast(@ModelAttribute("newBroadcast") Broadcast broadcast) {
+    public String createBroadcast(@ModelAttribute("newBroadcast") Mailing broadcast) {
         // Логика: сохраняем рассылку, бот будет читать её позже
-        broadcastRepository.save(broadcast);
+        mailingRepository.save(broadcast);
         return "redirect:/broadcasts";
     }
 }

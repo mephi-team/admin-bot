@@ -7,8 +7,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
-import team.mephi.adminbot.model.Broadcast;
-import team.mephi.adminbot.repository.BroadcastRepository;
+import team.mephi.adminbot.model.Mailing;
+import team.mephi.adminbot.repository.MailingRepository;
 
 import java.util.List;
 
@@ -21,22 +21,22 @@ import static org.mockito.Mockito.*;
  * Юнит-тесты для BroadcastController без поднятия Spring-контекста.
  */
 @ExtendWith(MockitoExtension.class)
-class BroadcastControllerTest {
+class MailingControllerTest {
 
     @Mock
-    private BroadcastRepository broadcastRepository;
+    private MailingRepository mailingRepository;
 
     @InjectMocks
-    private BroadcastController broadcastController;
+    private MailingController broadcastController;
 
     @Test
     void broadcastsPage_shouldLoadBroadcastsAndPopulateModel() {
         // given
-        List<Broadcast> broadcasts = List.of(
-                Broadcast.builder().build(),
-                Broadcast.builder().build()
+        List<Mailing> broadcasts = List.of(
+                Mailing.builder().build(),
+                Mailing.builder().build()
         );
-        when(broadcastRepository.findAllByOrderByCreatedAtDesc()).thenReturn(broadcasts);
+        when(mailingRepository.findAllByOrderByCreatedAtDesc()).thenReturn(broadcasts);
 
         Model model = new ExtendedModelMap();
 
@@ -46,7 +46,7 @@ class BroadcastControllerTest {
         // then
         assertEquals("broadcasts", viewName);
 
-        verify(broadcastRepository).findAllByOrderByCreatedAtDesc();
+        verify(mailingRepository).findAllByOrderByCreatedAtDesc();
 
         assertSame(broadcasts, model.getAttribute("broadcasts"));
         assertNotNull(model.getAttribute("newBroadcast"));
@@ -56,13 +56,13 @@ class BroadcastControllerTest {
     @Test
     void createBroadcast_shouldSaveBroadcastAndRedirect() {
         // given
-        Broadcast broadcast = Broadcast.builder().build();
+        Mailing broadcast = Mailing.builder().build();
 
         // when
         String viewName = broadcastController.createBroadcast(broadcast);
 
         // then
         assertEquals("redirect:/broadcasts", viewName);
-        verify(broadcastRepository).save(broadcast);
+        verify(mailingRepository).save(broadcast);
     }
 }

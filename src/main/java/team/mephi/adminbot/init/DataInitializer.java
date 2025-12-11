@@ -5,6 +5,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import team.mephi.adminbot.model.*;
+import team.mephi.adminbot.model.enums.MailingStatus;
 import team.mephi.adminbot.model.enums.SenderType;
 import team.mephi.adminbot.repository.*;
 
@@ -34,7 +35,7 @@ public class DataInitializer {
     private QuestionRepository questionRepository;
 
     @Autowired
-    private BroadcastRepository broadcastRepository;
+    private MailingRepository mailingRepository;
 
     @Bean
     public ApplicationRunner initTestData() {
@@ -44,7 +45,7 @@ public class DataInitializer {
             boolean hasUsers = userRepository.count() > 0;
             boolean hasDialogs = dialogRepository.count() > 0;
             boolean hasQuestions = questionRepository.count() > 0;
-            boolean hasBroadcasts = broadcastRepository.count() > 0;
+            boolean hasBroadcasts = mailingRepository.count() > 0;
 
             if (!hasUsers || !hasDialogs || !hasQuestions || !hasBroadcasts) {
                 System.out.println("🔁 Предзаполнение БД тестовыми данными...");
@@ -120,33 +121,25 @@ public class DataInitializer {
     private void initBroadcasts() {
         Random random = new Random();
 
-        Role studentRole = roleRepository.findByName("student")
-                .orElseThrow(() -> new RuntimeException("Роль 'student' не найдена"));
-        Role candidateRole = roleRepository.findByName("candidate")
-                .orElseThrow(() -> new RuntimeException("Роль 'candidate' не найдена"));
-
-        List<Broadcast> broadcasts = Arrays.asList(
-                Broadcast.builder()
+        List<Mailing> broadcasts = Arrays.asList(
+                Mailing.builder()
                         .createdBy(userRepository.findById(1L + random.nextLong(userRepository.count())).orElseThrow())
-                        .users(studentRole)
-                        .direction(directionRepository.findById(1L + random.nextLong(directionRepository.count())).orElseThrow())
-                        .messageText("Добро пожаловать в Flexiq! Начните обучение уже сегодня.")
+                        .name("Test1")
+                        .status(MailingStatus.DRAFT)
                         .build(),
-                Broadcast.builder()
+                Mailing.builder()
                         .createdBy(userRepository.findById(1L + random.nextLong(userRepository.count())).orElseThrow())
-                        .users(candidateRole)
-                        .direction(directionRepository.findById(1L + random.nextLong(directionRepository.count())).orElseThrow())
-                        .messageText("Напоминаем: завтра стартует новый поток по Java-разработке!")
+                        .name("Test2")
+                        .status(MailingStatus.DRAFT)
                         .build(),
-                Broadcast.builder()
+                Mailing.builder()
                         .createdBy(userRepository.findById(1L + random.nextLong(userRepository.count())).orElseThrow())
-                        .users(studentRole)
-                        .direction(directionRepository.findById(1L + random.nextLong(directionRepository.count())).orElseThrow())
-                        .messageText("Специальное предложение: скидка 15% на все курсы до конца недели.")
+                        .name("Test3")
+                        .status(MailingStatus.DRAFT)
                         .build()
         );
         broadcasts.forEach(b -> b.setCreatedAt(LocalDateTime.now().minusDays(new Random().nextInt(5))));
-        broadcastRepository.saveAll(broadcasts);
+        mailingRepository.saveAll(broadcasts);
         System.out.println("  → Создано 3 рассылки");
     }
 
