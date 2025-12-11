@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Пользователи — Админка Flexiq</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="../../static/css/main.css" rel="stylesheet" th:href="@{/css/main.css}"/>
+
+    <style>
+        /*body {*/
+        /*    background-color: #ffffff;*/
+        /*    font-size: 14px;*/
+        /*}*/
+        /* держу пока локально, перемещу в главный css при зачистке*/
+        .page-wrapper {
+            padding-top: 24px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        /* Пилюли-фильтры */
+        .status-pill {
+            border-radius: 999px;
+            padding: 6px 16px;
+            font-size: 13px;
+            border: 1px solid #dee2e6;
+            background-color: #fff;
+            color: #4f4f4f;
+            text-decoration: none;
+        }
+        .status-pill.active {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+            color: #fff !important;
+        }
+
+        /* Поиск */
+        .users-search input {
+            border-radius: 999px;
+            font-size: 13px;
+            padding-block: 6px;
+        }
+        .users-search .input-group-text {
+            border-radius: 999px 0 0 999px;
+            background-color: #ffffff;
+        }
+
+        /* Таблица */
+        .users-table thead {
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 12px;
+            color: #6b7280;
+        }
+        .users-table th {
+            font-weight: 500;
+        }
+        .users-table tbody tr {
+            border-bottom: 1px solid #eef0f4;
+        }
+        .users-table tbody tr:hover {
+            background-color: #f9fafb;
+        }
+
+        .column-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .consent-link {
+            font-size: 12px;
+        }
+
+        .table-actions i {
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .icon-btn {
+            border: none;
+            background: transparent;
+            padding: 0;
+        }
+    </style>
+</head>
+<body class="d-flex flex-column vh-100 overflow-hidden">
+
+<div th:replace="~{fragments/common :: header}">Header</div>
+<div class="container-fluid h-100 overflow-hidden">
+    <div class="row h-100 overflow-hidden">
+
+        <div class="col-sm-1 h-100 p-0"></div>
+
+        <div class="col flex-grow-1 d-flex flex-column p-0 h-100 overflow-hidden page-wrapper">
+
+            <!-- Заголовок и кнопки -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h1 class="page-title mb-0">Пользователи</h1>
+
+                <div class="d-flex align-items-center gap-2">
+                    <a class="btn btn-outline-primary btn-sm" href="/users/import">
+                        <i class="bi bi-file-earmark-arrow-up me-2"></i>
+                        Загрузить из файла
+                    </a>
+                    <a class="btn btn-primary btn-sm" href="/users/create">
+                        <i class="bi bi-plus-lg me-2"></i>
+                        Добавить пользователя
+                    </a>
+                </div>
+            </div>
+
+            <!-- Фильтры -->
+            <div class="d-flex flex-wrap gap-2 mb-3">
+                <a class="status-pill"
+                   th:href="@{/users(status='all')}"
+                   th:classappend="${currentStatus} == 'all' ? ' active'">
+                    Все
+                </a>
+
+                <a class="status-pill"
+                   th:href="@{/users(status='active')}"
+                   th:classappend="${currentStatus} == 'active' ? ' active'">
+                    Активные
+                </a>
+
+                <a class="status-pill"
+                   th:href="@{/users(status='blocked')}"
+                   th:classappend="${currentStatus} == 'blocked' ? ' active'">
+                    Заблокированные
+                </a>
+            </div>
+
+            <!-- Поиск -->
+            <div class="d-flex justify-content-between align-items-center mb-2">
+
+                <form th:action="@{/users}" method="get"
+                      class="users-search flex-grow-1 me-3"
+                      style="max-width:420px;">
+
+                    <!-- сохраняем выбранный фильтр статуса -->
+                    <input type="hidden" name="status" th:value="${currentStatus}"/>
+
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text border-end-0">
+                            <i class="bi bi-search"></i>
+                        </span>
+                        <input class="form-control border-start-0"
+                               type="text"
+                               name="q"
+                               th:value="${search}"
+                               placeholder="Найти пользователя...">
+                    </div>
+                </form>
+
+                <div class="d-flex align-items-center gap-3">
+                    <button type="button" class="icon-btn">
+                        <i class="bi bi-gear"></i>
+                    </button>
+                    <button type="button" class="icon-btn">
+                        <i class="bi bi-download"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Таблица -->
+            <div class="table-responsive">
+                <table class="table table-hover mb-0 users-table align-middle">
+                    <thead>
+                    <tr>
+                        <th style="width: 40px;">
+                            <input class="form-check-input" type="checkbox">
+                        </th>
+
+                        <th>
+                            <span class="column-label">
+                                Имя пользователя
+                                <i class="bi bi-funnel text-muted" style="font-size:0.8rem;"></i>
+                            </span>
+                        </th>
+
+                        <th style="width: 220px;">
+                            <span class="column-label">
+                                Telegram
+                                <i class="bi bi-arrow-down-up text-muted" style="font-size:0.8rem;"></i>
+                            </span>
+                        </th>
+
+                        <th style="width: 180px;">
+                            <span class="column-label">
+                                Согласия ПД
+                                <i class="bi bi-arrow-down-up text-muted" style="font-size:0.8rem;"></i>
+                            </span>
+                        </th>
+
+                        <th style="width: 120px;">
+                            Действия
+                        </th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+                    <!-- Строки пользователей -->
+                    <tr th:each="u : ${users}">
+                        <td>
+                            <input class="form-check-input" type="checkbox"
+                                   th:id="'check-' + ${u.id}">
+                        </td>
+
+                        <td>
+                            <span th:text="${u.name}">Имя</span>
+                        </td>
+
+                        <td>
+                            <a class="text-decoration-none"
+                               th:text="${u.externalId}"
+                               href="#">
+                                @username
+                            </a>
+                        </td>
+
+                        <td>
+                            <a href="#" class="consent-link link-primary">
+                                Получено: 0/1
+                            </a>
+                        </td>
+
+                        <td class="table-actions">
+                            <div class="d-flex gap-2">
+                                <i class="bi bi-calendar-event" title="История"></i>
+                                <i class="bi bi-slash-circle" title="Заблокировать"></i>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Если нет пользователей -->
+                    <tr th:if="${#lists.isEmpty(users)}">
+                        <td colspan="5" class="text-center text-muted py-4">
+                            Пользователи не найдены
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+        <div class="col-sm-1 h-100 p-0"></div>
+    </div>
+</div>
+</body>
+</html>
