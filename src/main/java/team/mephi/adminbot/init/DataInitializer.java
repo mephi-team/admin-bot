@@ -5,6 +5,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import team.mephi.adminbot.model.*;
+import team.mephi.adminbot.model.enums.SenderType;
 import team.mephi.adminbot.repository.*;
 
 import java.time.LocalDateTime;
@@ -268,7 +269,7 @@ public class DataInitializer {
         msg.setDialog(dialog);
         msg.setSender(sender);
         msg.setText(text);
-        msg.setSenderType(senderType);
+        msg.setSenderType(SenderType.valueOf(senderType.toUpperCase()));
         msg.setStatus("active");
         msg.setCreatedAt(createdAt);
         return msg;
