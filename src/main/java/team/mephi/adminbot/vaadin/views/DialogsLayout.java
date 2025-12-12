@@ -12,15 +12,9 @@ public class DialogsLayout extends AppLayout {
     private boolean minimized = false;
 
     public DialogsLayout() {
-        addToNavbar(new Logo("Neoflex1"), new TopMenu());
+        addToNavbar(new Logo("Neoflex"), new TopMenu());
         addToDrawer(new MenuButton(event -> toggleDrawerMode()), new LeftMenu());
         setDrawerMinimized(false);
-        getElement().getStyle().set("height", "100%");
-//        getElement().getStyle().set("border", "3px solid green");
-//        getElement().getStyle().set("overflow", "hidden");
-
-//        getContent().getElement().getStyle().set("border", "3px solid green");
-//        getContent().getElement().getStyle().set("border", "1px solid blue");
     }
 
     private void toggleDrawerMode() {

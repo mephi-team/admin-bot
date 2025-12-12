@@ -1,22 +1,23 @@
 package team.mephi.adminbot.vaadin.components;
 
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.virtuallist.VirtualList;
 import com.vaadin.flow.data.provider.CallbackDataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.AfterNavigationObserver;
 import team.mephi.adminbot.dto.MessagesForListDto;
+import team.mephi.adminbot.repository.MessageRepository;
 
 import java.util.Optional;
 
-public class ChatListComponent extends VirtualList<MessagesForListDto> implements AfterNavigationObserver {
-    private CallbackDataProvider<MessagesForListDto, Long> provider;
+public class ChatListComponent extends VerticalLayout implements AfterNavigationObserver {
+    private final CallbackDataProvider<MessagesForListDto, Long> provider;
+    private Long dialogId;
 
     ComponentRenderer<Div, MessagesForListDto> cardRenderer = new ComponentRenderer<>(item -> {
-        System.out.println("MSG: " + item.getText());
         var card = new Div(item.getText());
-//        card.getElement().getStyle().set("border", "1px solid red");
         card.getStyle().set("min-height", "50px");
         card.getStyle().set("max-width", "50%");
         card.getStyle().set("padding", "16px");
@@ -33,20 +34,37 @@ public class ChatListComponent extends VirtualList<MessagesForListDto> implement
         return card;
     });
 
-    public ChatListComponent(CallbackDataProvider<MessagesForListDto, Long> provider) {
-        this.provider = provider;
-        setDataProvider(provider);
-        setRenderer(cardRenderer);
+    public ChatListComponent(MessageRepository messageRepository) {
+        this.provider = getProvider(messageRepository);
+        VirtualList<MessagesForListDto> chatList = new VirtualList<>();
+        chatList.setDataProvider(provider);
+        chatList.setRenderer(cardRenderer);
+
+        add(chatList);
+        setHeightFull();
+        getElement().getStyle().set("border", "1px solid #eaeaee");
+        getElement().getStyle().set("border-radius", "12px");
+    }
+
+    private CallbackDataProvider<MessagesForListDto, Long> getProvider(MessageRepository messageRepository) {
+        return new CallbackDataProvider<>(
+                query -> {
+                    return messageRepository.findAllByDialogId(dialogId)
+                            .stream().map(a -> new MessagesForListDto(a.getId(), a.getText(), a.getSenderType().name()))
+                            .skip(query.getOffset())
+                            .limit(query.getLimit());
+                },
+                query -> messageRepository.countByDialogId(dialogId)
+        );
     }
 
     @Override
     public void afterNavigation(AfterNavigationEvent event) {
-        // Извлекаем ID из текущего URL (вам нужно адаптировать эту логику под ваши маршруты)
-        Optional<String> dialogId = event.getRouteParameters().get("dialogId");
-        dialogId.ifPresent(id -> {
-            var activeDialogId = Long.parseLong(id);
-            provider.withConfigurableFilter().setFilter(activeDialogId);
+        Optional<String> optionalId = event.getRouteParameters().get("dialogId");
+        optionalId.ifPresent(id -> {
+            dialogId = Long.parseLong(id);
+            provider.withConfigurableFilter().setFilter(dialogId);
         });
-        getDataProvider().refreshAll();
+        provider.refreshAll();
     }
 }
