@@ -31,6 +31,7 @@ public class DialogListComponent extends VerticalLayout implements AfterNavigati
 
     ComponentRenderer<RouterLink, DialogWithLastMessageDto> cardRenderer = new ComponentRenderer<>(item -> {
         RouterLink link = new RouterLink();
+        link.setHighlightCondition((a,e) -> false);
         link.setClassName("dialog-item text-body");
 
         link.setRoute(Dialogs.class, new RouteParameters("dialogId", item.getDialogId().toString()));
