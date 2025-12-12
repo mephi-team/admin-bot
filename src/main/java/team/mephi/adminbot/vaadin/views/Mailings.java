@@ -2,21 +2,15 @@ package team.mephi.adminbot.vaadin.views;
 
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.CallbackDataProvider;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
-import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
 import team.mephi.adminbot.dto.MailingList;
-import team.mephi.adminbot.model.Mailing;
-import team.mephi.adminbot.model.Question;
 import team.mephi.adminbot.repository.MailingRepository;
-import team.mephi.adminbot.repository.QuestionRepository;
+import team.mephi.adminbot.vaadin.components.SearchField;
 
-import java.util.List;
 
 @Route(value = "/mailings", layout = DialogsLayout.class)
 public class Mailings extends VerticalLayout {
@@ -28,7 +22,7 @@ public class Mailings extends VerticalLayout {
         grid.addColumn(MailingList::getName).setHeader("Text").setSortable(true);
         grid.setMultiSort(true, Grid.MultiSortPriority.APPEND);
 
-        final TextField searchField = createSearchField();
+        final TextField searchField = new SearchField("Найти рассылку");
 
         var filterableProvider = getProvider(mailingRepository, searchField);
         grid.setDataProvider(filterableProvider);
@@ -62,14 +56,5 @@ public class Mailings extends VerticalLayout {
         );
 
         return dataProvider.withConfigurableFilter();
-    }
-
-    private TextField createSearchField() {
-        TextField searchField = new TextField();
-        searchField.setWidth("50%");
-        searchField.setPlaceholder("Найти рассылку");
-        searchField.setPrefixComponent(new Icon(VaadinIcon.SEARCH));
-        searchField.setValueChangeMode(ValueChangeMode.EAGER);
-        return searchField;
     }
 }

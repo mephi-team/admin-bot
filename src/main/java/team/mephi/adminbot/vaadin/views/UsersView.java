@@ -1,15 +1,13 @@
 package team.mephi.adminbot.vaadin.views;
 
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.CallbackDataProvider;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
-import com.vaadin.flow.data.value.ValueChangeMode;
 import team.mephi.adminbot.model.User;
 import team.mephi.adminbot.repository.UserRepository;
+import team.mephi.adminbot.vaadin.components.SearchField;
 
 public class UsersView extends VerticalLayout {
     private final String role;
@@ -18,7 +16,7 @@ public class UsersView extends VerticalLayout {
         this.role = role;
 
         setHeightFull();
-        final TextField searchField = createSearchField();
+        final TextField searchField = new SearchField("Найти куратора");
 
         Grid<User> grid = new Grid<>(User.class, false);
         grid.addColumn(User::getId).setHeader("Id").setSortable(true);
@@ -44,14 +42,5 @@ public class UsersView extends VerticalLayout {
         );
 
         return dataProvider.withConfigurableFilter();
-    }
-
-    private TextField createSearchField() {
-        TextField searchField = new TextField();
-        searchField.setWidth("50%");
-        searchField.setPlaceholder("Найти куратора");
-        searchField.setPrefixComponent(new Icon(VaadinIcon.SEARCH));
-        searchField.setValueChangeMode(ValueChangeMode.EAGER);
-        return searchField;
     }
 }

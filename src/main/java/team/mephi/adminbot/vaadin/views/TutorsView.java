@@ -1,20 +1,18 @@
 package team.mephi.adminbot.vaadin.views;
 
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.CallbackDataProvider;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
-import com.vaadin.flow.data.value.ValueChangeMode;
 import team.mephi.adminbot.dto.TutorWithCounts;
 import team.mephi.adminbot.repository.TutorRepository;
+import team.mephi.adminbot.vaadin.components.SearchField;
 
 public class TutorsView extends VerticalLayout {
     public TutorsView(TutorRepository tutorRepository) {
         setHeightFull();
-        final TextField searchField = createSearchField();
+        final TextField searchField = new SearchField("Найти куратора");
 
         var filterableProvider = getProvider(tutorRepository, searchField);
         Grid<TutorWithCounts> grid = new Grid<>(TutorWithCounts.class, false);
@@ -49,14 +47,5 @@ public class TutorsView extends VerticalLayout {
         );
 
         return dataProvider.withConfigurableFilter();
-    }
-
-    private TextField createSearchField() {
-        TextField searchField = new TextField();
-        searchField.setWidth("50%");
-        searchField.setPlaceholder("Найти куратора");
-        searchField.setPrefixComponent(new Icon(VaadinIcon.SEARCH));
-        searchField.setValueChangeMode(ValueChangeMode.EAGER);
-        return searchField;
     }
 }

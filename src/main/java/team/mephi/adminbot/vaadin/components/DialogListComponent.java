@@ -2,8 +2,6 @@ package team.mephi.adminbot.vaadin.components;
 
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.html.*;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -12,7 +10,6 @@ import com.vaadin.flow.component.virtuallist.VirtualList;
 import com.vaadin.flow.data.provider.CallbackDataProvider;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
-import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.RouteParameters;
@@ -104,7 +101,7 @@ public class DialogListComponent extends VerticalLayout implements AfterNavigati
     public DialogListComponent(DialogRepository dialogRepository) {
         this.today = LocalDateTime.now();
 
-        final TextField searchField = createSearchField();
+        final TextField searchField = new SearchField("Найти вопрос");
 
         provider = getProvider(dialogRepository, searchField);
 
@@ -131,15 +128,6 @@ public class DialogListComponent extends VerticalLayout implements AfterNavigati
         );
 
         return dataProvider.withConfigurableFilter();
-    }
-
-    private TextField createSearchField() {
-        TextField searchField = new TextField();
-        searchField.setWidth("100%");
-        searchField.setPlaceholder("Найти вопрос");
-        searchField.setPrefixComponent(new Icon(VaadinIcon.SEARCH));
-        searchField.setValueChangeMode(ValueChangeMode.EAGER);
-        return searchField;
     }
 
     private String formatDate(LocalDateTime dateTime) {

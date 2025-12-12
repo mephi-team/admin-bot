@@ -2,16 +2,14 @@ package team.mephi.adminbot.vaadin.views;
 
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.CallbackDataProvider;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
-import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
 import team.mephi.adminbot.model.Question;
 import team.mephi.adminbot.repository.QuestionRepository;
+import team.mephi.adminbot.vaadin.components.SearchField;
 
 @Route(value = "/questions", layout = DialogsLayout.class)
 public class Questions extends VerticalLayout {
@@ -35,7 +33,7 @@ public class Questions extends VerticalLayout {
         grid.addColumn(Question::getCreatedAt).setHeader("Автор").setSortable(true);
         grid.setMultiSort(true, Grid.MultiSortPriority.APPEND);
 
-        final TextField searchField = createSearchField();
+        final TextField searchField = new SearchField("Найти вопрос");
 
         var filterableProvider = getProvider(questionRepository, searchField);
 
@@ -66,14 +64,5 @@ public class Questions extends VerticalLayout {
         );
 
         return dataProvider.withConfigurableFilter();
-    }
-
-    private TextField createSearchField() {
-        TextField searchField = new TextField();
-        searchField.setWidth("50%");
-        searchField.setPlaceholder("Найти вопрос");
-        searchField.setPrefixComponent(new Icon(VaadinIcon.SEARCH));
-        searchField.setValueChangeMode(ValueChangeMode.EAGER);
-        return searchField;
     }
 }
