@@ -16,16 +16,13 @@ import lombok.Getter;
 import lombok.Setter;
 import team.mephi.adminbot.dto.DialogWithLastMessageDto;
 import team.mephi.adminbot.dto.MessagesForListDto;
-import team.mephi.adminbot.model.Dialog;
-import team.mephi.adminbot.model.Question;
 import team.mephi.adminbot.repository.DialogRepository;
 import team.mephi.adminbot.repository.MessageRepository;
-import team.mephi.adminbot.repository.QuestionRepository;
 import team.mephi.adminbot.vaadin.components.ChatListComponent;
 import team.mephi.adminbot.vaadin.components.DialogListComponent;
 
 @Route(value = "/dialogs/:dialogId?", layout = DialogsLayout.class)
-public class Dailogs extends VerticalLayout implements HasUrlParameter<Long>, BeforeEnterObserver {
+public class Dialogs extends VerticalLayout implements HasUrlParameter<Long>, BeforeEnterObserver {
     private final VerticalLayout leftColumn = new VerticalLayout();
     private final VerticalLayout rightColumn = new VerticalLayout();
     private final DialogListComponent dialogList;
@@ -44,7 +41,7 @@ public class Dailogs extends VerticalLayout implements HasUrlParameter<Long>, Be
         }
     }
 
-    public Dailogs(DialogRepository dialogRepository, MessageRepository messageRepository) {
+    public Dialogs(DialogRepository dialogRepository, MessageRepository messageRepository) {
 //        getElement().getStyle().set("border", "3px solid blue");
         getElement().getStyle().set("height", "100%");
         getElement().getStyle().set("overflow", "hidden");

@@ -47,30 +47,17 @@ public class Users extends VerticalLayout {
 
         Map<String, Long> roleCounts = userRepository.countsByRole();
 
-        tabSheet.add(new Span(new Span("Гости"), createBadge(roleCounts.getOrDefault("visitor", 0L))), roleCounts.getOrDefault("visitor", 0L) > 0 ? createGrid(userRepository, "visitor") : new Span("Гостей пока нет"));
-        tabSheet.add(new Span(new Span("Кандидаты"), createBadge(roleCounts.getOrDefault("candidate", 0L))), roleCounts.getOrDefault("candidate", 0L) > 0 ? createGrid(userRepository, "candidate") : new Span("Кандидатов пока нет"));
-        tabSheet.add(new Span(new Span("Миддл-Кандидаты"), createBadge(roleCounts.getOrDefault("middle_candidate", 0L))), roleCounts.getOrDefault("middle_candidate", 0L) > 0 ? createGrid(userRepository, "middle_candidate") : new Span("Миддл-Кандидатов пока нет"));
-        tabSheet.add(new Span(new Span("Студенты"), createBadge(roleCounts.getOrDefault("student", 0L))), roleCounts.getOrDefault("student", 0L) > 0 ? createGrid(userRepository, "student") : new Span("Студентов пока нет"));
-        tabSheet.add(new Span(new Span("Слушатели"), createBadge(roleCounts.getOrDefault("free_listener", 0L))), roleCounts.getOrDefault("free_listener", 0L) > 0 ? createGrid(userRepository, "free_listener") : new Span("Слушателей пока нет"));
-        tabSheet.add(new Span(new Span("Эксперты"), createBadge(roleCounts.getOrDefault("expert", 0L))), roleCounts.getOrDefault("expert", 0L) > 0 ? createGrid(userRepository, "expert") : new Span("Экспертов пока нет"));
+        tabSheet.add(new Span(new Span("Гости"), createBadge(roleCounts.getOrDefault("visitor", 0L))), roleCounts.getOrDefault("visitor", 0L) > 0 ? new UsersView(userRepository, "visitor") : new Span("Гостей пока нет"));
+        tabSheet.add(new Span(new Span("Кандидаты"), createBadge(roleCounts.getOrDefault("candidate", 0L))), roleCounts.getOrDefault("candidate", 0L) > 0 ? new UsersView(userRepository, "candidate") : new Span("Кандидатов пока нет"));
+        tabSheet.add(new Span(new Span("Миддл-Кандидаты"), createBadge(roleCounts.getOrDefault("middle_candidate", 0L))), roleCounts.getOrDefault("middle_candidate", 0L) > 0 ? new UsersView(userRepository, "middle_candidate") : new Span("Миддл-Кандидатов пока нет"));
+        tabSheet.add(new Span(new Span("Студенты"), createBadge(roleCounts.getOrDefault("student", 0L))), roleCounts.getOrDefault("student", 0L) > 0 ? new UsersView(userRepository, "student") : new Span("Студентов пока нет"));
+        tabSheet.add(new Span(new Span("Слушатели"), createBadge(roleCounts.getOrDefault("free_listener", 0L))), roleCounts.getOrDefault("free_listener", 0L) > 0 ? new UsersView(userRepository, "free_listener") : new Span("Слушателей пока нет"));
+        tabSheet.add(new Span(new Span("Эксперты"), createBadge(roleCounts.getOrDefault("expert", 0L))), roleCounts.getOrDefault("expert", 0L) > 0 ? new UsersView(userRepository, "expert") : new Span("Экспертов пока нет"));
         tabSheet.add(new Span(new Span("Кураторы"), createBadge(roleCounts.getOrDefault("tutor", 0L))), new TutorsView(tutorRepository));
 
         add(top, tabSheet);
     }
 
-    private Grid<User> createGrid(UserRepository userRepository, String role) {
-        Grid<User> grid = new Grid<>(User.class, false);
-        grid.addColumn(User::getId).setHeader("Id").setSortable(true);
-        grid.addColumn(User::getUserName).setHeader("Name").setSortable(true);
-        grid.setMultiSort(true, Grid.MultiSortPriority.APPEND);
-        grid.setItems(userRepository.findAllByRole(role));
-        grid.setHeightFull();
-        return grid;
-    }
-
-    /**
-     * Helper method for creating a badge.
-     */
     private Span createBadge(Long value) {
         Span badge = new Span(String.valueOf(value));
         badge.getElement().getThemeList().add("badge small contrast");

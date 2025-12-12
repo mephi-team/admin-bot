@@ -8,44 +8,39 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.CallbackDataProvider;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.value.ValueChangeMode;
-import team.mephi.adminbot.dto.TutorWithCounts;
-import team.mephi.adminbot.repository.TutorRepository;
+import team.mephi.adminbot.model.User;
+import team.mephi.adminbot.repository.UserRepository;
 
-public class TutorsView extends VerticalLayout {
-    public TutorsView(TutorRepository tutorRepository) {
+public class UsersView extends VerticalLayout {
+    private final String role;
+
+    public UsersView(UserRepository userRepository, String role) {
+        this.role = role;
+
         setHeightFull();
         final TextField searchField = createSearchField();
 
-        var filterableProvider = getProvider(tutorRepository, searchField);
-        Grid<TutorWithCounts> grid = new Grid<>(TutorWithCounts.class, false);
-        grid.addColumn(a -> a.getLastName() + " " + a.getFirstName()).setHeader("Фамилия Имя").setSortable(true);
-        grid.addColumn(TutorWithCounts::getEmail).setHeader("Email").setSortable(true);
-        grid.addColumn(TutorWithCounts::getTgId).setHeader("Telegram").setSortable(true);
-        grid.addColumn(TutorWithCounts::getDirections).setHeader("Направление").setSortable(true);
-        grid.addColumn(TutorWithCounts::getStudentCount).setHeader("Кураторство").setSortable(true);
+        Grid<User> grid = new Grid<>(User.class, false);
+        grid.addColumn(User::getId).setHeader("Id").setSortable(true);
+        grid.addColumn(User::getUserName).setHeader("Name").setSortable(true);
         grid.setMultiSort(true, Grid.MultiSortPriority.APPEND);
-        grid.setDataProvider(filterableProvider);
+        grid.setDataProvider(getProvider(userRepository, searchField));
         grid.setHeightFull();
-
-        searchField.addValueChangeListener(e -> {
-            filterableProvider.setFilter(e.getValue());
-        });
 
         add(searchField, grid);
     }
-
-    private static ConfigurableFilterDataProvider<TutorWithCounts, Void, String> getProvider(TutorRepository questionRepository, TextField searchField) {
-        CallbackDataProvider<TutorWithCounts, String> dataProvider = new CallbackDataProvider<>(
+    private ConfigurableFilterDataProvider<User, Void, String> getProvider(UserRepository questionRepository, TextField searchField) {
+        CallbackDataProvider<User, String> dataProvider = new CallbackDataProvider<>(
                 query -> {
                     // Используем Stream для получения нужного диапазона данных из репозитория
                     // В реальном приложении здесь обычно используется JpaSpecificationExecutor с пагинацией
-                    return questionRepository.findAllWithDirectionsAndStudents(searchField.getValue())
+                    return questionRepository.findAllByRole(role)
                             .stream()
                             .skip(query.getOffset()) // Пропускаем уже загруженные элементы
                             .limit(query.getLimit()); // Берем только нужное количество
                 },
                 // Метод count (подсчет общего количества результатов фильтрации)
-                query -> questionRepository.countByName(searchField.getValue())
+                query -> questionRepository.countByRole(role)
         );
 
         return dataProvider.withConfigurableFilter();

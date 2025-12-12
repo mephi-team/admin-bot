@@ -9,8 +9,11 @@ import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.AfterNavigationObserver;
+import com.vaadin.flow.router.RouteParameters;
+import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import team.mephi.adminbot.dto.DialogWithLastMessageDto;
+import team.mephi.adminbot.vaadin.views.Dialogs;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -21,11 +24,11 @@ public class DialogListComponent extends VirtualList<DialogWithLastMessageDto> i
     private final LocalDateTime today;
     private Long activeDialogId;
 
-    ComponentRenderer<Anchor, DialogWithLastMessageDto> cardRenderer = new ComponentRenderer<>(item -> {
-        Anchor link = new Anchor();
+    ComponentRenderer<RouterLink, DialogWithLastMessageDto> cardRenderer = new ComponentRenderer<>(item -> {
+        RouterLink link = new RouterLink();
         link.setClassName("dialog-item text-body");
 
-        link.setHref("/v2/dialogs/" + item.getDialogId());
+        link.setRoute(Dialogs.class, new RouteParameters("dialogId", item.getDialogId().toString()));
 
         Div content = new Div();
         content.addClassNames("d-flex", "align-items-start");

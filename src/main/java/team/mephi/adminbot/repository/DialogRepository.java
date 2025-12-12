@@ -30,7 +30,7 @@ public interface DialogRepository extends JpaRepository<Dialog, Long> {
         u.last_name AS userLastName,
         u.first_name AS userFirstName,
         r.description AS userRoleDescription,
-        u.external_id AS userExternalId,
+        u.tg_id AS userExternalId,
         d.last_message_at AS lastMessageAt,
         m.text AS lastMessageText,
         m.sender_type AS lastMessageSenderType,
@@ -48,7 +48,7 @@ public interface DialogRepository extends JpaRepository<Dialog, Long> {
         ORDER BY dialog_id, created_at DESC
     ) m ON m.dialog_id = d.id
     LEFT JOIN users s ON m.sender_id = s.id
-    WHERE LOWER(u.name) LIKE LOWER(CONCAT('%', :query, '%'))
+    WHERE LOWER(u.user_name) LIKE LOWER(CONCAT('%', :query, '%'))
     ORDER BY d.last_message_at DESC
     """, nativeQuery = true)
     List<DialogWithLastMessageDto> findDialogsWithLastMessageNative(String query);
@@ -58,7 +58,7 @@ public interface DialogRepository extends JpaRepository<Dialog, Long> {
         count(1)
     FROM dialogs d
     JOIN users u ON d.user_id = u.id
-    WHERE LOWER(u.name) LIKE LOWER(CONCAT('%', :query, '%'))
+    WHERE LOWER(u.user_name) LIKE LOWER(CONCAT('%', :query, '%'))
     """, nativeQuery = true)
     Integer countDialogsWithLastMessageNative(String query);
 }
