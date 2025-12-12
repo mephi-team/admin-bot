@@ -45,6 +45,9 @@ public class UserController {
 
         model.addAttribute("users", users);
         model.addAttribute("currentStatus", status);
+
+        // для правильной работы поля поиска - значение поиска остается, пользователь стирает значение вручную
+        model.addAttribute("search", query == null ? "" : query);
         return "users";
     }
 }

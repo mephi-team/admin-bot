@@ -8,11 +8,6 @@
     <link href="../../static/css/main.css" rel="stylesheet" th:href="@{/css/main.css}"/>
 
     <style>
-        /*body {*/
-        /*    background-color: #ffffff;*/
-        /*    font-size: 14px;*/
-        /*}*/
-        /* держу пока локально, перемещу в главный css при зачистке*/
         .page-wrapper {
             padding-top: 24px;
         }
@@ -23,7 +18,7 @@
             margin-bottom: 16px;
         }
 
-        /* Пилюли-фильтры */
+        /* Пилюли фильтров */
         .status-pill {
             border-radius: 999px;
             padding: 6px 16px;
@@ -43,21 +38,16 @@
         .users-search input {
             border-radius: 999px;
             font-size: 13px;
-            padding-block: 6px;
         }
         .users-search .input-group-text {
-            border-radius: 999px 0 0 999px;
             background-color: #ffffff;
         }
 
         /* Таблица */
         .users-table thead {
-            border-bottom: 1px solid #e5e7eb;
             font-size: 12px;
             color: #6b7280;
-        }
-        .users-table th {
-            font-weight: 500;
+            border-bottom: 1px solid #e5e7eb;
         }
         .users-table tbody tr {
             border-bottom: 1px solid #eef0f4;
@@ -88,21 +78,22 @@
         }
     </style>
 </head>
-<body class="d-flex flex-column vh-100 overflow-hidden">
 
+<body class="d-flex flex-column vh-100 overflow-hidden">
 <div th:replace="~{fragments/common :: header}">Header</div>
+
 <div class="container-fluid h-100 overflow-hidden">
     <div class="row h-100 overflow-hidden">
 
-        <div class="col-sm-1 h-100 p-0"></div>
+        <div class="col-sm-1 p-0"></div>
 
-        <div class="col flex-grow-1 d-flex flex-column p-0 h-100 overflow-hidden page-wrapper">
+        <div class="col d-flex flex-column p-0 h-100 overflow-hidden page-wrapper">
 
-            <!-- Заголовок и кнопки -->
+            <!-- Заголовок + кнопки -->
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h1 class="page-title mb-0">Пользователи</h1>
 
-                <div class="d-flex align-items-center gap-2">
+                <div class="d-flex gap-2">
                     <a class="btn btn-outline-primary btn-sm" href="/users/import">
                         <i class="bi bi-file-earmark-arrow-up me-2"></i>
                         Загрузить из файла
@@ -115,7 +106,7 @@
             </div>
 
             <!-- Фильтры -->
-            <div class="d-flex flex-wrap gap-2 mb-3">
+            <div class="d-flex gap-2 mb-3">
                 <a class="status-pill"
                    th:href="@{/users(status='all')}"
                    th:classappend="${currentStatus} == 'all' ? ' active'">
@@ -135,29 +126,40 @@
                 </a>
             </div>
 
-            <!-- Поиск -->
+            <!-- Поиск + иконки -->
             <div class="d-flex justify-content-between align-items-center mb-2">
 
-                <form th:action="@{/users}" method="get"
+                <form id="searchForm"
+                      th:action="@{/users}"
+                      method="get"
                       class="users-search flex-grow-1 me-3"
                       style="max-width:420px;">
 
-                    <!-- сохраняем выбранный фильтр статуса -->
                     <input type="hidden" name="status" th:value="${currentStatus}"/>
 
                     <div class="input-group input-group-sm">
                         <span class="input-group-text border-end-0">
                             <i class="bi bi-search"></i>
                         </span>
-                        <input class="form-control border-start-0"
+
+                        <input id="qInput"
+                               class="form-control border-start-0"
                                type="text"
                                name="q"
                                th:value="${search}"
                                placeholder="Найти пользователя...">
+
+                        <button id="clearBtn"
+                                type="button"
+                                class="input-group-text"
+                                th:style="${#strings.isEmpty(search)} ? 'display:none;' : ''"
+                                title="Очистить поиск">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
                     </div>
                 </form>
 
-                <div class="d-flex align-items-center gap-3">
+                <div class="d-flex gap-3">
                     <button type="button" class="icon-btn">
                         <i class="bi bi-gear"></i>
                     </button>
@@ -172,86 +174,94 @@
                 <table class="table table-hover mb-0 users-table align-middle">
                     <thead>
                     <tr>
-                        <th style="width: 40px;">
+                        <th style="width:40px">
                             <input class="form-check-input" type="checkbox">
                         </th>
-
                         <th>
                             <span class="column-label">
                                 Имя пользователя
                                 <i class="bi bi-funnel text-muted" style="font-size:0.8rem;"></i>
                             </span>
                         </th>
-
-                        <th style="width: 220px;">
-                            <span class="column-label">
-                                Telegram
-                                <i class="bi bi-arrow-down-up text-muted" style="font-size:0.8rem;"></i>
-                            </span>
+                        <th style="width:220px">
+                            Telegram
                         </th>
-
-                        <th style="width: 180px;">
-                            <span class="column-label">
-                                Согласия ПД
-                                <i class="bi bi-arrow-down-up text-muted" style="font-size:0.8rem;"></i>
-                            </span>
+                        <th style="width:180px">
+                            Согласия ПД
                         </th>
-
-                        <th style="width: 120px;">
+                        <th style="width:120px">
                             Действия
                         </th>
                     </tr>
                     </thead>
 
                     <tbody>
-
-                    <!-- Строки пользователей -->
                     <tr th:each="u : ${users}">
                         <td>
-                            <input class="form-check-input" type="checkbox"
-                                   th:id="'check-' + ${u.id}">
+                            <input class="form-check-input" type="checkbox">
                         </td>
-
+                        <td th:text="${u.name}">Имя</td>
                         <td>
-                            <span th:text="${u.name}">Имя</span>
+                            <a th:text="${u.externalId}" class="text-decoration-none" href="#">@user</a>
                         </td>
-
                         <td>
-                            <a class="text-decoration-none"
-                               th:text="${u.externalId}"
-                               href="#">
-                                @username
-                            </a>
+                            <a href="#" class="consent-link link-primary">Получено: 0/1</a>
                         </td>
-
-                        <td>
-                            <a href="#" class="consent-link link-primary">
-                                Получено: 0/1
-                            </a>
-                        </td>
-
                         <td class="table-actions">
                             <div class="d-flex gap-2">
-                                <i class="bi bi-calendar-event" title="История"></i>
-                                <i class="bi bi-slash-circle" title="Заблокировать"></i>
+                                <i class="bi bi-calendar-event"></i>
+                                <i class="bi bi-slash-circle"></i>
                             </div>
                         </td>
                     </tr>
 
-                    <!-- Если нет пользователей -->
                     <tr th:if="${#lists.isEmpty(users)}">
                         <td colspan="5" class="text-center text-muted py-4">
                             Пользователи не найдены
                         </td>
                     </tr>
-
                     </tbody>
                 </table>
             </div>
 
         </div>
-        <div class="col-sm-1 h-100 p-0"></div>
+
+        <div class="col-sm-1 p-0"></div>
     </div>
 </div>
+
+<!-- поиск с автоматическим сбросом-->
+<script>
+    (function () {
+        const form = document.getElementById('searchForm');
+        const input = document.getElementById('qInput');
+        const clearBtn = document.getElementById('clearBtn');
+
+        if (!form || !input || !clearBtn) return;
+
+        let lastValue = input.value;
+
+        const toggle = () => {
+            clearBtn.style.display = input.value.trim() ? '' : 'none';
+        };
+
+        clearBtn.addEventListener('click', () => {
+            input.value = '';
+            toggle();
+            form.submit();
+        });
+
+        input.addEventListener('input', () => {
+            toggle();
+            if (input.value.trim() === '' && lastValue.trim() !== '') {
+                form.submit();
+            }
+            lastValue = input.value;
+        });
+
+        toggle();
+    })();
+</script>
+
 </body>
 </html>
