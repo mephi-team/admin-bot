@@ -1,6 +1,7 @@
 package team.mephi.adminbot.vaadin.components;
 
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.messages.MessageInput;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.virtuallist.VirtualList;
 import com.vaadin.flow.data.provider.CallbackDataProvider;
@@ -41,10 +42,20 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
         chatList.setDataProvider(provider);
         chatList.setRenderer(cardRenderer);
 
-        add(chatList);
+        VerticalLayout v = new VerticalLayout();
+        v.setHeightFull();
+        v.getElement().getStyle().set("border", "1px solid #eaeaee");
+        v.getElement().getStyle().set("border-radius", "12px");
+        v.setPadding(false);
+        v.add(chatList);
+
+        MessageInput chatInput = new MessageInput();
+        chatInput.setWidthFull();
+
+        add(v, chatInput);
+
         setHeightFull();
-        getElement().getStyle().set("border", "1px solid #eaeaee");
-        getElement().getStyle().set("border-radius", "12px");
+        getElement().getStyle().set("padding-block-start", "0");
     }
 
     private CallbackDataProvider<MessagesForListDto, Long> getProvider(MessageRepository messageRepository) {

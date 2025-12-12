@@ -16,7 +16,6 @@ public class Dialogs extends VerticalLayout {
     private final VerticalLayout leftColumn = new VerticalLayout();
     private final VerticalLayout rightColumn = new VerticalLayout();
     private final ChatListComponent chatList;
-    private final MessageInput chatInput;
     private final Div message = new Div("");
 
     public Dialogs(DialogRepository dialogRepository, MessageRepository messageRepository) {
@@ -34,10 +33,7 @@ public class Dialogs extends VerticalLayout {
         leftColumn.add(new DialogListComponent(dialogRepository));
 
         chatList = new ChatListComponent(messageRepository);
-        chatInput = new MessageInput();
-        chatInput.setWidthFull();
-
-        rightColumn.add(chatList, chatInput);
+        rightColumn.add(chatList);
 
         add(new H1("Диалоги"), contentLayout);
     }

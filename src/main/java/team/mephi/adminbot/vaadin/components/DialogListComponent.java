@@ -105,6 +105,7 @@ public class DialogListComponent extends VerticalLayout implements AfterNavigati
         this.today = LocalDateTime.now();
 
         setHeightFull();
+        setPadding(false);
 
         final TextField searchField = new SearchField("Найти вопрос");
 
