@@ -12,7 +12,7 @@ import team.mephi.adminbot.vaadin.components.ChatListComponent;
 import team.mephi.adminbot.vaadin.components.DialogListComponent;
 
 @Route(value = "/dialogs/:dialogId?", layout = DialogsLayout.class)
-public class Dialogs extends VerticalLayout implements HasUrlParameter<Long> {
+public class Dialogs extends VerticalLayout {
     private final VerticalLayout leftColumn = new VerticalLayout();
     private final VerticalLayout rightColumn = new VerticalLayout();
     private final ChatListComponent chatList;
@@ -40,14 +40,5 @@ public class Dialogs extends VerticalLayout implements HasUrlParameter<Long> {
         rightColumn.add(chatList, chatInput);
 
         add(new H1("Диалоги"), contentLayout);
-    }
-
-    @Override
-    public void setParameter(BeforeEvent event, @OptionalParameter Long parameter) {
-        if (parameter == null) {
-            chatList.add(message);
-        } else {
-            chatList.add(chatList, chatInput);
-        }
     }
 }

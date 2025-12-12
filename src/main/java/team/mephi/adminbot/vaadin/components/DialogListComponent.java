@@ -57,11 +57,13 @@ public class DialogListComponent extends VerticalLayout implements AfterNavigati
 
         Span fullName = new Span();
         fullName.getStyle().set("font-weight", "bold");
+        fullName.getStyle().set("white-space", "nowrap");
         fullName.setText(item.getUserLastName() + " " + item.getUserFirstName());
         header.add(fullName);
 
         Span date = new Span();
         date.addClassName("text-muted");
+        date.getStyle().set("white-space", "nowrap");
         date.setText(formatDate((LocalDateTime) item.getLastMessageAt()));
         header.add(date);
 
@@ -70,6 +72,7 @@ public class DialogListComponent extends VerticalLayout implements AfterNavigati
         // Роль и externalId
         Span roleInfo = new Span();
         roleInfo.addClassNames("text-muted", "small");
+        roleInfo.getStyle().set("white-space", "nowrap");
         roleInfo.setText(
                 item.getUserRoleDescription().toLowerCase() +
                         " | @" + item.getUserExternalId()
@@ -100,6 +103,8 @@ public class DialogListComponent extends VerticalLayout implements AfterNavigati
 
     public DialogListComponent(DialogRepository dialogRepository) {
         this.today = LocalDateTime.now();
+
+        setHeightFull();
 
         final TextField searchField = new SearchField("Найти вопрос");
 
