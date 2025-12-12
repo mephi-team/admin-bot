@@ -2,17 +2,24 @@ package team.mephi.adminbot.vaadin.components;
 
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.virtuallist.VirtualList;
+import com.vaadin.flow.data.provider.CallbackDataProvider;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.router.RouteParameters;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import team.mephi.adminbot.dto.DialogWithLastMessageDto;
+import team.mephi.adminbot.repository.DialogRepository;
 import team.mephi.adminbot.vaadin.views.Dialogs;
 
 import java.time.LocalDateTime;
@@ -20,9 +27,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @AnonymousAllowed
-public class DialogListComponent extends VirtualList<DialogWithLastMessageDto> implements AfterNavigationObserver {
+public class DialogListComponent extends VerticalLayout implements AfterNavigationObserver {
     private final LocalDateTime today;
     private Long activeDialogId;
+    protected ConfigurableFilterDataProvider<DialogWithLastMessageDto, Void, String> provider;
 
     ComponentRenderer<RouterLink, DialogWithLastMessageDto> cardRenderer = new ComponentRenderer<>(item -> {
         RouterLink link = new RouterLink();
@@ -93,11 +101,45 @@ public class DialogListComponent extends VirtualList<DialogWithLastMessageDto> i
         return link;
     });
 
-    public DialogListComponent(ConfigurableFilterDataProvider<DialogWithLastMessageDto, Void, String> provider) {
+    public DialogListComponent(DialogRepository dialogRepository) {
         this.today = LocalDateTime.now();
 
-        setDataProvider(provider);
-        setRenderer(cardRenderer);
+        final TextField searchField = createSearchField();
+
+        provider = getProvider(dialogRepository, searchField);
+
+        VirtualList<DialogWithLastMessageDto> list = new VirtualList<>();
+        list.setDataProvider(provider);
+        list.setRenderer(cardRenderer);
+
+        searchField.addValueChangeListener(e -> {
+            provider.setFilter(e.getValue());
+        });
+
+        add(searchField, list);
+    }
+
+    private static ConfigurableFilterDataProvider<DialogWithLastMessageDto, Void, String> getProvider(DialogRepository dialogRepository, TextField searchField) {
+        CallbackDataProvider<DialogWithLastMessageDto, String> dataProvider = new CallbackDataProvider<>(
+                query -> {
+                    return dialogRepository.findDialogsWithLastMessageNative(searchField.getValue())
+                            .stream()
+                            .skip(query.getOffset())
+                            .limit(query.getLimit());
+                },
+                query -> dialogRepository.countDialogsWithLastMessageNative(searchField.getValue())
+        );
+
+        return dataProvider.withConfigurableFilter();
+    }
+
+    private TextField createSearchField() {
+        TextField searchField = new TextField();
+        searchField.setWidth("100%");
+        searchField.setPlaceholder("Найти вопрос");
+        searchField.setPrefixComponent(new Icon(VaadinIcon.SEARCH));
+        searchField.setValueChangeMode(ValueChangeMode.EAGER);
+        return searchField;
     }
 
     private String formatDate(LocalDateTime dateTime) {
@@ -130,13 +172,13 @@ public class DialogListComponent extends VirtualList<DialogWithLastMessageDto> i
             try {
                 this.activeDialogId = Long.parseLong(dialogId.get());
                 // После получения ID, перерендериваем список, чтобы применились стили
-                getDataProvider().refreshAll();
+                provider.refreshAll();
             } catch (NumberFormatException e) {
                 // Обработка ошибки, если ID не число
             }
         } else {
             this.activeDialogId = null;
-            getDataProvider().refreshAll();
+            provider.refreshAll();
         }
     }
 }

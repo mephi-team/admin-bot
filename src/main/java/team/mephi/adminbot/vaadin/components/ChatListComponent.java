@@ -36,6 +36,7 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
 
     public ChatListComponent(MessageRepository messageRepository) {
         this.provider = getProvider(messageRepository);
+
         VirtualList<MessagesForListDto> chatList = new VirtualList<>();
         chatList.setDataProvider(provider);
         chatList.setRenderer(cardRenderer);
