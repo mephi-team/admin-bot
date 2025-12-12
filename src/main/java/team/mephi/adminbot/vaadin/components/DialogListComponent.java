@@ -145,7 +145,7 @@ public class DialogListComponent extends VerticalLayout implements AfterNavigati
         if (datePart.equals(todayPart)) {
             return dateTime.format(DateTimeFormatter.ofPattern("HH:mm"));
         } else {
-            return dateTime.format(DateTimeFormatter.ofPattern("dd MMMM"));
+            return dateTime.format(DateTimeFormatter.ofPattern("dd MMM"));
         }
     }
 
