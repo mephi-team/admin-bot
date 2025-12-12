@@ -13,16 +13,16 @@ import team.mephi.adminbot.vaadin.components.DialogListComponent;
 
 @Route(value = "/dialogs/:dialogId?", layout = DialogsLayout.class)
 public class Dialogs extends VerticalLayout {
-    private final VerticalLayout leftColumn = new VerticalLayout();
-    private final VerticalLayout rightColumn = new VerticalLayout();
 
     public Dialogs(DialogRepository dialogRepository, MessageRepository messageRepository) {
         setSizeFull();
 
+        VerticalLayout leftColumn = new VerticalLayout();
         leftColumn.setPadding(false);
         leftColumn.setWidth("30%");
         leftColumn.add(new DialogListComponent(dialogRepository));
 
+        VerticalLayout rightColumn = new VerticalLayout();
         rightColumn.setPadding(false);
         rightColumn.setWidth("70%");
         rightColumn.add(new ChatListComponent(messageRepository));
