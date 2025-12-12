@@ -15,25 +15,20 @@ import team.mephi.adminbot.vaadin.components.DialogListComponent;
 public class Dialogs extends VerticalLayout {
     private final VerticalLayout leftColumn = new VerticalLayout();
     private final VerticalLayout rightColumn = new VerticalLayout();
-    private final ChatListComponent chatList;
-    private final Div message = new Div("");
 
     public Dialogs(DialogRepository dialogRepository, MessageRepository messageRepository) {
         setSizeFull();
 
         leftColumn.setPadding(false);
         leftColumn.setWidth("30%");
+        leftColumn.add(new DialogListComponent(dialogRepository));
 
         rightColumn.setPadding(false);
         rightColumn.setWidth("70%");
+        rightColumn.add(new ChatListComponent(messageRepository));
 
         SplitLayout contentLayout = new SplitLayout(leftColumn, rightColumn);
         contentLayout.setSizeFull();
-
-        leftColumn.add(new DialogListComponent(dialogRepository));
-
-        chatList = new ChatListComponent(messageRepository);
-        rightColumn.add(chatList);
 
         add(new H1("Диалоги"), contentLayout);
     }
