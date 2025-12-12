@@ -67,6 +67,27 @@ class DialogControllerApiTest {
     }
 
     @Test
+    void getDialogs_withBlankSearch_shouldFallbackToFindAllWithUsers() throws Exception {
+        // given
+        String search = "   ";
+        List<Dialog> dialogs = List.of(new Dialog(), new Dialog(), new Dialog());
+        when(dialogRepository.findAllWithUsers()).thenReturn(dialogs);
+
+        // when / then
+        mockMvc.perform(get("/dialogs").param("search", search))
+                .andExpect(status().isOk())
+                .andExpect(view().name("dialogs/list"))
+                .andExpect(model().attributeExists("dialogs"))
+                // ВАЖНО: контроллер кладёт searchQuery как есть, без trim
+                .andExpect(model().attribute("searchQuery", search))
+                .andExpect(model().attributeExists("today"))
+                .andExpect(model().attribute("currentUri", "dialogs"));
+
+        verify(dialogRepository).findAllWithUsers();
+        verify(dialogRepository, never()).searchByUserName(anyString());
+    }
+
+    @Test
     void getDialogs_withSearch_shouldUseSearchByUserName() throws Exception {
         // given
         String search = "Иван";
