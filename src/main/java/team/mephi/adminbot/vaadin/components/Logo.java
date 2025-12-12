@@ -11,6 +11,6 @@ public class Logo extends Component {
                 .set("left", "var(--lumo-space-l)").set("margin", "0")
                 .set("position", "absolute")
                 .set("color", "black");
-        getElement().setAttribute("href", "/path");
+        getElement().setAttribute("href", "/v2");
     }
 }

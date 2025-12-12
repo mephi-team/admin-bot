@@ -22,10 +22,10 @@ public class User {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String externalId; // ID пользователя в мессенджере (Telegram, WhatsApp и т.д.)
+    private String tgId;
 
     @Column(nullable = false)
-    private String name;
+    private String userName;
 
     @Column(nullable = false)
     private String firstName;
@@ -33,8 +33,29 @@ public class User {
     @Column(nullable = false)
     private String lastName;
 
+    @Column(nullable = true)
+    private String city;
+
+    @Column(nullable = true)
+    private String dateOfBirth;
+
+    @Column(nullable = true, unique = true)
+    private String email;
+
+    @Column(nullable = true, unique = true)
+    private String phoneNumber;
+
     @Column(nullable = false)
     private String status; // например: "active", "blocked"
+
+    @Column
+    private Boolean userApproval = false;
+
+    @Column
+    private LocalDateTime pdConsentDate;
+
+    @Column
+    private Boolean isRevoked = false;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
@@ -51,6 +72,10 @@ public class User {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_code", nullable = false)
     private Role role;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "direction", nullable = true)
+    private Direction direction;
 
     @PrePersist
     protected void onCreate() {

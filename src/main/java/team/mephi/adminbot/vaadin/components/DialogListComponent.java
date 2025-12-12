@@ -25,7 +25,7 @@ public class DialogListComponent extends VirtualList<DialogWithLastMessageDto> i
         Anchor link = new Anchor();
         link.setClassName("dialog-item text-body");
 
-        link.setHref("/path/dialogs/" + item.getDialogId());
+        link.setHref("/v2/dialogs/" + item.getDialogId());
 
         Div content = new Div();
         content.addClassNames("d-flex", "align-items-start");

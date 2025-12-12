@@ -37,6 +37,9 @@ public class DataInitializer {
     @Autowired
     private MailingRepository mailingRepository;
 
+    @Autowired
+    private TutorRepository tutorRepository;
+
     @Bean
     public ApplicationRunner initTestData() {
         return args -> {
@@ -46,6 +49,7 @@ public class DataInitializer {
             boolean hasDialogs = dialogRepository.count() > 0;
             boolean hasQuestions = questionRepository.count() > 0;
             boolean hasBroadcasts = mailingRepository.count() > 0;
+            boolean hasTutors = tutorRepository.count() > 0;
 
             if (!hasUsers || !hasDialogs || !hasQuestions || !hasBroadcasts) {
                 System.out.println("🔁 Предзаполнение БД тестовыми данными...");
@@ -56,6 +60,7 @@ public class DataInitializer {
                 if (!hasQuestions) initQuestions();
                 if (!hasBroadcasts) initBroadcasts();
                 if (!hasDialogs) initDialogs(); // зависит от пользователей
+                if (!hasTutors) initTutors();
 
                 System.out.println("✅ Тестовые данные успешно созданы.");
             }
@@ -67,8 +72,10 @@ public class DataInitializer {
                 Role.builder().name("student").description("Студенты").build(),
                 Role.builder().name("candidate").description("Кандидаты").build(),
                 Role.builder().name("visitor").description("Посетитель").build(),
-                Role.builder().name("free_listener ").description("Слушатели").build(),
-                Role.builder().name("middle_candidate").description("Миддл-кандидаты").build()
+                Role.builder().name("free_listener").description("Слушатели").build(),
+                Role.builder().name("middle_candidate").description("Миддл-кандидаты").build(),
+                Role.builder().name("lc_expert").description("Эксперты").build(),
+                Role.builder().name("extuser").description("Внешний пользователь").build()
         );
         roleRepository.saveAll(roles);
         System.out.println("  → Создано 5 ролей");
@@ -92,16 +99,31 @@ public class DataInitializer {
                 .orElseThrow(() -> new RuntimeException("Роль 'student' не найдена"));
         Role candidateRole = roleRepository.findByName("candidate")
                 .orElseThrow(() -> new RuntimeException("Роль 'candidate' не найдена"));
+        Role visitorRole = roleRepository.findByName("visitor")
+                .orElseThrow(() -> new RuntimeException("Роль 'visitor' не найдена"));
+        Role freeListenerRole = roleRepository.findByName("free_listener")
+                .orElseThrow(() -> new RuntimeException("Роль 'free_listener' не найдена"));
 
         List<User> users = Arrays.asList(
-                User.builder().externalId("tg_1001").name("Анна Смирнова").firstName("Анна").lastName("Смирнова").role(studentRole).status("active").build(),
-                User.builder().externalId("tg_1002").name("Иван Петров").firstName("Иван").lastName("Петров").role(candidateRole).status("active").build(),
-                User.builder().externalId("tg_1003").name("Мария Козлова").firstName("Мария").lastName("Козлова").role(studentRole).status("blocked").build(),
-                User.builder().externalId("tg_1004").name("Алексей Иванов").firstName("Алексей").lastName("Иванов").role(candidateRole).status("active").build(),
-                User.builder().externalId("tg_1005").name("Екатерина Волкова").firstName("Екатерина").lastName("Волкова").role(studentRole).status("active").build()
+                User.builder().tgId("tg_1001").userName("Анна Смирнова").firstName("Анна").lastName("Смирнова").role(studentRole).status("active").build(),
+                User.builder().tgId("tg_1002").userName("Иван Петров").firstName("Иван").lastName("Петров").role(candidateRole).status("active").build(),
+                User.builder().tgId("tg_1003").userName("Мария Козлова").firstName("Мария").lastName("Козлова").role(studentRole).status("blocked").build(),
+                User.builder().tgId("tg_1004").userName("Алексей Иванов").firstName("Алексей").lastName("Иванов").role(candidateRole).status("active").build(),
+                User.builder().tgId("tg_1005").userName("Екатерина Волкова").firstName("Екатерина").lastName("Волкова").role(studentRole).status("active").build(),
+                User.builder().tgId("tg_1006").userName("Анна Козлова").firstName("Анна").lastName("Козлова").role(visitorRole).status("active").build(),
+                User.builder().tgId("tg_1007").userName("Петр Иванов").firstName("Петр").lastName("Иванов").role(freeListenerRole).status("active").build()
         );
         userRepository.saveAll(users);
         System.out.println("  → Создано 5 пользователей");
+    }
+
+    private void initTutors() {
+        List<Tutor> tutors = Arrays.asList(
+                Tutor.builder().userName("test1").firstName("Сергей").lastName("Иванов").phoneNumber("+79991234567").email("test1@example.com").build(),
+                Tutor.builder().userName("test2").firstName("Николай").lastName("Александров").phoneNumber("+79997654321").email("test2@example.com").build()
+        );
+        tutorRepository.saveAll(tutors);
+        System.out.println("  → Создано 2 куратора");
     }
 
     private void initQuestions() {
