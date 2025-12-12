@@ -12,13 +12,11 @@ import team.mephi.adminbot.repository.MailingRepository;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /**
- * Юнит-тесты для BroadcastController без поднятия Spring-контекста.
+ * Юнит-тесты для MailingController без поднятия Spring-контекста.
  */
 @ExtendWith(MockitoExtension.class)
 class MailingControllerTest {
@@ -27,42 +25,42 @@ class MailingControllerTest {
     private MailingRepository mailingRepository;
 
     @InjectMocks
-    private MailingController broadcastController;
+    private MailingController mailingController;
 
     @Test
-    void broadcastsPage_shouldLoadBroadcastsAndPopulateModel() {
+    void broadcastsPage_shouldLoadMailingsAndPopulateModel() {
         // given
-        List<Mailing> broadcasts = List.of(
+        List<Mailing> mailings = List.of(
                 Mailing.builder().build(),
                 Mailing.builder().build()
         );
-        when(mailingRepository.findAllByOrderByCreatedAtDesc()).thenReturn(broadcasts);
+        when(mailingRepository.findAllByOrderByCreatedAtDesc()).thenReturn(mailings);
 
         Model model = new ExtendedModelMap();
 
         // when
-        String viewName = broadcastController.broadcastsPage(model);
+        String viewName = mailingController.broadcastsPage(model);
 
         // then
         assertEquals("broadcasts", viewName);
 
         verify(mailingRepository).findAllByOrderByCreatedAtDesc();
 
-        assertSame(broadcasts, model.getAttribute("broadcasts"));
+        assertSame(mailings, model.getAttribute("broadcasts"));
         assertNotNull(model.getAttribute("newBroadcast"));
         assertEquals("broadcasts", model.getAttribute("currentUri"));
     }
 
     @Test
-    void createBroadcast_shouldSaveBroadcastAndRedirect() {
+    void createMailing_shouldSaveMailingAndRedirect() {
         // given
-        Mailing broadcast = Mailing.builder().build();
+        Mailing mailing = Mailing.builder().build();
 
         // when
-        String viewName = broadcastController.createBroadcast(broadcast);
+        String viewName = mailingController.createBroadcast(mailing);
 
         // then
         assertEquals("redirect:/broadcasts", viewName);
-        verify(mailingRepository).save(broadcast);
+        verify(mailingRepository).save(mailing);
     }
 }
