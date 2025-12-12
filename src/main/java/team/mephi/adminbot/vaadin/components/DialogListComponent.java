@@ -89,7 +89,7 @@ public class DialogListComponent extends VerticalLayout implements AfterNavigati
 
         Span senderName = new Span();
         senderName.addClassName("text-primary");
-        senderName.setText(getSenderDisplayName(item.getLastMessageSenderName(), item.getLastMessageSenderType()));
+        senderName.setText(item.getLastMessageSenderName());
 
         Span messageText = new Span();
         messageText.setText(item.getLastMessageText());
@@ -147,14 +147,6 @@ public class DialogListComponent extends VerticalLayout implements AfterNavigati
             return dateTime.format(DateTimeFormatter.ofPattern("HH:mm"));
         } else {
             return dateTime.format(DateTimeFormatter.ofPattern("dd MMM"));
-        }
-    }
-
-    private String getSenderDisplayName(String msg, String type) {
-        if ("user".equals(type)) {
-            return msg;
-        } else {
-            return "Администратор";
         }
     }
 
