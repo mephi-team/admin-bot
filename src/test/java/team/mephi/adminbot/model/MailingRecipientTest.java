@@ -1,7 +1,8 @@
 package team.mephi.adminbot.model;
 
 import org.junit.jupiter.api.Test;
-import team.mephi.adminbot.model.enums.RecipientStatus;
+import team.mephi.adminbot.model.enums.MailingChannel;
+import team.mephi.adminbot.model.enums.MailingRecipientStatus;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,8 +25,8 @@ class MailingRecipientTest {
                 .id(3L)
                 .user(user)
                 .mailing(mailing)
-                .channel("TELEGRAM")
-                .status(RecipientStatus.SENT)
+                .channel(MailingChannel.TELEGRAM)
+                .status(MailingRecipientStatus.SENT)
                 .statusReason("ok")
                 .messageId("mid")
                 .build();
@@ -34,8 +35,8 @@ class MailingRecipientTest {
         assertEquals(3L, mr.getId());
         assertSame(user, mr.getUser());
         assertSame(mailing, mr.getMailing());
-        assertEquals("TELEGRAM", mr.getChannel());
-        assertEquals(RecipientStatus.SENT, mr.getStatus());
+        assertEquals(MailingChannel.TELEGRAM, mr.getChannel());
+        assertEquals(MailingRecipientStatus.SENT, mr.getStatus());
         assertEquals("ok", mr.getStatusReason());
         assertEquals("mid", mr.getMessageId());
         assertNotNull(mr.toString());
