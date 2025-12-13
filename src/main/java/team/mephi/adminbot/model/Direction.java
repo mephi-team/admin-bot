@@ -121,17 +121,11 @@ public class Direction {
     /**
      * Тьюторы, связанные с направлением.
      *
-     * TODO: раскомментировать, когда появится сущность Tutor.
-     * Таблица tutor_directions уже существует в базе.
+     * Связь многие-ко-многим через таблицу tutor_directions.
      */
-    // @ManyToMany(fetch = FetchType.LAZY)
-    // @JoinTable(
-    //     name = "tutor_directions",
-    //     joinColumns = @JoinColumn(name = "direction_id"),
-    //     inverseJoinColumns = @JoinColumn(name = "tutor_id")
-    // )
-    // @Builder.Default
-    // private List<Tutor> tutors = new ArrayList<>();
+    @ManyToMany(mappedBy = "directions", fetch = FetchType.LAZY)
+    @Builder.Default
+    private List<Tutor> tutors = new ArrayList<>();
 
     // ===== equals() и hashCode() =====
 
