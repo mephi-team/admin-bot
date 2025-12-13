@@ -76,8 +76,8 @@ public class SecurityConfig {
 
                         // Веб-страницы (Thymeleaf) — тоже требуют входа
                         .requestMatchers(
-                                "/", "/users", "/questions",
-                                "/analytics", "/dialogs", "/broadcasts"
+                                "/", "/users/**", "/questions/**",
+                                "/analytics/**", "/dialogs/**", "/broadcasts/**"
                         ).permitAll()
 
                         // Все остальные запросы тоже требуют аутентификации

@@ -3,10 +3,8 @@ package team.mephi.adminbot.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import team.mephi.adminbot.dto.CreateUserFormDto;
 import team.mephi.adminbot.model.Role;
 import team.mephi.adminbot.model.User;
@@ -47,7 +45,7 @@ public class UserController {
                     : userRepository.searchByRole(role, query);
         }
 
-        //получаем согласие на персональную информацию -> UI
+        //получаем данные по согласию на персональную информацию -> пушим в UI
         Map<Long, PdConsentService.PdConsentView> pdConsents = users.stream()
                         .collect(Collectors.toMap(
                                 User::getId, u -> pdConsentService.buildForUserView(u.getId())
@@ -66,7 +64,8 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public String createUser(@ModelAttribute CreateUserFormDto form){
+    public String createUser(@ModelAttribute CreateUserFormDto form,
+                             RedirectAttributes ra){
         // 1) Роль
         Role role = roleRepository.findByName(form.getRoleName())
                 .orElseThrow(() -> new IllegalArgumentException("Role not found: " + form.getRoleName()));
@@ -98,7 +97,50 @@ public class UserController {
 
         userRepository.save(user);
 
+        ra.addFlashAttribute("toastTitle", "Пользователь добавлен");
+        ra.addFlashAttribute("toastBody",
+                "Добавлен пользователь " + name + " с ролью «" + role.getDescription() + "»");
         // редирект обратно на ту вкладку роли, где создавали
         return "redirect:/users?role=" + role.getName();
     }
+
+    // используем CreateUserFormDto, функционал тот же
+    @PostMapping("/users/{id}/edit")
+    public String editUser(@PathVariable Long id,
+                           @ModelAttribute CreateUserFormDto form,
+                           @RequestParam(required = false) String returnUrl,
+                           RedirectAttributes ra) {
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User not found: " + id));
+
+        Role role = roleRepository.findByName(form.getRoleName())
+                .orElseThrow(() -> new IllegalArgumentException("Role not found: " + form.getRoleName()));
+
+        String fullName = form.getFullName() == null ? "" : form.getFullName().trim();
+        String[] parts = fullName.split("\\s+");
+        String lastName = parts.length > 0 ? parts[0] : "-";
+        String firstName = parts.length > 1 ? parts[1] : "-";
+        String name = (lastName + " " + firstName).trim();
+
+        String telegram = form.getTelegram() == null ? "" : form.getTelegram().trim();
+        if (!telegram.isBlank() && !telegram.startsWith("@")) telegram = "@" + telegram;
+
+        user.setRole(role);
+        user.setName(name);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setExternalId(telegram);
+
+        userRepository.save(user);
+
+        ra.addFlashAttribute("toastTitle", "Пользователь обновлён");
+        ra.addFlashAttribute("toastBody", "Обновлён пользователь " + user.getName() + " с ролью «" + role.getDescription() + "»");
+
+        if(returnUrl != null && returnUrl.startsWith("/")){
+            return "redirect:" + returnUrl;
+        }
+        return "redirect:/users?role=" + role.getName();
+    }
+
 }

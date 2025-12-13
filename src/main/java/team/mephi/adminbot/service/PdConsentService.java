@@ -14,7 +14,7 @@ import java.util.List;
 public class PdConsentService {
     private final PdConsentLogRepository repository;
 
-    // UI-view (НЕ entity)
+    // UI-view
     public record PdConsentView(
             int received,
             int total,

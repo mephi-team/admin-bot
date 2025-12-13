@@ -106,6 +106,28 @@
             width: 420px;
         }
 
+        .user-center-toast{
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+
+            width: 420px;
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 16px 18px;
+
+            z-index: 1080;
+
+            opacity: 1;
+            transition: opacity .2s ease, transform .2s ease;
+        }
+
+        .user-center-toast.hide{
+            opacity: 0;
+            transform: translate(-50%, -45%);
+        }
+
     </style>
 </head>
 
@@ -249,14 +271,61 @@
 
                         <td class="table-actions">
                             <div class="actions">
-                                <button type="button" class="action-btn" aria-label="История">
-                                    <i class="bi bi-calendar3"></i>
+
+                                <!-- Отклонить / удалить -->
+                                <button type="button"
+                                        class="action-btn action-danger"
+                                        title="Отклонить">
+                                    <i class="bi bi-x-circle"></i>
                                 </button>
-                                <button type="button" class="action-btn" aria-label="Блокировка">
+
+                                <!-- Подтвердить / активировать -->
+                                <button type="button"
+                                        class="action-btn action-primary"
+                                        title="Подтвердить">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                </button>
+
+                                <!-- Карточка пользователя -->
+                                <button type="button"
+                                        class="action-btn"
+                                        title="Карточка пользователя">
+                                    <i class="bi bi-card-checklist"></i>
+                                </button>
+
+                                <!-- Диалоги -->
+                                <button type="button"
+                                        class="action-btn"
+                                        title="Диалоги">
+                                    <i class="bi bi-chat-dots"></i>
+                                </button>
+
+                                <!-- Редактировать -->
+                                <button type="button"
+                                        class="action-btn"
+                                        title="Редактировать"
+                                        data-bs-toggle="offcanvas"
+                                        data-bs-target="#editUserCanvas"
+                                        aria-controls="editUserCanvas"
+
+                                        th:attr="data-id=${u.id},
+                                        data-fullname=${u.name},
+                                        data-telegram=${u.externalId},
+                                        data-role=${u.role.name}">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+
+
+                                <!-- Заблокировать -->
+                                <button type="button"
+                                        class="action-btn action-warning"
+                                        title="Заблокировать">
                                     <i class="bi bi-ban"></i>
                                 </button>
+
                             </div>
                         </td>
+
 
 
                     </tr>
@@ -457,7 +526,7 @@
 </div>
 
 
-<!--проставка роли по текущей вкладке при  создании-->
+<!--проставка роли по текущей вкладке при создании-->
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const btn = document.getElementById('openAddUserBtn');
@@ -478,6 +547,183 @@
     });
 </script>
 
+<!-- Попап при успешной записи пользователя-->
+<div th:if="${toastBody != null}"
+     id="userCenterToast"
+     class="user-center-toast shadow">
+
+    <div class="d-flex align-items-start gap-3">
+        <div class="pt-1">
+            <i class="bi bi-check-circle-fill text-success" style="font-size:18px;"></i>
+        </div>
+
+        <div class="flex-grow-1">
+            <div class="fw-semibold" th:text="${toastTitle}">
+                Пользователь добавлен
+            </div>
+            <div class="text-muted small" th:text="${toastBody}">
+                Добавлен пользователь … с ролью …
+            </div>
+        </div>
+
+        <button type="button"
+                class="btn-close ms-2 mt-1"
+                aria-label="Close"
+                onclick="closeUserCenterToast()"></button>
+    </div>
+</div>
+<!--Задержка попапа сверху на 3 секунды-->
+<script>
+    function closeUserCenterToast() {
+        const el = document.getElementById('userCenterToast');
+        if (!el) return;
+        el.classList.add('hide');
+        setTimeout(() => el.remove(), 220);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const el = document.getElementById('userCenterToast');
+        if (!el) return;
+
+        setTimeout(closeUserCenterToast, 3000);
+    });
+</script>
+
+
+<!-- панель справа для редактирования пользователя -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="editUserCanvas" aria-labelledby="editUserCanvasLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="editUserCanvasLabel">Редактирование пользователя</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+
+    <div class="offcanvas-body d-flex flex-column">
+        <form id="editUserForm"
+              method="post"
+              class="d-flex flex-column h-100">
+
+            <input type="hidden" name="returnUrl" id="editReturnUrl"/>
+
+            <!-- Роль -->
+            <div class="mb-3">
+                <label class="form-label">Пользователь<span class="text-danger">*</span></label>
+                <select class="form-select form-select-sm" name="roleName" id="editRoleSelect" required>
+                    <option th:each="r : ${roles}"
+                            th:value="${r.name}"
+                            th:text="${r.description}">
+                        Роль
+                    </option>
+                </select>
+            </div>
+
+            <!-- ФИО -->
+            <div class="mb-3">
+                <label class="form-label">Фамилия Имя<span class="text-danger">*</span></label>
+                <input type="text"
+                       class="form-control form-control-sm"
+                       name="fullName"
+                       id="editFullName"
+                       placeholder="Иванов Иван"
+                       required>
+            </div>
+
+            <!-- Telegram -->
+            <div class="mb-3">
+                <label class="form-label">Telegram<span class="text-danger">*</span></label>
+                <input type="text"
+                       class="form-control form-control-sm"
+                       name="telegram"
+                       id="editTelegram"
+                       placeholder="@username"
+                       required>
+                <div class="form-text">Сохраняется в externalId (уникальный).</div>
+            </div>
+
+            <!-- Заглушки полей, которых нет в User -->
+            <hr class="my-3">
+
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control form-control-sm" placeholder="В разработке" disabled>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Телефон</label>
+                <input type="text" class="form-control form-control-sm" placeholder="В разработке" disabled>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Набор</label>
+                <select class="form-select form-select-sm" disabled>
+                    <option selected>Весенний, 2025 (текущий)</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Направление</label>
+                <select class="form-select form-select-sm" disabled>
+                    <option selected>В разработке</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Город</label>
+                <select class="form-select form-select-sm" disabled>
+                    <option selected>В разработке</option>
+                </select>
+            </div>
+
+            <!-- Кнопка сохранить -->
+            <div class="mt-auto pt-3 d-flex justify-content-start">
+                <button type="submit" class="btn btn-primary btn-sm px-4">
+                    Сохранить
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!--Скрипт для заполнения данными формы изменения данных пользователя-->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const editCanvasEl = document.getElementById('editUserCanvas');
+        const editForm = document.getElementById('editUserForm');
+        const editRole = document.getElementById('editRoleSelect');
+        const editFullName = document.getElementById('editFullName');
+        const editTelegram = document.getElementById('editTelegram');
+
+        if (!editCanvasEl || !editForm || !editRole || !editFullName || !editTelegram) return;
+
+        // bootstrap событие: когда offcanvas начинает открываться
+        editCanvasEl.addEventListener('show.bs.offcanvas', (event) => {
+            const btn = event.relatedTarget; // кнопка, которая открыла offcanvas
+            if (!btn) return;
+
+            const id = btn.getAttribute('data-id');
+            const fullName = btn.getAttribute('data-fullname') || '';
+            const telegram = btn.getAttribute('data-telegram') || '';
+            const role = btn.getAttribute('data-role') || '';
+
+            // 1) action формы: /users/{id}/edit
+            editForm.setAttribute('action', `/users/${id}/edit`);
+
+            // определяет куда возвращаться при сохранении
+            editReturnUrl.value = window.location.pathname + window.location.search;
+
+            // 2) заполняем поля
+            editFullName.value = fullName;
+
+            // нормализуем telegram
+            let tg = telegram.trim();
+            if (tg && !tg.startsWith('@')) tg = '@' + tg;
+            editTelegram.value = tg;
+
+            // 3) проставляем роль (если option существует)
+            const exists = Array.from(editRole.options).some(o => o.value === role);
+            if (exists) editRole.value = role;
+        });
+    });
+</script>
 
 </body>
 </html>
