@@ -22,4 +22,24 @@ public class Direction {
 
     @Column(nullable = false)
     private String name;
+
+    /**
+     * Внешний идентификатор направления (курса) в системе NeoStudy.
+     *
+     * Здесь хранится ID этого направления,
+     * под которым оно зарегистрировано в NeoStudy.
+     */
+    @Column(name = "neostudy_external_id")
+    private String neostudyExternalId;
+
+    /**
+     * Дата и время последней синхронизации направления с NeoStudy.
+     *
+     * Показывает, когда данные курса
+     * в последний раз обновлялись из NeoStudy
+     * или отправлялись туда.
+     */
+    @Column(name = "neostudy_synced_at")
+    private java.time.LocalDateTime neostudySyncedAt;
+
 }
