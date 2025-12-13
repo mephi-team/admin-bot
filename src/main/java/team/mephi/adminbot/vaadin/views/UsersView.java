@@ -16,6 +16,8 @@ public class UsersView extends VerticalLayout {
         this.role = role;
 
         setHeightFull();
+        setPadding(false);
+
         final TextField searchField = new SearchField("Найти куратора");
 
         Grid<User> grid = new Grid<>(User.class, false);

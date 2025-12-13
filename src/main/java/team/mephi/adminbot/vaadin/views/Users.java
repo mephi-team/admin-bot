@@ -42,7 +42,6 @@ public class Users extends VerticalLayout {
         top.addToEnd(buttons);
 
         TabSheet tabSheet = new TabSheet();
-
         tabSheet.setSizeFull();
 
         Map<String, Long> roleCounts = userRepository.countsByRole();

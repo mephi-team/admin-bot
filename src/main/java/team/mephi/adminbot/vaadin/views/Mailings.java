@@ -15,11 +15,19 @@ import team.mephi.adminbot.vaadin.components.SearchField;
 @Route(value = "/mailings", layout = DialogsLayout.class)
 public class Mailings extends VerticalLayout {
     public Mailings(MailingRepository mailingRepository) {
+        setHeightFull();
+
         add(new H1("Рассылки"));
 
         Grid<MailingList> grid = new Grid<>(MailingList.class, false);
-        grid.addColumn(MailingList::getId).setHeader("Id").setSortable(true);
-        grid.addColumn(MailingList::getName).setHeader("Text").setSortable(true);
+        grid.addColumn(MailingList::getDate).setHeader("Дата").setSortable(true);
+        grid.addColumn(MailingList::getUsers).setHeader("Пользователи").setSortable(true);
+        grid.addColumn(MailingList::getCohort).setHeader("Набор").setSortable(true);
+        grid.addColumn(MailingList::getDirection).setHeader("Направление").setSortable(true);
+        grid.addColumn(MailingList::getCurator).setHeader("Куратор").setSortable(true);
+        grid.addColumn(MailingList::getCity).setHeader("Город").setSortable(true);
+        grid.addColumn(MailingList::getText).setHeader("Текст сообщения").setSortable(true);
+        grid.addColumn(MailingList::getStatus).setHeader("Статус").setSortable(true);
         grid.setMultiSort(true, Grid.MultiSortPriority.APPEND);
 
         final TextField searchField = new SearchField("Найти рассылку");
@@ -47,6 +55,13 @@ public class Mailings extends VerticalLayout {
                             .map(m -> MailingList.builder()
                                     .id(m.getId())
                                     .name(m.getName())
+                                    .date(m.getCreatedAt())
+                                    .users(m.getFilters() != null ? m.getFilters().getUsers() : "")
+                                    .cohort(m.getFilters() != null ? m.getFilters().getCurator() : "")
+                                    .direction(m.getFilters() != null ? m.getFilters().getDirection() : "")
+                                    .curator(m.getFilters() != null ? m.getFilters().getCurator() : "")
+                                    .city(m.getFilters() != null ? m.getFilters().getCity() : "")
+                                    .status(m.getStatus().name())
                                     .build())
                             .skip(query.getOffset()) // Пропускаем уже загруженные элементы
                             .limit(query.getLimit()); // Берем только нужное количество

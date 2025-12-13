@@ -14,10 +14,11 @@ import team.mephi.adminbot.vaadin.components.SearchField;
 @Route(value = "/questions", layout = DialogsLayout.class)
 public class Questions extends VerticalLayout {
     public Questions(QuestionRepository questionRepository) {
+        setHeightFull();
+
         add(new H1("Вопросы"));
 
         Grid<Question> grid = new Grid<>(Question.class, false);
-
 //        grid.addComponentColumn(item -> {
 //                    Checkbox checkbox = new Checkbox();
 //                    // Опционально: связать состояние чекбокса с полем в объекте Person

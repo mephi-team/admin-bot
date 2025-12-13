@@ -12,11 +12,15 @@ import team.mephi.adminbot.vaadin.components.SearchField;
 public class TutorsView extends VerticalLayout {
     public TutorsView(TutorRepository tutorRepository) {
         setHeightFull();
+        setPadding(false);
+
         final TextField searchField = new SearchField("Найти куратора");
 
         var filterableProvider = getProvider(tutorRepository, searchField);
         Grid<TutorWithCounts> grid = new Grid<>(TutorWithCounts.class, false);
-        grid.addColumn(a -> a.getLastName() + " " + a.getFirstName()).setHeader("Фамилия Имя").setSortable(true);
+        grid.addColumn(a -> a.getLastName() + " " + a.getFirstName())
+                .setHeader("Фамилия Имя")
+                .setSortable(true).setComparator(TutorWithCounts::getLastName);
         grid.addColumn(TutorWithCounts::getEmail).setHeader("Email").setSortable(true);
         grid.addColumn(TutorWithCounts::getTgId).setHeader("Telegram").setSortable(true);
         grid.addColumn(TutorWithCounts::getDirections).setHeader("Направление").setSortable(true);

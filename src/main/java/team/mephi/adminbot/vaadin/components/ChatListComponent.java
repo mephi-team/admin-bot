@@ -16,6 +16,9 @@ import java.util.Optional;
 public class ChatListComponent extends VerticalLayout implements AfterNavigationObserver {
     private final CallbackDataProvider<MessagesForListDto, Long> provider;
     private Long dialogId;
+    MessageInput chatInput;
+    VirtualList<MessagesForListDto> chatList;
+    Div emptyMessage = new Div("Выберите диалог, чтобы продолжить общение");
 
     ComponentRenderer<Div, MessagesForListDto> cardRenderer = new ComponentRenderer<>(item -> {
         var card = new Div(item.getText());
@@ -38,20 +41,22 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
     public ChatListComponent(MessageRepository messageRepository) {
         this.provider = getProvider(messageRepository);
 
-        VirtualList<MessagesForListDto> chatList = new VirtualList<>();
+        chatList = new VirtualList<>();
         chatList.setDataProvider(provider);
         chatList.setRenderer(cardRenderer);
+
+        emptyMessage.setVisible(false);
+        emptyMessage.getElement().getStyle().set("padding", "1em");
 
         VerticalLayout v = new VerticalLayout();
         v.setHeightFull();
         v.getElement().getStyle().set("border", "1px solid #eaeaee");
         v.getElement().getStyle().set("border-radius", "12px");
         v.setPadding(false);
-        v.add(chatList);
+        v.add(chatList, emptyMessage);
 
-        MessageInput chatInput = new MessageInput();
+        chatInput = new MessageInput();
         chatInput.setWidthFull();
-
         add(v, chatInput);
 
         setHeightFull();
@@ -73,10 +78,17 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
     @Override
     public void afterNavigation(AfterNavigationEvent event) {
         Optional<String> optionalId = event.getRouteParameters().get("dialogId");
-        optionalId.ifPresent(id -> {
-            dialogId = Long.parseLong(id);
+        if (optionalId.isPresent()) {
+            dialogId = Long.parseLong(optionalId.get());
             provider.withConfigurableFilter().setFilter(dialogId);
-        });
+            chatInput.setVisible(true);
+            chatList.setVisible(true);
+            emptyMessage.setVisible(false);
+        } else {
+            chatInput.setVisible(false);
+            chatList.setVisible(false);
+            emptyMessage.setVisible(true);
+        }
         provider.refreshAll();
     }
 }

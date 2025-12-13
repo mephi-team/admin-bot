@@ -7,10 +7,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
+import team.mephi.adminbot.model.enums.Channels;
 import team.mephi.adminbot.model.enums.MailingStatus;
+import team.mephi.adminbot.model.objects.Filters;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Data
 @Builder
@@ -31,11 +35,11 @@ public class Mailing {
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
-    private Object channels;
+    private List<Channels> channels;
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
-    private Object filters;
+    private Filters filters;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

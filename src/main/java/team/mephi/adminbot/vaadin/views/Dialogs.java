@@ -1,8 +1,6 @@
 package team.mephi.adminbot.vaadin.views;
 
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.messages.MessageInput;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.splitlayout.SplitLayout;
 import com.vaadin.flow.router.*;
@@ -31,5 +29,17 @@ public class Dialogs extends VerticalLayout {
         contentLayout.setSizeFull();
 
         add(new H1("Диалоги"), contentLayout);
+    }
+
+    VerticalLayout createEmpty() {
+        VerticalLayout message = new VerticalLayout();
+        message.getElement().getStyle().set("border", "1px solid #eaeaee");
+        message.getElement().getStyle().set("border-radius", "12px");
+        message.add("Выберите диалог, чтобы продолжить общение");
+        message.setSizeFull();
+        VerticalLayout out = new VerticalLayout(message);
+        out.getElement().getStyle().set("padding-block-start", "0");
+        out.setSizeFull();
+        return out;
     }
 }

@@ -5,16 +5,15 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import team.mephi.adminbot.model.*;
+import team.mephi.adminbot.model.enums.Channels;
 import team.mephi.adminbot.model.enums.MailingStatus;
 import team.mephi.adminbot.model.enums.SenderType;
+import team.mephi.adminbot.model.objects.Filters;
 import team.mephi.adminbot.repository.*;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Configuration
 public class DataInitializer {
@@ -147,16 +146,20 @@ public class DataInitializer {
                 Mailing.builder()
                         .createdBy(userRepository.findById(1L + random.nextLong(userRepository.count())).orElseThrow())
                         .name("Test1")
+                        .channels(List.of(Channels.Email))
+                        .filters(Filters.builder().users("students").cohort("summer2025").direction("Java").city("Москва").curator("Иванов").build())
                         .status(MailingStatus.DRAFT)
                         .build(),
                 Mailing.builder()
                         .createdBy(userRepository.findById(1L + random.nextLong(userRepository.count())).orElseThrow())
                         .name("Test2")
+                        .channels(List.of(Channels.Telegram))
                         .status(MailingStatus.DRAFT)
                         .build(),
                 Mailing.builder()
                         .createdBy(userRepository.findById(1L + random.nextLong(userRepository.count())).orElseThrow())
                         .name("Test3")
+                        .channels(List.of(Channels.Email, Channels.Telegram))
                         .status(MailingStatus.DRAFT)
                         .build()
         );
