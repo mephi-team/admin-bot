@@ -290,7 +290,7 @@ public class User {
      */
     @OneToMany(mappedBy = "uploadedBy", fetch = FetchType.LAZY)
     @Builder.Default
-    private List<File> uploadedFiles = new ArrayList<>();
+    private List<StoredFile> uploadedFiles = new ArrayList<>();
 
     /**
      * Ответы, которые дал пользователь.
