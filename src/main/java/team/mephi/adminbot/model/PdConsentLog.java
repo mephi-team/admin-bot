@@ -8,7 +8,9 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import team.mephi.adminbot.model.enums.ConsentStatus;
 
-import java.time.LocalDateTime;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.Instant;
 
 /**
  * Лог согласий на обработку персональных данных (PD / GDPR).
@@ -70,7 +72,8 @@ public class PdConsentLog {
      * для обеспечения целостности аудита.
      */
     @Column(name = "consented_at", nullable = false, updatable = false)
-    private LocalDateTime consentedAt;
+    @CreationTimestamp
+    private Instant consentedAt;
 
     /**
      * Источник согласия, откуда пришло согласие пользователя.
@@ -91,18 +94,5 @@ public class PdConsentLog {
     @Column(name = "status", nullable = false)
     private ConsentStatus status;
 
-    /**
-     * Автоматически устанавливает временную метку события при создании записи,
-     * если она не была задана явно.
-     *
-     * Это обеспечивает, что каждая запись имеет временную метку события,
-     * даже если она не была указана при создании объекта.
-     */
-    @PrePersist
-    protected void onCreate() {
-        if (this.consentedAt == null) {
-            this.consentedAt = LocalDateTime.now();
-        }
-    }
 }
 

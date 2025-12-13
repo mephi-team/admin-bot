@@ -1,14 +1,19 @@
 package team.mephi.adminbot.model;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import team.mephi.adminbot.model.enums.MailingStatus;
 
-import java.time.LocalDateTime;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,7 +62,8 @@ public class EnrollmentBatch {
      * и дальше не изменяется.
      */
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    @CreationTimestamp
+    private Instant createdAt;
 
     /**
      * Текущий статус батча.
@@ -75,8 +81,9 @@ public class EnrollmentBatch {
      * Хранится в виде JSON (jsonb в PostgreSQL).
      * Пример значения: ["telegram", "email"].
      */
+    @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "channels", columnDefinition = "jsonb", nullable = false)
-    private String channels;
+    private JsonNode channels;
 
     /**
      * Ссылки на зачисление, входящие в этот батч.
@@ -101,9 +108,6 @@ public class EnrollmentBatch {
      */
     @PrePersist
     protected void onCreate() {
-        if (this.createdAt == null) {
-            this.createdAt = LocalDateTime.now();
-        }
         if (this.status == null) {
             this.status = MailingStatus.DRAFT;
         }

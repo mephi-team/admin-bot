@@ -1,5 +1,6 @@
 package team.mephi.adminbot.model;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +11,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import team.mephi.adminbot.model.enums.ScriptTaskStatus;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 /**
  * Сущность задачи выполнения скрипта массовой регистрации (enrollment script task).
@@ -123,7 +124,7 @@ public class EnrollmentScriptTask {
      */
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "log", columnDefinition = "jsonb")
-    private Object log;
+    private JsonNode log;
 
     /**
      * Время начала выполнения задачи.
@@ -132,7 +133,7 @@ public class EnrollmentScriptTask {
      * Может быть null, если задача ещё не начала выполняться.
      */
     @Column(name = "started_at")
-    private LocalDateTime startedAt;
+    private Instant startedAt;
 
     /**
      * Время завершения выполнения задачи.
@@ -141,6 +142,6 @@ public class EnrollmentScriptTask {
      * Может быть null, если задача ещё не завершена.
      */
     @Column(name = "finished_at")
-    private LocalDateTime finishedAt;
+    private Instant finishedAt;
 }
 

@@ -1,13 +1,18 @@
 package team.mephi.adminbot.model;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Immutable;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
-import java.time.LocalDateTime;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.Instant;
 
 /**
  * Лог аудита административных действий.
@@ -86,8 +91,9 @@ public class AdminAudit {
      *
      * Поле необязательное.
      */
+    @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
-    private String payload;
+    private JsonNode payload;
 
     /**
      * Дата и время, когда произошло действие.
@@ -96,15 +102,6 @@ public class AdminAudit {
      * и больше никогда не изменяется.
      */
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    /**
-     * Хук JPA, который автоматически
-     * проставляет текущее время
-     * перед сохранением записи в базу.
-     */
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-    }
+    @CreationTimestamp
+    private Instant createdAt;
 }

@@ -111,4 +111,3 @@ public class StoredFile {
     @CreationTimestamp
     private Instant uploadedAt;
 }
-

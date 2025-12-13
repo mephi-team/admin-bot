@@ -8,32 +8,32 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import team.mephi.adminbot.model.enums.EnrollmentStatus;
 
-import java.time.LocalDateTime;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.Instant;
 
 /**
- * Entity representing an enrollment link for out-of-flow user enrollment.
- * <p>
- * Each enrollment link is generated for a specific user within a batch and tracks:
- * <ul>
- *   <li><b>Lifecycle:</b> created → sent → used/expired/failed</li>
- *   <li><b>Delivery status:</b> whether the link has been sent to the user</li>
- *   <li><b>Expiration:</b> optional expiration timestamp</li>
- *   <li><b>Failure tracking:</b> status reason for failed or expired links</li>
- * </ul>
- * <p>
- * Relations:
- * <ul>
- *   <li>Each link belongs to exactly one {@link EnrollmentBatch}</li>
- *   <li>Each link is associated with exactly one {@link User}</li>
- * </ul>
- * <p>
- * Constraints:
- * <ul>
- *   <li>Link must be unique within the system</li>
- *   <li>created_at is immutable after insert</li>
- *   <li>expires_at must be after created_at (if present)</li>
- *   <li>is_sent defaults to false for newly created links</li>
- * </ul>
+ * Сущность ссылки для записи пользователя вне основного флоу.
+ *
+ * Проще говоря:
+ * это персональная ссылка, по которой конкретный пользователь
+ * может пройти и завершить процесс зачисления.
+ *
+ * Для каждой ссылки отслеживается:
+ * - её жизненный цикл (создана → отправлена → использована / истекла / ошибка)
+ * - была ли ссылка отправлена пользователю
+ * - срок действия (если он есть)
+ * - причина ошибки или истечения срока
+ *
+ * Связи:
+ * - каждая ссылка относится к одному батчу зачисления
+ * - каждая ссылка создаётся для одного конкретного пользователя
+ *
+ * Ограничения и правила:
+ * - сама ссылка должна быть уникальной
+ * - дата создания не меняется после сохранения
+ * - дата истечения (если есть) должна быть позже даты создания
+ * - флаг sent по умолчанию false
  */
 @Data
 @Builder
@@ -43,8 +43,9 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "enrollment_links")
 public class EnrollmentLink {
+
     /**
-     * Primary key identifier.
+     * Технический первичный ключ записи.
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,96 +53,100 @@ public class EnrollmentLink {
     private Long id;
 
     /**
-     * The enrollment batch this link belongs to.
-     * Foreign key to enrollment_batches.batch_id.
+     * Батч зачисления, к которому относится эта ссылка.
      */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "batch_id", nullable = false)
     private EnrollmentBatch batch;
 
     /**
-     * The user this enrollment link is generated for.
-     * Foreign key to users.id.
+     * Пользователь, для которого создана ссылка.
      */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     /**
-     * The enrollment link URL.
-     * Must be unique within the system.
+     * Сама ссылка (URL).
+     *
+     * Должна быть уникальной в рамках всей системы.
      */
     @Column(name = "link", nullable = false)
     private String link;
 
     /**
-     * Timestamp when the enrollment link was created.
-     * Immutable after insert.
+     * Дата и время создания ссылки.
+     *
+     * Проставляется автоматически
+     * и больше никогда не изменяется.
      */
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    @CreationTimestamp
+    private Instant createdAt;
 
     /**
-     * Timestamp when the enrollment link expires.
-     * Nullable - if null, the link does not expire.
-     * Must be after created_at if present.
+     * Дата и время, после которых ссылка считается недействительной.
+     *
+     * Может быть null — тогда ссылка не имеет срока действия.
+     * Если указана, должна быть позже createdAt.
      */
     @Column(name = "expires_at")
-    private LocalDateTime expiresAt;
+    private Instant expiresAt;
 
     /**
-     * Flag indicating whether the enrollment link has been sent to the user.
-     * Defaults to false for newly created links.
+     * Признак того, что ссылка была отправлена пользователю.
+     *
+     * По умолчанию false.
      */
     @Column(name = "is_sent", nullable = false)
     @Builder.Default
     private boolean sent = false;
 
     /**
-     * Current status of the enrollment link.
-     * Reflects the lifecycle: PENDING, SENT, USED, EXPIRED, FAILED.
+     * Текущий статус ссылки.
+     *
+     * Отражает её состояние:
+     * PENDING, SENT, USED, EXPIRED, FAILED.
      */
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private EnrollmentStatus status;
 
     /**
-     * Reason for the current status (e.g., failure reason, expiration reason).
-     * Nullable - only populated when status indicates an error or special condition.
+     * Причина текущего статуса.
+     *
+     * Используется, например, для ошибок
+     * или пояснения, почему ссылка истекла.
+     * Может быть пустым.
      */
     @Column(name = "status_reason")
     private String statusReason;
 
     /**
-     * Initializes default values before persisting a new enrollment link.
-     * Sets:
-     * <ul>
-     *   <li>createdAt to current timestamp if not set</li>
-     *   <li>sent to false if not set</li>
-     *   <li>status to PENDING if not set</li>
-     * </ul>
-     * Also validates that expires_at is after created_at if both are present.
+     * Метод, который вызывается перед сохранением новой ссылки.
      *
-     * @throws IllegalArgumentException if expires_at is before or equal to created_at
+     * Делает следующее:
+     * - гарантирует, что sent = false
+     * - если статус не задан — ставит PENDING
+     * - проверяет корректность даты истечения
      */
     @PrePersist
     protected void onCreate() {
-        if (this.createdAt == null) {
-            this.createdAt = LocalDateTime.now();
-        }
-        // Ensure sent is false for newly created links
+        // Для новых ссылок всегда считаем, что они ещё не отправлены
         this.sent = false;
+
         if (this.status == null) {
             this.status = EnrollmentStatus.PENDING;
         }
+
         validateExpirationDate();
     }
 
     /**
-     * Validates expiration date before updating the entity.
-     * Ensures that expires_at is after created_at if both are present.
+     * Метод, который вызывается перед обновлением записи.
      *
-     * @throws IllegalArgumentException if expires_at is before or equal to created_at
+     * Проверяет, что дата истечения
+     * (если она указана) корректна.
      */
     @PreUpdate
     protected void onUpdate() {
@@ -149,16 +154,19 @@ public class EnrollmentLink {
     }
 
     /**
-     * Validates that expires_at is after created_at if both are present.
+     * Проверка корректности даты истечения.
      *
-     * @throws IllegalArgumentException if expires_at is before or equal to created_at
+     * Если expiresAt указана, она должна быть
+     * строго позже createdAt.
+     *
+     * Иначе выбрасывается исключение.
      */
     private void validateExpirationDate() {
         if (expiresAt != null && createdAt != null && !expiresAt.isAfter(createdAt)) {
             throw new IllegalArgumentException(
-                    "expires_at must be after created_at. created_at: " + createdAt + ", expires_at: " + expiresAt
+                    "expires_at must be after created_at. created_at: "
+                            + createdAt + ", expires_at: " + expiresAt
             );
         }
     }
 }
-

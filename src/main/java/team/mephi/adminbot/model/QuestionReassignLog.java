@@ -7,7 +7,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.Instant;
 
 /**
  * Лог переназначения вопросов между направлениями обучения.
@@ -111,16 +113,7 @@ public class QuestionReassignLog {
      * Это поле является неизменяемым (immutable) для обеспечения целостности аудита.
      */
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    /**
-     * Автоматически устанавливает createdAt при создании новой записи.
-     */
-    @PrePersist
-    protected void onCreate() {
-        if (this.createdAt == null) {
-            this.createdAt = LocalDateTime.now();
-        }
-    }
+    @CreationTimestamp
+    private Instant createdAt;
 }
 

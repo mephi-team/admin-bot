@@ -8,7 +8,9 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import team.mephi.adminbot.model.enums.ScriptTaskStatus;
 
-import java.time.LocalDateTime;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,7 +70,8 @@ public class EnrollmentScriptFile {
      * и дальше не изменяется.
      */
     @Column(name = "uploaded_at", nullable = false, updatable = false)
-    private LocalDateTime uploadedAt;
+    @CreationTimestamp
+    private Instant uploadedAt;
 
     /**
      * Текущий статус обработки файла.
@@ -104,9 +107,6 @@ public class EnrollmentScriptFile {
      */
     @PrePersist
     protected void onCreate() {
-        if (this.uploadedAt == null) {
-            this.uploadedAt = LocalDateTime.now();
-        }
         if (this.status == null) {
             this.status = ScriptTaskStatus.PENDING;
         }

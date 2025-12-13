@@ -5,8 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+import team.mephi.adminbot.model.enums.NotificationStatus;
+import team.mephi.adminbot.model.enums.NotificationType;
 
-import java.time.LocalDateTime;
+import com.fasterxml.jackson.databind.JsonNode;
+import java.time.Instant;
 
 /**
  * Сущность уведомления в очереди отправки.
@@ -16,10 +22,10 @@ import java.time.LocalDateTime;
  * а фоновые воркеры потом их отправляют.
  *
  * Жизненный цикл статуса:
- * - NEW        — уведомление только что добавлено в очередь
- * - PROCESSING — уведомление сейчас отправляется
+ * - PENDING    — уведомление только что добавлено в очередь
  * - SENT       — уведомление успешно отправлено
  * - FAILED     — при отправке произошла ошибка
+ * - DELIVERED  — уведомление доставлено получателю
  */
 @Data
 @Builder
@@ -39,10 +45,11 @@ public class NotificationQueue {
     /**
      * Тип уведомления.
      *
-     * Например: EMAIL, TELEGRAM, PUSH и т.д.
+     * Например: EMAIL, TELEGRAM и т.д.
      */
+    @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
-    private String type;
+    private NotificationType type;
 
     /**
      * Получатель уведомления.
@@ -59,16 +66,18 @@ public class NotificationQueue {
      * Содержит всё, что нужно для отправки:
      * текст, параметры шаблона, метаданные и т.п.
      */
+    @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb", nullable = false)
-    private String payload;
+    private JsonNode payload;
 
     /**
      * Текущий статус уведомления.
      *
      * См. описание жизненного цикла выше.
      */
+    @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private String status;
+    private NotificationStatus status;
 
     /**
      * Текст ошибки, если отправка завершилась неудачей.
@@ -85,7 +94,8 @@ public class NotificationQueue {
      * и после этого не меняется.
      */
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    @CreationTimestamp
+    private Instant createdAt;
 
     /**
      * Дата и время успешной отправки уведомления.
@@ -93,22 +103,18 @@ public class NotificationQueue {
      * Заполняется после перехода в статус SENT.
      */
     @Column(name = "sent_at")
-    private LocalDateTime sentAt;
+    private Instant sentAt;
 
     /**
      * Хук JPA, который срабатывает перед сохранением записи.
      *
      * Если значения не заданы:
-     * - ставит текущее время в createdAt
-     * - устанавливает статус NEW
+     * - устанавливает статус PENDING
      */
     @PrePersist
     protected void onCreate() {
-        if (this.createdAt == null) {
-            this.createdAt = LocalDateTime.now();
-        }
         if (this.status == null) {
-            this.status = "NEW";
+            this.status = NotificationStatus.PENDING;
         }
     }
 }
