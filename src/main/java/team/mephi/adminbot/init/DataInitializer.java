@@ -9,6 +9,7 @@ import team.mephi.adminbot.model.enums.MailingStatus;
 import team.mephi.adminbot.model.enums.SenderType;
 import team.mephi.adminbot.repository.*;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -138,7 +139,7 @@ public class DataInitializer {
                         .status(MailingStatus.DRAFT)
                         .build()
         );
-        broadcasts.forEach(b -> b.setCreatedAt(LocalDateTime.now().minusDays(new Random().nextInt(5))));
+        broadcasts.forEach(b -> b.setCreatedAt(Instant.now().minusSeconds(new Random().nextInt(5) * 86400L)));
         mailingRepository.saveAll(broadcasts);
         System.out.println("  → Создано 3 рассылки");
     }
