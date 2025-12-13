@@ -14,6 +14,7 @@ import team.mephi.adminbot.repository.DialogRepository;
 import team.mephi.adminbot.repository.QuestionRepository;
 import team.mephi.adminbot.repository.UserRepository;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -60,7 +61,7 @@ class MainControllerApiTest {
         long expectedNewQuestions = 3L;
 
         when(userRepository.count()).thenReturn(expectedTotalUsers);
-        when(dialogRepository.countByLastMessageAtAfter(any(LocalDateTime.class)))
+        when(dialogRepository.countByLastMessageAtAfter(any(Instant.class)))
                 .thenReturn(expectedActiveDialogs);
         when(questionRepository.countByCreatedAtAfter(any(LocalDateTime.class)))
                 .thenReturn(expectedNewQuestions);
@@ -74,7 +75,7 @@ class MainControllerApiTest {
                 .andExpect(model().attribute("newQuestions", expectedNewQuestions));
 
         verify(userRepository).count();
-        verify(dialogRepository).countByLastMessageAtAfter(any(LocalDateTime.class));
+        verify(dialogRepository).countByLastMessageAtAfter(any(Instant.class));
         verify(questionRepository).countByCreatedAtAfter(any(LocalDateTime.class));
     }
 }

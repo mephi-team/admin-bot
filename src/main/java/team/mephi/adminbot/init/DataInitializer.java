@@ -5,6 +5,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import team.mephi.adminbot.model.*;
+import team.mephi.adminbot.model.enums.DialogStatus;
 import team.mephi.adminbot.model.enums.MailingStatus;
 import team.mephi.adminbot.model.enums.SenderType;
 import team.mephi.adminbot.repository.*;
@@ -174,7 +175,7 @@ public class DataInitializer {
         Dialog dialog = new Dialog();
         dialog.setUser(user);
         dialog.setDirection(directionRepository.findById(1L + random.nextLong(directionRepository.count())).orElseThrow());
-        dialog.setStatus("active");
+        dialog.setStatus(DialogStatus.ACTIVE);
 
         List<Message> messages = new ArrayList<>();
         LocalDateTime currentTimestamp;
@@ -247,9 +248,11 @@ public class DataInitializer {
         }
 
         if (!messages.isEmpty()) {
-            dialog.setLastMessageAt(messages.get(messages.size() - 1).getCreatedAt());
+            // Convert LocalDateTime to Instant for lastMessageAt
+            LocalDateTime lastMessageDateTime = messages.get(messages.size() - 1).getCreatedAt();
+            dialog.setLastMessageAt(lastMessageDateTime.atZone(java.time.ZoneId.systemDefault()).toInstant());
         } else {
-            dialog.setLastMessageAt(LocalDateTime.now());
+            dialog.setLastMessageAt(Instant.now());
         }
 
         dialog.setMessages(messages);
