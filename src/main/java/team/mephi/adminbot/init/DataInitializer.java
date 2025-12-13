@@ -67,7 +67,7 @@ public class DataInitializer {
                 Role.builder().name("student").description("Студенты").build(),
                 Role.builder().name("candidate").description("Кандидаты").build(),
                 Role.builder().name("visitor").description("Посетитель").build(),
-                Role.builder().name("free_listener ").description("Слушатели").build(),
+                Role.builder().name("free_listener").description("Слушатели").build(),
                 Role.builder().name("middle_candidate").description("Миддл-кандидаты").build()
         );
         roleRepository.saveAll(roles);

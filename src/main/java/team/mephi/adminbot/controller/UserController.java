@@ -1,6 +1,7 @@
 package team.mephi.adminbot.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,7 @@ import team.mephi.adminbot.model.User;
 import team.mephi.adminbot.repository.RoleRepository;
 import team.mephi.adminbot.repository.UserRepository;
 import team.mephi.adminbot.service.PdConsentService;
+import team.mephi.adminbot.service.UserService;
 
 import java.util.List;
 import java.util.Map;
@@ -25,6 +27,8 @@ public class UserController {
     private RoleRepository roleRepository;
     @Autowired
     private PdConsentService pdConsentService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/users")
     public String usersPage(
@@ -143,4 +147,20 @@ public class UserController {
         return "redirect:/users?role=" + role.getName();
     }
 
+    // кейс подтверждения или отказа кандидатам
+    @PostMapping("/users/{id}/approve")
+    public ResponseEntity<String> approve(@PathVariable Long id) {
+        try {
+            userService.approveCandidate(id);
+            return ResponseEntity.ok("OK");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/users/{id}/reject")
+    public ResponseEntity<Void> reject(@PathVariable Long id) {
+        userService.rejectCandidate(id);
+        return ResponseEntity.ok().build();
+    }
 }
