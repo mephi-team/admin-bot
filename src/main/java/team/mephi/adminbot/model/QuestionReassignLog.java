@@ -13,28 +13,32 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "mailings")
-public class Broadcast {
+@Table(name = "question_reassign_log")
+public class QuestionReassignLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "users", nullable = false)
-    private Role users;
+    @JoinColumn(name = "question_id", nullable = false)
+    private UserQuestion question;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "direction", nullable = false)
-    private Direction direction;
+    @JoinColumn(name = "from_direction_id")
+    private Direction fromDirection;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "created_by", nullable = false)
-    private User createdBy;
+    @JoinColumn(name = "to_direction_id")
+    private Direction toDirection;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
-    private String messageText;
+    @Column(columnDefinition = "TEXT")
+    private String reason;
 
-    @Column(nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reassigned_by", nullable = false)
+    private User reassignedBy;
+
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
     @PrePersist
@@ -42,3 +46,4 @@ public class Broadcast {
         this.createdAt = LocalDateTime.now();
     }
 }
+

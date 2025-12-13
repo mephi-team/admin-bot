@@ -57,19 +57,7 @@
                         </th>
                         <th scope="col">
                             <div class="d-flex align-items-center">
-                                Пользователи
-                                <i class="bi bi-arrow-up-down ms-2 text-muted" style="font-size: 0.8rem;"></i>
-                            </div>
-                        </th>
-                        <th scope="col">
-                            <div class="d-flex align-items-center">
-                                Направление
-                                <i class="bi bi-arrow-up-down ms-2 text-muted" style="font-size: 0.8rem;"></i>
-                            </div>
-                        </th>
-                        <th scope="col">
-                            <div class="d-flex align-items-center">
-                                Куратор
+                                Название
                                 <i class="bi bi-arrow-up-down ms-2 text-muted" style="font-size: 0.8rem;"></i>
                             </div>
                         </th>
@@ -79,11 +67,7 @@
                     <tr th:each="b : ${broadcasts}">
                         <td><input class="form-check-input" id="check-__${b.id}__" type="checkbox"></td>
                         <td th:text="${#temporals.format(b.createdAt, 'dd.MM.yyyy HH:mm')}">17.05.2025 15:35</td>
-                        <td th:text="${b.users.description}">Студенты</td>
-                        <td th:text="${b.direction.name}">Аналитика</td>
-                        <td th:text="${(b.createdBy.lastName + ' ' + #strings.substring(b.createdBy.firstName, 0, 1) + '.')}">
-                            Иванов К.
-                        </td>
+                        <td th:text="${b.name}">Аналитика</td>
                     </tr>
                     </tbody>
                 </table>
