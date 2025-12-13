@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import team.mephi.adminbot.model.User;
+import team.mephi.adminbot.model.enums.UserStatus;
 import team.mephi.adminbot.repository.UserRepository;
 
 import java.util.List;
@@ -16,6 +17,13 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    /**
+     * Страница со списком пользователей.
+     *
+     * Поддерживает:
+     * - фильтрацию по статусу (active / blocked / all)
+     * - поиск по строке (имя, телефон, email и т.д.)
+     */
     @GetMapping("/users")
     public String usersPage(
             @RequestParam(defaultValue = "all") String status,
@@ -23,31 +31,45 @@ public class UserController {
             Model model) {
 
         List<User> users;
+
+        // Проверяем, используется ли поиск
         boolean searching = query != null && !query.isBlank();
 
         if (!searching) {
-            // стандартный фильтр без поиска
+            // Обычный список пользователей, без строки поиска
             if (status.equals("active")) {
-                users = userRepository.findByStatus("active");
+                users = userRepository.findByStatus(UserStatus.ACTIVE);
             } else if (status.equals("blocked")) {
-                users = userRepository.findByStatus("blocked");
+                users = userRepository.findByStatus(UserStatus.BLOCKED);
             } else {
+                // status = all
                 users = userRepository.findAll();
             }
         } else {
-            // поиск с учётом статуса
+            // Поиск пользователей с учётом выбранного статуса
             if (status.equals("all")) {
                 users = userRepository.searchAll(query);
             } else {
-                users = userRepository.searchByStatus(status, query);
+                try {
+                    // Пробуем преобразовать статус из строки в enum
+                    UserStatus userStatus =
+                            UserStatus.valueOf(status.toUpperCase());
+
+                    users = userRepository.searchByStatus(userStatus, query);
+                } catch (IllegalArgumentException e) {
+                    // Если статус некорректный — ищем без фильтра по статусу
+                    users = userRepository.searchAll(query);
+                }
             }
         }
 
+        // Передаём данные в шаблон
         model.addAttribute("users", users);
         model.addAttribute("currentStatus", status);
 
-        // для правильной работы поля поиска - значение поиска остается, пользователь стирает значение вручную
+        // Чтобы строка поиска не очищалась автоматически
         model.addAttribute("search", query == null ? "" : query);
+
         return "users";
     }
 }
