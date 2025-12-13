@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findByStatus(String status);
+    java.util.Optional<User> findByExternalId(String externalId);
 }
