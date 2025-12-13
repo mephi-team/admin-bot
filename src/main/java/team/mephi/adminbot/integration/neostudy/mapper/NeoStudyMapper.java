@@ -5,7 +5,7 @@ import team.mephi.adminbot.integration.neostudy.dto.*;
 import team.mephi.adminbot.model.Direction;
 import team.mephi.adminbot.model.User;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,10 +29,8 @@ public class NeoStudyMapper {
         }
 
         return NeoStudyUserRequest.builder()
-                .externalId(user.getExternalId())
-                .name(user.getName())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
+                .externalId(user.getTgId())  // Use tgId as external identifier for NeoStudy
+                .name(user.getFullName())    // Use fullName instead of deprecated name/firstName/lastName
                 .status(user.getStatus())
                 .build();
     }
@@ -50,18 +48,17 @@ public class NeoStudyMapper {
         }
 
         return User.builder()
-                .externalId(response.getExternalId())
-                .name(response.getName())
-                .firstName(response.getFirstName())
-                .lastName(response.getLastName())
+                .tgId(response.getExternalId())  // Map externalId from NeoStudy to tgId
+                .fullName(response.getName())    // Map name from NeoStudy to fullName
                 .status(response.getStatus())
                 // Если даты не пришли — ставим текущее время
+                // Convert LocalDateTime from DTO to Instant for entity (using UTC)
                 .createdAt(response.getCreatedAt() != null
-                        ? response.getCreatedAt()
-                        : LocalDateTime.now())
+                        ? response.getCreatedAt().atZone(java.time.ZoneId.of("UTC")).toInstant()
+                        : Instant.now())
                 .updatedAt(response.getUpdatedAt() != null
-                        ? response.getUpdatedAt()
-                        : LocalDateTime.now())
+                        ? response.getUpdatedAt().atZone(java.time.ZoneId.of("UTC")).toInstant()
+                        : Instant.now())
                 .build();
     }
 
@@ -78,19 +75,14 @@ public class NeoStudyMapper {
         }
 
         if (response.getName() != null) {
-            user.setName(response.getName());
-        }
-        if (response.getFirstName() != null) {
-            user.setFirstName(response.getFirstName());
-        }
-        if (response.getLastName() != null) {
-            user.setLastName(response.getLastName());
+            user.setFullName(response.getName());  // Update only fullName, not deprecated fields
         }
         if (response.getStatus() != null) {
             user.setStatus(response.getStatus());
         }
         if (response.getUpdatedAt() != null) {
-            user.setUpdatedAt(response.getUpdatedAt());
+            // Convert LocalDateTime from DTO to Instant for entity (using UTC)
+            user.setUpdatedAt(response.getUpdatedAt().atZone(java.time.ZoneId.of("UTC")).toInstant());
         }
     }
 
@@ -161,7 +153,7 @@ public class NeoStudyMapper {
                 .courseId(courseId)
                 .status(status)
                 // Дата записи — текущее время
-                .enrollmentDate(LocalDateTime.now().toString())
+                .enrollmentDate(Instant.now().toString())
                 .build();
     }
 
@@ -179,7 +171,7 @@ public class NeoStudyMapper {
                 .userId(userId)
                 .courseId(courseId)
                 .status(status)
-                .enrollmentDate(LocalDateTime.now().toString())
+                .enrollmentDate(Instant.now().toString())
                 // Если метаданные не передали — используем пустую map
                 .metadata(metadata != null ? metadata : new HashMap<>())
                 .build();

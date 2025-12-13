@@ -17,7 +17,7 @@ import team.mephi.adminbot.model.User;
 import team.mephi.adminbot.repository.DirectionRepository;
 import team.mephi.adminbot.repository.UserRepository;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -71,9 +71,9 @@ public class NeoStudyService {
         }
 
         log.info(
-                "Регистрация пользователя в NeoStudy: userId={}, externalId={}",
+                "Регистрация пользователя в NeoStudy: userId={}, tgId={}",
                 user.getId(),
-                user.getExternalId()
+                user.getTgId()
         );
 
         try {
@@ -82,12 +82,12 @@ public class NeoStudyService {
 
             // Сначала пробуем найти пользователя в NeoStudy
             Mono<NeoStudyUserResponse> responseMono = neoStudyClient
-                    .getUserByExternalId(user.getExternalId())
+                    .getUserByExternalId(user.getTgId())  // Use tgId instead of deprecated externalId
                     .onErrorResume(error -> {
                         // Если пользователя нет — создаём нового
                         log.debug(
-                                "Пользователь не найден в NeoStudy, создаём нового: externalId={}",
-                                user.getExternalId()
+                                "Пользователь не найден в NeoStudy, создаём нового: tgId={}",
+                                user.getTgId()
                         );
                         return neoStudyClient.createUser(request);
                     })
@@ -105,7 +105,7 @@ public class NeoStudyService {
             if (response != null) {
                 // Сохраняем NeoStudy ID и время синхронизации
                 user.setNeostudyExternalId(response.getId());
-                user.setNeostudySyncedAt(LocalDateTime.now());
+                user.setNeostudySyncedAt(Instant.now());
 
                 User savedUser = userRepository.save(user);
 
@@ -175,7 +175,7 @@ public class NeoStudyService {
 
             if (response != null) {
                 neoStudyMapper.updateUserFromNeoStudy(user, response);
-                user.setNeostudySyncedAt(LocalDateTime.now());
+                user.setNeostudySyncedAt(Instant.now());
                 user = userRepository.save(user);
 
                 log.info(
@@ -247,7 +247,7 @@ public class NeoStudyService {
 
                         // Обновляем NeoStudy ID и время синхронизации
                         direction.setNeostudyExternalId(course.getId());
-                        direction.setNeostudySyncedAt(LocalDateTime.now());
+                        direction.setNeostudySyncedAt(Instant.now());
 
                         return directionRepository.save(direction);
                     })

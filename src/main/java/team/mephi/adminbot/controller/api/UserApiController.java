@@ -55,9 +55,14 @@ public class UserApiController {
         // subject — это ID пользователя в Keycloak
         String subject = jwt.getSubject();
 
-        // Пытаемся найти пользователя в базе по externalId
-        // (предполагается, что externalId = ID пользователя в Keycloak)
-        Optional<User> userOpt = userRepository.findByExternalId(subject);
+        // Получаем email из JWT для поиска пользователя
+        String email = jwt.getClaimAsString("email");
+
+        // Пытаемся найти пользователя в базе по email
+        // (используем email из JWT, так как это надежный идентификатор)
+        Optional<User> userOpt = email != null
+                ? userRepository.findByEmail(email)
+                : Optional.empty();
 
         // Формируем объект профиля, который вернём клиенту
         Map<String, Object> profile = new HashMap<>();
@@ -73,7 +78,7 @@ public class UserApiController {
         // добавляем данные из нашей БД
         userOpt.ifPresent(user -> {
             profile.put("userId", user.getId());
-            profile.put("userName", user.getName());
+            profile.put("userName", user.getFullName());  // Use fullName instead of deprecated getName()
             profile.put("status", user.getStatus());
         });
 

@@ -10,7 +10,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import team.mephi.adminbot.model.enums.UserStatus;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -208,7 +207,7 @@ public class User {
      * Дата и время последней синхронизации пользователя с NeoStudy.
      */
     @Column(name = "neostudy_synced_at")
-    private LocalDateTime neostudySyncedAt;
+    private Instant neostudySyncedAt;
 
     // ===== Связи с другими сущностями =====
 

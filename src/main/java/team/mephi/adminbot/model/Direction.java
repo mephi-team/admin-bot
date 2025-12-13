@@ -67,7 +67,7 @@ public class Direction {
      * последний раз обновлялись или отправлялись в NeoStudy.
      */
     @Column(name = "neostudy_synced_at")
-    private java.time.LocalDateTime neostudySyncedAt;
+    private java.time.Instant neostudySyncedAt;
 
     // ===== Связи с другими сущностями =====
 
