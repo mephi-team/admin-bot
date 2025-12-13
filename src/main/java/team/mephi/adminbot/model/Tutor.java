@@ -87,14 +87,9 @@ public class Tutor {
      *
      * Связь многие-ко-многим через таблицу tutor_directions.
      */
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "tutor_directions",
-            joinColumns = @JoinColumn(name = "tutor_id"),
-            inverseJoinColumns = @JoinColumn(name = "direction_id")
-    )
+    @OneToMany(mappedBy = "tutor", fetch = FetchType.LAZY)
     @Builder.Default
-    private Set<Direction> directions = new HashSet<>();
+    private Set<TutorDirection> directions = new HashSet<>();
 
     // ===== equals() и hashCode() =====
 
