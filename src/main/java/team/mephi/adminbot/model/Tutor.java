@@ -6,9 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -80,7 +78,7 @@ public class Tutor {
      */
     @OneToMany(mappedBy = "tutor", fetch = FetchType.LAZY)
     @Builder.Default
-    private List<StudentTutor> studentAssignments = new ArrayList<>();
+    private Set<StudentTutor> studentAssignments = new HashSet<>();
 
     /**
      * Направления, с которыми работает тьютор.

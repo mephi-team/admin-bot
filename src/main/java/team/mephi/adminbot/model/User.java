@@ -12,7 +12,9 @@ import team.mephi.adminbot.model.enums.UserStatus;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Основная сущность пользователя системы.
@@ -287,6 +289,16 @@ public class User {
     @OneToMany(mappedBy = "answeredBy", fetch = FetchType.LAZY)
     @Builder.Default
     private List<UserAnswer> answers = new ArrayList<>();
+
+    /**
+     * История назначений этого пользователя (студента) на тьюторов.
+     *
+     * Один студент может иметь множество записей о назначениях на разных тьюторов.
+     * Связь через таблицу student_tutor.
+     */
+    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
+    @Builder.Default
+    private Set<StudentTutor> tutorAssignments = new HashSet<>();
 
     /**
      * Инициализация дат при создании записи.
