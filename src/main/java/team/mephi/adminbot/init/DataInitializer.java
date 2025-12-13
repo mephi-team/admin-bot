@@ -7,7 +7,8 @@ import org.springframework.context.annotation.Configuration;
 import team.mephi.adminbot.model.*;
 import team.mephi.adminbot.model.enums.DialogStatus;
 import team.mephi.adminbot.model.enums.MailingStatus;
-import team.mephi.adminbot.model.enums.SenderType;
+import team.mephi.adminbot.model.enums.MessageSenderType;
+import team.mephi.adminbot.model.enums.MessageStatus;
 import team.mephi.adminbot.repository.*;
 
 import java.time.Instant;
@@ -248,9 +249,8 @@ public class DataInitializer {
         }
 
         if (!messages.isEmpty()) {
-            // Convert LocalDateTime to Instant for lastMessageAt
-            LocalDateTime lastMessageDateTime = messages.get(messages.size() - 1).getCreatedAt();
-            dialog.setLastMessageAt(lastMessageDateTime.atZone(java.time.ZoneId.systemDefault()).toInstant());
+            // Use Instant directly from message
+            dialog.setLastMessageAt(messages.get(messages.size() - 1).getCreatedAt());
         } else {
             dialog.setLastMessageAt(Instant.now());
         }
@@ -266,9 +266,10 @@ public class DataInitializer {
         msg.setDialog(dialog);
         msg.setSender(sender);
         msg.setText(text);
-        msg.setSenderType(SenderType.valueOf(senderType.toUpperCase()));
-        msg.setStatus("active");
-        msg.setCreatedAt(createdAt);
+        msg.setSenderType(MessageSenderType.valueOf(senderType.toUpperCase()));
+        msg.setStatus(MessageStatus.SENT);
+        // Convert LocalDateTime to Instant
+        msg.setCreatedAt(createdAt.atZone(java.time.ZoneId.systemDefault()).toInstant());
         return msg;
     }
 }
