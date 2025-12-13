@@ -13,7 +13,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import team.mephi.adminbot.model.Dialog;
 import team.mephi.adminbot.repository.DialogRepository;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -50,12 +50,12 @@ class AnalyticsControllerApiTest {
     void getAnalytics_defaultType_shouldReturnAnalyticsViewWithChartData() throws Exception {
         // given
         Dialog d1 = new Dialog();
-        d1.setLastMessageAt(LocalDateTime.now().minusDays(1));
+        d1.setLastMessageAt(Instant.now().minusSeconds(24 * 3600));
 
         Dialog d2 = new Dialog();
-        d2.setLastMessageAt(LocalDateTime.now());
+        d2.setLastMessageAt(Instant.now());
 
-        when(dialogRepository.findLastWeekDialogs(any(LocalDateTime.class)))
+        when(dialogRepository.findLastWeekDialogs(any(Instant.class)))
                 .thenReturn(List.of(d1, d2));
 
         // when / then
@@ -66,7 +66,7 @@ class AnalyticsControllerApiTest {
                 .andExpect(model().attributeExists("chartData"))
                 .andExpect(model().attribute("type", "activity"));
 
-        verify(dialogRepository).findLastWeekDialogs(any(LocalDateTime.class));
+        verify(dialogRepository).findLastWeekDialogs(any(Instant.class));
     }
 
     @Test
@@ -74,7 +74,7 @@ class AnalyticsControllerApiTest {
         // given
         String type = "custom";
 
-        when(dialogRepository.findLastWeekDialogs(any(LocalDateTime.class)))
+        when(dialogRepository.findLastWeekDialogs(any(Instant.class)))
                 .thenReturn(List.of());
 
         // when / then
@@ -85,6 +85,6 @@ class AnalyticsControllerApiTest {
                 .andExpect(model().attributeExists("chartData"))
                 .andExpect(model().attribute("type", type));
 
-        verify(dialogRepository).findLastWeekDialogs(any(LocalDateTime.class));
+        verify(dialogRepository).findLastWeekDialogs(any(Instant.class));
     }
 }

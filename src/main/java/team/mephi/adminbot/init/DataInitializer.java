@@ -5,10 +5,13 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import team.mephi.adminbot.model.*;
+import team.mephi.adminbot.model.enums.DialogStatus;
 import team.mephi.adminbot.model.enums.MailingStatus;
-import team.mephi.adminbot.model.enums.SenderType;
+import team.mephi.adminbot.model.enums.MessageSenderType;
+import team.mephi.adminbot.model.enums.MessageStatus;
 import team.mephi.adminbot.repository.*;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -64,11 +67,11 @@ public class DataInitializer {
 
     private void initRoles() {
         List<Role> roles = Arrays.asList(
-                Role.builder().name("student").description("Студенты").build(),
-                Role.builder().name("candidate").description("Кандидаты").build(),
-                Role.builder().name("visitor").description("Посетитель").build(),
-                Role.builder().name("free_listener ").description("Слушатели").build(),
-                Role.builder().name("middle_candidate").description("Миддл-кандидаты").build()
+                Role.builder().code("student").name("student").description("Студенты").build(),
+                Role.builder().code("candidate").name("candidate").description("Кандидаты").build(),
+                Role.builder().code("visitor").name("visitor").description("Посетитель").build(),
+                Role.builder().code("free_listener").name("free_listener").description("Слушатели").build(),
+                Role.builder().code("middle_candidate").name("middle_candidate").description("Миддл-кандидаты").build()
         );
         roleRepository.saveAll(roles);
         System.out.println("  → Создано 5 ролей");
@@ -138,7 +141,7 @@ public class DataInitializer {
                         .status(MailingStatus.DRAFT)
                         .build()
         );
-        broadcasts.forEach(b -> b.setCreatedAt(LocalDateTime.now().minusDays(new Random().nextInt(5))));
+        broadcasts.forEach(b -> b.setCreatedAt(Instant.now().minusSeconds(new Random().nextInt(5) * 86400L)));
         mailingRepository.saveAll(broadcasts);
         System.out.println("  → Создано 3 рассылки");
     }
@@ -173,7 +176,7 @@ public class DataInitializer {
         Dialog dialog = new Dialog();
         dialog.setUser(user);
         dialog.setDirection(directionRepository.findById(1L + random.nextLong(directionRepository.count())).orElseThrow());
-        dialog.setStatus("active");
+        dialog.setStatus(DialogStatus.ACTIVE);
 
         List<Message> messages = new ArrayList<>();
         LocalDateTime currentTimestamp;
@@ -246,9 +249,10 @@ public class DataInitializer {
         }
 
         if (!messages.isEmpty()) {
+            // Use Instant directly from message
             dialog.setLastMessageAt(messages.get(messages.size() - 1).getCreatedAt());
         } else {
-            dialog.setLastMessageAt(LocalDateTime.now());
+            dialog.setLastMessageAt(Instant.now());
         }
 
         dialog.setMessages(messages);
@@ -262,9 +266,10 @@ public class DataInitializer {
         msg.setDialog(dialog);
         msg.setSender(sender);
         msg.setText(text);
-        msg.setSenderType(SenderType.valueOf(senderType.toUpperCase()));
-        msg.setStatus("active");
-        msg.setCreatedAt(createdAt);
+        msg.setSenderType(MessageSenderType.valueOf(senderType.toUpperCase()));
+        msg.setStatus(MessageStatus.SENT);
+        // Convert LocalDateTime to Instant
+        msg.setCreatedAt(createdAt.atZone(java.time.ZoneId.systemDefault()).toInstant());
         return msg;
     }
 }

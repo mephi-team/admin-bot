@@ -1,9 +1,9 @@
 package team.mephi.adminbot.model;
 
 import org.junit.jupiter.api.Test;
-import team.mephi.adminbot.model.enums.MailingStatus;
+import team.mephi.adminbot.model.enums.MailingTaskStatus;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,7 +18,7 @@ class MailingTaskTest {
         Mailing mailing = new Mailing();
         mailing.setId(1L);
 
-        LocalDateTime sendAt = LocalDateTime.now().plusDays(1);
+        Instant sendAt = Instant.now().plusSeconds(86400); // +1 day
 
         // when
         MailingTask task = MailingTask.builder()
@@ -26,7 +26,7 @@ class MailingTaskTest {
                 .mailing(mailing)
                 .sendAt(sendAt)
                 .repeatCron("0 0 * * *")
-                .status(MailingStatus.SCHEDULED)
+                .status(MailingTaskStatus.SCHEDULED)
                 .build();
 
         // then
@@ -34,7 +34,7 @@ class MailingTaskTest {
         assertSame(mailing, task.getMailing());
         assertEquals(sendAt, task.getSendAt());
         assertEquals("0 0 * * *", task.getRepeatCron());
-        assertEquals(MailingStatus.SCHEDULED, task.getStatus());
+        assertEquals(MailingTaskStatus.SCHEDULED, task.getStatus());
         assertNotNull(task.toString());
     }
 }

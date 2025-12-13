@@ -26,14 +26,15 @@ class ExpertDirectionTest {
     @Test
     void builder_shouldSetIds() {
         // given / when
+        ExpertDirection.ExpertDirectionId id = new ExpertDirection.ExpertDirectionId(10L, 20L);
         ExpertDirection ed = ExpertDirection.builder()
-                .expertId(10L)
-                .directionId(20L)
+                .id(id)
                 .build();
 
         // then
-        assertEquals(10L, ed.getExpertId());
-        assertEquals(20L, ed.getDirectionId());
+        assertNotNull(ed.getId());
+        assertEquals(10L, ed.getId().getExpertId());
+        assertEquals(20L, ed.getId().getDirectionId());
         assertNotNull(ed.toString());
     }
 }

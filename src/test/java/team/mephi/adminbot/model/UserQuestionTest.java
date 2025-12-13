@@ -3,7 +3,7 @@ package team.mephi.adminbot.model;
 import org.junit.jupiter.api.Test;
 import team.mephi.adminbot.model.enums.QuestionStatus;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -40,8 +40,8 @@ class UserQuestionTest {
         UserQuestion q = new UserQuestion();
         q.onCreate();
 
-        LocalDateTime createdAtBefore = q.getCreatedAt();
-        LocalDateTime updatedAtBefore = q.getUpdatedAt();
+        Instant createdAtBefore = q.getCreatedAt();
+        Instant updatedAtBefore = q.getUpdatedAt();
 
         Thread.sleep(50);
 
@@ -63,7 +63,7 @@ class UserQuestionTest {
         UserQuestion q = UserQuestion.builder()
                 .id(1L)
                 .answers(List.of(a1, a2))
-                .status(QuestionStatus.PROGRESS)
+                .status(QuestionStatus.IN_PROGRESS)
                 .text("T")
                 .role("r")
                 .build();
@@ -71,7 +71,7 @@ class UserQuestionTest {
         // then
         assertEquals(1L, q.getId());
         assertEquals(2, q.getAnswers().size());
-        assertEquals(QuestionStatus.PROGRESS, q.getStatus());
+        assertEquals(QuestionStatus.IN_PROGRESS, q.getStatus());
         assertNotNull(q.toString());
     }
 }
