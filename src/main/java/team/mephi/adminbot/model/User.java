@@ -89,9 +89,10 @@ public class User {
      * Роль пользователя в системе.
      *
      * Связь с таблицей ролей (roles.code).
+     * Каждый пользователь имеет ровно одну роль.
      */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "role_code", nullable = false)
+    @JoinColumn(name = "role_code", referencedColumnName = "code", nullable = false)
     private Role role;
 
     /**

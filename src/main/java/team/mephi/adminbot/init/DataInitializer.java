@@ -64,11 +64,11 @@ public class DataInitializer {
 
     private void initRoles() {
         List<Role> roles = Arrays.asList(
-                Role.builder().name("student").description("Студенты").build(),
-                Role.builder().name("candidate").description("Кандидаты").build(),
-                Role.builder().name("visitor").description("Посетитель").build(),
-                Role.builder().name("free_listener ").description("Слушатели").build(),
-                Role.builder().name("middle_candidate").description("Миддл-кандидаты").build()
+                Role.builder().code("student").name("student").description("Студенты").build(),
+                Role.builder().code("candidate").name("candidate").description("Кандидаты").build(),
+                Role.builder().code("visitor").name("visitor").description("Посетитель").build(),
+                Role.builder().code("free_listener").name("free_listener").description("Слушатели").build(),
+                Role.builder().code("middle_candidate").name("middle_candidate").description("Миддл-кандидаты").build()
         );
         roleRepository.saveAll(roles);
         System.out.println("  → Создано 5 ролей");
