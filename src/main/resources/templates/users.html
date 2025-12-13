@@ -92,9 +92,9 @@
 
         /* Иконка */
         .users-table .table-actions .action-btn i {
-            font-size: 18px;      /* 👈 ключевой момент */
+            font-size: 18px;
             line-height: 1;
-            color: #0f172a;       /* как в хедере */
+            color: #0f172a;
         }
 
         /* Hover — такой же мягкий, как у ⚙️ */
@@ -127,6 +127,27 @@
             opacity: 0;
             transform: translate(-50%, -45%);
         }
+
+        /* APPROVE / REJECT — делаем ту же цветовую гамму */
+
+        /* Базовый цвет для approve / reject */
+        .users-table .table-actions .action-primary i,
+        .users-table .table-actions .action-danger i {
+            color: #2563eb; /* основной синий (Bootstrap primary-like) */
+        }
+
+        /* Hover — мягкий синий фон */
+        .users-table .table-actions .action-primary:hover,
+        .users-table .table-actions .action-danger:hover {
+            background-color: #eff6ff;
+        }
+
+        /* Акцент при наведении */
+        .users-table .table-actions .action-primary:hover i,
+        .users-table .table-actions .action-danger:hover i {
+            color: #1d4ed8; /* чуть темнее */
+        }
+
 
     </style>
 </head>
