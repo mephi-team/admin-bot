@@ -83,12 +83,11 @@ public class Direction {
     /**
      * Заявки, связанные с этим направлением.
      *
-     * TODO: раскомментировать, когда появится сущность Application.
-     * Таблица applications уже есть в БД и содержит direction_id.
+     * Все заявки на поступление, поданные на это направление обучения.
      */
-    // @OneToMany(mappedBy = "direction", fetch = FetchType.LAZY)
-    // @Builder.Default
-    // private List<Application> applications = new ArrayList<>();
+    @OneToMany(mappedBy = "direction", fetch = FetchType.LAZY)
+    @Builder.Default
+    private List<Application> applications = new ArrayList<>();
 
     /**
      * Диалоги, относящиеся к этому направлению.

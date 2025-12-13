@@ -241,6 +241,15 @@ public class User {
     private List<UserQuestion> assignedQuestions = new ArrayList<>();
 
     /**
+     * Заявки пользователя на поступление.
+     *
+     * Все заявки / формы записи, поданные этим пользователем.
+     */
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @Builder.Default
+    private List<Application> applications = new ArrayList<>();
+
+    /**
      * Связи пользователя с курсами (записи на обучение).
      */
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
