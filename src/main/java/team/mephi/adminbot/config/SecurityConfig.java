@@ -78,7 +78,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/", "/users", "/questions",
                                 "/analytics", "/dialogs", "/broadcasts"
-                        ).authenticated()
+                        ).permitAll()
 
                         // Все остальные запросы тоже требуют аутентификации
                         .anyRequest()

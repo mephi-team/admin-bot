@@ -3,20 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Пользователи — Админка Flexiq</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet">
     <link href="../../static/css/main.css" rel="stylesheet" th:href="@{/css/main.css}"/>
 
     <style>
-        .page-wrapper {
-            padding-top: 24px;
-        }
-
-        .page-title {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 16px;
-        }
+        .page-wrapper { padding-top: 24px; }
+        .page-title { font-size: 24px; font-weight: 600; margin-bottom: 16px; }
 
         /* Пилюли фильтров */
         .status-pill {
@@ -35,13 +29,8 @@
         }
 
         /* Поиск */
-        .users-search input {
-            border-radius: 999px;
-            font-size: 13px;
-        }
-        .users-search .input-group-text {
-            background-color: #ffffff;
-        }
+        .users-search input { border-radius: 999px; font-size: 13px; }
+        .users-search .input-group-text { background-color: #ffffff; }
 
         /* Таблица */
         .users-table thead {
@@ -49,32 +38,68 @@
             color: #6b7280;
             border-bottom: 1px solid #e5e7eb;
         }
-        .users-table tbody tr {
-            border-bottom: 1px solid #eef0f4;
-        }
-        .users-table tbody tr:hover {
-            background-color: #f9fafb;
+        .users-table tbody tr { border-bottom: 1px solid #eef0f4; }
+        .users-table tbody tr:hover { background-color: #f9fafb; }
+
+        .column-label { display: inline-flex; align-items: center; gap: 4px; }
+
+        .table-actions i { cursor: pointer; font-size: 16px; }
+
+        .icon-btn { border: none; background: transparent; padding: 0; }
+
+        .tooltip-inner{
+            text-align:left;
+            max-width: 280px;
+            padding: 10px 12px;
+            border-radius: 10px;
         }
 
-        .column-label {
+        /* Контейнер */
+        .users-table .table-actions .actions {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px; /* как в хедере */
+        }
+
+        /* Кнопка-иконка */
+        .users-table .table-actions .action-btn {
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+            background: transparent !important;
+
+            padding: 0 !important;
+            width: 28px;          /* 👈 как у иконок в хедере */
+            height: 28px;
+
             display: inline-flex;
             align-items: center;
-            gap: 4px;
-        }
+            justify-content: center;
 
-        .consent-link {
-            font-size: 12px;
-        }
-
-        .table-actions i {
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 16px;
         }
 
-        .icon-btn {
-            border: none;
-            background: transparent;
-            padding: 0;
+        /* Убрать фокус-рамки */
+        .users-table .table-actions .action-btn:focus,
+        .users-table .table-actions .action-btn:focus-visible,
+        .users-table .table-actions .action-btn:active {
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+        }
+
+        /* Иконка */
+        .users-table .table-actions .action-btn i {
+            font-size: 18px;      /* 👈 ключевой момент */
+            line-height: 1;
+            color: #0f172a;       /* как в хедере */
+        }
+
+        /* Hover — такой же мягкий, как у ⚙️ */
+        .users-table .table-actions .action-btn:hover {
+            background-color: #f1f5f9;
         }
     </style>
 </head>
@@ -105,25 +130,25 @@
                 </div>
             </div>
 
-            <!-- Фильтры -->
-            <div class="d-flex gap-2 mb-3">
+            <!-- Фильтры по ролям -->
+            <div class="d-flex gap-2 mb-3 flex-wrap">
+
+                <!-- Все -->
                 <a class="status-pill"
-                   th:href="@{/users(status='all')}"
-                   th:classappend="${currentStatus == 'all'} ? ' active' : ''">
+                   th:href="@{/users(role='all', q=${search})}"
+                   th:classappend="${currentRole == 'all'} ? ' active' : ''">
                     Все
                 </a>
 
-                <a class="status-pill"
-                   th:href="@{/users(status='active')}"
-                   th:classappend="${currentStatus == 'active'} ? ' active' : ''">
-                    Активные
+                <!-- Роли из БД -->
+                <a th:each="r : ${roles}"
+                   class="status-pill"
+                   th:href="@{/users(role=${r.name}, q=${search})}"
+                   th:classappend="${currentRole == r.name} ? ' active' : ''"
+                   th:text="${r.description}">
+                    Роль
                 </a>
 
-                <a class="status-pill"
-                   th:href="@{/users(status='blocked')}"
-                   th:classappend="${currentStatus == 'blocked'} ? ' active' : ''">
-                    Заблокированные
-                </a>
             </div>
 
 
@@ -136,12 +161,12 @@
                       class="users-search flex-grow-1 me-3"
                       style="max-width:420px;">
 
-                    <input type="hidden" name="status" th:value="${currentStatus}"/>
+                    <input type="hidden" name="role" th:value="${currentRole}"/>
 
                     <div class="input-group input-group-sm">
-                        <span class="input-group-text border-end-0">
-                            <i class="bi bi-search"></i>
-                        </span>
+            <span class="input-group-text border-end-0">
+              <i class="bi bi-search"></i>
+            </span>
 
                         <input id="qInput"
                                class="form-control border-start-0"
@@ -179,20 +204,14 @@
                             <input class="form-check-input" type="checkbox">
                         </th>
                         <th>
-                            <span class="column-label">
-                                Имя пользователя
-                                <i class="bi bi-funnel text-muted" style="font-size:0.8rem;"></i>
-                            </span>
+              <span class="column-label">
+                Имя пользователя
+                <i class="bi bi-funnel text-muted" style="font-size:0.8rem;"></i>
+              </span>
                         </th>
-                        <th style="width:220px">
-                            Telegram
-                        </th>
-                        <th style="width:180px">
-                            Согласия ПД
-                        </th>
-                        <th style="width:120px">
-                            Действия
-                        </th>
+                        <th style="width:220px">Telegram</th>
+                        <th style="width:180px">Согласия ПД</th>
+                        <th style="width:120px">Действия</th>
                     </tr>
                     </thead>
 
@@ -201,26 +220,34 @@
                         <td>
                             <input class="form-check-input" type="checkbox">
                         </td>
+
                         <td th:text="${u.name}">Имя</td>
+
                         <td>
                             <a th:text="${u.externalId}" class="text-decoration-none" href="#">@user</a>
                         </td>
+
+                        <!-- PD Consent (ЗАГЛУШКА: tooltip читает то, что видно в тексте) -->
                         <td>
-                            <span class="pd-consent-link text-primary"
-                                  style="cursor:pointer"
-                                  data-bs-toggle="tooltip"
-                                  data-bs-placement="bottom"
-                                  data-bs-html="true">
-                                  Получено: 0/1
-                            </span>
+                        <span class="pd-consent-link text-primary"
+                              style="cursor:pointer">
+                              Получено: 0/1
+                        </span>
+
                         </td>
 
                         <td class="table-actions">
-                            <div class="d-flex gap-2">
-                                <i class="bi bi-calendar-event"></i>
-                                <i class="bi bi-slash-circle"></i>
+                            <div class="actions">
+                                <button type="button" class="action-btn" aria-label="История">
+                                    <i class="bi bi-calendar3"></i>
+                                </button>
+                                <button type="button" class="action-btn" aria-label="Блокировка">
+                                    <i class="bi bi-ban"></i>
+                                </button>
                             </div>
                         </td>
+
+
                     </tr>
 
                     <tr th:if="${#lists.isEmpty(users)}">
@@ -238,7 +265,7 @@
     </div>
 </div>
 
-<!-- поиск с автоматическим сбросом-->
+<!-- Поиск с автоматическим сбросом -->
 <script>
     (function () {
         const form = document.getElementById('searchForm');
@@ -271,40 +298,48 @@
     })();
 </script>
 
-<!-- скрипт для попап согласий на обработку данных, заглушка до получения pd consent сущности-->
+<!-- Tooltip для "Согласия ПД" (заглушка: текст берём из разметки) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    (() => {
-        function buildPdTooltipContent(el) {
-            // читаем то, что уже показано в разметке: "Получено: 0/1"
-            const text = (el.textContent || '').trim();
+    document.addEventListener('DOMContentLoaded', () => {
 
-            // достаем "0/1"
-            const m = text.match(/(\d+)\s*\/\s*(\d+)/);
+        function buildPdTooltipContent(el) {
+            const text = (el.innerText || el.textContent || '').replace(/\s+/g, ' ').trim();
+            const m = text.match(/(\d+)\s*[\/／∕]\s*(\d+)/);
             const received = m ? parseInt(m[1], 10) : 0;
             const total = m ? parseInt(m[2], 10) : 1;
 
             const status = received >= total ? 'получено' : 'не получено';
 
             return (
-                '<div class="fw-semibold mb-1">Согласие на обработку персональных данных</div>' +
-                '<div class="text-muted">Согласие при регистрации — ' + status + '</div>'
+                '<strong>Согласия на обработку ПД</strong><br>' +
+                '<span>Согласие при регистрации — ' + status + '</span>'
             );
         }
 
-        // Инициализация тултипов
-        document.querySelectorAll('.pd-consent-link[data-bs-toggle="tooltip"]').forEach(el => {
-            const tt = new bootstrap.Tooltip(el, {
+        document.querySelectorAll('.pd-consent-link').forEach(el => {
+            // на всякий случай убираем браузерные подсказки
+            el.removeAttribute('title');
+            el.removeAttribute('data-bs-original-title');
+
+            const tooltip = new bootstrap.Tooltip(el, {
                 html: true,
+                sanitize: false,
                 placement: 'bottom',
-                trigger: 'hover focus',
+                trigger: 'hover',
+                container: 'body',
+                boundary: document.body,
                 title: () => buildPdTooltipContent(el)
             });
 
+            // debug
+            el.addEventListener('mouseenter', () => {
+                console.log('[PD tooltip] content:', buildPdTooltipContent(el));
+                tooltip.update();
+            });
         });
-    })();
+
+    });
 </script>
-
-
 </body>
 </html>

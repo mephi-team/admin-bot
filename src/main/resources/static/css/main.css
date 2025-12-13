@@ -85,3 +85,34 @@ html, body, h1, h2, h3, h4, h5, h6 {
 .dialog-item:hover {
     background-color: #f8f9fa;
 }
+
+.table-actions .action-btn{
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+
+    padding: 0 !important;
+    width: 34px;
+    height: 34px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.table-actions .action-btn:focus,
+.table-actions .action-btn:focus-visible,
+.table-actions .action-btn:active{
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.table-actions .action-btn i{
+    font-size: 20px;
+    line-height: 1;
+}
