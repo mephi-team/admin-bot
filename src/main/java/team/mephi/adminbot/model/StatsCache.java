@@ -23,11 +23,11 @@ public class StatsCache {
     private String metricName;
 
     @Id
-    @Column(nullable = false)
+    @Column(name = "period", nullable = false)
     private String period;
 
     @JdbcTypeCode(SqlTypes.JSON)
-    @Column(columnDefinition = "jsonb")
+    @Column(columnDefinition = "jsonb", nullable = false)
     private Object payload;
 
     @Column(name = "updated_at", nullable = false)
