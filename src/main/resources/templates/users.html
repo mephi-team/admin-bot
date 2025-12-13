@@ -101,6 +101,11 @@
         .users-table .table-actions .action-btn:hover {
             background-color: #f1f5f9;
         }
+
+        #addUserCanvas.offcanvas-end{
+            width: 420px;
+        }
+
     </style>
 </head>
 
@@ -123,10 +128,16 @@
                         <i class="bi bi-file-earmark-arrow-up me-2"></i>
                         Загрузить из файла
                     </a>
-                    <a class="btn btn-primary btn-sm" href="/users/create">
+                    <button type="button"
+                            class="btn btn-primary btn-sm"
+                            id="openAddUserBtn"
+                            data-bs-toggle="offcanvas"
+                            data-bs-target="#addUserCanvas"
+                            aria-controls="addUserCanvas"
+                            th:attr="data-current-role=${currentRole}">
                         <i class="bi bi-plus-lg me-2"></i>
                         Добавить пользователя
-                    </a>
+                    </button>
                 </div>
             </div>
 
@@ -341,5 +352,132 @@
 
     });
 </script>
+<<!-- панель справа для добавления пользователя -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="addUserCanvas" aria-labelledby="addUserCanvasLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="addUserCanvasLabel">Добавление пользователя</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+
+    <div class="offcanvas-body d-flex flex-column">
+
+        <form id="addUserForm"
+              th:action="@{/users}"
+              method="post"
+              class="d-flex flex-column h-100">
+
+            <!-- CSRF (при включенном Spring Security CSRF) -->
+            <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+            <!-- Роль -->
+            <div class="mb-3">
+                <label class="form-label">Пользователь<span class="text-danger">*</span></label>
+                <select class="form-select form-select-sm" name="roleName" id="roleSelect" required>
+                    <option th:each="r : ${roles}"
+                            th:value="${r.name}"
+                            th:text="${r.description}">
+                        Роль
+                    </option>
+                </select>
+                <div class="form-text">Роль будет предзаполнена текущей вкладкой.</div>
+            </div>
+
+            <!-- ФИО (будет разбито на firstName/lastName) -->
+            <div class="mb-3">
+                <label class="form-label">Фамилия Имя<span class="text-danger">*</span></label>
+                <input type="text"
+                       class="form-control form-control-sm"
+                       name="fullName"
+                       placeholder="Иванов Иван"
+                       required>
+                <div class="form-text">Например: «Иванов Иван».</div>
+            </div>
+
+            <!-- Telegram => externalId (уникальный) -->
+            <div class="mb-3">
+                <label class="form-label">Telegram<span class="text-danger">*</span></label>
+                <input type="text"
+                       class="form-control form-control-sm"
+                       name="telegram"
+                       placeholder="@username"
+                       required>
+                <div class="form-text">Будет использован как внешний ID (externalId), должен быть уникальным.</div>
+            </div>
+
+            <!-- Остальные поля пока не сохраняем (чтобы не ломать User) -->
+            <hr class="my-3">
+
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email"
+                       class="form-control form-control-sm"
+                       name="email"
+                       placeholder="В разработке"
+                       disabled>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Телефон</label>
+                <input type="text"
+                       class="form-control form-control-sm"
+                       name="phone"
+                       placeholder="В разработке"
+                       disabled>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Набор</label>
+                <select class="form-select form-select-sm" name="batch" disabled>
+                    <option selected>Весенний, 2025 (текущий)</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Направление</label>
+                <select class="form-select form-select-sm" name="direction" disabled>
+                    <option selected>В разработке</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Город</label>
+                <select class="form-select form-select-sm" name="city" disabled>
+                    <option selected>В разработке</option>
+                </select>
+            </div>
+
+            <!-- Кнопка отправки формы -->
+            <div class="mt-auto pt-3 d-flex justify-content-start">
+                <button type="submit" class="btn btn-secondary btn-sm px-4">
+                    Добавить пользователя
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!--проставка роли по текущей вкладке при  создании-->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const btn = document.getElementById('openAddUserBtn');
+        const roleSelect = document.getElementById('roleSelect');
+        if (!btn || !roleSelect) return;
+
+        // default если вкладка "all"
+        const FALLBACK_ROLE = 'candidate';
+
+        btn.addEventListener('click', () => {
+            const currentRole = (btn.dataset.currentRole || 'all').trim();
+            const toSet = (currentRole === 'all' || currentRole === '') ? FALLBACK_ROLE : currentRole;
+
+            // если такой option реально есть в select — ставим
+            const exists = Array.from(roleSelect.options).some(o => o.value === toSet);
+            roleSelect.value = exists ? toSet : FALLBACK_ROLE;
+        });
+    });
+</script>
+
+
 </body>
 </html>
