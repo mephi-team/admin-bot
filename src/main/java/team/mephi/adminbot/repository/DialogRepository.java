@@ -20,6 +20,6 @@ public interface DialogRepository extends JpaRepository<Dialog, Long> {
     List<Dialog> findAllWithUsers();
 
     // Поиск по имени пользователя или содержимому сообщений (упрощённо — только по имени)
-    @Query("SELECT d FROM Dialog d LEFT JOIN FETCH d.user WHERE LOWER(d.user.name) LIKE LOWER(CONCAT('%', :query, '%'))")
+    @Query("SELECT d FROM Dialog d LEFT JOIN FETCH d.user u WHERE LOWER(COALESCE(u.fullName, '')) LIKE LOWER(CONCAT('%', :query, '%'))")
     List<Dialog> searchByUserName(String query);
 }
