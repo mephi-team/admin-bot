@@ -20,49 +20,56 @@ import java.util.Arrays;
 /**
  * Основная конфигурация Spring Security для работы с Keycloak и JWT.
  *
- * Что здесь настраивается:
+ * Здесь настраивается:
  * - аутентификация по JWT (без сессий)
- * - доступ к эндпоинтам по ролям
+ * - доступ к эндпоинтам в зависимости от ролей
  * - CORS для фронтенда
- * - кастомная логика извлечения ролей из токена Keycloak
+ * - кастомное извлечение ролей из токена Keycloak
  */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-    // ID клиента в Keycloak, нужен для извлечения клиентских ролей
+    /**
+     * ID клиента в Keycloak.
+     *
+     * Нужен, чтобы доставать клиентские роли
+     * из JWT-токена (resource_access).
+     */
     @Value("${keycloak.client-id}")
     private String clientId;
 
     /**
      * Основная цепочка фильтров безопасности.
      *
-     * Здесь описываются все правила:
-     * кто, куда и с какими правами может обращаться.
+     * Здесь описано:
+     * кто может обращаться к каким эндпоинтам
+     * и при каких условиях.
      */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // Отключаем CSRF, так как используем JWT и не храним сессии
+                // CSRF отключаем, потому что используем JWT
+                // и не работаем с HTTP-сессиями
                 .csrf(csrf -> csrf.disable())
 
-                // Включаем CORS и указываем свою конфигурацию
+                // Включаем CORS с нашей конфигурацией
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
-                // Говорим Spring Security не создавать HTTP-сессии
+                // Запрещаем создание сессий — приложение полностью stateless
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
 
-                // Настраиваем правила доступа к эндпоинтам
+                // Правила доступа к эндпоинтам
                 .authorizeHttpRequests(auth -> auth
 
                         // Публичные эндпоинты для мониторинга
                         .requestMatchers("/actuator/health", "/actuator/info")
                         .permitAll()
 
-                        // Административное API — только для ROLE_ADMIN
+                        // Админское API — только для ROLE_ADMIN
                         .requestMatchers("/api/admin/**")
                         .hasRole("ADMIN")
 
@@ -70,25 +77,25 @@ public class SecurityConfig {
                         .requestMatchers("/api/expert/**")
                         .hasRole("LC_EXPERT")
 
-                        // API пользователя — любой аутентифицированный пользователь
+                        // API пользователя — любой залогиненный пользователь
                         .requestMatchers("/api/user/**")
                         .authenticated()
 
-                        // Веб-страницы (Thymeleaf) — тоже требуют входа
+                        // Веб-страницы (Thymeleaf) — тоже только после входа
                         .requestMatchers(
                                 "/", "/users", "/questions",
                                 "/analytics", "/dialogs", "/broadcasts"
                         ).authenticated()
 
-                        // Все остальные запросы тоже требуют аутентификации
+                        // Всё остальное — тоже требует аутентификации
                         .anyRequest()
                         .authenticated()
                 )
 
-                // Настраиваем Resource Server для работы с JWT
+                // Настройка Resource Server для проверки JWT
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt
-                                // Используем свой конвертер ролей из JWT
+                                // Используем свой конвертер ролей
                                 .jwtAuthenticationConverter(jwtAuthenticationConverter())
                         )
                 );
@@ -97,10 +104,10 @@ public class SecurityConfig {
     }
 
     /**
-     * Создаёт кастомный конвертер JWT → Authentication.
+     * Кастомный конвертер JWT → Authentication.
      *
-     * Он нужен для того, чтобы корректно вытаскивать роли
-     * из токена Keycloak (realm + client roles).
+     * Используется для корректного извлечения ролей
+     * из токена Keycloak (realm roles + client roles).
      */
     @Bean
     public Converter<Jwt, JwtAuthenticationToken> jwtAuthenticationConverter() {
@@ -110,17 +117,17 @@ public class SecurityConfig {
     /**
      * Настройка CORS.
      *
-     * Здесь указываются:
-     * - откуда можно делать запросы
-     * - какие HTTP-методы разрешены
+     * Здесь указываем:
+     * - какие источники могут делать запросы
+     * - какие методы разрешены
      * - какие заголовки можно передавать
      */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // Разрешённые источники запросов (фронтенд)
-        // Для продакшена список лучше ограничить
+        // Разрешённые источники (фронтенд)
+        // В продакшене список лучше сузить
         configuration.setAllowedOrigins(Arrays.asList(
                 "http://localhost:3000",
                 "http://localhost:8080",
@@ -132,7 +139,7 @@ public class SecurityConfig {
                 "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"
         ));
 
-        // Разрешённые заголовки (включая Authorization)
+        // Разрешённые заголовки, включая Authorization
         configuration.setAllowedHeaders(Arrays.asList(
                 "Authorization",
                 "Content-Type",
@@ -141,13 +148,13 @@ public class SecurityConfig {
                 "Origin"
         ));
 
-        // Разрешаем передавать куки и заголовки авторизации
+        // Разрешаем передавать cookies и заголовки авторизации
         configuration.setAllowCredentials(true);
 
         // Кэшируем preflight-запросы на 1 час
         configuration.setMaxAge(3600L);
 
-        // Применяем эту CORS-конфигурацию ко всем эндпоинтам
+        // Применяем CORS-настройки ко всем эндпоинтам
         UrlBasedCorsConfigurationSource source =
                 new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

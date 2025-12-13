@@ -42,6 +42,25 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
+    /**
+     * Внешний идентификатор пользователя в системе NeoStudy.
+     *
+     * Здесь хранится ID этого пользователя,
+     * под которым он зарегистрирован в NeoStudy.
+     */
+    @Column(name = "neostudy_external_id")
+    private String neostudyExternalId;
+
+    /**
+     * Дата и время последней синхронизации пользователя с NeoStudy.
+     *
+     * Показывает, когда данные пользователя
+     * в последний раз обновлялись из NeoStudy
+     * или отправлялись туда.
+     */
+    @Column(name = "neostudy_synced_at")
+    private LocalDateTime neostudySyncedAt;
+
     @OneToMany(mappedBy = "id", fetch = FetchType.LAZY)
     private List<Dialog> dialogs = new ArrayList<>();
 
