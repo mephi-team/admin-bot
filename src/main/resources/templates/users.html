@@ -109,22 +109,23 @@
             <div class="d-flex gap-2 mb-3">
                 <a class="status-pill"
                    th:href="@{/users(status='all')}"
-                   th:classappend="${currentStatus} == 'all' ? ' active'">
+                   th:classappend="${currentStatus == 'all'} ? ' active' : ''">
                     Все
                 </a>
 
                 <a class="status-pill"
                    th:href="@{/users(status='active')}"
-                   th:classappend="${currentStatus} == 'active' ? ' active'">
+                   th:classappend="${currentStatus == 'active'} ? ' active' : ''">
                     Активные
                 </a>
 
                 <a class="status-pill"
                    th:href="@{/users(status='blocked')}"
-                   th:classappend="${currentStatus} == 'blocked' ? ' active'">
+                   th:classappend="${currentStatus == 'blocked'} ? ' active' : ''">
                     Заблокированные
                 </a>
             </div>
+
 
             <!-- Поиск + иконки -->
             <div class="d-flex justify-content-between align-items-center mb-2">
@@ -205,8 +206,15 @@
                             <a th:text="${u.externalId}" class="text-decoration-none" href="#">@user</a>
                         </td>
                         <td>
-                            <a href="#" class="consent-link link-primary">Получено: 0/1</a>
+                            <span class="pd-consent-link text-primary"
+                                  style="cursor:pointer"
+                                  data-bs-toggle="tooltip"
+                                  data-bs-placement="bottom"
+                                  data-bs-html="true">
+                                  Получено: 0/1
+                            </span>
                         </td>
+
                         <td class="table-actions">
                             <div class="d-flex gap-2">
                                 <i class="bi bi-calendar-event"></i>
@@ -262,6 +270,41 @@
         toggle();
     })();
 </script>
+
+<!-- скрипт для попап согласий на обработку данных, заглушка до получения pd consent сущности-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    (() => {
+        function buildPdTooltipContent(el) {
+            // читаем то, что уже показано в разметке: "Получено: 0/1"
+            const text = (el.textContent || '').trim();
+
+            // достаем "0/1"
+            const m = text.match(/(\d+)\s*\/\s*(\d+)/);
+            const received = m ? parseInt(m[1], 10) : 0;
+            const total = m ? parseInt(m[2], 10) : 1;
+
+            const status = received >= total ? 'получено' : 'не получено';
+
+            return (
+                '<div class="fw-semibold mb-1">Согласие на обработку персональных данных</div>' +
+                '<div class="text-muted">Согласие при регистрации — ' + status + '</div>'
+            );
+        }
+
+        // Инициализация тултипов
+        document.querySelectorAll('.pd-consent-link[data-bs-toggle="tooltip"]').forEach(el => {
+            const tt = new bootstrap.Tooltip(el, {
+                html: true,
+                placement: 'bottom',
+                trigger: 'hover focus',
+                title: () => buildPdTooltipContent(el)
+            });
+
+        });
+    })();
+</script>
+
 
 </body>
 </html>
