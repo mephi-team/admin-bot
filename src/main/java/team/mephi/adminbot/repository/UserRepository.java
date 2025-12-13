@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findByStatus(String status);
+    java.util.Optional<User> findByExternalId(String externalId);
     @Query("SELECT u FROM User u WHERE " +
             "LOWER(u.name) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
             "LOWER(u.firstName) LIKE LOWER(CONCAT('%', :q, '%')) OR " +

@@ -16,7 +16,7 @@ public interface DialogRepository extends JpaRepository<Dialog, Long> {
     List<Dialog> findLastWeekDialogs(LocalDateTime oneWeekAgo);
 
     // Загружаем диалоги с пользователями (без сообщений — lazy loading)
-    @Query("SELECT d FROM Dialog d ORDER BY d.lastMessageAt DESC")
+    @Query("SELECT d FROM Dialog d JOIN FETCH d.user JOIN FETCH d.direction JOIN FETCH d.user.role ORDER BY d.lastMessageAt DESC")
     List<Dialog> findAllWithUsers();
 
     // Поиск по имени пользователя или содержимому сообщений (упрощённо — только по имени)

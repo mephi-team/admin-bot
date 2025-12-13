@@ -11,8 +11,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import team.mephi.adminbot.model.Broadcast;
-import team.mephi.adminbot.repository.BroadcastRepository;
+import team.mephi.adminbot.model.Mailing;
+import team.mephi.adminbot.repository.MailingRepository;
 
 import java.util.List;
 
@@ -24,16 +24,16 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * API-тесты для BroadcastController c использованием MockMvc (без поднятия полного Spring-контекста).
+ * API-тесты для MailingController c использованием MockMvc (без поднятия полного Spring-контекста).
  */
 @ExtendWith(MockitoExtension.class)
-class BroadcastControllerApiTest {
+class MailingControllerApiTest {
 
     @Mock
-    private BroadcastRepository broadcastRepository;
+    private MailingRepository mailingRepository;
 
     @InjectMocks
-    private BroadcastController broadcastController;
+    private MailingController mailingController;
 
     private MockMvc mockMvc;
 
@@ -42,19 +42,19 @@ class BroadcastControllerApiTest {
         ViewResolver viewResolver = new InternalResourceViewResolver("/WEB-INF/views/", ".jsp");
 
         this.mockMvc = MockMvcBuilders
-                .standaloneSetup(broadcastController)
+                .standaloneSetup(mailingController)
                 .setViewResolvers(viewResolver)
                 .build();
     }
 
     @Test
-    void getBroadcasts_shouldReturnBroadcastsViewWithModelAttributes() throws Exception {
+    void getMailings_shouldReturnBroadcastsViewWithModelAttributes() throws Exception {
         // given
-        List<Broadcast> broadcasts = List.of(
-                Broadcast.builder().id(1L).messageText("Msg1").build(),
-                Broadcast.builder().id(2L).messageText("Msg2").build()
+        List<Mailing> mailings = List.of(
+                Mailing.builder().id(1L).name("Msg1").build(),
+                Mailing.builder().id(2L).name("Msg2").build()
         );
-        when(broadcastRepository.findAllByOrderByCreatedAtDesc()).thenReturn(broadcasts);
+        when(mailingRepository.findAllByOrderByCreatedAtDesc()).thenReturn(mailings);
 
         // when / then
         mockMvc.perform(get("/broadcasts"))
@@ -64,24 +64,24 @@ class BroadcastControllerApiTest {
                 .andExpect(model().attributeExists("newBroadcast"))
                 .andExpect(model().attribute("currentUri", "broadcasts"));
 
-        verify(broadcastRepository).findAllByOrderByCreatedAtDesc();
+        verify(mailingRepository).findAllByOrderByCreatedAtDesc();
     }
 
     @Test
-    void createBroadcast_shouldSaveBroadcastAndRedirect() throws Exception {
+    void createMailing_shouldSaveMailingAndRedirect() throws Exception {
         // given
-        ArgumentCaptor<Broadcast> captor = ArgumentCaptor.forClass(Broadcast.class);
+        ArgumentCaptor<Mailing> captor = ArgumentCaptor.forClass(Mailing.class);
 
         // when / then
         mockMvc.perform(post("/broadcasts")
-                        .param("messageText", "Тестовая рассылка"))
+                        .param("name", "Тестовая рассылка"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/broadcasts"));
 
-        verify(broadcastRepository).save(captor.capture());
+        verify(mailingRepository).save(captor.capture());
 
-        Broadcast saved = captor.getValue();
+        Mailing saved = captor.getValue();
         assertNotNull(saved, "Сохранённая рассылка не должна быть null");
-        assertEquals("Тестовая рассылка", saved.getMessageText(), "messageText должен пробиндиться из формы");
+        assertEquals("Тестовая рассылка", saved.getName(), "name должен пробиндиться из формы");
     }
 }
