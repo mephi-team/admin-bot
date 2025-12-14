@@ -68,11 +68,11 @@
       "clientAuthenticatorType": "client-secret",
       "secret": "zxEweBxQCpBH6B5Pfv37wEE6DH17mzdM",
       "redirectUris": [
-        "http://localhost:8081/login/oauth2/code/keycloak",
-        "http://localhost:8081"
+        "http://localhost:8080/login/oauth2/code/keycloak",
+        "http://localhost:8080"
       ],
       "webOrigins": [
-        "http://localhost:8081"
+        "http://localhost:8080"
       ]
     }
   ]

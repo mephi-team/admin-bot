@@ -8,7 +8,13 @@ import lombok.Data;
 public class UserDto {
     private Long id;
     private String userName;
-    private String firstName;
-    private String lastName;
+    private String fullName;
     private String email;
+    private String tgName;
+    private String phoneNumber;
+    private Boolean pdConsent;
+    private String cohort;
+    private String direction;
+    private String city;
+    private String status;
 }

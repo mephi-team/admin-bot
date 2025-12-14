@@ -106,6 +106,8 @@ public class DataInitializer {
                 .orElseThrow(() -> new RuntimeException("Роль 'student' не найдена"));
         Role candidateRole = roleRepository.findByName("candidate")
                 .orElseThrow(() -> new RuntimeException("Роль 'candidate' не найдена"));
+        Role middleCandidateRole = roleRepository.findByName("middle_candidate")
+                .orElseThrow(() -> new RuntimeException("Роль 'middle_candidate' не найдена"));
         Role visitorRole = roleRepository.findByName("visitor")
                 .orElseThrow(() -> new RuntimeException("Роль 'visitor' не найдена"));
         Role freeListenerRole = roleRepository.findByName("free_listener")
@@ -121,7 +123,7 @@ public class DataInitializer {
                 User.builder().tgId("tg_1001").userName("Анна Смирнова").firstName("Анна").lastName("Смирнова").role(studentRole).direction(java).status(UserStatus.ACTIVE).build(),
                 User.builder().tgId("tg_1002").userName("Иван Петров").firstName("Иван").lastName("Петров").role(candidateRole).direction(analytics).status(UserStatus.ACTIVE).build(),
                 User.builder().tgId("tg_1003").userName("Мария Козлова").firstName("Мария").lastName("Козлова").role(studentRole).direction(python).status(UserStatus.BLOCKED).build(),
-                User.builder().tgId("tg_1004").userName("Алексей Иванов").firstName("Алексей").lastName("Иванов").role(candidateRole).direction(java).status(UserStatus.ACTIVE).build(),
+                User.builder().tgId("tg_1004").userName("Алексей Иванов").firstName("Алексей").lastName("Иванов").role(middleCandidateRole).direction(java).status(UserStatus.ACTIVE).build(),
                 User.builder().tgId("tg_1005").userName("Екатерина Волкова").firstName("Екатерина").lastName("Волкова").role(studentRole).direction(analytics).status(UserStatus.ACTIVE).build(),
                 User.builder().tgId("tg_1006").userName("Анна Козлова").firstName("Анна").lastName("Козлова").role(visitorRole).status(UserStatus.ACTIVE).build(),
                 User.builder().tgId("tg_1007").userName("Петр Иванов").firstName("Петр").lastName("Иванов").role(freeListenerRole).direction(python).status(UserStatus.ACTIVE).build(),

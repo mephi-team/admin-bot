@@ -1,11 +1,7 @@
 package team.mephi.adminbot.vaadin.views;
 
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.ComponentUtil;
-import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Span;
@@ -13,17 +9,12 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.TabSheet;
-import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.Route;
-import team.mephi.adminbot.dto.TutorWithCounts;
-import team.mephi.adminbot.model.Tutor;
-import team.mephi.adminbot.model.User;
 import team.mephi.adminbot.repository.TutorRepository;
 import team.mephi.adminbot.repository.UserRepository;
+import team.mephi.adminbot.vaadin.views.users.*;
 
-import java.util.List;
 import java.util.Map;
 
 @Route("/users")
@@ -46,12 +37,12 @@ public class Users extends VerticalLayout {
 
         Map<String, Long> roleCounts = userRepository.countsByRole();
 
-        tabSheet.add(new Span(new Span("Гости"), createBadge(roleCounts.getOrDefault("visitor", 0L))), roleCounts.getOrDefault("visitor", 0L) > 0 ? new UsersView(userRepository, "visitor") : new Span("Гостей пока нет"));
-        tabSheet.add(new Span(new Span("Кандидаты"), createBadge(roleCounts.getOrDefault("candidate", 0L))), roleCounts.getOrDefault("candidate", 0L) > 0 ? new UsersView(userRepository, "candidate") : new Span("Кандидатов пока нет"));
-        tabSheet.add(new Span(new Span("Миддл-Кандидаты"), createBadge(roleCounts.getOrDefault("middle_candidate", 0L))), roleCounts.getOrDefault("middle_candidate", 0L) > 0 ? new UsersView(userRepository, "middle_candidate") : new Span("Миддл-Кандидатов пока нет"));
-        tabSheet.add(new Span(new Span("Студенты"), createBadge(roleCounts.getOrDefault("student", 0L))), roleCounts.getOrDefault("student", 0L) > 0 ? new UsersView(userRepository, "student") : new Span("Студентов пока нет"));
-        tabSheet.add(new Span(new Span("Слушатели"), createBadge(roleCounts.getOrDefault("free_listener", 0L))), roleCounts.getOrDefault("free_listener", 0L) > 0 ? new UsersView(userRepository, "free_listener") : new Span("Слушателей пока нет"));
-        tabSheet.add(new Span(new Span("Эксперты"), createBadge(roleCounts.getOrDefault("expert", 0L))), roleCounts.getOrDefault("expert", 0L) > 0 ? new UsersView(userRepository, "expert") : new Span("Экспертов пока нет"));
+        tabSheet.add(new Span(new Span("Гости"), createBadge(roleCounts.getOrDefault("visitor", 0L))), roleCounts.getOrDefault("visitor", 0L) > 0 ? new GuestsView(userRepository, "visitor") : new Span("Гостей пока нет"));
+        tabSheet.add(new Span(new Span("Кандидаты"), createBadge(roleCounts.getOrDefault("candidate", 0L))), roleCounts.getOrDefault("candidate", 0L) > 0 ? new CandidateView(userRepository, "candidate") : new Span("Кандидатов пока нет"));
+        tabSheet.add(new Span(new Span("Миддл-Кандидаты"), createBadge(roleCounts.getOrDefault("middle_candidate", 0L))), roleCounts.getOrDefault("middle_candidate", 0L) > 0 ? new MiddleCandidateView(userRepository, "middle_candidate") : new Span("Миддл-Кандидатов пока нет"));
+        tabSheet.add(new Span(new Span("Студенты"), createBadge(roleCounts.getOrDefault("student", 0L))), roleCounts.getOrDefault("student", 0L) > 0 ? new StudentView(userRepository, "student") : new Span("Студентов пока нет"));
+        tabSheet.add(new Span(new Span("Слушатели"), createBadge(roleCounts.getOrDefault("free_listener", 0L))), roleCounts.getOrDefault("free_listener", 0L) > 0 ? new FreeListenerView(userRepository, "free_listener") : new Span("Слушателей пока нет"));
+        tabSheet.add(new Span(new Span("Эксперты"), createBadge(roleCounts.getOrDefault("lc_expert", 0L))), roleCounts.getOrDefault("lc_expert", 0L) > 0 ? new ExpertsView(userRepository, "lc_expert") : new Span("Экспертов пока нет"));
         tabSheet.add(new Span(new Span("Кураторы"), createBadge(roleCounts.getOrDefault("tutor", 0L))), new TutorsView(tutorRepository));
 
         add(top, tabSheet);
