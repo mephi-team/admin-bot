@@ -7,6 +7,8 @@ import com.vaadin.flow.router.Route;
 @Route("/analytics")
 public class Analytics extends VerticalLayout {
     public Analytics() {
-        add(new H1("Analytics"));
+        setSizeFull();
+
+        add(new H1("Аналитика"));
     }
 }

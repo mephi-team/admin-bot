@@ -100,7 +100,7 @@ public class Questions extends VerticalLayout {
                                     .date(LocalDateTime.ofInstant(u.getCreatedAt(), ZoneId.of("UTC")))
                                     .user(u.getUser().getUserName())
                                     .role(u.getRole())
-                                    .direction(u.getDirection() != null ? u.getDirection().getName() : "")
+//                                    .direction(u.getDirection() != null ? u.getDirection().getName() : "")
                                     .answer(u.getAnswers().getLast().getAnswerText())
                                     .build()
                             )
