@@ -11,9 +11,14 @@ import com.vaadin.flow.router.AfterNavigationObserver;
 import team.mephi.adminbot.dto.MessagesForListDto;
 import team.mephi.adminbot.repository.MessageRepository;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 public class ChatListComponent extends VerticalLayout implements AfterNavigationObserver {
+    private static final LocalDateTime today = LocalDateTime.now();
     private final CallbackDataProvider<MessagesForListDto, Long> provider;
     private Long dialogId;
     MessageInput chatInput;
@@ -21,7 +26,7 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
     Div emptyMessage = new Div("Выберите диалог, чтобы продолжить общение");
 
     ComponentRenderer<Div, MessagesForListDto> cardRenderer = new ComponentRenderer<>(item -> {
-        var card = new Div(item.getText());
+        var card = new Div();
         card.getStyle().set("min-height", "50px");
         card.getStyle().set("max-width", "50%");
         card.getStyle().set("padding", "16px");
@@ -35,6 +40,9 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
             card.getElement().getStyle().set("background-color", "#eaeaee");
             card.getStyle().set("border-end-start-radius", "0");
         }
+        Div text = new Div(item.getText());
+        Div date = new Div(item.getDate());
+        card.add(text, date);
         return card;
     });
 
@@ -67,7 +75,7 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
         return new CallbackDataProvider<>(
                 query -> {
                     return messageRepository.findAllByDialogId(dialogId)
-                            .stream().map(a -> new MessagesForListDto(a.getId(), a.getText(), a.getSenderType().name()))
+                            .stream().map(a -> new MessagesForListDto(a.getId(), a.getText(), formatDate(a.getCreatedAt()), a.getSenderType().name()))
                             .skip(query.getOffset())
                             .limit(query.getLimit());
                 },
@@ -90,5 +98,20 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
             emptyMessage.setVisible(true);
         }
         provider.refreshAll();
+    }
+
+    private String formatDate(Instant dateTime) {
+        LocalDateTime local = LocalDateTime.ofInstant(dateTime, ZoneId.of("UTC"));
+        if (dateTime == null) return "";
+
+        DateTimeFormatter todayFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String datePart = local.format(todayFormatter);
+        String todayPart = today.format(todayFormatter);
+
+        if (datePart.equals(todayPart)) {
+            return local.format(DateTimeFormatter.ofPattern("HH:mm"));
+        } else {
+            return local.format(DateTimeFormatter.ofPattern("dd MMMM"));
+        }
     }
 }

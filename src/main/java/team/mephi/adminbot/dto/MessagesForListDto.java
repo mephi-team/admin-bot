@@ -8,5 +8,6 @@ import lombok.Data;
 public class MessagesForListDto {
     private Long id;
     private String text;
+    private String date;
     private String senderType;
 }
