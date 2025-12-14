@@ -8,11 +8,11 @@ import com.vaadin.flow.data.provider.CallbackDataProvider;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.router.Route;
 import team.mephi.adminbot.dto.UserQuestionDto;
-import team.mephi.adminbot.model.Question;
-import team.mephi.adminbot.model.UserQuestion;
-import team.mephi.adminbot.repository.QuestionRepository;
 import team.mephi.adminbot.repository.UserQuestionRepository;
 import team.mephi.adminbot.vaadin.components.SearchField;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Route(value = "/questions", layout = DialogsLayout.class)
 public class Questions extends VerticalLayout {
@@ -65,7 +65,7 @@ public class Questions extends VerticalLayout {
                                     .builder()
                                     .id(u.getId())
                                     .question(u.getText())
-                                    .date(u.getCreatedAt())
+                                    .date(LocalDateTime.ofInstant(u.getCreatedAt(), ZoneId.of("UTC")))
                                     .user(u.getUser().getUserName())
                                     .role(u.getRole())
                                     .direction(u.getDirection() != null ? u.getDirection().getName() : "")

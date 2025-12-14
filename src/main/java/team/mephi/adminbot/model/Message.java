@@ -3,10 +3,12 @@ package team.mephi.adminbot.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
-import team.mephi.adminbot.model.enums.SenderType;
+import team.mephi.adminbot.model.enums.MessageSenderType;
+import team.mephi.adminbot.model.enums.MessageStatus;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 /**
  * Сущность сообщения в диалоге.
@@ -102,7 +104,7 @@ public class Message {
      */
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
-    private JsonNode attachments;
+    private Object attachments;
 
     /**
      * Статус доставки и прочтения сообщения.

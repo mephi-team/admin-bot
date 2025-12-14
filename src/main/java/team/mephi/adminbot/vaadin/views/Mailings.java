@@ -11,6 +11,9 @@ import team.mephi.adminbot.dto.MailingList;
 import team.mephi.adminbot.repository.MailingRepository;
 import team.mephi.adminbot.vaadin.components.SearchField;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+
 
 @Route(value = "/mailings", layout = DialogsLayout.class)
 public class Mailings extends VerticalLayout {
@@ -55,7 +58,7 @@ public class Mailings extends VerticalLayout {
                             .map(m -> MailingList.builder()
                                     .id(m.getId())
                                     .name(m.getName())
-                                    .date(m.getCreatedAt())
+                                    .date(LocalDateTime.ofInstant(m.getCreatedAt(), ZoneId.of("UTC")))
                                     .users(m.getFilters() != null ? m.getFilters().getUsers() : "")
                                     .cohort(m.getFilters() != null ? m.getFilters().getCurator() : "")
                                     .direction(m.getFilters() != null ? m.getFilters().getDirection() : "")

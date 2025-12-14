@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 
 /**
  * Сущность тьютора / куратора.
@@ -57,7 +60,7 @@ public class Tutor {
     /**
      * Номер телефона тьютора.
      */
-    @Column(name = "phone")
+    @Column(name = "phone_number")
     private String phone;
 
     /**

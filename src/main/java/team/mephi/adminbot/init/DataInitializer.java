@@ -5,19 +5,21 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import team.mephi.adminbot.model.*;
-import team.mephi.adminbot.model.enums.Channels;
-import team.mephi.adminbot.model.enums.MailingStatus;
-import team.mephi.adminbot.model.enums.QuestionStatus;
-import team.mephi.adminbot.model.enums.SenderType;
+import team.mephi.adminbot.model.enums.*;
 import team.mephi.adminbot.model.objects.Filters;
 import team.mephi.adminbot.repository.*;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAmount;
 import java.util.*;
 
 @Configuration
 public class DataInitializer {
+    private final Long DAY_SECONDS = 86400L;
+    private final Long HOUR_SECONDS = 3600L;
+    private final Long MINUTE_SECONDS = 3600L;
 
     @Autowired
     private RoleRepository roleRepository;
@@ -74,13 +76,13 @@ public class DataInitializer {
 
     private void initRoles() {
         List<Role> roles = Arrays.asList(
-                Role.builder().name("student").description("Студенты").build(),
-                Role.builder().name("candidate").description("Кандидаты").build(),
-                Role.builder().name("visitor").description("Посетитель").build(),
-                Role.builder().name("free_listener").description("Слушатели").build(),
-                Role.builder().name("middle_candidate").description("Миддл-кандидаты").build(),
-                Role.builder().name("lc_expert").description("Эксперты").build(),
-                Role.builder().name("extuser").description("Внешний пользователь").build()
+                Role.builder().code("student").name("student").description("Студенты").build(),
+                Role.builder().code("candidate").name("candidate").description("Кандидаты").build(),
+                Role.builder().code("visitor").name("visitor").description("Посетитель").build(),
+                Role.builder().code("free_listener").name("free_listener").description("Слушатели").build(),
+                Role.builder().code("middle_candidate").name("middle_candidate").description("Миддл-кандидаты").build(),
+                Role.builder().code("lc_expert").name("lc_expert").description("Эксперты").build(),
+                Role.builder().code("extuser").name("extuser").description("Внешний пользователь").build()
         );
         roleRepository.saveAll(roles);
         System.out.println("  → Создано 5 ролей");
@@ -116,14 +118,14 @@ public class DataInitializer {
         Direction python = directionRepository.findById(3L).orElseThrow();
 
         List<User> users = Arrays.asList(
-                User.builder().tgId("tg_1001").userName("Анна Смирнова").firstName("Анна").lastName("Смирнова").role(studentRole).direction(java).status("active").build(),
-                User.builder().tgId("tg_1002").userName("Иван Петров").firstName("Иван").lastName("Петров").role(candidateRole).direction(analytics).status("active").build(),
-                User.builder().tgId("tg_1003").userName("Мария Козлова").firstName("Мария").lastName("Козлова").role(studentRole).direction(python).status("blocked").build(),
-                User.builder().tgId("tg_1004").userName("Алексей Иванов").firstName("Алексей").lastName("Иванов").role(candidateRole).direction(java).status("active").build(),
-                User.builder().tgId("tg_1005").userName("Екатерина Волкова").firstName("Екатерина").lastName("Волкова").role(studentRole).direction(analytics).status("active").build(),
-                User.builder().tgId("tg_1006").userName("Анна Козлова").firstName("Анна").lastName("Козлова").role(visitorRole).status("active").build(),
-                User.builder().tgId("tg_1007").userName("Петр Иванов").firstName("Петр").lastName("Иванов").role(freeListenerRole).direction(python).status("active").build(),
-                User.builder().tgId("tg_1008").userName("Сергей Смирнов").firstName("Сергей").lastName("Смирнов").role(lcExpertRole).status("active").build()
+                User.builder().tgId("tg_1001").userName("Анна Смирнова").firstName("Анна").lastName("Смирнова").role(studentRole).direction(java).status(UserStatus.ACTIVE).build(),
+                User.builder().tgId("tg_1002").userName("Иван Петров").firstName("Иван").lastName("Петров").role(candidateRole).direction(analytics).status(UserStatus.ACTIVE).build(),
+                User.builder().tgId("tg_1003").userName("Мария Козлова").firstName("Мария").lastName("Козлова").role(studentRole).direction(python).status(UserStatus.BLOCKED).build(),
+                User.builder().tgId("tg_1004").userName("Алексей Иванов").firstName("Алексей").lastName("Иванов").role(candidateRole).direction(java).status(UserStatus.ACTIVE).build(),
+                User.builder().tgId("tg_1005").userName("Екатерина Волкова").firstName("Екатерина").lastName("Волкова").role(studentRole).direction(analytics).status(UserStatus.ACTIVE).build(),
+                User.builder().tgId("tg_1006").userName("Анна Козлова").firstName("Анна").lastName("Козлова").role(visitorRole).status(UserStatus.ACTIVE).build(),
+                User.builder().tgId("tg_1007").userName("Петр Иванов").firstName("Петр").lastName("Иванов").role(freeListenerRole).direction(python).status(UserStatus.ACTIVE).build(),
+                User.builder().tgId("tg_1008").userName("Сергей Смирнов").firstName("Сергей").lastName("Смирнов").role(lcExpertRole).status(UserStatus.ACTIVE).build()
         );
         userRepository.saveAll(users);
         System.out.println("  → Создано 5 пользователей");
@@ -131,8 +133,8 @@ public class DataInitializer {
 
     private void initTutors() {
         List<Tutor> tutors = Arrays.asList(
-                Tutor.builder().userName("test1").firstName("Сергей").lastName("Иванов").phoneNumber("+79991234567").email("test1@example.com").build(),
-                Tutor.builder().userName("test2").firstName("Николай").lastName("Александров").phoneNumber("+79997654321").email("test2@example.com").build()
+                Tutor.builder().userName("test1").firstName("Сергей").lastName("Иванов").phone("+79991234567").email("test1@example.com").build(),
+                Tutor.builder().userName("test2").firstName("Николай").lastName("Александров").phone("+79997654321").email("test2@example.com").build()
         );
         tutorRepository.saveAll(tutors);
         System.out.println("  → Создано 2 куратора");
@@ -145,14 +147,14 @@ public class DataInitializer {
         List<User> students = userRepository.findAllByRole(student);
 
         List<UserQuestion> questions = Arrays.asList(
-                UserQuestion.builder().status(QuestionStatus.NEW).role(student).user(students.get(random.nextInt(students.size()))).text("Как поступить в Flexiq?").build(),
-                UserQuestion.builder().status(QuestionStatus.ANSWERED).role(student).user(students.get(random.nextInt(students.size()))).text("Сколько длится обучение?").build(),
-                UserQuestion.builder().status(QuestionStatus.ANSWERED).role(student).user(students.get(random.nextInt(students.size()))).text("Есть ли рассрочка?").build(),
-                UserQuestion.builder().status(QuestionStatus.ANSWERED).role(student).user(students.get(random.nextInt(students.size()))).text("Нужен ли опыт для поступления?").build(),
-                UserQuestion.builder().status(QuestionStatus.PROGRESS).role(student).user(students.get(random.nextInt(students.size()))).text("Выдают ли диплом?").build()
+                UserQuestion.builder().status(QuestionStatus.NEW).role(student).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Как поступить в Flexiq?").build(),
+                UserQuestion.builder().status(QuestionStatus.ANSWERED).role(student).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Сколько длится обучение?").build(),
+                UserQuestion.builder().status(QuestionStatus.ANSWERED).role(student).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Есть ли рассрочка?").build(),
+                UserQuestion.builder().status(QuestionStatus.ANSWERED).role(student).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Нужен ли опыт для поступления?").build(),
+                UserQuestion.builder().status(QuestionStatus.IN_PROGRESS).role(student).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Выдают ли диплом?").build()
         );
         // Устанавливаем createdAt вручную, если в конструкторе не задано
-        questions.forEach(q -> q.setCreatedAt(LocalDateTime.now().minusDays(new Random().nextInt(10))));
+        questions.forEach(q -> q.setCreatedAt(Instant.now().minusSeconds(new Random().nextInt(10) * DAY_SECONDS)));
         questionRepository.saveAll(questions);
         System.out.println("  → Создано 5 вопросов");
     }
@@ -164,11 +166,11 @@ public class DataInitializer {
         List<User> experts = userRepository.findAllByRole(expert);
 
         List<UserAnswer> answers = Arrays.asList(
-                UserAnswer.builder().answeredBy(experts.get(random.nextInt(0, experts.size()))).question(questionRepository.findById(1L).orElseThrow()).answerText("Подайте заявку на сайте и пройдите техническое тестирование.").build(),
-                UserAnswer.builder().answeredBy(experts.get(random.nextInt(0, experts.size()))).question(questionRepository.findById(2L).orElseThrow()).answerText("Программы длятся от 3 до 6 месяцев в зависимости от направления.").build(),
-                UserAnswer.builder().answeredBy(experts.get(random.nextInt(0, experts.size()))).question(questionRepository.findById(3L).orElseThrow()).answerText("Да, мы предлагаем рассрочку до 12 месяцев без процентов.").build(),
-                UserAnswer.builder().answeredBy(experts.get(random.nextInt(0, experts.size()))).question(questionRepository.findById(4L).orElseThrow()).answerText("Нет, наши курсы рассчитаны на начинающих.").build(),
-                UserAnswer.builder().answeredBy(experts.get(random.nextInt(0, experts.size()))).question(questionRepository.findById(5L).orElseThrow()).answerText("По окончании вы получаете сертификат установленного образца.").build()
+                UserAnswer.builder().status(AnswerStatus.SENT).answeredAt(Instant.now()).answeredBy(experts.get(random.nextInt(0, experts.size()))).question(questionRepository.findById(1L).orElseThrow()).answerText("Подайте заявку на сайте и пройдите техническое тестирование.").build(),
+                UserAnswer.builder().status(AnswerStatus.SENT).answeredAt(Instant.now()).answeredBy(experts.get(random.nextInt(0, experts.size()))).question(questionRepository.findById(2L).orElseThrow()).answerText("Программы длятся от 3 до 6 месяцев в зависимости от направления.").build(),
+                UserAnswer.builder().status(AnswerStatus.SENT).answeredAt(Instant.now()).answeredBy(experts.get(random.nextInt(0, experts.size()))).question(questionRepository.findById(3L).orElseThrow()).answerText("Да, мы предлагаем рассрочку до 12 месяцев без процентов.").build(),
+                UserAnswer.builder().status(AnswerStatus.SENT).answeredAt(Instant.now()).answeredBy(experts.get(random.nextInt(0, experts.size()))).question(questionRepository.findById(4L).orElseThrow()).answerText("Нет, наши курсы рассчитаны на начинающих.").build(),
+                UserAnswer.builder().status(AnswerStatus.UPDATED).answeredAt(Instant.now()).answeredBy(experts.get(random.nextInt(0, experts.size()))).question(questionRepository.findById(5L).orElseThrow()).answerText("По окончании вы получаете сертификат установленного образца.").build()
         );
         answerRepository.saveAll(answers);
     }
@@ -197,7 +199,7 @@ public class DataInitializer {
                         .status(MailingStatus.DRAFT)
                         .build()
         );
-        broadcasts.forEach(b -> b.setCreatedAt(LocalDateTime.now().minusDays(new Random().nextInt(5))));
+        broadcasts.forEach(b -> b.setCreatedAt(Instant.now().minusSeconds(new Random().nextInt(5) * DAY_SECONDS)));
         mailingRepository.saveAll(broadcasts);
         System.out.println("  → Создано 3 рассылки");
     }
@@ -232,17 +234,17 @@ public class DataInitializer {
         Dialog dialog = new Dialog();
         dialog.setUser(user);
         dialog.setDirection(directionRepository.findById(1L + random.nextLong(directionRepository.count())).orElseThrow());
-        dialog.setStatus("active");
+        dialog.setStatus(DialogStatus.ACTIVE);
 
         List<Message> messages = new ArrayList<>();
-        LocalDateTime currentTimestamp;
+        Instant currentTimestamp;
 
         if (forceToday) {
             // === СЛОЖНЫЙ ДИАЛОГ: НАЧИНАЕТСЯ В ПРОШЛОМ, ЗАКАНЧИВАЕТСЯ СЕГОДНЯ ===
             int daysAgo = 2 + random.nextInt(4); // 2–5 дней назад
-            currentTimestamp = LocalDateTime.now()
-                    .minusDays(daysAgo)
-                    .plusHours(10) // начали утром
+            currentTimestamp = Instant.now()
+                    .minusSeconds(daysAgo * DAY_SECONDS)
+                    .plusSeconds(10 * HOUR_SECONDS) // начали утром
                     .truncatedTo(ChronoUnit.MINUTES);
 
             int initialRounds = 1 + random.nextInt(2); // 1–2 обмена в прошлом
@@ -260,9 +262,9 @@ public class DataInitializer {
             }
 
             // Перерыв: несколько дней молчания
-            currentTimestamp = LocalDateTime.now()
-                    .minusHours(random.nextInt(3)) // сегодня, последние 3 часа
-                    .minusMinutes(random.nextInt(60))
+            currentTimestamp = Instant.now()
+                    .minusSeconds(random.nextInt(3) * HOUR_SECONDS) // сегодня, последние 3 часа
+                    .minusSeconds(random.nextInt(60) * MINUTE_SECONDS)
                     .truncatedTo(ChronoUnit.MINUTES);
 
             // Сегодня: ещё 1–2 сообщения
@@ -282,9 +284,9 @@ public class DataInitializer {
             }
         } else {
             // === ОБЫЧНЫЙ ДИАЛОГ: ВСЁ ЗА ОДИН ДЕНЬ ===
-            currentTimestamp = LocalDateTime.now()
-                    .minusDays(random.nextInt(10))
-                    .plusHours(9 + random.nextInt(10))
+            currentTimestamp = Instant.now()
+                    .minusSeconds(random.nextInt(10) * DAY_SECONDS)
+                    .plusSeconds(9 + random.nextInt(10) * HOUR_SECONDS)
                     .truncatedTo(ChronoUnit.MINUTES);
 
             int rounds = 1 + random.nextInt(3);
@@ -307,7 +309,7 @@ public class DataInitializer {
         if (!messages.isEmpty()) {
             dialog.setLastMessageAt(messages.get(messages.size() - 1).getCreatedAt());
         } else {
-            dialog.setLastMessageAt(LocalDateTime.now());
+            dialog.setLastMessageAt(Instant.now());
         }
 
         dialog.setMessages(messages);
@@ -316,13 +318,13 @@ public class DataInitializer {
     }
 
     // Вспомогательный метод для создания сообщения
-    private Message createMessage(Dialog dialog, User sender, String text, String senderType, LocalDateTime createdAt) {
+    private Message createMessage(Dialog dialog, User sender, String text, String senderType, Instant createdAt) {
         Message msg = new Message();
         msg.setDialog(dialog);
         msg.setSender(sender);
         msg.setText(text);
-        msg.setSenderType(SenderType.valueOf(senderType.toUpperCase()));
-        msg.setStatus("active");
+        msg.setSenderType(MessageSenderType.valueOf(senderType.toUpperCase()));
+        msg.setStatus(MessageStatus.SENT);
         msg.setCreatedAt(createdAt);
         return msg;
     }

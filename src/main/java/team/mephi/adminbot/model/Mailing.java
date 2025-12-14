@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
+import team.mephi.adminbot.model.enums.Channels;
 import team.mephi.adminbot.model.enums.MailingStatus;
+import team.mephi.adminbot.model.objects.Filters;
 
 import java.time.Instant;
 import java.util.List;
@@ -72,11 +74,11 @@ public class Mailing {
      * Каналы связи для доставки сообщений.
      *
      * JSON-объект (jsonb) с настройками каналов:
-     * например, {"email": true, "telegram": true, "sms": false}
+     * например, ["email", "telegram", "sms"]
      */
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
-    private Map<String, Object> channels;
+    private List<Channels> channels;
 
     /**
      * Фильтры для отбора получателей рассылки.
@@ -86,7 +88,7 @@ public class Mailing {
      */
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
-    private Map<String, Object> filters;
+    private Filters filters;
 
     /**
      * Текущий статус рассылки.
