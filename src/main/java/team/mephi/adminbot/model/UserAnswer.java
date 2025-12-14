@@ -33,7 +33,7 @@ public class UserAnswer {
     @Column(name = "answered_at", nullable = false)
     private LocalDateTime answeredAt;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String status;
 
     @PrePersist

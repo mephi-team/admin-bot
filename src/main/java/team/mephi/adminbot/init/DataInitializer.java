@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import team.mephi.adminbot.model.*;
 import team.mephi.adminbot.model.enums.Channels;
 import team.mephi.adminbot.model.enums.MailingStatus;
+import team.mephi.adminbot.model.enums.QuestionStatus;
 import team.mephi.adminbot.model.enums.SenderType;
 import team.mephi.adminbot.model.objects.Filters;
 import team.mephi.adminbot.repository.*;
@@ -31,7 +32,10 @@ public class DataInitializer {
     private DialogRepository dialogRepository;
 
     @Autowired
-    private QuestionRepository questionRepository;
+    private UserQuestionRepository questionRepository;
+
+    @Autowired
+    private UserAnswerRepository answerRepository;
 
     @Autowired
     private MailingRepository mailingRepository;
@@ -47,6 +51,7 @@ public class DataInitializer {
             boolean hasUsers = userRepository.count() > 0;
             boolean hasDialogs = dialogRepository.count() > 0;
             boolean hasQuestions = questionRepository.count() > 0;
+            boolean hasAnswers = answerRepository.count() > 0;
             boolean hasBroadcasts = mailingRepository.count() > 0;
             boolean hasTutors = tutorRepository.count() > 0;
 
@@ -57,6 +62,7 @@ public class DataInitializer {
                 if (!hasRoles) initRoles();
                 if (!hasUsers) initUsers();
                 if (!hasQuestions) initQuestions();
+                if (!hasAnswers) initAnswers();
                 if (!hasBroadcasts) initBroadcasts();
                 if (!hasDialogs) initDialogs(); // зависит от пользователей
                 if (!hasTutors) initTutors();
@@ -102,15 +108,22 @@ public class DataInitializer {
                 .orElseThrow(() -> new RuntimeException("Роль 'visitor' не найдена"));
         Role freeListenerRole = roleRepository.findByName("free_listener")
                 .orElseThrow(() -> new RuntimeException("Роль 'free_listener' не найдена"));
+        Role lcExpertRole = roleRepository.findByName("lc_expert")
+                .orElseThrow(() -> new RuntimeException("Роль 'lc_expert' не найдена"));
+
+        Direction java = directionRepository.findById(1L).orElseThrow();
+        Direction analytics = directionRepository.findById(2L).orElseThrow();
+        Direction python = directionRepository.findById(3L).orElseThrow();
 
         List<User> users = Arrays.asList(
-                User.builder().tgId("tg_1001").userName("Анна Смирнова").firstName("Анна").lastName("Смирнова").role(studentRole).status("active").build(),
-                User.builder().tgId("tg_1002").userName("Иван Петров").firstName("Иван").lastName("Петров").role(candidateRole).status("active").build(),
-                User.builder().tgId("tg_1003").userName("Мария Козлова").firstName("Мария").lastName("Козлова").role(studentRole).status("blocked").build(),
-                User.builder().tgId("tg_1004").userName("Алексей Иванов").firstName("Алексей").lastName("Иванов").role(candidateRole).status("active").build(),
-                User.builder().tgId("tg_1005").userName("Екатерина Волкова").firstName("Екатерина").lastName("Волкова").role(studentRole).status("active").build(),
+                User.builder().tgId("tg_1001").userName("Анна Смирнова").firstName("Анна").lastName("Смирнова").role(studentRole).direction(java).status("active").build(),
+                User.builder().tgId("tg_1002").userName("Иван Петров").firstName("Иван").lastName("Петров").role(candidateRole).direction(analytics).status("active").build(),
+                User.builder().tgId("tg_1003").userName("Мария Козлова").firstName("Мария").lastName("Козлова").role(studentRole).direction(python).status("blocked").build(),
+                User.builder().tgId("tg_1004").userName("Алексей Иванов").firstName("Алексей").lastName("Иванов").role(candidateRole).direction(java).status("active").build(),
+                User.builder().tgId("tg_1005").userName("Екатерина Волкова").firstName("Екатерина").lastName("Волкова").role(studentRole).direction(analytics).status("active").build(),
                 User.builder().tgId("tg_1006").userName("Анна Козлова").firstName("Анна").lastName("Козлова").role(visitorRole).status("active").build(),
-                User.builder().tgId("tg_1007").userName("Петр Иванов").firstName("Петр").lastName("Иванов").role(freeListenerRole).status("active").build()
+                User.builder().tgId("tg_1007").userName("Петр Иванов").firstName("Петр").lastName("Иванов").role(freeListenerRole).direction(python).status("active").build(),
+                User.builder().tgId("tg_1008").userName("Сергей Смирнов").firstName("Сергей").lastName("Смирнов").role(lcExpertRole).status("active").build()
         );
         userRepository.saveAll(users);
         System.out.println("  → Создано 5 пользователей");
@@ -126,17 +139,38 @@ public class DataInitializer {
     }
 
     private void initQuestions() {
-        List<Question> questions = Arrays.asList(
-                Question.builder().questionText("Как поступить в Flexiq?").answerText("Подайте заявку на сайте и пройдите техническое тестирование.").build(),
-                Question.builder().questionText("Сколько длится обучение?").answerText("Программы длятся от 3 до 6 месяцев в зависимости от направления.").build(),
-                Question.builder().questionText("Есть ли рассрочка?").answerText("Да, мы предлагаем рассрочку до 12 месяцев без процентов.").build(),
-                Question.builder().questionText("Нужен ли опыт для поступления?").answerText("Нет, наши курсы рассчитаны на начинающих.").build(),
-                Question.builder().questionText("Выдают ли диплом?").answerText("По окончании вы получаете сертификат установленного образца.").build()
+        Random random = new Random();
+
+        String student = roleRepository.findByName("student").get().getName();
+        List<User> students = userRepository.findAllByRole(student);
+
+        List<UserQuestion> questions = Arrays.asList(
+                UserQuestion.builder().status(QuestionStatus.NEW).role(student).user(students.get(random.nextInt(students.size()))).text("Как поступить в Flexiq?").build(),
+                UserQuestion.builder().status(QuestionStatus.ANSWERED).role(student).user(students.get(random.nextInt(students.size()))).text("Сколько длится обучение?").build(),
+                UserQuestion.builder().status(QuestionStatus.ANSWERED).role(student).user(students.get(random.nextInt(students.size()))).text("Есть ли рассрочка?").build(),
+                UserQuestion.builder().status(QuestionStatus.ANSWERED).role(student).user(students.get(random.nextInt(students.size()))).text("Нужен ли опыт для поступления?").build(),
+                UserQuestion.builder().status(QuestionStatus.PROGRESS).role(student).user(students.get(random.nextInt(students.size()))).text("Выдают ли диплом?").build()
         );
         // Устанавливаем createdAt вручную, если в конструкторе не задано
         questions.forEach(q -> q.setCreatedAt(LocalDateTime.now().minusDays(new Random().nextInt(10))));
         questionRepository.saveAll(questions);
         System.out.println("  → Создано 5 вопросов");
+    }
+
+    private void initAnswers() {
+        Random random = new Random();
+
+        String expert = roleRepository.findByName("lc_expert").get().getName();
+        List<User> experts = userRepository.findAllByRole(expert);
+
+        List<UserAnswer> answers = Arrays.asList(
+                UserAnswer.builder().answeredBy(experts.get(random.nextInt(0, experts.size()))).question(questionRepository.findById(1L).orElseThrow()).answerText("Подайте заявку на сайте и пройдите техническое тестирование.").build(),
+                UserAnswer.builder().answeredBy(experts.get(random.nextInt(0, experts.size()))).question(questionRepository.findById(2L).orElseThrow()).answerText("Программы длятся от 3 до 6 месяцев в зависимости от направления.").build(),
+                UserAnswer.builder().answeredBy(experts.get(random.nextInt(0, experts.size()))).question(questionRepository.findById(3L).orElseThrow()).answerText("Да, мы предлагаем рассрочку до 12 месяцев без процентов.").build(),
+                UserAnswer.builder().answeredBy(experts.get(random.nextInt(0, experts.size()))).question(questionRepository.findById(4L).orElseThrow()).answerText("Нет, наши курсы рассчитаны на начинающих.").build(),
+                UserAnswer.builder().answeredBy(experts.get(random.nextInt(0, experts.size()))).question(questionRepository.findById(5L).orElseThrow()).answerText("По окончании вы получаете сертификат установленного образца.").build()
+        );
+        answerRepository.saveAll(answers);
     }
 
     private void initBroadcasts() {
@@ -170,7 +204,7 @@ public class DataInitializer {
 
     private void initDialogs() {
         List<User> users = userRepository.findAll();
-        List<Question> allQuestions = questionRepository.findAll();
+        List<UserQuestion> allQuestions = questionRepository.findAllWithAnswers();
         Random random = new Random();
 
         // --- 1. Создаём обычные диалоги (как раньше) ---
@@ -194,7 +228,7 @@ public class DataInitializer {
         System.out.println("  → Созданы диалоги, включая с сегодняшней датой");
     }
 
-    private void createDialogForUser(User user, List<Question> allQuestions, Random random, boolean forceToday) {
+    private void createDialogForUser(User user, List<UserQuestion> allQuestions, Random random, boolean forceToday) {
         Dialog dialog = new Dialog();
         dialog.setUser(user);
         dialog.setDirection(directionRepository.findById(1L + random.nextLong(directionRepository.count())).orElseThrow());
@@ -213,14 +247,14 @@ public class DataInitializer {
 
             int initialRounds = 1 + random.nextInt(2); // 1–2 обмена в прошлом
             for (int r = 0; r < initialRounds; r++) {
-                Question q = allQuestions.get(random.nextInt(allQuestions.size()));
+                UserQuestion q = allQuestions.get(random.nextInt(allQuestions.size()));
                 // Пользователь спрашивает
-                Message userMsg = createMessage(dialog, user, q.getQuestionText(), "user", currentTimestamp);
+                Message userMsg = createMessage(dialog, user, q.getText(), "user", currentTimestamp);
                 messages.add(userMsg);
                 currentTimestamp = currentTimestamp.plusSeconds(5 + random.nextInt(10));
 
                 // Бот отвечает
-                Message botMsg = createMessage(dialog, null, q.getAnswerText(), "bot", currentTimestamp);
+                Message botMsg = createMessage(dialog, null, q.getAnswers().get(random.nextInt(q.getAnswers().size())).getAnswerText(), "bot", currentTimestamp);
                 messages.add(botMsg);
                 currentTimestamp = currentTimestamp.plusSeconds(10 + random.nextInt(20));
             }
@@ -234,14 +268,14 @@ public class DataInitializer {
             // Сегодня: ещё 1–2 сообщения
             int todayRounds = 1 + random.nextInt(2);
             for (int r = 0; r < todayRounds; r++) {
-                Question q = allQuestions.get(random.nextInt(allQuestions.size()));
-                Message userMsg = createMessage(dialog, user, q.getQuestionText(), "user", currentTimestamp);
+                UserQuestion q = allQuestions.get(random.nextInt(allQuestions.size()));
+                Message userMsg = createMessage(dialog, user, q.getText(), "user", currentTimestamp);
                 messages.add(userMsg);
                 currentTimestamp = currentTimestamp.plusSeconds(3 + random.nextInt(5));
 
                 // Иногда бот не отвечает (последнее сообщение от пользователя)
                 if (r < todayRounds - 1 || random.nextBoolean()) {
-                    Message botMsg = createMessage(dialog, null, q.getAnswerText(), "bot", currentTimestamp);
+                    Message botMsg = createMessage(dialog, null, q.getAnswers().get(random.nextInt(q.getAnswers().size())).getAnswerText(), "bot", currentTimestamp);
                     messages.add(botMsg);
                     currentTimestamp = currentTimestamp.plusSeconds(4 + random.nextInt(6));
                 }
@@ -257,13 +291,13 @@ public class DataInitializer {
             boolean endsWithUserMessage = random.nextBoolean();
 
             for (int r = 0; r < rounds; r++) {
-                Question q = allQuestions.get(random.nextInt(allQuestions.size()));
-                Message userMsg = createMessage(dialog, user, q.getQuestionText(), "user", currentTimestamp);
+                UserQuestion q = allQuestions.get(random.nextInt(allQuestions.size()));
+                Message userMsg = createMessage(dialog, user, q.getText(), "user", currentTimestamp);
                 messages.add(userMsg);
                 currentTimestamp = currentTimestamp.plusSeconds(2 + random.nextInt(3));
 
                 if (!(r == rounds - 1 && endsWithUserMessage)) {
-                    Message botMsg = createMessage(dialog, null, q.getAnswerText(), "bot", currentTimestamp);
+                    Message botMsg = createMessage(dialog, null, q.getAnswers().get(random.nextInt(0, q.getAnswers().size())).getAnswerText(), "bot", currentTimestamp);
                     messages.add(botMsg);
                     currentTimestamp = currentTimestamp.plusSeconds(3 + random.nextInt(4));
                 }
