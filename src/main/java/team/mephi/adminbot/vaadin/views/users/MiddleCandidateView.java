@@ -12,8 +12,12 @@ import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.function.SerializableBiConsumer;
 import team.mephi.adminbot.dto.UserDto;
 import team.mephi.adminbot.repository.UserRepository;
+import team.mephi.adminbot.vaadin.components.GridSettingsButton;
+import team.mephi.adminbot.vaadin.components.GridSettingsPopover;
 import team.mephi.adminbot.vaadin.components.SearchField;
 import team.mephi.adminbot.vaadin.providers.UserProvider;
+
+import java.util.Set;
 
 public class MiddleCandidateView extends VerticalLayout {
     private final String role;
@@ -27,15 +31,15 @@ public class MiddleCandidateView extends VerticalLayout {
         final TextField searchField = new SearchField("Найти миддл-кандидита");
 
         Grid<UserDto> grid = new Grid<>(UserDto.class, false);
-        grid.addColumn(UserDto::getFullName).setHeader("Фамилия Имя").setSortable(true);
-        grid.addColumn(UserDto::getEmail).setHeader("Email").setSortable(true);
-        grid.addColumn(UserDto::getTgName).setHeader("Telegram").setSortable(true);
-        grid.addColumn(UserDto::getPhoneNumber).setHeader("Телефон").setSortable(true);
-        grid.addColumn(UserDto::getPdConsent).setHeader("Согласия ПД").setSortable(true);
-        grid.addColumn(UserDto::getCohort).setHeader("Набор").setSortable(true);
-        grid.addColumn(UserDto::getDirection).setHeader("Направление").setSortable(true);
-        grid.addColumn(UserDto::getCity).setHeader("Город").setSortable(true);
-        grid.addColumn(createStatusComponentRenderer()).setHeader("Статус").setSortable(true);
+        grid.addColumn(UserDto::getFullName).setHeader("Фамилия Имя").setSortable(true).setKey("name");
+        grid.addColumn(UserDto::getEmail).setHeader("Email").setSortable(true).setKey("email");
+        grid.addColumn(UserDto::getTgName).setHeader("Telegram").setSortable(true).setKey("telegram");
+        grid.addColumn(UserDto::getPhoneNumber).setHeader("Телефон").setSortable(true).setKey("phone");
+        grid.addColumn(UserDto::getPdConsent).setHeader("Согласия ПД").setSortable(true).setKey("pd");
+        grid.addColumn(UserDto::getCohort).setHeader("Набор").setSortable(true).setKey("cohort");
+        grid.addColumn(UserDto::getDirection).setHeader("Направление").setSortable(true).setKey("direction");
+        grid.addColumn(UserDto::getCity).setHeader("Город").setSortable(true).setKey("city");
+        grid.addColumn(createStatusComponentRenderer()).setHeader("Статус").setSortable(true).setKey("status");
 
         grid.addComponentColumn(item -> {
             Span group = new Span();
@@ -65,7 +69,7 @@ public class MiddleCandidateView extends VerticalLayout {
             });
             group.add(confirmButton, rejectButton, noteButton, chatButton, editButton, deleteButton);
             return group;
-        }).setHeader("Действия").setWidth("290px").setFlexGrow(0);
+        }).setHeader("Действия").setWidth("290px").setFlexGrow(0).setKey("actions");
 
         grid.setMultiSort(true, Grid.MultiSortPriority.APPEND);
         grid.setDataProvider(getProvider(userRepository, searchField));
@@ -77,7 +81,12 @@ public class MiddleCandidateView extends VerticalLayout {
             // selection.getAllSelectedItems().size());
         });
 
-        add(searchField, grid);
+        GridSettingsButton settings = new GridSettingsButton();
+        GridSettingsPopover popover = new GridSettingsPopover(grid, Set.of("email", "phone", "cohort"));
+        popover.setTarget(settings);
+        SearchFragment headerLayout = new SearchFragment(searchField, settings);
+
+        add(headerLayout, grid);
     }
 
     private ConfigurableFilterDataProvider<UserDto, Void, String> getProvider(UserRepository userRepository, TextField searchField) {

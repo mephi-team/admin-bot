@@ -11,7 +11,11 @@ import com.vaadin.flow.data.provider.CallbackDataProvider;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import team.mephi.adminbot.dto.TutorWithCounts;
 import team.mephi.adminbot.repository.TutorRepository;
+import team.mephi.adminbot.vaadin.components.GridSettingsButton;
+import team.mephi.adminbot.vaadin.components.GridSettingsPopover;
 import team.mephi.adminbot.vaadin.components.SearchField;
+
+import java.util.Set;
 
 public class TutorsView extends VerticalLayout {
     public TutorsView(TutorRepository tutorRepository) {
@@ -24,11 +28,11 @@ public class TutorsView extends VerticalLayout {
         Grid<TutorWithCounts> grid = new Grid<>(TutorWithCounts.class, false);
         grid.addColumn(a -> a.getLastName() + " " + a.getFirstName())
                 .setHeader("Фамилия Имя")
-                .setSortable(true).setComparator(TutorWithCounts::getLastName);
-        grid.addColumn(TutorWithCounts::getEmail).setHeader("Email").setSortable(true);
-        grid.addColumn(TutorWithCounts::getTgId).setHeader("Telegram").setSortable(true);
-        grid.addColumn(TutorWithCounts::getDirections).setHeader("Направление").setSortable(true);
-        grid.addColumn(TutorWithCounts::getStudentCount).setHeader("Кураторство").setSortable(true);
+                .setSortable(true).setComparator(TutorWithCounts::getLastName).setKey("name");
+        grid.addColumn(TutorWithCounts::getEmail).setHeader("Email").setSortable(true).setKey("email");
+        grid.addColumn(TutorWithCounts::getTgId).setHeader("Telegram").setSortable(true).setKey("telegram");
+        grid.addColumn(TutorWithCounts::getDirections).setHeader("Направление").setSortable(true).setKey("direction");
+        grid.addColumn(TutorWithCounts::getStudentCount).setHeader("Кураторство").setSortable(true).setKey("curatorship");
 
         grid.addComponentColumn(item -> {
             Span group = new Span();
@@ -54,7 +58,7 @@ public class TutorsView extends VerticalLayout {
             });
             group.add(dropButton, noteButton, chatButton, editButton, deleteButton);
             return group;
-        }).setHeader("Действия").setWidth("330px").setFlexGrow(0);
+        }).setHeader("Действия").setWidth("330px").setFlexGrow(0).setKey("actions");
 
         grid.setMultiSort(true, Grid.MultiSortPriority.APPEND);
         grid.setDataProvider(filterableProvider);
@@ -70,7 +74,12 @@ public class TutorsView extends VerticalLayout {
             filterableProvider.setFilter(e.getValue());
         });
 
-        add(searchField, grid);
+        GridSettingsButton settings = new GridSettingsButton();
+        GridSettingsPopover popover = new GridSettingsPopover(grid, Set.of());
+        popover.setTarget(settings);
+        SearchFragment headerLayout = new SearchFragment(searchField, settings);
+
+        add(headerLayout, grid);
     }
 
     private static ConfigurableFilterDataProvider<TutorWithCounts, Void, String> getProvider(TutorRepository questionRepository, TextField searchField) {

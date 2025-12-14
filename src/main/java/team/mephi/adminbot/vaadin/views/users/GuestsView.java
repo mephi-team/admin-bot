@@ -10,8 +10,12 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import team.mephi.adminbot.dto.UserDto;
 import team.mephi.adminbot.repository.UserRepository;
+import team.mephi.adminbot.vaadin.components.GridSettingsButton;
+import team.mephi.adminbot.vaadin.components.GridSettingsPopover;
 import team.mephi.adminbot.vaadin.components.SearchField;
 import team.mephi.adminbot.vaadin.providers.UserProvider;
+
+import java.util.Set;
 
 public class GuestsView extends VerticalLayout {
     private final String role;
@@ -25,9 +29,9 @@ public class GuestsView extends VerticalLayout {
         final TextField searchField = new SearchField("Найти гостя");
 
         Grid<UserDto> grid = new Grid<>(UserDto.class, false);
-        grid.addColumn(UserDto::getUserName).setHeader("Имя пользователя в Telegram").setSortable(true);
-        grid.addColumn(UserDto::getTgName).setHeader("Telegram").setSortable(true);
-        grid.addColumn(UserDto::getPdConsent).setHeader("Согласия ПД").setSortable(true);
+        grid.addColumn(UserDto::getUserName).setHeader("Имя пользователя в Telegram").setSortable(true).setKey("name");
+        grid.addColumn(UserDto::getTgName).setHeader("Telegram").setSortable(true).setKey("telegram");
+        grid.addColumn(UserDto::getPdConsent).setHeader("Согласия ПД").setSortable(true).setKey("pd_consent");
 
         grid.addComponentColumn(item -> {
             Span group = new Span();
@@ -41,7 +45,7 @@ public class GuestsView extends VerticalLayout {
             });
             group.add(editButton, deleteButton);
             return group;
-        }).setHeader("Действия").setWidth("120px").setFlexGrow(0);
+        }).setHeader("Действия").setWidth("120px").setFlexGrow(0).setKey("action");
 
         grid.setMultiSort(true, Grid.MultiSortPriority.APPEND);
         grid.setDataProvider(getProvider(userRepository, searchField));
@@ -53,7 +57,12 @@ public class GuestsView extends VerticalLayout {
             // selection.getAllSelectedItems().size());
         });
 
-        add(searchField, grid);
+        GridSettingsButton settings = new GridSettingsButton();
+        GridSettingsPopover popover = new GridSettingsPopover(grid, Set.of());
+        popover.setTarget(settings);
+        SearchFragment headerLayout = new SearchFragment(searchField, settings);
+
+        add(headerLayout, grid);
     }
 
     private ConfigurableFilterDataProvider<UserDto, Void, String> getProvider(UserRepository userRepository, TextField searchField) {
