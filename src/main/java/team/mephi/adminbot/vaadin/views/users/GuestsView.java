@@ -1,6 +1,10 @@
 package team.mephi.adminbot.vaadin.views.users;
 
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
@@ -24,6 +28,21 @@ public class GuestsView extends VerticalLayout {
         grid.addColumn(UserDto::getUserName).setHeader("Имя пользователя в Telegram").setSortable(true);
         grid.addColumn(UserDto::getTgName).setHeader("Telegram").setSortable(true);
         grid.addColumn(UserDto::getPdConsent).setHeader("Согласия ПД").setSortable(true);
+
+        grid.addComponentColumn(item -> {
+            Span group = new Span();
+            Button editButton = new Button(new Icon(VaadinIcon.EDIT));
+            editButton.addClickListener(e -> {
+                System.out.println(item);
+            });
+            Button deleteButton = new Button(new Icon(VaadinIcon.FILE_REMOVE));
+            editButton.addClickListener(e -> {
+                System.out.println(item);
+            });
+            group.add(editButton, deleteButton);
+            return group;
+        }).setHeader("Действия").setWidth("120px").setFlexGrow(0);
+
         grid.setMultiSort(true, Grid.MultiSortPriority.APPEND);
         grid.setDataProvider(getProvider(userRepository, searchField));
         grid.setHeightFull();
