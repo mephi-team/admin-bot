@@ -3,7 +3,7 @@ package team.mephi.adminbot.model;
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.*;
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
+//import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
@@ -139,7 +139,7 @@ public class Message {
      * Устанавливается автоматически при создании записи.
      */
     @Column(name = "created_at", nullable = false, updatable = false)
-    @CreationTimestamp
+//    @CreationTimestamp // Мешает созданию тестовых сообщений прошлой датой
     private Instant createdAt;
 
     /**

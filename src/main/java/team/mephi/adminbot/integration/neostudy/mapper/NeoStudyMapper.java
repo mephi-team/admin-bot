@@ -21,7 +21,7 @@ public class NeoStudyMapper {
 
         return NeoStudyUserRequest.builder()
                 .externalId(user.getTgId())
-                .name(user.getFullName())
+                .name(user.getUserName())
                 .status(user.getStatus() != null ? user.getStatus().name() : null)
                 .build();
     }
@@ -33,7 +33,7 @@ public class NeoStudyMapper {
 
         return User.builder()
                 .tgId(response.getExternalId())
-                .fullName(response.getName())
+                .userName(response.getName())
                 .status(response.getStatus() != null
                         ? UserStatus.valueOf(response.getStatus().toUpperCase())
                         : null)
@@ -52,7 +52,7 @@ public class NeoStudyMapper {
         }
 
         if (response.getName() != null) {
-            user.setFullName(response.getName());
+            user.setUserName(response.getName());
         }
 
         if (response.getStatus() != null) {

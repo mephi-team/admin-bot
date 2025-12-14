@@ -21,7 +21,7 @@ import java.time.Instant;
  * - источник заявки и UTM-метки для аналитики
  *
  * Используется для:
- * - антидубликации заявок (по email, phone, full_name)
+ * - антидубликации заявок (по email, phone, first_name + last_name)
  * - аналитики источников трафика (UTM-метки)
  * - отслеживания статуса обработки заявок
  */
@@ -33,7 +33,7 @@ import java.time.Instant;
 @Table(name = "applications", indexes = {
         @Index(name = "idx_applications_email", columnList = "email"),
         @Index(name = "idx_applications_phone", columnList = "phone"),
-        @Index(name = "idx_applications_full_name", columnList = "first_name,last_name"),
+        @Index(name = "idx_applications_first_name_last_name", columnList = "first_name,last_name"),
         @Index(name = "idx_applications_direction_id", columnList = "direction_id"),
         @Index(name = "idx_applications_status", columnList = "status"),
         @Index(name = "idx_applications_user_id", columnList = "user_id")

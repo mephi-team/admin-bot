@@ -30,11 +30,17 @@ public class Tutor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Column(name = "last_name")
+    private String lastName;
+
     /**
-     * Полное имя тьютора (ФИО).
+     * Имя пользователя
      */
-    @Column(name = "full_name")
-    private String fullName;
+    @Column(name = "user_name")
+    private String userName;
 
     /**
      * Username тьютора в Telegram.

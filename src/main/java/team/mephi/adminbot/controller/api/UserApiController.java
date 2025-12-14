@@ -78,7 +78,7 @@ public class UserApiController {
         // добавляем данные из нашей БД
         userOpt.ifPresent(user -> {
             profile.put("userId", user.getId());
-            profile.put("userName", user.getFullName());  // Use fullName instead of deprecated getName()
+            profile.put("userName", user.getUserName());  // Use fullName instead of deprecated getName()
             profile.put("status", user.getStatus());
         });
 

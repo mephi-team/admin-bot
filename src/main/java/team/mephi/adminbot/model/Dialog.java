@@ -108,7 +108,7 @@ public class Dialog {
      * Загружается лениво для оптимизации производительности.
      * Не каскадирует удаление - сообщения управляются отдельно.
      */
-    @OneToMany(mappedBy = "dialog", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "dialog", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Message> messages = new ArrayList<>();
 
     // ===== equals() и hashCode() =====

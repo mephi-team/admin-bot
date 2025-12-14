@@ -57,7 +57,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * Поиск нечувствителен к регистру.
      */
     @Query("SELECT u FROM User u WHERE " +
-            "LOWER(COALESCE(u.fullName, '')) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
+            "LOWER(COALESCE(u.userName, '')) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
             "LOWER(COALESCE(u.name, '')) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
             "LOWER(COALESCE(u.firstName, '')) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
             "LOWER(COALESCE(u.lastName, '')) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
@@ -74,7 +74,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * затем ищет по тем же полям, что и searchAll().
      */
     @Query("SELECT u FROM User u WHERE u.status = :status AND (" +
-            "LOWER(COALESCE(u.fullName, '')) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
+            "LOWER(COALESCE(u.userName, '')) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
             "LOWER(COALESCE(u.name, '')) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
             "LOWER(COALESCE(u.firstName, '')) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
             "LOWER(COALESCE(u.lastName, '')) LIKE LOWER(CONCAT('%', :q, '%')) OR " +

@@ -33,8 +33,8 @@ import java.util.Set;
         @Index(name = "idx_users_email", columnList = "email", unique = true),
         @Index(name = "idx_users_tg_id", columnList = "tg_id", unique = true),
         @Index(name = "idx_users_phone_number", columnList = "phone_number", unique = true),
-        @Index(name = "idx_users_full_name_phone", columnList = "full_name,phone_number"),
-        @Index(name = "idx_users_full_name_email", columnList = "full_name,email"),
+        @Index(name = "idx_users_last_name_phone", columnList = "last_name,phone_number"),
+        @Index(name = "idx_users_last_name_email", columnList = "last_name,email"),
         @Index(name = "idx_users_status", columnList = "status"),
         @Index(name = "idx_users_role_code", columnList = "role_code"),
         @Index(name = "idx_users_direction_id", columnList = "direction_id")
@@ -63,12 +63,12 @@ public class User {
     private String tgName;
 
     /**
-     * Полное имя пользователя (ФИО).
+     * Имя пользователя.
      *
      * Основное поле с именем, которое используется в системе.
      */
-    @Column(name = "full_name")
-    private String fullName;
+    @Column(name = "user_name")
+    private String userName;
 
     /**
      * Email пользователя.
@@ -180,17 +180,9 @@ public class User {
     @Column(name = "name")
     private String name;
 
-    /**
-     * @deprecated Используй fullName.
-     */
-    @Deprecated
     @Column(name = "first_name")
     private String firstName;
 
-    /**
-     * @deprecated Используй fullName.
-     */
-    @Deprecated
     @Column(name = "last_name")
     private String lastName;
 

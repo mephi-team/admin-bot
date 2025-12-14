@@ -98,11 +98,11 @@ public class DataInitializer {
                 .orElseThrow(() -> new RuntimeException("Роль 'candidate' не найдена"));
 
         List<User> users = Arrays.asList(
-                User.builder().tgId("tg_1001").fullName("Анна Смирнова").email("anna@example.com").role(studentRole).status(UserStatus.ACTIVE).build(),
-                User.builder().tgId("tg_1002").fullName("Иван Петров").email("ivan@example.com").role(candidateRole).status(UserStatus.ACTIVE).build(),
-                User.builder().tgId("tg_1003").fullName("Мария Козлова").email("maria@example.com").role(studentRole).status(UserStatus.BLOCKED).build(),
-                User.builder().tgId("tg_1004").fullName("Алексей Иванов").email("alexey@example.com").role(candidateRole).status(UserStatus.ACTIVE).build(),
-                User.builder().tgId("tg_1005").fullName("Екатерина Волкова").email("ekaterina@example.com").role(studentRole).status(UserStatus.ACTIVE).build()
+                User.builder().tgId("6701928374").userName("NexusDreams").firstName("Анна").lastName("Смирнова").email("anna@example.com").role(studentRole).status(UserStatus.ACTIVE).build(),
+                User.builder().tgId("2059184736").userName("StellarCraze").firstName("Иван").lastName("Петров").email("ivan@example.com").role(candidateRole).status(UserStatus.ACTIVE).build(),
+                User.builder().tgId("2073159486").userName("SolarFlicker").firstName("Мария").lastName("Козлова").email("maria@example.com").role(studentRole).status(UserStatus.BLOCKED).build(),
+                User.builder().tgId("8347201592").userName("SparkedEclipse").firstName("Алексей").lastName("Иванов").email("alexey@example.com").role(candidateRole).status(UserStatus.ACTIVE).build(),
+                User.builder().tgId("8469031275").userName("FrostFire").firstName("Екатерина").lastName("Волкова").email("ekaterina@example.com").role(studentRole).status(UserStatus.ACTIVE).build()
         );
         userRepository.saveAll(users);
         System.out.println("  → Создано 5 пользователей");

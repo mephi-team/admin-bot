@@ -59,7 +59,7 @@
                         <div class="text-muted small">
                                                 <span class="text-lowercase"
                                                       th:text="${dialog.user.role.description}">студент</span>
-                            | @<span th:text="${dialog.user.externalId}">username</span>
+                            | @<span th:text="${dialog.user.userName}">username</span>
                         </div>
                         <div class="text-truncate mt-1" th:if="${messageCount > 0}"
                              th:with="lastMsg=${dialog.messages[__${messageCount}__ - 1]}">
