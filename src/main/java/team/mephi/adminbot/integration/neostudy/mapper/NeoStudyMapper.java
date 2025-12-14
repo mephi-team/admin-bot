@@ -4,104 +4,68 @@ import org.springframework.stereotype.Component;
 import team.mephi.adminbot.integration.neostudy.dto.*;
 import team.mephi.adminbot.model.Direction;
 import team.mephi.adminbot.model.User;
+import team.mephi.adminbot.model.enums.UserStatus;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Маппер для преобразования данных между нашей системой и NeoStudy.
- *
- * Отвечает за два направления:
- * - наши доменные модели → DTO NeoStudy (для отправки запросов)
- * - DTO NeoStudy → наши доменные модели (для обработки ответов)
- */
 @Component
 public class NeoStudyMapper {
 
-    /**
-     * Преобразует нашего пользователя в DTO,
-     * которое отправляется в NeoStudy.
-     */
     public NeoStudyUserRequest toNeoStudyUserRequest(User user) {
         if (user == null) {
             return null;
         }
 
         return NeoStudyUserRequest.builder()
-                .externalId(user.getExternalId())
-                .name(user.getName())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .status(user.getStatus())
+                .externalId(user.getTgId())
+                .name(user.getFullName())
+                .status(user.getStatus() != null ? user.getStatus().name() : null)
                 .build();
     }
 
-    /**
-     * Преобразует ответ от NeoStudy в объект User.
-     *
-     * Важно: здесь создаётся новый объект User.
-     * Если нужно обновлять существующего пользователя —
-     * используйте отдельный метод updateUserFromNeoStudy.
-     */
     public User toUser(NeoStudyUserResponse response) {
         if (response == null) {
             return null;
         }
 
         return User.builder()
-                .externalId(response.getExternalId())
-                .name(response.getName())
-                .firstName(response.getFirstName())
-                .lastName(response.getLastName())
-                .status(response.getStatus())
-                // Если даты не пришли — ставим текущее время
+                .tgId(response.getExternalId())
+                .fullName(response.getName())
+                .status(response.getStatus() != null
+                        ? UserStatus.valueOf(response.getStatus().toUpperCase())
+                        : null)
                 .createdAt(response.getCreatedAt() != null
-                        ? response.getCreatedAt()
-                        : LocalDateTime.now())
+                        ? response.getCreatedAt().atZone(ZoneId.of("UTC")).toInstant()
+                        : Instant.now())
                 .updatedAt(response.getUpdatedAt() != null
-                        ? response.getUpdatedAt()
-                        : LocalDateTime.now())
+                        ? response.getUpdatedAt().atZone(ZoneId.of("UTC")).toInstant()
+                        : Instant.now())
                 .build();
     }
 
-    /**
-     * Обновляет существующего пользователя данными,
-     * которые пришли от NeoStudy.
-     *
-     * Обновляются только те поля,
-     * которые реально присутствуют в ответе.
-     */
     public void updateUserFromNeoStudy(User user, NeoStudyUserResponse response) {
         if (user == null || response == null) {
             return;
         }
 
         if (response.getName() != null) {
-            user.setName(response.getName());
+            user.setFullName(response.getName());
         }
-        if (response.getFirstName() != null) {
-            user.setFirstName(response.getFirstName());
-        }
-        if (response.getLastName() != null) {
-            user.setLastName(response.getLastName());
-        }
+
         if (response.getStatus() != null) {
-            user.setStatus(response.getStatus());
+            user.setStatus(UserStatus.valueOf(response.getStatus().toUpperCase()));
         }
+
         if (response.getUpdatedAt() != null) {
-            user.setUpdatedAt(response.getUpdatedAt());
+            user.setUpdatedAt(response.getUpdatedAt()
+                    .atZone(ZoneId.of("UTC"))
+                    .toInstant());
         }
     }
 
-    /**
-     * Преобразует наше направление (Direction)
-     * в DTO курса NeoStudy.
-     *
-     * Обычно курсы приходят от NeoStudy,
-     * но этот метод может быть полезен
-     * для сравнения или проверки данных.
-     */
     public NeoStudyCourseResponse toNeoStudyCourse(Direction direction) {
         if (direction == null) {
             return null;
@@ -113,10 +77,6 @@ public class NeoStudyMapper {
                 .build();
     }
 
-    /**
-     * Преобразует курс, полученный от NeoStudy,
-     * в нашу доменную модель Direction.
-     */
     public Direction toDirection(NeoStudyCourseResponse response) {
         if (response == null) {
             return null;
@@ -128,10 +88,6 @@ public class NeoStudyMapper {
                 .build();
     }
 
-    /**
-     * Обновляет существующее направление
-     * данными, полученными от NeoStudy.
-     */
     public void updateDirectionFromNeoStudy(Direction direction, NeoStudyCourseResponse response) {
         if (direction == null || response == null) {
             return;
@@ -145,12 +101,6 @@ public class NeoStudyMapper {
         }
     }
 
-    /**
-     * Создаёт запрос на запись пользователя на курс в NeoStudy.
-     *
-     * Используется, когда нужно просто записать пользователя
-     * с указанным статусом.
-     */
     public NeoStudyEnrollmentRequest toNeoStudyEnrollmentRequest(
             String userId,
             String courseId,
@@ -160,15 +110,10 @@ public class NeoStudyMapper {
                 .userId(userId)
                 .courseId(courseId)
                 .status(status)
-                // Дата записи — текущее время
-                .enrollmentDate(LocalDateTime.now().toString())
+                .enrollmentDate(Instant.now().toString())
                 .build();
     }
 
-    /**
-     * Создаёт запрос на запись пользователя на курс
-     * с дополнительными метаданными.
-     */
     public NeoStudyEnrollmentRequest toNeoStudyEnrollmentRequest(
             String userId,
             String courseId,
@@ -179,8 +124,7 @@ public class NeoStudyMapper {
                 .userId(userId)
                 .courseId(courseId)
                 .status(status)
-                .enrollmentDate(LocalDateTime.now().toString())
-                // Если метаданные не передали — используем пустую map
+                .enrollmentDate(Instant.now().toString())
                 .metadata(metadata != null ? metadata : new HashMap<>())
                 .build();
     }

@@ -2,59 +2,100 @@ package team.mephi.adminbot.model;
 
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Юнит-тесты для сущности MailTemplate (проверка @PrePersist и @PreUpdate).
+ * Юнит-тесты для сущности MailTemplate.
+ *
+ * Проверяет корректность работы equals()/hashCode() и базовую функциональность сущности.
+ * Примечание: тестирование @CreationTimestamp и @UpdateTimestamp требует интеграционных тестов
+ * с реальной базой данных, так как эти аннотации обрабатываются Hibernate при сохранении.
  */
 class MailTemplateTest {
 
     @Test
-    void onCreate_shouldSetCreatedAtAndUpdatedAt() {
+    void equals_shouldReturnTrueForSameId() {
         // given
-        MailTemplate template = MailTemplate.builder()
+        MailTemplate template1 = MailTemplate.builder()
+                .id(1L)
+                .name("Template 1")
+                .subject("Subject 1")
+                .build();
+
+        MailTemplate template2 = MailTemplate.builder()
+                .id(1L)
+                .name("Template 2")
+                .subject("Subject 2")
+                .build();
+
+        // then
+        assertEquals(template1, template2, "Шаблоны с одинаковым ID должны быть равны");
+        assertEquals(template1.hashCode(), template2.hashCode(), "HashCode должен совпадать для одинаковых ID");
+    }
+
+    @Test
+    void equals_shouldReturnFalseForDifferentIds() {
+        // given
+        MailTemplate template1 = MailTemplate.builder()
+                .id(1L)
                 .name("Template")
                 .subject("Subject")
                 .build();
 
-        // when
-        template.onCreate();
+        MailTemplate template2 = MailTemplate.builder()
+                .id(2L)
+                .name("Template")
+                .subject("Subject")
+                .build();
 
         // then
-        assertNotNull(template.getCreatedAt(), "createdAt должен быть установлен");
-        assertNotNull(template.getUpdatedAt(), "updatedAt должен быть установлен");
-        assertEquals(
-                template.getCreatedAt(),
-                template.getUpdatedAt(),
-                "createdAt и updatedAt должны совпадать при создании"
-        );
+        assertNotEquals(template1, template2, "Шаблоны с разными ID не должны быть равны");
     }
 
     @Test
-    void onUpdate_shouldUpdateOnlyUpdatedAt() throws InterruptedException {
+    void equals_shouldReturnFalseForNullId() {
         // given
-        MailTemplate template = new MailTemplate();
-        template.onCreate();
+        MailTemplate template1 = MailTemplate.builder()
+                .id(null)
+                .name("Template")
+                .subject("Subject")
+                .build();
 
-        LocalDateTime createdAtBefore = template.getCreatedAt();
-        LocalDateTime updatedAtBefore = template.getUpdatedAt();
-
-        Thread.sleep(50);
-
-        // when
-        template.onUpdate();
+        MailTemplate template2 = MailTemplate.builder()
+                .id(null)
+                .name("Template")
+                .subject("Subject")
+                .build();
 
         // then
-        assertEquals(
-                createdAtBefore,
-                template.getCreatedAt(),
-                "createdAt не должен меняться при onUpdate"
-        );
-        assertTrue(
-                template.getUpdatedAt().isAfter(updatedAtBefore),
-                "updatedAt должен обновиться"
-        );
+        assertNotEquals(template1, template2, "Шаблоны с null ID не должны быть равны");
+    }
+
+    @Test
+    void equals_shouldReturnTrueForSameInstance() {
+        // given
+        MailTemplate template = MailTemplate.builder()
+                .id(1L)
+                .name("Template")
+                .subject("Subject")
+                .build();
+
+        // then
+        assertEquals(template, template, "Объект должен быть равен самому себе");
+    }
+
+    @Test
+    void equals_shouldReturnFalseForDifferentClass() {
+        // given
+        MailTemplate template = MailTemplate.builder()
+                .id(1L)
+                .name("Template")
+                .subject("Subject")
+                .build();
+
+        Object other = new Object();
+
+        // then
+        assertNotEquals(template, other, "Шаблон не должен быть равен объекту другого класса");
     }
 }

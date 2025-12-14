@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 import team.mephi.adminbot.model.EnrollmentBatch;
 
 @Repository
-public interface EnrollmentBatchRepository extends JpaRepository<EnrollmentBatch, String> {
+public interface EnrollmentBatchRepository extends JpaRepository<EnrollmentBatch, Long> {
 }
 

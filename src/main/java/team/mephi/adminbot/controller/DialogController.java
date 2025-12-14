@@ -76,7 +76,7 @@ public class DialogController {
         // Группируем по дате (LocalDate)
         Map<LocalDate, List<Message>> grouped = sorted.stream()
                 .collect(Collectors.groupingBy(
-                        msg -> msg.getCreatedAt().toLocalDate(),
+                        msg -> msg.getCreatedAt().atZone(java.time.ZoneId.systemDefault()).toLocalDate(),
                         LinkedHashMap::new, // сохраняем порядок
                         Collectors.toList()
                 ));

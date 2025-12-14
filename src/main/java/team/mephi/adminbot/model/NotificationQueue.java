@@ -5,13 +5,28 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
-import team.mephi.adminbot.model.enums.NotificationType;
 import team.mephi.adminbot.model.enums.NotificationStatus;
+import team.mephi.adminbot.model.enums.NotificationType;
 
-import java.time.LocalDateTime;
+import com.fasterxml.jackson.databind.JsonNode;
+import java.time.Instant;
 
+/**
+ * Сущность уведомления в очереди отправки.
+ *
+ * Эта таблица работает как очередь (outbox):
+ * бизнес-логика кладёт сюда уведомления,
+ * а фоновые воркеры потом их отправляют.
+ *
+ * Жизненный цикл статуса:
+ * - PENDING    — уведомление только что добавлено в очередь
+ * - SENT       — уведомление успешно отправлено
+ * - FAILED     — при отправке произошла ошибка
+ * - DELIVERED  — уведомление доставлено получателю
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -19,39 +34,87 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "notifications_queue")
 public class NotificationQueue {
+
+    /**
+     * Технический первичный ключ записи.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * Тип уведомления.
+     *
+     * Например: EMAIL, TELEGRAM и т.д.
+     */
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "type", nullable = false)
     private NotificationType type;
 
-    @Column(nullable = false)
+    /**
+     * Получатель уведомления.
+     *
+     * Это может быть email, chatId, userId —
+     * в зависимости от типа уведомления.
+     */
+    @Column(name = "recipient", nullable = false)
     private String recipient;
 
+    /**
+     * Данные уведомления в формате JSON.
+     *
+     * Содержит всё, что нужно для отправки:
+     * текст, параметры шаблона, метаданные и т.п.
+     */
     @JdbcTypeCode(SqlTypes.JSON)
-    @Column(columnDefinition = "jsonb")
-    private Object payload;
+    @Column(columnDefinition = "jsonb", nullable = false)
+    private JsonNode payload;
 
+    /**
+     * Текущий статус уведомления.
+     *
+     * См. описание жизненного цикла выше.
+     */
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "status", nullable = false)
     private NotificationStatus status;
 
-    @Column(columnDefinition = "TEXT")
+    /**
+     * Текст ошибки, если отправка завершилась неудачей.
+     *
+     * Заполняется только при статусе FAILED.
+     */
+    @Column(name = "error")
     private String error;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
+    /**
+     * Дата и время создания записи в очереди.
+     *
+     * Проставляется автоматически
+     * и после этого не меняется.
+     */
+    @Column(name = "created_at", nullable = false, updatable = false)
+    @CreationTimestamp
+    private Instant createdAt;
 
+    /**
+     * Дата и время успешной отправки уведомления.
+     *
+     * Заполняется после перехода в статус SENT.
+     */
     @Column(name = "sent_at")
-    private LocalDateTime sentAt;
+    private Instant sentAt;
 
+    /**
+     * Хук JPA, который срабатывает перед сохранением записи.
+     *
+     * Если значения не заданы:
+     * - устанавливает статус PENDING
+     */
     @PrePersist
     protected void onCreate() {
-        if (this.createdAt == null) {
-            this.createdAt = LocalDateTime.now();
+        if (this.status == null) {
+            this.status = NotificationStatus.PENDING;
         }
     }
 }
-
