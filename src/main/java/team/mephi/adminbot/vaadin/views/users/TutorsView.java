@@ -25,7 +25,6 @@ public class TutorsView extends VerticalLayout {
 
         final TextField searchField = new SearchField("Найти куратора");
 
-        var filterableProvider = getProvider(tutorRepository, searchField);
         Grid<TutorWithCounts> grid = new Grid<>(TutorWithCounts.class, false);
         grid.addColumn(a -> a.getLastName() + " " + a.getFirstName())
                 .setHeader("Фамилия Имя")
@@ -60,6 +59,8 @@ public class TutorsView extends VerticalLayout {
             group.add(dropButton, noteButton, chatButton, editButton, deleteButton);
             return group;
         }).setHeader("Действия").setWidth("330px").setFlexGrow(0).setKey("actions");
+
+        var filterableProvider = getProvider(tutorRepository, searchField);
 
         grid.setMultiSort(true, Grid.MultiSortPriority.APPEND);
         grid.setDataProvider(filterableProvider);

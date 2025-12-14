@@ -99,6 +99,30 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u JOIN fetch u.role LEFT JOIN FETCH u.direction WHERE u.role.name = :role")
     List<User> findAllByRole(String role);
 
+    @Query("SELECT u FROM User u JOIN fetch u.role LEFT JOIN FETCH u.direction WHERE u.role.name = :role AND (" +
+            "LOWER(COALESCE(u.userName, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
+            "LOWER(COALESCE(u.name, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
+            "LOWER(COALESCE(u.firstName, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
+            "LOWER(COALESCE(u.lastName, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
+            "LOWER(COALESCE(u.externalId, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
+            "LOWER(COALESCE(u.tgId, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
+            "LOWER(COALESCE(u.email, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
+            "LOWER(COALESCE(u.phoneNumber, '')) LIKE LOWER(CONCAT('%', :query, '%'))" +
+            ")")
+    List<User> findAllByRoleAndName(String role, String query);
+
+    @Query("SELECT count(u )FROM User u JOIN u.role WHERE u.role.name = :role AND (" +
+            "LOWER(COALESCE(u.userName, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
+            "LOWER(COALESCE(u.name, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
+            "LOWER(COALESCE(u.firstName, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
+            "LOWER(COALESCE(u.lastName, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
+            "LOWER(COALESCE(u.externalId, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
+            "LOWER(COALESCE(u.tgId, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
+            "LOWER(COALESCE(u.email, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
+            "LOWER(COALESCE(u.phoneNumber, '')) LIKE LOWER(CONCAT('%', :query, '%'))" +
+            ")")
+    Integer countByRoleAndName(String role, String query);
+
     @Query("SELECT count(u) FROM User u WHERE u.role.name = :role")
     Integer countByRole(String role);
 

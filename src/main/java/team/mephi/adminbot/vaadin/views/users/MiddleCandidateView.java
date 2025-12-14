@@ -72,14 +72,23 @@ public class MiddleCandidateView extends VerticalLayout {
             return group;
         }).setHeader("Действия").setWidth("290px").setFlexGrow(0).setKey("actions");
 
+        var filterableProvider = getProvider(userRepository, searchField);
+
         grid.setMultiSort(true, Grid.MultiSortPriority.APPEND);
-        grid.setDataProvider(getProvider(userRepository, searchField));
+        grid.setDataProvider(filterableProvider);
         grid.setHeightFull();
 
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
         grid.addSelectionListener(selection -> {
             // System.out.printf("Number of selected people: %s%n",
             // selection.getAllSelectedItems().size());
+        });
+
+        searchField.addValueChangeListener(e -> {
+            // setFilter will refresh the data provider and trigger data
+            // provider fetch / count queries. As a side effect, the pagination
+            // controls will be updated.
+            filterableProvider.setFilter(e.getValue());
         });
 
         GridSettingsButton settings = new GridSettingsButton();
@@ -91,7 +100,7 @@ public class MiddleCandidateView extends VerticalLayout {
     }
 
     private ConfigurableFilterDataProvider<UserDto, Void, String> getProvider(UserRepository userRepository, TextField searchField) {
-        UserProvider dataProvider = new UserProvider(userRepository, role);
+        UserProvider dataProvider = new UserProvider(userRepository, role, searchField);
         return dataProvider.withConfigurableFilter();
     }
 
