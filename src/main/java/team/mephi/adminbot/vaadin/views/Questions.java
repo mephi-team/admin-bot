@@ -73,6 +73,12 @@ public class Questions extends VerticalLayout {
 
         grid.setDataProvider(filterableProvider);
 
+        grid.setSelectionMode(Grid.SelectionMode.MULTI);
+        grid.addSelectionListener(selection -> {
+            // System.out.printf("Number of selected people: %s%n",
+            // selection.getAllSelectedItems().size());
+        });
+
         searchField.addValueChangeListener(e -> {
             // setFilter will refresh the data provider and trigger data
             // provider fetch / count queries. As a side effect, the pagination
