@@ -1,21 +1,32 @@
 package team.mephi.adminbot.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
+import org.springframework.security.oauth2.client.oidc.web.logout.OidcClientInitiatedLogoutSuccessHandler;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 
-import java.util.Arrays;
+import java.util.*;
 
 /**
  * Основная конфигурация Spring Security для работы с Keycloak и JWT.
@@ -31,6 +42,9 @@ import java.util.Arrays;
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
+    @Autowired
+    private ClientRegistrationRepository clientRegistrationRepository;
+
     /**
      * ID клиента в Keycloak.
      *
@@ -39,6 +53,12 @@ public class SecurityConfig {
      */
     @Value("${keycloak.client-id}")
     private String clientId;
+
+    @Value("${spring.security.oauth2.client.provider.keycloak.issuer-uri}")
+    String jwkSetUri;
+
+    @Value("${app.redirect-url}")
+    String redirectUrl;
 
     /**
      * Основная цепочка фильтров безопасности.
@@ -57,61 +77,69 @@ public class SecurityConfig {
                 // Включаем CORS с нашей конфигурацией
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
-                // Запрещаем создание сессий — приложение полностью stateless
-                .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
-
                 // Правила доступа к эндпоинтам
                 .authorizeHttpRequests(auth -> auth
 
                         // Публичные эндпоинты для мониторинга
                         .requestMatchers("/actuator/health", "/actuator/info")
                         .permitAll()
-
-                        // Админское API — только для ROLE_ADMIN
-                        .requestMatchers("/api/admin/**")
+                        // только для ROLE_LC_EXPERT и ADMIN
+                        .requestMatchers("/questions")
+                        .hasAnyRole("LC_EXPERT", "ADMIN")
+                        // только для ROLE_ADMIN
+                        .requestMatchers("/analytics", "/dialogs", "/broadcasts","/users")
                         .hasRole("ADMIN")
-
-                        // API эксперта — только для ROLE_LC_EXPERT
-                        .requestMatchers("/api/expert/**")
-                        .hasRole("LC_EXPERT")
-
-                        // API пользователя — любой залогиненный пользователь
-                        .requestMatchers("/api/user/**")
-                        .authenticated()
-
-                        // Веб-страницы (Thymeleaf) — тоже только после входа
-                        .requestMatchers(
-                                "/", "/users", "/questions",
-                                "/analytics", "/dialogs", "/broadcasts"
-                        ).authenticated()
-
                         // Всё остальное — тоже требует аутентификации
                         .anyRequest()
                         .authenticated()
                 )
-
-                // Настройка Resource Server для проверки JWT
-                .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(jwt -> jwt
-                                // Используем свой конвертер ролей
-                                .jwtAuthenticationConverter(jwtAuthenticationConverter())
-                        )
+                .oauth2Login(oauth2Login ->
+                        oauth2Login
+                                // Настраиваем сервис для получения информации о пользователе и ролях
+                                .userInfoEndpoint(userInfo ->
+                                        userInfo.oidcUserService(oidcUserService())
+                                )
+                )
+                // Настройка выхода из системы
+                .logout(logout ->
+                        logout
+                                .logoutRequestMatcher(PathPatternRequestMatcher.withDefaults().matcher("/logout"))
+                                .logoutSuccessUrl("/")
+                                .logoutSuccessHandler(oidcLogoutSuccessHandler())
+                                .invalidateHttpSession(true)
+                                .deleteCookies("JSESSIONID")
                 );
 
         return http.build();
     }
 
-    /**
-     * Кастомный конвертер JWT → Authentication.
-     *
-     * Используется для корректного извлечения ролей
-     * из токена Keycloak (realm roles + client roles).
-     */
-    @Bean
-    public Converter<Jwt, JwtAuthenticationToken> jwtAuthenticationConverter() {
-        return new JwtAuthenticationConverter(clientId);
+    private OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService() {
+        final OidcUserService delegate = new OidcUserService();
+
+        return (userRequest) -> {
+            OidcUser oidcUser = delegate.loadUser(userRequest);
+            String accessTokenValue = userRequest.getAccessToken().getTokenValue();
+
+            // Создаем декодер для парсинга строки токена в объект JWT
+            JwtDecoder decoder = NimbusJwtDecoder.withJwkSetUri(
+                    userRequest.getClientRegistration().getProviderDetails().getJwkSetUri()
+            ).build();
+
+            // Парсим токен в объект Spring Security Jwt
+            Jwt jwt = decoder.decode(accessTokenValue);
+            Map<String, Object> allClaims = jwt.getClaims();
+            Set<GrantedAuthority> mappedAuthorities = new HashSet<>();
+            Map<String, Object> realmAccess = (Map<String, Object>) allClaims.getOrDefault("realm_access", Collections.emptyMap());
+            List<String> roles = (List<String>) realmAccess.getOrDefault("roles", Collections.emptyList());
+
+            mappedAuthorities.addAll(roles.stream()
+                    .map(role -> new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()))
+                    .toList());
+
+            // Объединяем стандартные полномочия (SCOPES) с нашими новыми ролями
+            mappedAuthorities.addAll(oidcUser.getAuthorities());
+            return new DefaultOidcUser(mappedAuthorities, oidcUser.getIdToken(), oidcUser.getUserInfo());
+        };
     }
 
     /**
@@ -160,6 +188,20 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
 
         return source;
+    }
+
+    @Bean
+    JwtDecoder jwtDecoder() {
+        return NimbusJwtDecoder.withIssuerLocation(jwkSetUri).build();
+    }
+
+    private LogoutSuccessHandler oidcLogoutSuccessHandler() {
+        OidcClientInitiatedLogoutSuccessHandler oidcLogoutSuccessHandler =
+                new OidcClientInitiatedLogoutSuccessHandler(this.clientRegistrationRepository);
+
+        oidcLogoutSuccessHandler.setPostLogoutRedirectUri(redirectUrl); // Замените на ваш URL
+
+        return oidcLogoutSuccessHandler;
     }
 }
 

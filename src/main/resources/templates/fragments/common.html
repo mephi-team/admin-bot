@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
 
 <!-- Фрагмент: header -->
@@ -25,7 +25,7 @@
 
     <!-- Центр: навигация -->
     <div class="d-flex flex-grow-1 justify-content-center">
-        <nav class="nav">
+        <nav class="nav" sec:authorize="hasRole('ADMIN')">
             <a class="nav-link px-3 text-dark fw-medium" href="/dialogs" th:href="@{/dialogs}">Общение</a>
             <a class="nav-link px-3 text-dark fw-medium" href="/users" th:href="@{/users}">Пользователи</a>
             <a class="nav-link px-3 text-dark fw-medium" href="/analytics" th:href="@{/analytics}">Аналитика</a>
@@ -40,12 +40,12 @@
         </button>
 
         <!-- Имя пользователя -->
-        <span class="text-dark fw-medium">Администратор</span>
+        <span class="text-dark fw-medium" th:text="${#authentication.principal.IdToken.claims.name}">Администратор</span>
 
         <!-- Выход -->
-        <button aria-label="Выход" class="btn btn-link text-dark p-0" type="button">
+        <a href="/logout" aria-label="Выход" class="btn btn-link text-dark p-0" type="button">
             <i class="bi bi-box-arrow-right fs-5"></i>
-        </button>
+        </a>
     </div>
 </header>
 

@@ -1,0 +1,10 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<h1>Отладочная страница ролей</h1>
+<p>Текущие Granted Authorities:</p>
+<ul>
+    <li th:each="role : ${roles}" th:text="${role}">Role Name</li>
+</ul>
+<a th:href="@{/}">На главную</a> | <a th:href="@{/logout}">Выйти</a>
+</body>
+</html>
