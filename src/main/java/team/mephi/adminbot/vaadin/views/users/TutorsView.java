@@ -1,4 +1,4 @@
-package team.mephi.adminbot.vaadin.views;
+package team.mephi.adminbot.vaadin.views.users;
 
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -28,6 +28,12 @@ public class TutorsView extends VerticalLayout {
         grid.setMultiSort(true, Grid.MultiSortPriority.APPEND);
         grid.setDataProvider(filterableProvider);
         grid.setHeightFull();
+
+        grid.setSelectionMode(Grid.SelectionMode.MULTI);
+        grid.addSelectionListener(selection -> {
+            // System.out.printf("Number of selected people: %s%n",
+            // selection.getAllSelectedItems().size());
+        });
 
         searchField.addValueChangeListener(e -> {
             filterableProvider.setFilter(e.getValue());

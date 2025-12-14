@@ -28,6 +28,12 @@ public class GuestsView extends VerticalLayout {
         grid.setDataProvider(getProvider(userRepository, searchField));
         grid.setHeightFull();
 
+        grid.setSelectionMode(Grid.SelectionMode.MULTI);
+        grid.addSelectionListener(selection -> {
+            // System.out.printf("Number of selected people: %s%n",
+            // selection.getAllSelectedItems().size());
+        });
+
         add(searchField, grid);
     }
 

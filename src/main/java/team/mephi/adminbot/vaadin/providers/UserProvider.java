@@ -16,6 +16,8 @@ public class UserProvider extends CallbackDataProvider<UserDto, String> {
                             .limit(query.getLimit()); // Берем только нужное количество
                 },
                 // Метод count (подсчет общего количества результатов фильтрации)
-                query -> questionRepository.countByRole(role));
+                query -> questionRepository.countByRole(role),
+                UserDto::getId
+        );
     }
 }
