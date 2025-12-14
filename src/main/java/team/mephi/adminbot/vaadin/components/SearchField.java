@@ -11,5 +11,6 @@ public class SearchField extends TextField {
         setPlaceholder(placeholder);
         setPrefixComponent(new Icon(VaadinIcon.SEARCH));
         setValueChangeMode(ValueChangeMode.EAGER);
+        setClearButtonVisible(true);
     }
 }
