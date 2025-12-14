@@ -32,7 +32,7 @@ public class MainController {
         long activeDialogs = dialogRepository.countByLastMessageAtAfter(Instant.now().minusSeconds(24 * 3600));
 
         // Новые вопросы (за последнюю неделю)
-        long newQuestions = questionRepository.countByCreatedAtAfter(LocalDateTime.now().minusDays(7));
+        long newQuestions = questionRepository.countByCreatedAtAfter(Instant.now().minusSeconds(7 * 3600));
 
         model.addAttribute("totalUsers", totalUsers);
         model.addAttribute("activeDialogs", activeDialogs);
