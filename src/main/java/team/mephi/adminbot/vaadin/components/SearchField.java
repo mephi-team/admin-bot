@@ -7,7 +7,7 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 
 public class SearchField extends TextField {
     public SearchField(String placeholder) {
-        setWidth("100%");
+        setWidth("50%");
         setPlaceholder(placeholder);
         setPrefixComponent(new Icon(VaadinIcon.SEARCH));
         setValueChangeMode(ValueChangeMode.EAGER);

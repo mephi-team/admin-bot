@@ -15,6 +15,7 @@ import team.mephi.adminbot.repository.UserRepository;
 import team.mephi.adminbot.vaadin.components.GridSettingsButton;
 import team.mephi.adminbot.vaadin.components.GridSettingsPopover;
 import team.mephi.adminbot.vaadin.components.SearchField;
+import team.mephi.adminbot.vaadin.components.SearchFragment;
 import team.mephi.adminbot.vaadin.providers.UserProvider;
 
 import java.util.Set;

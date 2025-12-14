@@ -1,7 +1,11 @@
 package team.mephi.adminbot.vaadin.views;
 
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.CallbackDataProvider;
@@ -9,10 +13,14 @@ import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.router.Route;
 import team.mephi.adminbot.dto.UserQuestionDto;
 import team.mephi.adminbot.repository.UserQuestionRepository;
+import team.mephi.adminbot.vaadin.components.GridSettingsButton;
+import team.mephi.adminbot.vaadin.components.GridSettingsPopover;
 import team.mephi.adminbot.vaadin.components.SearchField;
+import team.mephi.adminbot.vaadin.components.SearchFragment;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Set;
 
 @Route(value = "/questions", layout = DialogsLayout.class)
 public class Questions extends VerticalLayout {
@@ -32,12 +40,31 @@ public class Questions extends VerticalLayout {
 //                .setFlexGrow(0) // Не растягивать этот столбец
 //                .setWidth("75px"); // Задать фиксированную ширину
 
-        grid.addColumn(UserQuestionDto::getQuestion).setHeader("Вопрос").setSortable(true);
-        grid.addColumn(UserQuestionDto::getDate).setHeader("Дата").setSortable(true);
-        grid.addColumn(UserQuestionDto::getUser).setHeader("Автор").setSortable(true);
-        grid.addColumn(UserQuestionDto::getRole).setHeader("Роль").setSortable(true);
-        grid.addColumn(UserQuestionDto::getDirection).setHeader("Направление").setSortable(true);
-        grid.addColumn(UserQuestionDto::getAnswer).setHeader("Ответ").setSortable(true);
+        grid.addColumn(UserQuestionDto::getQuestion).setHeader("Вопрос").setSortable(true).setKey("question");
+        grid.addColumn(UserQuestionDto::getDate).setHeader("Дата").setSortable(true).setKey("date");
+        grid.addColumn(UserQuestionDto::getUser).setHeader("Автор").setSortable(true).setKey("author");
+        grid.addColumn(UserQuestionDto::getRole).setHeader("Роль").setSortable(true).setKey("role");
+        grid.addColumn(UserQuestionDto::getDirection).setHeader("Направление").setSortable(true).setKey("direction");
+        grid.addColumn(UserQuestionDto::getAnswer).setHeader("Ответ").setSortable(true).setKey("answer");
+
+        grid.addComponentColumn(item -> {
+            Span group = new Span();
+            Button responseButton = new Button("Ответить");
+            responseButton.addClickListener(e -> {
+                System.out.println(item);
+            });
+            Button editButton = new Button(new Icon(VaadinIcon.CHAT));
+            editButton.addClickListener(e -> {
+                System.out.println(item);
+            });
+            Button deleteButton = new Button(new Icon(VaadinIcon.TRASH));
+            editButton.addClickListener(e -> {
+                System.out.println(item);
+            });
+            group.add(responseButton, editButton, deleteButton);
+            return group;
+        }).setHeader("Действия").setWidth("220px").setFlexGrow(0).setKey("action");
+
         grid.setMultiSort(true, Grid.MultiSortPriority.APPEND);
 
         final TextField searchField = new SearchField("Найти вопрос");
@@ -53,7 +80,12 @@ public class Questions extends VerticalLayout {
             filterableProvider.setFilter(e.getValue());
         });
 
-        add(searchField, grid);
+        GridSettingsButton settings = new GridSettingsButton();
+        GridSettingsPopover popover = new GridSettingsPopover(grid, Set.of());
+        popover.setTarget(settings);
+        SearchFragment headerLayout = new SearchFragment(searchField, settings);
+
+        add(headerLayout, grid);
     }
 
     private static ConfigurableFilterDataProvider<UserQuestionDto, Void, String> getProvider(UserQuestionRepository questionRepository, TextField searchField) {
