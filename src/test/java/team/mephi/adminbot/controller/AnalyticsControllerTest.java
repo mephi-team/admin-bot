@@ -10,8 +10,9 @@ import org.springframework.ui.Model;
 import team.mephi.adminbot.model.Dialog;
 import team.mephi.adminbot.repository.DialogRepository;
 
+import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -32,7 +33,7 @@ class AnalyticsControllerTest {
     @InjectMocks
     private AnalyticsController analyticsController;
 
-    private Dialog createDialog(LocalDateTime lastMessageAt) {
+    private Dialog createDialog(Instant lastMessageAt) {
         Dialog dialog = new Dialog();
         dialog.setLastMessageAt(lastMessageAt);
         return dialog;
@@ -42,9 +43,9 @@ class AnalyticsControllerTest {
     void analyticsPage_shouldBuildChartDataFromDialogs() {
         // given
         LocalDate today = LocalDate.now();
-        LocalDateTime todayMorning = today.atTime(10, 0);
-        LocalDateTime todayEvening = today.atTime(18, 0);
-        LocalDateTime yesterdayNoon = today.minusDays(1).atTime(12, 0);
+        Instant todayMorning = today.atTime(10, 0).atZone(ZoneId.systemDefault()).toInstant();
+        Instant todayEvening = today.atTime(18, 0).atZone(ZoneId.systemDefault()).toInstant();
+        Instant yesterdayNoon = today.minusDays(1).atTime(12, 0).atZone(ZoneId.systemDefault()).toInstant();
 
         // 2 диалога сегодня, 1 диалог вчера
         List<Dialog> dialogs = Arrays.asList(
@@ -53,7 +54,7 @@ class AnalyticsControllerTest {
                 createDialog(yesterdayNoon)
         );
 
-        when(dialogRepository.findLastWeekDialogs(any(LocalDateTime.class)))
+        when(dialogRepository.findLastWeekDialogs(any(Instant.class)))
                 .thenReturn(dialogs);
 
         Model model = new ExtendedModelMap();
@@ -91,7 +92,7 @@ class AnalyticsControllerTest {
     @Test
     void analyticsPage_withNoDialogs_shouldProduceEmptyChart() {
         // given
-        when(dialogRepository.findLastWeekDialogs(any(LocalDateTime.class)))
+        when(dialogRepository.findLastWeekDialogs(any(Instant.class)))
                 .thenReturn(List.of());
 
         Model model = new ExtendedModelMap();

@@ -1,0 +1,79 @@
+{
+  "realm": "mephi-realm",
+  "enabled": true,
+  "roles": {
+    "realm": [
+      {
+        "name": "lc_expert",
+        "description": "Expert role"
+      },
+      {
+        "name": "admin",
+        "description": "Administrator role"
+      }
+    ]
+  },
+  "users": [
+    {
+      "username": "expert1",
+      "enabled": true,
+      "email": "expert1@example.com",
+      "firstName": "Expert",
+      "lastName": "One",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": ["lc_expert"]
+    },
+    {
+      "username": "expert2",
+      "enabled": true,
+      "email": "expert2@example.com",
+      "firstName": "Expert",
+      "lastName": "Two",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "password123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": ["lc_expert"]
+    },
+    {
+      "username": "admin1",
+      "enabled": true,
+      "email": "admin1@example.com",
+      "firstName": "Admin",
+      "lastName": "One",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "admin123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": ["admin"]
+    }
+  ],
+  "clients": [
+    {
+      "clientId": "admin-bot-client",
+      "enabled": true,
+      "bearerOnly": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "zxEweBxQCpBH6B5Pfv37wEE6DH17mzdM",
+      "redirectUris": [
+        "http://localhost:8081/login/oauth2/code/keycloak",
+        "http://localhost:8081"
+      ],
+      "webOrigins": [
+        "http://localhost:8081"
+      ]
+    }
+  ]
+}

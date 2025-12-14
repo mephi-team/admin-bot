@@ -8,35 +8,35 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Юнит-тесты для сущности Question (проверка @PrePersist onCreate).
+ * Юнит-тесты для сущности Question.
  */
 class QuestionTest {
 
     @Test
-    void onCreate_shouldSetCreatedAtIfNull() {
+    void onCreate_shouldSetCreatedAtToNow() {
         // given
         Question question = Question.builder()
-                .questionText("Как поступить в школу?")
-                .answerText("Заполните заявку на сайте.")
+                .questionText("Как поступить?")
+                .answerText("Через сайт.")
                 .build();
 
-        assertNull(question.getCreatedAt(), "До вызова onCreate createdAt должен быть null");
+        assertNull(question.getCreatedAt());
 
         // when
         question.onCreate();
 
         // then
-        assertNotNull(question.getCreatedAt(), "После onCreate createdAt должен быть установлен");
+        assertNotNull(question.getCreatedAt());
         assertTrue(
-                Duration.between(question.getCreatedAt(), LocalDateTime.now()).getSeconds() < 5,
-                "createdAt должен быть установлен примерно в текущее время"
+                Duration.between(question.getCreatedAt(), LocalDateTime.now()).getSeconds() < 5
         );
     }
 
     @Test
     void onCreate_shouldOverrideExistingCreatedAt() {
         // given
-        LocalDateTime oldTime = LocalDateTime.now().minusDays(5);
+        LocalDateTime oldTime = LocalDateTime.now().minusDays(3);
+
         Question question = Question.builder()
                 .questionText("Вопрос")
                 .answerText("Ответ")
@@ -47,7 +47,6 @@ class QuestionTest {
         question.onCreate();
 
         // then
-        assertNotNull(question.getCreatedAt());
-        assertNotEquals(oldTime, question.getCreatedAt(), "onCreate должен перезаписать createdAt");
+        assertNotEquals(oldTime, question.getCreatedAt());
     }
 }

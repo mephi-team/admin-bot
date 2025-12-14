@@ -10,8 +10,9 @@ import team.mephi.adminbot.repository.DialogRepository;
 import tech.tablesaw.api.DateColumn;
 import tech.tablesaw.api.Table;
 
+import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,12 +30,12 @@ public class AnalyticsController {
         YearMonth currentMonth = YearMonth.now();
 
         // Получаем диалоги за последнюю неделю
-        LocalDateTime oneWeekAgo = LocalDateTime.now().minusDays(7);
+        Instant oneWeekAgo = Instant.now().minusSeconds(7 * 24 * 3600);
         List<Dialog> dialogs = dialogRepository.findLastWeekDialogs(oneWeekAgo);
 
-        // Извлекаем даты
+        // Извлекаем даты (конвертируем Instant в LocalDate)
         List<LocalDate> dates = dialogs.stream()
-                .map(d -> d.getLastMessageAt().toLocalDate())
+                .map(d -> d.getLastMessageAt().atZone(ZoneId.systemDefault()).toLocalDate())
                 .collect(Collectors.toList());
 
         // Создаём таблицу в Tablesaw

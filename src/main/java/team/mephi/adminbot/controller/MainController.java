@@ -8,6 +8,7 @@ import team.mephi.adminbot.repository.DialogRepository;
 import team.mephi.adminbot.repository.QuestionRepository;
 import team.mephi.adminbot.repository.UserRepository;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Controller
@@ -28,10 +29,10 @@ public class MainController {
         long totalUsers = userRepository.count();
 
         // Активные диалоги (за последние 24 часа)
-        long activeDialogs = dialogRepository.countByLastMessageAtAfter(LocalDateTime.now().minusHours(24));
+        long activeDialogs = dialogRepository.countByLastMessageAtAfter(Instant.now().minusSeconds(24 * 3600));
 
         // Новые вопросы (за последнюю неделю)
-        long newQuestions = questionRepository.countByCreatedAtAfter(LocalDateTime.now().minusDays(7));
+        long newQuestions = questionRepository.countByCreatedAtAfter(Instant.now().minusSeconds(7 * 3600));
 
         model.addAttribute("totalUsers", totalUsers);
         model.addAttribute("activeDialogs", activeDialogs);

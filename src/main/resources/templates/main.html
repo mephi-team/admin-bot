@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Главная — Админка Flexiq</title>
@@ -18,7 +18,7 @@
             <!-- Карточки -->
             <div class="row g-4">
                 <!-- Рассылки -->
-                <div class="col-lg-4 col-md-6">
+                <div class="col-lg-4 col-md-6" sec:authorize="hasRole('ADMIN')">
                     <div class="card h-100 shadow-sm border rounded-4">
                         <div class="card-body d-flex flex-column">
                             <div class="d-flex align-items-center mb-3">
@@ -35,7 +35,7 @@
                 </div>
 
                 <!-- Диалоги -->
-                <div class="col-lg-4 col-md-6">
+                <div class="col-lg-4 col-md-6" sec:authorize="hasRole('ADMIN')">
                     <div class="card h-100 shadow-sm border rounded-4">
                         <div class="card-body d-flex flex-column">
                             <div class="d-flex align-items-center mb-3">
@@ -77,7 +77,7 @@
                 </div>
 
                 <!-- Пользователи -->
-                <div class="col-lg-4 col-md-6">
+                <div class="col-lg-4 col-md-6" sec:authorize="hasRole('ADMIN')">
                     <div class="card h-100 shadow-sm border rounded-4">
                         <div class="card-body d-flex flex-column">
                             <div class="d-flex align-items-center mb-3">
@@ -94,7 +94,7 @@
                 </div>
 
                 <!-- Аналитика -->
-                <div class="col-lg-4 col-md-6">
+                <div class="col-lg-4 col-md-6" sec:authorize="hasRole('ADMIN')">
                     <div class="card h-100 shadow-sm border rounded-4">
                         <div class="card-body d-flex flex-column">
                             <div class="d-flex align-items-center mb-3">

@@ -35,7 +35,6 @@ class DialogControllerTest {
 
     @SuppressWarnings("unchecked")
     private List<MessagesGroup> invokeGroupMessagesByDate(List<Message> messages) throws Exception {
-        // Получаем приватный метод groupMessagesByDate через reflection
         Method method = DialogController.class.getDeclaredMethod("groupMessagesByDate", List.class);
         method.setAccessible(true);
         return (List<MessagesGroup>) method.invoke(dialogController, messages);
@@ -74,6 +73,31 @@ class DialogControllerTest {
 
         assertSame(dialogs, model.getAttribute("dialogs"));
         assertEquals("", model.getAttribute("searchQuery"));
+        assertNotNull(model.getAttribute("today"));
+        assertEquals("dialogs", model.getAttribute("currentUri"));
+    }
+
+    @Test
+    void dialogsPage_whenSearchIsBlank_shouldFallbackToFindAllWithUsers() {
+        // given
+        String search = "   ";
+        List<Dialog> dialogs = List.of(new Dialog(), new Dialog(), new Dialog());
+        when(dialogRepository.findAllWithUsers()).thenReturn(dialogs);
+
+        Model model = new ExtendedModelMap();
+
+        // when
+        String viewName = dialogController.dialogsPage(search, model);
+
+        // then
+        assertEquals("dialogs/list", viewName);
+
+        verify(dialogRepository).findAllWithUsers();
+        verify(dialogRepository, never()).searchByUserName(anyString());
+
+        assertSame(dialogs, model.getAttribute("dialogs"));
+        // ВАЖНО: контроллер кладёт searchQuery как есть, без trim
+        assertEquals(search, model.getAttribute("searchQuery"));
         assertNotNull(model.getAttribute("today"));
         assertEquals("dialogs", model.getAttribute("currentUri"));
     }
@@ -133,11 +157,9 @@ class DialogControllerTest {
         assertSame(dialog, model.getAttribute("dialog"));
 
         Object messageGroups = model.getAttribute("messageGroups");
-        assertNotNull(messageGroups, "messageGroups должен быть установлен в модель");
-        assertTrue(messageGroups instanceof List, "messageGroups должен быть списком");
-
-        List<?> groupsList = (List<?>) messageGroups;
-        assertFalse(groupsList.isEmpty(), "messageGroups не должен быть пустым");
+        assertNotNull(messageGroups);
+        assertTrue(messageGroups instanceof List);
+        assertFalse(((List<?>) messageGroups).isEmpty());
 
         assertNotNull(model.getAttribute("today"));
         assertEquals("dialogs", model.getAttribute("currentUri"));
@@ -207,21 +229,21 @@ class DialogControllerTest {
 
         // then
         assertNotNull(groups);
-        assertEquals(3, groups.size(), "Должно быть 3 группы: Сегодня, Вчера и дата для позавчера");
+        assertEquals(3, groups.size());
 
         MessagesGroup todayGroup = groups.stream()
                 .filter(g -> "Сегодня".equals(g.getDateLabel()))
                 .findFirst()
                 .orElse(null);
-        assertNotNull(todayGroup, "Должна быть группа с лейблом 'Сегодня'");
-        assertEquals(2, todayGroup.getMessages().size(), "В группе 'Сегодня' должно быть 2 сообщения");
+        assertNotNull(todayGroup);
+        assertEquals(2, todayGroup.getMessages().size());
 
         MessagesGroup yesterdayGroup = groups.stream()
                 .filter(g -> "Вчера".equals(g.getDateLabel()))
                 .findFirst()
                 .orElse(null);
-        assertNotNull(yesterdayGroup, "Должна быть группа с лейблом 'Вчера'");
-        assertEquals(1, yesterdayGroup.getMessages().size(), "В группе 'Вчера' должно быть 1 сообщение");
+        assertNotNull(yesterdayGroup);
+        assertEquals(1, yesterdayGroup.getMessages().size());
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM", new Locale("ru"));
         String expectedOldDateLabel = twoDaysAgo.format(formatter);
@@ -230,8 +252,8 @@ class DialogControllerTest {
                 .filter(g -> expectedOldDateLabel.equals(g.getDateLabel()))
                 .findFirst()
                 .orElse(null);
-        assertNotNull(oldDateGroup, "Должна быть группа с лейблом даты позавчера");
-        assertEquals(1, oldDateGroup.getMessages().size(), "В группе даты позавчера должно быть 1 сообщение");
+        assertNotNull(oldDateGroup);
+        assertEquals(1, oldDateGroup.getMessages().size());
     }
 
     @Test
@@ -243,7 +265,7 @@ class DialogControllerTest {
         List<MessagesGroup> groups = invokeGroupMessagesByDate(messages);
 
         // then
-        assertNotNull(groups, "Метод должен возвращать не null");
-        assertTrue(groups.isEmpty(), "Для пустого списка сообщений должна возвращаться пустая коллекция групп");
+        assertNotNull(groups);
+        assertTrue(groups.isEmpty());
     }
 }

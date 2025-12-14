@@ -5,12 +5,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import team.mephi.adminbot.model.Question;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 @Repository
 public interface QuestionRepository extends JpaRepository<Question, Long> {
-    long countByCreatedAtAfter(LocalDateTime dateTime);
+    long countByCreatedAtAfter(Instant createdAt);
 
     @Query("SELECT q FROM Question q WHERE LOWER(q.questionText) LIKE LOWER(CONCAT('%', :query, '%'))")
     List<Question> findAllLikeQuestionText(String query);

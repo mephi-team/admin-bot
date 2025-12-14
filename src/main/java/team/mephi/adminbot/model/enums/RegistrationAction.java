@@ -4,6 +4,9 @@ public enum RegistrationAction {
     REGISTER,
     UNREGISTER,
     UPDATE,
-    DELETE
+    DELETE,
+    IDP_PENDING,
+    SCRIPT_STARTED,
+    SCRIPT_FINISHED
 }
 

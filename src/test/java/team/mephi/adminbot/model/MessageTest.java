@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Юнит-тесты для сущности Message (проверка дефолтных временных полей).
+ * Юнит-тесты для сущности Message (проверка дефолтных временных полей и @PreUpdate).
  */
 class MessageTest {
 
@@ -42,5 +42,20 @@ class MessageTest {
 
         // then
         assertEquals(newUpdatedAt, message.getUpdatedAt(), "updatedAt должен обновляться сеттером");
+    }
+
+    @Test
+    void onUpdate_shouldRefreshUpdatedAt() throws InterruptedException {
+        // given
+        Message message = new Message();
+        LocalDateTime before = message.getUpdatedAt();
+
+        Thread.sleep(50);
+
+        // when
+        message.onUpdate();
+
+        // then
+        assertTrue(message.getUpdatedAt().isAfter(before), "updatedAt должен обновиться при onUpdate");
     }
 }

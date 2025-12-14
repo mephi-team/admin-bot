@@ -8,48 +8,39 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Юнит-тесты для сущности Broadcast (проверка @PrePersist onCreate и связей).
+ * Юнит-тесты для сущности Mailing.
  */
 class MailingTest {
 
     @Test
     void onCreate_shouldSetCreatedAtToNow() {
         // given
-        Mailing broadcast = Mailing.builder()
+        Mailing mailing = Mailing.builder()
                 .name("Тестовая рассылка")
                 .build();
 
-        assertNull(broadcast.getCreatedAt(), "До onCreate createdAt должен быть null");
+        assertNull(mailing.getCreatedAt());
 
         // when
-        broadcast.onCreate();
+        mailing.onCreate();
 
         // then
-        assertNotNull(broadcast.getCreatedAt(), "После onCreate createdAt должен быть установлен");
+        assertNotNull(mailing.getCreatedAt());
         assertTrue(
-                Duration.between(broadcast.getCreatedAt(), LocalDateTime.now()).getSeconds() < 5,
-                "createdAt должен быть примерно текущим временем"
+                Duration.between(mailing.getCreatedAt(), LocalDateTime.now()).getSeconds() < 5
         );
     }
 
     @Test
-    void builder_shouldSetRelationsAndFields() {
-        // given
-        User creator = new User();
-        creator.setId(1L);
-
-        Direction direction = new Direction();
-        direction.setId(2L);
-
-        Role role = new Role();
-        role.setCode(3L);
-
-        // when
-        Mailing broadcast = Mailing.builder()
+    void builder_shouldSetIdAndName() {
+        // given / when
+        Mailing mailing = Mailing.builder()
                 .id(100L)
+                .name("Mailing name")
                 .build();
 
         // then
-        assertEquals(100L, broadcast.getId());
+        assertEquals(100L, mailing.getId());
+        assertEquals("Mailing name", mailing.getName());
     }
 }

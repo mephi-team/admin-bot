@@ -6,43 +6,110 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 
+/**
+ * Сущность тьютора / куратора.
+ *
+ * Тьютор представляет собой преподавателя или куратора,
+ * который работает со студентами по определенным направлениям.
+ */
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "tutors")
 public class Tutor {
+
+    /**
+     * Внутренний ID тьютора в базе данных.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "first_name")
     private String firstName;
 
-    @Column(nullable = false)
+    @Column(name = "last_name")
     private String lastName;
 
-    @Column(nullable = false)
+    /**
+     * Имя пользователя
+     */
+    @Column(name = "user_name")
     private String userName;
 
-    @Column
+    /**
+     * Username тьютора в Telegram.
+     */
+    @Column(name = "tg_name")
+    private String tgName;
+
+    /**
+     * Telegram ID тьютора.
+     *
+     * Может быть пустым, если тьютор не имеет аккаунта в Telegram.
+     */
+    @Column(name = "tg_id")
     private String tgId;
 
-    @Column(nullable = false)
-    private String phoneNumber;
+    /**
+     * Номер телефона тьютора.
+     */
+    @Column(name = "phone")
+    private String phone;
 
-    @Column(nullable = false)
+    /**
+     * Email адрес тьютора.
+     */
+    @Column(name = "email")
     private String email;
 
-    @Column
+    /**
+     * Дополнительные заметки о тьюторе.
+     */
+    @Column(name = "notes")
     private String notes;
 
-    @OneToMany(mappedBy = "tutor", fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
-    private List<StudentTutor> studentTutor;
+    // ===== Связи с другими сущностями =====
 
-    @OneToMany(mappedBy = "tutor", fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
-    private List<TutorDirection> tutorDirections;
+    /**
+     * История назначений студентов на этого тьютора.
+     *
+     * Один тьютор может иметь много записей о назначениях студентов.
+     * Связь через таблицу student_tutor.
+     */
+    @OneToMany(mappedBy = "tutor", fetch = FetchType.LAZY)
+    @Builder.Default
+    private Set<StudentTutor> studentAssignments = new HashSet<>();
+
+    /**
+     * Направления, с которыми работает тьютор.
+     *
+     * Связь многие-ко-многим через таблицу tutor_directions.
+     */
+    @OneToMany(mappedBy = "tutor", fetch = FetchType.LAZY)
+    @Builder.Default
+    private Set<TutorDirection> directions = new HashSet<>();
+
+    // ===== equals() и hashCode() =====
+
+    /**
+     * Тьюторы считаются одинаковыми,
+     * если у них совпадает ID.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Tutor tutor = (Tutor) o;
+        return id != null && id.equals(tutor.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }
+
