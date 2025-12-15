@@ -14,7 +14,7 @@ import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.function.SerializableRunnable;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
-import team.mephi.adminbot.dto.UserDto;
+import org.springframework.data.domain.Persistable;
 import team.mephi.adminbot.model.User;
 import team.mephi.adminbot.repository.TutorRepository;
 import team.mephi.adminbot.repository.UserRepository;
@@ -68,7 +68,7 @@ public class Users extends VerticalLayout {
                 new StudentView(userRepository, "student", onEdit(), onDelete()),
                 new FreeListenerView(userRepository, "free_listener", onEdit(), onDelete()),
                 new ExpertsView(userRepository, "lc_expert", onEdit(), onDelete()),
-                new TutorsView(tutorRepository)
+                new TutorsView(tutorRepository, onEdit(), onDelete())
         );
 
         tabs.forEach(tab -> {
@@ -83,14 +83,15 @@ public class Users extends VerticalLayout {
 //        tabSheet.getSelectedIndex();
         dialog = new UserDeleteDialog(event -> {
             if(deleteId != null) {
-                userRepository.deleteById(deleteId);
-                roleCounts = userRepository.countsByRole();
-
                 int tabIndex = tabSheet.getSelectedIndex();
                 String tabCode = tabs.get(tabIndex);
 
                 System.out.println("!!!! TAB INDEX " + tabSheet.getSelectedIndex());
                 ProviderGet provider = (ProviderGet) tables.get(tabIndex);
+
+                provider.getRepository().deleteById(deleteId);
+                roleCounts = userRepository.countsByRole();
+
                 badges.get(tabCode).setCount(roleCounts.getOrDefault(tabCode, 0L));
                 provider.getProvider().refreshAll();
             }
@@ -101,14 +102,14 @@ public class Users extends VerticalLayout {
         add(top, tabSheet, driver, dialog);
     }
 
-    private Consumer<UserDto> onDelete() {
+    private Consumer<Persistable<Long>> onDelete() {
         return (s) -> {
             deleteId = s.getId();
             dialog.open();
         };
     }
 
-    private Consumer<UserDto> onEdit() {
+    private Consumer<Persistable<Long>> onEdit() {
         return (s) -> {
             driver.setProposal(new User());
         };

@@ -2,10 +2,11 @@ package team.mephi.adminbot.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.data.domain.Persistable;
 
 @Data
 @AllArgsConstructor
-public class UserDto {
+public class UserDto implements Persistable<Long> {
     private Long id;
     private String userName;
     private String fullName;
@@ -17,4 +18,9 @@ public class UserDto {
     private String direction;
     private String city;
     private String status;
+
+    @Override
+    public boolean isNew() {
+        return false;
+    }
 }

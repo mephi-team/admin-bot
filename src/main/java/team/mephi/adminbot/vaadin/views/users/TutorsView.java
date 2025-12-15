@@ -9,23 +9,32 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.CallbackDataProvider;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
+import com.vaadin.flow.data.provider.DataProvider;
+import org.springframework.data.domain.Persistable;
+import org.springframework.data.repository.CrudRepository;
 import team.mephi.adminbot.dto.TutorWithCounts;
 import team.mephi.adminbot.repository.TutorRepository;
 import team.mephi.adminbot.vaadin.components.GridSettingsButton;
 import team.mephi.adminbot.vaadin.components.GridSettingsPopover;
 import team.mephi.adminbot.vaadin.components.SearchField;
 import team.mephi.adminbot.vaadin.components.SearchFragment;
+import team.mephi.adminbot.vaadin.providers.ProviderGet;
 
 import java.util.Set;
+import java.util.function.Consumer;
 
-public class TutorsView extends VerticalLayout {
-    public TutorsView(TutorRepository tutorRepository) {
+public class TutorsView extends VerticalLayout implements ProviderGet {
+    private final TutorRepository tutorRepository;
+    private final Grid<TutorWithCounts> grid;
+
+    public TutorsView(TutorRepository tutorRepository, Consumer<Persistable<Long>> onEdit, Consumer<Persistable<Long>> onDelete) {
+        this.tutorRepository = tutorRepository;
         setHeightFull();
         setPadding(false);
 
         final TextField searchField = new SearchField("Найти куратора");
 
-        Grid<TutorWithCounts> grid = new Grid<>(TutorWithCounts.class, false);
+        grid = new Grid<>(TutorWithCounts.class, false);
         grid.addColumn(a -> a.getLastName() + " " + a.getFirstName())
                 .setHeader("Фамилия Имя")
                 .setSortable(true).setComparator(TutorWithCounts::getLastName).setKey("name");
@@ -50,11 +59,11 @@ public class TutorsView extends VerticalLayout {
             });
             Button editButton = new Button(new Icon(VaadinIcon.EDIT));
             editButton.addClickListener(e -> {
-                System.out.println(item);
+                onEdit.accept(item);
             });
             Button deleteButton = new Button(new Icon(VaadinIcon.FILE_REMOVE));
-            editButton.addClickListener(e -> {
-                System.out.println(item);
+            deleteButton.addClickListener(e -> {
+                onDelete.accept(item);
             });
             group.add(dropButton, noteButton, chatButton, editButton, deleteButton);
             return group;
@@ -82,6 +91,16 @@ public class TutorsView extends VerticalLayout {
         SearchFragment headerLayout = new SearchFragment(searchField, settings);
 
         add(headerLayout, grid);
+    }
+
+    @Override
+    public DataProvider<TutorWithCounts, ?> getProvider() {
+        return grid.getDataProvider();
+    }
+
+    @Override
+    public CrudRepository<?, Long> getRepository() {
+        return tutorRepository;
     }
 
     private static ConfigurableFilterDataProvider<TutorWithCounts, Void, String> getProvider(TutorRepository questionRepository, TextField searchField) {

@@ -9,6 +9,8 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
+import org.springframework.data.domain.Persistable;
+import org.springframework.data.repository.CrudRepository;
 import team.mephi.adminbot.dto.UserDto;
 import team.mephi.adminbot.repository.UserRepository;
 import team.mephi.adminbot.vaadin.components.GridSettingsButton;
@@ -22,11 +24,13 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 public class CandidateView extends VerticalLayout implements ProviderGet {
+    private final UserRepository userRepository;
     private final String role;
     private final Grid<UserDto> grid;
 
-    public CandidateView(UserRepository userRepository, String role, Consumer<UserDto> onEdit, Consumer<UserDto> onDelete) {
+    public CandidateView(UserRepository userRepository, String role, Consumer<Persistable<Long>> onEdit, Consumer<Persistable<Long>> onDelete) {
         this.role = role;
+        this.userRepository = userRepository;
 
         setHeightFull();
         setPadding(false);
@@ -103,6 +107,11 @@ public class CandidateView extends VerticalLayout implements ProviderGet {
     @Override
     public DataProvider<UserDto, ?> getProvider() {
         return grid.getDataProvider();
+    }
+
+    @Override
+    public CrudRepository<?, Long> getRepository() {
+        return userRepository;
     }
 
     private ConfigurableFilterDataProvider<UserDto, Void, String> getProvider(UserRepository userRepository, TextField searchField) {
