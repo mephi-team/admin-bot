@@ -4,12 +4,14 @@ import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.splitlayout.SplitLayout;
 import com.vaadin.flow.router.*;
+import jakarta.annotation.security.RolesAllowed;
 import team.mephi.adminbot.repository.DialogRepository;
 import team.mephi.adminbot.repository.MessageRepository;
 import team.mephi.adminbot.vaadin.components.ChatListComponent;
 import team.mephi.adminbot.vaadin.components.DialogListComponent;
 
 @Route(value = "/dialogs/:dialogId?", layout = DialogsLayout.class)
+@RolesAllowed("ADMIN")
 public class Dialogs extends VerticalLayout {
 
     public Dialogs(DialogRepository dialogRepository, MessageRepository messageRepository) {

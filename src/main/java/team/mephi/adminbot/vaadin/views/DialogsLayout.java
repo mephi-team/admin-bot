@@ -2,17 +2,17 @@ package team.mephi.adminbot.vaadin.views;
 
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.dependency.StyleSheet;
-import team.mephi.adminbot.vaadin.components.LeftMenu;
-import team.mephi.adminbot.vaadin.components.Logo;
-import team.mephi.adminbot.vaadin.components.MenuButton;
-import team.mephi.adminbot.vaadin.components.TopMenu;
+import com.vaadin.flow.spring.security.AuthenticationContext;
+import jakarta.annotation.security.PermitAll;
+import team.mephi.adminbot.vaadin.components.*;
 
+@PermitAll
 @StyleSheet(value = "/css/app-layout-styles.css")
 public class DialogsLayout extends AppLayout {
     private boolean minimized = false;
 
-    public DialogsLayout() {
-        addToNavbar(new Logo("Neoflex"), new TopMenu());
+    public DialogsLayout(AuthenticationContext authenticationContext) {
+        addToNavbar(new Logo("Neoflex"), new TopMenu(authenticationContext), new UserMenu(authenticationContext));
         addToDrawer(new MenuButton(event -> toggleDrawerMode()), new LeftMenu());
         setDrawerMinimized(false);
     }

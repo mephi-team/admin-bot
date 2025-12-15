@@ -13,8 +13,8 @@ import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.function.SerializableBiConsumer;
 import com.vaadin.flow.router.Route;
+import jakarta.annotation.security.RolesAllowed;
 import team.mephi.adminbot.dto.MailingList;
-import team.mephi.adminbot.dto.UserDto;
 import team.mephi.adminbot.repository.MailingRepository;
 import team.mephi.adminbot.vaadin.components.GridSettingsButton;
 import team.mephi.adminbot.vaadin.components.GridSettingsPopover;
@@ -27,6 +27,7 @@ import java.util.Set;
 
 
 @Route(value = "/mailings", layout = DialogsLayout.class)
+@RolesAllowed("ADMIN")
 public class Mailings extends VerticalLayout {
     public Mailings(MailingRepository mailingRepository) {
         setHeightFull();

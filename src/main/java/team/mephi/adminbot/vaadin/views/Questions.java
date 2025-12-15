@@ -11,6 +11,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.CallbackDataProvider;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.router.Route;
+import jakarta.annotation.security.PermitAll;
 import team.mephi.adminbot.dto.UserQuestionDto;
 import team.mephi.adminbot.repository.UserQuestionRepository;
 import team.mephi.adminbot.vaadin.components.GridSettingsButton;
@@ -23,6 +24,7 @@ import java.time.ZoneId;
 import java.util.Set;
 
 @Route(value = "/questions", layout = DialogsLayout.class)
+@PermitAll
 public class Questions extends VerticalLayout {
     public Questions(UserQuestionRepository questionRepository) {
         setHeightFull();

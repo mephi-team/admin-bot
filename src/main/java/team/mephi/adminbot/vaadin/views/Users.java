@@ -11,6 +11,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.router.Route;
+import jakarta.annotation.security.RolesAllowed;
 import team.mephi.adminbot.repository.TutorRepository;
 import team.mephi.adminbot.repository.UserRepository;
 import team.mephi.adminbot.vaadin.views.users.*;
@@ -18,6 +19,7 @@ import team.mephi.adminbot.vaadin.views.users.*;
 import java.util.Map;
 
 @Route("/users")
+@RolesAllowed("ADMIN")
 public class Users extends VerticalLayout {
     public Users(UserRepository userRepository, TutorRepository tutorRepository) {
         setHeightFull();
