@@ -1,5 +1,6 @@
 package team.mephi.adminbot.vaadin.views;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Div;
@@ -10,17 +11,32 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.TabSheet;
+import com.vaadin.flow.function.SerializableRunnable;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
+import team.mephi.adminbot.dto.UserDto;
+import team.mephi.adminbot.model.User;
 import team.mephi.adminbot.repository.TutorRepository;
 import team.mephi.adminbot.repository.UserRepository;
+import team.mephi.adminbot.vaadin.components.UserDrawer;
+import team.mephi.adminbot.vaadin.components.UserCountBadge;
+import team.mephi.adminbot.vaadin.components.UserDeleteDialog;
+import team.mephi.adminbot.vaadin.providers.ProviderGet;
 import team.mephi.adminbot.vaadin.views.users.*;
 
+import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 @Route("/users")
 @RolesAllowed("ADMIN")
 public class Users extends VerticalLayout {
+    UserDrawer driver;
+    UserDeleteDialog dialog;
+    Long deleteId;
+    Map<String, Long> roleCounts;
+
     public Users(UserRepository userRepository, TutorRepository tutorRepository) {
         setHeightFull();
         HorizontalLayout top = new HorizontalLayout();
@@ -37,17 +53,71 @@ public class Users extends VerticalLayout {
         TabSheet tabSheet = new TabSheet();
         tabSheet.setSizeFull();
 
-        Map<String, Long> roleCounts = userRepository.countsByRole();
+        roleCounts = userRepository.countsByRole();
 
-        tabSheet.add(new Span(new Span("Гости"), createBadge(roleCounts.getOrDefault("visitor", 0L))), roleCounts.getOrDefault("visitor", 0L) > 0 ? new GuestsView(userRepository, "visitor") : new Span("Гостей пока нет"));
-        tabSheet.add(new Span(new Span("Кандидаты"), createBadge(roleCounts.getOrDefault("candidate", 0L))), roleCounts.getOrDefault("candidate", 0L) > 0 ? new CandidateView(userRepository, "candidate") : new Span("Кандидатов пока нет"));
-        tabSheet.add(new Span(new Span("Миддл-Кандидаты"), createBadge(roleCounts.getOrDefault("middle_candidate", 0L))), roleCounts.getOrDefault("middle_candidate", 0L) > 0 ? new MiddleCandidateView(userRepository, "middle_candidate") : new Span("Миддл-Кандидатов пока нет"));
-        tabSheet.add(new Span(new Span("Студенты"), createBadge(roleCounts.getOrDefault("student", 0L))), roleCounts.getOrDefault("student", 0L) > 0 ? new StudentView(userRepository, "student") : new Span("Студентов пока нет"));
-        tabSheet.add(new Span(new Span("Слушатели"), createBadge(roleCounts.getOrDefault("free_listener", 0L))), roleCounts.getOrDefault("free_listener", 0L) > 0 ? new FreeListenerView(userRepository, "free_listener") : new Span("Слушателей пока нет"));
-        tabSheet.add(new Span(new Span("Эксперты"), createBadge(roleCounts.getOrDefault("lc_expert", 0L))), roleCounts.getOrDefault("lc_expert", 0L) > 0 ? new ExpertsView(userRepository, "lc_expert") : new Span("Экспертов пока нет"));
-        tabSheet.add(new Span(new Span("Кураторы"), createBadge(roleCounts.getOrDefault("tutor", 0L))), new TutorsView(tutorRepository));
+        List<String> tabs = List.of("visitor", "candidate", "middle_candidate", "student", "free_listener", "lc_expert", "tutor");
+        List<String> tabNames = List.of("Гости", "Кандидаты", "Миддл-Кандидаты", "Студенты", "Слушатели", "Эксперты", "Кураторы");
 
-        add(top, tabSheet);
+        Map<String, UserCountBadge> badges = tabs.stream().collect(Collectors.toMap(
+                s -> s, key -> new UserCountBadge(roleCounts.getOrDefault(key, 0L))));
+
+        List<Component> tables = List.of(
+                new GuestsView(userRepository, "visitor", onEdit(), onDelete()),
+                new CandidateView(userRepository, "candidate", onEdit(), onDelete()),
+                new MiddleCandidateView(userRepository, "middle_candidate", onEdit(), onDelete()),
+                new StudentView(userRepository, "student", onEdit(), onDelete()),
+                new FreeListenerView(userRepository, "free_listener", onEdit(), onDelete()),
+                new ExpertsView(userRepository, "lc_expert", onEdit(), onDelete()),
+                new TutorsView(tutorRepository)
+        );
+
+        tabs.forEach(tab -> {
+            int index = tabs.indexOf(tab);
+            tabSheet.add(new Span(new Span(tabNames.get(index)), badges.get(tab)), tables.get(index));
+        });
+
+        driver = new UserDrawer((a) -> {
+            return a;
+        }, onClose());
+
+//        tabSheet.getSelectedIndex();
+        dialog = new UserDeleteDialog(event -> {
+            if(deleteId != null) {
+                userRepository.deleteById(deleteId);
+                roleCounts = userRepository.countsByRole();
+
+                int tabIndex = tabSheet.getSelectedIndex();
+                String tabCode = tabs.get(tabIndex);
+
+                System.out.println("!!!! TAB INDEX " + tabSheet.getSelectedIndex());
+                ProviderGet provider = (ProviderGet) tables.get(tabIndex);
+                badges.get(tabCode).setCount(roleCounts.getOrDefault(tabCode, 0L));
+                provider.getProvider().refreshAll();
+            }
+            dialog.close();
+            deleteId = null;
+        });
+
+        add(top, tabSheet, driver, dialog);
+    }
+
+    private Consumer<UserDto> onDelete() {
+        return (s) -> {
+            deleteId = s.getId();
+            dialog.open();
+        };
+    }
+
+    private Consumer<UserDto> onEdit() {
+        return (s) -> {
+            driver.setProposal(new User());
+        };
+    }
+
+    SerializableRunnable onClose() {
+        return () -> {
+            driver.setProposal(null);
+        };
     }
 
     private Span createBadge(Long value) {

@@ -1,16 +1,17 @@
 package team.mephi.adminbot.vaadin.components;
 
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.Tag;
+import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.router.RouterLink;
+import team.mephi.adminbot.vaadin.views.Dashboard;
 
-@Tag("a")
-public class Logo extends Component {
+public class Logo extends HorizontalLayout {
     public Logo(String text) {
-        getElement().setText(text);
-        getElement().getStyle().set("font-size", "var(--lumo-font-size-l)")
-                .set("left", "var(--lumo-space-l)").set("margin", "0")
-                .set("position", "absolute")
-                .set("color", "black");
-        getElement().setAttribute("href", "/v2");
+        setPadding(true);
+        RouterLink link = new RouterLink(Dashboard.class);
+        Image logo = new Image("/images/logo.svg", text);
+        logo.setWidth("96px");
+        link.add(logo);
+        add(link);
     }
 }

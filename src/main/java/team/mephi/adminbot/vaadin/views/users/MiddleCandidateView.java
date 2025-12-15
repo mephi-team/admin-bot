@@ -8,6 +8,7 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
+import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.function.SerializableBiConsumer;
 import team.mephi.adminbot.dto.UserDto;
@@ -16,14 +17,17 @@ import team.mephi.adminbot.vaadin.components.GridSettingsButton;
 import team.mephi.adminbot.vaadin.components.GridSettingsPopover;
 import team.mephi.adminbot.vaadin.components.SearchField;
 import team.mephi.adminbot.vaadin.components.SearchFragment;
+import team.mephi.adminbot.vaadin.providers.ProviderGet;
 import team.mephi.adminbot.vaadin.providers.UserProvider;
 
 import java.util.Set;
+import java.util.function.Consumer;
 
-public class MiddleCandidateView extends VerticalLayout {
+public class MiddleCandidateView extends VerticalLayout implements ProviderGet {
     private final String role;
+    private final Grid<UserDto> grid;
 
-    public MiddleCandidateView(UserRepository userRepository, String role) {
+    public MiddleCandidateView(UserRepository userRepository, String role, Consumer<UserDto> onEdit, Consumer<UserDto> onDelete) {
         this.role = role;
 
         setHeightFull();
@@ -31,7 +35,7 @@ public class MiddleCandidateView extends VerticalLayout {
 
         final TextField searchField = new SearchField("Найти миддл-кандидита");
 
-        Grid<UserDto> grid = new Grid<>(UserDto.class, false);
+        grid = new Grid<>(UserDto.class, false);
         grid.addColumn(UserDto::getFullName).setHeader("Фамилия Имя").setSortable(true).setKey("name");
         grid.addColumn(UserDto::getEmail).setHeader("Email").setSortable(true).setKey("email");
         grid.addColumn(UserDto::getTgName).setHeader("Telegram").setSortable(true).setKey("telegram");
@@ -62,11 +66,11 @@ public class MiddleCandidateView extends VerticalLayout {
             });
             Button editButton = new Button(new Icon(VaadinIcon.EDIT));
             editButton.addClickListener(e -> {
-                System.out.println(item);
+                onEdit.accept(item);
             });
             Button deleteButton = new Button(new Icon(VaadinIcon.FILE_REMOVE));
-            editButton.addClickListener(e -> {
-                System.out.println(item);
+            deleteButton.addClickListener(e -> {
+                onDelete.accept(item);
             });
             group.add(confirmButton, rejectButton, noteButton, chatButton, editButton, deleteButton);
             return group;
@@ -97,6 +101,11 @@ public class MiddleCandidateView extends VerticalLayout {
         SearchFragment headerLayout = new SearchFragment(searchField, settings);
 
         add(headerLayout, grid);
+    }
+
+    @Override
+    public DataProvider<UserDto, ?> getProvider() {
+        return grid.getDataProvider();
     }
 
     private ConfigurableFilterDataProvider<UserDto, Void, String> getProvider(UserRepository userRepository, TextField searchField) {

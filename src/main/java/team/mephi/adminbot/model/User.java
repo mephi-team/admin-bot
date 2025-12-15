@@ -164,6 +164,8 @@ public class User {
     @UpdateTimestamp
     private Instant updatedAt;
 
+    @Column
+    private Boolean deleted;
     // ===== Устаревшие поля (оставлены для совместимости) =====
 
     /**
@@ -315,6 +317,7 @@ public class User {
         if (this.updatedAt == null) {
             this.updatedAt = now;
         }
+        this.deleted = false;
     }
 
     /**

@@ -8,20 +8,24 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
+import com.vaadin.flow.data.provider.DataProvider;
 import team.mephi.adminbot.dto.UserDto;
 import team.mephi.adminbot.repository.UserRepository;
 import team.mephi.adminbot.vaadin.components.GridSettingsButton;
 import team.mephi.adminbot.vaadin.components.GridSettingsPopover;
 import team.mephi.adminbot.vaadin.components.SearchField;
 import team.mephi.adminbot.vaadin.components.SearchFragment;
+import team.mephi.adminbot.vaadin.providers.ProviderGet;
 import team.mephi.adminbot.vaadin.providers.UserProvider;
 
 import java.util.Set;
+import java.util.function.Consumer;
 
-public class GuestsView extends VerticalLayout {
+public class GuestsView extends VerticalLayout implements ProviderGet {
     private final String role;
+    private final Grid<UserDto> grid;
 
-    public GuestsView(UserRepository userRepository, String role) {
+    public GuestsView(UserRepository userRepository, String role, Consumer<UserDto> onEdit, Consumer<UserDto> onDelete) {
         this.role = role;
 
         setHeightFull();
@@ -29,7 +33,7 @@ public class GuestsView extends VerticalLayout {
 
         final TextField searchField = new SearchField("Найти гостя");
 
-        Grid<UserDto> grid = new Grid<>(UserDto.class, false);
+        grid = new Grid<>(UserDto.class, false);
         grid.addColumn(UserDto::getUserName).setHeader("Имя пользователя в Telegram").setSortable(true).setKey("name");
         grid.addColumn(UserDto::getTgName).setHeader("Telegram").setSortable(true).setKey("telegram");
         grid.addColumn(UserDto::getPdConsent).setHeader("Согласия ПД").setSortable(true).setKey("pd_consent");
@@ -37,13 +41,14 @@ public class GuestsView extends VerticalLayout {
         grid.addComponentColumn(item -> {
             Span group = new Span();
             Button editButton = new Button(new Icon(VaadinIcon.EDIT));
-            editButton.addClickListener(e -> {
-                System.out.println(item);
+            editButton.addClickListener((e) -> {
+                onEdit.accept(item);
             });
             Button deleteButton = new Button(new Icon(VaadinIcon.FILE_REMOVE));
-            editButton.addClickListener(e -> {
-                System.out.println(item);
+            deleteButton.addClickListener((e) -> {
+                onDelete.accept(item);
             });
+
             group.add(editButton, deleteButton);
             return group;
         }).setHeader("Действия").setWidth("120px").setFlexGrow(0).setKey("action");
@@ -73,6 +78,11 @@ public class GuestsView extends VerticalLayout {
         SearchFragment headerLayout = new SearchFragment(searchField, settings);
 
         add(headerLayout, grid);
+    }
+
+    @Override
+    public DataProvider<UserDto, ?> getProvider() {
+        return grid.getDataProvider();
     }
 
     private ConfigurableFilterDataProvider<UserDto, Void, String> getProvider(UserRepository userRepository, TextField searchField) {
