@@ -115,7 +115,8 @@ public class TutorsView extends VerticalLayout implements ProviderGet {
                             .skip(query.getOffset())
                             .limit(query.getLimit());
                 },
-                query -> tutorRepository.countByName(searchField.getValue())
+                query -> tutorRepository.countByName(searchField.getValue()),
+                TutorWithCounts::getId
         );
 
         return dataProvider.withConfigurableFilter();
