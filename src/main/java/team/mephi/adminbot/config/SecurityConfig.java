@@ -67,51 +67,51 @@ public class SecurityConfig {
      * кто может обращаться к каким эндпоинтам
      * и при каких условиях.
      */
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                // CSRF отключаем, потому что используем JWT
-                // и не работаем с HTTP-сессиями
-                .csrf(csrf -> csrf.disable())
-
-                // Включаем CORS с нашей конфигурацией
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-
-                // Правила доступа к эндпоинтам
-                .authorizeHttpRequests(auth -> auth
-
-                        // Публичные эндпоинты для мониторинга
-                        .requestMatchers("/actuator/health", "/actuator/info")
-                        .permitAll()
-                        // только для ROLE_LC_EXPERT и ADMIN
-                        .requestMatchers("/questions")
-                        .hasAnyRole("LC_EXPERT", "ADMIN")
-                        // только для ROLE_ADMIN
-                        .requestMatchers("/analytics", "/dialogs", "/broadcasts","/users")
-                        .hasRole("ADMIN")
-                        // Всё остальное — тоже требует аутентификации
-                        .anyRequest()
-                        .authenticated()
-                )
-                .oauth2Login(oauth2Login ->
-                        oauth2Login
-                                // Настраиваем сервис для получения информации о пользователе и ролях
-                                .userInfoEndpoint(userInfo ->
-                                        userInfo.oidcUserService(oidcUserService())
-                                )
-                )
-                // Настройка выхода из системы
-                .logout(logout ->
-                        logout
-                                .logoutRequestMatcher(PathPatternRequestMatcher.withDefaults().matcher("/logout"))
-                                .logoutSuccessUrl("/")
-                                .logoutSuccessHandler(oidcLogoutSuccessHandler())
-                                .invalidateHttpSession(true)
-                                .deleteCookies("JSESSIONID")
-                );
-
-        return http.build();
-    }
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        http
+//                // CSRF отключаем, потому что используем JWT
+//                // и не работаем с HTTP-сессиями
+//                .csrf(csrf -> csrf.disable())
+//
+//                // Включаем CORS с нашей конфигурацией
+//                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+//
+//                // Правила доступа к эндпоинтам
+//                .authorizeHttpRequests(auth -> auth
+//
+//                        // Публичные эндпоинты для мониторинга
+//                        .requestMatchers("/actuator/health", "/actuator/info")
+//                        .permitAll()
+//                        // только для ROLE_LC_EXPERT и ADMIN
+//                        .requestMatchers("/questions")
+//                        .hasAnyRole("LC_EXPERT", "ADMIN")
+//                        // только для ROLE_ADMIN
+//                        .requestMatchers("/analytics", "/dialogs", "/broadcasts","/users")
+//                        .hasRole("ADMIN")
+//                        // Всё остальное — тоже требует аутентификации
+//                        .anyRequest()
+//                        .authenticated()
+//                )
+//                .oauth2Login(oauth2Login ->
+//                        oauth2Login
+//                                // Настраиваем сервис для получения информации о пользователе и ролях
+//                                .userInfoEndpoint(userInfo ->
+//                                        userInfo.oidcUserService(oidcUserService())
+//                                )
+//                )
+//                // Настройка выхода из системы
+//                .logout(logout ->
+//                        logout
+//                                .logoutRequestMatcher(PathPatternRequestMatcher.withDefaults().matcher("/logout"))
+//                                .logoutSuccessUrl("/")
+//                                .logoutSuccessHandler(oidcLogoutSuccessHandler())
+//                                .invalidateHttpSession(true)
+//                                .deleteCookies("JSESSIONID")
+//                );
+//
+//        return http.build();
+//    }
 
     private OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService() {
         final OidcUserService delegate = new OidcUserService();

@@ -6,7 +6,9 @@ import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Section;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.function.SerializableFunction;
 import com.vaadin.flow.function.SerializableRunnable;
 import com.vaadin.flow.theme.lumo.LumoUtility;
@@ -18,6 +20,7 @@ public class UserDrawer extends Section {
     private final SerializableFunction<User, User> onSaveCallback;
     private final SerializableRunnable onCloseCallback;
     private final UserForm form;
+    private final BeanValidationBinder<User> binder = new BeanValidationBinder<>(User.class);
 
     public UserDrawer(SerializableFunction<User, User> onSaveCallback,
                       SerializableRunnable onCloseCallback) {
@@ -55,6 +58,9 @@ public class UserDrawer extends Section {
                 LumoUtility.Border.ALL,
                 LumoUtility.Padding.MEDIUM);
         setVisible(false);
+
+        binder.bindInstanceFields(form);
+        binder.setBean(new User());
     }
 
     public void setProposal(@Nullable User proposal) {
@@ -63,7 +69,14 @@ public class UserDrawer extends Section {
     }
 
     private void save() {
-//        form.getFormDataObject.ifPresent(proposal -> {
+        if (binder.validate().isOk()) {
+            User user = binder.getBean();
+            // Сохранить в БД
+//            Notification.show("Сохранено: " + user, 3000, Notification.Position.TOP_END);
+        } else {
+//            Notification.show("Исправьте ошибки", 3000, Notification.Position.MIDDLE);
+        }
+//        form.getFormDataObject().ifPresent(proposal -> {
 //            var savedProposal = onSaveCallback.apply(proposal);
 //            form.setFormDataObject(savedProposal);
 //        });

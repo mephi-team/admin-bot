@@ -1,6 +1,7 @@
 package team.mephi.adminbot.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -76,6 +77,8 @@ public class User {
      * Должен быть уникальным.
      */
     @Column(name = "email", unique = true)
+    @NotBlank(message = "Email обязателен")
+    @Email
     private String email;
 
     /**
@@ -97,6 +100,7 @@ public class User {
      */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_code", referencedColumnName = "code", nullable = false)
+    @NotNull(message = "Роль обязательна")
     private Role role;
 
     /**
@@ -186,9 +190,15 @@ public class User {
     private String name;
 
     @Column(name = "first_name")
+    @NotBlank(message = "Имя обязательно")
+    @Size(min = 2, max = 50, message = "Имя должно быть от 2 до 50 символов")
+//    @NotEmpty(message = "Имя не должно быть пустым")
     private String firstName;
 
     @Column(name = "last_name")
+    @NotBlank(message = "Фамилия обязательна")
+    @Size(min = 2, max = 50, message = "Фамилия должна быть от 2 до 50 символов")
+//    @NotEmpty(message = "Фамилия не должна быть пустой")
     private String lastName;
 
     /**

@@ -76,8 +76,9 @@ public class Users extends VerticalLayout {
             tabSheet.add(new Span(new Span(tabNames.get(index)), badges.get(tab)), tables.get(index));
         });
 
-        driver = new UserDrawer((a) -> {
-            return a;
+        driver = new UserDrawer((u) -> {
+            System.out.println("!!!! User " + u);
+            return u;
         }, onClose());
 
 //        tabSheet.getSelectedIndex();
