@@ -13,13 +13,11 @@ import org.springframework.data.domain.Persistable;
 import org.springframework.data.repository.CrudRepository;
 import team.mephi.adminbot.dto.UserDto;
 import team.mephi.adminbot.repository.UserRepository;
-import team.mephi.adminbot.vaadin.components.GridSettingsButton;
-import team.mephi.adminbot.vaadin.components.GridSettingsPopover;
-import team.mephi.adminbot.vaadin.components.SearchField;
-import team.mephi.adminbot.vaadin.components.SearchFragment;
+import team.mephi.adminbot.vaadin.components.*;
 import team.mephi.adminbot.vaadin.providers.ProviderGet;
 import team.mephi.adminbot.vaadin.providers.UserProvider;
 
+import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -27,6 +25,8 @@ public class StudentView extends VerticalLayout implements ProviderGet {
     private final UserRepository userRepository;
     private final String role;
     private final Grid<UserDto> grid;
+    private final GridSelectActions actions;
+    private List<Long> selectedIds;
 
     public StudentView(UserRepository userRepository, String role, Consumer<Persistable<Long>> onEdit, Consumer<Persistable<Long>> onDelete) {
         this.role = role;
@@ -38,6 +38,13 @@ public class StudentView extends VerticalLayout implements ProviderGet {
         final TextField searchField = new SearchField("Найти студента");
 
         grid = new Grid<>(UserDto.class, false);
+
+        Button block = new Button("Заблокировать пользователей", new Icon(VaadinIcon.BAN), e -> {
+            userRepository.deleteAllById(selectedIds);
+            grid.getDataProvider().refreshAll();
+        });
+        actions = new GridSelectActions(block);
+
         grid.addColumn(UserDto::getFullName).setHeader("Фамилия Имя").setSortable(true).setKey("name");
         grid.addColumn(UserDto::getEmail).setHeader("Email").setSortable(true).setKey("email");
         grid.addColumn(UserDto::getTgName).setHeader("Telegram").setSortable(true).setKey("telegram");
@@ -65,7 +72,12 @@ public class StudentView extends VerticalLayout implements ProviderGet {
             editButton.addClickListener(e -> {
                 onEdit.accept(item);
             });
-            Button deleteButton = new Button(new Icon(VaadinIcon.FILE_REMOVE));
+            Button deleteButton = new Button(new Icon(VaadinIcon.BAN));
+            if (item.getDelete()) {
+                deleteButton.getElement().getStyle().set("color", "red");
+            } else {
+                deleteButton.getElement().getStyle().set("color", "black");
+            }
             deleteButton.addClickListener(e -> {
                 onDelete.accept(item);
             });
@@ -81,14 +93,11 @@ public class StudentView extends VerticalLayout implements ProviderGet {
 
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
         grid.addSelectionListener(selection -> {
-            // System.out.printf("Number of selected people: %s%n",
-            // selection.getAllSelectedItems().size());
+            actions.setCount(selection.getAllSelectedItems().size());
+            selectedIds = selection.getAllSelectedItems().stream().map(UserDto::getId).toList();
         });
 
         searchField.addValueChangeListener(e -> {
-            // setFilter will refresh the data provider and trigger data
-            // provider fetch / count queries. As a side effect, the pagination
-            // controls will be updated.
             filterableProvider.setFilter(e.getValue());
         });
 
@@ -97,7 +106,7 @@ public class StudentView extends VerticalLayout implements ProviderGet {
         popover.setTarget(settings);
         SearchFragment headerLayout = new SearchFragment(searchField, settings);
 
-        add(headerLayout, grid);
+        add(headerLayout, actions, grid);
     }
 
     @Override

@@ -75,6 +75,9 @@ public class Tutor {
     @Column(name = "notes")
     private String notes;
 
+    @Column(name = "deleted")
+    private Boolean deleted;
+
     // ===== Связи с другими сущностями =====
 
     /**
@@ -96,6 +99,10 @@ public class Tutor {
     @Builder.Default
     private Set<TutorDirection> directions = new HashSet<>();
 
+    @PrePersist
+    protected void onCreate() {
+        this.deleted = false;
+    }
     // ===== equals() и hashCode() =====
 
     /**

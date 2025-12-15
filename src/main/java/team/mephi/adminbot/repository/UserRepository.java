@@ -1,6 +1,8 @@
 package team.mephi.adminbot.repository;
 
 import jakarta.persistence.Tuple;
+import jakarta.transaction.Transactional;
+import org.jspecify.annotations.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -100,7 +102,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u JOIN fetch u.role LEFT JOIN FETCH u.direction WHERE u.role.name = :role")
     List<User> findAllByRole(String role);
 
-    @Query("SELECT u FROM User u JOIN fetch u.role LEFT JOIN FETCH u.direction WHERE u.deleted = false AND u.role.name = :role AND (" +
+    //@Query("SELECT u FROM User u JOIN fetch u.role LEFT JOIN FETCH u.direction WHERE u.deleted = false AND u.role.name = :role AND (" +
+    @Query("SELECT u FROM User u JOIN fetch u.role LEFT JOIN FETCH u.direction WHERE u.role.name = :role AND (" +
             "LOWER(COALESCE(u.userName, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
             "LOWER(COALESCE(u.name, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
             "LOWER(COALESCE(u.firstName, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
@@ -112,7 +115,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
             ")")
     List<User> findAllByRoleAndName(String role, String query);
 
-    @Query("SELECT count(u )FROM User u JOIN u.role WHERE u.deleted = false AND u.role.name = :role AND (" +
+    //@Query("SELECT count(u )FROM User u JOIN u.role WHERE u.deleted = false AND u.role.name = :role AND (" +
+    @Query("SELECT count(u )FROM User u JOIN u.role WHERE u.role.name = :role AND (" +
             "LOWER(COALESCE(u.userName, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
             "LOWER(COALESCE(u.name, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
             "LOWER(COALESCE(u.firstName, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
@@ -124,14 +128,21 @@ public interface UserRepository extends JpaRepository<User, Long> {
             ")")
     Integer countByRoleAndName(String role, String query);
 
-    @Query("update User u set u.deleted = true WHERE u.id = :id")
+    @Query("update User u set u.deleted = FUNCTION('NOT', u.deleted) WHERE u.id = :id")
+    @Transactional
     @Modifying
-    void deleteById(Long id);
+    void deleteById(@NonNull Long id);
+
+    @Query("update User u set u.deleted = FUNCTION('NOT', u.deleted) WHERE u.id IN :ids")
+    @Transactional
+    @Modifying
+    void deleteAllById(@Param("ids") Iterable<? extends Long> ids);
 
     @Query("SELECT count(u) FROM User u WHERE u.role.name = :role")
     Integer countByRole(String role);
 
-    @Query("SELECT u.role.name, count(u) FROM User u WHERE u.deleted = false GROUP BY u.role.name UNION ALL SELECT 'tutor', count(t) FROM Tutor t")
+    @Query("SELECT u.role.name, count(u) FROM User u GROUP BY u.role.name UNION ALL SELECT 'tutor', count(t) FROM Tutor t")
+//    @Query("SELECT u.role.name, count(u) FROM User u WHERE u.deleted = false GROUP BY u.role.name UNION ALL SELECT 'tutor', count(t) FROM Tutor t")
     List<Tuple> countsByRoleTuples();
 
     default Map<String, Long> countsByRole() {

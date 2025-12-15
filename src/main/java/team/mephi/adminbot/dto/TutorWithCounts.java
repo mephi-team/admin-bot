@@ -8,10 +8,10 @@ import org.springframework.data.domain.Persistable;
 @AllArgsConstructor
 public class TutorWithCounts implements Persistable<Long> {
     private Long id;
-    private String firstName;
-    private String lastName;
+    private String fullName;
     private String tgId;
     private String email;
+    private Boolean delete;
     private Long studentCount;
     private String directions;
 

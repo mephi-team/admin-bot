@@ -18,6 +18,7 @@ public class UserDto implements Persistable<Long> {
     private String direction;
     private String city;
     private String status;
+    private Boolean delete;
 
     @Override
     public boolean isNew() {

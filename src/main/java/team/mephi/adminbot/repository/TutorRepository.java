@@ -1,8 +1,11 @@
 package team.mephi.adminbot.repository;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.transaction.Transactional;
+import org.jspecify.annotations.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import team.mephi.adminbot.dto.TutorWithCounts;
 import team.mephi.adminbot.model.Tutor;
 
@@ -12,7 +15,7 @@ public interface TutorRepository extends JpaRepository<Tutor, Long> {
 
     @Query(value = """
             SELECT
-                t.id, t.first_name, t.last_name, t.tg_id, t.email,
+                t.id, CONCAT(t.first_name, ' ', t.last_name), t.tg_id, t.email, t.deleted,
                 COUNT(DISTINCT st.id) AS student_count,
                 STRING_AGG(d.name, ', ') AS directions
             FROM tutors t
@@ -27,4 +30,14 @@ public interface TutorRepository extends JpaRepository<Tutor, Long> {
 
     @Query("SELECT count(t) FROM Tutor t WHERE LOWER(t.firstName) LIKE LOWER(CONCAT('%', :query, '%')) or LOWER(t.lastName) LIKE LOWER(CONCAT('%', :query, '%'))")
     Integer countByName(String query);
+
+    @Query("update Tutor t set t.deleted = FUNCTION('NOT', t.deleted) WHERE t.id = :id")
+    @Transactional
+    @Modifying
+    void deleteById(@NonNull Long id);
+
+    @Query("update Tutor t set t.deleted = FUNCTION('NOT', t.deleted) WHERE t.id IN :ids")
+    @Transactional
+    @Modifying
+    void deleteAllById(@Param("ids") Iterable<? extends Long> ids);
 }

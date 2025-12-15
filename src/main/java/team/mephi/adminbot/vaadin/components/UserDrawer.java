@@ -4,6 +4,8 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Section;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.function.SerializableFunction;
 import com.vaadin.flow.function.SerializableRunnable;
@@ -32,16 +34,19 @@ public class UserDrawer extends Section {
         // Create the components
         form = new UserForm();
 
-        var header = new H2("Редактировать пользователя");
-        header.setId("proposal-drawer-header");
+        HorizontalLayout header = new HorizontalLayout();
+        var title = new H2("Редактировать пользователя");
+        title.setId("proposal-drawer-header");
 //        setAriaLabeledBy("proposal-drawer-header");
+
+        var closeBtn = new Button(new Icon(VaadinIcon.CLOSE), event -> close());
+
+        header.add(title, closeBtn);
 
         var saveBtn = new Button("Save", event -> save());
         saveBtn.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
-        var closeBtn = new Button("Close", event -> close());
-
-        var buttons = new HorizontalLayout(closeBtn, saveBtn);
+        var buttons = new HorizontalLayout(saveBtn);
 
         // Configure the drawer
         add(header, form, buttons);
