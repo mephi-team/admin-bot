@@ -2,11 +2,7 @@ package team.mephi.adminbot.model;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import team.mephi.adminbot.model.enums.ScriptTaskStatus;
@@ -76,7 +72,7 @@ public class EnrollmentScriptTask {
 
     /**
      * Файл, для которого выполняется задача.
-     *
+     * <p>
      * Всегда обязателен.
      * Загружается лениво.
      * Удаление файла НЕ удаляет задачи автоматически.
@@ -87,7 +83,7 @@ public class EnrollmentScriptTask {
 
     /**
      * Статус выполнения задачи.
-     *
+     * <p>
      * Показывает текущее состояние выполнения:
      * PENDING, RUNNING, COMPLETED, FAILED.
      */
@@ -97,7 +93,7 @@ public class EnrollmentScriptTask {
 
     /**
      * Количество успешно обработанных строк.
-     *
+     * <p>
      * По умолчанию 0.
      * Увеличивается при успешной обработке каждой строки Excel-файла.
      */
@@ -107,7 +103,7 @@ public class EnrollmentScriptTask {
 
     /**
      * Количество строк с ошибками обработки.
-     *
+     * <p>
      * По умолчанию 0.
      * Увеличивается при ошибке обработки каждой строки Excel-файла.
      */
@@ -117,7 +113,7 @@ public class EnrollmentScriptTask {
 
     /**
      * Структурированные логи выполнения и ошибок.
-     *
+     * <p>
      * JSON-объект (jsonb) с деталями выполнения:
      * ошибки обработки строк, метаданные выполнения и т.д.
      * Может быть null, если логирование не требуется.
@@ -128,7 +124,7 @@ public class EnrollmentScriptTask {
 
     /**
      * Время начала выполнения задачи.
-     *
+     * <p>
      * Устанавливается при старте выполнения скрипта.
      * Может быть null, если задача ещё не начала выполняться.
      */
@@ -137,7 +133,7 @@ public class EnrollmentScriptTask {
 
     /**
      * Время завершения выполнения задачи.
-     *
+     * <p>
      * Устанавливается при завершении выполнения (успешном или с ошибкой).
      * Может быть null, если задача ещё не завершена.
      */

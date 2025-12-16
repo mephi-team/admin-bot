@@ -2,7 +2,7 @@ package team.mephi.adminbot.model;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Юнит-тесты для сущности Direction (проверка геттеров/сеттеров/билдера).

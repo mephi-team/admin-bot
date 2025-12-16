@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Юнит-тесты для EnrollmentScriptFile.
- *
+ * <p>
  * Проверяют логику метода onCreate(),
  * который вызывается перед сохранением сущности:
  * - установка uploadedAt

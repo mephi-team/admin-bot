@@ -11,7 +11,7 @@ import team.mephi.adminbot.vaadin.views.Users;
 
 import java.util.Collection;
 
-public class TopMenu extends HorizontalLayout  {
+public class TopMenu extends HorizontalLayout {
     public TopMenu(AuthenticationContext authContext) {
         Collection<String> userRoles = authContext.getGrantedRoles();
 

@@ -10,7 +10,8 @@ import team.mephi.adminbot.model.User;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Юнит-тесты для DataInitializer (вспомогательная логика создания сообщений) без поднятия Spring-контекста.

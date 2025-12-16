@@ -20,11 +20,9 @@ import java.util.Optional;
 public class ChatListComponent extends VerticalLayout implements AfterNavigationObserver {
     private static final LocalDateTime today = LocalDateTime.now();
     private final CallbackDataProvider<MessagesForListDto, Long> provider;
-    private Long dialogId;
     MessageInput chatInput;
     VirtualList<MessagesForListDto> chatList;
     Div emptyMessage = new Div("Выберите диалог, чтобы продолжить общение");
-
     ComponentRenderer<Div, MessagesForListDto> cardRenderer = new ComponentRenderer<>(item -> {
         var card = new Div();
         card.getStyle().set("min-height", "50px");
@@ -45,6 +43,7 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
         card.add(text, date);
         return card;
     });
+    private Long dialogId;
 
     public ChatListComponent(MessageRepository messageRepository) {
         this.provider = getProvider(messageRepository);

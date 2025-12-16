@@ -5,7 +5,8 @@ import team.mephi.adminbot.model.enums.ScriptTaskStatus;
 
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Юнит-тесты для сущности EnrollmentScriptTask (проверка дефолтов и Lombok-методов).

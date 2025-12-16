@@ -3,12 +3,7 @@ package team.mephi.adminbot.controller.api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import team.mephi.adminbot.model.Question;
 import team.mephi.adminbot.repository.QuestionRepository;
 
@@ -18,11 +13,12 @@ import java.util.Map;
 
 /**
  * REST-контроллер для работы эксперта LC.
- *
+ * <p>
  * Все методы этого контроллера доступны только пользователям
  * с ролью ROLE_LC_EXPERT.
- *
+ * <p>
  * Доступ ограничен с помощью аннотации:
+ *
  * @PreAuthorize("hasRole('LC_EXPERT')")
  */
 @RestController
@@ -36,7 +32,7 @@ public class ExpertController {
 
     /**
      * GET /api/expert/questions
-     *
+     * <p>
      * Возвращает список всех вопросов.
      * Доступно только эксперту.
      */
@@ -51,7 +47,7 @@ public class ExpertController {
 
     /**
      * GET /api/expert/questions/{id}
-     *
+     * <p>
      * Возвращает один конкретный вопрос по его ID.
      * Если вопрос не найден — вернётся 404.
      * Доступно только эксперту.
@@ -67,10 +63,10 @@ public class ExpertController {
 
     /**
      * PUT /api/expert/questions/{id}
-     *
+     * <p>
      * Обновляет данные вопроса.
      * Можно изменить текст вопроса и/или текст ответа.
-     *
+     * <p>
      * Обновляются только те поля, которые пришли в запросе.
      * Доступно только эксперту.
      */
@@ -104,11 +100,11 @@ public class ExpertController {
 
     /**
      * GET /api/expert/stats
-     *
+     * <p>
      * Возвращает простую статистику для экрана эксперта:
      * - общее количество вопросов
      * - текущее время на сервере
-     *
+     * <p>
      * Доступно только эксперту.
      */
     @GetMapping("/stats")

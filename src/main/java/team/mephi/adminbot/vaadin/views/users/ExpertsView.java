@@ -66,7 +66,7 @@ public class ExpertsView extends VerticalLayout implements ProviderGet {
                 onView.accept(item, this);
             });
             Button chatButton = new Button(new Icon(VaadinIcon.CHAT), e -> {
-                UI.getCurrent().navigate(Dialogs.class, new QueryParameters(Map.of("userId", List.of(""+item.getId()))));
+                UI.getCurrent().navigate(Dialogs.class, new QueryParameters(Map.of("userId", List.of("" + item.getId()))));
             });
             Button editButton = new Button(new Icon(VaadinIcon.PENCIL), e -> {
                 onEdit.accept(item, this);

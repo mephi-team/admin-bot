@@ -8,12 +8,12 @@ import java.time.Duration;
 
 /**
  * Класс с настройками интеграции с NeoStudy.
- *
+ * <p>
  * Все значения подгружаются из application.properties или application.yml
  * с префиксом "neostudy".
- *
+ * <p>
  * Пример настроек:
- *
+ * <p>
  * neostudy.base-url=https://api.neostudy.example.com
  * neostudy.api-key=your-api-key-here
  * neostudy.timeout.connect=5s

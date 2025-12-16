@@ -3,11 +3,7 @@ package team.mephi.adminbot.controller.api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import team.mephi.adminbot.model.User;
 import team.mephi.adminbot.repository.UserRepository;
 
@@ -17,11 +13,12 @@ import java.util.Map;
 
 /**
  * REST-контроллер для административных операций.
- *
+ * <p>
  * Этот контроллер доступен только администраторам.
  * Для доступа ко всем методам требуется роль ROLE_ADMIN.
- *
+ * <p>
  * Проверка роли выполняется через аннотацию:
+ *
  * @PreAuthorize("hasRole('ADMIN')")
  */
 @RestController
@@ -35,7 +32,7 @@ public class AdminController {
 
     /**
      * GET /api/admin/users
-     *
+     * <p>
      * Возвращает список всех пользователей.
      * Доступно только администратору.
      */
@@ -50,7 +47,7 @@ public class AdminController {
 
     /**
      * GET /api/admin/users/{id}
-     *
+     * <p>
      * Возвращает одного пользователя по его ID.
      * Если пользователь не найден — вернётся 404.
      * Доступно только администратору.
@@ -66,7 +63,7 @@ public class AdminController {
 
     /**
      * DELETE /api/admin/users/{id}
-     *
+     * <p>
      * Удаляет пользователя по ID.
      * Если пользователь существует — удаляем и возвращаем сообщение об успехе.
      * Если нет — возвращаем 404.
@@ -94,11 +91,11 @@ public class AdminController {
 
     /**
      * GET /api/admin/stats
-     *
+     * <p>
      * Возвращает простую статистику для админ-панели:
      * - общее количество пользователей
      * - текущее время на сервере
-     *
+     * <p>
      * Доступно только администратору.
      */
     @GetMapping("/stats")

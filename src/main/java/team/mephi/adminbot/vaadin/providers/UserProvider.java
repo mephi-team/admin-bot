@@ -12,7 +12,7 @@ public class UserProvider extends CallbackDataProvider<UserDto, String> {
                     // В реальном приложении здесь обычно используется JpaSpecificationExecutor с пагинацией
                     return questionRepository.findAllByRoleAndName(role, searchField.getValue())
                             .stream()
-                            .map(u -> new UserDto(u.getId(), u.getUserName(),  u.getLastName() + " " + u.getFirstName(), u.getEmail(), u.getTgName(), u.getPhoneNumber(), u.getPdConsent(), u.getCohort(), u.getDirection() != null ? u.getDirection().getName() : "", u.getCity(), u.getStatus().name(), u.getDeleted()))
+                            .map(u -> new UserDto(u.getId(), u.getUserName(), u.getLastName() + " " + u.getFirstName(), u.getEmail(), u.getTgName(), u.getPhoneNumber(), u.getPdConsent(), u.getCohort(), u.getDirection() != null ? u.getDirection().getName() : "", u.getCity(), u.getStatus().name(), u.getDeleted()))
                             .skip(query.getOffset()) // Пропускаем уже загруженные элементы
                             .limit(query.getLimit()); // Берем только нужное количество
                 },

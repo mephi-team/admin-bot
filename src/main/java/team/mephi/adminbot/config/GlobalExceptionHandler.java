@@ -14,10 +14,10 @@ import java.util.Map;
 
 /**
  * Глобальный обработчик ошибок, связанных с безопасностью.
- *
+ * <p>
  * Перехватывает основные ошибки доступа и аутентификации
  * и возвращает понятные JSON-ответы.
- *
+ * <p>
  * Здесь обрабатываются:
  * - 401 Unauthorized — пользователь не аутентифицирован
  * - 403 Forbidden — нет прав доступа
@@ -27,7 +27,7 @@ public class GlobalExceptionHandler {
 
     /**
      * Обрабатывает ошибки аутентификации (401 Unauthorized).
-     *
+     * <p>
      * Срабатывает, если:
      * - JWT-токен не передан
      * - JWT-токен просрочен или некорректный
@@ -55,11 +55,11 @@ public class GlobalExceptionHandler {
 
     /**
      * Обрабатывает ошибки доступа (403 Forbidden).
-     *
+     * <p>
      * Срабатывает, если:
      * - пользователь вошёл в систему, но у него нет нужной роли
      * - пользователь пытается получить доступ к ресурсу,
-     *   на который у него нет прав
+     * на который у него нет прав
      */
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<Map<String, Object>> handleAccessDeniedException(AccessDeniedException ex) {
@@ -81,7 +81,7 @@ public class GlobalExceptionHandler {
     /**
      * Обрабатывает все остальные ошибки,
      * которые не были перехвачены выше.
-     *
+     * <p>
      * Обычно это неожиданные ошибки или баги в коде.
      */
     @ExceptionHandler(Exception.class)

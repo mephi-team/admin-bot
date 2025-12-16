@@ -16,18 +16,18 @@ import java.util.Optional;
 public interface TutorRepository extends JpaRepository<Tutor, Long> {
 
     @Query(value = """
-            SELECT
-                t.id, CONCAT(t.first_name, ' ', t.last_name), t.tg_id, t.email, t.deleted,
-                COUNT(DISTINCT st.id) AS student_count,
-                STRING_AGG(d.name, ', ') AS directions
-            FROM tutors t
-                     LEFT JOIN student_tutor st ON st.tutor_id = t.id
-                     LEFT JOIN tutor_directions td ON td.tutor_id = t.id
-                     LEFT JOIN directions d ON td.direction_id = d.id
-            WHERE LOWER(t.last_name) LIKE LOWER(CONCAT('%', :query, '%')) OR 
-                      LOWER(t.first_name) LIKE LOWER(CONCAT('%', :query, '%'))
-            GROUP BY t.id
-    """, nativeQuery = true)
+                    SELECT
+                        t.id, CONCAT(t.first_name, ' ', t.last_name), t.tg_id, t.email, t.deleted,
+                        COUNT(DISTINCT st.id) AS student_count,
+                        STRING_AGG(d.name, ', ') AS directions
+                    FROM tutors t
+                             LEFT JOIN student_tutor st ON st.tutor_id = t.id
+                             LEFT JOIN tutor_directions td ON td.tutor_id = t.id
+                             LEFT JOIN directions d ON td.direction_id = d.id
+                    WHERE LOWER(t.last_name) LIKE LOWER(CONCAT('%', :query, '%')) OR 
+                              LOWER(t.first_name) LIKE LOWER(CONCAT('%', :query, '%'))
+                    GROUP BY t.id
+            """, nativeQuery = true)
     List<TutorWithCounts> findAllWithDirectionsAndStudents(String query);
 
     @Query("SELECT count(t) FROM Tutor t WHERE LOWER(t.firstName) LIKE LOWER(CONCAT('%', :query, '%')) or LOWER(t.lastName) LIKE LOWER(CONCAT('%', :query, '%'))")

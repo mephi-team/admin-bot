@@ -19,10 +19,10 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Конфигурация WebClient для работы с API NeoStudy.
- *
+ * <p>
  * Здесь создаётся и настраивается WebClient,
  * через который выполняются все запросы в NeoStudy.
- *
+ * <p>
  * Что настраивается:
  * - таймауты подключения, чтения и записи
  * - пул соединений
@@ -40,7 +40,7 @@ public class NeoStudyWebClientConfig {
 
     /**
      * Создаёт WebClient для запросов в NeoStudy.
-     *
+     * <p>
      * WebClient настраивается с учётом:
      * - базового URL из конфигурации
      * - таймаутов

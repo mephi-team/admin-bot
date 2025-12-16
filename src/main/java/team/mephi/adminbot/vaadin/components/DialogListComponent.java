@@ -1,7 +1,8 @@
 package team.mephi.adminbot.vaadin.components;
 
 import com.vaadin.flow.component.Text;
-import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -26,12 +27,11 @@ import java.util.Optional;
 @AnonymousAllowed
 public class DialogListComponent extends VerticalLayout implements AfterNavigationObserver {
     private final LocalDateTime today;
-    private Long activeDialogId;
     protected ConfigurableFilterDataProvider<DialogWithLastMessageDto, Void, String> provider;
-
+    private Long activeDialogId;
     ComponentRenderer<RouterLink, DialogWithLastMessageDto> cardRenderer = new ComponentRenderer<>(item -> {
         RouterLink link = new RouterLink();
-        link.setHighlightCondition((a,e) -> false);
+        link.setHighlightCondition((a, e) -> false);
         link.setClassName("dialog-item text-body");
 
         link.setRoute(Dialogs.class, new RouteParameters("dialogId", item.getDialogId().toString()));

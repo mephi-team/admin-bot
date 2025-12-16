@@ -1,7 +1,10 @@
 package team.mephi.adminbot.integration.neostudy.mapper;
 
 import org.springframework.stereotype.Component;
-import team.mephi.adminbot.integration.neostudy.dto.*;
+import team.mephi.adminbot.integration.neostudy.dto.NeoStudyCourseResponse;
+import team.mephi.adminbot.integration.neostudy.dto.NeoStudyEnrollmentRequest;
+import team.mephi.adminbot.integration.neostudy.dto.NeoStudyUserRequest;
+import team.mephi.adminbot.integration.neostudy.dto.NeoStudyUserResponse;
 import team.mephi.adminbot.model.Direction;
 import team.mephi.adminbot.model.User;
 import team.mephi.adminbot.model.enums.UserStatus;

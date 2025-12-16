@@ -2,16 +2,11 @@ package team.mephi.adminbot.model;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import team.mephi.adminbot.model.enums.MailingStatus;
-
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -19,12 +14,12 @@ import java.util.List;
 
 /**
  * Сущность батча (пакета) для массовой отправки ссылок на зачисление.
- *
+ * <p>
  * Батч объединяет группу пользователей и описывает:
  * - кто его создал
  * - через какие каналы можно отправлять ссылки
  * - на каком этапе обработки он сейчас находится
- *
+ * <p>
  * Используется для рассылок вне основного сценария регистрации.
  */
 @Data
@@ -38,7 +33,7 @@ public class EnrollmentBatch {
 
     /**
      * Уникальный идентификатор батча.
-     *
+     * <p>
      * Генерируется внешней логикой (не auto-increment).
      */
     @Id
@@ -48,7 +43,7 @@ public class EnrollmentBatch {
 
     /**
      * Пользователь, который создал этот батч.
-     *
+     * <p>
      * Обязательное поле — батч всегда имеет автора.
      */
     @ManyToOne(fetch = FetchType.LAZY)
@@ -57,7 +52,7 @@ public class EnrollmentBatch {
 
     /**
      * Дата и время создания батча.
-     *
+     * <p>
      * Устанавливается один раз при создании
      * и дальше не изменяется.
      */
@@ -67,7 +62,7 @@ public class EnrollmentBatch {
 
     /**
      * Текущий статус батча.
-     *
+     * <p>
      * Отражает этап жизненного цикла,
      * например: DRAFT, ACTIVE, PAUSED, FINISHED.
      */
@@ -77,7 +72,7 @@ public class EnrollmentBatch {
 
     /**
      * Каналы доставки ссылок для этого батча.
-     *
+     * <p>
      * Хранится в виде JSON (jsonb в PostgreSQL).
      * Пример значения: ["telegram", "email"].
      */
@@ -87,7 +82,7 @@ public class EnrollmentBatch {
 
     /**
      * Ссылки на зачисление, входящие в этот батч.
-     *
+     * <p>
      * Один батч может содержать много ссылок.
      * Управление ссылками происходит отдельно
      * (без cascade-операций).
@@ -101,7 +96,7 @@ public class EnrollmentBatch {
 
     /**
      * Инициализация значений перед сохранением батча в базу.
-     *
+     * <p>
      * Если значения не заданы явно:
      * - createdAt ставится в текущее время
      * - status устанавливается в DRAFT

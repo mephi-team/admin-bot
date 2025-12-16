@@ -31,6 +31,15 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 
 public class MiddleCandidateView extends VerticalLayout implements ProviderGet {
+    private static final SerializableBiConsumer<Span, UserDto> statusComponentUpdater = (
+            span, person) -> {
+        String theme = switch (person.getStatus()) {
+            case "ACTIVE" -> String.format("badge %s", "success");
+            default -> String.format("badge %s", "error");
+        };
+        span.getElement().setAttribute("theme", theme);
+        span.setText(person.getStatus());
+    };
     private final UserRepository userRepository;
     private final String role;
     private final Grid<UserDto> grid;
@@ -67,17 +76,17 @@ public class MiddleCandidateView extends VerticalLayout implements ProviderGet {
         grid.addColumn(createStatusComponentRenderer()).setHeader("Статус").setSortable(true).setKey("status");
 
         grid.addComponentColumn(item -> {
-            Button confirmButton = new Button(new Icon(VaadinIcon.CLOSE),e -> {
+            Button confirmButton = new Button(new Icon(VaadinIcon.CLOSE), e -> {
                 System.out.println(item);
             });
-            Button rejectButton = new Button(new Icon(VaadinIcon.CHECK),e -> {
+            Button rejectButton = new Button(new Icon(VaadinIcon.CHECK), e -> {
                 System.out.println(item);
             });
-            Button noteButton = new Button(new Icon(VaadinIcon.EYE),e -> {
-               onView.accept(item, this);
+            Button noteButton = new Button(new Icon(VaadinIcon.EYE), e -> {
+                onView.accept(item, this);
             });
             Button chatButton = new Button(new Icon(VaadinIcon.CHAT), e -> {
-                UI.getCurrent().navigate(Dialogs.class, new QueryParameters(Map.of("userId", List.of(""+item.getId()))));
+                UI.getCurrent().navigate(Dialogs.class, new QueryParameters(Map.of("userId", List.of("" + item.getId()))));
             });
             Button editButton = new Button(new Icon(VaadinIcon.PENCIL), e -> {
                 onEdit.accept(item, this);
@@ -120,6 +129,10 @@ public class MiddleCandidateView extends VerticalLayout implements ProviderGet {
         add(headerLayout, actions, grid);
     }
 
+    private static ComponentRenderer<Span, UserDto> createStatusComponentRenderer() {
+        return new ComponentRenderer<>(Span::new, statusComponentUpdater);
+    }
+
     @Override
     public DataProvider<UserDto, ?> getProvider() {
         return grid.getDataProvider();
@@ -129,16 +142,6 @@ public class MiddleCandidateView extends VerticalLayout implements ProviderGet {
         UserProvider dataProvider = new UserProvider(userRepository, role, searchField);
         return dataProvider.withConfigurableFilter();
     }
-
-    private static final SerializableBiConsumer<Span, UserDto> statusComponentUpdater = (
-            span, person) -> {
-        String theme = switch (person.getStatus()) {
-            case "ACTIVE" -> String.format("badge %s","success");
-            default -> String.format("badge %s","error");
-        };
-        span.getElement().setAttribute("theme", theme);
-        span.setText(person.getStatus());
-    };
 
     @Override
     public CrudRepository<?, Long> getRepository() {
@@ -167,9 +170,5 @@ public class MiddleCandidateView extends VerticalLayout implements ProviderGet {
     @Override
     public void refreshAll() {
         grid.getDataProvider().refreshAll();
-    }
-
-    private static ComponentRenderer<Span, UserDto> createStatusComponentRenderer() {
-        return new ComponentRenderer<>(Span::new, statusComponentUpdater);
     }
 }

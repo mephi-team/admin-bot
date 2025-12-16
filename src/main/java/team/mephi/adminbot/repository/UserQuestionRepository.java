@@ -11,6 +11,7 @@ import java.util.List;
 public interface UserQuestionRepository extends JpaRepository<UserQuestion, Long> {
     @Query("SELECT q FROM UserQuestion q JOIN FETCH q.user LEFT JOIN FETCH q.user.direction LEFT JOIN FETCH q.answers WHERE LOWER(q.text) LIKE LOWER(CONCAT('%', :query, '%'))")
     List<UserQuestion> findAllByText(String query);
+
     @Query("SELECT count(q) FROM UserQuestion q WHERE LOWER(q.text) LIKE LOWER(CONCAT('%', :query, '%'))")
     Integer countByText(String query);
 

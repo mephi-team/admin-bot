@@ -11,9 +11,6 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.router.QueryParameters;
-import com.vaadin.flow.router.RouteParam;
-import com.vaadin.flow.router.RouteParameters;
-import com.vaadin.flow.router.RouterLink;
 import org.springframework.data.domain.Persistable;
 import org.springframework.data.repository.CrudRepository;
 import team.mephi.adminbot.dto.SimpleUser;
@@ -77,7 +74,7 @@ public class CandidateView extends VerticalLayout implements ProviderGet {
                 onView.accept(item, this);
             });
             Button chatButton = new Button(new Icon(VaadinIcon.CHAT), e -> {
-                UI.getCurrent().navigate(Dialogs.class, new QueryParameters(Map.of("userId", List.of(""+item.getId()))));
+                UI.getCurrent().navigate(Dialogs.class, new QueryParameters(Map.of("userId", List.of("" + item.getId()))));
             });
             Button editButton = new Button(new Icon(VaadinIcon.PENCIL), e -> {
                 onEdit.accept(item, this);

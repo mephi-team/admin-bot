@@ -17,9 +17,9 @@ import org.springframework.data.domain.Persistable;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.repository.TutorRepository;
 import team.mephi.adminbot.repository.UserRepository;
-import team.mephi.adminbot.vaadin.components.UserDrawer;
 import team.mephi.adminbot.vaadin.components.UserCountBadge;
 import team.mephi.adminbot.vaadin.components.UserDeleteDialog;
+import team.mephi.adminbot.vaadin.components.UserDrawer;
 import team.mephi.adminbot.vaadin.providers.ProviderGet;
 import team.mephi.adminbot.vaadin.views.users.*;
 
@@ -48,8 +48,8 @@ public class Users extends VerticalLayout {
         var primaryButton = new Button("Добавить пользователя", new Icon(VaadinIcon.PLUS));
         primaryButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         Div buttons = new Div(new Button("Загрузить из файла", new Icon(VaadinIcon.FILE_ADD)), primaryButton);
-        buttons.getElement().getStyle().set("display","flex");
-        buttons.getElement().getStyle().set("gap","24px");
+        buttons.getElement().getStyle().set("display", "flex");
+        buttons.getElement().getStyle().set("gap", "24px");
         top.addToEnd(buttons);
 
         tabSheet = new TabSheet();
@@ -82,7 +82,7 @@ public class Users extends VerticalLayout {
 
 //        tabSheet.getSelectedIndex();
         dialog = new UserDeleteDialog(event -> {
-            if(deleteId != null) {
+            if (deleteId != null) {
                 int tabIndex = tabSheet.getSelectedIndex();
                 String tabCode = tabs.get(tabIndex);
 

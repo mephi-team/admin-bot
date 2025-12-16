@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,18 +18,16 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
-import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 
 import java.util.*;
 
 /**
  * Основная конфигурация Spring Security для работы с Keycloak и JWT.
- *
+ * <p>
  * Здесь настраивается:
  * - аутентификация по JWT (без сессий)
  * - доступ к эндпоинтам в зависимости от ролей
@@ -42,27 +39,24 @@ import java.util.*;
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
+    @Value("${spring.security.oauth2.client.provider.keycloak.issuer-uri}")
+    String jwkSetUri;
+    @Value("${app.redirect-url}")
+    String redirectUrl;
     @Autowired
     private ClientRegistrationRepository clientRegistrationRepository;
-
     /**
      * ID клиента в Keycloak.
-     *
+     * <p>
      * Нужен, чтобы доставать клиентские роли
      * из JWT-токена (resource_access).
      */
     @Value("${keycloak.client-id}")
     private String clientId;
 
-    @Value("${spring.security.oauth2.client.provider.keycloak.issuer-uri}")
-    String jwkSetUri;
-
-    @Value("${app.redirect-url}")
-    String redirectUrl;
-
     /**
      * Основная цепочка фильтров безопасности.
-     *
+     * <p>
      * Здесь описано:
      * кто может обращаться к каким эндпоинтам
      * и при каких условиях.
@@ -112,7 +106,6 @@ public class SecurityConfig {
 //
 //        return http.build();
 //    }
-
     private OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService() {
         final OidcUserService delegate = new OidcUserService();
 
@@ -144,7 +137,7 @@ public class SecurityConfig {
 
     /**
      * Настройка CORS.
-     *
+     * <p>
      * Здесь указываем:
      * - какие источники могут делать запросы
      * - какие методы разрешены

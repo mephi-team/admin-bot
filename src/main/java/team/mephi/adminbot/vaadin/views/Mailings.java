@@ -29,6 +29,16 @@ import java.util.Set;
 @Route(value = "/mailings", layout = DialogsLayout.class)
 @RolesAllowed("ADMIN")
 public class Mailings extends VerticalLayout {
+    private static final SerializableBiConsumer<Span, MailingList> statusComponentUpdater = (
+            span, person) -> {
+        String theme = switch (person.getStatus()) {
+            case "ACTIVE" -> String.format("badge %s", "success");
+            default -> String.format("badge %s", "error");
+        };
+        span.getElement().setAttribute("theme", theme);
+        span.setText(person.getStatus());
+    };
+
     public Mailings(MailingRepository mailingRepository) {
         setHeightFull();
 
@@ -113,16 +123,6 @@ public class Mailings extends VerticalLayout {
 
         return dataProvider.withConfigurableFilter();
     }
-
-    private static final SerializableBiConsumer<Span, MailingList> statusComponentUpdater = (
-            span, person) -> {
-        String theme = switch (person.getStatus()) {
-            case "ACTIVE" -> String.format("badge %s","success");
-            default -> String.format("badge %s","error");
-        };
-        span.getElement().setAttribute("theme", theme);
-        span.setText(person.getStatus());
-    };
 
     private static ComponentRenderer<Span, MailingList> createStatusComponentRenderer() {
         return new ComponentRenderer<>(Span::new, statusComponentUpdater);

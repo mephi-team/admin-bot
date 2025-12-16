@@ -2,7 +2,7 @@ package team.mephi.adminbot.model.enums;
 
 /**
  * Статус операции регистрации.
- *
+ * <p>
  * Используется для отслеживания состояния процесса регистрации пользователя.
  */
 public enum RegistrationStatus {

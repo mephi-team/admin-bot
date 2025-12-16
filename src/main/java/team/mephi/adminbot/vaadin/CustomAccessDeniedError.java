@@ -1,8 +1,10 @@
 package team.mephi.adminbot.vaadin;
 
-import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.applayout.AppLayout;
-import com.vaadin.flow.router.*;
+import com.vaadin.flow.router.AccessDeniedException;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.ErrorParameter;
+import com.vaadin.flow.router.HasErrorParameter;
 import com.vaadin.flow.server.HttpStatusCode;
 import com.vaadin.flow.spring.security.AuthenticationContext;
 import jakarta.annotation.security.PermitAll;

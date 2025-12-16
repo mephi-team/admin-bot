@@ -2,11 +2,12 @@ package team.mephi.adminbot.model;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 /**
  * Юнит-тесты для сущности MailTemplate.
- *
+ * <p>
  * Проверяет корректность работы equals()/hashCode() и базовую функциональность сущности.
  * Примечание: тестирование @CreationTimestamp и @UpdateTimestamp требует интеграционных тестов
  * с реальной базой данных, так как эти аннотации обрабатываются Hibernate при сохранении.

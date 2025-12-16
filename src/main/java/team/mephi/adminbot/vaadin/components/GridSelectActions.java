@@ -5,10 +5,10 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
 public class GridSelectActions extends HorizontalLayout {
-    private Integer selectedCount = 0;
     Span countControl;
+    private Integer selectedCount = 0;
 
-    public GridSelectActions(Component ... components) {
+    public GridSelectActions(Component... components) {
         countControl = new Span(String.valueOf(selectedCount));
         Span prefix = new Span(new Span("Выбрано пользователей: "), countControl);
         prefix.getElement().getStyle().set("font-weight", "bold");

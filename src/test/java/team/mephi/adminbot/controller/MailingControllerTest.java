@@ -13,7 +13,8 @@ import team.mephi.adminbot.repository.MailingRepository;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * Юнит-тесты для MailingController без поднятия Spring-контекста.

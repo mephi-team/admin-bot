@@ -63,7 +63,7 @@ public class TutorsView extends VerticalLayout implements ProviderGet {
                 onView.accept(item, this);
             });
             Button chatButton = new Button(new Icon(VaadinIcon.CHAT), e -> {
-                UI.getCurrent().navigate(Dialogs.class, new QueryParameters(Map.of("userId", List.of(""+item.getId()))));
+                UI.getCurrent().navigate(Dialogs.class, new QueryParameters(Map.of("userId", List.of("" + item.getId()))));
             });
             Button editButton = new Button(new Icon(VaadinIcon.PENCIL), e -> {
                 onEdit.accept(item, this);
@@ -103,6 +103,21 @@ public class TutorsView extends VerticalLayout implements ProviderGet {
         add(headerLayout, actions, grid);
     }
 
+    private static ConfigurableFilterDataProvider<TutorWithCounts, Void, String> getProvider(TutorRepository tutorRepository, TextField searchField) {
+        CallbackDataProvider<TutorWithCounts, String> dataProvider = new CallbackDataProvider<>(
+                query -> {
+                    return tutorRepository.findAllWithDirectionsAndStudents(searchField.getValue())
+                            .stream()
+                            .skip(query.getOffset())
+                            .limit(query.getLimit());
+                },
+                query -> tutorRepository.countByName(searchField.getValue()),
+                TutorWithCounts::getId
+        );
+
+        return dataProvider.withConfigurableFilter();
+    }
+
     @Override
     public DataProvider<TutorWithCounts, ?> getProvider() {
         return grid.getDataProvider();
@@ -135,20 +150,5 @@ public class TutorsView extends VerticalLayout implements ProviderGet {
     @Override
     public void refreshAll() {
         grid.getDataProvider().refreshAll();
-    }
-
-    private static ConfigurableFilterDataProvider<TutorWithCounts, Void, String> getProvider(TutorRepository tutorRepository, TextField searchField) {
-        CallbackDataProvider<TutorWithCounts, String> dataProvider = new CallbackDataProvider<>(
-                query -> {
-                    return tutorRepository.findAllWithDirectionsAndStudents(searchField.getValue())
-                            .stream()
-                            .skip(query.getOffset())
-                            .limit(query.getLimit());
-                },
-                query -> tutorRepository.countByName(searchField.getValue()),
-                TutorWithCounts::getId
-        );
-
-        return dataProvider.withConfigurableFilter();
     }
 }

@@ -8,15 +8,15 @@ import com.vaadin.flow.component.textfield.TextField;
 import java.util.List;
 
 public class UserForm extends FormLayout {
+    ComboBox<String> cohorts = new ComboBox<>();
+    ComboBox<String> directions = new ComboBox<>();
+    ComboBox<String> cities = new ComboBox<>();
     private ComboBox<String> roles = new ComboBox<>();
     private TextField firstName = new TextField();
     private TextField lastName = new TextField();
     private EmailField email = new EmailField();
     private TextField telegram = new TextField();
     private TextField phoneNumber = new TextField();
-    ComboBox<String> cohorts = new ComboBox<>();
-    ComboBox<String> directions = new ComboBox<>();
-    ComboBox<String> cities = new ComboBox<>();
 
     public UserForm() {
         roles.setItems(List.of("test1", "test2"));

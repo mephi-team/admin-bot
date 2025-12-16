@@ -2,11 +2,11 @@ package team.mephi.adminbot.integration.neostudy.exception;
 
 /**
  * Исключение для ошибок клиента при работе с API NeoStudy.
- *
+ * <p>
  * Используется, когда NeoStudy возвращает HTTP-ошибки 4xx,
  * то есть запрос был некорректным или у пользователя
  * нет прав на выполнение операции.
- *
+ * <p>
  * Примеры таких ошибок:
  * - 400 Bad Request
  * - 401 Unauthorized

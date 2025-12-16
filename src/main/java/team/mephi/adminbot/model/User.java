@@ -1,7 +1,10 @@
 package team.mephi.adminbot.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +21,7 @@ import java.util.Set;
 
 /**
  * Основная сущность пользователя системы.
- *
+ * <p>
  * Описывает кандидата или студента и содержит:
  * - личные данные
  * - роль и направление
@@ -51,7 +54,7 @@ public class User {
 
     /**
      * Telegram ID пользователя.
-     *
+     * <p>
      * Уникальный идентификатор аккаунта в Telegram.
      */
     @Column(name = "tg_id", unique = true)
@@ -65,7 +68,7 @@ public class User {
 
     /**
      * Имя пользователя.
-     *
+     * <p>
      * Основное поле с именем, которое используется в системе.
      */
     @Column(name = "user_name")
@@ -73,7 +76,7 @@ public class User {
 
     /**
      * Email пользователя.
-     *
+     * <p>
      * Должен быть уникальным.
      */
     @Column(name = "email", unique = true)
@@ -83,7 +86,7 @@ public class User {
 
     /**
      * Номер телефона пользователя.
-     *
+     * <p>
      * Также должен быть уникальным.
      */
     @Column(name = "phone_number", unique = true)
@@ -94,7 +97,7 @@ public class User {
 
     /**
      * Роль пользователя в системе.
-     *
+     * <p>
      * Связь с таблицей ролей (roles.code).
      * Каждый пользователь имеет ровно одну роль.
      */
@@ -112,7 +115,7 @@ public class User {
 
     /**
      * Когорта пользователя.
-     *
+     * <p>
      * Например, поток или набор.
      */
     @Column(name = "cohort")
@@ -120,7 +123,7 @@ public class User {
 
     /**
      * Текущий статус пользователя.
-     *
+     * <p>
      * Например: активен, отчислён, заблокирован и т.п.
      */
     @Enumerated(EnumType.STRING)
@@ -129,7 +132,7 @@ public class User {
 
     /**
      * Флаг согласия на обработку персональных данных.
-     *
+     * <p>
      * true — пользователь дал согласие
      * false — согласие не получено
      */
@@ -146,7 +149,7 @@ public class User {
 
     /**
      * Флаг отзыва доступа пользователя.
-     *
+     * <p>
      * true — доступ отозван
      * false — доступ активен
      */
@@ -174,7 +177,7 @@ public class User {
 
     /**
      * @deprecated Используй tgId.
-     *
+     * <p>
      * Старый внешний идентификатор пользователя
      * (Telegram, WhatsApp и т.п.).
      */
@@ -203,7 +206,7 @@ public class User {
 
     /**
      * ID пользователя в системе NeoStudy.
-     *
+     * <p>
      * Хранит идентификатор, под которым пользователь
      * зарегистрирован в NeoStudy.
      */
@@ -248,7 +251,7 @@ public class User {
 
     /**
      * Заявки пользователя на поступление.
-     *
+     * <p>
      * Все заявки / формы записи, поданные этим пользователем.
      */
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
@@ -307,7 +310,7 @@ public class User {
 
     /**
      * История назначений этого пользователя (студента) на тьюторов.
-     *
+     * <p>
      * Один студент может иметь множество записей о назначениях на разных тьюторов.
      * Связь через таблицу student_tutor.
      */

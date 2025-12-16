@@ -20,7 +20,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     /**
      * Найти всех пользователей с указанным статусом.
-     *
+     * <p>
      * Например: ACTIVE, BLOCKED, EXPELLED и т.д.
      */
     List<User> findByStatus(UserStatus status);
@@ -50,7 +50,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     /**
      * Поиск пользователей по строке запроса.
-     *
+     * <p>
      * Ищет совпадения сразу по нескольким полям:
      * - fullName
      * - name (устаревшее)
@@ -60,7 +60,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * - tgId
      * - email
      * - phoneNumber
-     *
+     * <p>
      * Поиск нечувствителен к регистру.
      */
     @Query("SELECT u FROM User u WHERE " +
@@ -76,7 +76,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     /**
      * Поиск пользователей по статусу и строке запроса.
-     *
+     * <p>
      * Сначала фильтрует по статусу,
      * затем ищет по тем же полям, что и searchAll().
      */

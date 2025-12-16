@@ -1,5 +1,6 @@
 package team.mephi.adminbot.model;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,16 +12,15 @@ import org.hibernate.type.SqlTypes;
 import team.mephi.adminbot.model.enums.NotificationStatus;
 import team.mephi.adminbot.model.enums.NotificationType;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import java.time.Instant;
 
 /**
  * Сущность уведомления в очереди отправки.
- *
+ * <p>
  * Эта таблица работает как очередь (outbox):
  * бизнес-логика кладёт сюда уведомления,
  * а фоновые воркеры потом их отправляют.
- *
+ * <p>
  * Жизненный цикл статуса:
  * - PENDING    — уведомление только что добавлено в очередь
  * - SENT       — уведомление успешно отправлено
@@ -44,7 +44,7 @@ public class NotificationQueue {
 
     /**
      * Тип уведомления.
-     *
+     * <p>
      * Например: EMAIL, TELEGRAM и т.д.
      */
     @Enumerated(EnumType.STRING)
@@ -53,7 +53,7 @@ public class NotificationQueue {
 
     /**
      * Получатель уведомления.
-     *
+     * <p>
      * Это может быть email, chatId, userId —
      * в зависимости от типа уведомления.
      */
@@ -62,7 +62,7 @@ public class NotificationQueue {
 
     /**
      * Данные уведомления в формате JSON.
-     *
+     * <p>
      * Содержит всё, что нужно для отправки:
      * текст, параметры шаблона, метаданные и т.п.
      */
@@ -72,7 +72,7 @@ public class NotificationQueue {
 
     /**
      * Текущий статус уведомления.
-     *
+     * <p>
      * См. описание жизненного цикла выше.
      */
     @Enumerated(EnumType.STRING)
@@ -81,7 +81,7 @@ public class NotificationQueue {
 
     /**
      * Текст ошибки, если отправка завершилась неудачей.
-     *
+     * <p>
      * Заполняется только при статусе FAILED.
      */
     @Column(name = "error")
@@ -89,7 +89,7 @@ public class NotificationQueue {
 
     /**
      * Дата и время создания записи в очереди.
-     *
+     * <p>
      * Проставляется автоматически
      * и после этого не меняется.
      */
@@ -99,7 +99,7 @@ public class NotificationQueue {
 
     /**
      * Дата и время успешной отправки уведомления.
-     *
+     * <p>
      * Заполняется после перехода в статус SENT.
      */
     @Column(name = "sent_at")
@@ -107,7 +107,7 @@ public class NotificationQueue {
 
     /**
      * Хук JPA, который срабатывает перед сохранением записи.
-     *
+     * <p>
      * Если значения не заданы:
      * - устанавливает статус PENDING
      */

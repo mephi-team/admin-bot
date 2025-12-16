@@ -9,7 +9,6 @@ import team.mephi.adminbot.repository.QuestionRepository;
 import team.mephi.adminbot.repository.UserRepository;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 
 @Controller
 public class MainController {
