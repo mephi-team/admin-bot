@@ -12,7 +12,7 @@ import team.mephi.adminbot.vaadin.components.DialogListComponent;
 
 @Route(value = "/dialogs/:dialogId?", layout = DialogsLayout.class)
 @RolesAllowed("ADMIN")
-public class Dialogs extends VerticalLayout {
+public class Dialogs extends VerticalLayout implements BeforeEnterObserver {
 
     public Dialogs(DialogRepository dialogRepository, MessageRepository messageRepository) {
         setSizeFull();
@@ -33,15 +33,8 @@ public class Dialogs extends VerticalLayout {
         add(new H1("Диалоги"), contentLayout);
     }
 
-    VerticalLayout createEmpty() {
-        VerticalLayout message = new VerticalLayout();
-        message.getElement().getStyle().set("border", "1px solid #eaeaee");
-        message.getElement().getStyle().set("border-radius", "12px");
-        message.add("Выберите диалог, чтобы продолжить общение");
-        message.setSizeFull();
-        VerticalLayout out = new VerticalLayout(message);
-        out.getElement().getStyle().set("padding-block-start", "0");
-        out.setSizeFull();
-        return out;
+    @Override
+    public void beforeEnter(BeforeEnterEvent event) {
+        System.out.println("!!! q = " + event.getLocation().getQueryParameters());
     }
 }
