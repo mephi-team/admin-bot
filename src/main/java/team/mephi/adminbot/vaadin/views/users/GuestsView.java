@@ -9,7 +9,6 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
-import org.springframework.data.domain.Persistable;
 import org.springframework.data.repository.CrudRepository;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.dto.UserDto;
@@ -31,7 +30,7 @@ public class GuestsView extends VerticalLayout implements ProviderGet {
     private final GridSelectActions actions;
     private List<Long> selectedIds;
 
-    public GuestsView(UserRepository userRepository, String role, BiConsumer<Persistable<Long>, ProviderGet> onEdit, BiConsumer<List<Long>, ProviderGet> onDelete) {
+    public GuestsView(UserRepository userRepository, String role, BiConsumer<Long, ProviderGet> onEdit, BiConsumer<List<Long>, ProviderGet> onDelete) {
         this.role = role;
         this.userRepository = userRepository;
 
@@ -52,8 +51,8 @@ public class GuestsView extends VerticalLayout implements ProviderGet {
         grid.addColumn(UserDto::getPdConsent).setHeader("Согласия ПД").setSortable(true).setKey("pd_consent");
 
         grid.addComponentColumn(item -> {
-            Button editButton = new Button(new Icon(VaadinIcon.EYE), e -> {
-                onEdit.accept(item, this);
+            Button viewButton = new Button(new Icon(VaadinIcon.EYE), e -> {
+                onEdit.accept(item.getId(), this);
             });
             Button deleteButton = new Button(new Icon(VaadinIcon.BAN), e -> {
                 onDelete.accept(List.of(item.getId()), this);
@@ -63,7 +62,7 @@ public class GuestsView extends VerticalLayout implements ProviderGet {
             } else {
                 deleteButton.getElement().getStyle().set("color", "black");
             }
-            return new Span(editButton, deleteButton);
+            return new Span(viewButton, deleteButton);
         }).setHeader("Действия").setWidth("120px").setFlexGrow(0).setKey("action");
 
         var filterableProvider = getProvider(userRepository, searchField);

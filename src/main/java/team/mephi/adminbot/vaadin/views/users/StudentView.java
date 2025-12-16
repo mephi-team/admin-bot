@@ -11,7 +11,6 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.router.QueryParameters;
-import org.springframework.data.domain.Persistable;
 import org.springframework.data.repository.CrudRepository;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.dto.UserDto;
@@ -35,7 +34,7 @@ public class StudentView extends VerticalLayout implements ProviderGet {
     private final GridSelectActions actions;
     private List<Long> selectedIds;
 
-    public StudentView(UserRepository userRepository, String role, BiConsumer<Persistable<Long>, ProviderGet> onView, BiConsumer<Persistable<Long>, ProviderGet> onEdit, BiConsumer<List<Long>, ProviderGet> onDelete) {
+    public StudentView(UserRepository userRepository, String role, BiConsumer<Long, ProviderGet> onView, BiConsumer<Long, ProviderGet> onEdit, BiConsumer<List<Long>, ProviderGet> onDelete) {
         this.role = role;
         this.userRepository = userRepository;
 
@@ -65,14 +64,14 @@ public class StudentView extends VerticalLayout implements ProviderGet {
             Button dropButton = new Button("Отчислить", new Icon(VaadinIcon.CLOSE), e -> {
                 System.out.println(item);
             });
-            Button noteButton = new Button(new Icon(VaadinIcon.EYE), e -> {
-                onView.accept(item, this);
+            Button viewButton = new Button(new Icon(VaadinIcon.EYE), e -> {
+                onView.accept(item.getId(), this);
             });
             Button chatButton = new Button(new Icon(VaadinIcon.CHAT), e -> {
                 UI.getCurrent().navigate(Dialogs.class, new QueryParameters(Map.of("userId", List.of("" + item.getId()))));
             });
             Button editButton = new Button(new Icon(VaadinIcon.PENCIL), e -> {
-                onEdit.accept(item, this);
+                onEdit.accept(item.getId(), this);
             });
             Button deleteButton = new Button(new Icon(VaadinIcon.BAN), e -> {
                 onDelete.accept(List.of(item.getId()), this);
@@ -82,7 +81,7 @@ public class StudentView extends VerticalLayout implements ProviderGet {
             } else {
                 deleteButton.getElement().getStyle().set("color", "black");
             }
-            group.add(dropButton, noteButton, chatButton, editButton, deleteButton);
+            group.add(dropButton, viewButton, chatButton, editButton, deleteButton);
             return group;
         }).setHeader("Действия").setWidth("340px").setFlexGrow(0).setKey("actions");
 

@@ -14,7 +14,6 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
-import org.springframework.data.domain.Persistable;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.repository.TutorRepository;
 import team.mephi.adminbot.repository.UserRepository;
@@ -55,13 +54,14 @@ public class Users extends VerticalLayout {
     private final String REJECT_ACTION = "Отклонить";
 
     UserDrawer driver;
-    UserConfirmDialog dialogBlock = new UserConfirmDialog(BLOCK_TITLE, BLOCK_TEXT, BLOCK_ACTION, BLOCK_ALL_TITLE, BLOCK_ALL_TEXT, BLOCK_MESSAGE, BLOCK_ALL_MESSAGE, this::showMessage);
+    UserConfirmDialog dialogBlock = new UserConfirmDialog(BLOCK_TITLE, BLOCK_TEXT, BLOCK_ACTION, BLOCK_ALL_TITLE, BLOCK_ALL_TEXT, BLOCK_MESSAGE, BLOCK_ALL_MESSAGE, this::showBlockMessage);
     UserConfirmDialog dialogAccept = new UserConfirmDialog(ACCEPT_TITLE, ACCEPT_TEXT, ACCEPT_ACTION, ACCEPT_ALL_TITLE, ACCEPT_ALL_TEXT, ACCEPT_MESSAGE, ACCEPT_ALL_MESSAGE, this::showMessage);
     UserConfirmDialog dialogReject = new UserConfirmDialog(REJECT_TITLE, REJECT_TEXT, REJECT_ACTION, REJECT_ALL_TITLE, REJECT_ALL_TEXT, REJECT_MESSAGE, REJECT_ALL_MESSAGE,  this::showMessage);
     Map<String, Long> roleCounts;
     List<Component> tables;
     TabSheet tabSheet;
     ProviderGet provider;
+    List<Long> blockIds;
 
     public Users(UserRepository userRepository, TutorRepository tutorRepository) {
         setHeightFull();
@@ -88,13 +88,13 @@ public class Users extends VerticalLayout {
                 s -> s, key -> new UserCountBadge(roleCounts.getOrDefault(key, 0L))));
 
         tables = List.of(
-                new GuestsView(userRepository, "visitor", this::onView, this::onDelete),
-                new CandidateView(userRepository, "candidate", this::onView, this::onEdit, this::onDelete, this::onAccept, this::onReject),
-                new MiddleCandidateView(userRepository, "middle_candidate", this::onView, this::onEdit, this::onDelete),
-                new StudentView(userRepository, "student", this::onView, this::onEdit, this::onDelete),
-                new FreeListenerView(userRepository, "free_listener", this::onView, this::onEdit, this::onDelete),
-                new ExpertsView(userRepository, "lc_expert", this::onView, this::onEdit, this::onDelete),
-                new TutorsView(tutorRepository, this::onView, this::onEdit, this::onDelete)
+                new GuestsView(userRepository, "visitor", this::onView, this::onBlock),
+                new CandidateView(userRepository, "candidate", this::onView, this::onEdit, this::onBlock, this::onAccept, this::onReject),
+                new MiddleCandidateView(userRepository, "middle_candidate", this::onView, this::onEdit, this::onBlock),
+                new StudentView(userRepository, "student", this::onView, this::onEdit, this::onBlock),
+                new FreeListenerView(userRepository, "free_listener", this::onView, this::onEdit, this::onBlock),
+                new ExpertsView(userRepository, "lc_expert", this::onView, this::onEdit, this::onBlock),
+                new TutorsView(tutorRepository, this::onView, this::onEdit, this::onBlock)
         );
 
         tabs.forEach(tab -> {
@@ -112,11 +112,12 @@ public class Users extends VerticalLayout {
         Notification.show(message, 3000, Notification.Position.TOP_END);
     }
 
-    private void showMessageDelete(String message) {
-//            int tabIndex = tabSheet.getSelectedIndex();
-//            provider.deleteById();
-//            provider.refreshAll();
+    private void showBlockMessage(String message) {
+        provider.deleteAllById(blockIds);
+        provider.refreshAll();
         Notification.show(message, 3000, Notification.Position.TOP_END);
+        blockIds = null;
+        this.provider = null;
     }
 
     private void onAccept(List<Long> ids) {
@@ -136,25 +137,27 @@ public class Users extends VerticalLayout {
         return simpleUser;
     }
 
-    private void onView(Persistable<Long> longPersistable, ProviderGet provider) {
-        Optional<SimpleUser> simpleUser = provider.findSimpleUserById(longPersistable.getId());
+    private void onView(Long id, ProviderGet provider) {
         this.provider = provider;
+        Optional<SimpleUser> simpleUser = provider.findSimpleUserById(id);
         simpleUser.ifPresent(u -> {
             driver.setUser(u, true);
         });
     }
 
-    private void onEdit(Persistable<Long> longPersistable, ProviderGet provider) {
-        Optional<SimpleUser> simpleUser = provider.findSimpleUserById(longPersistable.getId());
+    private void onEdit(Long id, ProviderGet provider) {
         this.provider = provider;
+        Optional<SimpleUser> simpleUser = provider.findSimpleUserById(id);
         simpleUser.ifPresent(u -> {
             driver.setUser(u);
         });
     }
 
-    private void onDelete(List<Long> ids, ProviderGet provider) {
+    private void onBlock(List<Long> ids, ProviderGet provider) {
+        this.provider = provider;
         dialogBlock.setCount(ids.size());
         dialogBlock.open();
+        blockIds = ids;
     }
 
     void onClose() {
