@@ -64,13 +64,13 @@ public class Users extends VerticalLayout {
                 s -> s, key -> new UserCountBadge(roleCounts.getOrDefault(key, 0L))));
 
         tables = List.of(
-                new GuestsView(userRepository, "visitor", this::onEdit, this::onDelete),
-                new CandidateView(userRepository, "candidate", this::onEdit, this::onDelete),
-                new MiddleCandidateView(userRepository, "middle_candidate", this::onEdit, this::onDelete),
-                new StudentView(userRepository, "student", this::onEdit, this::onDelete),
-                new FreeListenerView(userRepository, "free_listener", this::onEdit, this::onDelete),
-                new ExpertsView(userRepository, "lc_expert", this::onEdit, this::onDelete),
-                new TutorsView(tutorRepository, this::onEdit, this::onDelete)
+                new GuestsView(userRepository, "visitor", this::onView, this::onDelete),
+                new CandidateView(userRepository, "candidate", this::onView, this::onEdit, this::onDelete),
+                new MiddleCandidateView(userRepository, "middle_candidate", this::onView, this::onEdit, this::onDelete),
+                new StudentView(userRepository, "student", this::onView, this::onEdit, this::onDelete),
+                new FreeListenerView(userRepository, "free_listener", this::onView, this::onEdit, this::onDelete),
+                new ExpertsView(userRepository, "lc_expert", this::onView, this::onEdit, this::onDelete),
+                new TutorsView(tutorRepository, this::onView, this::onEdit, this::onDelete)
         );
 
         tabs.forEach(tab -> {
@@ -104,6 +104,14 @@ public class Users extends VerticalLayout {
         provider.refreshAll();
         this.provider = null;
         return simpleUser;
+    }
+
+    private void onView(Persistable<Long> longPersistable, ProviderGet provider) {
+        Optional<SimpleUser> simpleUser = provider.findSimpleUserById(longPersistable.getId());
+        this.provider = provider;
+        simpleUser.ifPresent(u -> {
+            driver.setUser(u, true);
+        });
     }
 
     private void onEdit(Persistable<Long> longPersistable, ProviderGet provider) {

@@ -21,6 +21,7 @@ public class UserDrawer extends Section {
     private final SerializableFunction<SimpleUser, SimpleUser> onSaveCallback;
     private final SerializableRunnable onCloseCallback;
     private final UserForm form;
+    private final Button saveBtn;
     private final BeanValidationBinder<SimpleUser> binder = new BeanValidationBinder<>(SimpleUser.class);
 
     public UserDrawer(SerializableFunction<SimpleUser, SimpleUser> onSaveCallback,
@@ -47,7 +48,7 @@ public class UserDrawer extends Section {
 
         header.add(title, closeBtn);
 
-        var saveBtn = new Button("Save", this::save);
+        saveBtn = new Button("Сохранить", this::save);
         saveBtn.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
         var buttons = new HorizontalLayout(saveBtn);
@@ -78,7 +79,13 @@ public class UserDrawer extends Section {
     }
 
     public void setUser(@Nullable SimpleUser user) {
+        setUser(user, false);
+    }
+
+    public void setUser(@Nullable SimpleUser user, Boolean readOnly) {
         binder.setBean(user);
+        binder.setReadOnly(readOnly);
+        saveBtn.setVisible(!readOnly);
         setVisible(user != null);
     }
 }

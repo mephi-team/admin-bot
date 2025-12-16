@@ -33,7 +33,7 @@ public class MiddleCandidateView extends VerticalLayout implements ProviderGet {
     private final GridSelectActions actions;
     private List<Long> selectedIds;
 
-    public MiddleCandidateView(UserRepository userRepository, String role, BiConsumer<Persistable<Long>, ProviderGet> onEdit, BiConsumer<Persistable<Long>, ProviderGet> onDelete) {
+    public MiddleCandidateView(UserRepository userRepository, String role, BiConsumer<Persistable<Long>, ProviderGet> onView, BiConsumer<Persistable<Long>, ProviderGet> onEdit, BiConsumer<Persistable<Long>, ProviderGet> onDelete) {
         this.role = role;
         this.userRepository = userRepository;
 
@@ -69,13 +69,13 @@ public class MiddleCandidateView extends VerticalLayout implements ProviderGet {
             Button rejectButton = new Button(new Icon(VaadinIcon.CHECK),e -> {
                 System.out.println(item);
             });
-            Button noteButton = new Button(new Icon(VaadinIcon.NOTEBOOK),e -> {
-                System.out.println(item);
+            Button noteButton = new Button(new Icon(VaadinIcon.EYE),e -> {
+               onView.accept(item, this);
             });
             Button chatButton = new Button(new Icon(VaadinIcon.CHAT), e -> {
                 System.out.println(item);
             });
-            Button editButton = new Button(new Icon(VaadinIcon.EDIT), e -> {
+            Button editButton = new Button(new Icon(VaadinIcon.PENCIL), e -> {
                 onEdit.accept(item, this);
             });
             Button deleteButton = new Button(new Icon(VaadinIcon.BAN), e -> {

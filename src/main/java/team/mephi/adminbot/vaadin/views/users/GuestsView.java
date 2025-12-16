@@ -53,7 +53,7 @@ public class GuestsView extends VerticalLayout implements ProviderGet {
         grid.addColumn(UserDto::getPdConsent).setHeader("Согласия ПД").setSortable(true).setKey("pd_consent");
 
         grid.addComponentColumn(item -> {
-            Button editButton = new Button(new Icon(VaadinIcon.EDIT), e -> {
+            Button editButton = new Button(new Icon(VaadinIcon.EYE), e -> {
                 onEdit.accept(item, this);
             });
             Button deleteButton = new Button(new Icon(VaadinIcon.BAN), e -> {

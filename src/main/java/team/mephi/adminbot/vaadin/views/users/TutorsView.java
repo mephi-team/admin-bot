@@ -30,7 +30,7 @@ public class TutorsView extends VerticalLayout implements ProviderGet {
     private final GridSelectActions actions;
     private List<Long> selectedIds;
 
-    public TutorsView(TutorRepository tutorRepository, BiConsumer<Persistable<Long>, ProviderGet> onEdit, BiConsumer<Persistable<Long>, ProviderGet> onDelete) {
+    public TutorsView(TutorRepository tutorRepository, BiConsumer<Persistable<Long>, ProviderGet> onView, BiConsumer<Persistable<Long>, ProviderGet> onEdit, BiConsumer<Persistable<Long>, ProviderGet> onDelete) {
         this.tutorRepository = tutorRepository;
         setHeightFull();
         setPadding(false);
@@ -55,13 +55,13 @@ public class TutorsView extends VerticalLayout implements ProviderGet {
             Button dropButton = new Button("Кураторство", e -> {
                 System.out.println(item);
             });
-            Button noteButton = new Button(new Icon(VaadinIcon.NOTEBOOK), e -> {
-                System.out.println(item);
+            Button noteButton = new Button(new Icon(VaadinIcon.EYE), e -> {
+                onView.accept(item, this);
             });
             Button chatButton = new Button(new Icon(VaadinIcon.CHAT), e -> {
                 System.out.println(item);
             });
-            Button editButton = new Button(new Icon(VaadinIcon.EDIT), e -> {
+            Button editButton = new Button(new Icon(VaadinIcon.PENCIL), e -> {
                 onEdit.accept(item, this);
             });
             Button deleteButton = new Button(new Icon(VaadinIcon.BAN), e -> {
