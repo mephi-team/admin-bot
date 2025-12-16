@@ -16,6 +16,7 @@ import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
 import org.springframework.data.domain.Persistable;
 import team.mephi.adminbot.dto.SimpleUser;
+import team.mephi.adminbot.model.User;
 import team.mephi.adminbot.repository.TutorRepository;
 import team.mephi.adminbot.repository.UserRepository;
 import team.mephi.adminbot.vaadin.components.UserDrawer;
@@ -65,13 +66,13 @@ public class Users extends VerticalLayout {
                 s -> s, key -> new UserCountBadge(roleCounts.getOrDefault(key, 0L))));
 
         tables = List.of(
-                new GuestsView(userRepository, "visitor", onEdit(), onDelete()),
-                new CandidateView(userRepository, "candidate", onEdit(), onDelete()),
-                new MiddleCandidateView(userRepository, "middle_candidate", onEdit(), onDelete()),
-                new StudentView(userRepository, "student", onEdit(), onDelete()),
-                new FreeListenerView(userRepository, "free_listener", onEdit(), onDelete()),
-                new ExpertsView(userRepository, "lc_expert", onEdit(), onDelete()),
-                new TutorsView(tutorRepository, onEdit(), onDelete())
+                new GuestsView(userRepository, "visitor", this::onEdit, this::onDelete),
+                new CandidateView(userRepository, "candidate", this::onEdit, this::onDelete),
+                new MiddleCandidateView(userRepository, "middle_candidate", this::onEdit, this::onDelete),
+                new StudentView(userRepository, "student", this::onEdit, this::onDelete),
+                new FreeListenerView(userRepository, "free_listener", this::onEdit, this::onDelete),
+                new ExpertsView(userRepository, "lc_expert", this::onEdit, this::onDelete),
+                new TutorsView(tutorRepository, this::onEdit, this::onDelete)
         );
 
         tabs.forEach(tab -> {
@@ -79,10 +80,18 @@ public class Users extends VerticalLayout {
             tabSheet.add(new Span(new Span(tabNames.get(index)), badges.get(tab)), tables.get(index));
         });
 
-        driver = new UserDrawer((u) -> {
-            System.out.println("!!!! User " + u);
-            return u;
-        }, onClose());
+        driver = new UserDrawer((user) -> {
+            System.out.println("!!!! User " + user);
+            User fullUser = userRepository.findById(user.getId()).orElseThrow();
+            fullUser.setFirstName(user.getFirstName());
+            fullUser.setLastName(user.getLastName());
+            // ... обновляем поля
+            userRepository.save(fullUser);
+
+            // 2. Обновляем счётчики и таблицу
+            roleCounts = userRepository.countsByRole();
+            return user;
+        }, this::onClose);
 
 //        tabSheet.getSelectedIndex();
         dialog = new UserDeleteDialog(event -> {
@@ -106,33 +115,20 @@ public class Users extends VerticalLayout {
         add(top, tabSheet, driver, dialog);
     }
 
-    private Consumer<Persistable<Long>> onDelete() {
-        return (s) -> {
-            deleteId = s.getId();
-            dialog.open();
-        };
+    private void onEdit(Persistable<Long> longPersistable) {
+        int tabIndex = tabSheet.getSelectedIndex();
+        ProviderGet provider = (ProviderGet) tables.get(tabIndex);
+        Optional<SimpleUser> e = ((UserRepository)provider.getRepository()).findSimpleUserById(longPersistable.getId());
+        driver.setProposal(e.get());
     }
 
-    private Consumer<Persistable<Long>> onEdit() {
-        return (s) -> {
-            int tabIndex = tabSheet.getSelectedIndex();
-            ProviderGet provider = (ProviderGet) tables.get(tabIndex);
-            Optional<SimpleUser> e = ((UserRepository)provider.getRepository()).findSimpleUserById(s.getId());
-            driver.setProposal(e.get());
-        };
+    private void onDelete(Persistable<Long> longPersistable) {
+        deleteId = longPersistable.getId();
+        dialog.open();
     }
 
-    SerializableRunnable onClose() {
-        return () -> {
-            driver.setProposal(null);
-        };
-    }
-
-    private Span createBadge(Long value) {
-        Span badge = new Span(String.valueOf(value));
-        badge.getElement().getThemeList().add("badge small contrast");
-        badge.getStyle().set("margin-inline-start", "var(--lumo-space-xs)");
-        return badge;
+    void onClose() {
+        driver.setProposal(null);
     }
 
 }
