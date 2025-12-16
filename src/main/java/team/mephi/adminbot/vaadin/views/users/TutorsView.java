@@ -34,7 +34,7 @@ public class TutorsView extends VerticalLayout implements ProviderGet {
     private final GridSelectActions actions;
     private List<Long> selectedIds;
 
-    public TutorsView(TutorRepository tutorRepository, BiConsumer<Persistable<Long>, ProviderGet> onView, BiConsumer<Persistable<Long>, ProviderGet> onEdit, BiConsumer<Persistable<Long>, ProviderGet> onDelete) {
+    public TutorsView(TutorRepository tutorRepository, BiConsumer<Persistable<Long>, ProviderGet> onView, BiConsumer<Persistable<Long>, ProviderGet> onEdit, BiConsumer<List<Long>, ProviderGet> onDelete) {
         this.tutorRepository = tutorRepository;
         setHeightFull();
         setPadding(false);
@@ -44,8 +44,7 @@ public class TutorsView extends VerticalLayout implements ProviderGet {
         grid = new Grid<>(TutorWithCounts.class, false);
 
         Button block = new Button("Заблокировать пользователей", new Icon(VaadinIcon.BAN), e -> {
-            tutorRepository.deleteAllById(selectedIds);
-            grid.getDataProvider().refreshAll();
+            onDelete.accept(selectedIds, this);
         });
         actions = new GridSelectActions(block);
 
@@ -69,7 +68,7 @@ public class TutorsView extends VerticalLayout implements ProviderGet {
                 onEdit.accept(item, this);
             });
             Button deleteButton = new Button(new Icon(VaadinIcon.BAN), e -> {
-                onDelete.accept(item, this);
+                onDelete.accept(List.of(item.getId()), this);
             });
             if (item.getDelete()) {
                 deleteButton.getElement().getStyle().set("color", "red");
@@ -145,6 +144,11 @@ public class TutorsView extends VerticalLayout implements ProviderGet {
     @Override
     public void deleteById(Long id) {
         this.tutorRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteAllById(Iterable<? extends Long> ids) {
+        this.tutorRepository.deleteAllById(ids);
     }
 
     @Override

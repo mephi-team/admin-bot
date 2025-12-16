@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class CandidateView extends VerticalLayout implements ProviderGet {
     private final UserRepository userRepository;
@@ -35,7 +36,7 @@ public class CandidateView extends VerticalLayout implements ProviderGet {
     private final GridSelectActions actions;
     private List<Long> selectedIds;
 
-    public CandidateView(UserRepository userRepository, String role, BiConsumer<Persistable<Long>, ProviderGet> onView, BiConsumer<Persistable<Long>, ProviderGet> onEdit, BiConsumer<Persistable<Long>, ProviderGet> onDelete) {
+    public CandidateView(UserRepository userRepository, String role, BiConsumer<Persistable<Long>, ProviderGet> onView, BiConsumer<Persistable<Long>, ProviderGet> onEdit, BiConsumer<List<Long>, ProviderGet> onDelete, Consumer<List<Long>> onConfirm, Consumer<List<Long>> onReject) {
         this.role = role;
         this.userRepository = userRepository;
 
@@ -46,11 +47,14 @@ public class CandidateView extends VerticalLayout implements ProviderGet {
 
         grid = new Grid<>(UserDto.class, false);
 
-        Button accept = new Button("Утвердить кандидатов", new Icon(VaadinIcon.CHECK));
-        Button reject = new Button("Отклонить кандидатов", new Icon(VaadinIcon.CLOSE));
+        Button accept = new Button("Утвердить кандидатов", new Icon(VaadinIcon.CHECK), e -> {
+            onConfirm.accept(selectedIds);
+        });
+        Button reject = new Button("Отклонить кандидатов", new Icon(VaadinIcon.CLOSE), e -> {
+            onReject.accept(selectedIds);
+        });
         Button block = new Button("Заблокировать пользователей", new Icon(VaadinIcon.BAN), e -> {
-            userRepository.deleteAllById(selectedIds);
-            grid.getDataProvider().refreshAll();
+            onDelete.accept(selectedIds, this);
         });
         actions = new GridSelectActions(accept, reject, block);
 
@@ -64,11 +68,11 @@ public class CandidateView extends VerticalLayout implements ProviderGet {
         grid.addColumn(UserDto::getCity).setHeader("Город").setSortable(true).setKey("city");
 
         grid.addComponentColumn(item -> {
-            Button confirmButton = new Button(new Icon(VaadinIcon.CLOSE), e -> {
-                System.out.println(item);
+            Button rejectButton = new Button(new Icon(VaadinIcon.CLOSE), e -> {
+                onReject.accept(List.of(item.getId()));
             });
-            Button rejectButton = new Button(new Icon(VaadinIcon.CHECK), e -> {
-                System.out.println(item);
+            Button confirmButton = new Button(new Icon(VaadinIcon.CHECK), e -> {
+                onConfirm.accept(List.of(item.getId()));
             });
             Button noteButton = new Button(new Icon(VaadinIcon.EYE), e -> {
                 onView.accept(item, this);
@@ -80,14 +84,14 @@ public class CandidateView extends VerticalLayout implements ProviderGet {
                 onEdit.accept(item, this);
             });
             Button deleteButton = new Button(new Icon(VaadinIcon.BAN), e -> {
-                onDelete.accept(item, this);
+                onDelete.accept(List.of(item.getId()), this);
             });
             if (item.getDelete()) {
                 deleteButton.getElement().getStyle().set("color", "red");
             } else {
                 deleteButton.getElement().getStyle().set("color", "black");
             }
-            return new Span(confirmButton, rejectButton, noteButton, chatButton, editButton, deleteButton);
+            return new Span(rejectButton, confirmButton, noteButton, chatButton, editButton, deleteButton);
         }).setHeader("Действия").setWidth("290px").setFlexGrow(0).setKey("actions");
 
         var filterableProvider = getProvider(userRepository, searchField);
@@ -141,6 +145,11 @@ public class CandidateView extends VerticalLayout implements ProviderGet {
     @Override
     public void deleteById(Long id) {
         this.userRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteAllById(Iterable<? extends Long> ids) {
+        this.userRepository.deleteAllById(ids);
     }
 
     @Override

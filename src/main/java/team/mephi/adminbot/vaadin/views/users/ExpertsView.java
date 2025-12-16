@@ -35,7 +35,7 @@ public class ExpertsView extends VerticalLayout implements ProviderGet {
     private final GridSelectActions actions;
     private List<Long> selectedIds;
 
-    public ExpertsView(UserRepository userRepository, String role, BiConsumer<Persistable<Long>, ProviderGet> onView, BiConsumer<Persistable<Long>, ProviderGet> onEdit, BiConsumer<Persistable<Long>, ProviderGet> onDelete) {
+    public ExpertsView(UserRepository userRepository, String role, BiConsumer<Persistable<Long>, ProviderGet> onView, BiConsumer<Persistable<Long>, ProviderGet> onEdit, BiConsumer<List<Long>, ProviderGet> onDelete) {
         this.role = role;
         this.userRepository = userRepository;
 
@@ -47,8 +47,7 @@ public class ExpertsView extends VerticalLayout implements ProviderGet {
         grid = new Grid<>(UserDto.class, false);
 
         Button block = new Button("Заблокировать пользователей", new Icon(VaadinIcon.BAN), e -> {
-            userRepository.deleteAllById(selectedIds);
-            grid.getDataProvider().refreshAll();
+            onDelete.accept(selectedIds, this);
         });
         actions = new GridSelectActions(block);
 
@@ -72,7 +71,7 @@ public class ExpertsView extends VerticalLayout implements ProviderGet {
                 onEdit.accept(item, this);
             });
             Button deleteButton = new Button(new Icon(VaadinIcon.BAN), e -> {
-                onDelete.accept(item, this);
+                onDelete.accept(List.of(item.getId()), this);
             });
             if (item.getDelete()) {
                 deleteButton.getElement().getStyle().set("color", "red");
@@ -133,6 +132,11 @@ public class ExpertsView extends VerticalLayout implements ProviderGet {
     @Override
     public void deleteById(Long id) {
         this.userRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteAllById(Iterable<? extends Long> ids) {
+        this.userRepository.deleteAllById(ids);
     }
 
     @Override

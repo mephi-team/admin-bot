@@ -17,5 +17,7 @@ public interface ProviderGet {
 
     void deleteById(Long id);
 
+    void deleteAllById(Iterable<? extends Long> ids);
+
     void refreshAll();
 }
