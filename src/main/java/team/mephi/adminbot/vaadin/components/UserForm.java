@@ -12,7 +12,7 @@ public class UserForm extends FormLayout {
     private TextField firstName = new TextField();
     private TextField lastName = new TextField();
     private EmailField email = new EmailField();
-    private TextField tgName = new TextField();
+    private TextField telegram = new TextField();
     private TextField phoneNumber = new TextField();
     ComboBox<String> cohorts = new ComboBox<>();
     ComboBox<String> directions = new ComboBox<>();
@@ -38,7 +38,7 @@ public class UserForm extends FormLayout {
         addFormItem(firstName, "Имя");
         addFormItem(lastName, "Фамилия");
         addFormItem(email, "Email");
-        addFormItem(tgName, "Telegram");
+        addFormItem(telegram, "Telegram");
         addFormItem(phoneNumber, "Телефон");
         addFormItem(cohorts, "Набор");
         addFormItem(directions, "Направление");

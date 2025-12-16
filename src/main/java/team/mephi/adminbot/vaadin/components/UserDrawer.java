@@ -6,23 +6,22 @@ import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Section;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.function.SerializableFunction;
 import com.vaadin.flow.function.SerializableRunnable;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.Nullable;
-import team.mephi.adminbot.model.User;
+import team.mephi.adminbot.dto.SimpleUser;
 
 public class UserDrawer extends Section {
 
-    private final SerializableFunction<User, User> onSaveCallback;
+    private final SerializableFunction<SimpleUser, SimpleUser> onSaveCallback;
     private final SerializableRunnable onCloseCallback;
     private final UserForm form;
-    private final BeanValidationBinder<User> binder = new BeanValidationBinder<>(User.class);
+    private final BeanValidationBinder<SimpleUser> binder = new BeanValidationBinder<>(SimpleUser.class);
 
-    public UserDrawer(SerializableFunction<User, User> onSaveCallback,
+    public UserDrawer(SerializableFunction<SimpleUser, SimpleUser> onSaveCallback,
                       SerializableRunnable onCloseCallback) {
         getElement().getStyle().set("position", "fixed");
         getElement().getStyle().set("top", "0");
@@ -60,19 +59,19 @@ public class UserDrawer extends Section {
         setVisible(false);
 
         binder.bindInstanceFields(form);
-        binder.setBean(new User());
     }
 
-    public void setProposal(@Nullable User proposal) {
-//        form.setFormDataObject(proposal);
+    public void setProposal(@Nullable SimpleUser proposal) {
+        binder.setBean(proposal);
         setVisible(proposal != null);
     }
 
     private void save() {
         if (binder.validate().isOk()) {
-            User user = binder.getBean();
+            SimpleUser user = binder.getBean();
             // Сохранить в БД
 //            Notification.show("Сохранено: " + user, 3000, Notification.Position.TOP_END);
+            var savedProposal = onSaveCallback.apply(user);
         } else {
 //            Notification.show("Исправьте ошибки", 3000, Notification.Position.MIDDLE);
         }

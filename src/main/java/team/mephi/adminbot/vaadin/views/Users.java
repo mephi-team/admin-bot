@@ -15,7 +15,7 @@ import com.vaadin.flow.function.SerializableRunnable;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
 import org.springframework.data.domain.Persistable;
-import team.mephi.adminbot.model.User;
+import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.repository.TutorRepository;
 import team.mephi.adminbot.repository.UserRepository;
 import team.mephi.adminbot.vaadin.components.UserDrawer;
@@ -26,6 +26,7 @@ import team.mephi.adminbot.vaadin.views.users.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -36,6 +37,8 @@ public class Users extends VerticalLayout {
     UserDeleteDialog dialog;
     Long deleteId;
     Map<String, Long> roleCounts;
+    List<Component> tables;
+    TabSheet tabSheet;
 
     public Users(UserRepository userRepository, TutorRepository tutorRepository) {
         setHeightFull();
@@ -50,7 +53,7 @@ public class Users extends VerticalLayout {
         buttons.getElement().getStyle().set("gap","24px");
         top.addToEnd(buttons);
 
-        TabSheet tabSheet = new TabSheet();
+        tabSheet = new TabSheet();
         tabSheet.setSizeFull();
 
         roleCounts = userRepository.countsByRole();
@@ -61,7 +64,7 @@ public class Users extends VerticalLayout {
         Map<String, UserCountBadge> badges = tabs.stream().collect(Collectors.toMap(
                 s -> s, key -> new UserCountBadge(roleCounts.getOrDefault(key, 0L))));
 
-        List<Component> tables = List.of(
+        tables = List.of(
                 new GuestsView(userRepository, "visitor", onEdit(), onDelete()),
                 new CandidateView(userRepository, "candidate", onEdit(), onDelete()),
                 new MiddleCandidateView(userRepository, "middle_candidate", onEdit(), onDelete()),
@@ -112,7 +115,10 @@ public class Users extends VerticalLayout {
 
     private Consumer<Persistable<Long>> onEdit() {
         return (s) -> {
-            driver.setProposal(new User());
+            int tabIndex = tabSheet.getSelectedIndex();
+            ProviderGet provider = (ProviderGet) tables.get(tabIndex);
+            Optional<SimpleUser> e = ((UserRepository)provider.getRepository()).findSimpleUserById(s.getId());
+            driver.setProposal(e.get());
         };
     }
 
