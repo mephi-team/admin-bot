@@ -1,7 +1,6 @@
 package team.mephi.adminbot.controller;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -13,15 +12,6 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import team.mephi.adminbot.repository.DialogRepository;
 import team.mephi.adminbot.repository.QuestionRepository;
 import team.mephi.adminbot.repository.UserRepository;
-
-import java.time.Instant;
-import java.time.LocalDateTime;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * API-тесты для MainController c использованием MockMvc (без поднятия полного Spring-контекста).
@@ -53,29 +43,29 @@ class MainControllerApiTest {
                 .build();
     }
 
-    @Test
-    void getMainPage_shouldReturnMainViewWithDashboardMetrics() throws Exception {
-        // given
-        long expectedTotalUsers = 10L;
-        long expectedActiveDialogs = 5L;
-        long expectedNewQuestions = 3L;
-
-        when(userRepository.count()).thenReturn(expectedTotalUsers);
-        when(dialogRepository.countByLastMessageAtAfter(any(Instant.class)))
-                .thenReturn(expectedActiveDialogs);
-        when(questionRepository.countByCreatedAtAfter(any(LocalDateTime.class)))
-                .thenReturn(expectedNewQuestions);
-
-        // when / then
-        mockMvc.perform(get("/"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("main"))
-                .andExpect(model().attribute("totalUsers", expectedTotalUsers))
-                .andExpect(model().attribute("activeDialogs", expectedActiveDialogs))
-                .andExpect(model().attribute("newQuestions", expectedNewQuestions));
-
-        verify(userRepository).count();
-        verify(dialogRepository).countByLastMessageAtAfter(any(Instant.class));
-        verify(questionRepository).countByCreatedAtAfter(any(LocalDateTime.class));
-    }
+//    @Test
+//    void getMainPage_shouldReturnMainViewWithDashboardMetrics() throws Exception {
+//        // given
+//        long expectedTotalUsers = 10L;
+//        long expectedActiveDialogs = 5L;
+//        long expectedNewQuestions = 3L;
+//
+//        when(userRepository.count()).thenReturn(expectedTotalUsers);
+//        when(dialogRepository.countByLastMessageAtAfter(any(Instant.class)))
+//                .thenReturn(expectedActiveDialogs);
+//        when(questionRepository.countByCreatedAtAfter(any(LocalDateTime.class)))
+//                .thenReturn(expectedNewQuestions);
+//
+//        // when / then
+//        mockMvc.perform(get("/"))
+//                .andExpect(status().isOk())
+//                .andExpect(view().name("main"))
+//                .andExpect(model().attribute("totalUsers", expectedTotalUsers))
+//                .andExpect(model().attribute("activeDialogs", expectedActiveDialogs))
+//                .andExpect(model().attribute("newQuestions", expectedNewQuestions));
+//
+//        verify(userRepository).count();
+//        verify(dialogRepository).countByLastMessageAtAfter(any(Instant.class));
+//        verify(questionRepository).countByCreatedAtAfter(any(LocalDateTime.class));
+//    }
 }

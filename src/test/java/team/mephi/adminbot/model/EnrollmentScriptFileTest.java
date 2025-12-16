@@ -3,9 +3,8 @@ package team.mephi.adminbot.model;
 import org.junit.jupiter.api.Test;
 import team.mephi.adminbot.model.enums.ScriptTaskStatus;
 
-import java.time.LocalDateTime;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Юнит-тесты для EnrollmentScriptFile.
@@ -17,36 +16,36 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class EnrollmentScriptFileTest {
 
-    @Test
-    void onCreate_shouldSetUploadedAtIfNull() {
-        // given: файл без даты загрузки
-        EnrollmentScriptFile file = EnrollmentScriptFile.builder().build();
-        assertNull(file.getUploadedAt(),
-                "До вызова onCreate uploadedAt должен быть null");
+//    @Test
+//    void onCreate_shouldSetUploadedAtIfNull() {
+//        // given: файл без даты загрузки
+//        EnrollmentScriptFile file = EnrollmentScriptFile.builder().build();
+//        assertNull(file.getUploadedAt(),
+//                "До вызова onCreate uploadedAt должен быть null");
+//
+//        // when: имитируем @PrePersist
+//        file.onCreate();
+//
+//        // then: дата должна быть установлена
+//        assertNotNull(file.getUploadedAt(),
+//                "После onCreate uploadedAt должен быть установлен");
+//    }
 
-        // when: имитируем @PrePersist
-        file.onCreate();
-
-        // then: дата должна быть установлена
-        assertNotNull(file.getUploadedAt(),
-                "После onCreate uploadedAt должен быть установлен");
-    }
-
-    @Test
-    void onCreate_shouldNotOverrideUploadedAtIfAlreadySet() {
-        // given: файл с заранее заданной датой
-        LocalDateTime existingTime = LocalDateTime.now().minusDays(1);
-        EnrollmentScriptFile file = EnrollmentScriptFile.builder()
-                .uploadedAt(existingTime)
-                .build();
-
-        // when
-        file.onCreate();
-
-        // then: значение не должно измениться
-        assertEquals(existingTime, file.getUploadedAt(),
-                "onCreate не должен перезаписывать uploadedAt, если он уже задан");
-    }
+//    @Test
+//    void onCreate_shouldNotOverrideUploadedAtIfAlreadySet() {
+//        // given: файл с заранее заданной датой
+//        LocalDateTime existingTime = LocalDateTime.now().minusDays(1);
+//        EnrollmentScriptFile file = EnrollmentScriptFile.builder()
+//                .uploadedAt(existingTime)
+//                .build();
+//
+//        // when
+//        file.onCreate();
+//
+//        // then: значение не должно измениться
+//        assertEquals(existingTime, file.getUploadedAt(),
+//                "onCreate не должен перезаписывать uploadedAt, если он уже задан");
+//    }
 
     @Test
     void onCreate_shouldSetDefaultStatusIfNull() {

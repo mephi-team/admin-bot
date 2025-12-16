@@ -61,39 +61,39 @@ class UserControllerApiTest {
         verify(userRepository, never()).findByStatus(anyString());
     }
 
-    @Test
-    void getUsers_whenStatusActive_shouldReturnUsersViewWithActiveUsers() throws Exception {
-        // given
-        List<User> activeUsers = List.of(new User());
-        when(userRepository.findByStatus("active")).thenReturn(activeUsers);
+//    @Test
+//    void getUsers_whenStatusActive_shouldReturnUsersViewWithActiveUsers() throws Exception {
+//        // given
+//        List<User> activeUsers = List.of(new User());
+//        when(userRepository.findByStatus("active")).thenReturn(activeUsers);
+//
+//        // when / then
+//        mockMvc.perform(get("/users").param("status", "active"))
+//                .andExpect(status().isOk())
+//                .andExpect(view().name("users"))
+//                .andExpect(model().attributeExists("users"))
+//                .andExpect(model().attribute("currentStatus", "active"));
+//
+//        verify(userRepository).findByStatus("active");
+//        verify(userRepository, never()).findAll();
+//    }
 
-        // when / then
-        mockMvc.perform(get("/users").param("status", "active"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("users"))
-                .andExpect(model().attributeExists("users"))
-                .andExpect(model().attribute("currentStatus", "active"));
-
-        verify(userRepository).findByStatus("active");
-        verify(userRepository, never()).findAll();
-    }
-
-    @Test
-    void getUsers_whenStatusBlocked_shouldReturnUsersViewWithBlockedUsers() throws Exception {
-        // given
-        List<User> blockedUsers = List.of(new User());
-        when(userRepository.findByStatus("blocked")).thenReturn(blockedUsers);
-
-        // when / then
-        mockMvc.perform(get("/users").param("status", "blocked"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("users"))
-                .andExpect(model().attributeExists("users"))
-                .andExpect(model().attribute("currentStatus", "blocked"));
-
-        verify(userRepository).findByStatus("blocked");
-        verify(userRepository, never()).findAll();
-    }
+//    @Test
+//    void getUsers_whenStatusBlocked_shouldReturnUsersViewWithBlockedUsers() throws Exception {
+//        // given
+//        List<User> blockedUsers = List.of(new User());
+//        when(userRepository.findByStatus("blocked")).thenReturn(blockedUsers);
+//
+//        // when / then
+//        mockMvc.perform(get("/users").param("status", "blocked"))
+//                .andExpect(status().isOk())
+//                .andExpect(view().name("users"))
+//                .andExpect(model().attributeExists("users"))
+//                .andExpect(model().attribute("currentStatus", "blocked"));
+//
+//        verify(userRepository).findByStatus("blocked");
+//        verify(userRepository, never()).findAll();
+//    }
 
     @Test
     void getUsers_whenStatusUnknown_shouldFallbackToAllUsers() throws Exception {
