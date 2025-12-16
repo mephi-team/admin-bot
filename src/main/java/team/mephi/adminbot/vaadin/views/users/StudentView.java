@@ -11,6 +11,7 @@ import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
 import org.springframework.data.domain.Persistable;
 import org.springframework.data.repository.CrudRepository;
+import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.dto.UserDto;
 import team.mephi.adminbot.repository.UserRepository;
 import team.mephi.adminbot.vaadin.components.*;
@@ -18,7 +19,9 @@ import team.mephi.adminbot.vaadin.providers.ProviderGet;
 import team.mephi.adminbot.vaadin.providers.UserProvider;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public class StudentView extends VerticalLayout implements ProviderGet {
@@ -28,7 +31,7 @@ public class StudentView extends VerticalLayout implements ProviderGet {
     private final GridSelectActions actions;
     private List<Long> selectedIds;
 
-    public StudentView(UserRepository userRepository, String role, Consumer<Persistable<Long>> onEdit, Consumer<Persistable<Long>> onDelete) {
+    public StudentView(UserRepository userRepository, String role, BiConsumer<Persistable<Long>, ProviderGet> onEdit, Consumer<Persistable<Long>> onDelete) {
         this.role = role;
         this.userRepository = userRepository;
 
@@ -70,7 +73,7 @@ public class StudentView extends VerticalLayout implements ProviderGet {
             });
             Button editButton = new Button(new Icon(VaadinIcon.EDIT));
             editButton.addClickListener(e -> {
-                onEdit.accept(item);
+                onEdit.accept(item, this);
             });
             Button deleteButton = new Button(new Icon(VaadinIcon.BAN));
             if (item.getDelete()) {
@@ -117,6 +120,11 @@ public class StudentView extends VerticalLayout implements ProviderGet {
     @Override
     public CrudRepository<?, Long> getRepository() {
         return userRepository;
+    }
+
+    @Override
+    public Optional<SimpleUser> findSimpleUserById(Long id) {
+        return userRepository.findSimpleUserById(id);
     }
 
     private ConfigurableFilterDataProvider<UserDto, Void, String> getProvider(UserRepository userRepository, TextField searchField) {

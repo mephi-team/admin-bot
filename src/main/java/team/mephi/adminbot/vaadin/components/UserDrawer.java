@@ -1,11 +1,13 @@
 package team.mephi.adminbot.vaadin.components;
 
+import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Section;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.function.SerializableFunction;
@@ -41,11 +43,11 @@ public class UserDrawer extends Section {
         title.setId("proposal-drawer-header");
 //        setAriaLabeledBy("proposal-drawer-header");
 
-        var closeBtn = new Button(new Icon(VaadinIcon.CLOSE), event -> close());
+        var closeBtn = new Button(new Icon(VaadinIcon.CLOSE), this::close);
 
         header.add(title, closeBtn);
 
-        var saveBtn = new Button("Save", event -> save());
+        var saveBtn = new Button("Save", this::save);
         saveBtn.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
         var buttons = new HorizontalLayout(saveBtn);
@@ -61,27 +63,20 @@ public class UserDrawer extends Section {
         binder.bindInstanceFields(form);
     }
 
-    public void setProposal(@Nullable SimpleUser proposal) {
-        binder.setBean(proposal);
-        setVisible(proposal != null);
-    }
-
-    private void save() {
+    private void save(ClickEvent<Button> buttonClickEvent) {
         if (binder.validate().isOk()) {
-            SimpleUser user = binder.getBean();
-            // Сохранить в БД
-//            Notification.show("Сохранено: " + user, 3000, Notification.Position.TOP_END);
-            var savedProposal = onSaveCallback.apply(user);
-        } else {
-//            Notification.show("Исправьте ошибки", 3000, Notification.Position.MIDDLE);
+            onSaveCallback.apply(binder.getBean());
+            onCloseCallback.run();
+            Notification.show("Сохранено", 3000, Notification.Position.TOP_END);
         }
-//        form.getFormDataObject().ifPresent(proposal -> {
-//            var savedProposal = onSaveCallback.apply(proposal);
-//            form.setFormDataObject(savedProposal);
-//        });
     }
 
-    private void close() {
+    private void close(ClickEvent<Button> buttonClickEvent) {
         onCloseCallback.run();
+    }
+
+    public void setUser(@Nullable SimpleUser user) {
+        binder.setBean(user);
+        setVisible(user != null);
     }
 }

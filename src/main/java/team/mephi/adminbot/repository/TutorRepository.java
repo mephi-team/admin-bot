@@ -6,10 +6,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.dto.TutorWithCounts;
 import team.mephi.adminbot.model.Tutor;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TutorRepository extends JpaRepository<Tutor, Long> {
 
@@ -40,4 +42,7 @@ public interface TutorRepository extends JpaRepository<Tutor, Long> {
     @Transactional
     @Modifying
     void deleteAllById(@Param("ids") Iterable<? extends Long> ids);
+
+    @Query("SELECT new team.mephi.adminbot.dto.SimpleUser(u.id, u.firstName, u.lastName, u.email, u.tgId) FROM Tutor u WHERE u.id = :id")
+    Optional<SimpleUser> findSimpleUserById(@NonNull Long id);
 }

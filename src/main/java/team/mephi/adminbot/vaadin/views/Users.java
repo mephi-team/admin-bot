@@ -11,12 +11,10 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.TabSheet;
-import com.vaadin.flow.function.SerializableRunnable;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
 import org.springframework.data.domain.Persistable;
 import team.mephi.adminbot.dto.SimpleUser;
-import team.mephi.adminbot.model.User;
 import team.mephi.adminbot.repository.TutorRepository;
 import team.mephi.adminbot.repository.UserRepository;
 import team.mephi.adminbot.vaadin.components.UserDrawer;
@@ -28,7 +26,6 @@ import team.mephi.adminbot.vaadin.views.users.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Route("/users")
@@ -80,18 +77,7 @@ public class Users extends VerticalLayout {
             tabSheet.add(new Span(new Span(tabNames.get(index)), badges.get(tab)), tables.get(index));
         });
 
-        driver = new UserDrawer((user) -> {
-            System.out.println("!!!! User " + user);
-            User fullUser = userRepository.findById(user.getId()).orElseThrow();
-            fullUser.setFirstName(user.getFirstName());
-            fullUser.setLastName(user.getLastName());
-            // ... обновляем поля
-            userRepository.save(fullUser);
-
-            // 2. Обновляем счётчики и таблицу
-            roleCounts = userRepository.countsByRole();
-            return user;
-        }, this::onClose);
+        driver = new UserDrawer(this::onSave, this::onClose);
 
 //        tabSheet.getSelectedIndex();
         dialog = new UserDeleteDialog(event -> {
@@ -115,11 +101,24 @@ public class Users extends VerticalLayout {
         add(top, tabSheet, driver, dialog);
     }
 
-    private void onEdit(Persistable<Long> longPersistable) {
-        int tabIndex = tabSheet.getSelectedIndex();
-        ProviderGet provider = (ProviderGet) tables.get(tabIndex);
-        Optional<SimpleUser> e = ((UserRepository)provider.getRepository()).findSimpleUserById(longPersistable.getId());
-        driver.setProposal(e.get());
+    private SimpleUser onSave(SimpleUser simpleUser) {
+        System.out.println("!!!! User " + simpleUser);
+//            User fullUser = userRepository.findById(user.getId()).orElseThrow();
+//            fullUser.setFirstName(user.getFirstName());
+//            fullUser.setLastName(user.getLastName());
+//            // ... обновляем поля
+//            userRepository.save(fullUser);
+
+        // 2. Обновляем счётчики и таблицу
+//        roleCounts = userRepository.countsByRole();
+        return simpleUser;
+    }
+
+    private void onEdit(Persistable<Long> longPersistable, ProviderGet provider) {
+        Optional<SimpleUser> simpleUser = provider.findSimpleUserById(longPersistable.getId());
+        simpleUser.ifPresent(u -> {
+            driver.setUser(u);
+        });
     }
 
     private void onDelete(Persistable<Long> longPersistable) {
@@ -128,7 +127,7 @@ public class Users extends VerticalLayout {
     }
 
     void onClose() {
-        driver.setProposal(null);
+        driver.setUser(null);
     }
 
 }
