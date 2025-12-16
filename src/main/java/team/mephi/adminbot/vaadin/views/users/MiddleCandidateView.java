@@ -15,6 +15,7 @@ import org.springframework.data.domain.Persistable;
 import org.springframework.data.repository.CrudRepository;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.dto.UserDto;
+import team.mephi.adminbot.model.User;
 import team.mephi.adminbot.repository.UserRepository;
 import team.mephi.adminbot.vaadin.components.*;
 import team.mephi.adminbot.vaadin.providers.ProviderGet;
@@ -24,7 +25,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 public class MiddleCandidateView extends VerticalLayout implements ProviderGet {
     private final UserRepository userRepository;
@@ -33,7 +33,7 @@ public class MiddleCandidateView extends VerticalLayout implements ProviderGet {
     private final GridSelectActions actions;
     private List<Long> selectedIds;
 
-    public MiddleCandidateView(UserRepository userRepository, String role, BiConsumer<Persistable<Long>, ProviderGet> onEdit, Consumer<Persistable<Long>> onDelete) {
+    public MiddleCandidateView(UserRepository userRepository, String role, BiConsumer<Persistable<Long>, ProviderGet> onEdit, BiConsumer<Persistable<Long>, ProviderGet> onDelete) {
         this.role = role;
         this.userRepository = userRepository;
 
@@ -79,16 +79,13 @@ public class MiddleCandidateView extends VerticalLayout implements ProviderGet {
                 onEdit.accept(item, this);
             });
             Button deleteButton = new Button(new Icon(VaadinIcon.BAN), e -> {
-                onDelete.accept(item);
+                onDelete.accept(item, this);
             });
             if (item.getDelete()) {
                 deleteButton.getElement().getStyle().set("color", "red");
             } else {
                 deleteButton.getElement().getStyle().set("color", "black");
             }
-            deleteButton.addClickListener(e -> {
-                onDelete.accept(item);
-            });
             return new Span(confirmButton, rejectButton, noteButton, chatButton, editButton, deleteButton);
         }).setHeader("Действия").setWidth("290px").setFlexGrow(0).setKey("actions");
 
@@ -147,6 +144,25 @@ public class MiddleCandidateView extends VerticalLayout implements ProviderGet {
     @Override
     public Optional<SimpleUser> findSimpleUserById(Long id) {
         return userRepository.findSimpleUserById(id);
+    }
+
+    @Override
+    public SimpleUser save(SimpleUser user) {
+        User fullUser = userRepository.findById(user.getId()).orElseThrow();
+        fullUser.setFirstName(user.getFirstName());
+        fullUser.setLastName(user.getLastName());
+        fullUser = userRepository.save(fullUser);
+        return new SimpleUser(fullUser.getId(), fullUser.getFirstName(), fullUser.getLastName(), fullUser.getEmail(), fullUser.getTgId());
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        this.userRepository.deleteById(id);
+    }
+
+    @Override
+    public void refreshAll() {
+        grid.getDataProvider().refreshAll();
     }
 
     private static ComponentRenderer<Span, UserDto> createStatusComponentRenderer() {

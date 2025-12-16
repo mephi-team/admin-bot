@@ -66,12 +66,14 @@ public class UserDrawer extends Section {
     private void save(ClickEvent<Button> buttonClickEvent) {
         if (binder.validate().isOk()) {
             onSaveCallback.apply(binder.getBean());
-            onCloseCallback.run();
+            close(buttonClickEvent);
             Notification.show("Сохранено", 3000, Notification.Position.TOP_END);
         }
     }
 
     private void close(ClickEvent<Button> buttonClickEvent) {
+        binder.setBean(null);
+        setVisible(false);
         onCloseCallback.run();
     }
 

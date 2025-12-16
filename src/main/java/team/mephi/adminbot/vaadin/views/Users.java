@@ -37,6 +37,7 @@ public class Users extends VerticalLayout {
     Map<String, Long> roleCounts;
     List<Component> tables;
     TabSheet tabSheet;
+    ProviderGet provider;
 
     public Users(UserRepository userRepository, TutorRepository tutorRepository) {
         setHeightFull();
@@ -85,14 +86,11 @@ public class Users extends VerticalLayout {
                 int tabIndex = tabSheet.getSelectedIndex();
                 String tabCode = tabs.get(tabIndex);
 
-                System.out.println("!!!! TAB INDEX " + tabSheet.getSelectedIndex());
-                ProviderGet provider = (ProviderGet) tables.get(tabIndex);
-
-                provider.getRepository().deleteById(deleteId);
+                provider.deleteById(deleteId);
                 roleCounts = userRepository.countsByRole();
 
                 badges.get(tabCode).setCount(roleCounts.getOrDefault(tabCode, 0L));
-                provider.getProvider().refreshAll();
+                provider.refreshAll();
             }
             dialog.close();
             deleteId = null;
@@ -102,32 +100,28 @@ public class Users extends VerticalLayout {
     }
 
     private SimpleUser onSave(SimpleUser simpleUser) {
-        System.out.println("!!!! User " + simpleUser);
-//            User fullUser = userRepository.findById(user.getId()).orElseThrow();
-//            fullUser.setFirstName(user.getFirstName());
-//            fullUser.setLastName(user.getLastName());
-//            // ... обновляем поля
-//            userRepository.save(fullUser);
-
-        // 2. Обновляем счётчики и таблицу
-//        roleCounts = userRepository.countsByRole();
+        simpleUser = provider.save(simpleUser);
+        provider.refreshAll();
+        this.provider = null;
         return simpleUser;
     }
 
     private void onEdit(Persistable<Long> longPersistable, ProviderGet provider) {
         Optional<SimpleUser> simpleUser = provider.findSimpleUserById(longPersistable.getId());
+        this.provider = provider;
         simpleUser.ifPresent(u -> {
             driver.setUser(u);
         });
     }
 
-    private void onDelete(Persistable<Long> longPersistable) {
+    private void onDelete(Persistable<Long> longPersistable, ProviderGet provider) {
+        this.provider = provider;
         deleteId = longPersistable.getId();
         dialog.open();
     }
 
     void onClose() {
-        driver.setUser(null);
+        this.provider = null;
     }
 
 }
