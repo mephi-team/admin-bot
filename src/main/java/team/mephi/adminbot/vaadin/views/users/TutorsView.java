@@ -133,11 +133,17 @@ public class TutorsView extends VerticalLayout implements ProviderGet {
 
     @Override
     public SimpleUser save(SimpleUser user) {
-        Tutor fullUser = tutorRepository.findById(user.getId()).orElseThrow();
+        Tutor fullUser;
+        if (user.getId() != null) {
+            fullUser = tutorRepository.findById(user.getId()).orElseGet(Tutor::new);
+        } else {
+            fullUser = new Tutor();
+        }
         fullUser.setFirstName(user.getFirstName());
         fullUser.setLastName(user.getLastName());
+        fullUser.setEmail(user.getEmail());
         fullUser = tutorRepository.save(fullUser);
-        return new SimpleUser(fullUser.getId(), fullUser.getFirstName(), fullUser.getLastName(), fullUser.getEmail(), fullUser.getTgId());
+        return new SimpleUser(fullUser.getId(), "tutor", fullUser.getFirstName(), fullUser.getLastName(), fullUser.getEmail(), fullUser.getTgId());
     }
 
     @Override

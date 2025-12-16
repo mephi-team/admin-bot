@@ -12,14 +12,18 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.TabSheet;
+import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
 import team.mephi.adminbot.dto.SimpleUser;
+import team.mephi.adminbot.model.Role;
+import team.mephi.adminbot.repository.RoleRepository;
 import team.mephi.adminbot.repository.TutorRepository;
 import team.mephi.adminbot.repository.UserRepository;
 import team.mephi.adminbot.vaadin.components.UserCountBadge;
 import team.mephi.adminbot.vaadin.components.UserConfirmDialog;
-import team.mephi.adminbot.vaadin.components.UserDrawer;
+import team.mephi.adminbot.vaadin.components.RightDrawer;
+import team.mephi.adminbot.vaadin.components.UserForm;
 import team.mephi.adminbot.vaadin.providers.ProviderGet;
 import team.mephi.adminbot.vaadin.views.users.*;
 
@@ -53,7 +57,7 @@ public class Users extends VerticalLayout {
     private final String REJECT_ALL_MESSAGE = "Информация об отказе отправлена %d кандидатам";
     private final String REJECT_ACTION = "Отклонить";
 
-    UserDrawer driver;
+    RightDrawer driver;
     UserConfirmDialog dialogBlock = new UserConfirmDialog(BLOCK_TITLE, BLOCK_TEXT, BLOCK_ACTION, BLOCK_ALL_TITLE, BLOCK_ALL_TEXT, BLOCK_MESSAGE, BLOCK_ALL_MESSAGE, this::showBlockMessage);
     UserConfirmDialog dialogAccept = new UserConfirmDialog(ACCEPT_TITLE, ACCEPT_TEXT, ACCEPT_ACTION, ACCEPT_ALL_TITLE, ACCEPT_ALL_TEXT, ACCEPT_MESSAGE, ACCEPT_ALL_MESSAGE, this::showMessage);
     UserConfirmDialog dialogReject = new UserConfirmDialog(REJECT_TITLE, REJECT_TEXT, REJECT_ACTION, REJECT_ALL_TITLE, REJECT_ALL_TEXT, REJECT_MESSAGE, REJECT_ALL_MESSAGE,  this::showMessage);
@@ -63,13 +67,24 @@ public class Users extends VerticalLayout {
     ProviderGet provider;
     List<Long> blockIds;
 
-    public Users(UserRepository userRepository, TutorRepository tutorRepository) {
+    private final BeanValidationBinder<SimpleUser> binder = new BeanValidationBinder<>(SimpleUser.class);
+
+    public Users(UserRepository userRepository, TutorRepository tutorRepository, RoleRepository roleRepository) {
+        List<String> tabs = List.of("visitor", "candidate", "middle_candidate", "student", "free_listener", "lc_expert", "tutor");
+        List<String> tabNames = List.of("Гости", "Кандидаты", "Миддл-Кандидаты", "Студенты", "Слушатели", "Эксперты", "Кураторы");
+
         setHeightFull();
         HorizontalLayout top = new HorizontalLayout();
         top.setWidthFull();
-
         top.addToStart(new H1("Пользователи"));
-        var primaryButton = new Button("Добавить пользователя", new Icon(VaadinIcon.PLUS));
+        var primaryButton = new Button("Добавить пользователя", new Icon(VaadinIcon.PLUS), e -> {
+            var selectedTab = tabSheet.getSelectedIndex();
+            var user = new SimpleUser();
+            user.setRole(tabs.get(selectedTab));
+            binder.setBean(user);
+            provider = (ProviderGet) tables.get(selectedTab);
+            driver.setVisible(true);
+        });
         primaryButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         Div buttons = new Div(new Button("Загрузить из файла", new Icon(VaadinIcon.FILE_ADD)), primaryButton);
         buttons.getElement().getStyle().set("display", "flex");
@@ -81,19 +96,16 @@ public class Users extends VerticalLayout {
 
         roleCounts = userRepository.countsByRole();
 
-        List<String> tabs = List.of("visitor", "candidate", "middle_candidate", "student", "free_listener", "lc_expert", "tutor");
-        List<String> tabNames = List.of("Гости", "Кандидаты", "Миддл-Кандидаты", "Студенты", "Слушатели", "Эксперты", "Кураторы");
-
         Map<String, UserCountBadge> badges = tabs.stream().collect(Collectors.toMap(
                 s -> s, key -> new UserCountBadge(roleCounts.getOrDefault(key, 0L))));
 
         tables = List.of(
-                new GuestsView(userRepository, "visitor", this::onView, this::onBlock),
-                new CandidateView(userRepository, "candidate", this::onView, this::onEdit, this::onBlock, this::onAccept, this::onReject),
-                new MiddleCandidateView(userRepository, "middle_candidate", this::onView, this::onEdit, this::onBlock),
-                new StudentView(userRepository, "student", this::onView, this::onEdit, this::onBlock),
-                new FreeListenerView(userRepository, "free_listener", this::onView, this::onEdit, this::onBlock),
-                new ExpertsView(userRepository, "lc_expert", this::onView, this::onEdit, this::onBlock),
+                new GuestsView(userRepository, roleRepository, "visitor", this::onView, this::onBlock),
+                new CandidateView(userRepository, roleRepository, "candidate", this::onView, this::onEdit, this::onBlock, this::onAccept, this::onReject),
+                new MiddleCandidateView(userRepository, roleRepository, "middle_candidate", this::onView, this::onEdit, this::onBlock),
+                new StudentView(userRepository, roleRepository, "student", this::onView, this::onEdit, this::onBlock),
+                new FreeListenerView(userRepository, roleRepository, "free_listener", this::onView, this::onEdit, this::onBlock),
+                new ExpertsView(userRepository, roleRepository, "lc_expert", this::onView, this::onEdit, this::onBlock),
                 new TutorsView(tutorRepository, this::onView, this::onEdit, this::onBlock)
         );
 
@@ -102,9 +114,14 @@ public class Users extends VerticalLayout {
             tabSheet.add(new Span(new Span(tabNames.get(index)), badges.get(tab)), tables.get(index));
         });
 
-        driver = new UserDrawer(this::onSave, this::onClose);
+        UserForm form = new UserForm(roleRepository.findAll());
+        driver = new RightDrawer("Редактировать пользователя", form, this::onSave, this::onClose);
 
-//        tabSheet.getSelectedIndex();
+        binder.bindInstanceFields(form);
+        binder.forField(form.roles)
+                .withConverter(Role::getCode, code -> roleRepository.findByCode(code).orElseThrow())
+                .bind(SimpleUser::getRole, SimpleUser::setRole);
+
         add(top, tabSheet, driver);
     }
 
@@ -130,18 +147,23 @@ public class Users extends VerticalLayout {
         dialogReject.open();
     }
 
-    private SimpleUser onSave(SimpleUser simpleUser) {
-        simpleUser = provider.save(simpleUser);
-        provider.refreshAll();
-        this.provider = null;
-        return simpleUser;
+    private Boolean onSave() {
+        if (binder.validate().isOk()) {
+            provider.save(binder.getBean());
+            provider.refreshAll();
+            this.provider = null;
+            Notification.show("Сохранено", 3000, Notification.Position.TOP_END);
+            return true;
+        }
+        return false;
     }
 
     private void onView(Long id, ProviderGet provider) {
         this.provider = provider;
         Optional<SimpleUser> simpleUser = provider.findSimpleUserById(id);
         simpleUser.ifPresent(u -> {
-            driver.setUser(u, true);
+            binder.setBean(u);
+            driver.setVisible(true);
         });
     }
 
@@ -149,7 +171,8 @@ public class Users extends VerticalLayout {
         this.provider = provider;
         Optional<SimpleUser> simpleUser = provider.findSimpleUserById(id);
         simpleUser.ifPresent(u -> {
-            driver.setUser(u);
+            binder.setBean(u);
+            driver.setVisible(true);
         });
     }
 
@@ -162,6 +185,7 @@ public class Users extends VerticalLayout {
 
     void onClose() {
         this.provider = null;
+        binder.setBean(new SimpleUser());
     }
 
 }

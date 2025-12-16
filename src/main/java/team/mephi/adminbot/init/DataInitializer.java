@@ -79,11 +79,12 @@ public class DataInitializer {
         List<Role> roles = Arrays.asList(
                 Role.builder().code("student").name("student").description("Студенты").build(),
                 Role.builder().code("candidate").name("candidate").description("Кандидаты").build(),
-                Role.builder().code("visitor").name("visitor").description("Посетитель").build(),
+                Role.builder().code("visitor").name("visitor").description("Посетители").build(),
                 Role.builder().code("free_listener").name("free_listener").description("Слушатели").build(),
                 Role.builder().code("middle_candidate").name("middle_candidate").description("Миддл-кандидаты").build(),
                 Role.builder().code("lc_expert").name("lc_expert").description("Эксперты").build(),
-                Role.builder().code("extuser").name("extuser").description("Внешний пользователь").build()
+                Role.builder().code("extuser").name("extuser").description("Внешние пользователи").build(),
+                Role.builder().code("tutor").name("tutor").description("Кураторы").build()
         );
         roleRepository.saveAll(roles);
         System.out.println("  → Создано 5 ролей");
@@ -123,7 +124,7 @@ public class DataInitializer {
         List<User> users = Arrays.asList(
                 User.builder().tgId("tg_1001").email("test1@example.com").userName("Анна Смирнова").firstName("Анна").lastName("Смирнова").role(studentRole).direction(java).status(UserStatus.ACTIVE).build(),
                 User.builder().tgId("tg_1002").email("test2@example.com").userName("Иван Петров").firstName("Иван").lastName("Петров").role(candidateRole).direction(analytics).status(UserStatus.ACTIVE).build(),
-                User.builder().tgId("tg_1003").email("test3@example.com").userName("Мария Козлова").firstName("Мария").lastName("Козлова").role(studentRole).direction(python).status(UserStatus.BLOCKED).build(),
+                User.builder().tgId("tg_1003").email("test3@example.com").userName("Мария Козлова").firstName("Мария").lastName("Козлова").role(candidateRole).direction(python).status(UserStatus.BLOCKED).build(),
                 User.builder().tgId("tg_1004").email("test4@example.com").userName("Алексей Иванов").firstName("Алексей").lastName("Иванов").role(middleCandidateRole).direction(java).status(UserStatus.ACTIVE).build(),
                 User.builder().tgId("tg_1005").email("test5@example.com").userName("Екатерина Волкова").firstName("Екатерина").lastName("Волкова").role(studentRole).direction(analytics).status(UserStatus.ACTIVE).build(),
                 User.builder().tgId("tg_1006").email("test6@example.com").userName("Анна Козлова").firstName("Анна").lastName("Козлова").role(visitorRole).status(UserStatus.ACTIVE).build(),

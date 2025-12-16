@@ -10,10 +10,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SimpleUser {
     private Long id;
+    private String role;
     @NotEmpty
     private String firstName;
     @NotEmpty
     private String lastName;
+    @NotEmpty
     private String email;
     private String telegram;
 }

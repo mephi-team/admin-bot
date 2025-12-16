@@ -13,6 +13,7 @@ import org.springframework.data.repository.CrudRepository;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.dto.UserDto;
 import team.mephi.adminbot.model.User;
+import team.mephi.adminbot.repository.RoleRepository;
 import team.mephi.adminbot.repository.UserRepository;
 import team.mephi.adminbot.vaadin.components.*;
 import team.mephi.adminbot.vaadin.providers.ProviderGet;
@@ -25,14 +26,16 @@ import java.util.function.BiConsumer;
 
 public class GuestsView extends VerticalLayout implements ProviderGet {
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final String role;
     private final Grid<UserDto> grid;
     private final GridSelectActions actions;
     private List<Long> selectedIds;
 
-    public GuestsView(UserRepository userRepository, String role, BiConsumer<Long, ProviderGet> onEdit, BiConsumer<List<Long>, ProviderGet> onDelete) {
+    public GuestsView(UserRepository userRepository, RoleRepository roleRepository, String role, BiConsumer<Long, ProviderGet> onEdit, BiConsumer<List<Long>, ProviderGet> onDelete) {
         this.role = role;
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
 
         setHeightFull();
         setPadding(false);
@@ -106,11 +109,18 @@ public class GuestsView extends VerticalLayout implements ProviderGet {
 
     @Override
     public SimpleUser save(SimpleUser user) {
-        User fullUser = userRepository.findById(user.getId()).orElseThrow();
+        User fullUser;
+        if (user.getId() != null) {
+            fullUser = userRepository.findById(user.getId()).orElseGet(User::new);
+        } else {
+            fullUser = new User();
+        }
+        fullUser.setRole(roleRepository.findByCode(user.getRole()).orElseThrow());
         fullUser.setFirstName(user.getFirstName());
         fullUser.setLastName(user.getLastName());
+        fullUser.setEmail(user.getEmail());
         fullUser = userRepository.save(fullUser);
-        return new SimpleUser(fullUser.getId(), fullUser.getFirstName(), fullUser.getLastName(), fullUser.getEmail(), fullUser.getTgId());
+        return new SimpleUser(fullUser.getId(), fullUser.getRole().getCode(), fullUser.getFirstName(), fullUser.getLastName(), fullUser.getEmail(), fullUser.getTgId());
     }
 
     @Override
