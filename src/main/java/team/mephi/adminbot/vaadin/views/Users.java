@@ -15,8 +15,8 @@ import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
+import team.mephi.adminbot.dto.RoleDto;
 import team.mephi.adminbot.dto.SimpleUser;
-import team.mephi.adminbot.model.Role;
 import team.mephi.adminbot.repository.RoleRepository;
 import team.mephi.adminbot.repository.TutorRepository;
 import team.mephi.adminbot.repository.UserRepository;
@@ -114,12 +114,15 @@ public class Users extends VerticalLayout {
             tabSheet.add(new Span(new Span(tabNames.get(index)), badges.get(tab)), tables.get(index));
         });
 
-        UserForm form = new UserForm(roleRepository.findAll());
+        List<RoleDto> roles = roleRepository.findAll().stream()
+                .map(r -> new RoleDto(r.getCode(), r.getName(), r.getDescription()))
+                .toList();
+        UserForm form = new UserForm(roles);
         driver = new RightDrawer("Редактировать пользователя", form, this::onSave, this::onClose);
 
         binder.bindInstanceFields(form);
-        binder.forField(form.roles)
-                .withConverter(Role::getCode, code -> roleRepository.findByCode(code).orElseThrow())
+        binder.forField(form.getRoles())
+                .withConverter(RoleDto::getCode, code -> roleRepository.findByCode(code).map(a -> new RoleDto(a.getCode(), a.getName(), a.getDescription())).orElseThrow())
                 .bind(SimpleUser::getRole, SimpleUser::setRole);
 
         add(top, tabSheet, driver);

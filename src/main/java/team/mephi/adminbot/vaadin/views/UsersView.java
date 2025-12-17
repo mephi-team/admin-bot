@@ -1,13 +1,18 @@
 package team.mephi.adminbot.vaadin.views;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
+import team.mephi.adminbot.vaadin.users.components.RoleService;
 import team.mephi.adminbot.vaadin.users.components.UserEditorDialog;
 import team.mephi.adminbot.vaadin.users.dataproviders.UserDataProvider;
 import team.mephi.adminbot.vaadin.users.service.UsersPresenter;
@@ -26,9 +31,10 @@ public class UsersView extends VerticalLayout {
 
     public UsersView(
             List<UserTabProvider> tabProviders,
-            UsersPresenter presenter
+            UsersPresenter presenter,
+            RoleService roleService // ← внедряем сервис
     ) {
-        this.editorDialog = new UserEditorDialog();
+        this.editorDialog = new UserEditorDialog(roleService);
         setSizeFull();
         tabSheet.setSizeFull();
         add(createHeader(), tabSheet, editorDialog);
@@ -50,7 +56,13 @@ public class UsersView extends VerticalLayout {
             }
             @Override
             public void onEdit(Long id) {
-                dataProvider.findUserById(id).ifPresent(editorDialog::openForEdit);
+                dataProvider.findUserById(id).ifPresent(u -> {
+                    editorDialog.openForEdit(u);
+                    editorDialog.setOnSaveCallback(() -> {
+                        dataProvider.save(editorDialog.getEditedUser());
+                        dataProvider.refresh();
+                    });
+                });
             }
             @Override
             public void onDelete(List<Long> ids) {
@@ -68,14 +80,22 @@ public class UsersView extends VerticalLayout {
     }
 
     private HorizontalLayout createHeader() {
-        var header = new HorizontalLayout();
-        header.setWidthFull();
-        header.addToStart(new H1("Пользователи"));
-        var addButton = new Button("Добавить", click -> {
-//            var role = getCurrentRole(); // по активной вкладке
-            editorDialog.openForNew("visitor");
+        HorizontalLayout top = new HorizontalLayout();
+        top.setWidthFull();
+        top.addToStart(new H1("Пользователи"));
+        var primaryButton = new Button("Добавить пользователя", new Icon(VaadinIcon.PLUS), e -> {
+            editorDialog.openForNew(getCurrentRole());
         });
-        header.addToEnd(addButton);
-        return header;
+        primaryButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        Div buttons = new Div(new Button("Загрузить из файла", new Icon(VaadinIcon.FILE_ADD)), primaryButton);
+        buttons.getElement().getStyle().set("display", "flex");
+        buttons.getElement().getStyle().set("gap", "24px");
+        top.addToEnd(buttons);
+        return top;
+    }
+
+    private String getCurrentRole() {
+        var selectedTab = tabSheet.getSelectedIndex();
+        return "visitor";
     }
 }

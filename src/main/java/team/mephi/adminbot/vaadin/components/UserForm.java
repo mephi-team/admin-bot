@@ -4,25 +4,26 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.TextField;
-import team.mephi.adminbot.model.Role;
+import team.mephi.adminbot.dto.RoleDto;
 
 import java.util.List;
 
 public class UserForm extends FormLayout {
-    ComboBox<String> cohorts = new ComboBox<>();
-    ComboBox<String> directions = new ComboBox<>();
-    ComboBox<String> cities = new ComboBox<>();
-    public ComboBox<Role> roles = new ComboBox<>();
+    private ComboBox<String> cohorts = new ComboBox<>();
+    private ComboBox<String> directions = new ComboBox<>();
+    private ComboBox<String> cities = new ComboBox<>();
+    private ComboBox<RoleDto> roles = new ComboBox<>();
     private TextField firstName = new TextField();
     private TextField lastName = new TextField();
     private EmailField email = new EmailField();
     private TextField telegram = new TextField();
     private TextField phoneNumber = new TextField();
+    private TextField id = new TextField();
 
-    public UserForm(List<Role> roleList) {
+    public UserForm(List<RoleDto> roleList) {
         roles.setItems(roleList);
         roles.setRequired(true);
-        roles.setItemLabelGenerator(Role::getDescription);
+        roles.setItemLabelGenerator(RoleDto::getDescription);
         cohorts.setItems(List.of("test1", "test2"));
         cohorts.setRequired(true);
         directions.setItems(List.of("test1", "test2"));
@@ -36,6 +37,8 @@ public class UserForm extends FormLayout {
         setExpandFields(true);
         setExpandColumns(true);
 
+        id.setVisible(false);
+        add(id);
         addFormItem(roles, "Пользователи");
         addFormItem(firstName, "Имя");
         addFormItem(lastName, "Фамилия");
@@ -45,5 +48,9 @@ public class UserForm extends FormLayout {
         addFormItem(cohorts, "Набор");
         addFormItem(directions, "Направление");
         addFormItem(cities, "Город");
+    }
+
+    public ComboBox<RoleDto> getRoles() {
+        return roles;
     }
 }
