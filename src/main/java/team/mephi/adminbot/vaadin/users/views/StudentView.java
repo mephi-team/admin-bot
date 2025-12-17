@@ -63,7 +63,7 @@ public class StudentView extends VerticalLayout {
             return group;
         }).setHeader("Действия").setWidth("340px").setFlexGrow(0).setKey("actions");
 
-        grid.setDataProvider(provider.getFilterableProvider());
+        grid.setDataProvider(provider.getDataProvider());
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
         grid.setSizeFull();
         grid.addSelectionListener(sel -> {

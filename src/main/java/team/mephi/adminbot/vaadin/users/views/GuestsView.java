@@ -36,7 +36,7 @@ public class GuestsView extends VerticalLayout {
         grid = new Grid<>(UserDto.class, false);
         grid.addColumn(UserDto::getFullName).setHeader("Имя пользователя в Telegram").setSortable(true).setKey("name");
         grid.addColumn(UserDto::getTgName).setHeader("Telegram").setSortable(true).setKey("telegram");
-        grid.addColumn(UserDto::getPdConsent).setHeader("Согласия ПД").setSortable(true).setKey("pd");
+        grid.addColumn(UserDto::getPdConsent).setHeader("Согласия ПД").setSortable(true).setKey("pd_consent");
 
         grid.addComponentColumn(item -> {
             Button viewButton = new Button(new Icon(VaadinIcon.EYE), e -> actions.onView(item.getId()));
@@ -49,7 +49,7 @@ public class GuestsView extends VerticalLayout {
             return new Span(viewButton, deleteButton);
         }).setHeader("Действия").setWidth("120px").setFlexGrow(0).setKey("action");
 
-        grid.setDataProvider(provider.getFilterableProvider());
+        grid.setDataProvider(provider.getDataProvider());
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
         grid.setSizeFull();
         grid.addSelectionListener(sel -> {

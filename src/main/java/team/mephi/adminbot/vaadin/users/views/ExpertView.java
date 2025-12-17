@@ -58,7 +58,7 @@ public class ExpertView extends VerticalLayout {
             return new Span(dropButton, viewButton, chatButton, editButton, deleteButton);
         }).setHeader("Действия").setWidth("320px").setFlexGrow(0).setKey("actions");
 
-        grid.setDataProvider(provider.getFilterableProvider());
+        grid.setDataProvider(provider.getDataProvider());
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
         grid.setSizeFull();
         grid.addSelectionListener(sel -> {
