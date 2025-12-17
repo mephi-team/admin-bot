@@ -59,8 +59,9 @@ vaadin-button:hover {
 }
 
 vaadin-button:hover > vaadin-icon {
-    color: white;
+    /*color: white;*/
 }
+
 a[router-link][highlight] {
     font-weight: bold;
 }
