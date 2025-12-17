@@ -61,6 +61,15 @@ public class Users extends VerticalLayout implements UserViewCallback {
     private final Map<String, UserDataProvider> dataProviders = new HashMap<>();
     private final Map<String, UserActions> actions = new HashMap<>();
 
+    private static final UserActions NO_OP_ACTIONS = new UserActions() {
+        @Override public void onCreate(String role) {}
+        @Override public void onView(Long id) {}
+        @Override public void onEdit(Long id) {}
+        @Override public void onDelete(List<Long> ids) {}
+        @Override public void onAccept(List<Long> ids) {}
+        @Override public void onReject(List<Long> ids) {}
+    };
+
     public Users(
             List<UserTabProvider> tabProviders,
             UsersPresenterFactory presenterFactory, // ← новый фабричный сервис
@@ -114,7 +123,7 @@ public class Users extends VerticalLayout implements UserViewCallback {
         top.addToStart(new H1("Пользователи"));
 
         var primaryButton = new Button("Добавить пользователя", new Icon(VaadinIcon.PLUS), e -> {
-            actions.get(getCurrentRole()).onCreate(getCurrentRole());
+            getCurrentAction().onCreate(getCurrentRole());
         });
         primaryButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         Div buttons = new Div(new Button("Загрузить из файла", new Icon(VaadinIcon.FILE_ADD)), primaryButton);
@@ -130,6 +139,10 @@ public class Users extends VerticalLayout implements UserViewCallback {
             return rolesInOrder.get(selectedTab);
         }
         return "visitor";
+    }
+
+    private UserActions getCurrentAction() {
+        return actions.getOrDefault(getCurrentRole(), NO_OP_ACTIONS);
     }
 
     @Override

@@ -36,7 +36,7 @@ public class GuestsView extends VerticalLayout {
         grid = new Grid<>(UserDto.class, false);
         grid.addColumn(UserDto::getFullName).setHeader("Имя пользователя в Telegram").setSortable(true).setKey("name");
         grid.addColumn(UserDto::getTgName).setHeader("Telegram").setSortable(true).setKey("telegram");
-        grid.addColumn(UserDto::getPdConsent).setHeader("Согласия ПД").setSortable(true).setKey("pd_consent");
+        grid.addColumn(UserDto::getPdConsent).setHeader("Согласия ПД").setSortable(true).setKey("pd");
 
         grid.addComponentColumn(item -> {
             Button viewButton = new Button(new Icon(VaadinIcon.EYE), e -> actions.onView(item.getId()));

@@ -38,12 +38,14 @@ public class UserEditorDialog extends Dialog {
 
     public void openForView(SimpleUser user) {
         binder.readBean(user);
+        binder.setReadOnly(true);
         saveButton.setVisible(false);
         open();
     }
 
     public void openForEdit(SimpleUser user) {
         binder.readBean(user);
+        binder.setReadOnly(false);
         saveButton.setVisible(true);
         open();
     }
@@ -52,6 +54,7 @@ public class UserEditorDialog extends Dialog {
         SimpleUser newUser = new SimpleUser();
         newUser.setRole(role);
         binder.readBean(newUser);
+        binder.setReadOnly(false);
         saveButton.setVisible(true);
         open();
     }
