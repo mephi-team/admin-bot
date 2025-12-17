@@ -32,7 +32,8 @@ public class TutorDataProvider implements UserDataProvider {
                             .stream()
                             .skip(query.getOffset())
                             .limit(query.getLimit()),
-                    query -> tutorRepository.countByName(query.getFilter().orElse(""))
+                    query -> tutorRepository.countByName(query.getFilter().orElse("")),
+                    TutorWithCounts::getId
             );
             provider = base.withConfigurableFilter();
         }
