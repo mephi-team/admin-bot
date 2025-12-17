@@ -12,7 +12,6 @@ import team.mephi.adminbot.dto.UserDto;
 import team.mephi.adminbot.vaadin.components.*;
 import team.mephi.adminbot.vaadin.users.actions.UserActions;
 import team.mephi.adminbot.vaadin.users.dataproviders.CandidateDataProvider;
-import team.mephi.adminbot.vaadin.users.dataproviders.GuestsDataProvider;
 import team.mephi.adminbot.vaadin.views.Dialogs;
 
 import java.util.List;
@@ -22,16 +21,26 @@ import java.util.Set;
 public class CandidateView extends VerticalLayout {
 
     private final Grid<UserDto> grid;
-    private final GridSelectActions actions;
+    private final GridSelectActions gsa;
     private final CandidateDataProvider provider;
     private List<Long> selectedIds;
 
     public CandidateView(CandidateDataProvider provider, UserActions actions) {
         this.provider = provider;
-        this.actions = new GridSelectActions(new Button("Заблокировать", VaadinIcon.BAN.create(), e -> {
-            if (!selectedIds.isEmpty())
-                actions.onDelete(selectedIds);
-        }));
+        this.gsa = new GridSelectActions(
+                new Button("Утвердить кандидатов", VaadinIcon.CHECK.create(), e -> {
+                    if (!selectedIds.isEmpty())
+                        actions.onAccept(selectedIds);
+                }),
+                new Button("Отклонить кандидатов", VaadinIcon.CLOSE.create(), e -> {
+                    if (!selectedIds.isEmpty())
+                        actions.onReject(selectedIds);
+                }),
+                new Button("Заблокировать пользователей", VaadinIcon.BAN.create(), e -> {
+                    if (!selectedIds.isEmpty())
+                        actions.onDelete(selectedIds);
+                })
+        );
 
         setSizeFull();
         setPadding(false);
@@ -66,7 +75,7 @@ public class CandidateView extends VerticalLayout {
         grid.setSizeFull();
         grid.addSelectionListener(sel -> {
             selectedIds = sel.getAllSelectedItems().stream().map(UserDto::getId).toList();
-            this.actions.setCount(selectedIds.size());
+            this.gsa.setCount(selectedIds.size());
         });
 
         var searchField = new SearchField("Найти кандидита");
@@ -76,6 +85,6 @@ public class CandidateView extends VerticalLayout {
         var settingsPopover = new GridSettingsPopover(grid, Set.of());
         settingsPopover.setTarget(settingsBtn);
 
-        add(new SearchFragment(searchField, settingsBtn), this.actions, grid);
+        add(new SearchFragment(searchField, settingsBtn), this.gsa, grid);
     }
 }

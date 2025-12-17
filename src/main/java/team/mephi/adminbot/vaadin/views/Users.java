@@ -58,9 +58,9 @@ public class Users extends VerticalLayout {
     private final String REJECT_ACTION = "Отклонить";
 
     RightDrawer driver;
-    UserConfirmDialog dialogBlock = new UserConfirmDialog(BLOCK_TITLE, BLOCK_TEXT, BLOCK_ACTION, BLOCK_ALL_TITLE, BLOCK_ALL_TEXT, BLOCK_MESSAGE, BLOCK_ALL_MESSAGE, this::showBlockMessage);
-    UserConfirmDialog dialogAccept = new UserConfirmDialog(ACCEPT_TITLE, ACCEPT_TEXT, ACCEPT_ACTION, ACCEPT_ALL_TITLE, ACCEPT_ALL_TEXT, ACCEPT_MESSAGE, ACCEPT_ALL_MESSAGE, this::showMessage);
-    UserConfirmDialog dialogReject = new UserConfirmDialog(REJECT_TITLE, REJECT_TEXT, REJECT_ACTION, REJECT_ALL_TITLE, REJECT_ALL_TEXT, REJECT_MESSAGE, REJECT_ALL_MESSAGE,  this::showMessage);
+    UserConfirmDialog dialogBlock = new UserConfirmDialog(BLOCK_TITLE, BLOCK_TEXT, BLOCK_ACTION, BLOCK_ALL_TITLE, BLOCK_ALL_TEXT, this::showBlockMessage);
+    UserConfirmDialog dialogAccept = new UserConfirmDialog(ACCEPT_TITLE, ACCEPT_TEXT, ACCEPT_ACTION, ACCEPT_ALL_TITLE, ACCEPT_ALL_TEXT, this::showAcceptMessage);
+    UserConfirmDialog dialogReject = new UserConfirmDialog(REJECT_TITLE, REJECT_TEXT, REJECT_ACTION, REJECT_ALL_TITLE, REJECT_ALL_TEXT,  this::showRejectMessage);
     Map<String, Long> roleCounts;
     List<Component> tables;
     TabSheet tabSheet;
@@ -128,14 +128,28 @@ public class Users extends VerticalLayout {
         add(top, tabSheet, driver);
     }
 
-    private void showMessage(String message) {
-        Notification.show(message, 3000, Notification.Position.TOP_END);
+    private void showAcceptMessage() {
+        if (blockIds.size() == 1)
+            Notification.show(ACCEPT_MESSAGE, 3000, Notification.Position.TOP_END);
+        else if (blockIds.size() > 1) {
+            Notification.show(String.format(ACCEPT_ALL_MESSAGE, blockIds.size()), 3000, Notification.Position.TOP_END);
+        }
     }
 
-    private void showBlockMessage(String message) {
-        provider.deleteAllById(blockIds);
-        provider.refreshAll();
-        Notification.show(message, 3000, Notification.Position.TOP_END);
+    private void showBlockMessage() {
+        if (blockIds.size() == 1)
+            Notification.show(BLOCK_MESSAGE, 3000, Notification.Position.TOP_END);
+        else if (blockIds.size() > 1) {
+            Notification.show(String.format(BLOCK_ALL_MESSAGE, blockIds.size()), 3000, Notification.Position.TOP_END);
+        }
+    }
+
+    private void showRejectMessage() {
+        if (blockIds.size() == 1)
+            Notification.show(REJECT_MESSAGE, 3000, Notification.Position.TOP_END);
+        else if (blockIds.size() > 1) {
+            Notification.show(String.format(REJECT_ALL_MESSAGE, blockIds.size()), 3000, Notification.Position.TOP_END);
+        }
         blockIds = null;
         this.provider = null;
     }

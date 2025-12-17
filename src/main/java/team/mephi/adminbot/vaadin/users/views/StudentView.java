@@ -27,10 +27,12 @@ public class StudentView extends VerticalLayout {
 
     public StudentView(StudentDataProvider provider, UserActions actions) {
         this.provider = provider;
-        this.gsa = new GridSelectActions(new Button("Заблокировать", VaadinIcon.BAN.create(), e -> {
-            if (!selectedIds.isEmpty())
-                actions.onDelete(selectedIds);
-        }));
+        this.gsa = new GridSelectActions(
+                new Button("Заблокировать пользователей", VaadinIcon.BAN.create(), e -> {
+                    if (!selectedIds.isEmpty())
+                        actions.onDelete(selectedIds);
+                })
+        );
 
         setSizeFull();
         setPadding(false);

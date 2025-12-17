@@ -1,25 +1,25 @@
 package team.mephi.adminbot.vaadin.components;
 
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
-
-import java.util.function.Consumer;
+import lombok.Getter;
+import lombok.Setter;
 
 public class UserConfirmDialog extends ConfirmDialog {
     private final String header;
     private final String text;
     private final String headerAll;
     private final String textAll;
-    private final String message;
-    private final String messageAll;
     private int count;
+    @Getter
+    @Setter
+    private Runnable onConfirm;
 
-    public UserConfirmDialog(String title, String text, String action, String titleAll, String textAll, String message, String messageAll, Consumer<String> onConfirm) {
+    public UserConfirmDialog(String title, String text, String action, String titleAll, String textAll, Runnable onConfirm) {
         this.header = title;
         this.text = text;
         this.headerAll = titleAll;
         this.textAll = textAll;
-        this.message = message;
-        this.messageAll = messageAll;
+        this.onConfirm = onConfirm;
 
         setHeader(title);
         setText(text);
@@ -32,7 +32,7 @@ public class UserConfirmDialog extends ConfirmDialog {
         });
 
         addConfirmListener(e -> {
-            onConfirm.accept(getMessageText());
+            if (getOnConfirm() != null) getOnConfirm().run();
         });
     }
 
@@ -44,14 +44,6 @@ public class UserConfirmDialog extends ConfirmDialog {
         } else {
             setHeader(this.headerAll);
             setText(String.format(textAll, count));
-        }
-    }
-
-    private String getMessageText() {
-        if (count == 1) {
-            return message;
-        } else {
-            return String.format(messageAll, count);
         }
     }
 }

@@ -29,10 +29,20 @@ public class MiddleCandidateView extends VerticalLayout {
 
     public MiddleCandidateView(MiddleCandidateDataProvider provider, UserActions actions) {
         this.provider = provider;
-        this.gsa = new GridSelectActions(new Button("Заблокировать", VaadinIcon.BAN.create(), e -> {
-            if (!selectedIds.isEmpty())
-                actions.onDelete(selectedIds);
-        }));
+        this.gsa = new GridSelectActions(
+                new Button("Утвердить кандидатов", VaadinIcon.CHECK.create(), e -> {
+                    if (!selectedIds.isEmpty())
+                        actions.onAccept(selectedIds);
+                }),
+                new Button("Отклонить кандидатов", VaadinIcon.CLOSE.create(), e -> {
+                    if (!selectedIds.isEmpty())
+                        actions.onReject(selectedIds);
+                }),
+                new Button("Заблокировать пользователей", VaadinIcon.BAN.create(), e -> {
+                    if (!selectedIds.isEmpty())
+                        actions.onDelete(selectedIds);
+                })
+        );
 
         setSizeFull();
         setPadding(false);

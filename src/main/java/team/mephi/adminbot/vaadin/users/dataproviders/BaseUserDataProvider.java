@@ -40,11 +40,12 @@ public abstract class BaseUserDataProvider implements UserDataProvider {
                                     u.getDirection() != null ? u.getDirection().getName() : "",
                                     u.getCity(),
                                     u.getStatus() != null ? u.getStatus().name() : "",
-                                    false // deleted
+                                    u.getDeleted()
                             ))
                             .skip(query.getOffset())
                             .limit(query.getLimit()),
-                    query -> userRepository.countByRoleAndName(getRole(), query.getFilter().orElse(""))
+                    query -> userRepository.countByRoleAndName(getRole(), query.getFilter().orElse("")),
+                    UserDto::getId
             );
             provider = base.withConfigurableFilter();
         }

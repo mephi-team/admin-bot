@@ -3,14 +3,11 @@ package team.mephi.adminbot.vaadin.users.views;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import team.mephi.adminbot.dto.UserDto;
-import team.mephi.adminbot.vaadin.components.GridSelectActions;
-import team.mephi.adminbot.vaadin.components.GridSettingsButton;
-import team.mephi.adminbot.vaadin.components.GridSettingsPopover;
-import team.mephi.adminbot.vaadin.components.SearchField;
-import team.mephi.adminbot.vaadin.components.SearchFragment;
+import team.mephi.adminbot.vaadin.components.*;
 import team.mephi.adminbot.vaadin.users.actions.UserActions;
 import team.mephi.adminbot.vaadin.users.dataproviders.GuestsDataProvider;
 
@@ -20,16 +17,18 @@ import java.util.Set;
 public class GuestsView extends VerticalLayout {
 
     private final Grid<UserDto> grid;
-    private final GridSelectActions actions;
+    private final GridSelectActions gsa;
     private final GuestsDataProvider provider;
     private List<Long> selectedIds;
 
     public GuestsView(GuestsDataProvider provider, UserActions actions) {
         this.provider = provider;
-        this.actions = new GridSelectActions(new Button("Заблокировать", VaadinIcon.BAN.create(), e -> {
-            if (!selectedIds.isEmpty())
-                actions.onDelete(selectedIds);
-        }));
+        this.gsa = new GridSelectActions(
+                new Button("Заблокировать пользователей", VaadinIcon.BAN.create(), e -> {
+                    if (!selectedIds.isEmpty())
+                        actions.onDelete(selectedIds);
+                })
+        );
 
         setSizeFull();
         setPadding(false);
@@ -40,17 +39,22 @@ public class GuestsView extends VerticalLayout {
         grid.addColumn(UserDto::getPdConsent).setHeader("Согласия ПД").setSortable(true).setKey("pd_consent");
 
         grid.addComponentColumn(item -> {
-            var viewBtn = new Button(VaadinIcon.EYE.create(), e -> actions.onView(item.getId()));
-            var blockBtn = new Button(VaadinIcon.BAN.create(), e -> actions.onDelete(List.of(item.getId())));
-            return new Span(viewBtn, blockBtn);
-        }).setHeader("Действия").setWidth("120px").setFlexGrow(0).setKey("actions");
+            Button viewButton = new Button(new Icon(VaadinIcon.EYE), e -> actions.onView(item.getId()));
+            Button deleteButton = new Button(new Icon(VaadinIcon.BAN), e -> actions.onDelete(List.of(item.getId())));
+            if (item.getDelete()) {
+                deleteButton.getElement().getStyle().set("color", "red");
+            } else {
+                deleteButton.getElement().getStyle().set("color", "black");
+            }
+            return new Span(viewButton, deleteButton);
+        }).setHeader("Действия").setWidth("120px").setFlexGrow(0).setKey("action");
 
         grid.setDataProvider(provider.getFilterableProvider());
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
         grid.setSizeFull();
         grid.addSelectionListener(sel -> {
             selectedIds = sel.getAllSelectedItems().stream().map(UserDto::getId).toList();
-            this.actions.setCount(selectedIds.size());
+            this.gsa.setCount(selectedIds.size());
         });
 
         var searchField = new SearchField("Найти гостя");
@@ -60,6 +64,6 @@ public class GuestsView extends VerticalLayout {
         var settingsPopover = new GridSettingsPopover(grid, Set.of());
         settingsPopover.setTarget(settingsBtn);
 
-        add(new SearchFragment(searchField, settingsBtn), this.actions, grid);
+        add(new SearchFragment(searchField, settingsBtn), this.gsa, grid);
     }
 }
