@@ -7,28 +7,29 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
+import com.vaadin.flow.function.SerializableBiConsumer;
 import com.vaadin.flow.router.QueryParameters;
 import team.mephi.adminbot.dto.UserDto;
 import team.mephi.adminbot.vaadin.components.*;
 import team.mephi.adminbot.vaadin.users.actions.UserActions;
-import team.mephi.adminbot.vaadin.users.dataproviders.CandidateDataProvider;
-import team.mephi.adminbot.vaadin.users.dataproviders.GuestsDataProvider;
+import team.mephi.adminbot.vaadin.users.dataproviders.MiddleCandidateDataProvider;
 import team.mephi.adminbot.vaadin.views.Dialogs;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class CandidateView extends VerticalLayout {
+public class MiddleCandidateView extends VerticalLayout {
 
     private final Grid<UserDto> grid;
-    private final GridSelectActions actions;
-    private final CandidateDataProvider provider;
+    private final GridSelectActions gsa;
+    private final MiddleCandidateDataProvider provider;
     private List<Long> selectedIds;
 
-    public CandidateView(CandidateDataProvider provider, UserActions actions) {
+    public MiddleCandidateView(MiddleCandidateDataProvider provider, UserActions actions) {
         this.provider = provider;
-        this.actions = new GridSelectActions(new Button("Заблокировать", VaadinIcon.BAN.create(), e -> {
+        this.gsa = new GridSelectActions(new Button("Заблокировать", VaadinIcon.BAN.create(), e -> {
             if (!selectedIds.isEmpty())
                 actions.onDelete(selectedIds);
         }));
@@ -45,10 +46,11 @@ public class CandidateView extends VerticalLayout {
         grid.addColumn(UserDto::getCohort).setHeader("Набор").setSortable(true).setKey("cohort");
         grid.addColumn(UserDto::getDirection).setHeader("Направление").setSortable(true).setKey("direction");
         grid.addColumn(UserDto::getCity).setHeader("Город").setSortable(true).setKey("city");
+        grid.addColumn(createStatusComponentRenderer()).setHeader("Статус").setSortable(true).setKey("status");
 
         grid.addComponentColumn(item -> {
-            Button rejectButton = new Button(new Icon(VaadinIcon.CLOSE), e -> actions.onReject(List.of(item.getId())));
-            Button confirmButton = new Button(new Icon(VaadinIcon.CHECK), e -> actions.onAccept(List.of(item.getId())));
+            Button confirmButton = new Button(new Icon(VaadinIcon.CLOSE), e -> System.out.println(item));
+            Button rejectButton = new Button(new Icon(VaadinIcon.CHECK), e -> System.out.println(item));
             Button viewButton = new Button(new Icon(VaadinIcon.EYE), e -> actions.onView(item.getId()));
             Button chatButton = new Button(new Icon(VaadinIcon.CHAT), e -> UI.getCurrent().navigate(Dialogs.class, new QueryParameters(Map.of("userId", List.of("" + item.getId())))));
             Button editButton = new Button(new Icon(VaadinIcon.PENCIL), e -> actions.onEdit(item.getId()));
@@ -58,7 +60,7 @@ public class CandidateView extends VerticalLayout {
             } else {
                 deleteButton.getElement().getStyle().set("color", "black");
             }
-            return new Span(rejectButton, confirmButton, viewButton, chatButton, editButton, deleteButton);
+            return new Span(confirmButton, rejectButton, viewButton, chatButton, editButton, deleteButton);
         }).setHeader("Действия").setWidth("290px").setFlexGrow(0).setKey("actions");
 
         grid.setDataProvider(provider.getFilterableProvider());
@@ -66,16 +68,29 @@ public class CandidateView extends VerticalLayout {
         grid.setSizeFull();
         grid.addSelectionListener(sel -> {
             selectedIds = sel.getAllSelectedItems().stream().map(UserDto::getId).toList();
-            this.actions.setCount(selectedIds.size());
+            this.gsa.setCount(selectedIds.size());
         });
 
-        var searchField = new SearchField("Найти кандидита");
+        var searchField = new SearchField("Найти миддл-кандидита");
         searchField.addValueChangeListener(e -> provider.getFilterableProvider().setFilter(e.getValue()));
 
         var settingsBtn = new GridSettingsButton();
         var settingsPopover = new GridSettingsPopover(grid, Set.of());
         settingsPopover.setTarget(settingsBtn);
 
-        add(new SearchFragment(searchField, settingsBtn), this.actions, grid);
+        add(new SearchFragment(searchField, settingsBtn), this.gsa, grid);
     }
+
+    private static ComponentRenderer<Span, UserDto> createStatusComponentRenderer() {
+        return new ComponentRenderer<>(Span::new, statusComponentUpdater);
+    }
+    private static final SerializableBiConsumer<Span, UserDto> statusComponentUpdater = (
+            span, person) -> {
+        String theme = switch (person.getStatus()) {
+            case "ACTIVE" -> String.format("badge %s", "success");
+            default -> String.format("badge %s", "error");
+        };
+        span.getElement().setAttribute("theme", theme);
+        span.setText(person.getStatus());
+    };
 }

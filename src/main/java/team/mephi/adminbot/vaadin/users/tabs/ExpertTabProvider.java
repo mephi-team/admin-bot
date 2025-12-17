@@ -3,35 +3,35 @@ package team.mephi.adminbot.vaadin.users.tabs;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import team.mephi.adminbot.vaadin.users.actions.UserActions;
-import team.mephi.adminbot.vaadin.users.dataproviders.GuestsDataProvider;
-import team.mephi.adminbot.vaadin.users.views.GuestsView;
+import team.mephi.adminbot.vaadin.users.dataproviders.ExpertDataProvider;
+import team.mephi.adminbot.vaadin.users.views.ExpertView;
 
 @SpringComponent
-public class GuestsTabProvider implements UserTabProvider {
+public class ExpertTabProvider implements UserTabProvider {
 
-    private final GuestsDataProvider dataProvider;
+    private final ExpertDataProvider dataProvider;
 
-    public GuestsTabProvider(GuestsDataProvider dataProvider) {
+    public ExpertTabProvider(ExpertDataProvider dataProvider) {
         this.dataProvider = dataProvider;
     }
 
     @Override
     public Integer getPosition() {
-        return 0;
+        return 5;
     }
 
     @Override
     public String getTabId() {
-        return "visitor";
+        return "lc_expert";
     }
 
     @Override
     public String getTabLabel() {
-        return "Гости";
+        return "Эксперты";
     }
 
     @Override
     public Component createTabContent(UserActions actions) {
-        return new GuestsView(dataProvider, actions);
+        return new ExpertView(dataProvider, actions);
     }
 }

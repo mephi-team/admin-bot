@@ -7,6 +7,6 @@ import team.mephi.adminbot.vaadin.users.dataproviders.UserDataProvider;
 public interface UserTabProvider {
     String getTabId();
     String getTabLabel();
-    Component createTabContent(UserDataProvider dataProvider, UserActions actions);
+    Component createTabContent(UserActions actions);
     Integer getPosition();
 }

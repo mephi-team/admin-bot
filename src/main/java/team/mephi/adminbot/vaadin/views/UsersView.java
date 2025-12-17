@@ -37,7 +37,7 @@ public class UsersView extends VerticalLayout {
         for (var provider : tabProviders) {
             var dataProvider = presenter.createDataProvider(provider.getTabId());
             var actions = createActions(provider.getTabId(), dataProvider);
-            var content = provider.createTabContent(dataProvider, actions);
+            var content = provider.createTabContent(actions);
             tabSheet.add(new Tab(provider.getTabLabel()), content, provider.getPosition());
         }
     }

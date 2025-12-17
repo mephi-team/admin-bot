@@ -3,35 +3,35 @@ package team.mephi.adminbot.vaadin.users.tabs;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import team.mephi.adminbot.vaadin.users.actions.UserActions;
-import team.mephi.adminbot.vaadin.users.dataproviders.GuestsDataProvider;
-import team.mephi.adminbot.vaadin.users.views.GuestsView;
+import team.mephi.adminbot.vaadin.users.dataproviders.StudentDataProvider;
+import team.mephi.adminbot.vaadin.users.views.StudentView;
 
 @SpringComponent
-public class GuestsTabProvider implements UserTabProvider {
+public class StudentTabProvider implements UserTabProvider {
 
-    private final GuestsDataProvider dataProvider;
+    private final StudentDataProvider dataProvider;
 
-    public GuestsTabProvider(GuestsDataProvider dataProvider) {
+    public StudentTabProvider(StudentDataProvider dataProvider) {
         this.dataProvider = dataProvider;
     }
 
     @Override
     public Integer getPosition() {
-        return 0;
+        return 3;
     }
 
     @Override
     public String getTabId() {
-        return "visitor";
+        return "student";
     }
 
     @Override
     public String getTabLabel() {
-        return "Гости";
+        return "Студенты";
     }
 
     @Override
     public Component createTabContent(UserActions actions) {
-        return new GuestsView(dataProvider, actions);
+        return new StudentView(dataProvider, actions);
     }
 }

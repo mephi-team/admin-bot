@@ -4,15 +4,15 @@ import org.springframework.stereotype.Component;
 import team.mephi.adminbot.repository.RoleRepository;
 import team.mephi.adminbot.repository.UserRepository;
 
-@Component("candidate")
-public class CandidateDataProvider extends BaseUserDataProvider {
+@Component("lc_expert")
+public class ExpertDataProvider extends BaseUserDataProvider {
 
-    public CandidateDataProvider(UserRepository userRepository, RoleRepository roleRepository) {
+    public ExpertDataProvider(UserRepository userRepository, RoleRepository roleRepository) {
         super(userRepository, roleRepository);
     }
 
     @Override
     protected String getRole() {
-        return "candidate";
+        return "lc_expert";
     }
 }

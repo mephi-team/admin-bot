@@ -35,10 +35,9 @@ public class GuestsView extends VerticalLayout {
         setPadding(false);
 
         grid = new Grid<>(UserDto.class, false);
-        grid.setSizeFull();
-        grid.addColumn(UserDto::getFullName).setHeader("Имя пользователя").setKey("name");
-        grid.addColumn(UserDto::getTgName).setHeader("Telegram").setKey("telegram");
-        grid.addColumn(UserDto::getPdConsent).setHeader("Согласия ПД").setKey("pd_consent");
+        grid.addColumn(UserDto::getFullName).setHeader("Имя пользователя в Telegram").setSortable(true).setKey("name");
+        grid.addColumn(UserDto::getTgName).setHeader("Telegram").setSortable(true).setKey("telegram");
+        grid.addColumn(UserDto::getPdConsent).setHeader("Согласия ПД").setSortable(true).setKey("pd_consent");
 
         grid.addComponentColumn(item -> {
             var viewBtn = new Button(VaadinIcon.EYE.create(), e -> actions.onView(item.getId()));
@@ -48,6 +47,7 @@ public class GuestsView extends VerticalLayout {
 
         grid.setDataProvider(provider.getFilterableProvider());
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
+        grid.setSizeFull();
         grid.addSelectionListener(sel -> {
             selectedIds = sel.getAllSelectedItems().stream().map(UserDto::getId).toList();
             this.actions.setCount(selectedIds.size());
