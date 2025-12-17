@@ -12,7 +12,6 @@ public class UsersPresenter {
 
     public UsersPresenter(Map<String, UserDataProvider> providers) {
         this.providers = providers;
-        System.out.println("!!!!! providers: " + providers);
     }
 
     public UserDataProvider createDataProvider(String role) {

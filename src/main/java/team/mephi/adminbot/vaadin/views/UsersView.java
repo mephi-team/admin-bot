@@ -4,6 +4,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
@@ -14,9 +15,11 @@ import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
 import team.mephi.adminbot.vaadin.components.UserConfirmDialog;
+import team.mephi.adminbot.vaadin.components.UserCountBadge;
 import team.mephi.adminbot.vaadin.users.components.RoleService;
 import team.mephi.adminbot.vaadin.users.components.UserEditorDialog;
 import team.mephi.adminbot.vaadin.users.dataproviders.UserDataProvider;
+import team.mephi.adminbot.vaadin.users.service.UserCountService;
 import team.mephi.adminbot.vaadin.users.service.UsersPresenter;
 import team.mephi.adminbot.vaadin.users.actions.UserActions;
 import team.mephi.adminbot.vaadin.users.tabs.UserTabProvider;
@@ -59,7 +62,8 @@ public class UsersView extends VerticalLayout {
     public UsersView(
             List<UserTabProvider> tabProviders,
             UsersPresenter presenter,
-            RoleService roleService // ← внедряем сервис
+            RoleService roleService,
+            UserCountService userCountService
     ) {
         this.editorDialog = new UserEditorDialog(roleService);
         this.dialogBlock = new UserConfirmDialog(BLOCK_TITLE, BLOCK_TEXT, BLOCK_ACTION, BLOCK_ALL_TITLE, BLOCK_ALL_TEXT, null);
@@ -77,7 +81,9 @@ public class UsersView extends VerticalLayout {
             var content = provider.createTabContent(actions);
             rolesInOrder.add(tabId);
             dataProviders.put(tabId, dataProvider);
-            tabSheet.add(new Tab(provider.getTabLabel()), content, provider.getPosition());
+            var userCount = userCountService.getAllCounts().getOrDefault(provider.getTabId(), 0L);
+            Span tabContent = new Span(new Span(provider.getTabLabel()), new UserCountBadge(userCount));
+            tabSheet.add(new Tab(tabContent), content, provider.getPosition());
         }
     }
 
