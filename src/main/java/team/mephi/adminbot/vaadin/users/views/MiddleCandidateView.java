@@ -21,15 +21,10 @@ import java.util.Map;
 import java.util.Set;
 
 public class MiddleCandidateView extends VerticalLayout {
-
-    private final Grid<UserDto> grid;
-    private final GridSelectActions gsa;
-    private final MiddleCandidateDataProvider provider;
     private List<Long> selectedIds;
 
     public MiddleCandidateView(MiddleCandidateDataProvider provider, UserActions actions) {
-        this.provider = provider;
-        this.gsa = new GridSelectActions(
+        var gsa = new GridSelectActions(
                 new Button("Утвердить кандидатов", VaadinIcon.CHECK.create(), e -> {
                     if (!selectedIds.isEmpty())
                         actions.onAccept(selectedIds);
@@ -47,7 +42,7 @@ public class MiddleCandidateView extends VerticalLayout {
         setSizeFull();
         setPadding(false);
 
-        grid = new Grid<>(UserDto.class, false);
+        var grid = new Grid<>(UserDto.class, false);
         grid.addColumn(UserDto::getFullName).setHeader("Фамилия Имя").setSortable(true).setKey("name");
         grid.addColumn(UserDto::getEmail).setHeader("Email").setSortable(true).setKey("email");
         grid.addColumn(UserDto::getTgName).setHeader("Telegram").setSortable(true).setKey("telegram");
@@ -78,7 +73,7 @@ public class MiddleCandidateView extends VerticalLayout {
         grid.setSizeFull();
         grid.addSelectionListener(sel -> {
             selectedIds = sel.getAllSelectedItems().stream().map(UserDto::getId).toList();
-            this.gsa.setCount(selectedIds.size());
+            gsa.setCount(selectedIds.size());
         });
 
         var searchField = new SearchField("Найти миддл-кандидита");
@@ -88,7 +83,7 @@ public class MiddleCandidateView extends VerticalLayout {
         var settingsPopover = new GridSettingsPopover(grid, Set.of());
         settingsPopover.setTarget(settingsBtn);
 
-        add(new SearchFragment(searchField, settingsBtn), this.gsa, grid);
+        add(new SearchFragment(searchField, settingsBtn), gsa, grid);
     }
 
     private static ComponentRenderer<Span, UserDto> createStatusComponentRenderer() {

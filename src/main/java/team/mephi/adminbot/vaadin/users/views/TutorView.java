@@ -19,15 +19,10 @@ import java.util.Map;
 import java.util.Set;
 
 public class TutorView extends VerticalLayout {
-
-    private final Grid<TutorWithCounts> grid;
-    private final GridSelectActions gsa;
-    private final TutorDataProvider provider;
     private List<Long> selectedIds;
 
     public TutorView(TutorDataProvider provider, UserActions actions) {
-        this.provider = provider;
-        this.gsa = new GridSelectActions(
+        var gsa = new GridSelectActions(
                 new Button("Заблокировать пользователей", VaadinIcon.BAN.create(), e -> {
                     if (!selectedIds.isEmpty())
                         actions.onDelete(selectedIds);
@@ -37,7 +32,7 @@ public class TutorView extends VerticalLayout {
         setSizeFull();
         setPadding(false);
 
-        grid = new Grid<>(TutorWithCounts.class, false);
+        var grid = new Grid<>(TutorWithCounts.class, false);
         grid.addColumn(TutorWithCounts::getFullName).setHeader("Фамилия Имя").setSortable(true).setKey("name");
         grid.addColumn(TutorWithCounts::getEmail).setHeader("Email").setSortable(true).setKey("email");
         grid.addColumn(TutorWithCounts::getTgId).setHeader("Telegram").setSortable(true).setKey("telegram");
@@ -65,7 +60,7 @@ public class TutorView extends VerticalLayout {
         grid.setSizeFull();
         grid.addSelectionListener(sel -> {
             selectedIds = sel.getAllSelectedItems().stream().map(TutorWithCounts::getId).toList();
-            this.gsa.setCount(selectedIds.size());
+            gsa.setCount(selectedIds.size());
         });
 
         var searchField = new SearchField("Найти куратора");
@@ -75,6 +70,6 @@ public class TutorView extends VerticalLayout {
         var settingsPopover = new GridSettingsPopover(grid, Set.of());
         settingsPopover.setTarget(settingsBtn);
 
-        add(new SearchFragment(searchField, settingsBtn), this.gsa, grid);
+        add(new SearchFragment(searchField, settingsBtn), gsa, grid);
     }
 }

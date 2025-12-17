@@ -19,15 +19,10 @@ import java.util.Map;
 import java.util.Set;
 
 public class StudentView extends VerticalLayout {
-
-    private final Grid<UserDto> grid;
-    private final GridSelectActions gsa;
-    private final StudentDataProvider provider;
     private List<Long> selectedIds;
 
     public StudentView(StudentDataProvider provider, UserActions actions) {
-        this.provider = provider;
-        this.gsa = new GridSelectActions(
+        var gsa = new GridSelectActions(
                 new Button("Заблокировать пользователей", VaadinIcon.BAN.create(), e -> {
                     if (!selectedIds.isEmpty())
                         actions.onDelete(selectedIds);
@@ -37,7 +32,7 @@ public class StudentView extends VerticalLayout {
         setSizeFull();
         setPadding(false);
 
-        grid = new Grid<>(UserDto.class, false);
+        var grid = new Grid<>(UserDto.class, false);
         grid.addColumn(UserDto::getFullName).setHeader("Фамилия Имя").setSortable(true).setKey("name");
         grid.addColumn(UserDto::getEmail).setHeader("Email").setSortable(true).setKey("email");
         grid.addColumn(UserDto::getTgName).setHeader("Telegram").setSortable(true).setKey("telegram");
@@ -68,7 +63,7 @@ public class StudentView extends VerticalLayout {
         grid.setSizeFull();
         grid.addSelectionListener(sel -> {
             selectedIds = sel.getAllSelectedItems().stream().map(UserDto::getId).toList();
-            this.gsa.setCount(selectedIds.size());
+            gsa.setCount(selectedIds.size());
         });
 
         var searchField = new SearchField("Найти студента");
@@ -78,6 +73,6 @@ public class StudentView extends VerticalLayout {
         var settingsPopover = new GridSettingsPopover(grid, Set.of());
         settingsPopover.setTarget(settingsBtn);
 
-        add(new SearchFragment(searchField, settingsBtn), this.gsa, grid);
+        add(new SearchFragment(searchField, settingsBtn), gsa, grid);
     }
 }
