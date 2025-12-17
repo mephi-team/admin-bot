@@ -19,8 +19,7 @@ import team.mephi.adminbot.vaadin.users.service.UsersPresenter;
 import team.mephi.adminbot.vaadin.users.actions.UserActions;
 import team.mephi.adminbot.vaadin.users.tabs.UserTabProvider;
 
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 @Route("/users1")
 @RolesAllowed("ADMIN")
@@ -28,6 +27,8 @@ public class UsersView extends VerticalLayout {
 
     private final UserEditorDialog editorDialog;
     private final TabSheet tabSheet = new TabSheet();
+    private final List<String> rolesInOrder = new ArrayList<>();
+    private final Map<String, UserDataProvider> dataProviders = new HashMap<>();
 
     public UsersView(
             List<UserTabProvider> tabProviders,
@@ -41,9 +42,12 @@ public class UsersView extends VerticalLayout {
         tabProviders.sort(Comparator.comparingInt(UserTabProvider::getPosition));
         // Создаём вкладки
         for (var provider : tabProviders) {
-            var dataProvider = presenter.createDataProvider(provider.getTabId());
-            var actions = createActions(provider.getTabId(), dataProvider);
+            var tabId = provider.getTabId();
+            var dataProvider = presenter.createDataProvider(tabId);
+            var actions = createActions(tabId, dataProvider);
             var content = provider.createTabContent(actions);
+            rolesInOrder.add(tabId);
+            dataProviders.put(tabId, dataProvider);
             tabSheet.add(new Tab(provider.getTabLabel()), content, provider.getPosition());
         }
     }
@@ -85,6 +89,11 @@ public class UsersView extends VerticalLayout {
         top.addToStart(new H1("Пользователи"));
         var primaryButton = new Button("Добавить пользователя", new Icon(VaadinIcon.PLUS), e -> {
             editorDialog.openForNew(getCurrentRole());
+            editorDialog.setOnSaveCallback(() -> {
+                var dataProvider = dataProviders.get(getCurrentRole());
+                dataProvider.save(editorDialog.getEditedUser());
+                dataProvider.refresh();
+            });
         });
         primaryButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         Div buttons = new Div(new Button("Загрузить из файла", new Icon(VaadinIcon.FILE_ADD)), primaryButton);
@@ -96,6 +105,9 @@ public class UsersView extends VerticalLayout {
 
     private String getCurrentRole() {
         var selectedTab = tabSheet.getSelectedIndex();
+        if (selectedTab > -1) {
+            return rolesInOrder.get(selectedTab);
+        }
         return "visitor";
     }
 }

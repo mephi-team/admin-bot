@@ -17,5 +17,6 @@ public class SimpleUser {
     private String lastName;
     @NotEmpty
     private String email;
+    @NotEmpty
     private String telegram;
 }

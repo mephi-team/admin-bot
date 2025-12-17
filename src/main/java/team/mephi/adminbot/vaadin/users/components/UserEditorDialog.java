@@ -51,7 +51,7 @@ public class UserEditorDialog extends Dialog {
     public void openForNew(String role) {
         SimpleUser newUser = new SimpleUser();
         newUser.setRole(role);
-        binder.setBean(newUser);
+        binder.readBean(newUser);
         saveButton.setVisible(true);
         open();
     }
@@ -59,7 +59,8 @@ public class UserEditorDialog extends Dialog {
     private void onSave() {
         if (onSaveCallback != null) {
             onSaveCallback.run();
-            close();
+            if(binder.validate().isOk())
+                close();
         }
     }
 
