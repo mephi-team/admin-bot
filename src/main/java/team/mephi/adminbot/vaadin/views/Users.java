@@ -19,8 +19,8 @@ import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.vaadin.components.UserConfirmDialog;
 import team.mephi.adminbot.vaadin.components.UserCountBadge;
 import team.mephi.adminbot.vaadin.users.actions.UserActions;
-import team.mephi.adminbot.vaadin.users.components.RoleService;
 import team.mephi.adminbot.vaadin.users.components.UserEditorDialog;
+import team.mephi.adminbot.vaadin.users.components.UserEditorDialogFactory;
 import team.mephi.adminbot.vaadin.users.dataproviders.UserDataProvider;
 import team.mephi.adminbot.vaadin.users.service.UserCountService;
 import team.mephi.adminbot.vaadin.users.service.UserViewCallback;
@@ -73,10 +73,10 @@ public class Users extends VerticalLayout implements UserViewCallback {
     public Users(
             List<UserTabProvider> tabProviders,
             UsersPresenterFactory presenterFactory, // ← новый фабричный сервис
-            RoleService roleService,
+            UserEditorDialogFactory dialogFactory,
             UserCountService userCountService
     ) {
-        this.editorDialog = new UserEditorDialog(roleService);
+        this.editorDialog = dialogFactory.create();
 
         this.dialogBlock = new UserConfirmDialog(
                 BLOCK_TITLE, BLOCK_TEXT, BLOCK_ACTION,

@@ -11,6 +11,9 @@ import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.vaadin.components.UserForm;
 
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class UserEditorDialog extends Dialog {
     private final UserForm form;
@@ -21,13 +24,17 @@ public class UserEditorDialog extends Dialog {
     @Setter
     private SerializableRunnable onSaveCallback;
 
-    public UserEditorDialog(RoleService roleService) {
-        List<RoleDto> roles = roleService.getAllRoles();
+    private final Map<String, RoleDto> roleCodeToDto;
+
+    public UserEditorDialog(List<RoleDto> roles) {
+        this.roleCodeToDto = roles.stream()
+                .collect(Collectors.toMap(RoleDto::getCode, Function.identity()));
+
         this.form = new UserForm(roles);
         setHeaderTitle("Пользователь");
         form.setWidth("100%");
         binder.forField(form.getRoles())
-                .withConverter(RoleDto::getCode, roleCode -> roleService.getByCode(roleCode).orElseThrow())
+                .withConverter(RoleDto::getCode, roleCode -> roleCodeToDto.getOrDefault(roleCode, null))
                 .bind(SimpleUser::getRole, SimpleUser::setRole);
         binder.bindInstanceFields(form);
         FormLayout layout = new FormLayout(form);
