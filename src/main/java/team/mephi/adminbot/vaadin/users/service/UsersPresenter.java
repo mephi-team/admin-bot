@@ -20,12 +20,28 @@ public class UsersPresenter implements UserActions {
     private static final String REJECT_MESSAGE = "Информация об отказе отправлена кандидату";
     private static final String REJECT_ALL_MESSAGE = "Информация об отказе отправлена %d кандидатам";
 
+    private static final String USER_CREATED = "Пользователь добавлен";
+    private static final String USER_SAVED = "Пользователь сохранён";
+
     public UsersPresenter(
             UserDataProvider dataProvider,
             UserViewCallback view
     ) {
         this.dataProvider = dataProvider;
         this.view = view;
+    }
+
+    @Override
+    public void onCreate(String role) {
+        view.showUserEditorForNew(role);
+        view.setOnSaveCallback(() -> {
+            SimpleUser newUser = view.getEditedUser();
+            if (newUser != null) {
+                dataProvider.save(newUser);
+                dataProvider.refresh();
+                view.showNotification(USER_CREATED);
+            }
+        });
     }
 
     @Override
@@ -44,7 +60,7 @@ public class UsersPresenter implements UserActions {
                 if (editedUser != null) {
                     dataProvider.save(editedUser);
                     dataProvider.refresh();
-                    view.showNotification("Пользователь сохранён");
+                    view.showNotification(USER_SAVED);
                 }
             });
         });

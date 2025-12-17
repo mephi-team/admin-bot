@@ -57,10 +57,11 @@ public class UserEditorDialog extends Dialog {
     }
 
     private void onSave() {
-        if (onSaveCallback != null) {
-            onSaveCallback.run();
-            if(binder.validate().isOk())
-                close();
+        if(binder.validate().isOk()) {
+            if (onSaveCallback != null) {
+                onSaveCallback.run();
+            }
+            close();
         }
     }
 

@@ -38,12 +38,12 @@ public class UserConfirmDialog extends ConfirmDialog {
 
     public void setCount(int count) {
         this.count = count;
-        if (count == 1) {
-            setHeader(this.header);
-            setText(this.text);
-        } else {
+        if (count > 1) {
             setHeader(this.headerAll);
             setText(String.format(textAll, count));
+        } else {
+            setHeader(this.header);
+            setText(this.text);
         }
     }
 }

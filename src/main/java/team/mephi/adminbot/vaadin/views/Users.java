@@ -18,6 +18,7 @@ import jakarta.annotation.security.RolesAllowed;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.vaadin.components.UserConfirmDialog;
 import team.mephi.adminbot.vaadin.components.UserCountBadge;
+import team.mephi.adminbot.vaadin.users.actions.UserActions;
 import team.mephi.adminbot.vaadin.users.components.RoleService;
 import team.mephi.adminbot.vaadin.users.components.UserEditorDialog;
 import team.mephi.adminbot.vaadin.users.dataproviders.UserDataProvider;
@@ -58,6 +59,7 @@ public class Users extends VerticalLayout implements UserViewCallback {
     private final TabSheet tabSheet = new TabSheet();
     private final List<String> rolesInOrder = new ArrayList<>();
     private final Map<String, UserDataProvider> dataProviders = new HashMap<>();
+    private final Map<String, UserActions> actions = new HashMap<>();
 
     public Users(
             List<UserTabProvider> tabProviders,
@@ -69,17 +71,17 @@ public class Users extends VerticalLayout implements UserViewCallback {
 
         this.dialogBlock = new UserConfirmDialog(
                 BLOCK_TITLE, BLOCK_TEXT, BLOCK_ACTION,
-                BLOCK_ALL_TITLE, String.format(BLOCK_ALL_TEXT, 0), // placeholder
+                BLOCK_ALL_TITLE, BLOCK_ALL_TEXT,
                 null
         );
         this.dialogAccept = new UserConfirmDialog(
                 ACCEPT_TITLE, ACCEPT_TEXT, ACCEPT_ACTION,
-                ACCEPT_ALL_TITLE, String.format(ACCEPT_ALL_TEXT, 0),
+                ACCEPT_ALL_TITLE, ACCEPT_ALL_TEXT,
                 null
         );
         this.dialogReject = new UserConfirmDialog(
                 REJECT_TITLE, REJECT_TEXT, REJECT_ACTION,
-                REJECT_ALL_TITLE, String.format(REJECT_ALL_TEXT, 0),
+                REJECT_ALL_TITLE, REJECT_ALL_TEXT,
                 null
         );
 
@@ -98,6 +100,7 @@ public class Users extends VerticalLayout implements UserViewCallback {
 
             rolesInOrder.add(tabId);
             dataProviders.put(tabId, dataProvider);
+            actions.put(tabId, presenter);
 
             var userCount = userCountService.getAllCounts().getOrDefault(provider.getTabId(), 0L);
             Span tabContent = new Span(new Span(provider.getTabLabel()), new UserCountBadge(userCount));
@@ -111,12 +114,7 @@ public class Users extends VerticalLayout implements UserViewCallback {
         top.addToStart(new H1("Пользователи"));
 
         var primaryButton = new Button("Добавить пользователя", new Icon(VaadinIcon.PLUS), e -> {
-            editorDialog.openForNew(getCurrentRole());
-            editorDialog.setOnSaveCallback(() -> {
-                var dataProvider = dataProviders.get(getCurrentRole());
-                dataProvider.save(editorDialog.getEditedUser());
-                dataProvider.refresh();
-            });
+            actions.get(getCurrentRole()).onCreate(getCurrentRole());
         });
         primaryButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         Div buttons = new Div(new Button("Загрузить из файла", new Icon(VaadinIcon.FILE_ADD)), primaryButton);
@@ -146,7 +144,6 @@ public class Users extends VerticalLayout implements UserViewCallback {
 
     @Override
     public void showUserEditorForView(SimpleUser user) {
-        System.out.println("showUserEditorForView " + user);
         editorDialog.openForView(user);
     }
 
