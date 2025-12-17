@@ -12,13 +12,17 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.TabSheet;
+import com.vaadin.flow.function.SerializableRunnable;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
+import team.mephi.adminbot.dto.SimpleUser;
+import team.mephi.adminbot.vaadin.components.UserConfirmDialog;
 import team.mephi.adminbot.vaadin.components.UserCountBadge;
 import team.mephi.adminbot.vaadin.users.components.RoleService;
 import team.mephi.adminbot.vaadin.users.components.UserEditorDialog;
 import team.mephi.adminbot.vaadin.users.dataproviders.UserDataProvider;
 import team.mephi.adminbot.vaadin.users.service.UserCountService;
+import team.mephi.adminbot.vaadin.users.service.UserViewCallback;
 import team.mephi.adminbot.vaadin.users.service.UsersPresenter;
 import team.mephi.adminbot.vaadin.users.service.UsersPresenterFactory;
 import team.mephi.adminbot.vaadin.users.tabs.UserTabProvider;
@@ -27,8 +31,29 @@ import java.util.*;
 
 @Route("/users")
 @RolesAllowed("ADMIN")
-public class Users extends VerticalLayout {
+public class Users extends VerticalLayout implements UserViewCallback {
+    private static final String BLOCK_TITLE = "Блокировать пользователя?";
+    private static final String BLOCK_TEXT = "Вы действительно хотите заблокировать пользователя?";
+    private static final String BLOCK_ALL_TITLE = "Блокировать пользователей?";
+    private static final String BLOCK_ALL_TEXT = "Вы действительно хотите заблокировать %d пользователей?";
+    private static final String BLOCK_ACTION = "Блокировать";
+
+    private static final String ACCEPT_TITLE = "Утвердить кандидата?";
+    private static final String ACCEPT_TEXT = "Вы действительно хотите утвердить кандидата?";
+    private static final String ACCEPT_ALL_TITLE = "Утвердить кандидатов?";
+    private static final String ACCEPT_ALL_TEXT = "Вы действительно хотите утвердить %d кандидатов?";
+    private static final String ACCEPT_ACTION = "Утвердить";
+
+    private static final String REJECT_TITLE = "Отклонить кандидата?";
+    private static final String REJECT_TEXT = "Вы действительно хотите отклонить кандидата?";
+    private static final String REJECT_ALL_TITLE = "Отклонить кандидатов?";
+    private static final String REJECT_ALL_TEXT = "Вы действительно хотите отклонить %d кандидатов?";
+    private static final String REJECT_ACTION = "Отклонить";
+
     private final UserEditorDialog editorDialog;
+    private final UserConfirmDialog dialogBlock;
+    private final UserConfirmDialog dialogAccept;
+    private final UserConfirmDialog dialogReject;
 
     private final TabSheet tabSheet = new TabSheet();
     private final List<String> rolesInOrder = new ArrayList<>();
@@ -41,6 +66,23 @@ public class Users extends VerticalLayout {
             UserCountService userCountService
     ) {
         this.editorDialog = new UserEditorDialog(roleService);
+
+        this.dialogBlock = new UserConfirmDialog(
+                BLOCK_TITLE, BLOCK_TEXT, BLOCK_ACTION,
+                BLOCK_ALL_TITLE, String.format(BLOCK_ALL_TEXT, 0), // placeholder
+                null
+        );
+        this.dialogAccept = new UserConfirmDialog(
+                ACCEPT_TITLE, ACCEPT_TEXT, ACCEPT_ACTION,
+                ACCEPT_ALL_TITLE, String.format(ACCEPT_ALL_TEXT, 0),
+                null
+        );
+        this.dialogReject = new UserConfirmDialog(
+                REJECT_TITLE, REJECT_TEXT, REJECT_ACTION,
+                REJECT_ALL_TITLE, String.format(REJECT_ALL_TEXT, 0),
+                null
+        );
+
         setSizeFull();
         tabSheet.setSizeFull();
         add(createHeader(), tabSheet, editorDialog);
@@ -51,7 +93,7 @@ public class Users extends VerticalLayout {
         for (var provider : tabProviders) {
             var tabId = provider.getTabId();
             var dataProvider = presenterFactory.createDataProvider(tabId);
-            var presenter = new UsersPresenter(editorDialog, dataProvider);
+            var presenter = new UsersPresenter(dataProvider, this);
             var content = provider.createTabContent(presenter);
 
             rolesInOrder.add(tabId);
@@ -90,5 +132,57 @@ public class Users extends VerticalLayout {
             return rolesInOrder.get(selectedTab);
         }
         return "visitor";
+    }
+
+    @Override
+    public void setOnSaveCallback(SerializableRunnable callback) {
+        editorDialog.setOnSaveCallback(callback);
+    }
+
+    @Override
+    public SimpleUser getEditedUser() {
+        return editorDialog.getEditedUser();
+    }
+
+    @Override
+    public void showUserEditorForView(SimpleUser user) {
+        System.out.println("showUserEditorForView " + user);
+        editorDialog.openForView(user);
+    }
+
+    @Override
+    public void showUserEditorForEdit(SimpleUser user) {
+        editorDialog.openForEdit(user);
+    }
+
+    @Override
+    public void showUserEditorForNew(String role) {
+        editorDialog.openForNew(role);
+    }
+
+    @Override
+    public void confirmDelete(List<Long> ids, Runnable onConfirm) {
+        dialogBlock.setCount(ids.size());
+        dialogBlock.setOnConfirm(onConfirm);
+        dialogBlock.open();
+    }
+
+    @Override
+    public void confirmAccept(List<Long> ids, Runnable onConfirm) {
+        dialogAccept.setCount(ids.size());
+        dialogAccept.setOnConfirm(onConfirm);
+        dialogAccept.open();
+    }
+
+    @Override
+    public void confirmReject(List<Long> ids, Runnable onConfirm) {
+        dialogReject.setCount(ids.size());
+        dialogReject.setOnConfirm(onConfirm);
+        dialogReject.open();
+    }
+
+    @Override
+    public void showNotification(String message) {
+        Notification.show(message, 3000, Notification.Position.TOP_END);
     }
 }
