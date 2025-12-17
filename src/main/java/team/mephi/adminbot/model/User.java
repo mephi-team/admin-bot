@@ -127,7 +127,7 @@ public class User {
      * Например: активен, отчислён, заблокирован и т.п.
      */
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
+    @Column(name = "status")
     private UserStatus status;
 
     /**
