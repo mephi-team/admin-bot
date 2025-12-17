@@ -59,8 +59,8 @@ public class MiddleCandidateView extends VerticalLayout {
         grid.addColumn(createStatusComponentRenderer()).setHeader("Статус").setSortable(true).setKey("status");
 
         grid.addComponentColumn(item -> {
-            Button confirmButton = new Button(new Icon(VaadinIcon.CLOSE), e -> System.out.println(item));
-            Button rejectButton = new Button(new Icon(VaadinIcon.CHECK), e -> System.out.println(item));
+            Button confirmButton = new Button(new Icon(VaadinIcon.CHECK), e -> actions.onAccept(List.of(item.getId())));
+            Button rejectButton = new Button(new Icon(VaadinIcon.CLOSE), e -> actions.onReject(List.of(item.getId())));
             Button viewButton = new Button(new Icon(VaadinIcon.EYE), e -> actions.onView(item.getId()));
             Button chatButton = new Button(new Icon(VaadinIcon.CHAT), e -> UI.getCurrent().navigate(Dialogs.class, new QueryParameters(Map.of("userId", List.of("" + item.getId())))));
             Button editButton = new Button(new Icon(VaadinIcon.PENCIL), e -> actions.onEdit(item.getId()));
@@ -70,7 +70,7 @@ public class MiddleCandidateView extends VerticalLayout {
             } else {
                 deleteButton.getElement().getStyle().set("color", "black");
             }
-            return new Span(confirmButton, rejectButton, viewButton, chatButton, editButton, deleteButton);
+            return new Span(rejectButton, confirmButton, viewButton, chatButton, editButton, deleteButton);
         }).setHeader("Действия").setWidth("290px").setFlexGrow(0).setKey("actions");
 
         grid.setDataProvider(provider.getFilterableProvider());
