@@ -182,27 +182,16 @@ public class DataInitializer {
     private void initBroadcasts() {
         Random random = new Random();
 
-        List<Mailing> broadcasts = Arrays.asList(
-                Mailing.builder()
-                        .createdBy(userRepository.findById(1L + random.nextLong(userRepository.count())).orElseThrow())
-                        .name("Test1")
-                        .channels(List.of(Channels.Email))
-                        .filters(Filters.builder().users("students").cohort("summer2025").direction("Java").city("Москва").curator("Иванов").build())
-                        .status(MailingStatus.DRAFT)
-                        .build(),
-                Mailing.builder()
-                        .createdBy(userRepository.findById(1L + random.nextLong(userRepository.count())).orElseThrow())
-                        .name("Test2")
-                        .channels(List.of(Channels.Telegram))
-                        .status(MailingStatus.DRAFT)
-                        .build(),
-                Mailing.builder()
-                        .createdBy(userRepository.findById(1L + random.nextLong(userRepository.count())).orElseThrow())
-                        .name("Test3")
-                        .channels(List.of(Channels.Email, Channels.Telegram))
-                        .status(MailingStatus.DRAFT)
-                        .build()
-        );
+        List<Mailing> broadcasts = new ArrayList<>();
+        for (int i = 1; i < 100; i++) {
+            broadcasts.add(Mailing.builder()
+                    .createdBy(userRepository.findById(1L + random.nextLong(userRepository.count())).orElseThrow())
+                    .name("Test1")
+                    .channels(List.of(Channels.Email))
+                    .filters(Filters.builder().users("students").cohort("summer2025").direction("Java").city("Москва").curator("Иванов").build())
+                    .status(MailingStatus.DRAFT)
+                    .build());
+        }
         broadcasts.forEach(b -> b.setCreatedAt(Instant.now().minusSeconds(new Random().nextInt(5) * DAY_SECONDS)));
         mailingRepository.saveAll(broadcasts);
         System.out.println("  → Создано 3 рассылки");
