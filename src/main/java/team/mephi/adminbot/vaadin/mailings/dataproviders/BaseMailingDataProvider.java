@@ -66,7 +66,6 @@ public abstract class BaseMailingDataProvider implements MailingDataProvider<Sim
 
     @Override
     public SimpleMailing save(SimpleMailing mailing) {
-        System.out.println("!!!! save " + mailing);
         var result = mailing.getId() != null
                 ? mailingRepository.findById(mailing.getId()).orElse(new Mailing())
                 : new Mailing();

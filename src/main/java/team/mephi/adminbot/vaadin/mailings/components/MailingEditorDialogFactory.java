@@ -8,10 +8,11 @@ import java.util.List;
 @SpringComponent
 public class MailingEditorDialogFactory {
     private List<UserDto> allUsers;
+
     public MailingEditorDialogFactory(UserService userService) {
-        this.allUsers = userService.getAllUsers();
-        System.out.println("allUsers " + allUsers);
+        this.allUsers = userService.getAllUsers();;
     }
+
     public MailingEditorDialog create() {
         return new MailingEditorDialog(allUsers);
     }

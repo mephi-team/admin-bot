@@ -1,9 +1,7 @@
 package team.mephi.adminbot.vaadin.mailings.components;
 
-import com.vaadin.flow.component.HasText;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
-import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.function.SerializableRunnable;
 import lombok.Setter;
@@ -27,16 +25,14 @@ public class MailingEditorDialog extends Dialog {
     private final Map<Long, UserDto> userIdToDto;
 
     public MailingEditorDialog(List<UserDto> users) {
-        System.out.println("! users " + users);
         this.userIdToDto = users.stream()
                 .collect(Collectors.toMap(UserDto::getId, Function.identity()));
 
         var form = new MailingForm(users);
         binder.bindInstanceFields(form);
         binder.forField(form.getUser())
-                .withConverter(UserDto::getId, roleCode -> userIdToDto.getOrDefault(roleCode, UserDto.builder().userName("Not Found").build()))
-                .withNullRepresentation(0L)
-                .withStatusLabel(new Span("Errror"))
+                .withConverter(UserDto::getId, roleCode -> userIdToDto.getOrDefault(roleCode, UserDto.builder().userName("").build()))
+                .withValidator(userIdToDto::containsKey, "Пользователь обязателен")
                 .bind(SimpleMailing::getUserId, SimpleMailing::setUserId);
         setHeaderTitle("Создание рассылки");
         add(form);

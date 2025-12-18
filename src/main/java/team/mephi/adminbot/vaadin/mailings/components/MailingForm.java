@@ -16,9 +16,9 @@ public class MailingForm extends FormLayout {
     private ComboBox<UserDto> user = new ComboBox<>();
 
     public MailingForm(List<UserDto> users) {
-        System.out.println("!!! users " + users);
         user.setItems(users);
         user.setItemLabelGenerator(UserDto::getUserName);
+        user.setRequired(true);
         setAutoResponsive(true);
         setLabelsAside(true);
 
