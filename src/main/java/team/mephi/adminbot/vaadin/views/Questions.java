@@ -14,7 +14,7 @@ import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
 import team.mephi.adminbot.dto.UserQuestionDto;
 import team.mephi.adminbot.vaadin.components.*;
-import team.mephi.adminbot.vaadin.users.dataproviders.QuestionDataProvider;
+import team.mephi.adminbot.vaadin.questions.dataproviders.QuestionDataProvider;
 
 import java.util.List;
 import java.util.Map;

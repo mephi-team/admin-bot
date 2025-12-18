@@ -1,4 +1,4 @@
-package team.mephi.adminbot.vaadin.users.dataproviders;
+package team.mephi.adminbot.vaadin.questions.dataproviders;
 
 import com.vaadin.flow.data.provider.CallbackDataProvider;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
