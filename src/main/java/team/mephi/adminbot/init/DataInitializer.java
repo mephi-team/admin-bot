@@ -92,7 +92,7 @@ public class DataInitializer {
                 Role.builder().code("tutor").name("tutor").description("Кураторы").build()
         );
         roleRepository.saveAll(roles);
-        System.out.println("  → Создано 5 ролей");
+        System.out.printf("  → Создано %d ролей%n", roles.size());
     }
 
     private void initDirections() {
@@ -104,7 +104,7 @@ public class DataInitializer {
                 Direction.builder().code("js").name("JavaScrypt").build()
         );
         directionRepository.saveAll(directions);
-        System.out.println("  → Создано 5 направлений");
+        System.out.printf("  → Создано %d направлений%n", directions.size());
     }
 
     private void initUsers() {
@@ -137,7 +137,7 @@ public class DataInitializer {
                 User.builder().tgId("tg_1008").email("test8@example.com").userName("Сергей Смирнов").firstName("Сергей").lastName("Смирнов").role(lcExpertRole).status(UserStatus.ACTIVE).build()
         );
         userRepository.saveAll(users);
-        System.out.println("  → Создано 5 пользователей");
+        System.out.printf("  → Создано %d пользователей%n", users.size());
     }
 
     private void initTutors() {
@@ -146,7 +146,7 @@ public class DataInitializer {
                 Tutor.builder().userName("test2").firstName("Николай").lastName("Александров").phone("+79997654321").email("test2@example.com").build()
         );
         tutorRepository.saveAll(tutors);
-        System.out.println("  → Создано 2 куратора");
+        System.out.printf("  → Создано %d кураторов%n", tutors.size());
     }
 
     private void initQuestions() {
@@ -165,7 +165,7 @@ public class DataInitializer {
         // Устанавливаем createdAt вручную, если в конструкторе не задано
         questions.forEach(q -> q.setCreatedAt(Instant.now().minusSeconds(new Random().nextInt(10) * DAY_SECONDS)));
         questionRepository.saveAll(questions);
-        System.out.println("  → Создано 5 вопросов");
+        System.out.printf("  → Создано %d вопросов%n", questions.size());
     }
 
     private void initAnswers() {
@@ -182,6 +182,7 @@ public class DataInitializer {
                 UserAnswer.builder().status(AnswerStatus.UPDATED).answeredAt(Instant.now()).answeredBy(experts.get(random.nextInt(0, experts.size()))).question(questionRepository.findById(5L).orElseThrow()).answerText("По окончании вы получаете сертификат установленного образца.").build()
         );
         answerRepository.saveAll(answers);
+        System.out.printf("  → Создано %d ответов%n", answers.size());
     }
 
     private void initBroadcasts() {
@@ -200,7 +201,7 @@ public class DataInitializer {
         }
         broadcasts.forEach(b -> b.setCreatedAt(Instant.now().minusSeconds(new Random().nextInt(5) * DAY_SECONDS)));
         mailingRepository.saveAll(broadcasts);
-        System.out.printf("  → Создано %d рассылки%n", broadcasts.size());
+        System.out.printf("  → Создано %d рассылок%n", broadcasts.size());
     }
 
     private void initTemplates() {
