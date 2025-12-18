@@ -15,14 +15,15 @@ import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.vaadin.components.*;
+import team.mephi.adminbot.vaadin.mailings.actions.MailingActions;
+import team.mephi.adminbot.vaadin.mailings.components.MailingEditorDialog;
 import team.mephi.adminbot.vaadin.mailings.service.MailingCountService;
 import team.mephi.adminbot.vaadin.mailings.service.MailingPresenterFactory;
 import team.mephi.adminbot.vaadin.mailings.service.MailingViewCallback;
 import team.mephi.adminbot.vaadin.mailings.service.MailingsPresenter;
 import team.mephi.adminbot.vaadin.mailings.tabs.MailingTabProvider;
 
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 
 @Route(value = "/mailings", layout = DialogsLayout.class)
@@ -36,7 +37,20 @@ public class Mailings extends VerticalLayout implements MailingViewCallback {
 
     private final TabSheet tabSheet = new TabSheet();
 
+    private final MailingEditorDialog mailingEditorDialog;
     private final UserConfirmDialog dialogDelete;
+
+    private final List<String> rolesInOrder = new ArrayList<>();
+    private final Map<String, MailingActions> actions = new HashMap<>();
+
+    private static final MailingActions NO_OP_ACTIONS = new MailingActions() {
+        @Override public void onCreate(String role) {}
+        @Override public void onView(Long id) {}
+        @Override public void onEdit(Long id) {}
+        @Override public void onDelete(List<Long> ids) {}
+        @Override public void onAccept(List<Long> ids) {}
+        @Override public void onReject(List<Long> ids) {}
+    };
 
     public Mailings(
             List<MailingTabProvider> tabProviders,
@@ -48,10 +62,11 @@ public class Mailings extends VerticalLayout implements MailingViewCallback {
                 DELETE_ALL_TITLE, DELETE_ALL_TEXT,
                 null
         );
+        this.mailingEditorDialog = new MailingEditorDialog();
 
         setHeightFull();
         tabSheet.setSizeFull();
-        add(createHeader(), tabSheet);
+        add(createHeader(), tabSheet, mailingEditorDialog);
 
         tabProviders.sort(Comparator.comparingInt(MailingTabProvider::getPosition));
 
@@ -61,9 +76,8 @@ public class Mailings extends VerticalLayout implements MailingViewCallback {
             var presenter = new MailingsPresenter(dataProvider, this);
             var content = provider.createTabContent(presenter);
 
-//            rolesInOrder.add(tabId);
-//            dataProviders.put(tabId, dataProvider);
-//            actions.put(tabId, presenter);
+            rolesInOrder.add(tabId);
+            actions.put(tabId, presenter);
 
             var userCount = mailingCountService.getAllCounts().getOrDefault(provider.getTabId(), 0L);
             Span tabContent = new Span(new Span(provider.getTabLabel()), new UserCountBadge(userCount));
@@ -77,11 +91,23 @@ public class Mailings extends VerticalLayout implements MailingViewCallback {
         top.addToStart(new H1("Рассылки"));
 
         var primaryButton = new Button("Новая рассылка", new Icon(VaadinIcon.PLUS), e -> {
-//            getCurrentAction().onCreate(getCurrentRole());
+            getCurrentAction().onCreate(getCurrentRole());
         });
         primaryButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         top.addToEnd(primaryButton);
         return top;
+    }
+
+    private String getCurrentRole() {
+        var selectedTab = tabSheet.getSelectedIndex();
+        if (selectedTab > -1) {
+            return rolesInOrder.get(selectedTab);
+        }
+        return "visitor";
+    }
+
+    private MailingActions getCurrentAction() {
+        return actions.getOrDefault(getCurrentRole(), NO_OP_ACTIONS);
     }
 
     @Override
@@ -96,7 +122,7 @@ public class Mailings extends VerticalLayout implements MailingViewCallback {
 
     @Override
     public void showUserEditorForNew(String role) {
-
+        mailingEditorDialog.open();
     }
 
     @Override

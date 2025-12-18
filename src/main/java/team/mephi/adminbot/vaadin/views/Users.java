@@ -21,7 +21,6 @@ import team.mephi.adminbot.vaadin.components.UserCountBadge;
 import team.mephi.adminbot.vaadin.users.actions.UserActions;
 import team.mephi.adminbot.vaadin.users.components.UserEditorDialog;
 import team.mephi.adminbot.vaadin.users.components.UserEditorDialogFactory;
-import team.mephi.adminbot.vaadin.users.dataproviders.UserDataProvider;
 import team.mephi.adminbot.vaadin.users.service.UserCountService;
 import team.mephi.adminbot.vaadin.users.service.UserViewCallback;
 import team.mephi.adminbot.vaadin.users.service.UsersPresenter;
@@ -58,7 +57,6 @@ public class Users extends VerticalLayout implements UserViewCallback {
 
     private final TabSheet tabSheet = new TabSheet();
     private final List<String> rolesInOrder = new ArrayList<>();
-    private final Map<String, UserDataProvider> dataProviders = new HashMap<>();
     private final Map<String, UserActions> actions = new HashMap<>();
 
     private static final UserActions NO_OP_ACTIONS = new UserActions() {
@@ -108,7 +106,6 @@ public class Users extends VerticalLayout implements UserViewCallback {
             var content = provider.createTabContent(presenter);
 
             rolesInOrder.add(tabId);
-            dataProviders.put(tabId, dataProvider);
             actions.put(tabId, presenter);
 
             var userCount = userCountService.getAllCounts().getOrDefault(provider.getTabId(), 0L);

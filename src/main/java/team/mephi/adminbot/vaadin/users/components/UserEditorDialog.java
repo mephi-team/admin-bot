@@ -8,7 +8,6 @@ import com.vaadin.flow.function.SerializableRunnable;
 import lombok.Setter;
 import team.mephi.adminbot.dto.RoleDto;
 import team.mephi.adminbot.dto.SimpleUser;
-import team.mephi.adminbot.vaadin.components.UserForm;
 
 import java.util.List;
 import java.util.Map;

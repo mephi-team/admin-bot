@@ -19,7 +19,7 @@ public class MailingsPresenter  implements MailingActions {
 
     @Override
     public void onCreate(String role) {
-
+        view.showUserEditorForNew(role);
     }
 
     @Override

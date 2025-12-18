@@ -1,4 +1,4 @@
-package team.mephi.adminbot.vaadin.components;
+package team.mephi.adminbot.vaadin.users.components;
 
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
