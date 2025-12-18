@@ -11,7 +11,7 @@ import com.vaadin.flow.function.SerializableBiConsumer;
 import team.mephi.adminbot.dto.MailingList;
 import team.mephi.adminbot.vaadin.components.*;
 import team.mephi.adminbot.vaadin.mailings.actions.MailingActions;
-import team.mephi.adminbot.vaadin.mailings.dataproviders.MailingDataProvider;
+import team.mephi.adminbot.vaadin.mailings.dataproviders.SentDataProvider;
 
 import java.util.List;
 import java.util.Set;
@@ -29,7 +29,7 @@ public class SentView extends VerticalLayout {
         span.setText(person.getStatus());
     };
 
-    public SentView(MailingDataProvider provider, MailingActions actions) {
+    public SentView(SentDataProvider provider, MailingActions actions) {
         var gsa = new GridSelectActions("Выбрано рассылок: ",
                 new Button("Удалить рассылки", VaadinIcon.TRASH.create(), e -> {
                     if (!selectedIds.isEmpty()) {

@@ -3,10 +3,16 @@ package team.mephi.adminbot.vaadin.mailings.tabs;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import team.mephi.adminbot.vaadin.mailings.actions.MailingActions;
+import team.mephi.adminbot.vaadin.mailings.dataproviders.TemplateDataProvider;
 import team.mephi.adminbot.vaadin.mailings.views.TemplateView;
 
 @SpringComponent
 public class TemplateTabProvider implements MailingTabProvider {
+    private final TemplateDataProvider templateDataProvider;
+
+    public TemplateTabProvider(TemplateDataProvider templateDataProvider) {
+        this.templateDataProvider = templateDataProvider;
+    }
 
     @Override
     public String getTabId() {
@@ -20,7 +26,7 @@ public class TemplateTabProvider implements MailingTabProvider {
 
     @Override
     public Component createTabContent(MailingActions actions) {
-        return new TemplateView();
+        return new TemplateView(templateDataProvider, actions);
     }
 
     @Override

@@ -44,6 +44,9 @@ public class DataInitializer {
     private MailingRepository mailingRepository;
 
     @Autowired
+    private MailTemplateRepository mailTemplateRepository;
+
+    @Autowired
     private TutorRepository tutorRepository;
 
     @Bean
@@ -56,6 +59,7 @@ public class DataInitializer {
             boolean hasQuestions = questionRepository.count() > 0;
             boolean hasAnswers = answerRepository.count() > 0;
             boolean hasBroadcasts = mailingRepository.count() > 0;
+            boolean hasTemplates = mailTemplateRepository.count() > 0;
             boolean hasTutors = tutorRepository.count() > 0;
 
             if (!hasUsers || !hasDialogs || !hasQuestions || !hasBroadcasts) {
@@ -67,6 +71,7 @@ public class DataInitializer {
                 if (!hasQuestions) initQuestions();
                 if (!hasAnswers) initAnswers();
                 if (!hasBroadcasts) initBroadcasts();
+                if (!hasTemplates) initTemplates();
                 if (!hasDialogs) initDialogs(); // зависит от пользователей
                 if (!hasTutors) initTutors();
 
@@ -181,20 +186,34 @@ public class DataInitializer {
 
     private void initBroadcasts() {
         Random random = new Random();
+        List<MailingStatus> statuses = Arrays.stream(MailingStatus.values()).toList();
 
         List<Mailing> broadcasts = new ArrayList<>();
         for (int i = 1; i < 100; i++) {
             broadcasts.add(Mailing.builder()
                     .createdBy(userRepository.findById(1L + random.nextLong(userRepository.count())).orElseThrow())
-                    .name("Test1")
+                    .name("Test" + i)
                     .channels(List.of(Channels.Email))
                     .filters(Filters.builder().users("students").cohort("summer2025").direction("Java").city("Москва").curator("Иванов").build())
-                    .status(MailingStatus.DRAFT)
+                    .status(statuses.get(random.nextInt(statuses.size())))
                     .build());
         }
         broadcasts.forEach(b -> b.setCreatedAt(Instant.now().minusSeconds(new Random().nextInt(5) * DAY_SECONDS)));
         mailingRepository.saveAll(broadcasts);
-        System.out.println("  → Создано 3 рассылки");
+        System.out.printf("  → Создано %d рассылки%n", broadcasts.size());
+    }
+
+    private void initTemplates() {
+        List<MailTemplate> templates = new ArrayList<>();
+        for (int i = 1; i < 10; i++) {
+            templates.add(MailTemplate.builder()
+                    .name("Name" + i)
+                    .subject("Subject" + i)
+                    .bodyText("Text " + i)
+                    .build());
+        }
+        mailTemplateRepository.saveAll(templates);
+        System.out.printf("  → Создано %d шаблонов%n", templates.size());
     }
 
     private void initDialogs() {
