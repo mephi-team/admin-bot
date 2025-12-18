@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.dto.TutorWithCounts;
 import team.mephi.adminbot.model.Tutor;
-import team.mephi.adminbot.repository.RoleRepository;
 import team.mephi.adminbot.repository.TutorRepository;
 
 import java.util.Optional;
@@ -16,13 +15,11 @@ import java.util.Optional;
 public class TutorDataProvider implements UserDataProvider {
 
     private final TutorRepository tutorRepository;
-    private final RoleRepository roleRepository;
 
     private ConfigurableFilterDataProvider<TutorWithCounts, Void, String> provider;
 
-    public TutorDataProvider(TutorRepository tutorRepository, RoleRepository roleRepository) {
+    public TutorDataProvider(TutorRepository tutorRepository) {
         this.tutorRepository = tutorRepository;
-        this.roleRepository = roleRepository;
     }
 
     public ConfigurableFilterDataProvider<TutorWithCounts, Void, String> getFilterableProvider() {
