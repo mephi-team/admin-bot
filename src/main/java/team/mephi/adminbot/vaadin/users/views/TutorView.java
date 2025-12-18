@@ -22,7 +22,7 @@ public class TutorView extends VerticalLayout {
     private List<Long> selectedIds;
 
     public TutorView(TutorDataProvider provider, UserActions actions) {
-        var gsa = new GridSelectActions(
+        var gsa = new GridSelectActions("Выбрано пользователей: ",
                 new Button("Заблокировать пользователей", VaadinIcon.BAN.create(), e -> {
                     if (!selectedIds.isEmpty())
                         actions.onDelete(selectedIds);

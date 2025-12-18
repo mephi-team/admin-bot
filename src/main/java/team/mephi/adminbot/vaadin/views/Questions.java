@@ -47,7 +47,7 @@ public class Questions extends VerticalLayout {
 
         add(new H1("Вопросы"));
 
-        var gsa = new GridSelectActions(
+        var gsa = new GridSelectActions("Выбрано вопросов: ",
                 new Button("Удалить вопросы", VaadinIcon.TRASH.create(), e -> {
                     if (!selectedIds.isEmpty()) {
                         onDelete(selectedIds);

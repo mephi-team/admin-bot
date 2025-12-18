@@ -22,7 +22,7 @@ public class StudentView extends VerticalLayout {
     private List<Long> selectedIds;
 
     public StudentView(StudentDataProvider provider, UserActions actions) {
-        var gsa = new GridSelectActions(
+        var gsa = new GridSelectActions("Выбрано пользователей: ",
                 new Button("Заблокировать пользователей", VaadinIcon.BAN.create(), e -> {
                     if (!selectedIds.isEmpty())
                         actions.onDelete(selectedIds);

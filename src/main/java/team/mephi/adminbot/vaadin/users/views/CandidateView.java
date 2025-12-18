@@ -22,7 +22,7 @@ public class CandidateView extends VerticalLayout {
     private List<Long> selectedIds;
 
     public CandidateView(CandidateDataProvider provider, UserActions actions) {
-        var gsa = new GridSelectActions(
+        var gsa = new GridSelectActions("Выбрано пользователей: ",
                 new Button("Утвердить кандидатов", VaadinIcon.CHECK.create(), e -> {
                     if (!selectedIds.isEmpty())
                         actions.onAccept(selectedIds);

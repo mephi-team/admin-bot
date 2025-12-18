@@ -30,8 +30,8 @@ public class SentView extends VerticalLayout {
     };
 
     public SentView(MailingDataProvider provider, MailingActions actions) {
-        var gsa = new GridSelectActions(
-                new Button("Удалить вопросы", VaadinIcon.TRASH.create(), e -> {
+        var gsa = new GridSelectActions("Выбрано рассылок: ",
+                new Button("Удалить рассылки", VaadinIcon.TRASH.create(), e -> {
                     if (!selectedIds.isEmpty()) {
                         actions.onDelete(selectedIds);
                     }

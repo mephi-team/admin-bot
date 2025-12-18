@@ -22,7 +22,7 @@ public class FreeListenerView extends VerticalLayout {
     private List<Long> selectedIds;
 
     public FreeListenerView(FreeListenerDataProvider provider, UserActions actions) {
-        var gsa = new GridSelectActions(
+        var gsa = new GridSelectActions("Выбрано пользователей: ",
                 new Button("Заблокировать пользователей", VaadinIcon.BAN.create(), e -> {
                     if (!selectedIds.isEmpty())
                         actions.onDelete(selectedIds);
