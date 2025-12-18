@@ -38,6 +38,8 @@ public class SentView extends VerticalLayout {
                 })
         );
 
+        setSizeFull();
+
         Grid<MailingList> grid = new Grid<>(MailingList.class, false);
         grid.addColumn(MailingList::getDate).setHeader("Дата").setSortable(true).setKey("date");
         grid.addColumn(MailingList::getUsers).setHeader("Пользователи").setSortable(true).setKey("users");
@@ -50,8 +52,7 @@ public class SentView extends VerticalLayout {
 
         grid.addComponentColumn(item -> {
             Span group = new Span();
-            Button editButton = new Button(new Icon(VaadinIcon.EDIT));
-            editButton.addClickListener(e -> System.out.println(item));
+            Button editButton = new Button(new Icon(VaadinIcon.EDIT), e -> System.out.println(item));
             Button deleteButton = new Button(new Icon(VaadinIcon.TRASH), e -> actions.onDelete(List.of(item.getId())));
             group.add(editButton, deleteButton);
             return group;
@@ -63,6 +64,10 @@ public class SentView extends VerticalLayout {
         grid.addSelectionListener(selection -> {
             selectedIds = selection.getAllSelectedItems().stream().map(MailingList::getId).toList();
             gsa.setCount(selectedIds.size());
+        });
+        provider.getFilterableProvider().addDataProviderListener(e -> {
+            selectedIds = List.of();
+            gsa.setCount(0);
         });
 
         var searchField = new SearchField("Найти рассылку");

@@ -10,7 +10,7 @@ import team.mephi.adminbot.repository.MailingRepository;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-@Component
+@Component("sent")
 public class MailingDataProvider {
     private final MailingRepository mailingRepository;
     private ConfigurableFilterDataProvider<MailingList, Void, String> provider;
@@ -49,6 +49,10 @@ public class MailingDataProvider {
 
     public DataProvider<MailingList, ?> getDataProvider() {
         return getFilterableProvider();
+    }
+
+    public void deleteAllById(Iterable<Long> ids) {
+        mailingRepository.deleteAllById(ids);
     }
 
     public void refresh() {

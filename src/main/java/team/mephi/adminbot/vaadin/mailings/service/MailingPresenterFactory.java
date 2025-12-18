@@ -2,7 +2,6 @@ package team.mephi.adminbot.vaadin.mailings.service;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.MailingDataProvider;
-import team.mephi.adminbot.vaadin.users.dataproviders.UserDataProvider;
 
 import java.util.Map;
 

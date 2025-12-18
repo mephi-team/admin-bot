@@ -6,6 +6,7 @@ import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
@@ -19,7 +20,6 @@ import team.mephi.adminbot.vaadin.mailings.service.MailingPresenterFactory;
 import team.mephi.adminbot.vaadin.mailings.service.MailingViewCallback;
 import team.mephi.adminbot.vaadin.mailings.service.MailingsPresenter;
 import team.mephi.adminbot.vaadin.mailings.tabs.MailingTabProvider;
-import team.mephi.adminbot.vaadin.users.tabs.UserTabProvider;
 
 import java.util.Comparator;
 import java.util.List;
@@ -28,13 +28,26 @@ import java.util.List;
 @Route(value = "/mailings", layout = DialogsLayout.class)
 @RolesAllowed("ADMIN")
 public class Mailings extends VerticalLayout implements MailingViewCallback {
+    private static final String DELETE_TITLE = "Удалить рассылку?";
+    private static final String DELETE_TEXT = "Вы действительно хотите удалить рассылку?";
+    private static final String DELETE_ALL_TITLE = "Удалить рассылки?";
+    private static final String DELETE_ALL_TEXT = "Вы действительно хотите удалить %d рассылок?";
+    private static final String DELETE_ACTION = "Удалить";
+
     private final TabSheet tabSheet = new TabSheet();
+
+    private final UserConfirmDialog dialogDelete;
 
     public Mailings(
             List<MailingTabProvider> tabProviders,
             MailingPresenterFactory presenterFactory,
             MailingCountService mailingCountService
     ) {
+        this.dialogDelete = new UserConfirmDialog(
+                DELETE_TITLE, DELETE_TEXT, DELETE_ACTION,
+                DELETE_ALL_TITLE, DELETE_ALL_TEXT,
+                null
+        );
 
         setHeightFull();
         tabSheet.setSizeFull();
@@ -88,7 +101,9 @@ public class Mailings extends VerticalLayout implements MailingViewCallback {
 
     @Override
     public void confirmDelete(List<Long> ids, Runnable onConfirm) {
-
+        dialogDelete.setCount(ids.size());
+        dialogDelete.setOnConfirm(onConfirm);
+        dialogDelete.open();
     }
 
     @Override
@@ -103,6 +118,6 @@ public class Mailings extends VerticalLayout implements MailingViewCallback {
 
     @Override
     public void showNotification(String message) {
-
+        Notification.show(message, 3000, Notification.Position.TOP_END);
     }
 }
