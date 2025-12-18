@@ -1,5 +1,6 @@
 package team.mephi.adminbot.repository;
 
+import jakarta.persistence.Tuple;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -7,6 +8,8 @@ import team.mephi.adminbot.model.Mailing;
 import team.mephi.adminbot.model.enums.MailingStatus;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Repository
 public interface MailingRepository extends JpaRepository<Mailing, Long> {
@@ -20,5 +23,16 @@ public interface MailingRepository extends JpaRepository<Mailing, Long> {
 
     @Query("SELECT count(m) FROM Mailing m WHERE LOWER(m.name) LIKE LOWER(CONCAT('%', :query, '%')) AND m.status IN :statuses")
     Integer countByName(String query, List<MailingStatus> statuses);
+
+    @Query("SELECT 'sent', count(m) FROM Mailing m WHERE m.status != team.mephi.adminbot.model.enums.MailingStatus.DRAFT UNION ALL SELECT 'draft', count(m) FROM Mailing m WHERE m.status = team.mephi.adminbot.model.enums.MailingStatus.DRAFT UNION ALL SELECT 'templates', count(t) FROM MailTemplate t")
+    List<Tuple> countsByStatusTuples();
+
+    default Map<String, Long> countsByStatus() {
+        return countsByStatusTuples().stream()
+                .collect(Collectors.toMap(
+                        tuple -> tuple.get(0, String.class),
+                        tuple -> tuple.get(1, Long.class)
+                ));
+    }
 }
 

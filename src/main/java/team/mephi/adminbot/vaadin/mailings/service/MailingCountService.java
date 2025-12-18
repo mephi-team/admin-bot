@@ -14,7 +14,6 @@ public class MailingCountService {
     }
 
     public Map<String, Long> getAllCounts() {
-//        return mailingRepository.countsByRole();
-        return Map.of("draft", 0L, "sent", 0L, "templates", 0L);
+        return mailingRepository.countsByStatus();
     }
 }
