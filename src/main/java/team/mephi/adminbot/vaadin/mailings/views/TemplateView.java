@@ -40,6 +40,7 @@ public class TemplateView extends VerticalLayout {
         );
 
         setSizeFull();
+        setPadding(false);
 
         Grid<TemplateListDto> grid = new Grid<>(TemplateListDto.class, false);
         grid.addColumn(TemplateListDto::getName).setHeader("Название").setSortable(true).setKey("name");

@@ -82,6 +82,9 @@ public class Questions extends VerticalLayout {
             selectedIds = selection.getAllSelectedItems().stream().map(UserQuestionDto::getId).toList();
             gsa.setCount(selectedIds.size());
         });
+        provider.getFilterableProvider().addDataProviderListener(e -> {
+            grid.deselectAll();
+        });
 
         var searchField = new SearchField("Найти вопрос");
         searchField.addValueChangeListener(e -> provider.getFilterableProvider().setFilter(e.getValue()));

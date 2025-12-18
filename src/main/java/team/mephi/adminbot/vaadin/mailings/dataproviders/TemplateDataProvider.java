@@ -4,14 +4,10 @@ import com.vaadin.flow.data.provider.CallbackDataProvider;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
 import org.springframework.stereotype.Component;
-import team.mephi.adminbot.dto.MailingList;
 import team.mephi.adminbot.dto.TemplateListDto;
 import team.mephi.adminbot.repository.MailTemplateRepository;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-
-@Component("template")
+@Component("templates")
 public class TemplateDataProvider implements MailingDataProvider {
     private final MailTemplateRepository mailTemplateRepository;
     private ConfigurableFilterDataProvider<TemplateListDto, Void, String> provider;

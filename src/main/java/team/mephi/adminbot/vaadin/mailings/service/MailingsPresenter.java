@@ -1,7 +1,7 @@
 package team.mephi.adminbot.vaadin.mailings.service;
 
 import team.mephi.adminbot.vaadin.mailings.actions.MailingActions;
-import team.mephi.adminbot.vaadin.mailings.dataproviders.SentDataProvider;
+import team.mephi.adminbot.vaadin.mailings.dataproviders.MailingDataProvider;
 
 import java.util.List;
 
@@ -9,10 +9,10 @@ public class MailingsPresenter  implements MailingActions {
     private static final String DELETE_MESSAGE = "Рассылка удалена";
     private static final String DELETE_ALL_MESSAGE = "Удалено %d рассылок";
 
-    private final SentDataProvider dataProvider;
+    private final MailingDataProvider dataProvider;
     private final MailingViewCallback view;
 
-    public MailingsPresenter(SentDataProvider dataProvider, MailingViewCallback view) {
+    public MailingsPresenter(MailingDataProvider dataProvider, MailingViewCallback view) {
         this.dataProvider = dataProvider;
         this.view = view;
     }

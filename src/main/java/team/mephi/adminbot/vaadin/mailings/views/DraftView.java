@@ -39,6 +39,7 @@ public class DraftView extends VerticalLayout {
         );
 
         setSizeFull();
+        setPadding(false);
 
         Grid<MailingList> grid = new Grid<>(MailingList.class, false);
         grid.addColumn(MailingList::getDate).setHeader("Дата").setSortable(true).setKey("date");
