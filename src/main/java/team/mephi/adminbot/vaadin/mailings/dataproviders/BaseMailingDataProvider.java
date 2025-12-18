@@ -4,19 +4,25 @@ import com.vaadin.flow.data.provider.CallbackDataProvider;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
 import team.mephi.adminbot.dto.MailingList;
+import team.mephi.adminbot.dto.SimpleMailing;
+import team.mephi.adminbot.model.Mailing;
 import team.mephi.adminbot.model.enums.MailingStatus;
 import team.mephi.adminbot.repository.MailingRepository;
+import team.mephi.adminbot.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Optional;
 
-public abstract class BaseMailingDataProvider implements MailingDataProvider {
+public abstract class BaseMailingDataProvider implements MailingDataProvider<SimpleMailing> {
     private final MailingRepository mailingRepository;
+    private final UserRepository userRepository;
     private ConfigurableFilterDataProvider<MailingList, Void, String> provider;
 
-    public BaseMailingDataProvider(MailingRepository mailingRepository) {
+    public BaseMailingDataProvider(MailingRepository mailingRepository, UserRepository userRepository) {
         this.mailingRepository = mailingRepository;
+        this.userRepository = userRepository;
     }
 
     public ConfigurableFilterDataProvider<MailingList, Void, String> getFilterableProvider() {
@@ -34,6 +40,7 @@ public abstract class BaseMailingDataProvider implements MailingDataProvider {
                                         .direction(m.getFilters() != null ? m.getFilters().getDirection() : "")
                                         .curator(m.getFilters() != null ? m.getFilters().getCurator() : "")
                                         .city(m.getFilters() != null ? m.getFilters().getCity() : "")
+                                        .text(m.getDescription())
                                         .status(m.getStatus().name())
                                         .build())
                                 .skip(query.getOffset()) // Пропускаем уже загруженные элементы
@@ -50,6 +57,26 @@ public abstract class BaseMailingDataProvider implements MailingDataProvider {
     @Override
     public DataProvider<MailingList, ?> getDataProvider() {
         return getFilterableProvider();
+    }
+
+    @Override
+    public Optional<SimpleMailing> findById(Long id) {
+        return mailingRepository.findById(id).map(t -> new SimpleMailing(t.getId(),t.getName(), t.getDescription(), t.getCreatedBy().getId()));
+    }
+
+    @Override
+    public SimpleMailing save(SimpleMailing mailing) {
+        System.out.println("!!!! save " + mailing);
+        var result = mailing.getId() != null
+                ? mailingRepository.findById(mailing.getId()).orElse(new Mailing())
+                : new Mailing();
+        var user = userRepository.findById(mailing.getUserId()).orElseThrow();
+        result.setName(mailing.getName());
+        result.setDescription(mailing.getText());
+        result.setCreatedBy(user);
+        result.setStatus(MailingStatus.DRAFT);
+        mailingRepository.save(result);
+        return new SimpleMailing(result.getId(), result.getName(), result.getDescription(), result.getCreatedBy().getId());
     }
 
     @Override

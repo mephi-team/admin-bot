@@ -1,5 +1,7 @@
 package team.mephi.adminbot.vaadin.mailings.service;
 
+import team.mephi.adminbot.dto.SimpleMailing;
+import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.vaadin.mailings.actions.MailingActions;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.MailingDataProvider;
 
@@ -9,10 +11,13 @@ public class MailingsPresenter  implements MailingActions {
     private static final String DELETE_MESSAGE = "Рассылка удалена";
     private static final String DELETE_ALL_MESSAGE = "Удалено %d рассылок";
 
-    private final MailingDataProvider dataProvider;
-    private final MailingViewCallback view;
+    private static final String MAILING_CREATED = "Рассылка сохранена";
+    private static final String MAILING_SAVED = "Рассылка сохранена";
 
-    public MailingsPresenter(MailingDataProvider dataProvider, MailingViewCallback view) {
+    private final MailingDataProvider<SimpleMailing> dataProvider;
+    private final MailingViewCallback<SimpleMailing> view;
+
+    public MailingsPresenter(MailingDataProvider<SimpleMailing> dataProvider, MailingViewCallback<SimpleMailing> view) {
         this.dataProvider = dataProvider;
         this.view = view;
     }
@@ -20,6 +25,14 @@ public class MailingsPresenter  implements MailingActions {
     @Override
     public void onCreate(String role) {
         view.showUserEditorForNew(role);
+        view.setOnSaveCallback(() -> {
+            SimpleMailing newMailing = view.getEditedMailing();
+            if (newMailing != null) {
+                dataProvider.save(newMailing);
+                dataProvider.refresh();
+                view.showNotification(MAILING_CREATED);
+            }
+        });
     }
 
     @Override
@@ -29,7 +42,17 @@ public class MailingsPresenter  implements MailingActions {
 
     @Override
     public void onEdit(Long id) {
-
+        dataProvider.findById(id).ifPresent(m -> {
+            view.showUserEditorForEdit(m);
+            view.setOnSaveCallback(() -> {
+                SimpleMailing editedMailing = view.getEditedMailing();
+                if (editedMailing != null) {
+                    dataProvider.save(editedMailing);
+                    dataProvider.refresh();
+                    view.showNotification(MAILING_SAVED);
+                }
+            });
+        });
     }
 
     @Override

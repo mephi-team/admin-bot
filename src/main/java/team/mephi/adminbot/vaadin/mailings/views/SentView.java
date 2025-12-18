@@ -53,7 +53,7 @@ public class SentView extends VerticalLayout {
 
         grid.addComponentColumn(item -> {
             Span group = new Span();
-            Button editButton = new Button(new Icon(VaadinIcon.EDIT), e -> System.out.println(item));
+            Button editButton = new Button(new Icon(VaadinIcon.EDIT), e -> actions.onEdit(item.getId()));
             Button deleteButton = new Button(new Icon(VaadinIcon.TRASH), e -> actions.onDelete(List.of(item.getId())));
             group.add(editButton, deleteButton);
             return group;

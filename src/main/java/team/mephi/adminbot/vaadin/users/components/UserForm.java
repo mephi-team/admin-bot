@@ -4,6 +4,7 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.TextField;
+import lombok.Getter;
 import team.mephi.adminbot.dto.RoleDto;
 
 import java.util.List;
@@ -12,6 +13,7 @@ public class UserForm extends FormLayout {
     private ComboBox<String> cohorts = new ComboBox<>();
     private ComboBox<String> directions = new ComboBox<>();
     private ComboBox<String> cities = new ComboBox<>();
+    @Getter
     private ComboBox<RoleDto> roles = new ComboBox<>();
     private TextField firstName = new TextField();
     private TextField lastName = new TextField();
@@ -48,9 +50,5 @@ public class UserForm extends FormLayout {
         addFormItem(cohorts, "Набор");
         addFormItem(directions, "Направление");
         addFormItem(cities, "Город");
-    }
-
-    public ComboBox<RoleDto> getRoles() {
-        return roles;
     }
 }

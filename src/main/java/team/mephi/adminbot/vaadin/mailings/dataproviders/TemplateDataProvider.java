@@ -4,11 +4,15 @@ import com.vaadin.flow.data.provider.CallbackDataProvider;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
 import org.springframework.stereotype.Component;
+import team.mephi.adminbot.dto.SimpleMailing;
 import team.mephi.adminbot.dto.TemplateListDto;
+import team.mephi.adminbot.model.MailTemplate;
 import team.mephi.adminbot.repository.MailTemplateRepository;
 
+import java.util.Optional;
+
 @Component("templates")
-public class TemplateDataProvider implements MailingDataProvider {
+public class TemplateDataProvider implements MailingDataProvider<SimpleMailing> {
     private final MailTemplateRepository mailTemplateRepository;
     private ConfigurableFilterDataProvider<TemplateListDto, Void, String> provider;
 
@@ -41,6 +45,16 @@ public class TemplateDataProvider implements MailingDataProvider {
     @Override
     public DataProvider<TemplateListDto, ?> getDataProvider() {
         return getFilterableProvider();
+    }
+
+    @Override
+    public Optional<SimpleMailing> findById(Long id) {
+        return mailTemplateRepository.findById(id).map(t -> new SimpleMailing(t.getId(),t.getName(), t.getBodyText(), t.getCreatedBy().getId()));
+    }
+
+    @Override
+    public SimpleMailing save(SimpleMailing user) {
+        return null;
     }
 
     @Override

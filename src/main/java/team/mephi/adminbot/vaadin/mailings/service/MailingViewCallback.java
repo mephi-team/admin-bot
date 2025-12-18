@@ -1,12 +1,14 @@
 package team.mephi.adminbot.vaadin.mailings.service;
 
-import team.mephi.adminbot.dto.SimpleUser;
+import com.vaadin.flow.function.SerializableRunnable;
 
 import java.util.List;
 
-public interface MailingViewCallback {
-    void showUserEditorForView(SimpleUser user);
-    void showUserEditorForEdit(SimpleUser user);
+public interface MailingViewCallback<T> {
+    void setOnSaveCallback(SerializableRunnable callback);
+    T getEditedMailing();
+    void showUserEditorForView(T user);
+    void showUserEditorForEdit(T user);
     void showUserEditorForNew(String role);
     void confirmDelete(List<Long> ids, Runnable onConfirm);
     void confirmAccept(List<Long> ids, Runnable onConfirm);

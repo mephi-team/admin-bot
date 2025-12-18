@@ -11,12 +11,14 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.TabSheet;
+import com.vaadin.flow.function.SerializableRunnable;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
-import team.mephi.adminbot.dto.SimpleUser;
+import team.mephi.adminbot.dto.SimpleMailing;
 import team.mephi.adminbot.vaadin.components.*;
 import team.mephi.adminbot.vaadin.mailings.actions.MailingActions;
 import team.mephi.adminbot.vaadin.mailings.components.MailingEditorDialog;
+import team.mephi.adminbot.vaadin.mailings.components.MailingEditorDialogFactory;
 import team.mephi.adminbot.vaadin.mailings.service.MailingCountService;
 import team.mephi.adminbot.vaadin.mailings.service.MailingPresenterFactory;
 import team.mephi.adminbot.vaadin.mailings.service.MailingViewCallback;
@@ -28,7 +30,7 @@ import java.util.*;
 
 @Route(value = "/mailings", layout = DialogsLayout.class)
 @RolesAllowed("ADMIN")
-public class Mailings extends VerticalLayout implements MailingViewCallback {
+public class Mailings extends VerticalLayout implements MailingViewCallback<SimpleMailing> {
     private static final String DELETE_TITLE = "Удалить рассылку?";
     private static final String DELETE_TEXT = "Вы действительно хотите удалить рассылку?";
     private static final String DELETE_ALL_TITLE = "Удалить рассылки?";
@@ -55,6 +57,7 @@ public class Mailings extends VerticalLayout implements MailingViewCallback {
     public Mailings(
             List<MailingTabProvider> tabProviders,
             MailingPresenterFactory presenterFactory,
+            MailingEditorDialogFactory dialogFactory,
             MailingCountService mailingCountService
     ) {
         this.dialogDelete = new UserConfirmDialog(
@@ -62,7 +65,7 @@ public class Mailings extends VerticalLayout implements MailingViewCallback {
                 DELETE_ALL_TITLE, DELETE_ALL_TEXT,
                 null
         );
-        this.mailingEditorDialog = new MailingEditorDialog();
+        this.mailingEditorDialog = dialogFactory.create();
 
         setHeightFull();
         tabSheet.setSizeFull();
@@ -111,18 +114,28 @@ public class Mailings extends VerticalLayout implements MailingViewCallback {
     }
 
     @Override
-    public void showUserEditorForView(SimpleUser user) {
+    public void setOnSaveCallback(SerializableRunnable callback) {
+        mailingEditorDialog.setOnSaveCallback(callback);
+    }
+
+    @Override
+    public SimpleMailing getEditedMailing() {
+        return mailingEditorDialog.getEditedMailing();
+    }
+
+    @Override
+    public void showUserEditorForView(SimpleMailing user) {
 
     }
 
     @Override
-    public void showUserEditorForEdit(SimpleUser user) {
-
+    public void showUserEditorForEdit(SimpleMailing mailing) {
+        mailingEditorDialog.openForEdit(mailing);
     }
 
     @Override
     public void showUserEditorForNew(String role) {
-        mailingEditorDialog.open();
+        mailingEditorDialog.openForNew();
     }
 
     @Override
