@@ -7,8 +7,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
-import team.mephi.adminbot.model.Question;
-import team.mephi.adminbot.repository.QuestionRepository;
+import team.mephi.adminbot.model.UserQuestion;
+import team.mephi.adminbot.repository.UserQuestionRepository;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 class QuestionControllerTest {
 
     @Mock
-    private QuestionRepository questionRepository;
+    private UserQuestionRepository questionRepository;
 
     @InjectMocks
     private QuestionController questionController;
@@ -31,9 +31,9 @@ class QuestionControllerTest {
     @Test
     void questionsPage_shouldLoadQuestionsAndPopulateModel() {
         // given
-        List<Question> questions = List.of(
-                Question.builder().build(),
-                Question.builder().build()
+        List<UserQuestion> questions = List.of(
+                UserQuestion.builder().build(),
+                UserQuestion.builder().build()
         );
         when(questionRepository.findAll()).thenReturn(questions);
 
@@ -55,7 +55,7 @@ class QuestionControllerTest {
     @Test
     void addQuestion_shouldSaveQuestionAndRedirect() {
         // given
-        Question question = Question.builder().build();
+        UserQuestion question = UserQuestion.builder().build();
 
         // when
         String viewName = questionController.addQuestion(question);

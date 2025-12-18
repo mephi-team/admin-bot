@@ -32,7 +32,7 @@ public class QuestionDataProvider {
                                                 .user(u.getUser().getUserName())
                                                 .role(u.getRole())
 //                                    .direction(u.getDirection() != null ? u.getDirection().getName() : "")
-                                                .answer(u.getAnswers().getLast().getAnswerText())
+                                                .answer(!u.getAnswers().isEmpty() ? u.getAnswers().getLast().getAnswerText() : "")
                                                 .build()
                                 )
                                 .skip(query.getOffset())

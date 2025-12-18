@@ -160,6 +160,16 @@ public class DataInitializer {
                 UserQuestion.builder().status(QuestionStatus.ANSWERED).role(student).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Сколько длится обучение?").build(),
                 UserQuestion.builder().status(QuestionStatus.ANSWERED).role(student).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Есть ли рассрочка?").build(),
                 UserQuestion.builder().status(QuestionStatus.ANSWERED).role(student).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Нужен ли опыт для поступления?").build(),
+                UserQuestion.builder().status(QuestionStatus.IN_PROGRESS).role(student).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Выдают ли диплом?").build(),
+                UserQuestion.builder().status(QuestionStatus.NEW).role(student).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Как поступить в Flexiq?").build(),
+                UserQuestion.builder().status(QuestionStatus.ANSWERED).role(student).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Сколько длится обучение?").build(),
+                UserQuestion.builder().status(QuestionStatus.ANSWERED).role(student).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Есть ли рассрочка?").build(),
+                UserQuestion.builder().status(QuestionStatus.ANSWERED).role(student).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Нужен ли опыт для поступления?").build(),
+                UserQuestion.builder().status(QuestionStatus.IN_PROGRESS).role(student).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Выдают ли диплом?").build(),
+                UserQuestion.builder().status(QuestionStatus.NEW).role(student).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Как поступить в Flexiq?").build(),
+                UserQuestion.builder().status(QuestionStatus.ANSWERED).role(student).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Сколько длится обучение?").build(),
+                UserQuestion.builder().status(QuestionStatus.ANSWERED).role(student).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Есть ли рассрочка?").build(),
+                UserQuestion.builder().status(QuestionStatus.ANSWERED).role(student).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Нужен ли опыт для поступления?").build(),
                 UserQuestion.builder().status(QuestionStatus.IN_PROGRESS).role(student).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Выдают ли диплом?").build()
         );
         // Устанавливаем createdAt вручную, если в конструкторе не задано
@@ -190,10 +200,10 @@ public class DataInitializer {
         List<MailingStatus> statuses = Arrays.stream(MailingStatus.values()).toList();
 
         List<Mailing> broadcasts = new ArrayList<>();
-        for (int i = 1; i < 100; i++) {
+        for (int i = 1; i <= 100; i++) {
             broadcasts.add(Mailing.builder()
                     .createdBy(userRepository.findById(1L + random.nextLong(userRepository.count())).orElseThrow())
-                    .name("Test" + i)
+                    .name("Test " + i)
                     .channels(List.of(Channels.Email))
                     .filters(Filters.builder().users("students").cohort("summer2025").direction("Java").city("Москва").curator("Иванов").build())
                     .status(statuses.get(random.nextInt(statuses.size())))
@@ -206,10 +216,10 @@ public class DataInitializer {
 
     private void initTemplates() {
         List<MailTemplate> templates = new ArrayList<>();
-        for (int i = 1; i < 10; i++) {
+        for (int i = 1; i <= 100; i++) {
             templates.add(MailTemplate.builder()
-                    .name("Name" + i)
-                    .subject("Subject" + i)
+                    .name("Name " + i)
+                    .subject("Subject " + i)
                     .bodyText("Text " + i)
                     .build());
         }

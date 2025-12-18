@@ -12,11 +12,13 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 import jakarta.annotation.security.PermitAll;
+import team.mephi.adminbot.repository.DialogRepository;
+import team.mephi.adminbot.repository.UserQuestionRepository;
 
 @Route("/")
 @PermitAll
 public class Dashboard extends VerticalLayout {
-    public Dashboard() {
+    public Dashboard(DialogRepository dialogRepository, UserQuestionRepository userQuestionRepository) {
         setAlignItems(Alignment.CENTER);
         add(new H1("Управление чат-ботом УЦ"));
 
@@ -42,7 +44,7 @@ public class Dashboard extends VerticalLayout {
         card2.setHeaderPrefix(new Icon(VaadinIcon.CHAT));
         card2.setWidth("300px");
         card2.setTitle(new Div("Диалоги"));
-        Span newDialogs = new Span("2");
+        Span newDialogs = new Span(dialogRepository.unreadCount().toString());
         newDialogs.getElement().getThemeList().add("badge success");
         card2.add(new Span(newDialogs, new Span(" новых сообщения")));
         card2.addToFooter(new RouterLink("Перейти →", Dialogs.class));
@@ -53,7 +55,7 @@ public class Dashboard extends VerticalLayout {
         card3.setHeaderPrefix(new Icon(VaadinIcon.QUESTION));
         card3.setWidth("300px");
         card3.setTitle(new Div("Вопросы"));
-        Span newQuestions = new Span("2");
+        Span newQuestions = new Span(userQuestionRepository.countNewQuestion().toString());
         newQuestions.getElement().getThemeList().add("badge success");
         card3.add(new Span(newQuestions, new Span(" новых вопроса")));
         card3.addToFooter(new RouterLink("Перейти →", Questions.class));

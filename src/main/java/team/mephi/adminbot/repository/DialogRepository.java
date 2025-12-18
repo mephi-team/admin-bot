@@ -61,4 +61,7 @@ public interface DialogRepository extends JpaRepository<Dialog, Long> {
             WHERE LOWER(u.user_name) LIKE LOWER(CONCAT('%', :query, '%'))
             """, nativeQuery = true)
     Integer countDialogsWithLastMessageNative(String query);
+
+    @Query("SELECT sum(d.unreadCount) FROM Dialog d")
+    Integer unreadCount();
 }

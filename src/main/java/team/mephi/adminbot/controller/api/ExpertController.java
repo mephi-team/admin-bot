@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import team.mephi.adminbot.model.Question;
-import team.mephi.adminbot.repository.QuestionRepository;
+import team.mephi.adminbot.model.UserQuestion;
+import team.mephi.adminbot.repository.UserQuestionRepository;
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +28,7 @@ public class ExpertController {
 
     // Репозиторий для работы с вопросами в базе данных
     @Autowired
-    private QuestionRepository questionRepository;
+    private UserQuestionRepository questionRepository;
 
     /**
      * GET /api/expert/questions
@@ -37,9 +37,9 @@ public class ExpertController {
      * Доступно только эксперту.
      */
     @GetMapping("/questions")
-    public ResponseEntity<List<Question>> getAllQuestions() {
+    public ResponseEntity<List<UserQuestion>> getAllQuestions() {
         // Получаем все вопросы из базы данных
-        List<Question> questions = questionRepository.findAll();
+        List<UserQuestion> questions = questionRepository.findAll();
 
         // Отдаём список вопросов клиенту
         return ResponseEntity.ok(questions);
@@ -53,7 +53,7 @@ public class ExpertController {
      * Доступно только эксперту.
      */
     @GetMapping("/questions/{id}")
-    public ResponseEntity<Question> getQuestionById(@PathVariable Long id) {
+    public ResponseEntity<UserQuestion> getQuestionById(@PathVariable Long id) {
         return questionRepository.findById(id)
                 // Если вопрос найден — возвращаем его
                 .map(ResponseEntity::ok)
@@ -71,25 +71,25 @@ public class ExpertController {
      * Доступно только эксперту.
      */
     @PutMapping("/questions/{id}")
-    public ResponseEntity<Question> updateQuestion(
+    public ResponseEntity<UserQuestion> updateQuestion(
             @PathVariable Long id,
-            @RequestBody Question question) {
+            @RequestBody UserQuestion question) {
 
         return questionRepository.findById(id)
                 .map(existingQuestion -> {
 
                     // Если передан новый текст вопроса — обновляем его
-                    if (question.getQuestionText() != null) {
-                        existingQuestion.setQuestionText(question.getQuestionText());
+                    if (question.getText() != null) {
+                        existingQuestion.setText(question.getText());
                     }
 
                     // Если передан новый текст ответа — обновляем его
-                    if (question.getAnswerText() != null) {
-                        existingQuestion.setAnswerText(question.getAnswerText());
-                    }
+//                    if (question.getAnswerText() != null) {
+//                        existingQuestion.setAnswerText(question.getAnswerText());
+//                    }
 
                     // Сохраняем обновлённый вопрос в базе
-                    Question updated = questionRepository.save(existingQuestion);
+                    UserQuestion updated = questionRepository.save(existingQuestion);
 
                     // Возвращаем обновлённый объект
                     return ResponseEntity.ok(updated);

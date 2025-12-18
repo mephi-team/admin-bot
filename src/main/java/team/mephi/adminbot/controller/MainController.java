@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import team.mephi.adminbot.repository.DialogRepository;
-import team.mephi.adminbot.repository.QuestionRepository;
+import team.mephi.adminbot.repository.UserQuestionRepository;
 import team.mephi.adminbot.repository.UserRepository;
 
 import java.time.Instant;
@@ -20,7 +20,7 @@ public class MainController {
     private DialogRepository dialogRepository;
 
     @Autowired
-    private QuestionRepository questionRepository;
+    private UserQuestionRepository questionRepository;
 
     @GetMapping("/")
     public String mainPage(Model model) {
