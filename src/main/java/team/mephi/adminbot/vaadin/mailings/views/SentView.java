@@ -66,8 +66,7 @@ public class SentView extends VerticalLayout {
             gsa.setCount(selectedIds.size());
         });
         provider.getFilterableProvider().addDataProviderListener(e -> {
-            selectedIds = List.of();
-            gsa.setCount(0);
+            grid.deselectAll();
         });
 
         var searchField = new SearchField("Найти рассылку");
