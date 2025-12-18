@@ -140,7 +140,7 @@ public class UserQuestion {
      * Связь один-ко-многим с UserAnswer.
      * Не каскадирует удаление (REMOVE), так как ответы должны существовать независимо от вопроса.
      */
-    @OneToMany(mappedBy = "question", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "question", cascade = {CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, fetch = FetchType.LAZY)
     @Builder.Default
     private List<UserAnswer> answers = new ArrayList<>();
 
