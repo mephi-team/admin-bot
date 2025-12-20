@@ -17,9 +17,8 @@ public class UserEditorDialog extends Dialog {
     @Setter
     private SerializableRunnable onSaveCallback;
 
-    public UserEditorDialog(RoleService roleService) {
-        var form = new UserForm(roleService);
-        form.setWidth("100%");
+    public UserEditorDialog(RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService) {
+        var form = new UserForm(roleService, cohortService, directionService, cityService);
         binder.forField(form.getRoles())
                 .withValidator(Objects::nonNull, "Роль обязательна")
                 .withConverter(RoleDto::getCode, roleCode -> roleService.getByCode(roleCode).orElse(null))

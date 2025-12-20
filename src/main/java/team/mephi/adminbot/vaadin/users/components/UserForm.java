@@ -5,14 +5,15 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.TextField;
 import lombok.Getter;
+import team.mephi.adminbot.dto.CityDto;
+import team.mephi.adminbot.dto.CohortDto;
+import team.mephi.adminbot.dto.DirectionDto;
 import team.mephi.adminbot.dto.RoleDto;
 
-import java.util.List;
-
 public class UserForm extends FormLayout {
-    private ComboBox<String> cohorts = new ComboBox<>();
-    private ComboBox<String> directions = new ComboBox<>();
-    private ComboBox<String> cities = new ComboBox<>();
+    private ComboBox<CohortDto> cohorts = new ComboBox<>();
+    private ComboBox<DirectionDto> directions = new ComboBox<>();
+    private ComboBox<CityDto> cities = new ComboBox<>();
     @Getter
     private ComboBox<RoleDto> roles = new ComboBox<>();
     private TextField firstName = new TextField();
@@ -22,16 +23,19 @@ public class UserForm extends FormLayout {
     private TextField phoneNumber = new TextField();
     private TextField id = new TextField();
 
-    public UserForm(RoleService roleService) {
+    public UserForm(RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService) {
         roles.setItemsPageable(roleService::getAllRoles);
         roles.setItemLabelGenerator(RoleDto::getDescription);
         roles.setRequiredIndicatorVisible(true);
-        cohorts.setItems(List.of("test1", "test2"));
-        cohorts.setRequired(true);
-        directions.setItems(List.of("test1", "test2"));
-        directions.setRequired(true);
-        cities.setItems(List.of("test1", "test2"));
-        cities.setRequired(true);
+        cohorts.setItemsPageable(cohortService::getAllCohorts);
+        cohorts.setItemLabelGenerator(CohortDto::getName);
+        cohorts.setRequiredIndicatorVisible(true);
+        directions.setItemsPageable(directionService::getAllDirections);
+        directions.setItemLabelGenerator(DirectionDto::getName);
+        directions.setRequiredIndicatorVisible(true);
+        cities.setItemsPageable(cityService::getAllCities);
+        cities.setItemLabelGenerator(CityDto::getName);
+        cities.setRequiredIndicatorVisible(true);
 
         setAutoResponsive(true);
         setLabelsAside(true);
