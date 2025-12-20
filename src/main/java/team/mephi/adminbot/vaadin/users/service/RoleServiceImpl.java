@@ -1,5 +1,6 @@
 package team.mephi.adminbot.vaadin.users.service;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import team.mephi.adminbot.dto.RoleDto;
 import team.mephi.adminbot.repository.RoleRepository;
@@ -18,7 +19,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public List<RoleDto> getAllRoles() {
+    public List<RoleDto> getAllRoles(Pageable pageable, String query) {
         return roleRepository.findAll().stream()
                 .map(r -> new RoleDto(r.getCode(), r.getName(), r.getDescription()))
                 .toList();

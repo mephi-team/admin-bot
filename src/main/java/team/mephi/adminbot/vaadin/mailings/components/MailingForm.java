@@ -6,19 +6,20 @@ import com.vaadin.flow.component.textfield.TextField;
 import lombok.Getter;
 import team.mephi.adminbot.dto.UserDto;
 
-import java.util.List;
-
 public class MailingForm extends FormLayout {
-    private TextField id = new TextField();
-    private TextField name = new TextField();
-    private TextField text = new TextField();
+    private final TextField id = new TextField();
     @Getter
-    private ComboBox<UserDto> user = new ComboBox<>();
+    private final TextField name = new TextField();
+    @Getter
+    private final TextField text = new TextField();
+    @Getter
+    private final ComboBox<UserDto> user = new ComboBox<>();
 
-    public MailingForm(List<UserDto> users) {
-        user.setItems(users);
+    public MailingForm(UserService userService) {
+        user.setItemsPageable(userService::getAllUsers);
         user.setItemLabelGenerator(UserDto::getUserName);
-        user.setRequired(true);
+        user.setRequiredIndicatorVisible(true);
+
         setAutoResponsive(true);
         setLabelsAside(true);
 

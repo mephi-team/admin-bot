@@ -22,10 +22,10 @@ public class UserForm extends FormLayout {
     private TextField phoneNumber = new TextField();
     private TextField id = new TextField();
 
-    public UserForm(List<RoleDto> roleList) {
-        roles.setItems(roleList);
-        roles.setRequired(true);
+    public UserForm(RoleService roleService) {
+        roles.setItemsPageable(roleService::getAllRoles);
         roles.setItemLabelGenerator(RoleDto::getDescription);
+        roles.setRequiredIndicatorVisible(true);
         cohorts.setItems(List.of("test1", "test2"));
         cohorts.setRequired(true);
         directions.setItems(List.of("test1", "test2"));

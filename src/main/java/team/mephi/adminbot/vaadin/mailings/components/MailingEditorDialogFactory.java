@@ -1,19 +1,16 @@
 package team.mephi.adminbot.vaadin.mailings.components;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import team.mephi.adminbot.dto.UserDto;
-
-import java.util.List;
 
 @SpringComponent
 public class MailingEditorDialogFactory {
-    private List<UserDto> allUsers;
+    private final UserService userService;
 
     public MailingEditorDialogFactory(UserService userService) {
-        this.allUsers = userService.getAllUsers();;
+        this.userService = userService;
     }
 
     public MailingEditorDialog create() {
-        return new MailingEditorDialog(allUsers);
+        return new MailingEditorDialog(userService);
     }
 }

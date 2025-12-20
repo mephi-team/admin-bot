@@ -2,44 +2,36 @@ package team.mephi.adminbot.vaadin.users.components;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
-import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.function.SerializableRunnable;
 import lombok.Setter;
 import team.mephi.adminbot.dto.RoleDto;
 import team.mephi.adminbot.dto.SimpleUser;
 
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 public class UserEditorDialog extends Dialog {
-    private final UserForm form;
     private final BeanValidationBinder<SimpleUser> binder = new BeanValidationBinder<>(SimpleUser.class);
     private final Button saveButton = new Button("Сохранить", e -> onSave());
-    private final Button cancelButton = new Button("Отмена", e -> close());
 
     @Setter
     private SerializableRunnable onSaveCallback;
 
-    private final Map<String, RoleDto> roleCodeToDto;
-
-    public UserEditorDialog(List<RoleDto> roles) {
-        this.roleCodeToDto = roles.stream()
-                .collect(Collectors.toMap(RoleDto::getCode, Function.identity()));
-
-        this.form = new UserForm(roles);
-        setHeaderTitle("Пользователь");
+    public UserEditorDialog(RoleService roleService) {
+        var form = new UserForm(roleService);
         form.setWidth("100%");
         binder.forField(form.getRoles())
-                .withConverter(RoleDto::getCode, roleCode -> roleCodeToDto.getOrDefault(roleCode, null))
-                .bind(SimpleUser::getRole, SimpleUser::setRole);
+                .withValidator(Objects::nonNull, "Роль обязательна")
+                .withConverter(RoleDto::getCode, roleCode -> roleService.getByCode(roleCode).orElse(null))
+                .bind("role");
         binder.bindInstanceFields(form);
-        FormLayout layout = new FormLayout(form);
-        layout.setMaxWidth("600px");
-        getFooter().add(cancelButton, saveButton);
-        add(layout);
+
+        setHeaderTitle("Пользователь");
+        add(form);
+        getFooter().add(new Button("Отмена", e -> close()), saveButton);
+
+        binder.addStatusChangeListener(e ->
+                saveButton.setEnabled(e.getBinder().isValid()));
     }
 
     public void openForView(SimpleUser user) {
