@@ -12,10 +12,15 @@ import java.util.Set;
 @AllArgsConstructor
 public class SimpleMailing {
     private Long id;
-    @NotEmpty
+//    @NotEmpty
     private String name;
     @NotEmpty
     private String text;
     private Long userId;
     private Set<String> channels;
+    @NotEmpty
+    private String users;
+    private String cohort;
+    private String direction;
+    private String city;
 }

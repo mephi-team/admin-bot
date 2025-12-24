@@ -85,7 +85,6 @@ public class MailingEditorDialog extends Dialog {
     }
 
     public void openForEdit(SimpleMailing mailing) {
-        System.out.println("!!!!! mailing " + mailing);
         binder.readBean(mailing);
         binder.setReadOnly(false);
 //        saveButton.setVisible(true);

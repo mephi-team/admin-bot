@@ -8,6 +8,7 @@ import team.mephi.adminbot.dto.SimpleMailing;
 import team.mephi.adminbot.model.Mailing;
 import team.mephi.adminbot.model.enums.Channels;
 import team.mephi.adminbot.model.enums.MailingStatus;
+import team.mephi.adminbot.model.objects.Filters;
 import team.mephi.adminbot.repository.MailingRepository;
 import team.mephi.adminbot.repository.UserRepository;
 
@@ -15,7 +16,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public abstract class BaseMailingDataProvider implements MailingDataProvider<SimpleMailing> {
@@ -39,7 +39,7 @@ public abstract class BaseMailingDataProvider implements MailingDataProvider<Sim
                                         .name(m.getName())
                                         .date(LocalDateTime.ofInstant(m.getCreatedAt(), ZoneId.of("UTC")))
                                         .users(m.getFilters() != null ? m.getFilters().getUsers() : "")
-                                        .cohort(m.getFilters() != null ? m.getFilters().getCurator() : "")
+                                        .cohort(m.getFilters() != null ? m.getFilters().getCohort() : "")
                                         .direction(m.getFilters() != null ? m.getFilters().getDirection() : "")
                                         .curator(m.getFilters() != null ? m.getFilters().getCurator() : "")
                                         .city(m.getFilters() != null ? m.getFilters().getCity() : "")
@@ -64,7 +64,7 @@ public abstract class BaseMailingDataProvider implements MailingDataProvider<Sim
 
     @Override
     public Optional<SimpleMailing> findById(Long id) {
-        return mailingRepository.findById(id).map(t -> new SimpleMailing(t.getId(),t.getName(), t.getDescription(), t.getCreatedBy().getId(), t.getChannels().stream().map(Enum::name).collect(Collectors.toSet())));
+        return mailingRepository.findById(id).map(t -> new SimpleMailing(t.getId(),t.getName(), t.getDescription(), t.getCreatedBy().getId(), t.getChannels().stream().map(Enum::name).collect(Collectors.toSet()), t.getFilters().getUsers(), t.getFilters().getCohort(), t.getFilters().getDirection(), t.getFilters().getCity()));
     }
 
     @Override
@@ -76,11 +76,12 @@ public abstract class BaseMailingDataProvider implements MailingDataProvider<Sim
         result.setName(mailing.getName());
         result.setDescription(mailing.getText());
         result.setCreatedBy(user);
+        result.setFilters(Filters.builder().direction(mailing.getDirection()).curator(user.getUserName()).city(mailing.getCity()).users(mailing.getUsers()).cohort(mailing.getCohort()).build());
         if (result.getStatus() == null)
             result.setStatus(MailingStatus.DRAFT);
         result.setChannels(mailing.getChannels().stream().map(Channels::valueOf).toList());
         mailingRepository.save(result);
-        return new SimpleMailing(result.getId(), result.getName(), result.getDescription(), result.getCreatedBy().getId(), result.getChannels().stream().map(Enum::name).collect(Collectors.toSet()));
+        return new SimpleMailing(result.getId(), result.getName(), result.getDescription(), result.getCreatedBy().getId(), result.getChannels().stream().map(Enum::name).collect(Collectors.toSet()), result.getFilters().getUsers(), result.getFilters().getCohort(), result.getFilters().getDirection(), result.getFilters().getCity());
     }
 
     @Override

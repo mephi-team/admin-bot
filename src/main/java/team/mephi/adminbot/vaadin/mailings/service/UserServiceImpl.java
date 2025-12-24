@@ -28,7 +28,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<UserDto> getById(Long id) {
-        System.out.println("! id " + id);
         return userRepository.findById(id).map(u -> UserDto.builder().id(u.getId()).userName(u.getUserName()).build());
     }
 }
