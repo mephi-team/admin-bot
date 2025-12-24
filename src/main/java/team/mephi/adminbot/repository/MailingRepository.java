@@ -18,7 +18,7 @@ public interface MailingRepository extends JpaRepository<Mailing, Long> {
     @Query("SELECT m FROM Mailing m JOIN fetch m.createdBy JOIN FETCH m.createdBy")
     List<Mailing> findAllWithUsers();
 
-    @Query("SELECT m FROM Mailing m WHERE LOWER(m.name) LIKE LOWER(CONCAT('%', :query, '%')) AND m.status IN :statuses")
+    @Query("SELECT m FROM Mailing m WHERE LOWER(m.name) LIKE LOWER(CONCAT('%', :query, '%')) AND m.status IN :statuses ORDER BY m.createdAt DESC")
     List<Mailing> findMailingByName(String query, List<MailingStatus> statuses);
 
     @Query("SELECT count(m) FROM Mailing m WHERE LOWER(m.name) LIKE LOWER(CONCAT('%', :query, '%')) AND m.status IN :statuses")

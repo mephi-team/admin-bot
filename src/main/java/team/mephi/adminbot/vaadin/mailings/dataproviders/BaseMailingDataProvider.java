@@ -6,6 +6,7 @@ import com.vaadin.flow.data.provider.DataProvider;
 import team.mephi.adminbot.dto.MailingList;
 import team.mephi.adminbot.dto.SimpleMailing;
 import team.mephi.adminbot.model.Mailing;
+import team.mephi.adminbot.model.enums.Channels;
 import team.mephi.adminbot.model.enums.MailingStatus;
 import team.mephi.adminbot.repository.MailingRepository;
 import team.mephi.adminbot.repository.UserRepository;
@@ -14,6 +15,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public abstract class BaseMailingDataProvider implements MailingDataProvider<SimpleMailing> {
     private final MailingRepository mailingRepository;
@@ -61,7 +64,7 @@ public abstract class BaseMailingDataProvider implements MailingDataProvider<Sim
 
     @Override
     public Optional<SimpleMailing> findById(Long id) {
-        return mailingRepository.findById(id).map(t -> new SimpleMailing(t.getId(),t.getName(), t.getDescription(), t.getCreatedBy().getId()));
+        return mailingRepository.findById(id).map(t -> new SimpleMailing(t.getId(),t.getName(), t.getDescription(), t.getCreatedBy().getId(), t.getChannels().stream().map(Enum::name).collect(Collectors.toSet())));
     }
 
     @Override
@@ -73,9 +76,11 @@ public abstract class BaseMailingDataProvider implements MailingDataProvider<Sim
         result.setName(mailing.getName());
         result.setDescription(mailing.getText());
         result.setCreatedBy(user);
-        result.setStatus(MailingStatus.DRAFT);
+        if (result.getStatus() == null)
+            result.setStatus(MailingStatus.DRAFT);
+        result.setChannels(mailing.getChannels().stream().map(Channels::valueOf).toList());
         mailingRepository.save(result);
-        return new SimpleMailing(result.getId(), result.getName(), result.getDescription(), result.getCreatedBy().getId());
+        return new SimpleMailing(result.getId(), result.getName(), result.getDescription(), result.getCreatedBy().getId(), result.getChannels().stream().map(Enum::name).collect(Collectors.toSet()));
     }
 
     @Override

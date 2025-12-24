@@ -6,10 +6,10 @@ import com.vaadin.flow.data.provider.DataProvider;
 import org.springframework.stereotype.Component;
 import team.mephi.adminbot.dto.SimpleMailing;
 import team.mephi.adminbot.dto.TemplateListDto;
-import team.mephi.adminbot.model.MailTemplate;
 import team.mephi.adminbot.repository.MailTemplateRepository;
 
 import java.util.Optional;
+import java.util.Set;
 
 @Component("templates")
 public class TemplateDataProvider implements MailingDataProvider<SimpleMailing> {
@@ -49,7 +49,7 @@ public class TemplateDataProvider implements MailingDataProvider<SimpleMailing> 
 
     @Override
     public Optional<SimpleMailing> findById(Long id) {
-        return mailTemplateRepository.findById(id).map(t -> new SimpleMailing(t.getId(),t.getName(), t.getBodyText(), t.getCreatedBy().getId()));
+        return mailTemplateRepository.findById(id).map(t -> new SimpleMailing(t.getId(),t.getName(), t.getBodyText(), t.getCreatedBy().getId(), Set.of()));
     }
 
     @Override
