@@ -19,6 +19,8 @@ import team.mephi.adminbot.vaadin.components.*;
 import team.mephi.adminbot.vaadin.mailings.actions.MailingActions;
 import team.mephi.adminbot.vaadin.mailings.components.MailingEditorDialog;
 import team.mephi.adminbot.vaadin.mailings.components.MailingEditorDialogFactory;
+import team.mephi.adminbot.vaadin.mailings.components.TemplateEditorDialog;
+import team.mephi.adminbot.vaadin.mailings.components.TemplateEditorDialogFactory;
 import team.mephi.adminbot.vaadin.mailings.service.MailingCountService;
 import team.mephi.adminbot.vaadin.mailings.service.MailingPresenterFactory;
 import team.mephi.adminbot.vaadin.mailings.service.MailingViewCallback;
@@ -30,7 +32,7 @@ import java.util.*;
 
 @Route(value = "/mailings", layout = DialogsLayout.class)
 @RolesAllowed("ADMIN")
-public class Mailings extends VerticalLayout implements MailingViewCallback<SimpleMailing> {
+public class Mailings extends VerticalLayout {
     private static final String DELETE_TITLE = "Удалить рассылку?";
     private static final String DELETE_TEXT = "Вы действительно хотите удалить рассылку?";
     private static final String DELETE_ALL_TITLE = "Удалить рассылки?";
@@ -40,6 +42,7 @@ public class Mailings extends VerticalLayout implements MailingViewCallback<Simp
     private final TabSheet tabSheet = new TabSheet();
 
     private final MailingEditorDialog mailingEditorDialog;
+    private final TemplateEditorDialog templateEditorDialog;
     private final UserConfirmDialog dialogDelete;
 
     private final List<String> rolesInOrder = new ArrayList<>();
@@ -47,17 +50,15 @@ public class Mailings extends VerticalLayout implements MailingViewCallback<Simp
 
     private static final MailingActions NO_OP_ACTIONS = new MailingActions() {
         @Override public void onCreate(String role) {}
-        @Override public void onView(Long id) {}
         @Override public void onEdit(Long id) {}
         @Override public void onDelete(List<Long> ids) {}
-        @Override public void onAccept(List<Long> ids) {}
-        @Override public void onReject(List<Long> ids) {}
     };
 
     public Mailings(
             List<MailingTabProvider> tabProviders,
             MailingPresenterFactory presenterFactory,
-            MailingEditorDialogFactory dialogFactory,
+            MailingEditorDialogFactory mailingDialogFactory,
+            TemplateEditorDialogFactory templateDialogFactory,
             MailingCountService mailingCountService
     ) {
         this.dialogDelete = new UserConfirmDialog(
@@ -65,7 +66,8 @@ public class Mailings extends VerticalLayout implements MailingViewCallback<Simp
                 DELETE_ALL_TITLE, DELETE_ALL_TEXT,
                 null
         );
-        this.mailingEditorDialog = dialogFactory.create();
+        this.mailingEditorDialog = mailingDialogFactory.create();
+        this.templateEditorDialog = templateDialogFactory.create();
 
         setHeightFull();
         tabSheet.setSizeFull();
@@ -76,7 +78,35 @@ public class Mailings extends VerticalLayout implements MailingViewCallback<Simp
         for (var provider : tabProviders) {
             var tabId = provider.getTabId();
             var dataProvider = presenterFactory.createDataProvider(tabId);
-            var presenter = new MailingsPresenter(dataProvider, this);
+            var presenter = new MailingsPresenter(dataProvider, new MailingViewCallback<SimpleMailing>() {
+                @Override
+                public void setOnSaveCallback(SerializableRunnable callback) {
+                    mailingEditorDialog.setOnSaveCallback(callback);
+                }
+                @Override
+                public SimpleMailing getEditedMailing() {
+                    return mailingEditorDialog.getEditedMailing();
+                }
+                @Override
+                public void showDialogForEdit(SimpleMailing mailing) {
+                    mailingEditorDialog.openForEdit(mailing);
+                }
+                @Override
+                public void showDialogForNew(String role) {
+                    mailingEditorDialog.openForNew();
+                }
+
+                @Override
+                public void confirmDelete(List<Long> ids, Runnable onConfirm) {
+                    dialogDelete.setCount(ids.size());
+                    dialogDelete.setOnConfirm(onConfirm);
+                    dialogDelete.open();
+                }
+                @Override
+                public void showNotification(String message) {
+                    Notification.show(message, 3000, Notification.Position.TOP_END);
+                }
+            });
             var content = provider.createTabContent(presenter);
 
             rolesInOrder.add(tabId);
@@ -111,52 +141,5 @@ public class Mailings extends VerticalLayout implements MailingViewCallback<Simp
 
     private MailingActions getCurrentAction() {
         return actions.getOrDefault(getCurrentRole(), NO_OP_ACTIONS);
-    }
-
-    @Override
-    public void setOnSaveCallback(SerializableRunnable callback) {
-        mailingEditorDialog.setOnSaveCallback(callback);
-    }
-
-    @Override
-    public SimpleMailing getEditedMailing() {
-        return mailingEditorDialog.getEditedMailing();
-    }
-
-    @Override
-    public void showUserEditorForView(SimpleMailing user) {
-
-    }
-
-    @Override
-    public void showUserEditorForEdit(SimpleMailing mailing) {
-        mailingEditorDialog.openForEdit(mailing);
-    }
-
-    @Override
-    public void showUserEditorForNew(String role) {
-        mailingEditorDialog.openForNew();
-    }
-
-    @Override
-    public void confirmDelete(List<Long> ids, Runnable onConfirm) {
-        dialogDelete.setCount(ids.size());
-        dialogDelete.setOnConfirm(onConfirm);
-        dialogDelete.open();
-    }
-
-    @Override
-    public void confirmAccept(List<Long> ids, Runnable onConfirm) {
-
-    }
-
-    @Override
-    public void confirmReject(List<Long> ids, Runnable onConfirm) {
-
-    }
-
-    @Override
-    public void showNotification(String message) {
-        Notification.show(message, 3000, Notification.Position.TOP_END);
     }
 }

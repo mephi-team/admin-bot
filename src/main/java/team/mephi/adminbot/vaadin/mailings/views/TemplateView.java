@@ -6,9 +6,6 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.data.renderer.ComponentRenderer;
-import com.vaadin.flow.function.SerializableBiConsumer;
-import team.mephi.adminbot.dto.MailingList;
 import team.mephi.adminbot.dto.TemplateListDto;
 import team.mephi.adminbot.vaadin.components.*;
 import team.mephi.adminbot.vaadin.mailings.actions.MailingActions;
@@ -19,16 +16,6 @@ import java.util.Set;
 
 public class TemplateView extends VerticalLayout {
     private List<Long> selectedIds;
-
-    private static final SerializableBiConsumer<Span, MailingList> statusComponentUpdater = (
-            span, person) -> {
-        String theme = switch (person.getStatus()) {
-            case "ACTIVE" -> String.format("badge %s", "success");
-            default -> String.format("badge %s", "error");
-        };
-        span.getElement().setAttribute("theme", theme);
-        span.setText(person.getStatus());
-    };
 
     public TemplateView(TemplateDataProvider provider, MailingActions actions) {
         var gsa = new GridSelectActions("Выбрано шаблонов: ",
@@ -48,7 +35,7 @@ public class TemplateView extends VerticalLayout {
 
         grid.addComponentColumn(item -> {
             Span group = new Span();
-            Button editButton = new Button(new Icon(VaadinIcon.EDIT), e -> System.out.println(item));
+            Button editButton = new Button(new Icon(VaadinIcon.EDIT), e -> actions.onEdit(item.getId()));
             Button deleteButton = new Button(new Icon(VaadinIcon.TRASH), e -> actions.onDelete(List.of(item.getId())));
             group.add(editButton, deleteButton);
             return group;
@@ -75,9 +62,5 @@ public class TemplateView extends VerticalLayout {
         settingsPopover.setTarget(settingsBtn);
 
         add(new SearchFragment(searchField, settingsBtn), gsa, grid);
-    }
-
-    private static ComponentRenderer<Span, MailingList> createStatusComponentRenderer() {
-        return new ComponentRenderer<>(Span::new, statusComponentUpdater);
     }
 }
