@@ -43,7 +43,7 @@ public class TutorDataProvider implements UserDataProvider {
     }
 
     @Override
-    public Optional<SimpleUser> findUserById(Long id) {
+    public Optional<SimpleUser> findById(Long id) {
         return tutorRepository.findSimpleUserById(id);
     }
 

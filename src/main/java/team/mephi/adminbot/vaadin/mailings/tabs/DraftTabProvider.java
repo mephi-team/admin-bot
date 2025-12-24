@@ -2,7 +2,7 @@ package team.mephi.adminbot.vaadin.mailings.tabs;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import team.mephi.adminbot.vaadin.mailings.actions.MailingActions;
+import team.mephi.adminbot.vaadin.CRUDActions;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.DraftDataProvider;
 import team.mephi.adminbot.vaadin.mailings.views.DraftView;
 
@@ -24,7 +24,7 @@ public class DraftTabProvider implements MailingTabProvider {
     }
 
     @Override
-    public Component createTabContent(MailingActions actions) {
+    public Component createTabContent(CRUDActions actions) {
         return new DraftView(mailingDataProvider, actions);
     }
 

@@ -16,7 +16,7 @@ import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
 import team.mephi.adminbot.dto.SimpleMailing;
 import team.mephi.adminbot.vaadin.components.*;
-import team.mephi.adminbot.vaadin.mailings.actions.MailingActions;
+import team.mephi.adminbot.vaadin.CRUDActions;
 import team.mephi.adminbot.vaadin.mailings.components.MailingEditorDialog;
 import team.mephi.adminbot.vaadin.mailings.components.MailingEditorDialogFactory;
 import team.mephi.adminbot.vaadin.mailings.components.TemplateEditorDialog;
@@ -46,10 +46,11 @@ public class Mailings extends VerticalLayout {
     private final UserConfirmDialog dialogDelete;
 
     private final List<String> rolesInOrder = new ArrayList<>();
-    private final Map<String, MailingActions> actions = new HashMap<>();
+    private final Map<String, CRUDActions> actions = new HashMap<>();
 
-    private static final MailingActions NO_OP_ACTIONS = new MailingActions() {
+    private static final CRUDActions NO_OP_ACTIONS = new CRUDActions() {
         @Override public void onCreate(String role) {}
+        @Override public void onView(Long id) {}
         @Override public void onEdit(Long id) {}
         @Override public void onDelete(List<Long> ids) {}
     };
@@ -139,7 +140,7 @@ public class Mailings extends VerticalLayout {
         return "visitor";
     }
 
-    private MailingActions getCurrentAction() {
+    private CRUDActions getCurrentAction() {
         return actions.getOrDefault(getCurrentRole(), NO_OP_ACTIONS);
     }
 }

@@ -1,11 +1,11 @@
 package team.mephi.adminbot.vaadin.mailings.service;
 
-import team.mephi.adminbot.vaadin.mailings.actions.MailingActions;
+import team.mephi.adminbot.vaadin.CRUDActions;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.MailingDataProvider;
 
 import java.util.List;
 
-public class MailingsPresenter <T> implements MailingActions {
+public class MailingsPresenter <T> implements CRUDActions {
     private static final String DELETE_MESSAGE = "Рассылка удалена";
     private static final String DELETE_ALL_MESSAGE = "Удалено %d рассылок";
 
@@ -34,9 +34,13 @@ public class MailingsPresenter <T> implements MailingActions {
     }
 
     @Override
+    public void onView(Long id) {
+
+    }
+
+    @Override
     public void onEdit(Long id) {
         dataProvider.findById(id).ifPresent(m -> {
-            System.out.println("!!! " + m);
             view.showDialogForEdit(m);
             view.setOnSaveCallback(() -> {
                 var editedMailing = view.getEditedMailing();

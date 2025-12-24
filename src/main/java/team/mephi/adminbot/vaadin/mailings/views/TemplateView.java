@@ -8,7 +8,7 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import team.mephi.adminbot.dto.TemplateListDto;
 import team.mephi.adminbot.vaadin.components.*;
-import team.mephi.adminbot.vaadin.mailings.actions.MailingActions;
+import team.mephi.adminbot.vaadin.CRUDActions;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.TemplateDataProvider;
 
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.Set;
 public class TemplateView extends VerticalLayout {
     private List<Long> selectedIds;
 
-    public TemplateView(TemplateDataProvider provider, MailingActions actions) {
+    public TemplateView(TemplateDataProvider provider, CRUDActions actions) {
         var gsa = new GridSelectActions("Выбрано шаблонов: ",
                 new Button("Удалить шаблоны", VaadinIcon.TRASH.create(), e -> {
                     if (!selectedIds.isEmpty()) {

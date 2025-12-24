@@ -10,7 +10,7 @@ import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.function.SerializableBiConsumer;
 import team.mephi.adminbot.dto.MailingList;
 import team.mephi.adminbot.vaadin.components.*;
-import team.mephi.adminbot.vaadin.mailings.actions.MailingActions;
+import team.mephi.adminbot.vaadin.CRUDActions;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.DraftDataProvider;
 
 import java.util.List;
@@ -29,7 +29,7 @@ public class DraftView extends VerticalLayout {
         span.setText(person.getStatus());
     };
 
-    public DraftView(DraftDataProvider provider, MailingActions actions) {
+    public DraftView(DraftDataProvider provider, CRUDActions actions) {
         var gsa = new GridSelectActions("Выбрано рассылок: ",
                 new Button("Удалить рассылки", VaadinIcon.TRASH.create(), e -> {
                     if (!selectedIds.isEmpty()) {

@@ -50,6 +50,20 @@ public class Users extends VerticalLayout implements UserViewCallback {
     private static final String REJECT_ALL_TEXT = "Вы действительно хотите отклонить %d кандидатов?";
     private static final String REJECT_ACTION = "Отклонить";
 
+    // --- Константы текстов ---
+    private static final String BLOCK_MESSAGE = "Пользователь заблокирован";
+    private static final String BLOCK_ALL_MESSAGE = "Заблокировано %d пользователей";
+
+    private static final String ACCEPT_MESSAGE = "Информация о приеме отправлена";
+    private static final String ACCEPT_ALL_MESSAGE = "Информация о приеме отправлена %d кандидатам";
+
+    private static final String REJECT_MESSAGE = "Информация об отказе отправлена кандидату";
+    private static final String REJECT_ALL_MESSAGE = "Информация об отказе отправлена %d кандидатам";
+
+    private static final String USER_CREATED = "Пользователь добавлен";
+    private static final String USER_SAVED = "Пользователь сохранён";
+
+
     private final UserEditorDialog editorDialog;
     private final UserConfirmDialog dialogBlock;
     private final UserConfirmDialog dialogAccept;
@@ -148,22 +162,22 @@ public class Users extends VerticalLayout implements UserViewCallback {
     }
 
     @Override
-    public SimpleUser getEditedUser() {
+    public SimpleUser getEditedItem() {
         return editorDialog.getEditedUser();
     }
 
     @Override
-    public void showUserEditorForView(SimpleUser user) {
+    public void showDialogForView(SimpleUser user) {
         editorDialog.openForView(user);
     }
 
     @Override
-    public void showUserEditorForEdit(SimpleUser user) {
+    public void showDialogForEdit(SimpleUser user) {
         editorDialog.openForEdit(user);
     }
 
     @Override
-    public void showUserEditorForNew(String role) {
+    public void showDialogForNew(String role) {
         editorDialog.openForNew(role);
     }
 
@@ -172,6 +186,21 @@ public class Users extends VerticalLayout implements UserViewCallback {
         dialogBlock.setCount(ids.size());
         dialogBlock.setOnConfirm(onConfirm);
         dialogBlock.open();
+    }
+
+    @Override
+    public void showNotificationForNew() {
+        Notification.show(USER_CREATED, 3000, Notification.Position.TOP_END);
+    }
+
+    @Override
+    public void showNotificationForEdit(Long id) {
+        Notification.show(USER_SAVED, 3000, Notification.Position.TOP_END);
+    }
+
+    @Override
+    public void showNotificationForDelete(List<Long> ids) {
+        Notification.show(makeNotification(BLOCK_MESSAGE, BLOCK_ALL_MESSAGE, ids.size()), 3000, Notification.Position.TOP_END);
     }
 
     @Override
@@ -189,7 +218,19 @@ public class Users extends VerticalLayout implements UserViewCallback {
     }
 
     @Override
-    public void showNotification(String message) {
-        Notification.show(message, 3000, Notification.Position.TOP_END);
+    public void showNotificationForAccept(List<Long> ids) {
+        Notification.show(makeNotification(ACCEPT_MESSAGE, ACCEPT_ALL_MESSAGE, ids.size()), 3000, Notification.Position.TOP_END);
+    }
+
+    @Override
+    public void showNotificationForReject(List<Long> ids) {
+        Notification.show(makeNotification(REJECT_MESSAGE, REJECT_ALL_MESSAGE, ids.size()), 3000, Notification.Position.TOP_END);
+    }
+
+    private String makeNotification(String single, String plural, int count) {
+        if (count > 1) {
+            return String.format(plural, count);
+        }
+        return single;
     }
 }

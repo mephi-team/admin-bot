@@ -58,7 +58,7 @@ public abstract class BaseUserDataProvider implements UserDataProvider {
     }
 
     @Override
-    public Optional<SimpleUser> findUserById(Long id) {
+    public Optional<SimpleUser> findById(Long id) {
         return userRepository.findSimpleUserById(id);
     }
 
