@@ -29,8 +29,11 @@ public class MailingForm extends FormLayout {
         user.setItemsPageable(userService::getAllUsers);
         user.setItemLabelGenerator(UserDto::getUserName);
 
-        user.setRequiredIndicatorVisible(true);
+        users.setRequiredIndicatorVisible(true);
         cohort.setRequiredIndicatorVisible(true);
+        direction.setRequiredIndicatorVisible(true);
+        user.setRequiredIndicatorVisible(true);
+        city.setRequiredIndicatorVisible(true);
 
         users.setItems(List.of("students", "candidate"));
         cohort.setItems(List.of("summer2025", "winter2025"));
@@ -40,7 +43,7 @@ public class MailingForm extends FormLayout {
         setAutoResponsive(true);
         setLabelsAside(true);
 
-        addFormItem(channels, "Канал рассылки");
+        addFormItem(channels, "Каналы рассылки");
         addFormItem(users, "Пользователи");
         addFormItem(cohort, "Набор");
         addFormItem(direction, "Направление");

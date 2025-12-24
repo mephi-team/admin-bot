@@ -14,13 +14,17 @@ public class SimpleMailing {
     private Long id;
 //    @NotEmpty
     private String name;
-    @NotEmpty
+    @NotEmpty(message = "Текст обязателен")
     private String text;
     private Long userId;
+    @NotEmpty(message = "Канал обязателен")
     private Set<String> channels;
-    @NotEmpty
+    @NotEmpty(message = "Пользователи обязательны")
     private String users;
+    @NotEmpty(message = "Город обязателен")
     private String cohort;
+    @NotEmpty(message = "Направление обязательно")
     private String direction;
+    @NotEmpty(message = "Город обязателен")
     private String city;
 }
