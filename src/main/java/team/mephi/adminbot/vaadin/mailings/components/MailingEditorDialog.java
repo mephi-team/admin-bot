@@ -28,7 +28,7 @@ public class MailingEditorDialog extends Dialog {
 
     public MailingEditorDialog(UserService userService) {
         var form1 = new MailingForm(userService);
-        var form2 = new TemplateForm();
+        var form2 = new TemplateFormTab();
 
         binder.forField(form1.getUser())
                 .withValidator(Objects::nonNull, "Пользователь обязателен")

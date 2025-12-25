@@ -5,7 +5,6 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.function.SerializableRunnable;
 import lombok.Setter;
-import team.mephi.adminbot.dto.SimpleMailing;
 import team.mephi.adminbot.dto.SimpleTemplate;
 
 public class TemplateEditorDialog extends Dialog {
