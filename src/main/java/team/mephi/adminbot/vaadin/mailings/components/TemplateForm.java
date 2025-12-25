@@ -8,6 +8,8 @@ import lombok.Getter;
 public class TemplateForm extends FormLayout {
     private final TextField id = new TextField();
     @Getter
+    private final TextArea name = new TextArea();
+    @Getter
     private final TextArea text = new TextArea();
 
     public TemplateForm() {
@@ -16,6 +18,7 @@ public class TemplateForm extends FormLayout {
 
         text.setMinRows(10);
 
+        addFormItem(name, "Название");
         addFormItem(text, "Текст сообщения");
     }
 }

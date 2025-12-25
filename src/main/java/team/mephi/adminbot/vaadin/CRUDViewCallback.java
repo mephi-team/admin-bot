@@ -4,7 +4,7 @@ import com.vaadin.flow.function.SerializableRunnable;
 
 import java.util.List;
 
-public interface CRUDViewCallback <T> {
+public interface CRUDViewCallback<T> {
     void setOnSaveCallback(SerializableRunnable callback);
     T getEditedItem();
     void showDialogForView(T user);

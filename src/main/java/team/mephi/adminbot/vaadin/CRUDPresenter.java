@@ -34,9 +34,9 @@ public class CRUDPresenter<T> implements CRUDActions {
         dataProvider.findById(id).ifPresent(m -> {
             view.showDialogForEdit(m);
             view.setOnSaveCallback(() -> {
-                T editedMailing = view.getEditedItem();
-                if (editedMailing != null) {
-                    dataProvider.save(editedMailing);
+                T editedItem = view.getEditedItem();
+                if (editedItem != null) {
+                    dataProvider.save(editedItem);
                     dataProvider.refresh();
                     view.showNotificationForEdit(id);
                 }

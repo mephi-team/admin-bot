@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface MailTemplateRepository extends JpaRepository<MailTemplate, Long> {
-    @Query("SELECT t FROM MailTemplate t WHERE LOWER(COALESCE(t.name, '')) LIKE LOWER(CONCAT('%', :query, '%'))")
+    @Query("SELECT t FROM MailTemplate t WHERE LOWER(COALESCE(t.name, '')) LIKE LOWER(CONCAT('%', :query, '%')) ORDER BY t.createdAt DESC ")
     List<MailTemplate> findAllByName(String query);
 
     @Query("SELECT count(t) FROM MailTemplate t WHERE LOWER(COALESCE(t.name, '')) LIKE LOWER(CONCAT('%', :query, '%'))")

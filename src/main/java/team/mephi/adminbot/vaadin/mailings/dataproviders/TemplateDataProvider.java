@@ -6,6 +6,7 @@ import com.vaadin.flow.data.provider.DataProvider;
 import org.springframework.stereotype.Component;
 import team.mephi.adminbot.dto.SimpleTemplate;
 import team.mephi.adminbot.dto.TemplateListDto;
+import team.mephi.adminbot.model.MailTemplate;
 import team.mephi.adminbot.repository.MailTemplateRepository;
 
 import java.util.Optional;
@@ -52,8 +53,14 @@ public class TemplateDataProvider implements MailingDataProvider<SimpleTemplate>
     }
 
     @Override
-    public SimpleTemplate save(SimpleTemplate user) {
-        return null;
+    public SimpleTemplate save(SimpleTemplate template) {
+        var result = template.getId() != null
+                ? mailTemplateRepository.findById(template.getId()).orElse(new MailTemplate())
+                : new MailTemplate();
+        result.setName(template.getName());
+        result.setBodyText(template.getText());
+        mailTemplateRepository.save(result);
+        return new SimpleTemplate(result.getId(), result.getName(), result.getBodyText());
     }
 
     @Override
