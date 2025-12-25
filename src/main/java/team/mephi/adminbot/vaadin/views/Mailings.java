@@ -97,10 +97,12 @@ public class Mailings extends VerticalLayout {
                     }
                     @Override
                     public void showDialogForEdit(SimpleTemplate mailing) {
+                        templateEditorDialog.setHeaderTitle("Редактировать шаблон");
                         templateEditorDialog.showDialogForEdit(mailing);
                     }
                     @Override
                     public void showDialogForNew(String role) {
+                        templateEditorDialog.setHeaderTitle("Создать шаблон");
                         templateEditorDialog.showDialogForNew();
                     }
                     @Override
@@ -174,6 +176,13 @@ public class Mailings extends VerticalLayout {
             Span tabContent = new Span(new Span(provider.getTabLabel()), new UserCountBadge(userCount));
             tabSheet.add(new Tab(tabContent), content, provider.getPosition());
         }
+        tabSheet.addSelectedChangeListener(a -> {
+           if (tabSheet.getSelectedIndex() == 1) {
+               primaryButton.setText("Создать шаблон");
+           } else {
+               primaryButton.setText("Создать рассылку");
+           }
+        });
     }
 
     private HorizontalLayout createHeader() {
