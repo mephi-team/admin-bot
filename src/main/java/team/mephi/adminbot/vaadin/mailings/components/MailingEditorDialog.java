@@ -1,6 +1,7 @@
 package team.mephi.adminbot.vaadin.mailings.components;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.tabs.Tab;
@@ -43,8 +44,10 @@ public class MailingEditorDialog extends Dialog {
         add(tabSheet);
 
         saveButton.setVisible(false);
+        saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         next.setIconAfterText(true);
         next.getStyle().set("margin-right", "auto");
+        next.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         next.addClickListener(s -> {
             tabSheet.setSelectedTab(tab2);
         });
