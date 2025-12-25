@@ -1,11 +1,7 @@
 package team.mephi.adminbot.vaadin.mailings.tabs;
 
-import com.vaadin.flow.component.Component;
 import team.mephi.adminbot.vaadin.CRUDActions;
+import team.mephi.adminbot.vaadin.TabProvider;
 
-public interface MailingTabProvider {
-    String getTabId();
-    String getTabLabel();
-    Component createTabContent(CRUDActions actions);
-    Integer getPosition();
+public interface MailingTabProvider extends TabProvider<CRUDActions> {
 }

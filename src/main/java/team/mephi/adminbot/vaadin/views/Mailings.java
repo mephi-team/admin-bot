@@ -15,16 +15,17 @@ import com.vaadin.flow.function.SerializableRunnable;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
 import team.mephi.adminbot.dto.SimpleMailing;
+import team.mephi.adminbot.vaadin.CRUDPresenter;
+import team.mephi.adminbot.vaadin.CRUDViewCallback;
 import team.mephi.adminbot.vaadin.components.*;
 import team.mephi.adminbot.vaadin.CRUDActions;
 import team.mephi.adminbot.vaadin.mailings.components.MailingEditorDialog;
 import team.mephi.adminbot.vaadin.mailings.components.MailingEditorDialogFactory;
 import team.mephi.adminbot.vaadin.mailings.components.TemplateEditorDialog;
 import team.mephi.adminbot.vaadin.mailings.components.TemplateEditorDialogFactory;
+import team.mephi.adminbot.vaadin.mailings.dataproviders.MailingDataProvider;
 import team.mephi.adminbot.vaadin.mailings.service.MailingCountService;
 import team.mephi.adminbot.vaadin.mailings.service.MailingPresenterFactory;
-import team.mephi.adminbot.vaadin.mailings.service.MailingViewCallback;
-import team.mephi.adminbot.vaadin.mailings.service.MailingsPresenter;
 import team.mephi.adminbot.vaadin.mailings.tabs.MailingTabProvider;
 
 import java.util.*;
@@ -38,6 +39,11 @@ public class Mailings extends VerticalLayout {
     private static final String DELETE_ALL_TITLE = "Удалить рассылки?";
     private static final String DELETE_ALL_TEXT = "Вы действительно хотите удалить %d рассылок?";
     private static final String DELETE_ACTION = "Удалить";
+
+    private static final String MAILING_CREATED = "Рассылка сохранена";
+    private static final String MAILING_SAVED = "Рассылка сохранена";
+    private static final String DELETE_MESSAGE = "Рассылка удалена";
+    private static final String DELETE_ALL_MESSAGE = "Удалено %d рассылок";
 
     private final TabSheet tabSheet = new TabSheet();
 
@@ -78,16 +84,18 @@ public class Mailings extends VerticalLayout {
 
         for (var provider : tabProviders) {
             var tabId = provider.getTabId();
-            var dataProvider = presenterFactory.createDataProvider(tabId);
-            var presenter = new MailingsPresenter(dataProvider, new MailingViewCallback<SimpleMailing>() {
+            MailingDataProvider<SimpleMailing> dataProvider = (MailingDataProvider<SimpleMailing>)presenterFactory.createDataProvider(tabId);
+            var presenter = new CRUDPresenter<>(dataProvider, new CRUDViewCallback<>() {
                 @Override
                 public void setOnSaveCallback(SerializableRunnable callback) {
                     mailingEditorDialog.setOnSaveCallback(callback);
                 }
                 @Override
-                public SimpleMailing getEditedMailing() {
+                public SimpleMailing getEditedItem() {
                     return mailingEditorDialog.getEditedMailing();
                 }
+                @Override
+                public void showDialogForView(SimpleMailing user) {}
                 @Override
                 public void showDialogForEdit(SimpleMailing mailing) {
                     mailingEditorDialog.openForEdit(mailing);
@@ -96,7 +104,6 @@ public class Mailings extends VerticalLayout {
                 public void showDialogForNew(String role) {
                     mailingEditorDialog.openForNew();
                 }
-
                 @Override
                 public void confirmDelete(List<Long> ids, Runnable onConfirm) {
                     dialogDelete.setCount(ids.size());
@@ -104,7 +111,19 @@ public class Mailings extends VerticalLayout {
                     dialogDelete.open();
                 }
                 @Override
-                public void showNotification(String message) {
+                public void showNotificationForNew() {
+                    Notification.show(MAILING_CREATED, 3000, Notification.Position.TOP_END);
+                }
+                @Override
+                public void showNotificationForEdit(Long id) {
+                    Notification.show(MAILING_SAVED, 3000, Notification.Position.TOP_END);
+                }
+                @Override
+                public void showNotificationForDelete(List<Long> ids) {
+                    String message = DELETE_MESSAGE;
+                    if (ids.size() > 1) {
+                        message = String.format(DELETE_ALL_MESSAGE, ids.size());
+                    }
                     Notification.show(message, 3000, Notification.Position.TOP_END);
                 }
             });
