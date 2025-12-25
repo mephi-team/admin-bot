@@ -64,7 +64,7 @@ public abstract class BaseMailingDataProvider implements MailingDataProvider<Sim
 
     @Override
     public Optional<SimpleMailing> findById(Long id) {
-        return mailingRepository.findById(id).map(t -> new SimpleMailing(t.getId(),t.getName(), t.getDescription(), t.getCreatedBy().getId(), t.getChannels().stream().map(Enum::name).collect(Collectors.toSet()), t.getFilters().getUsers(), t.getFilters().getCohort(), t.getFilters().getDirection(), t.getFilters().getCity()));
+        return mailingRepository.findById(id).map(t -> new SimpleMailing(t.getId(), t.getName(), t.getDescription(), t.getStatus().name(), t.getCreatedBy().getId(), t.getChannels().stream().map(Enum::name).collect(Collectors.toSet()), t.getFilters().getUsers(), t.getFilters().getCohort(), t.getFilters().getDirection(), t.getFilters().getCity()));
     }
 
     @Override
@@ -77,11 +77,10 @@ public abstract class BaseMailingDataProvider implements MailingDataProvider<Sim
         result.setDescription(mailing.getText());
         result.setCreatedBy(user);
         result.setFilters(Filters.builder().direction(mailing.getDirection()).curator(user.getUserName()).city(mailing.getCity()).users(mailing.getUsers()).cohort(mailing.getCohort()).build());
-        if (result.getStatus() == null)
-            result.setStatus(MailingStatus.DRAFT);
+        result.setStatus(MailingStatus.valueOf(mailing.getStatus()));
         result.setChannels(mailing.getChannels().stream().map(Channels::valueOf).toList());
         mailingRepository.save(result);
-        return new SimpleMailing(result.getId(), result.getName(), result.getDescription(), result.getCreatedBy().getId(), result.getChannels().stream().map(Enum::name).collect(Collectors.toSet()), result.getFilters().getUsers(), result.getFilters().getCohort(), result.getFilters().getDirection(), result.getFilters().getCity());
+        return new SimpleMailing(result.getId(), result.getName(), result.getDescription(), result.getStatus().name(), result.getCreatedBy().getId(), result.getChannels().stream().map(Enum::name).collect(Collectors.toSet()), result.getFilters().getUsers(), result.getFilters().getCohort(), result.getFilters().getDirection(), result.getFilters().getCity());
     }
 
     @Override

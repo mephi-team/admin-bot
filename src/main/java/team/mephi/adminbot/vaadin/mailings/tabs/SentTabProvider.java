@@ -3,6 +3,7 @@ package team.mephi.adminbot.vaadin.mailings.tabs;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import team.mephi.adminbot.vaadin.CRUDActions;
+import team.mephi.adminbot.vaadin.mailings.actions.MailingActions;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.SentDataProvider;
 import team.mephi.adminbot.vaadin.mailings.views.SentView;
 
@@ -25,7 +26,7 @@ public class SentTabProvider implements  MailingTabProvider {
 
     @Override
     public Component createTabContent(CRUDActions actions) {
-        return new SentView(mailingDataProvider, actions);
+        return new SentView(mailingDataProvider, (MailingActions) actions);
     }
 
     @Override

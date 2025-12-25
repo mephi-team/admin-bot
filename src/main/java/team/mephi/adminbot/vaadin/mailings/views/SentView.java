@@ -11,7 +11,7 @@ import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.function.SerializableBiConsumer;
 import team.mephi.adminbot.dto.MailingList;
 import team.mephi.adminbot.vaadin.components.*;
-import team.mephi.adminbot.vaadin.CRUDActions;
+import team.mephi.adminbot.vaadin.mailings.actions.MailingActions;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.SentDataProvider;
 
 import java.util.List;
@@ -30,7 +30,7 @@ public class SentView extends VerticalLayout {
         span.setText(person.getStatus());
     };
 
-    public SentView(SentDataProvider provider, CRUDActions actions) {
+    public SentView(SentDataProvider provider, MailingActions actions) {
         var gsa = new GridSelectActions("Выбрано рассылок: ",
                 new Button("Удалить рассылки", VaadinIcon.TRASH.create(), e -> {
                     if (!selectedIds.isEmpty()) {
@@ -55,9 +55,12 @@ public class SentView extends VerticalLayout {
         grid.addComponentColumn(item -> {
             Div group = new Div();
             group.getElement().getStyle().set("text-align","end");
-            Button editButton = new Button(new Icon(VaadinIcon.EDIT), e -> actions.onEdit(item.getId()));
+            Button retryButton = new Button(new Icon(VaadinIcon.ROTATE_RIGHT), e -> actions.onRetry(item.getId()));
+            retryButton.setVisible(item.getStatus().equals("PAUSED"));
+            Button cancelButton = new Button(new Icon(VaadinIcon.CLOSE_CIRCLE_O), e -> actions.onCancel(item.getId()));
+            cancelButton.setVisible(item.getStatus().equals("ACTIVE"));
             Button deleteButton = new Button(new Icon(VaadinIcon.TRASH), e -> actions.onDelete(List.of(item.getId())));
-            group.add(editButton, deleteButton);
+            group.add(retryButton, cancelButton, deleteButton);
             return group;
         }).setHeader("Действия").setWidth("120px").setFlexGrow(0).setKey("action");
 

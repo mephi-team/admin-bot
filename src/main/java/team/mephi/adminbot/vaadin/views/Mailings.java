@@ -22,8 +22,11 @@ import team.mephi.adminbot.vaadin.mailings.components.MailingEditorDialog;
 import team.mephi.adminbot.vaadin.mailings.components.MailingEditorDialogFactory;
 import team.mephi.adminbot.vaadin.mailings.components.TemplateEditorDialog;
 import team.mephi.adminbot.vaadin.mailings.components.TemplateEditorDialogFactory;
+import team.mephi.adminbot.vaadin.mailings.dataproviders.MailingDataProvider;
 import team.mephi.adminbot.vaadin.mailings.service.MailingCountService;
 import team.mephi.adminbot.vaadin.mailings.service.MailingPresenterFactory;
+import team.mephi.adminbot.vaadin.mailings.service.MailingViewCallback;
+import team.mephi.adminbot.vaadin.mailings.service.MailingsPresenter;
 import team.mephi.adminbot.vaadin.mailings.tabs.MailingTabProvider;
 
 import java.util.*;
@@ -49,6 +52,8 @@ public class Mailings extends VerticalLayout {
     private final MailingEditorDialog mailingEditorDialog;
     private final TemplateEditorDialog templateEditorDialog;
     private final SimpleConfirmDialog dialogDelete;
+    private final SimpleConfirmDialog dialogCancel;
+    private final SimpleConfirmDialog dialogRetry;
 
     private final List<String> rolesInOrder = new ArrayList<>();
     private final Map<String, CRUDActions> actions = new HashMap<>();
@@ -71,6 +76,14 @@ public class Mailings extends VerticalLayout {
                 DELETE_TITLE, DELETE_TEXT, DELETE_ACTION,
                 DELETE_ALL_TITLE, DELETE_ALL_TEXT,
                 null
+        );
+        this.dialogCancel = new SimpleConfirmDialog(
+                "Отменить рассылку?", "Рассылка будет отменена",
+                "Отменить", "", "", null
+        );
+        this.dialogRetry = new SimpleConfirmDialog(
+                "Возобновить рассылку?", "Рассылка будет возобновлена",
+                "Возобновить", "", "", null
         );
         this.mailingEditorDialog = mailingDialogFactory.create();
         this.templateEditorDialog = templateDialogFactory.create();
@@ -127,8 +140,28 @@ public class Mailings extends VerticalLayout {
                     }
                 });
             } else {
-                CRUDDataProvider<SimpleMailing> dataProvider = (CRUDDataProvider<SimpleMailing>) presenterFactory.createDataProvider(tabId);
-                presenter = new CRUDPresenter<>(dataProvider, new CRUDViewCallbackBase<>() {
+                MailingDataProvider<SimpleMailing> dataProvider = (MailingDataProvider<SimpleMailing>) presenterFactory.createDataProvider(tabId);
+                presenter = new MailingsPresenter(dataProvider, new MailingViewCallback() {
+                    @Override
+                    public void confirmCancel(Long id, Runnable onConfirm) {
+                        dialogCancel.showForConfirm(1, onConfirm);
+                    }
+
+                    @Override
+                    public void confirmRetry(Long id, Runnable onConfirm) {
+                        dialogRetry.showForConfirm(1, onConfirm);
+                    }
+
+                    @Override
+                    public void showNotificationForCancel(Long id) {
+                        Notification.show("Отменено!", 3000, Notification.Position.TOP_END);
+                    }
+
+                    @Override
+                    public void showNotificationForRetry(Long id) {
+                        Notification.show("Повтор!", 3000, Notification.Position.TOP_END);
+                    }
+
                     @Override
                     public void setOnSaveCallback(SerializableRunnable callback) {
                         mailingEditorDialog.setOnSaveCallback(callback);
@@ -137,6 +170,12 @@ public class Mailings extends VerticalLayout {
                     public SimpleMailing getEditedItem() {
                         return mailingEditorDialog.getEditedItem();
                     }
+
+                    @Override
+                    public void showDialogForView(SimpleMailing user) {
+
+                    }
+
                     @Override
                     public void showDialogForEdit(SimpleMailing mailing) {
                         mailingEditorDialog.showDialogForEdit(mailing);
@@ -145,6 +184,7 @@ public class Mailings extends VerticalLayout {
                     public void showDialogForNew(String role) {
                         mailingEditorDialog.showDialogForNew();
                     }
+
                     @Override
                     public void confirmDelete(List<Long> ids, Runnable onConfirm) {
                         dialogDelete.showForConfirm(ids.size(), onConfirm);

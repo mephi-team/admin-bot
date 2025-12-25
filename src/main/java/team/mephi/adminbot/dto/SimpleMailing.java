@@ -16,6 +16,7 @@ public class SimpleMailing {
     private String name;
     @NotEmpty(message = "Текст обязателен")
     private String text;
+    private String status;
     private Long userId;
     @NotEmpty(message = "Канал обязателен")
     private Set<String> channels;
