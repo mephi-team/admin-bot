@@ -90,39 +90,32 @@ public class Mailings extends VerticalLayout {
                     public void setOnSaveCallback(SerializableRunnable callback) {
                         templateEditorDialog.setOnSaveCallback(callback);
                     }
-
                     @Override
                     public SimpleTemplate getEditedItem() {
                         return templateEditorDialog.getEditedMailing();
                     }
-
                     @Override
                     public void showDialogForEdit(SimpleTemplate mailing) {
                         templateEditorDialog.openForEdit(mailing);
                     }
-
                     @Override
                     public void showDialogForNew(String role) {
                         mailingEditorDialog.openForNew();
                     }
-
                     @Override
                     public void confirmDelete(List<Long> ids, Runnable onConfirm) {
                         dialogDelete.setCount(ids.size());
                         dialogDelete.setOnConfirm(onConfirm);
                         dialogDelete.open();
                     }
-
                     @Override
                     public void showNotificationForNew() {
                         Notification.show(MAILING_CREATED, 3000, Notification.Position.TOP_END);
                     }
-
                     @Override
                     public void showNotificationForEdit(Long id) {
                         Notification.show(MAILING_SAVED, 3000, Notification.Position.TOP_END);
                     }
-
                     @Override
                     public void showNotificationForDelete(List<Long> ids) {
                         String message = DELETE_MESSAGE;
@@ -139,39 +132,32 @@ public class Mailings extends VerticalLayout {
                     public void setOnSaveCallback(SerializableRunnable callback) {
                         mailingEditorDialog.setOnSaveCallback(callback);
                     }
-
                     @Override
                     public SimpleMailing getEditedItem() {
                         return mailingEditorDialog.getEditedMailing();
                     }
-
                     @Override
                     public void showDialogForEdit(SimpleMailing mailing) {
                         mailingEditorDialog.openForEdit(mailing);
                     }
-
                     @Override
                     public void showDialogForNew(String role) {
                         mailingEditorDialog.openForNew();
                     }
-
                     @Override
                     public void confirmDelete(List<Long> ids, Runnable onConfirm) {
                         dialogDelete.setCount(ids.size());
                         dialogDelete.setOnConfirm(onConfirm);
                         dialogDelete.open();
                     }
-
                     @Override
                     public void showNotificationForNew() {
                         Notification.show(MAILING_CREATED, 3000, Notification.Position.TOP_END);
                     }
-
                     @Override
                     public void showNotificationForEdit(Long id) {
                         Notification.show(MAILING_SAVED, 3000, Notification.Position.TOP_END);
                     }
-
                     @Override
                     public void showNotificationForDelete(List<Long> ids) {
                         String message = DELETE_MESSAGE;
