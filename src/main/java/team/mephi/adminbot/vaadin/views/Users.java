@@ -16,7 +16,7 @@ import com.vaadin.flow.function.SerializableRunnable;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
 import team.mephi.adminbot.dto.SimpleUser;
-import team.mephi.adminbot.vaadin.components.UserConfirmDialog;
+import team.mephi.adminbot.vaadin.components.SimpleConfirmDialog;
 import team.mephi.adminbot.vaadin.components.UserCountBadge;
 import team.mephi.adminbot.vaadin.users.actions.UserActions;
 import team.mephi.adminbot.vaadin.users.components.UserEditorDialog;
@@ -65,9 +65,9 @@ public class Users extends VerticalLayout implements UserViewCallback {
 
 
     private final UserEditorDialog editorDialog;
-    private final UserConfirmDialog dialogBlock;
-    private final UserConfirmDialog dialogAccept;
-    private final UserConfirmDialog dialogReject;
+    private final SimpleConfirmDialog dialogBlock;
+    private final SimpleConfirmDialog dialogAccept;
+    private final SimpleConfirmDialog dialogReject;
 
     private final TabSheet tabSheet = new TabSheet();
     private final List<String> rolesInOrder = new ArrayList<>();
@@ -90,17 +90,17 @@ public class Users extends VerticalLayout implements UserViewCallback {
     ) {
         this.editorDialog = dialogFactory.create();
 
-        this.dialogBlock = new UserConfirmDialog(
+        this.dialogBlock = new SimpleConfirmDialog(
                 BLOCK_TITLE, BLOCK_TEXT, BLOCK_ACTION,
                 BLOCK_ALL_TITLE, BLOCK_ALL_TEXT,
                 null
         );
-        this.dialogAccept = new UserConfirmDialog(
+        this.dialogAccept = new SimpleConfirmDialog(
                 ACCEPT_TITLE, ACCEPT_TEXT, ACCEPT_ACTION,
                 ACCEPT_ALL_TITLE, ACCEPT_ALL_TEXT,
                 null
         );
-        this.dialogReject = new UserConfirmDialog(
+        this.dialogReject = new SimpleConfirmDialog(
                 REJECT_TITLE, REJECT_TEXT, REJECT_ACTION,
                 REJECT_ALL_TITLE, REJECT_ALL_TEXT,
                 null

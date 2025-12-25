@@ -4,7 +4,7 @@ import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import lombok.Getter;
 import lombok.Setter;
 
-public class UserConfirmDialog extends ConfirmDialog {
+public class SimpleConfirmDialog extends ConfirmDialog {
     private final String header;
     private final String text;
     private final String headerAll;
@@ -13,7 +13,7 @@ public class UserConfirmDialog extends ConfirmDialog {
     @Setter
     private Runnable onConfirm;
 
-    public UserConfirmDialog(String title, String text, String action, String titleAll, String textAll, Runnable onConfirm) {
+    public SimpleConfirmDialog(String title, String text, String action, String titleAll, String textAll, Runnable onConfirm) {
         this.header = title;
         this.text = text;
         this.headerAll = titleAll;

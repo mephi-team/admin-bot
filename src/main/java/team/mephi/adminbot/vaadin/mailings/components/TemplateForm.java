@@ -1,14 +1,19 @@
 package team.mephi.adminbot.vaadin.mailings.components;
 
+import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import lombok.Getter;
 
+import java.util.List;
+
 public class TemplateForm extends FormLayout {
     private final TextField id = new TextField();
     @Getter
-    private final TextArea name = new TextArea();
+    private final TextField name = new TextField();
     @Getter
     private final TextArea text = new TextArea();
 
@@ -16,9 +21,52 @@ public class TemplateForm extends FormLayout {
         setAutoResponsive(true);
         setLabelsAside(true);
 
+        RadioButtonGroup<String> radioGroup = new RadioButtonGroup<>();
+        radioGroup.setItems("Создать новое", "Загрузить из шаблона");
+        radioGroup.setValue("Создать новое");
+
+        ComboBox<String> templates = new ComboBox<>();
+        templates.setItems(List.of("Шаблон 1", "Шаблон 2"));
+
+        Checkbox saveTemplate = new Checkbox();
+
         text.setMinRows(10);
 
-        addFormItem(name, "Название");
-        addFormItem(text, "Текст сообщения");
+        addFormItem(radioGroup, "Сообщение");
+        FormItem templateItem = addFormItem(templates, "Шаблон");
+        FormItem textItem = addFormItem(text, "Текст сообщения");
+        FormItem saveItem = addFormItem(saveTemplate, "Сохранить как новый шаблон");
+        FormItem nameItem = addFormItem(name, "Название");
+
+        templateItem.setVisible(false);
+        nameItem.setVisible(false);
+
+        templates.addValueChangeListener(v -> {
+           text.setValue(v.getValue());
+        });
+
+        saveTemplate.addValueChangeListener(v -> {
+           if (v.getValue()) {
+               nameItem.setVisible(true);
+           } else {
+               nameItem.setVisible(false);
+           }
+        });
+
+        radioGroup.addValueChangeListener(v -> {
+            if (v.getValue().equals("Создать новое")) {
+                templateItem.setVisible(false);
+                saveItem.setVisible(true);
+                if (saveTemplate.getValue()) {
+                    nameItem.setVisible(true);
+                }
+                textItem.setEnabled(true);
+            } else {
+                templateItem.setVisible(true);
+                saveItem.setVisible(false);
+                nameItem.setVisible(false);
+                textItem.setEnabled(false);
+            }
+        });
     }
 }

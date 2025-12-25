@@ -48,7 +48,7 @@ public class Mailings extends VerticalLayout {
 
     private final MailingEditorDialog mailingEditorDialog;
     private final TemplateEditorDialog templateEditorDialog;
-    private final UserConfirmDialog dialogDelete;
+    private final SimpleConfirmDialog dialogDelete;
 
     private final List<String> rolesInOrder = new ArrayList<>();
     private final Map<String, CRUDActions> actions = new HashMap<>();
@@ -67,7 +67,7 @@ public class Mailings extends VerticalLayout {
             TemplateEditorDialogFactory templateDialogFactory,
             MailingCountService mailingCountService
     ) {
-        this.dialogDelete = new UserConfirmDialog(
+        this.dialogDelete = new SimpleConfirmDialog(
                 DELETE_TITLE, DELETE_TEXT, DELETE_ACTION,
                 DELETE_ALL_TITLE, DELETE_ALL_TEXT,
                 null
@@ -101,7 +101,7 @@ public class Mailings extends VerticalLayout {
                     }
                     @Override
                     public void showDialogForNew(String role) {
-                        mailingEditorDialog.showDialogForNew();
+                        templateEditorDialog.showDialogForNew();
                     }
                     @Override
                     public void confirmDelete(List<Long> ids, Runnable onConfirm) {
@@ -174,9 +174,6 @@ public class Mailings extends VerticalLayout {
             Span tabContent = new Span(new Span(provider.getTabLabel()), new UserCountBadge(userCount));
             tabSheet.add(new Tab(tabContent), content, provider.getPosition());
         }
-        tabSheet.addSelectedChangeListener(s -> {
-            primaryButton.setVisible(tabSheet.getSelectedIndex() != 1);
-        });
     }
 
     private HorizontalLayout createHeader() {

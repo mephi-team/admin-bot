@@ -5,6 +5,7 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.function.SerializableRunnable;
 import lombok.Setter;
+import team.mephi.adminbot.dto.SimpleMailing;
 import team.mephi.adminbot.dto.SimpleTemplate;
 
 public class TemplateEditorDialog extends Dialog {
@@ -22,6 +23,14 @@ public class TemplateEditorDialog extends Dialog {
         setHeaderTitle("Создание шаблона");
         add(form);
         getFooter().add(saveButton);
+    }
+
+    public void showDialogForNew() {
+        var newTemplate = new SimpleTemplate();
+        binder.readBean(newTemplate);
+        binder.setReadOnly(false);
+
+        open();
     }
 
     public void showDialogForEdit(SimpleTemplate template) {

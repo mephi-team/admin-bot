@@ -58,6 +58,7 @@ public class TemplateDataProvider implements MailingDataProvider<SimpleTemplate>
                 ? mailTemplateRepository.findById(template.getId()).orElse(new MailTemplate())
                 : new MailTemplate();
         result.setName(template.getName());
+        result.setSubject(template.getName());
         result.setBodyText(template.getText());
         mailTemplateRepository.save(result);
         return new SimpleTemplate(result.getId(), result.getName(), result.getBodyText());

@@ -31,7 +31,7 @@ public class Questions extends VerticalLayout {
     private static final String DELETE_MESSAGE = "Вопрос удален";
     private static final String DELETE_ALL_MESSAGE = "Удалено %d вопросов";
 
-    private final UserConfirmDialog dialogDelete;
+    private final SimpleConfirmDialog dialogDelete;
 
     private final QuestionDataProvider provider;
     private List<Long> selectedIds;
@@ -39,7 +39,7 @@ public class Questions extends VerticalLayout {
     public Questions(QuestionDataProvider provider) {
         this.provider = provider;
 
-        this.dialogDelete = new UserConfirmDialog(
+        this.dialogDelete = new SimpleConfirmDialog(
                 DELETE_TITLE, DELETE_TEXT, DELETE_ACTION,
                 DELETE_ALL_TITLE, DELETE_ALL_TEXT,
                 null
