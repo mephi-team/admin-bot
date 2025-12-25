@@ -2,7 +2,7 @@ package team.mephi.adminbot.vaadin.mailings.views;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -34,7 +34,8 @@ public class TemplateView extends VerticalLayout {
         grid.addColumn(TemplateListDto::getText).setHeader("Текст").setSortable(true).setKey("text");
 
         grid.addComponentColumn(item -> {
-            Span group = new Span();
+            Div group = new Div();
+            group.getElement().getStyle().set("text-align","end");
             Button editButton = new Button(new Icon(VaadinIcon.EDIT), e -> actions.onEdit(item.getId()));
             Button deleteButton = new Button(new Icon(VaadinIcon.TRASH), e -> actions.onDelete(List.of(item.getId())));
             group.add(editButton, deleteButton);
