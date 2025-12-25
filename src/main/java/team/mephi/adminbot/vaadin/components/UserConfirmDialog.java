@@ -9,7 +9,6 @@ public class UserConfirmDialog extends ConfirmDialog {
     private final String text;
     private final String headerAll;
     private final String textAll;
-    private int count;
     @Getter
     @Setter
     private Runnable onConfirm;
@@ -36,8 +35,7 @@ public class UserConfirmDialog extends ConfirmDialog {
         });
     }
 
-    public void setCount(int count) {
-        this.count = count;
+    public void showForConfirm(int count, Runnable onConfirm) {
         if (count > 1) {
             setHeader(this.headerAll);
             setText(String.format(textAll, count));
@@ -45,5 +43,7 @@ public class UserConfirmDialog extends ConfirmDialog {
             setHeader(this.header);
             setText(this.text);
         }
+        this.onConfirm = onConfirm;
+        open();
     }
 }

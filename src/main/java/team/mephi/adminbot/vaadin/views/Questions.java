@@ -97,8 +97,7 @@ public class Questions extends VerticalLayout {
     }
 
     private void onDelete(List<Long> selectedIds) {
-        dialogDelete.setCount(selectedIds.size());
-        dialogDelete.setOnConfirm(() -> {
+        dialogDelete.showForConfirm(selectedIds.size(), () -> {
             provider.deleteAllById(selectedIds);
             provider.refresh();
             if (selectedIds.size() > 1) {
@@ -107,6 +106,5 @@ public class Questions extends VerticalLayout {
                 Notification.show(DELETE_MESSAGE, 3000, Notification.Position.TOP_END);
             }
         });
-        dialogDelete.open();
     }
 }

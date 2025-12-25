@@ -24,14 +24,14 @@ public class TemplateEditorDialog extends Dialog {
         getFooter().add(saveButton);
     }
 
-    public void openForEdit(SimpleTemplate template) {
+    public void showDialogForEdit(SimpleTemplate template) {
         binder.readBean(template);
         binder.setReadOnly(false);
 
         open();
     }
 
-    public SimpleTemplate getEditedMailing() {
+    public SimpleTemplate getEditedItem() {
         SimpleTemplate template = new SimpleTemplate();
         binder.writeBeanIfValid(template);
         return template;

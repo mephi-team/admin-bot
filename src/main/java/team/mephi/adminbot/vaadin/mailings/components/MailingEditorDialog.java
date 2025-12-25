@@ -74,7 +74,7 @@ public class MailingEditorDialog extends Dialog {
         });
     }
 
-    public void openForNew() {
+    public void showDialogForNew() {
         var newMailing = new SimpleMailing();
         newMailing.setUserId(0L);
         binder.readBean(newMailing);
@@ -84,7 +84,7 @@ public class MailingEditorDialog extends Dialog {
         open();
     }
 
-    public void openForEdit(SimpleMailing mailing) {
+    public void showDialogForEdit(SimpleMailing mailing) {
         binder.readBean(mailing);
         binder.setReadOnly(false);
 //        saveButton.setVisible(true);
@@ -101,7 +101,7 @@ public class MailingEditorDialog extends Dialog {
         }
     }
 
-    public SimpleMailing getEditedMailing() {
+    public SimpleMailing getEditedItem() {
         SimpleMailing mailing = new SimpleMailing();
         binder.writeBeanIfValid(mailing);
         return mailing;

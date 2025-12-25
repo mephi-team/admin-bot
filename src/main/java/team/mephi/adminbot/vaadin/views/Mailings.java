@@ -93,21 +93,19 @@ public class Mailings extends VerticalLayout {
                     }
                     @Override
                     public SimpleTemplate getEditedItem() {
-                        return templateEditorDialog.getEditedMailing();
+                        return templateEditorDialog.getEditedItem();
                     }
                     @Override
                     public void showDialogForEdit(SimpleTemplate mailing) {
-                        templateEditorDialog.openForEdit(mailing);
+                        templateEditorDialog.showDialogForEdit(mailing);
                     }
                     @Override
                     public void showDialogForNew(String role) {
-                        mailingEditorDialog.openForNew();
+                        mailingEditorDialog.showDialogForNew();
                     }
                     @Override
                     public void confirmDelete(List<Long> ids, Runnable onConfirm) {
-                        dialogDelete.setCount(ids.size());
-                        dialogDelete.setOnConfirm(onConfirm);
-                        dialogDelete.open();
+                        dialogDelete.showForConfirm(ids.size(), onConfirm);
                     }
                     @Override
                     public void showNotificationForNew() {
@@ -135,21 +133,19 @@ public class Mailings extends VerticalLayout {
                     }
                     @Override
                     public SimpleMailing getEditedItem() {
-                        return mailingEditorDialog.getEditedMailing();
+                        return mailingEditorDialog.getEditedItem();
                     }
                     @Override
                     public void showDialogForEdit(SimpleMailing mailing) {
-                        mailingEditorDialog.openForEdit(mailing);
+                        mailingEditorDialog.showDialogForEdit(mailing);
                     }
                     @Override
                     public void showDialogForNew(String role) {
-                        mailingEditorDialog.openForNew();
+                        mailingEditorDialog.showDialogForNew();
                     }
                     @Override
                     public void confirmDelete(List<Long> ids, Runnable onConfirm) {
-                        dialogDelete.setCount(ids.size());
-                        dialogDelete.setOnConfirm(onConfirm);
-                        dialogDelete.open();
+                        dialogDelete.showForConfirm(ids.size(), onConfirm);
                     }
                     @Override
                     public void showNotificationForNew() {

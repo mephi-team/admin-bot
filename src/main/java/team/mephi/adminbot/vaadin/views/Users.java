@@ -183,9 +183,7 @@ public class Users extends VerticalLayout implements UserViewCallback {
 
     @Override
     public void confirmDelete(List<Long> ids, Runnable onConfirm) {
-        dialogBlock.setCount(ids.size());
-        dialogBlock.setOnConfirm(onConfirm);
-        dialogBlock.open();
+        dialogBlock.showForConfirm(ids.size(), onConfirm);
     }
 
     @Override
@@ -205,16 +203,12 @@ public class Users extends VerticalLayout implements UserViewCallback {
 
     @Override
     public void confirmAccept(List<Long> ids, Runnable onConfirm) {
-        dialogAccept.setCount(ids.size());
-        dialogAccept.setOnConfirm(onConfirm);
-        dialogAccept.open();
+        dialogAccept.showForConfirm(ids.size(), onConfirm);
     }
 
     @Override
     public void confirmReject(List<Long> ids, Runnable onConfirm) {
-        dialogReject.setCount(ids.size());
-        dialogReject.setOnConfirm(onConfirm);
-        dialogReject.open();
+        dialogReject.showForConfirm(ids.size(), onConfirm);
     }
 
     @Override
