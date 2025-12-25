@@ -44,6 +44,7 @@ public class Mailings extends VerticalLayout {
     private static final String DELETE_ALL_MESSAGE = "Удалено %d рассылок";
 
     private final TabSheet tabSheet = new TabSheet();
+    private final Button primaryButton = new Button("Новая рассылка", new Icon(VaadinIcon.PLUS));
 
     private final MailingEditorDialog mailingEditorDialog;
     private final TemplateEditorDialog templateEditorDialog;
@@ -177,6 +178,9 @@ public class Mailings extends VerticalLayout {
             Span tabContent = new Span(new Span(provider.getTabLabel()), new UserCountBadge(userCount));
             tabSheet.add(new Tab(tabContent), content, provider.getPosition());
         }
+        tabSheet.addSelectedChangeListener(s -> {
+            primaryButton.setVisible(tabSheet.getSelectedIndex() != 1);
+        });
     }
 
     private HorizontalLayout createHeader() {
@@ -184,7 +188,7 @@ public class Mailings extends VerticalLayout {
         top.setWidthFull();
         top.addToStart(new H1("Рассылки"));
 
-        var primaryButton = new Button("Новая рассылка", new Icon(VaadinIcon.PLUS), e -> {
+        primaryButton.addClickListener(e -> {
             getCurrentAction().onCreate(getCurrentRole());
         });
         primaryButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
