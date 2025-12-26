@@ -62,4 +62,9 @@ public class TutorDataProvider implements UserDataProvider {
     public void deleteAllById(Iterable<Long> ids) {
         tutorRepository.deleteAllById(ids);
     }
+
+    @Override
+    public void blockAllById(Iterable<Long> ids) {
+        tutorRepository.blockAllById(ids);
+    }
 }

@@ -22,8 +22,8 @@ public class FreeListenerView extends VerticalLayout {
     private List<Long> selectedIds;
 
     public FreeListenerView(FreeListenerDataProvider provider, UserActions actions) {
-        var gsa = new GridSelectActions("Выбрано пользователей: ",
-                new Button("Заблокировать пользователей", VaadinIcon.BAN.create(), e -> {
+        var gsa = new GridSelectActions(getTranslation("grid_users_actions_label"),
+                new Button(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), e -> {
                     if (!selectedIds.isEmpty())
                         actions.onDelete(selectedIds);
                 })
@@ -33,16 +33,16 @@ public class FreeListenerView extends VerticalLayout {
         setPadding(false);
 
         var grid = new Grid<>(UserDto.class, false);
-        grid.addColumn(UserDto::getFullName).setHeader("Фамилия Имя").setSortable(true).setKey("name");
-        grid.addColumn(UserDto::getEmail).setHeader("Email").setSortable(true).setKey("email");
-        grid.addColumn(UserDto::getTgName).setHeader("Telegram").setSortable(true).setKey("telegram");
-        grid.addColumn(UserDto::getPhoneNumber).setHeader("Телефон").setSortable(true).setKey("phone");
-        grid.addColumn(UserDto::getCohort).setHeader("Набор").setSortable(true).setKey("cohort");
-        grid.addColumn(UserDto::getDirection).setHeader("Направление").setSortable(true).setKey("direction");
-        grid.addColumn(UserDto::getCity).setHeader("Город").setSortable(true).setKey("city");
+        grid.addColumn(UserDto::getFullName).setHeader(getTranslation("grid_free_listener_header_name_label")).setSortable(true).setKey("name");
+        grid.addColumn(UserDto::getEmail).setHeader(getTranslation("grid_free_listener_header_email_label")).setSortable(true).setKey("email");
+        grid.addColumn(UserDto::getTgName).setHeader(getTranslation("grid_free_listener_header_telegram_label")).setSortable(true).setKey("telegram");
+        grid.addColumn(UserDto::getPhoneNumber).setHeader(getTranslation("grid_free_listener_header_phone_label")).setSortable(true).setKey("phone");
+        grid.addColumn(UserDto::getCohort).setHeader(getTranslation("grid_free_listener_header_cohort_label")).setSortable(true).setKey("cohort");
+        grid.addColumn(UserDto::getDirection).setHeader(getTranslation("grid_free_listener_header_direction_label")).setSortable(true).setKey("direction");
+        grid.addColumn(UserDto::getCity).setHeader(getTranslation("grid_free_listener_header_city_label")).setSortable(true).setKey("city");
 
         grid.addComponentColumn(item -> {
-            Button dropButton = new Button("Отчислить", new Icon(VaadinIcon.CLOSE), e -> {
+            Button dropButton = new Button(getTranslation("grid_student_action_drop_label"), new Icon(VaadinIcon.CLOSE), e -> {
                 System.out.println(item);
             });
             Button viewButton = new Button(new Icon(VaadinIcon.EYE), e -> actions.onView(item.getId()));
@@ -55,7 +55,7 @@ public class FreeListenerView extends VerticalLayout {
                 deleteButton.getElement().getStyle().set("color", "black");
             }
             return new Span(dropButton, viewButton, chatButton, editButton, deleteButton);
-        }).setHeader("Действия").setWidth("340px").setFlexGrow(0).setKey("actions");
+        }).setHeader(getTranslation("grid_header_actions_label")).setWidth("340px").setFlexGrow(0).setKey("actions");
 
         grid.setDataProvider(provider.getDataProvider());
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
@@ -65,7 +65,7 @@ public class FreeListenerView extends VerticalLayout {
             gsa.setCount(selectedIds.size());
         });
 
-        var searchField = new SearchField("Найти слушателя");
+        var searchField = new SearchField(getTranslation("grid_free_listener_search_placeholder"));
         searchField.addValueChangeListener(e -> provider.getFilterableProvider().setFilter(e.getValue()));
 
         var settingsBtn = new GridSettingsButton();

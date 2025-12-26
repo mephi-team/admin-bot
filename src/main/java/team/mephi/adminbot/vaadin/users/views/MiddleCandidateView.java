@@ -24,16 +24,16 @@ public class MiddleCandidateView extends VerticalLayout {
     private List<Long> selectedIds;
 
     public MiddleCandidateView(MiddleCandidateDataProvider provider, UserActions actions) {
-        var gsa = new GridSelectActions("Выбрано пользователей: ",
-                new Button("Утвердить кандидатов", VaadinIcon.CHECK.create(), e -> {
+        var gsa = new GridSelectActions(getTranslation("grid_users_actions_label"),
+                new Button(getTranslation("grid_middle_candidate_actions_accept_label"), VaadinIcon.CHECK.create(), e -> {
                     if (!selectedIds.isEmpty())
                         actions.onAccept(selectedIds);
                 }),
-                new Button("Отклонить кандидатов", VaadinIcon.CLOSE.create(), e -> {
+                new Button(getTranslation("grid_middle_candidate_actions_reject_label"), VaadinIcon.CLOSE.create(), e -> {
                     if (!selectedIds.isEmpty())
                         actions.onReject(selectedIds);
                 }),
-                new Button("Заблокировать пользователей", VaadinIcon.BAN.create(), e -> {
+                new Button(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), e -> {
                     if (!selectedIds.isEmpty())
                         actions.onDelete(selectedIds);
                 })
@@ -43,15 +43,15 @@ public class MiddleCandidateView extends VerticalLayout {
         setPadding(false);
 
         var grid = new Grid<>(UserDto.class, false);
-        grid.addColumn(UserDto::getFullName).setHeader("Фамилия Имя").setSortable(true).setKey("name");
-        grid.addColumn(UserDto::getEmail).setHeader("Email").setSortable(true).setKey("email");
-        grid.addColumn(UserDto::getTgName).setHeader("Telegram").setSortable(true).setKey("telegram");
-        grid.addColumn(UserDto::getPhoneNumber).setHeader("Телефон").setSortable(true).setKey("phone");
-        grid.addColumn(UserDto::getPdConsent).setHeader("Согласия ПД").setSortable(true).setKey("pd");
-        grid.addColumn(UserDto::getCohort).setHeader("Набор").setSortable(true).setKey("cohort");
-        grid.addColumn(UserDto::getDirection).setHeader("Направление").setSortable(true).setKey("direction");
-        grid.addColumn(UserDto::getCity).setHeader("Город").setSortable(true).setKey("city");
-        grid.addColumn(createStatusComponentRenderer()).setHeader("Статус").setSortable(true).setKey("status");
+        grid.addColumn(UserDto::getFullName).setHeader(getTranslation("grid_middle_candidate_header_name_label")).setSortable(true).setKey("name");
+        grid.addColumn(UserDto::getEmail).setHeader(getTranslation("grid_middle_candidate_header_email_label")).setSortable(true).setKey("email");
+        grid.addColumn(UserDto::getTgName).setHeader(getTranslation("grid_middle_candidate_header_telegram_label")).setSortable(true).setKey("telegram");
+        grid.addColumn(UserDto::getPhoneNumber).setHeader(getTranslation("grid_middle_candidate_header_phone_label")).setSortable(true).setKey("phone");
+        grid.addColumn(UserDto::getPdConsent).setHeader(getTranslation("grid_middle_candidate_header_pd_consent_label")).setSortable(true).setKey("pd_consent");
+        grid.addColumn(UserDto::getCohort).setHeader(getTranslation("grid_middle_candidate_header_cohort_label")).setSortable(true).setKey("cohort");
+        grid.addColumn(UserDto::getDirection).setHeader(getTranslation("grid_middle_candidate_header_direction_label")).setSortable(true).setKey("direction");
+        grid.addColumn(UserDto::getCity).setHeader(getTranslation("grid_middle_candidate_header_city_label")).setSortable(true).setKey("city");
+        grid.addColumn(createStatusComponentRenderer()).setHeader(getTranslation("grid_middle_candidate_header_status_label")).setSortable(true).setKey("status");
 
         grid.addComponentColumn(item -> {
             Button confirmButton = new Button(new Icon(VaadinIcon.CHECK), e -> actions.onAccept(List.of(item.getId())));
@@ -66,7 +66,7 @@ public class MiddleCandidateView extends VerticalLayout {
                 deleteButton.getElement().getStyle().set("color", "black");
             }
             return new Span(rejectButton, confirmButton, viewButton, chatButton, editButton, deleteButton);
-        }).setHeader("Действия").setWidth("290px").setFlexGrow(0).setKey("actions");
+        }).setHeader(getTranslation("grid_header_actions_label")).setWidth("290px").setFlexGrow(0).setKey("actions");
 
         grid.setDataProvider(provider.getDataProvider());
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
@@ -76,7 +76,7 @@ public class MiddleCandidateView extends VerticalLayout {
             gsa.setCount(selectedIds.size());
         });
 
-        var searchField = new SearchField("Найти миддл-кандидита");
+        var searchField = new SearchField(getTranslation("grid_middle_candidate_search_placeholder"));
         searchField.addValueChangeListener(e -> provider.getFilterableProvider().setFilter(e.getValue()));
 
         var settingsBtn = new GridSettingsButton();

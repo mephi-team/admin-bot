@@ -7,6 +7,7 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import team.mephi.adminbot.dto.UserDto;
+import team.mephi.adminbot.model.enums.UserStatus;
 import team.mephi.adminbot.vaadin.components.*;
 import team.mephi.adminbot.vaadin.users.actions.UserActions;
 import team.mephi.adminbot.vaadin.users.dataproviders.GuestsDataProvider;
@@ -18,8 +19,8 @@ public class GuestsView extends VerticalLayout {
     private List<Long> selectedIds;
 
     public GuestsView(GuestsDataProvider provider, UserActions actions) {
-        var gsa = new GridSelectActions("Выбрано пользователей: ",
-                new Button("Заблокировать пользователей", VaadinIcon.BAN.create(), e -> {
+        var gsa = new GridSelectActions(getTranslation("grid_users_actions_label"),
+                new Button(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), e -> {
                     if (!selectedIds.isEmpty())
                         actions.onDelete(selectedIds);
                 })
@@ -29,20 +30,20 @@ public class GuestsView extends VerticalLayout {
         setPadding(false);
 
         var grid = new Grid<>(UserDto.class, false);
-        grid.addColumn(UserDto::getFullName).setHeader("Имя пользователя в Telegram").setSortable(true).setKey("name");
-        grid.addColumn(UserDto::getTgName).setHeader("Telegram").setSortable(true).setKey("telegram");
-        grid.addColumn(UserDto::getPdConsent).setHeader("Согласия ПД").setSortable(true).setKey("pd_consent");
+        grid.addColumn(UserDto::getFullName).setHeader(getTranslation("grid_guests_header_name_label")).setSortable(true).setKey("name");
+        grid.addColumn(UserDto::getTgName).setHeader(getTranslation("grid_guests_header_telegram_label")).setSortable(true).setKey("telegram");
+        grid.addColumn(UserDto::getPdConsent).setHeader(getTranslation("grid_guests_header_pd_consent_label")).setSortable(true).setKey("pd_consent");
 
         grid.addComponentColumn(item -> {
             Button viewButton = new Button(new Icon(VaadinIcon.EYE), e -> actions.onView(item.getId()));
-            Button deleteButton = new Button(new Icon(VaadinIcon.BAN), e -> actions.onDelete(List.of(item.getId())));
-            if (item.getDelete()) {
+            Button deleteButton = new Button(new Icon(VaadinIcon.BAN), e -> actions.onBlock(List.of(item.getId())));
+            if (item.getStatus().equals(UserStatus.BLOCKED.name())) {
                 deleteButton.getElement().getStyle().set("color", "red");
             } else {
                 deleteButton.getElement().getStyle().set("color", "black");
             }
             return new Span(viewButton, deleteButton);
-        }).setHeader("Действия").setWidth("120px").setFlexGrow(0).setKey("action");
+        }).setHeader(getTranslation("grid_header_actions_label")).setWidth("120px").setFlexGrow(0).setKey("actions");
 
         grid.setDataProvider(provider.getDataProvider());
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
@@ -52,7 +53,7 @@ public class GuestsView extends VerticalLayout {
             gsa.setCount(selectedIds.size());
         });
 
-        var searchField = new SearchField("Найти гостя");
+        var searchField = new SearchField(getTranslation("grid_guests_search_placeholder"));
         searchField.addValueChangeListener(e -> provider.getFilterableProvider().setFilter(e.getValue()));
 
         var settingsBtn = new GridSettingsButton();

@@ -139,6 +139,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Modifying
     void deleteAllById(@Param("ids") Iterable<? extends Long> ids);
 
+    @Query("update User u set u.status = team.mephi.adminbot.model.enums.UserStatus.BLOCKED WHERE u.id IN :ids")
+    @Transactional
+    @Modifying
+    void blockAllById(@Param("ids") Iterable<? extends Long> ids);
+
     @Query("SELECT count(u) FROM User u WHERE u.role.name = :role")
     Integer countByRole(String role);
 

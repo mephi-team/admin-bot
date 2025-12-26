@@ -11,6 +11,6 @@ public class Analytics extends VerticalLayout {
     public Analytics() {
         setSizeFull();
 
-        add(new H1("Аналитика"));
+        add(new H1(getTranslation("page_analytics_title")));
     }
 }

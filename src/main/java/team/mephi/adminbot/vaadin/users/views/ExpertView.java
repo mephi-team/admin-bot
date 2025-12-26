@@ -22,8 +22,8 @@ public class ExpertView extends VerticalLayout {
     private List<Long> selectedIds;
 
     public ExpertView(ExpertDataProvider provider, UserActions actions) {
-        var gsa = new GridSelectActions("Выбрано пользователей: ",
-                new Button("Заблокировать пользователей", VaadinIcon.BAN.create(), e -> {
+        var gsa = new GridSelectActions(getTranslation("grid_users_actions_label"),
+                new Button(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), e -> {
                     if (!selectedIds.isEmpty())
                         actions.onDelete(selectedIds);
                 })
@@ -33,14 +33,14 @@ public class ExpertView extends VerticalLayout {
         setPadding(false);
 
         var grid = new Grid<>(UserDto.class, false);
-        grid.addColumn(UserDto::getFullName).setHeader("Фамилия Имя").setSortable(true).setKey("name");
-        grid.addColumn(UserDto::getEmail).setHeader("Email").setSortable(true).setKey("email");
-        grid.addColumn(UserDto::getTgName).setHeader("Telegram").setSortable(true).setKey("telegram");
-        grid.addColumn(UserDto::getCohort).setHeader("Набор").setSortable(true).setKey("cohort");
-        grid.addColumn(UserDto::getDirection).setHeader("Направление").setSortable(true).setKey("direction");
+        grid.addColumn(UserDto::getFullName).setHeader(getTranslation("grid_expert_header_name_label")).setSortable(true).setKey("name");
+        grid.addColumn(UserDto::getEmail).setHeader(getTranslation("grid_expert_header_email_label")).setSortable(true).setKey("email");
+        grid.addColumn(UserDto::getTgName).setHeader(getTranslation("grid_expert_header_telegram_label")).setSortable(true).setKey("telegram");
+        grid.addColumn(UserDto::getCohort).setHeader(getTranslation("grid_expert_header_cohort_label")).setSortable(true).setKey("cohort");
+        grid.addColumn(UserDto::getDirection).setHeader(getTranslation("grid_expert_header_direction_label")).setSortable(true).setKey("direction");
 
         grid.addComponentColumn(item -> {
-            Button dropButton = new Button("Удалить", new Icon(VaadinIcon.CLOSE), e -> System.out.println(item));
+            Button dropButton = new Button(getTranslation("grid_expert_action_delete_label"), new Icon(VaadinIcon.CLOSE), e -> System.out.println(item));
             Button viewButton = new Button(new Icon(VaadinIcon.EYE), e -> actions.onView(item.getId()));
             Button chatButton = new Button(new Icon(VaadinIcon.CHAT), e -> UI.getCurrent().navigate(Dialogs.class, new QueryParameters(Map.of("userId", List.of("" + item.getId())))));
             Button editButton = new Button(new Icon(VaadinIcon.PENCIL), e -> actions.onEdit(item.getId()));
@@ -51,7 +51,7 @@ public class ExpertView extends VerticalLayout {
                 deleteButton.getElement().getStyle().set("color", "black");
             }
             return new Span(dropButton, viewButton, chatButton, editButton, deleteButton);
-        }).setHeader("Действия").setWidth("320px").setFlexGrow(0).setKey("actions");
+        }).setHeader(getTranslation("grid_header_actions_label")).setWidth("320px").setFlexGrow(0).setKey("actions");
 
         grid.setDataProvider(provider.getDataProvider());
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
@@ -61,7 +61,7 @@ public class ExpertView extends VerticalLayout {
             gsa.setCount(selectedIds.size());
         });
 
-        var searchField = new SearchField("Найти эксперта");
+        var searchField = new SearchField(getTranslation("grid_expert_search_placeholder"));
         searchField.addValueChangeListener(e -> provider.getFilterableProvider().setFilter(e.getValue()));
 
         var settingsBtn = new GridSettingsButton();

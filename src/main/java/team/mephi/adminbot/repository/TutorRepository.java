@@ -43,6 +43,11 @@ public interface TutorRepository extends JpaRepository<Tutor, Long> {
     @Modifying
     void deleteAllById(@Param("ids") Iterable<? extends Long> ids);
 
+    @Query("update Tutor t set t.deleted = FUNCTION('NOT', t.deleted) WHERE t.id IN :ids")
+    @Transactional
+    @Modifying
+    void blockAllById(@Param("ids") Iterable<? extends Long> ids);
+
     @Query("SELECT new team.mephi.adminbot.dto.SimpleUser(u.id, 'tutor', u.firstName, u.lastName, u.email, u.tgId) FROM Tutor u WHERE u.id = :id")
     Optional<SimpleUser> findSimpleUserById(@NonNull Long id);
 }

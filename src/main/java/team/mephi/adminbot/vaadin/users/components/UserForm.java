@@ -45,14 +45,14 @@ public class UserForm extends FormLayout {
 
         id.setVisible(false);
         add(id);
-        addFormItem(roles, "Пользователи");
-        addFormItem(firstName, "Имя");
-        addFormItem(lastName, "Фамилия");
-        addFormItem(email, "Email");
-        addFormItem(telegram, "Telegram");
-        addFormItem(phoneNumber, "Телефон");
-        addFormItem(cohorts, "Набор");
-        addFormItem(directions, "Направление");
-        addFormItem(cities, "Город");
+        addFormItem(roles, getTranslation("form_users_roles_label"));
+        addFormItem(firstName, getTranslation("form_users_first_name_label"));
+        addFormItem(lastName, getTranslation("form_users_last_name_label"));
+        addFormItem(email, getTranslation("form_users_email_label"));
+        addFormItem(telegram, getTranslation("form_users_telegram_label"));
+        addFormItem(phoneNumber, getTranslation("form_users_phone_number_label"));
+        addFormItem(cohorts, getTranslation("form_users_cohorts_label"));
+        addFormItem(directions, getTranslation("form_users_directions_label"));
+        addFormItem(cities, getTranslation("form_users_cities_label"));
     }
 }

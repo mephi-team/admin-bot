@@ -10,6 +10,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.QueryParameters;
 import team.mephi.adminbot.dto.TutorWithCounts;
 import team.mephi.adminbot.vaadin.components.*;
+import team.mephi.adminbot.vaadin.users.actions.TutorActions;
 import team.mephi.adminbot.vaadin.users.actions.UserActions;
 import team.mephi.adminbot.vaadin.users.dataproviders.TutorDataProvider;
 import team.mephi.adminbot.vaadin.views.Dialogs;
@@ -21,9 +22,9 @@ import java.util.Set;
 public class TutorView extends VerticalLayout {
     private List<Long> selectedIds;
 
-    public TutorView(TutorDataProvider provider, UserActions actions) {
-        var gsa = new GridSelectActions("Выбрано пользователей: ",
-                new Button("Заблокировать пользователей", VaadinIcon.BAN.create(), e -> {
+    public TutorView(TutorDataProvider provider, TutorActions actions) {
+        var gsa = new GridSelectActions(getTranslation("grid_users_actions_label"),
+                new Button(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), e -> {
                     if (!selectedIds.isEmpty())
                         actions.onDelete(selectedIds);
                 })
@@ -33,27 +34,27 @@ public class TutorView extends VerticalLayout {
         setPadding(false);
 
         var grid = new Grid<>(TutorWithCounts.class, false);
-        grid.addColumn(TutorWithCounts::getFullName).setHeader("Фамилия Имя").setSortable(true).setKey("name");
-        grid.addColumn(TutorWithCounts::getEmail).setHeader("Email").setSortable(true).setKey("email");
-        grid.addColumn(TutorWithCounts::getTgId).setHeader("Telegram").setSortable(true).setKey("telegram");
-        grid.addColumn(TutorWithCounts::getDirections).setHeader("Направление").setSortable(true).setKey("direction");
-        grid.addColumn(TutorWithCounts::getStudentCount).setHeader("Кураторство").setSortable(true).setKey("curatorship");
+        grid.addColumn(TutorWithCounts::getFullName).setHeader(getTranslation("grid_tutor_header_name_label")).setSortable(true).setKey("name");
+        grid.addColumn(TutorWithCounts::getEmail).setHeader(getTranslation("grid_tutor_header_email_label")).setSortable(true).setKey("email");
+        grid.addColumn(TutorWithCounts::getTgId).setHeader(getTranslation("grid_tutor_header_telegram_label")).setSortable(true).setKey("telegram");
+        grid.addColumn(TutorWithCounts::getDirections).setHeader(getTranslation("grid_tutor_header_direction_label")).setSortable(true).setKey("direction");
+        grid.addColumn(TutorWithCounts::getStudentCount).setHeader(getTranslation("grid_tutor_header_curatorship_label")).setSortable(true).setKey("curatorship");
 
         grid.addComponentColumn(item -> {
-            Button dropButton = new Button("Кураторство", e -> System.out.println(item));
+            Button dropButton = new Button(getTranslation("grid_tutor_action_curatorship_label"), e -> actions.onTutoring(item.getId()));
             Button viewButton = new Button(new Icon(VaadinIcon.EYE), e -> actions.onView(item.getId()));
             Button chatButton = new Button(new Icon(VaadinIcon.CHAT), e -> {
                 UI.getCurrent().navigate(Dialogs.class, new QueryParameters(Map.of("userId", List.of("" + item.getId()))));
             });
             Button editButton = new Button(new Icon(VaadinIcon.PENCIL), e -> actions.onEdit(item.getId()));
-            Button deleteButton = new Button(new Icon(VaadinIcon.BAN), e -> actions.onDelete(List.of(item.getId())));
+            Button blockButton = new Button(new Icon(VaadinIcon.BAN), e -> actions.onBlock(List.of(item.getId())));
             if (item.getDelete()) {
-                deleteButton.getElement().getStyle().set("color", "red");
+                blockButton.getElement().getStyle().set("color", "red");
             } else {
-                deleteButton.getElement().getStyle().set("color", "black");
+                blockButton.getElement().getStyle().set("color", "black");
             }
-            return new Span(dropButton, viewButton, chatButton, editButton, deleteButton);
-        }).setHeader("Действия").setWidth("330px").setFlexGrow(0).setKey("actions");
+            return new Span(dropButton, viewButton, chatButton, editButton, blockButton);
+        }).setHeader(getTranslation("grid_header_actions_label")).setWidth("330px").setFlexGrow(0).setKey("actions");
 
         grid.setDataProvider(provider.getDataProvider());
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
@@ -63,7 +64,7 @@ public class TutorView extends VerticalLayout {
             gsa.setCount(selectedIds.size());
         });
 
-        var searchField = new SearchField("Найти куратора");
+        var searchField = new SearchField(getTranslation("grid_tutor_search_placeholder"));
         searchField.addValueChangeListener(e -> provider.getFilterableProvider().setFilter(e.getValue()));
 
         var settingsBtn = new GridSettingsButton();

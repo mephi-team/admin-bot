@@ -81,5 +81,10 @@ public abstract class BaseUserDataProvider implements UserDataProvider {
         userRepository.deleteAllById(ids);
     }
 
+    @Override
+    public void blockAllById(Iterable<Long> ids) {
+        userRepository.blockAllById(ids);
+    }
+
     protected abstract String getRole();
 }

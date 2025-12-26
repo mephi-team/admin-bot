@@ -22,8 +22,8 @@ public class StudentView extends VerticalLayout {
     private List<Long> selectedIds;
 
     public StudentView(StudentDataProvider provider, UserActions actions) {
-        var gsa = new GridSelectActions("Выбрано пользователей: ",
-                new Button("Заблокировать пользователей", VaadinIcon.BAN.create(), e -> {
+        var gsa = new GridSelectActions(getTranslation("grid_users_actions_label"),
+                new Button(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), e -> {
                     if (!selectedIds.isEmpty())
                         actions.onDelete(selectedIds);
                 })
@@ -33,18 +33,18 @@ public class StudentView extends VerticalLayout {
         setPadding(false);
 
         var grid = new Grid<>(UserDto.class, false);
-        grid.addColumn(UserDto::getFullName).setHeader("Фамилия Имя").setSortable(true).setKey("name");
-        grid.addColumn(UserDto::getEmail).setHeader("Email").setSortable(true).setKey("email");
-        grid.addColumn(UserDto::getTgName).setHeader("Telegram").setSortable(true).setKey("telegram");
-        grid.addColumn(UserDto::getPhoneNumber).setHeader("Телефон").setSortable(true).setKey("phone");
-        grid.addColumn(UserDto::getCohort).setHeader("Набор").setSortable(true).setKey("cohort");
-        grid.addColumn(UserDto::getDirection).setHeader("Направление").setSortable(true).setKey("direction");
-        grid.addColumn(UserDto::getCity).setHeader("Город").setSortable(true).setKey("city");
-        grid.addColumn(UserDto::getCity).setHeader("Куратор").setSortable(true).setKey("curator");
+        grid.addColumn(UserDto::getFullName).setHeader(getTranslation("grid_student_header_name_label")).setSortable(true).setKey("name");
+        grid.addColumn(UserDto::getEmail).setHeader(getTranslation("grid_student_header_email_label")).setSortable(true).setKey("email");
+        grid.addColumn(UserDto::getTgName).setHeader(getTranslation("grid_student_header_telegram_label")).setSortable(true).setKey("telegram");
+        grid.addColumn(UserDto::getPhoneNumber).setHeader(getTranslation("grid_student_header_phone_label")).setSortable(true).setKey("phone");
+        grid.addColumn(UserDto::getCohort).setHeader(getTranslation("grid_student_header_cohort_label")).setSortable(true).setKey("cohort");
+        grid.addColumn(UserDto::getDirection).setHeader(getTranslation("grid_student_header_direction_label")).setSortable(true).setKey("direction");
+        grid.addColumn(UserDto::getCity).setHeader(getTranslation("grid_student_header_city_label")).setSortable(true).setKey("city");
+        grid.addColumn(UserDto::getCity).setHeader(getTranslation("grid_student_header_tutor_label")).setSortable(true).setKey("tutor");
 
         grid.addComponentColumn(item -> {
             Span group = new Span();
-            Button dropButton = new Button("Отчислить", new Icon(VaadinIcon.CLOSE), e -> System.out.println(item));
+            Button dropButton = new Button(getTranslation("grid_student_action_drop_label"), new Icon(VaadinIcon.CLOSE), e -> System.out.println(item));
             Button viewButton = new Button(new Icon(VaadinIcon.EYE), e -> actions.onView(item.getId()));
             Button chatButton = new Button(new Icon(VaadinIcon.CHAT), e -> UI.getCurrent().navigate(Dialogs.class, new QueryParameters(Map.of("userId", List.of("" + item.getId())))));
             Button editButton = new Button(new Icon(VaadinIcon.PENCIL), e -> actions.onEdit(item.getId()));
@@ -56,7 +56,7 @@ public class StudentView extends VerticalLayout {
             }
             group.add(dropButton, viewButton, chatButton, editButton, deleteButton);
             return group;
-        }).setHeader("Действия").setWidth("340px").setFlexGrow(0).setKey("actions");
+        }).setHeader(getTranslation("grid_header_actions_label")).setWidth("340px").setFlexGrow(0).setKey("actions");
 
         grid.setDataProvider(provider.getDataProvider());
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
@@ -66,7 +66,7 @@ public class StudentView extends VerticalLayout {
             gsa.setCount(selectedIds.size());
         });
 
-        var searchField = new SearchField("Найти студента");
+        var searchField = new SearchField(getTranslation("grid_student_search_placeholder"));
         searchField.addValueChangeListener(e -> provider.getFilterableProvider().setFilter(e.getValue()));
 
         var settingsBtn = new GridSettingsButton();

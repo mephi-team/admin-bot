@@ -2,6 +2,7 @@ package team.mephi.adminbot.vaadin.users.tabs;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import team.mephi.adminbot.vaadin.CRUDActions;
 import team.mephi.adminbot.vaadin.CRUDDataProvider;
 import team.mephi.adminbot.vaadin.users.actions.UserActions;
 import team.mephi.adminbot.vaadin.users.dataproviders.ExpertDataProvider;
@@ -21,11 +22,11 @@ public class ExpertTabProvider implements UserTabProvider {
 
     @Override
     public String getTabLabel() {
-        return "Эксперты";
+        return "page_users_tab_lc_expert_label";
     }
 
     @Override
-    public Component createTabContent(CRUDDataProvider<?> dataProvider, UserActions actions) {
-        return new ExpertView((ExpertDataProvider) dataProvider, actions);
+    public Component createTabContent(CRUDDataProvider<?> dataProvider, CRUDActions actions) {
+        return new ExpertView((ExpertDataProvider) dataProvider, (UserActions) actions);
     }
 }

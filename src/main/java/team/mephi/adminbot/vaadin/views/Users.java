@@ -16,15 +16,16 @@ import com.vaadin.flow.function.SerializableRunnable;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
 import team.mephi.adminbot.dto.SimpleUser;
+import team.mephi.adminbot.vaadin.CRUDActions;
+import team.mephi.adminbot.vaadin.CRUDPresenter;
 import team.mephi.adminbot.vaadin.components.SimpleConfirmDialog;
 import team.mephi.adminbot.vaadin.components.UserCountBadge;
 import team.mephi.adminbot.vaadin.users.actions.UserActions;
+import team.mephi.adminbot.vaadin.users.components.TutoringDialog;
+import team.mephi.adminbot.vaadin.users.components.TutoringDialogFactory;
 import team.mephi.adminbot.vaadin.users.components.UserEditorDialog;
 import team.mephi.adminbot.vaadin.users.components.UserEditorDialogFactory;
-import team.mephi.adminbot.vaadin.users.service.UserCountService;
-import team.mephi.adminbot.vaadin.users.service.UserViewCallback;
-import team.mephi.adminbot.vaadin.users.service.UsersPresenter;
-import team.mephi.adminbot.vaadin.users.service.UsersPresenterFactory;
+import team.mephi.adminbot.vaadin.users.service.*;
 import team.mephi.adminbot.vaadin.users.tabs.UserTabProvider;
 
 import java.util.*;
@@ -33,13 +34,14 @@ import java.util.*;
 @RolesAllowed("ADMIN")
 public class Users extends VerticalLayout implements UserViewCallback {
     private final UserEditorDialog editorDialog;
+    private final TutoringDialog tutoringDialog;
     private final SimpleConfirmDialog dialogBlock;
     private final SimpleConfirmDialog dialogAccept;
     private final SimpleConfirmDialog dialogReject;
 
     private final TabSheet tabSheet = new TabSheet();
     private final List<String> rolesInOrder = new ArrayList<>();
-    private final Map<String, UserActions> actions = new HashMap<>();
+    private final Map<String, CRUDActions> actions = new HashMap<>();
 
     private static final UserActions NO_OP_ACTIONS = new UserActions() {
         @Override public void onCreate(String role) {}
@@ -48,15 +50,18 @@ public class Users extends VerticalLayout implements UserViewCallback {
         @Override public void onDelete(List<Long> ids) {}
         @Override public void onAccept(List<Long> ids) {}
         @Override public void onReject(List<Long> ids) {}
+        @Override public void onBlock(List<Long> ids) {}
     };
 
     public Users(
             List<UserTabProvider> tabProviders,
-            UsersPresenterFactory presenterFactory, // ← новый фабричный сервис
+            UsersPresenterFactory presenterFactory,
             UserEditorDialogFactory dialogFactory,
-            UserCountService userCountService
+            UserCountService userCountService,
+            TutoringDialogFactory tutoringDialogFactory
     ) {
         this.editorDialog = dialogFactory.create();
+        this.tutoringDialog = tutoringDialogFactory.create();
 
         this.dialogBlock = new SimpleConfirmDialog(
                 "dialog_block_users_title", "dialog_block_users_text", "dialog_block_users_action",
@@ -81,14 +86,68 @@ public class Users extends VerticalLayout implements UserViewCallback {
         for (var provider : tabProviders) {
             var tabId = provider.getTabId();
             var dataProvider = presenterFactory.createDataProvider(tabId);
-            var presenter = new UsersPresenter(dataProvider, this);
+            CRUDPresenter<?> presenter;
+            if (tabId.equals("tutor")) {
+                presenter = new TutorPresenter(dataProvider, new TutorViewCallback() {
+                    @Override
+                    public void setOnSaveCallback(SerializableRunnable callback) {
+                        editorDialog.setOnSaveCallback(callback);
+                    }
+                    @Override
+                    public SimpleUser getEditedItem() {
+                        return editorDialog.getEditedUser();
+                    }
+                    @Override
+                    public void showDialogForView(SimpleUser user) {
+                        editorDialog.openForView(user);
+                    }
+                    @Override
+                    public void showDialogForNew(String role) {
+                        editorDialog.setHeaderTitle("dialog_users_new_title");
+                        editorDialog.openForNew(role);
+                    }
+                    @Override
+                    public void showDialogForEdit(SimpleUser user) {
+                        editorDialog.setHeaderTitle("dialog_users_edit_title");
+                        editorDialog.openForEdit(user);
+                    }
+                    @Override
+                    public void confirmDelete(List<Long> ids, Runnable onConfirm) {
+                        dialogBlock.showForConfirm(ids.size(), onConfirm);
+                    }
+                    @Override
+                    public void showNotificationForNew() {
+                        Notification.show(getTranslation("notification_users_created"), 3000, Notification.Position.TOP_END);
+                    }
+                    @Override
+                    public void showNotificationForEdit(Long id) {
+                        Notification.show(getTranslation("notification_users_created"), 3000, Notification.Position.TOP_END);
+                    }
+                    @Override
+                    public void showNotificationForDelete(List<Long> ids) {
+                        Notification.show(makeNotification("notification_users_blocked", "notification_users_blocked_all", ids.size()), 3000, Notification.Position.TOP_END);
+                    }
+
+                    @Override
+                    public void showDialogForTutoring(SimpleUser user) {
+                        tutoringDialog.openForView(user);
+                    }
+                    @Override
+                    public void showNotificationForTutoring(Long id) {
+                        Notification.show("Test", 3000, Notification.Position.TOP_END);
+                    }
+                });
+            } else {
+                presenter = new UsersPresenter(dataProvider, this);
+            }
+
             var content = provider.createTabContent(dataProvider, presenter);
 
             rolesInOrder.add(tabId);
             actions.put(tabId, presenter);
 
             var userCount = userCountService.getAllCounts().getOrDefault(provider.getTabId(), 0L);
-            Span tabContent = new Span(new Span(provider.getTabLabel()), new UserCountBadge(userCount));
+            Span tabContent = new Span(new Span(getTranslation(provider.getTabLabel())), new UserCountBadge(userCount));
             tabSheet.add(new Tab(tabContent), content, provider.getPosition());
         }
     }
@@ -117,7 +176,7 @@ public class Users extends VerticalLayout implements UserViewCallback {
         return "visitor";
     }
 
-    private UserActions getCurrentAction() {
+    private CRUDActions getCurrentAction() {
         return actions.getOrDefault(getCurrentRole(), NO_OP_ACTIONS);
     }
 
@@ -133,16 +192,19 @@ public class Users extends VerticalLayout implements UserViewCallback {
 
     @Override
     public void showDialogForView(SimpleUser user) {
+        editorDialog.setHeaderTitle("dialog_users_view_title");
         editorDialog.openForView(user);
     }
 
     @Override
     public void showDialogForEdit(SimpleUser user) {
+        editorDialog.setHeaderTitle("dialog_users_edit_title");
         editorDialog.openForEdit(user);
     }
 
     @Override
     public void showDialogForNew(String role) {
+        editorDialog.setHeaderTitle("dialog_users_new_title");
         editorDialog.openForNew(role);
     }
 

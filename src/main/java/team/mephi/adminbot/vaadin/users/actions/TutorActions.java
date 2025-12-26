@@ -4,8 +4,7 @@ import team.mephi.adminbot.vaadin.CRUDActions;
 
 import java.util.List;
 
-public interface UserActions extends CRUDActions {
-    void onAccept(List<Long> ids);
-    void onReject(List<Long> ids);
+public interface TutorActions extends CRUDActions {
     void onBlock(List<Long> ids);
+    void onTutoring(Long id);
 }

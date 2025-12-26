@@ -12,7 +12,7 @@ import java.util.Objects;
 
 public class UserEditorDialog extends Dialog {
     private final BeanValidationBinder<SimpleUser> binder = new BeanValidationBinder<>(SimpleUser.class);
-    private final Button saveButton = new Button("Сохранить", e -> onSave());
+    private final Button saveButton = new Button(getTranslation("save_button"), e -> onSave());
 
     @Setter
     private SerializableRunnable onSaveCallback;
@@ -25,9 +25,9 @@ public class UserEditorDialog extends Dialog {
                 .bind("role");
         binder.bindInstanceFields(form);
 
-        setHeaderTitle("Пользователь");
+        setHeaderTitle(getTranslation("dialog_users_new_title"));
         add(form);
-        getFooter().add(new Button("Отмена", e -> close()), saveButton);
+        getFooter().add(new Button(getTranslation("cancel_button"), e -> close()), saveButton);
 
         binder.addStatusChangeListener(e ->
                 saveButton.setEnabled(e.getBinder().isValid()));
@@ -69,5 +69,10 @@ public class UserEditorDialog extends Dialog {
         SimpleUser user = new SimpleUser();
         binder.writeBeanIfValid(user);
         return user;
+    }
+
+    @Override
+    public void setHeaderTitle(String title) {
+        super.setHeaderTitle(getTranslation(title));
     }
 }
