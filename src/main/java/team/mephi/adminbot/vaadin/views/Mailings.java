@@ -40,7 +40,8 @@ public class Mailings extends VerticalLayout {
 
     private final MailingEditorDialog mailingEditorDialog;
     private final TemplateEditorDialog templateEditorDialog;
-    private final SimpleConfirmDialog dialogDelete;
+    private final SimpleConfirmDialog dialogMailingDelete;
+    private final SimpleConfirmDialog dialogTemplateDelete;
     private final SimpleConfirmDialog dialogCancel;
     private final SimpleConfirmDialog dialogRetry;
 
@@ -61,9 +62,13 @@ public class Mailings extends VerticalLayout {
             TemplateEditorDialogFactory templateDialogFactory,
             MailingCountService mailingCountService
     ) {
-        this.dialogDelete = new SimpleConfirmDialog(
+        this.dialogMailingDelete = new SimpleConfirmDialog(
                 "delete_mailing_title", "delete_mailing_text", "delete_mailing_action",
                 "delete_mailing_all_title", "delete_mailing_all_text"
+        );
+        this.dialogTemplateDelete = new SimpleConfirmDialog(
+                "delete_template_title", "delete_template_text", "delete_template_action",
+                "delete_template_all_title", "delete_template_all_text"
         );
         this.dialogCancel = new SimpleConfirmDialog(
                 "cancel_mailing_title", "cancel_mailing_text", "cancel_mailing_action"
@@ -106,7 +111,7 @@ public class Mailings extends VerticalLayout {
                     }
                     @Override
                     public void confirmDelete(List<Long> ids, Runnable onConfirm) {
-                        dialogDelete.showForConfirm(ids.size(), onConfirm);
+                        dialogTemplateDelete.showForConfirm(ids.size(), onConfirm);
                     }
                     @Override
                     public void showNotificationForNew() {
@@ -174,7 +179,7 @@ public class Mailings extends VerticalLayout {
 
                     @Override
                     public void confirmDelete(List<Long> ids, Runnable onConfirm) {
-                        dialogDelete.showForConfirm(ids.size(), onConfirm);
+                        dialogMailingDelete.showForConfirm(ids.size(), onConfirm);
                     }
                     @Override
                     public void showNotificationForNew() {
