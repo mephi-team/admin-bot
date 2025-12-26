@@ -21,7 +21,7 @@ public class GridSettingsPopover extends Popover {
         setBackdropVisible(true);
         setPosition(PopoverPosition.BOTTOM_END);
 
-        Div heading = new Div("Настройка колонок");
+        Div heading = new Div(getTranslation("grid_settings_popover_header"));
         heading.getStyle().set("font-weight", "600");
         heading.getStyle().set("padding", "var(--lumo-space-xs)");
 
@@ -47,12 +47,12 @@ public class GridSettingsPopover extends Popover {
         defaultColumns.removeAll(exclude);
         group.setValue(defaultColumns);
 
-        Button showAll = new Button("Показать все", (e) -> {
+        Button showAll = new Button(getTranslation("grid_settings_popover_action_show_all"), (e) -> {
             group.setValue(new HashSet<String>(columns));
         });
         showAll.addThemeVariants(ButtonVariant.LUMO_SMALL);
 
-        Button reset = new Button("Сброс", (e) -> {
+        Button reset = new Button(getTranslation("grid_settings_popover_action_reset"), (e) -> {
             group.setValue(defaultColumns);
         });
         reset.addThemeVariants(ButtonVariant.LUMO_SMALL);

@@ -65,3 +65,7 @@ vaadin-button:hover > vaadin-icon {
 a[router-link][highlight] {
     font-weight: bold;
 }
+
+vaadin-tabsheet::part(content) {
+    padding-inline: 0;
+}

@@ -9,11 +9,11 @@ import team.mephi.adminbot.vaadin.views.Questions;
 
 public class LeftMenu extends SideNav {
     public LeftMenu() {
-        var item = new SideNavItem("Диалоги", Dialogs.class, VaadinIcon.DASHBOARD.create());
+        var item = new SideNavItem(getTranslation("left_menu_dialogs_link"), Dialogs.class, VaadinIcon.DASHBOARD.create());
         item.setMatchNested(true);
         addItem(item,
-                new SideNavItem("Рассылки", Mailings.class, VaadinIcon.CART.create()),
-                new SideNavItem("Вопросы", Questions.class, VaadinIcon.USER_HEART.create())
+                new SideNavItem(getTranslation("left_menu_mailing_link"), Mailings.class, VaadinIcon.CART.create()),
+                new SideNavItem(getTranslation("left_menu_question_link"), Questions.class, VaadinIcon.USER_HEART.create())
         );
     }
 }

@@ -22,7 +22,7 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
     private final CallbackDataProvider<MessagesForListDto, Long> provider;
     MessageInput chatInput;
     VirtualList<MessagesForListDto> chatList;
-    Div emptyMessage = new Div("Выберите диалог, чтобы продолжить общение");
+    Div emptyMessage = new Div(getTranslation("page_dialogs_chat_not_selected"));
     ComponentRenderer<Div, MessagesForListDto> cardRenderer = new ComponentRenderer<>(item -> {
         var card = new Div();
         card.getStyle().set("min-height", "50px");
