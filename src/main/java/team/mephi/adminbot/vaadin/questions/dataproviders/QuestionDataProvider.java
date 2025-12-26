@@ -3,14 +3,12 @@ package team.mephi.adminbot.vaadin.questions.dataproviders;
 import com.vaadin.flow.data.provider.CallbackDataProvider;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
-import org.springframework.stereotype.Component;
 import team.mephi.adminbot.dto.UserQuestionDto;
 import team.mephi.adminbot.repository.UserQuestionRepository;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-@Component("question")
 public class QuestionDataProvider {
     private final  UserQuestionRepository questionRepository;
     private ConfigurableFilterDataProvider<UserQuestionDto, Void, String> provider;

@@ -15,6 +15,7 @@ import jakarta.annotation.security.PermitAll;
 import team.mephi.adminbot.dto.UserQuestionDto;
 import team.mephi.adminbot.vaadin.components.*;
 import team.mephi.adminbot.vaadin.questions.dataproviders.QuestionDataProvider;
+import team.mephi.adminbot.vaadin.questions.service.QuestionPresenterFactory;
 
 import java.util.List;
 import java.util.Map;
@@ -28,8 +29,8 @@ public class Questions extends VerticalLayout {
     private final QuestionDataProvider provider;
     private List<Long> selectedIds;
 
-    public Questions(QuestionDataProvider provider) {
-        this.provider = provider;
+    public Questions(QuestionPresenterFactory factory) {
+        this.provider = factory.createDataProvider();
 
         this.dialogDelete = new SimpleConfirmDialog(
                 "dialog_delete_question_title", "dialog_delete_question_text", "dialog_delete_question_action",
