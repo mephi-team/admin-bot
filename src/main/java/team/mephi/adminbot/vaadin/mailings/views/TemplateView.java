@@ -18,8 +18,8 @@ public class TemplateView extends VerticalLayout {
     private List<Long> selectedIds;
 
     public TemplateView(TemplateDataProvider provider, CRUDActions actions) {
-        var gsa = new GridSelectActions("Выбрано шаблонов: ",
-                new Button("Удалить шаблоны", VaadinIcon.TRASH.create(), e -> {
+        var gsa = new GridSelectActions(getTranslation("template_grid_actions_label"),
+                new Button(getTranslation("template_grid_actions_delete_label"), VaadinIcon.TRASH.create(), e -> {
                     if (!selectedIds.isEmpty()) {
                         actions.onDelete(selectedIds);
                     }
@@ -30,8 +30,8 @@ public class TemplateView extends VerticalLayout {
         setPadding(false);
 
         Grid<TemplateListDto> grid = new Grid<>(TemplateListDto.class, false);
-        grid.addColumn(TemplateListDto::getName).setHeader("Название").setSortable(true).setKey("name");
-        grid.addColumn(TemplateListDto::getText).setHeader("Текст").setSortable(true).setKey("text");
+        grid.addColumn(TemplateListDto::getName).setHeader(getTranslation("template_grid_header_name_label")).setSortable(true).setKey("name");
+        grid.addColumn(TemplateListDto::getText).setHeader(getTranslation("template_grid_header_text_label")).setSortable(true).setKey("text");
 
         grid.addComponentColumn(item -> {
             Div group = new Div();
@@ -40,7 +40,7 @@ public class TemplateView extends VerticalLayout {
             Button deleteButton = new Button(new Icon(VaadinIcon.TRASH), e -> actions.onDelete(List.of(item.getId())));
             group.add(editButton, deleteButton);
             return group;
-        }).setHeader("Действия").setWidth("120px").setFlexGrow(0).setKey("action");
+        }).setHeader(getTranslation("grid_header_actions_label")).setWidth("120px").setFlexGrow(0).setKey("actions");
 
         grid.setDataProvider(provider.getDataProvider());
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
@@ -53,7 +53,7 @@ public class TemplateView extends VerticalLayout {
             grid.deselectAll();
         });
 
-        var searchField = new SearchField("Найти шаблон");
+        var searchField = new SearchField(getTranslation("template_grid_search_placeholder"));
         searchField.addValueChangeListener(e -> {
             provider.getFilterableProvider().setFilter(e.getValue());
         });

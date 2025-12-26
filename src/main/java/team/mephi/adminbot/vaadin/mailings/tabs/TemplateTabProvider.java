@@ -21,7 +21,7 @@ public class TemplateTabProvider implements MailingTabProvider {
 
     @Override
     public String getTabLabel() {
-        return "Шаблоны";
+        return "mailing_page_tab_templates_label";
     }
 
     @Override

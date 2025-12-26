@@ -21,7 +21,7 @@ public class SentTabProvider implements  MailingTabProvider {
 
     @Override
     public String getTabLabel() {
-        return "Отправленные";
+        return "mailing_page_tab_sent_label";
     }
 
     @Override

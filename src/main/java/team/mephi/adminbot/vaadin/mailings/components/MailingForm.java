@@ -47,17 +47,17 @@ public class MailingForm extends FormLayout {
         setAutoResponsive(true);
         setLabelsAside(true);
 
-        addFormItem(channels, "Каналы рассылки");
-        addFormItem(users, "Пользователи");
-        addFormItem(cohort, "Набор");
-        addFormItem(direction, "Направление");
-        addFormItem(city, "Город");
-        addFormItem(user, "Пользователь");
+        addFormItem(channels, getTranslation("mailing_form_channels_label"));
+        addFormItem(users, getTranslation("mailing_form_users_label"));
+        addFormItem(cohort, getTranslation("mailing_form_cohort_label"));
+        addFormItem(direction, getTranslation("mailing_form_direction_label"));
+        addFormItem(city, getTranslation("mailing_form_city_label"));
+        addFormItem(user, getTranslation("mailing_form_user_label"));
 
         Accordion accordion = new Accordion();
 
         Span name = new Span("Список выбранных получателей соответствует заданным выше фильтрам");
-        
+
         MultiSelectListBox<String> listBox = new MultiSelectListBox<>();
         listBox.setItems("Test Text 1", "Test Text 2", "Test Text 3");
         listBox.select("Test Text 1", "Test Text 3");

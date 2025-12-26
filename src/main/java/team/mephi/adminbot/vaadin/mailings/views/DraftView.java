@@ -31,8 +31,8 @@ public class DraftView extends VerticalLayout {
     };
 
     public DraftView(DraftDataProvider provider, CRUDActions actions) {
-        var gsa = new GridSelectActions("Выбрано рассылок: ",
-                new Button("Удалить рассылки", VaadinIcon.TRASH.create(), e -> {
+        var gsa = new GridSelectActions(getTranslation("mailing_grid_actions_label"),
+                new Button(getTranslation("mailing_grid_actions_delete_label"), VaadinIcon.TRASH.create(), e -> {
                     if (!selectedIds.isEmpty()) {
                         actions.onDelete(selectedIds);
                     }
@@ -43,14 +43,14 @@ public class DraftView extends VerticalLayout {
         setPadding(false);
 
         Grid<MailingList> grid = new Grid<>(MailingList.class, false);
-        grid.addColumn(MailingList::getDate).setHeader("Дата").setSortable(true).setKey("date");
-        grid.addColumn(MailingList::getUsers).setHeader("Пользователи").setSortable(true).setKey("users");
-        grid.addColumn(MailingList::getCohort).setHeader("Набор").setSortable(true).setKey("cohort");
-        grid.addColumn(MailingList::getDirection).setHeader("Направление").setSortable(true).setKey("direction");
-        grid.addColumn(MailingList::getCurator).setHeader("Куратор").setSortable(true).setKey("curator");
-        grid.addColumn(MailingList::getCity).setHeader("Город").setSortable(true).setKey("city");
-        grid.addColumn(MailingList::getText).setHeader("Текст сообщения").setSortable(true).setKey("text");
-        grid.addColumn(createStatusComponentRenderer()).setHeader("Статус").setSortable(true).setKey("status");
+        grid.addColumn(MailingList::getDate).setHeader(getTranslation("mailing_grid_header_date_label")).setSortable(true).setKey("date");
+        grid.addColumn(MailingList::getUsers).setHeader(getTranslation("mailing_grid_header_users_label")).setSortable(true).setKey("users");
+        grid.addColumn(MailingList::getCohort).setHeader(getTranslation("mailing_grid_header_cohort_label")).setSortable(true).setKey("cohort");
+        grid.addColumn(MailingList::getDirection).setHeader(getTranslation("mailing_grid_header_direction_label")).setSortable(true).setKey("direction");
+        grid.addColumn(MailingList::getCurator).setHeader(getTranslation("mailing_grid_header_curator_label")).setSortable(true).setKey("curator");
+        grid.addColumn(MailingList::getCity).setHeader(getTranslation("mailing_grid_header_city_label")).setSortable(true).setKey("city");
+        grid.addColumn(MailingList::getText).setHeader(getTranslation("mailing_grid_header_text_label")).setSortable(true).setKey("text");
+        grid.addColumn(createStatusComponentRenderer()).setHeader(getTranslation("mailing_grid_header_status_label")).setSortable(true).setKey("status");
 
         grid.addComponentColumn(item -> {
             Div group = new Div();
@@ -59,7 +59,7 @@ public class DraftView extends VerticalLayout {
             Button deleteButton = new Button(new Icon(VaadinIcon.TRASH), e -> actions.onDelete(List.of(item.getId())));
             group.add(editButton, deleteButton);
             return group;
-        }).setHeader("Действия").setWidth("120px").setFlexGrow(0).setKey("action");
+        }).setHeader(getTranslation("grid_header_actions_label")).setWidth("120px").setFlexGrow(0).setKey("actions");
 
         grid.setDataProvider(provider.getDataProvider());
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
@@ -72,7 +72,7 @@ public class DraftView extends VerticalLayout {
             grid.deselectAll();
         });
 
-        var searchField = new SearchField("Найти черновик");
+        var searchField = new SearchField(getTranslation("mailing_grid_search_placeholder"));
         searchField.addValueChangeListener(e -> {
             provider.getFilterableProvider().setFilter(e.getValue());
         });

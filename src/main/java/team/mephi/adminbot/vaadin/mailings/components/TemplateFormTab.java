@@ -38,11 +38,11 @@ public class TemplateFormTab extends FormLayout {
 
         addFormItem(radioGroup, "Сообщение");
         FormItem templateItem = addFormItem(templates, "Шаблон");
-        FormItem textItem = addFormItem(text, "Текст сообщения");
+        FormItem textItem = addFormItem(text, getTranslation("template_form_name_label"));
         FormItem createLinkItem = addFormItem(createLink, "Создать встречу");
         FormItem linkItem = addFormItem(link, "Ссылка на встречу");
         FormItem saveItem = addFormItem(saveTemplate, "Сохранить как новый шаблон");
-        FormItem nameItem = addFormItem(name, "Название");
+        FormItem nameItem = addFormItem(name, getTranslation("template_form_name_label"));
 
         templateItem.setVisible(false);
         nameItem.setVisible(false);
