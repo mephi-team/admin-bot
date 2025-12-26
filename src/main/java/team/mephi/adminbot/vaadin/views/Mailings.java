@@ -36,7 +36,7 @@ import java.util.*;
 @RolesAllowed("ADMIN")
 public class Mailings extends VerticalLayout {
     private final TabSheet tabSheet = new TabSheet();
-    private final Button primaryButton = new Button(getTranslation("create_mailing_button"), new Icon(VaadinIcon.PLUS));
+    private final Button primaryButton = new Button(getTranslation("page_create_mailing_button"), new Icon(VaadinIcon.PLUS));
 
     private final MailingEditorDialog mailingEditorDialog;
     private final TemplateEditorDialog templateEditorDialog;
@@ -63,18 +63,18 @@ public class Mailings extends VerticalLayout {
             MailingCountService mailingCountService
     ) {
         this.dialogMailingDelete = new SimpleConfirmDialog(
-                "delete_mailing_title", "delete_mailing_text", "delete_mailing_action",
-                "delete_mailing_all_title", "delete_mailing_all_text"
+                "dialog_delete_mailing_title", "dialog_delete_mailing_text", "dialog_delete_mailing_action",
+                "dialog_delete_mailing_all_title", "dialog_delete_mailing_all_text"
         );
         this.dialogTemplateDelete = new SimpleConfirmDialog(
-                "delete_template_title", "delete_template_text", "delete_template_action",
-                "delete_template_all_title", "delete_template_all_text"
+                "dialog_delete_template_title", "dialog_delete_template_text", "dialog_delete_template_action",
+                "dialog_delete_template_all_title", "dialog_delete_template_all_text"
         );
         this.dialogCancel = new SimpleConfirmDialog(
-                "cancel_mailing_title", "cancel_mailing_text", "cancel_mailing_action"
+                "dialog_cancel_mailing_title", "dialog_cancel_mailing_text", "dialog_cancel_mailing_action"
         );
         this.dialogRetry = new SimpleConfirmDialog(
-                "retry_mailing_title", "retry_mailing_text", "retry_mailing_action"
+                "dialog_retry_mailing_title", "dialog_retry_mailing_text", "dialog_retry_mailing_action"
         );
         this.mailingEditorDialog = mailingDialogFactory.create();
         this.templateEditorDialog = templateDialogFactory.create();
@@ -101,12 +101,12 @@ public class Mailings extends VerticalLayout {
                     }
                     @Override
                     public void showDialogForEdit(SimpleTemplate mailing) {
-                        templateEditorDialog.setHeaderTitle("template_edit_title");
+                        templateEditorDialog.setHeaderTitle("dialog_template_edit_title");
                         templateEditorDialog.showDialogForEdit(mailing);
                     }
                     @Override
                     public void showDialogForNew(String role) {
-                        templateEditorDialog.setHeaderTitle("template_new_title");
+                        templateEditorDialog.setHeaderTitle("dialog_template_new_title");
                         templateEditorDialog.showDialogForNew();
                     }
                     @Override
@@ -115,17 +115,17 @@ public class Mailings extends VerticalLayout {
                     }
                     @Override
                     public void showNotificationForNew() {
-                        Notification.show(getTranslation("mailing_created"), 3000, Notification.Position.TOP_END);
+                        Notification.show(getTranslation("notification_mailing_created"), 3000, Notification.Position.TOP_END);
                     }
                     @Override
                     public void showNotificationForEdit(Long id) {
-                        Notification.show(getTranslation("mailing_saved"), 3000, Notification.Position.TOP_END);
+                        Notification.show(getTranslation("notification_mailing_saved"), 3000, Notification.Position.TOP_END);
                     }
                     @Override
                     public void showNotificationForDelete(List<Long> ids) {
-                        String message = getTranslation("delete_message");
+                        String message = getTranslation("notification_template_delete");
                         if (ids.size() > 1) {
-                            message = getTranslation("delete_all_message", ids.size());
+                            message = getTranslation("notification_template_delete_all", ids.size());
                         }
                         Notification.show(message, 3000, Notification.Position.TOP_END);
                     }
@@ -144,12 +144,12 @@ public class Mailings extends VerticalLayout {
 
                     @Override
                     public void showNotificationForCancel(Long id) {
-                        Notification.show(getTranslation("cancel_message"), 3000, Notification.Position.TOP_END);
+                        Notification.show(getTranslation("notification_mailing_cancel"), 3000, Notification.Position.TOP_END);
                     }
 
                     @Override
                     public void showNotificationForRetry(Long id) {
-                        Notification.show(getTranslation("retry_message"), 3000, Notification.Position.TOP_END);
+                        Notification.show(getTranslation("notification_mailing_retry"), 3000, Notification.Position.TOP_END);
                     }
 
                     @Override
@@ -168,12 +168,12 @@ public class Mailings extends VerticalLayout {
 
                     @Override
                     public void showDialogForEdit(SimpleMailing mailing) {
-                        mailingEditorDialog.setHeaderTitle("mailing_edit_title");
+                        mailingEditorDialog.setHeaderTitle("dialog_mailing_edit_title");
                         mailingEditorDialog.showDialogForEdit(mailing);
                     }
                     @Override
                     public void showDialogForNew(String role) {
-                        mailingEditorDialog.setHeaderTitle("mailing_new_title");
+                        mailingEditorDialog.setHeaderTitle("dialog_mailing_new_title");
                         mailingEditorDialog.showDialogForNew();
                     }
 
@@ -183,17 +183,17 @@ public class Mailings extends VerticalLayout {
                     }
                     @Override
                     public void showNotificationForNew() {
-                        Notification.show(getTranslation("mailing_created"), 3000, Notification.Position.TOP_END);
+                        Notification.show(getTranslation("notification_mailing_created"), 3000, Notification.Position.TOP_END);
                     }
                     @Override
                     public void showNotificationForEdit(Long id) {
-                        Notification.show(getTranslation("mailing_saved"), 3000, Notification.Position.TOP_END);
+                        Notification.show(getTranslation("notification_mailing_saved"), 3000, Notification.Position.TOP_END);
                     }
                     @Override
                     public void showNotificationForDelete(List<Long> ids) {
-                        String message = getTranslation("delete_message");
+                        String message = getTranslation("notification_mailing_delete");
                         if (ids.size() > 1) {
-                            message = getTranslation("delete_all_message", ids.size());
+                            message = getTranslation("notification_mailing_delete_all", ids.size());
                         }
                         Notification.show(message, 3000, Notification.Position.TOP_END);
                     }
@@ -210,9 +210,9 @@ public class Mailings extends VerticalLayout {
         }
         tabSheet.addSelectedChangeListener(a -> {
            if (tabSheet.getSelectedIndex() == 1) {
-               primaryButton.setText(getTranslation("create_template_button"));
+               primaryButton.setText(getTranslation("page_create_template_button"));
            } else {
-               primaryButton.setText(getTranslation("create_mailing_button"));
+               primaryButton.setText(getTranslation("page_create_mailing_button"));
            }
         });
     }
@@ -220,7 +220,7 @@ public class Mailings extends VerticalLayout {
     private HorizontalLayout createHeader() {
         HorizontalLayout top = new HorizontalLayout();
         top.setWidthFull();
-        top.addToStart(new H1(getTranslation("mailing_page_title")));
+        top.addToStart(new H1(getTranslation("page_mailing_title")));
 
         primaryButton.addClickListener(e -> {
             getCurrentAction().onCreate(getCurrentRole());

@@ -15,7 +15,7 @@ public class TemplateForm extends FormLayout {
         setAutoResponsive(true);
         setLabelsAside(true);
 
-        addFormItem(name, getTranslation("template_form_name_label"));
-        addFormItem(text, getTranslation("template_form_text_label"));
+        addFormItem(name, getTranslation("form_template_name_label"));
+        addFormItem(text, getTranslation("form_template_text_label"));
     }
 }

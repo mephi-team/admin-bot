@@ -18,8 +18,8 @@ public class TemplateView extends VerticalLayout {
     private List<Long> selectedIds;
 
     public TemplateView(TemplateDataProvider provider, CRUDActions actions) {
-        var gsa = new GridSelectActions(getTranslation("template_grid_actions_label"),
-                new Button(getTranslation("template_grid_actions_delete_label"), VaadinIcon.TRASH.create(), e -> {
+        var gsa = new GridSelectActions(getTranslation("grid_template_actions_label"),
+                new Button(getTranslation("grid_template_actions_delete_label"), VaadinIcon.TRASH.create(), e -> {
                     if (!selectedIds.isEmpty()) {
                         actions.onDelete(selectedIds);
                     }
@@ -30,8 +30,8 @@ public class TemplateView extends VerticalLayout {
         setPadding(false);
 
         Grid<TemplateListDto> grid = new Grid<>(TemplateListDto.class, false);
-        grid.addColumn(TemplateListDto::getName).setHeader(getTranslation("template_grid_header_name_label")).setSortable(true).setKey("name");
-        grid.addColumn(TemplateListDto::getText).setHeader(getTranslation("template_grid_header_text_label")).setSortable(true).setKey("text");
+        grid.addColumn(TemplateListDto::getName).setHeader(getTranslation("grid_template_header_name_label")).setSortable(true).setKey("name");
+        grid.addColumn(TemplateListDto::getText).setHeader(getTranslation("grid_template_header_text_label")).setSortable(true).setKey("text");
 
         grid.addComponentColumn(item -> {
             Div group = new Div();
@@ -53,7 +53,7 @@ public class TemplateView extends VerticalLayout {
             grid.deselectAll();
         });
 
-        var searchField = new SearchField(getTranslation("template_grid_search_placeholder"));
+        var searchField = new SearchField(getTranslation("grid_template_search_placeholder"));
         searchField.addValueChangeListener(e -> {
             provider.getFilterableProvider().setFilter(e.getValue());
         });

@@ -31,8 +31,8 @@ public class SentView extends VerticalLayout {
     };
 
     public SentView(SentDataProvider provider, MailingActions actions) {
-        var gsa = new GridSelectActions(getTranslation("mailing_grid_actions_label"),
-                new Button(getTranslation("mailing_grid_actions_delete_label"), VaadinIcon.TRASH.create(), e -> {
+        var gsa = new GridSelectActions(getTranslation("grid_mailing_actions_label"),
+                new Button(getTranslation("grid_mailing_actions_delete_label"), VaadinIcon.TRASH.create(), e -> {
                     if (!selectedIds.isEmpty()) {
                         actions.onDelete(selectedIds);
                     }
@@ -43,14 +43,14 @@ public class SentView extends VerticalLayout {
         setPadding(false);
 
         Grid<MailingList> grid = new Grid<>(MailingList.class, false);
-        grid.addColumn(MailingList::getDate).setHeader(getTranslation("mailing_grid_header_date_label")).setSortable(true).setKey("date");
-        grid.addColumn(MailingList::getUsers).setHeader(getTranslation("mailing_grid_header_users_label")).setSortable(true).setKey("users");
-        grid.addColumn(MailingList::getCohort).setHeader(getTranslation("mailing_grid_header_cohort_label")).setSortable(true).setKey("cohort");
-        grid.addColumn(MailingList::getDirection).setHeader(getTranslation("mailing_grid_header_direction_label")).setSortable(true).setKey("direction");
-        grid.addColumn(MailingList::getCurator).setHeader(getTranslation("mailing_grid_header_curator_label")).setSortable(true).setKey("curator");
-        grid.addColumn(MailingList::getCity).setHeader(getTranslation("mailing_grid_header_city_label")).setSortable(true).setKey("city");
-        grid.addColumn(MailingList::getText).setHeader(getTranslation("mailing_grid_header_text_label")).setSortable(true).setKey("text");
-        grid.addColumn(createStatusComponentRenderer()).setHeader(getTranslation("mailing_grid_header_status_label")).setSortable(true).setKey("status");
+        grid.addColumn(MailingList::getDate).setHeader(getTranslation("grid_mailing_header_date_label")).setSortable(true).setKey("date");
+        grid.addColumn(MailingList::getUsers).setHeader(getTranslation("grid_mailing_header_users_label")).setSortable(true).setKey("users");
+        grid.addColumn(MailingList::getCohort).setHeader(getTranslation("grid_mailing_header_cohort_label")).setSortable(true).setKey("cohort");
+        grid.addColumn(MailingList::getDirection).setHeader(getTranslation("grid_mailing_header_direction_label")).setSortable(true).setKey("direction");
+        grid.addColumn(MailingList::getCurator).setHeader(getTranslation("grid_mailing_header_curator_label")).setSortable(true).setKey("curator");
+        grid.addColumn(MailingList::getCity).setHeader(getTranslation("grid_mailing_header_city_label")).setSortable(true).setKey("city");
+        grid.addColumn(MailingList::getText).setHeader(getTranslation("grid_mailing_header_text_label")).setSortable(true).setKey("text");
+        grid.addColumn(createStatusComponentRenderer()).setHeader(getTranslation("grid_mailing_header_status_label")).setSortable(true).setKey("status");
 
         grid.addComponentColumn(item -> {
             Div group = new Div();
@@ -75,7 +75,7 @@ public class SentView extends VerticalLayout {
             grid.deselectAll();
         });
 
-        var searchField = new SearchField(getTranslation("mailing_grid_search_placeholder"));
+        var searchField = new SearchField(getTranslation("grid_mailing_search_placeholder"));
         searchField.addValueChangeListener(e -> {
             provider.getFilterableProvider().setFilter(e.getValue());
         });

@@ -37,10 +37,10 @@ public class MailingEditorDialog extends Dialog {
         binder.bindInstanceFields(form1);
         binder.bindInstanceFields(form2);
 
-        tab1 = tabSheet.add(getTranslation("mailing_dialog_tab_recipients"), form1);
-        tab2 = tabSheet.add(getTranslation("mailing_dialog_tab_message"), form2);
+        tab1 = tabSheet.add(getTranslation("dialog_mailing_tab_recipients"), form1);
+        tab2 = tabSheet.add(getTranslation("dialog_mailing_tab_message"), form2);
 
-        setHeaderTitle("mailing_new_title");
+        setHeaderTitle("dialog_mailing_new_title");
         add(tabSheet);
 
         saveButton.setVisible(false);

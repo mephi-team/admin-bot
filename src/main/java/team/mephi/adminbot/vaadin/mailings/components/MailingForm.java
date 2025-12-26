@@ -47,12 +47,12 @@ public class MailingForm extends FormLayout {
         setAutoResponsive(true);
         setLabelsAside(true);
 
-        addFormItem(channels, getTranslation("mailing_form_channels_label"));
-        addFormItem(users, getTranslation("mailing_form_users_label"));
-        addFormItem(cohort, getTranslation("mailing_form_cohort_label"));
-        addFormItem(direction, getTranslation("mailing_form_direction_label"));
-        addFormItem(city, getTranslation("mailing_form_city_label"));
-        addFormItem(user, getTranslation("mailing_form_user_label"));
+        addFormItem(channels, getTranslation("form_mailing_channels_label"));
+        addFormItem(users, getTranslation("form_mailing_users_label"));
+        addFormItem(cohort, getTranslation("form_mailing_cohort_label"));
+        addFormItem(direction, getTranslation("form_mailing_direction_label"));
+        addFormItem(city, getTranslation("form_mailing_city_label"));
+        addFormItem(user, getTranslation("form_mailing_user_label"));
 
         Accordion accordion = new Accordion();
 

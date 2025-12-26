@@ -23,14 +23,6 @@ import java.util.Set;
 @Route(value = "/questions", layout = DialogsLayout.class)
 @PermitAll
 public class Questions extends VerticalLayout {
-    private static final String DELETE_TITLE = "Удалить вопрос?";
-    private static final String DELETE_TEXT = "Вы действительно хотите удалить вопрос?";
-    private static final String DELETE_ALL_TITLE = "Удалить вопросы?";
-    private static final String DELETE_ALL_TEXT = "Вы действительно хотите удалить %d вопросов?";
-    private static final String DELETE_ACTION = "Удалить";
-    private static final String DELETE_MESSAGE = "Вопрос удален";
-    private static final String DELETE_ALL_MESSAGE = "Удалено %d вопросов";
-
     private final SimpleConfirmDialog dialogDelete;
 
     private final QuestionDataProvider provider;
@@ -40,14 +32,14 @@ public class Questions extends VerticalLayout {
         this.provider = provider;
 
         this.dialogDelete = new SimpleConfirmDialog(
-                DELETE_TITLE, DELETE_TEXT, DELETE_ACTION,
-                DELETE_ALL_TITLE, DELETE_ALL_TEXT
+                "dialog_delete_question_title", "dialog_delete_question_text", "dialog_delete_question_action",
+                "dialog_delete_question_all_title", "dialog_delete_question_all_text"
         );
 
-        add(new H1("Вопросы"));
+        add(new H1(getTranslation("page_question_title")));
 
-        var gsa = new GridSelectActions("Выбрано вопросов: ",
-                new Button("Удалить вопросы", VaadinIcon.TRASH.create(), e -> {
+        var gsa = new GridSelectActions(getTranslation("grid_question_actions_label"),
+                new Button(getTranslation("grid_question_actions_delete_label"), VaadinIcon.TRASH.create(), e -> {
                     if (!selectedIds.isEmpty()) {
                         onDelete(selectedIds);
                     }
@@ -58,21 +50,21 @@ public class Questions extends VerticalLayout {
 
         Grid<UserQuestionDto> grid = new Grid<>(UserQuestionDto.class, false);
 
-        grid.addColumn(UserQuestionDto::getQuestion).setHeader("Вопрос").setSortable(true).setKey("question");
-        grid.addColumn(UserQuestionDto::getDate).setHeader("Дата").setSortable(true).setKey("date");
-        grid.addColumn(UserQuestionDto::getUser).setHeader("Автор").setSortable(true).setKey("author");
-        grid.addColumn(UserQuestionDto::getRole).setHeader("Роль").setSortable(true).setKey("role");
-        grid.addColumn(UserQuestionDto::getDirection).setHeader("Направление").setSortable(true).setKey("direction");
-        grid.addColumn(UserQuestionDto::getAnswer).setHeader("Ответ").setSortable(true).setKey("answer");
+        grid.addColumn(UserQuestionDto::getQuestion).setHeader(getTranslation("grid_question_header_question_label")).setSortable(true).setKey("question");
+        grid.addColumn(UserQuestionDto::getDate).setHeader(getTranslation("grid_question_header_date_label")).setSortable(true).setKey("date");
+        grid.addColumn(UserQuestionDto::getUser).setHeader(getTranslation("grid_question_header_author_label")).setSortable(true).setKey("author");
+        grid.addColumn(UserQuestionDto::getRole).setHeader(getTranslation("grid_question_header_role_label")).setSortable(true).setKey("role");
+        grid.addColumn(UserQuestionDto::getDirection).setHeader(getTranslation("grid_question_header_direction_label")).setSortable(true).setKey("direction");
+        grid.addColumn(UserQuestionDto::getAnswer).setHeader(getTranslation("grid_question_header_answer_label")).setSortable(true).setKey("answer");
 
         grid.addComponentColumn(item -> {
             Span group = new Span();
-            Button responseButton = new Button("Ответить",e -> System.out.println(item));
+            Button responseButton = new Button(getTranslation("grid_question_action_answer_label"), e -> System.out.println(item));
             Button chatButton = new Button(new Icon(VaadinIcon.CHAT),e -> UI.getCurrent().navigate(Dialogs.class, new QueryParameters(Map.of("userId", List.of("" + item.getId())))));
             Button deleteButton = new Button(new Icon(VaadinIcon.TRASH), e -> onDelete(List.of(item.getId())));
             group.add(responseButton, chatButton, deleteButton);
             return group;
-        }).setHeader("Действия").setWidth("220px").setFlexGrow(0).setKey("action");
+        }).setHeader(getTranslation("grid_header_actions_label")).setWidth("220px").setFlexGrow(0).setKey("actions");
 
         grid.setDataProvider(provider.getDataProvider());
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
@@ -85,7 +77,7 @@ public class Questions extends VerticalLayout {
             grid.deselectAll();
         });
 
-        var searchField = new SearchField("Найти вопрос");
+        var searchField = new SearchField(getTranslation("grid_question_search_placeholder"));
         searchField.addValueChangeListener(e -> provider.getFilterableProvider().setFilter(e.getValue()));
 
         var settingsBtn = new GridSettingsButton();
@@ -100,9 +92,9 @@ public class Questions extends VerticalLayout {
             provider.deleteAllById(selectedIds);
             provider.refresh();
             if (selectedIds.size() > 1) {
-                Notification.show(String.format(DELETE_ALL_MESSAGE, selectedIds.size()), 3000, Notification.Position.TOP_END);
+                Notification.show(getTranslation("notification_question_delete_all", selectedIds.size()), 3000, Notification.Position.TOP_END);
             } else {
-                Notification.show(DELETE_MESSAGE, 3000, Notification.Position.TOP_END);
+                Notification.show(getTranslation("notification_question_delete"), 3000, Notification.Position.TOP_END);
             }
         });
     }

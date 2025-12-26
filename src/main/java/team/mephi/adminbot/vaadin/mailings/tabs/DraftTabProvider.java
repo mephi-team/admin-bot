@@ -16,7 +16,7 @@ public class DraftTabProvider implements MailingTabProvider {
 
     @Override
     public String getTabLabel() {
-        return "mailing_page_tab_draft_label";
+        return "page_mailing_tab_draft_label";
     }
 
     @Override

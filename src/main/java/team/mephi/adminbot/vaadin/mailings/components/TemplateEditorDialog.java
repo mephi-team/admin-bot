@@ -19,7 +19,7 @@ public class TemplateEditorDialog extends Dialog {
 
         binder.bindInstanceFields(form);
 
-        setHeaderTitle("template_new_title");
+        setHeaderTitle("dialog_template_new_title");
         add(form);
         getFooter().add(saveButton);
     }
