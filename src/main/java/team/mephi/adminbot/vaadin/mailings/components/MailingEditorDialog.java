@@ -16,12 +16,12 @@ import java.util.Objects;
 
 public class MailingEditorDialog extends Dialog {
     private final BeanValidationBinder<SimpleMailing> binder = new BeanValidationBinder<>(SimpleMailing.class);
-    private final Button saveButton = new Button("Сохранить", e -> onSave());
+    private final Button saveButton = new Button(getTranslation("save_button"), e -> onSave());
     private final TabSheet tabSheet = new TabSheet();
     private final Tab tab1;
     private final Tab tab2;
-    private final Button next = new Button("Далее", VaadinIcon.ARROW_RIGHT.create());
-    private final Button prev = new Button("Назад", VaadinIcon.ARROW_LEFT.create());
+    private final Button next = new Button(getTranslation("next_button"), VaadinIcon.ARROW_RIGHT.create());
+    private final Button prev = new Button(getTranslation("prev_button"), VaadinIcon.ARROW_LEFT.create());
 
     @Setter
     private SerializableRunnable onSaveCallback;
@@ -37,10 +37,10 @@ public class MailingEditorDialog extends Dialog {
         binder.bindInstanceFields(form1);
         binder.bindInstanceFields(form2);
 
-        tab1 = tabSheet.add("Получатели", form1);
-        tab2 = tabSheet.add("Сообщение", form2);
+        tab1 = tabSheet.add(getTranslation("mailing_dialog_tab_recipients"), form1);
+        tab2 = tabSheet.add(getTranslation("mailing_dialog_tab_message"), form2);
 
-        setHeaderTitle("Создание рассылки");
+        setHeaderTitle("mailing_new_title");
         add(tabSheet);
 
         saveButton.setVisible(false);
@@ -108,5 +108,10 @@ public class MailingEditorDialog extends Dialog {
         SimpleMailing mailing = new SimpleMailing();
         binder.writeBeanIfValid(mailing);
         return mailing;
+    }
+
+    @Override
+    public void setHeaderTitle(String title) {
+        super.setHeaderTitle(getTranslation(title));
     }
 }

@@ -164,10 +164,12 @@ public class Mailings extends VerticalLayout {
 
                     @Override
                     public void showDialogForEdit(SimpleMailing mailing) {
+                        mailingEditorDialog.setHeaderTitle("mailing_edit_title");
                         mailingEditorDialog.showDialogForEdit(mailing);
                     }
                     @Override
                     public void showDialogForNew(String role) {
+                        mailingEditorDialog.setHeaderTitle("mailing_new_title");
                         mailingEditorDialog.showDialogForNew();
                     }
 
@@ -214,7 +216,7 @@ public class Mailings extends VerticalLayout {
     private HorizontalLayout createHeader() {
         HorizontalLayout top = new HorizontalLayout();
         top.setWidthFull();
-        top.addToStart(new H1("Рассылки"));
+        top.addToStart(new H1(getTranslation("mailing_page_title")));
 
         primaryButton.addClickListener(e -> {
             getCurrentAction().onCreate(getCurrentRole());
