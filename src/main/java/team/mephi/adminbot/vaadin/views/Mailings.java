@@ -83,9 +83,9 @@ public class Mailings extends VerticalLayout {
         for (var provider : tabProviders) {
             var tabId = provider.getTabId();
             CRUDPresenter<?> presenter;
+            MailingDataProvider<?> dataProvider =  presenterFactory.createDataProvider(tabId);
             if (tabId.equals("templates")) {
-                CRUDDataProvider<SimpleTemplate> dataProvider = (CRUDDataProvider<SimpleTemplate>) presenterFactory.createDataProvider(tabId);
-                presenter = new CRUDPresenter<>(dataProvider, new CRUDViewCallbackBase<>() {
+                presenter = new CRUDPresenter<>((MailingDataProvider<SimpleTemplate>)dataProvider, new CRUDViewCallbackBase<>() {
                     @Override
                     public void setOnSaveCallback(SerializableRunnable callback) {
                         templateEditorDialog.setOnSaveCallback(callback);
@@ -126,8 +126,7 @@ public class Mailings extends VerticalLayout {
                     }
                 });
             } else {
-                MailingDataProvider<SimpleMailing> dataProvider = (MailingDataProvider<SimpleMailing>) presenterFactory.createDataProvider(tabId);
-                presenter = new MailingsPresenter(dataProvider, new MailingViewCallback() {
+                presenter = new MailingsPresenter((MailingDataProvider<SimpleMailing>) dataProvider, new MailingViewCallback() {
                     @Override
                     public void confirmCancel(Long id, Runnable onConfirm) {
                         dialogCancel.showForConfirm(1, onConfirm);
@@ -195,7 +194,7 @@ public class Mailings extends VerticalLayout {
                     }
                 });
             }
-            var content = provider.createTabContent(presenter);
+            var content = provider.createTabContent(dataProvider, presenter);
 
             rolesInOrder.add(tabId);
             actions.put(tabId, presenter);

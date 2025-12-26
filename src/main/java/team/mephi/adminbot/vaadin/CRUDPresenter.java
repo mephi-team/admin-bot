@@ -18,7 +18,7 @@ public class CRUDPresenter<T> implements CRUDActions {
             T newMailing = view.getEditedItem();
             if (newMailing != null) {
                 dataProvider.save(newMailing);
-                dataProvider.refresh();
+                dataProvider.getDataProvider().refreshAll();
                 view.showNotificationForNew();
             }
         });
@@ -37,7 +37,7 @@ public class CRUDPresenter<T> implements CRUDActions {
                 T editedItem = view.getEditedItem();
                 if (editedItem != null) {
                     dataProvider.save(editedItem);
-                    dataProvider.refresh();
+                    dataProvider.getDataProvider().refreshAll();
                     view.showNotificationForEdit(id);
                 }
             });
@@ -48,7 +48,7 @@ public class CRUDPresenter<T> implements CRUDActions {
     public void onDelete(List<Long> ids) {
         view.confirmDelete(ids, () -> {
             dataProvider.deleteAllById(ids);
-            dataProvider.refresh();
+            dataProvider.getDataProvider().refreshAll();
             view.showNotificationForDelete(ids);
         });
     }

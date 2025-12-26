@@ -92,12 +92,5 @@ public abstract class BaseMailingDataProvider implements MailingDataProvider<Sim
         mailingRepository.deleteAllById(ids);
     }
 
-    @Override
-    public void refresh() {
-        if (provider != null) {
-            provider.refreshAll();
-        }
-    }
-
     protected abstract List<MailingStatus> getStatuses();
 }

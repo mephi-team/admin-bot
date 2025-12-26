@@ -9,5 +9,4 @@ public interface CRUDDataProvider<T> {
     Optional<T> findById(Long id);
     T save(T item);
     void deleteAllById(Iterable<Long> ids);
-    void refresh();
 }

@@ -64,11 +64,4 @@ public class TutorDataProvider implements UserDataProvider {
     public void deleteAllById(Iterable<Long> ids) {
         tutorRepository.deleteAllById(ids);
     }
-
-    @Override
-    public void refresh() {
-        if (provider != null) {
-            provider.refreshAll();
-        }
-    }
 }

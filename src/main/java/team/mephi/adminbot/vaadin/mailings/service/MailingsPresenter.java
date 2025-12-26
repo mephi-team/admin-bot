@@ -21,7 +21,7 @@ public class MailingsPresenter extends CRUDPresenter<SimpleMailing> implements M
             var edit = dataProvider.findById(id).orElseThrow();
             edit.setStatus("FINISHED");
             dataProvider.save(edit);
-            dataProvider.refresh();
+            dataProvider.getDataProvider().refreshAll();
             view.showNotificationForCancel(id);
         });
     }
@@ -32,7 +32,7 @@ public class MailingsPresenter extends CRUDPresenter<SimpleMailing> implements M
             var edit = dataProvider.findById(id).orElseThrow();
             edit.setStatus("ACTIVE");
             dataProvider.save(edit);
-            dataProvider.refresh();
+            dataProvider.getDataProvider().refreshAll();
             view.showNotificationForRetry(id);
         });
     }

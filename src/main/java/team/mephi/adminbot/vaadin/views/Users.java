@@ -117,7 +117,7 @@ public class Users extends VerticalLayout implements UserViewCallback {
             var tabId = provider.getTabId();
             var dataProvider = presenterFactory.createDataProvider(tabId);
             var presenter = new UsersPresenter(dataProvider, this);
-            var content = provider.createTabContent(presenter);
+            var content = provider.createTabContent(dataProvider, presenter);
 
             rolesInOrder.add(tabId);
             actions.put(tabId, presenter);

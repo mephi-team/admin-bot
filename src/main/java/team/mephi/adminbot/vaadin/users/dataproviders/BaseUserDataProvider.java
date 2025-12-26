@@ -81,12 +81,5 @@ public abstract class BaseUserDataProvider implements UserDataProvider {
         userRepository.deleteAllById(ids);
     }
 
-    @Override
-    public void refresh() {
-        if (provider != null) {
-            provider.refreshAll();
-        }
-    }
-
     protected abstract String getRole();
 }

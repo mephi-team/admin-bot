@@ -1,13 +1,11 @@
 package team.mephi.adminbot.vaadin.mailings.dataproviders;
 
-import org.springframework.stereotype.Component;
 import team.mephi.adminbot.model.enums.MailingStatus;
 import team.mephi.adminbot.repository.MailingRepository;
 import team.mephi.adminbot.repository.UserRepository;
 
 import java.util.List;
 
-@Component("draft")
 public class DraftDataProvider extends BaseMailingDataProvider {
 
     public DraftDataProvider(MailingRepository mailingRepository, UserRepository userRepository) {

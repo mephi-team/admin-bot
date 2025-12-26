@@ -2,18 +2,15 @@ package team.mephi.adminbot.vaadin.mailings.tabs;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import com.vaadin.flow.spring.annotation.UIScope;
 import team.mephi.adminbot.vaadin.CRUDActions;
+import team.mephi.adminbot.vaadin.CRUDDataProvider;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.TemplateDataProvider;
 import team.mephi.adminbot.vaadin.mailings.views.TemplateView;
 
 @SpringComponent
+@UIScope
 public class TemplateTabProvider implements MailingTabProvider {
-    private final TemplateDataProvider templateDataProvider;
-
-    public TemplateTabProvider(TemplateDataProvider templateDataProvider) {
-        this.templateDataProvider = templateDataProvider;
-    }
-
     @Override
     public String getTabId() {
         return "templates";
@@ -25,8 +22,8 @@ public class TemplateTabProvider implements MailingTabProvider {
     }
 
     @Override
-    public Component createTabContent(CRUDActions actions) {
-        return new TemplateView(templateDataProvider, actions);
+    public Component createTabContent(CRUDDataProvider<?> templateDataProvider, CRUDActions actions) {
+        return new TemplateView((TemplateDataProvider) templateDataProvider, actions);
     }
 
     @Override

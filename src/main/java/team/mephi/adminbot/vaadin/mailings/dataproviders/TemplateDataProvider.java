@@ -3,7 +3,6 @@ package team.mephi.adminbot.vaadin.mailings.dataproviders;
 import com.vaadin.flow.data.provider.CallbackDataProvider;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
-import org.springframework.stereotype.Component;
 import team.mephi.adminbot.dto.SimpleTemplate;
 import team.mephi.adminbot.dto.TemplateListDto;
 import team.mephi.adminbot.model.MailTemplate;
@@ -11,7 +10,6 @@ import team.mephi.adminbot.repository.MailTemplateRepository;
 
 import java.util.Optional;
 
-@Component("templates")
 public class TemplateDataProvider implements MailingDataProvider<SimpleTemplate> {
     private final MailTemplateRepository mailTemplateRepository;
     private ConfigurableFilterDataProvider<TemplateListDto, Void, String> provider;
@@ -67,12 +65,5 @@ public class TemplateDataProvider implements MailingDataProvider<SimpleTemplate>
     @Override
     public void deleteAllById(Iterable<Long> ids) {
         mailTemplateRepository.deleteAllById(ids);
-    }
-
-    @Override
-    public void refresh() {
-        if (provider != null) {
-            provider.refreshAll();
-        }
     }
 }

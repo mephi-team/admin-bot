@@ -41,8 +41,7 @@ public class Questions extends VerticalLayout {
 
         this.dialogDelete = new SimpleConfirmDialog(
                 DELETE_TITLE, DELETE_TEXT, DELETE_ACTION,
-                DELETE_ALL_TITLE, DELETE_ALL_TEXT,
-                null
+                DELETE_ALL_TITLE, DELETE_ALL_TEXT
         );
 
         add(new H1("Вопросы"));
