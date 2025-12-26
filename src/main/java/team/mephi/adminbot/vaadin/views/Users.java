@@ -32,38 +32,6 @@ import java.util.*;
 @Route("/users")
 @RolesAllowed("ADMIN")
 public class Users extends VerticalLayout implements UserViewCallback {
-    private static final String BLOCK_TITLE = "Блокировать пользователя?";
-    private static final String BLOCK_TEXT = "Вы действительно хотите заблокировать пользователя?";
-    private static final String BLOCK_ALL_TITLE = "Блокировать пользователей?";
-    private static final String BLOCK_ALL_TEXT = "Вы действительно хотите заблокировать %d пользователей?";
-    private static final String BLOCK_ACTION = "Блокировать";
-
-    private static final String ACCEPT_TITLE = "Утвердить кандидата?";
-    private static final String ACCEPT_TEXT = "Вы действительно хотите утвердить кандидата?";
-    private static final String ACCEPT_ALL_TITLE = "Утвердить кандидатов?";
-    private static final String ACCEPT_ALL_TEXT = "Вы действительно хотите утвердить %d кандидатов?";
-    private static final String ACCEPT_ACTION = "Утвердить";
-
-    private static final String REJECT_TITLE = "Отклонить кандидата?";
-    private static final String REJECT_TEXT = "Вы действительно хотите отклонить кандидата?";
-    private static final String REJECT_ALL_TITLE = "Отклонить кандидатов?";
-    private static final String REJECT_ALL_TEXT = "Вы действительно хотите отклонить %d кандидатов?";
-    private static final String REJECT_ACTION = "Отклонить";
-
-    // --- Константы текстов ---
-    private static final String BLOCK_MESSAGE = "Пользователь заблокирован";
-    private static final String BLOCK_ALL_MESSAGE = "Заблокировано %d пользователей";
-
-    private static final String ACCEPT_MESSAGE = "Информация о приеме отправлена";
-    private static final String ACCEPT_ALL_MESSAGE = "Информация о приеме отправлена %d кандидатам";
-
-    private static final String REJECT_MESSAGE = "Информация об отказе отправлена кандидату";
-    private static final String REJECT_ALL_MESSAGE = "Информация об отказе отправлена %d кандидатам";
-
-    private static final String USER_CREATED = "Пользователь добавлен";
-    private static final String USER_SAVED = "Пользователь сохранён";
-
-
     private final UserEditorDialog editorDialog;
     private final SimpleConfirmDialog dialogBlock;
     private final SimpleConfirmDialog dialogAccept;
@@ -91,19 +59,16 @@ public class Users extends VerticalLayout implements UserViewCallback {
         this.editorDialog = dialogFactory.create();
 
         this.dialogBlock = new SimpleConfirmDialog(
-                BLOCK_TITLE, BLOCK_TEXT, BLOCK_ACTION,
-                BLOCK_ALL_TITLE, BLOCK_ALL_TEXT,
-                null
+                "dialog_block_users_title", "dialog_block_users_text", "dialog_block_users_action",
+                "dialog_block_users_all_title", "dialog_block_users_all_text"
         );
         this.dialogAccept = new SimpleConfirmDialog(
-                ACCEPT_TITLE, ACCEPT_TEXT, ACCEPT_ACTION,
-                ACCEPT_ALL_TITLE, ACCEPT_ALL_TEXT,
-                null
+                "dialog_accept_users_title", "dialog_accept_users_text", "dialog_accept_users_action",
+                "dialog_accept_users_all_title", "dialog_accept_users_all_text"
         );
         this.dialogReject = new SimpleConfirmDialog(
-                REJECT_TITLE, REJECT_TEXT, REJECT_ACTION,
-                REJECT_ALL_TITLE, REJECT_ALL_TEXT,
-                null
+                "dialog_reject_users_title", "dialog_reject_users_text", "dialog_reject_users_action",
+                "dialog_reject_users_all_title", "dialog_reject_users_all_text"
         );
 
         setSizeFull();
@@ -131,13 +96,13 @@ public class Users extends VerticalLayout implements UserViewCallback {
     private HorizontalLayout createHeader() {
         HorizontalLayout top = new HorizontalLayout();
         top.setWidthFull();
-        top.addToStart(new H1("Пользователи"));
+        top.addToStart(new H1(getTranslation("page_users_title")));
 
-        var primaryButton = new Button("Добавить пользователя", new Icon(VaadinIcon.PLUS), e -> {
+        var primaryButton = new Button(getTranslation("page_users_create_user_button"), new Icon(VaadinIcon.PLUS), e -> {
             getCurrentAction().onCreate(getCurrentRole());
         });
         primaryButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        Div buttons = new Div(new Button("Загрузить из файла", new Icon(VaadinIcon.FILE_ADD)), primaryButton);
+        Div buttons = new Div(new Button(getTranslation("page_users_create_from_file_button"), new Icon(VaadinIcon.FILE_ADD)), primaryButton);
         buttons.getElement().getStyle().set("display", "flex");
         buttons.getElement().getStyle().set("gap", "24px");
         top.addToEnd(buttons);
@@ -188,17 +153,17 @@ public class Users extends VerticalLayout implements UserViewCallback {
 
     @Override
     public void showNotificationForNew() {
-        Notification.show(USER_CREATED, 3000, Notification.Position.TOP_END);
+        Notification.show("notification_users_created", 3000, Notification.Position.TOP_END);
     }
 
     @Override
     public void showNotificationForEdit(Long id) {
-        Notification.show(USER_SAVED, 3000, Notification.Position.TOP_END);
+        Notification.show("notification_users_saved", 3000, Notification.Position.TOP_END);
     }
 
     @Override
     public void showNotificationForDelete(List<Long> ids) {
-        Notification.show(makeNotification(BLOCK_MESSAGE, BLOCK_ALL_MESSAGE, ids.size()), 3000, Notification.Position.TOP_END);
+        Notification.show(makeNotification("notification_users_blocked", "notification_users_blocked_all", ids.size()), 3000, Notification.Position.TOP_END);
     }
 
     @Override
@@ -213,18 +178,18 @@ public class Users extends VerticalLayout implements UserViewCallback {
 
     @Override
     public void showNotificationForAccept(List<Long> ids) {
-        Notification.show(makeNotification(ACCEPT_MESSAGE, ACCEPT_ALL_MESSAGE, ids.size()), 3000, Notification.Position.TOP_END);
+        Notification.show(makeNotification("notification_users_accepted", "notification_users_accepted_all", ids.size()), 3000, Notification.Position.TOP_END);
     }
 
     @Override
     public void showNotificationForReject(List<Long> ids) {
-        Notification.show(makeNotification(REJECT_MESSAGE, REJECT_ALL_MESSAGE, ids.size()), 3000, Notification.Position.TOP_END);
+        Notification.show(makeNotification("notification_users_rejected", "notification_users_rejected_all", ids.size()), 3000, Notification.Position.TOP_END);
     }
 
     private String makeNotification(String single, String plural, int count) {
         if (count > 1) {
-            return String.format(plural, count);
+            return getTranslation(plural, count);
         }
-        return single;
+        return getTranslation(single);
     }
 }

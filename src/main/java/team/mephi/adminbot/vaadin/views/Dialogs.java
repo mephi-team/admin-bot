@@ -32,7 +32,7 @@ public class Dialogs extends VerticalLayout implements BeforeEnterObserver {
         SplitLayout contentLayout = new SplitLayout(leftColumn, rightColumn);
         contentLayout.setSizeFull();
 
-        add(new H1("Диалоги"), contentLayout);
+        add(new H1(getTranslation("page_dialogs_title")), contentLayout);
     }
 
     @Override

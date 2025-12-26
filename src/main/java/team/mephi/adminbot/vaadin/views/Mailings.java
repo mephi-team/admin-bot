@@ -36,7 +36,7 @@ import java.util.*;
 @RolesAllowed("ADMIN")
 public class Mailings extends VerticalLayout {
     private final TabSheet tabSheet = new TabSheet();
-    private final Button primaryButton = new Button(getTranslation("page_create_mailing_button"), new Icon(VaadinIcon.PLUS));
+    private final Button primaryButton = new Button(getTranslation("page_mailing_create_mailing_button"), new Icon(VaadinIcon.PLUS));
 
     private final MailingEditorDialog mailingEditorDialog;
     private final TemplateEditorDialog templateEditorDialog;
@@ -210,9 +210,9 @@ public class Mailings extends VerticalLayout {
         }
         tabSheet.addSelectedChangeListener(a -> {
            if (tabSheet.getSelectedIndex() == 1) {
-               primaryButton.setText(getTranslation("page_create_template_button"));
+               primaryButton.setText(getTranslation("page_mailing_create_template_button"));
            } else {
-               primaryButton.setText(getTranslation("page_create_mailing_button"));
+               primaryButton.setText(getTranslation("page_mailing_create_mailing_button"));
            }
         });
     }

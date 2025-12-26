@@ -108,7 +108,7 @@ public class DialogListComponent extends VerticalLayout implements AfterNavigati
         setHeightFull();
         setPadding(false);
 
-        final TextField searchField = new SearchField("Найти вопрос");
+        final TextField searchField = new SearchField(getTranslation("page_dialogs_search_label"));
         searchField.setWidth("100%");
 
         provider = getProvider(dialogRepository, searchField);
