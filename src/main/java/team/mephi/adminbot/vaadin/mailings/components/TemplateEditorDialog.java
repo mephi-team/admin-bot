@@ -9,7 +9,7 @@ import team.mephi.adminbot.dto.SimpleTemplate;
 
 public class TemplateEditorDialog extends Dialog {
     private final BeanValidationBinder<SimpleTemplate> binder = new BeanValidationBinder<>(SimpleTemplate.class);
-    private final Button saveButton = new Button("Сохранить", e -> onSave());
+    private final Button saveButton = new Button(getTranslation("save_button"), e -> onSave());
 
     @Setter
     private SerializableRunnable onSaveCallback;
@@ -52,5 +52,10 @@ public class TemplateEditorDialog extends Dialog {
             }
             close();
         }
+    }
+
+    @Override
+    public void setHeaderTitle(String title) {
+        super.setHeaderTitle(getTranslation(title));
     }
 }

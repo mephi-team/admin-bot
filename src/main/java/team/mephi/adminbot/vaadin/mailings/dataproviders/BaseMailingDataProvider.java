@@ -77,7 +77,11 @@ public abstract class BaseMailingDataProvider implements MailingDataProvider<Sim
         result.setDescription(mailing.getText());
         result.setCreatedBy(user);
         result.setFilters(Filters.builder().direction(mailing.getDirection()).curator(user.getUserName()).city(mailing.getCity()).users(mailing.getUsers()).cohort(mailing.getCohort()).build());
-        result.setStatus(MailingStatus.valueOf(mailing.getStatus()));
+        if (mailing.getStatus() == null) {
+            result.setStatus(MailingStatus.DRAFT);
+        } else {
+            result.setStatus(MailingStatus.valueOf(mailing.getStatus()));
+        }
         result.setChannels(mailing.getChannels().stream().map(Channels::valueOf).toList());
         mailingRepository.save(result);
         return new SimpleMailing(result.getId(), result.getName(), result.getDescription(), result.getStatus().name(), result.getCreatedBy().getId(), result.getChannels().stream().map(Enum::name).collect(Collectors.toSet()), result.getFilters().getUsers(), result.getFilters().getCohort(), result.getFilters().getDirection(), result.getFilters().getCity());

@@ -35,19 +35,8 @@ import java.util.*;
 @Route(value = "/mailings", layout = DialogsLayout.class)
 @RolesAllowed("ADMIN")
 public class Mailings extends VerticalLayout {
-    private static final String DELETE_TITLE = "Удалить рассылку?";
-    private static final String DELETE_TEXT = "Вы действительно хотите удалить рассылку?";
-    private static final String DELETE_ALL_TITLE = "Удалить рассылки?";
-    private static final String DELETE_ALL_TEXT = "Вы действительно хотите удалить %d рассылок?";
-    private static final String DELETE_ACTION = "Удалить";
-
-    private static final String MAILING_CREATED = "Рассылка сохранена";
-    private static final String MAILING_SAVED = "Рассылка сохранена";
-    private static final String DELETE_MESSAGE = "Рассылка удалена";
-    private static final String DELETE_ALL_MESSAGE = "Удалено %d рассылок";
-
     private final TabSheet tabSheet = new TabSheet();
-    private final Button primaryButton = new Button("Новая рассылка", new Icon(VaadinIcon.PLUS));
+    private final Button primaryButton = new Button(getTranslation("create_mailing_button"), new Icon(VaadinIcon.PLUS));
 
     private final MailingEditorDialog mailingEditorDialog;
     private final TemplateEditorDialog templateEditorDialog;
@@ -73,17 +62,14 @@ public class Mailings extends VerticalLayout {
             MailingCountService mailingCountService
     ) {
         this.dialogDelete = new SimpleConfirmDialog(
-                DELETE_TITLE, DELETE_TEXT, DELETE_ACTION,
-                DELETE_ALL_TITLE, DELETE_ALL_TEXT,
-                null
+                "delete_mailing_title", "delete_mailing_text", "delete_mailing_action",
+                "delete_mailing_all_title", "delete_mailing_all_text"
         );
         this.dialogCancel = new SimpleConfirmDialog(
-                "Отменить рассылку?", "Рассылка будет отменена",
-                "Отменить", "", "", null
+                "cancel_mailing_title", "cancel_mailing_text", "cancel_mailing_action"
         );
         this.dialogRetry = new SimpleConfirmDialog(
-                "Возобновить рассылку?", "Рассылка будет возобновлена",
-                "Возобновить", "", "", null
+                "retry_mailing_title", "retry_mailing_text", "retry_mailing_action"
         );
         this.mailingEditorDialog = mailingDialogFactory.create();
         this.templateEditorDialog = templateDialogFactory.create();
@@ -110,12 +96,12 @@ public class Mailings extends VerticalLayout {
                     }
                     @Override
                     public void showDialogForEdit(SimpleTemplate mailing) {
-                        templateEditorDialog.setHeaderTitle("Редактировать шаблон");
+                        templateEditorDialog.setHeaderTitle("template_edit_title");
                         templateEditorDialog.showDialogForEdit(mailing);
                     }
                     @Override
                     public void showDialogForNew(String role) {
-                        templateEditorDialog.setHeaderTitle("Создать шаблон");
+                        templateEditorDialog.setHeaderTitle("template_new_title");
                         templateEditorDialog.showDialogForNew();
                     }
                     @Override
@@ -124,17 +110,17 @@ public class Mailings extends VerticalLayout {
                     }
                     @Override
                     public void showNotificationForNew() {
-                        Notification.show(MAILING_CREATED, 3000, Notification.Position.TOP_END);
+                        Notification.show(getTranslation("mailing_created"), 3000, Notification.Position.TOP_END);
                     }
                     @Override
                     public void showNotificationForEdit(Long id) {
-                        Notification.show(MAILING_SAVED, 3000, Notification.Position.TOP_END);
+                        Notification.show(getTranslation("mailing_saved"), 3000, Notification.Position.TOP_END);
                     }
                     @Override
                     public void showNotificationForDelete(List<Long> ids) {
-                        String message = DELETE_MESSAGE;
+                        String message = getTranslation("delete_message");
                         if (ids.size() > 1) {
-                            message = String.format(DELETE_ALL_MESSAGE, ids.size());
+                            message = getTranslation("delete_all_message", ids.size());
                         }
                         Notification.show(message, 3000, Notification.Position.TOP_END);
                     }
@@ -154,12 +140,12 @@ public class Mailings extends VerticalLayout {
 
                     @Override
                     public void showNotificationForCancel(Long id) {
-                        Notification.show("Отменено!", 3000, Notification.Position.TOP_END);
+                        Notification.show(getTranslation("cancel_message"), 3000, Notification.Position.TOP_END);
                     }
 
                     @Override
                     public void showNotificationForRetry(Long id) {
-                        Notification.show("Повтор!", 3000, Notification.Position.TOP_END);
+                        Notification.show(getTranslation("retry_message"), 3000, Notification.Position.TOP_END);
                     }
 
                     @Override
@@ -191,17 +177,17 @@ public class Mailings extends VerticalLayout {
                     }
                     @Override
                     public void showNotificationForNew() {
-                        Notification.show(MAILING_CREATED, 3000, Notification.Position.TOP_END);
+                        Notification.show(getTranslation("mailing_created"), 3000, Notification.Position.TOP_END);
                     }
                     @Override
                     public void showNotificationForEdit(Long id) {
-                        Notification.show(MAILING_SAVED, 3000, Notification.Position.TOP_END);
+                        Notification.show(getTranslation("mailing_saved"), 3000, Notification.Position.TOP_END);
                     }
                     @Override
                     public void showNotificationForDelete(List<Long> ids) {
-                        String message = DELETE_MESSAGE;
+                        String message = getTranslation("delete_message");
                         if (ids.size() > 1) {
-                            message = String.format(DELETE_ALL_MESSAGE, ids.size());
+                            message = getTranslation("delete_all_message", ids.size());
                         }
                         Notification.show(message, 3000, Notification.Position.TOP_END);
                     }
@@ -218,9 +204,9 @@ public class Mailings extends VerticalLayout {
         }
         tabSheet.addSelectedChangeListener(a -> {
            if (tabSheet.getSelectedIndex() == 1) {
-               primaryButton.setText("Создать шаблон");
+               primaryButton.setText(getTranslation("create_template_button"));
            } else {
-               primaryButton.setText("Создать рассылку");
+               primaryButton.setText(getTranslation("create_mailing_button"));
            }
         });
     }

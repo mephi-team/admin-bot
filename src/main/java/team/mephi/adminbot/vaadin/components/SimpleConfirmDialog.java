@@ -13,6 +13,14 @@ public class SimpleConfirmDialog extends ConfirmDialog {
     @Setter
     private Runnable onConfirm;
 
+    public SimpleConfirmDialog(String title, String text, String action) {
+        this(title, text, action, "", "", null);
+    }
+
+    public SimpleConfirmDialog(String title, String text, String action, String titleAll, String textAll) {
+        this(title, text, action, titleAll, textAll, null);
+    }
+
     public SimpleConfirmDialog(String title, String text, String action, String titleAll, String textAll, Runnable onConfirm) {
         this.header = title;
         this.text = text;
@@ -20,12 +28,12 @@ public class SimpleConfirmDialog extends ConfirmDialog {
         this.textAll = textAll;
         this.onConfirm = onConfirm;
 
-        setHeader(title);
-        setText(text);
-        setConfirmText(action);
+        setHeader(getTranslation(title));
+        setText(getTranslation(text));
+        setConfirmText(getTranslation(action));
 
         setCancelable(true);
-        setCancelText("Отмена");
+        setCancelText(getTranslation("cancel_button"));
         addCancelListener(event -> {
             close();
         });
@@ -37,11 +45,11 @@ public class SimpleConfirmDialog extends ConfirmDialog {
 
     public void showForConfirm(int count, Runnable onConfirm) {
         if (count > 1) {
-            setHeader(this.headerAll);
-            setText(String.format(textAll, count));
+            setHeader(getTranslation(this.headerAll));
+            setText(getTranslation(textAll, count));
         } else {
-            setHeader(this.header);
-            setText(this.text);
+            setHeader(getTranslation(this.header));
+            setText(getTranslation(this.text));
         }
         this.onConfirm = onConfirm;
         open();
