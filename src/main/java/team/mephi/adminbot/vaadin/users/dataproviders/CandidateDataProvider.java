@@ -1,10 +1,8 @@
 package team.mephi.adminbot.vaadin.users.dataproviders;
 
-import org.springframework.stereotype.Component;
 import team.mephi.adminbot.repository.RoleRepository;
 import team.mephi.adminbot.repository.UserRepository;
 
-@Component("candidate")
 public class CandidateDataProvider extends BaseUserDataProvider {
 
     public CandidateDataProvider(UserRepository userRepository, RoleRepository roleRepository) {

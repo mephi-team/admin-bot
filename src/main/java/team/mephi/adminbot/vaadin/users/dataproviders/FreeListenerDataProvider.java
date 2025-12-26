@@ -1,10 +1,8 @@
 package team.mephi.adminbot.vaadin.users.dataproviders;
 
-import org.springframework.stereotype.Component;
 import team.mephi.adminbot.repository.RoleRepository;
 import team.mephi.adminbot.repository.UserRepository;
 
-@Component("free_listener")
 public class FreeListenerDataProvider extends BaseUserDataProvider {
 
     public FreeListenerDataProvider(UserRepository userRepository, RoleRepository roleRepository) {

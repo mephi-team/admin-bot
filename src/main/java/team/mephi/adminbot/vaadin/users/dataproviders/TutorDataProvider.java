@@ -3,7 +3,6 @@ package team.mephi.adminbot.vaadin.users.dataproviders;
 import com.vaadin.flow.data.provider.CallbackDataProvider;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.provider.DataProvider;
-import org.springframework.stereotype.Component;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.dto.TutorWithCounts;
 import team.mephi.adminbot.model.Tutor;
@@ -11,7 +10,6 @@ import team.mephi.adminbot.repository.TutorRepository;
 
 import java.util.Optional;
 
-@Component("tutor")
 public class TutorDataProvider implements UserDataProvider {
 
     private final TutorRepository tutorRepository;

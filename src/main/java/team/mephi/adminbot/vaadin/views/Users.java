@@ -153,12 +153,12 @@ public class Users extends VerticalLayout implements UserViewCallback {
 
     @Override
     public void showNotificationForNew() {
-        Notification.show("notification_users_created", 3000, Notification.Position.TOP_END);
+        Notification.show(getTranslation("notification_users_created"), 3000, Notification.Position.TOP_END);
     }
 
     @Override
     public void showNotificationForEdit(Long id) {
-        Notification.show("notification_users_saved", 3000, Notification.Position.TOP_END);
+        Notification.show(getTranslation("notification_users_saved"), 3000, Notification.Position.TOP_END);
     }
 
     @Override
