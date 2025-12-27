@@ -89,7 +89,7 @@ public class QuestionDataProvider {
 
     public void saveAnswer(Long question, String user, String text) {
         var answer = UserAnswer.builder()
-                .status(AnswerStatus.SENT)
+                .status(answerRepository.countByQuestionId(question) == 0 ? AnswerStatus.SENT : AnswerStatus.UPDATED)
                 .answeredAt(Instant.now())
                 .answeredBy(userRepository.findByEmail(user).orElseThrow())
                 .question(questionRepository.findByIdWithDeps(question).orElseThrow())
