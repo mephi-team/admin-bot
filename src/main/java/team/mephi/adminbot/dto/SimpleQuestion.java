@@ -1,5 +1,6 @@
 package team.mephi.adminbot.dto;
 
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,5 +14,6 @@ public class SimpleQuestion {
     String role;
     String direction;
     String text;
+    @NotEmpty
     String answer;
 }

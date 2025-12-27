@@ -17,10 +17,10 @@ public class AnswerForm extends FormLayout {
         setLabelsAside(true);
         setExpandFields(true);
 
-        addFormItem(author, getTranslation("dialog_answer_author_label"));
-        addFormItem(role, getTranslation("dialog_answer_role_label"));
-        addFormItem(direction, getTranslation("dialog_answer_direction_label"));
-        addFormItem(text, getTranslation("dialog_answer_text_label"));
+        addFormItem(author, getTranslation("dialog_answer_author_label")).setEnabled(false);
+        addFormItem(role, getTranslation("dialog_answer_role_label")).setEnabled(false);
+        addFormItem(direction, getTranslation("dialog_answer_direction_label")).setEnabled(false);
+        addFormItem(text, getTranslation("dialog_answer_text_label")).setEnabled(false);
 
         add(new H4(getTranslation("dialog_answer_text_title")));
         add(answer);
