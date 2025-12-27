@@ -8,6 +8,7 @@ import team.mephi.adminbot.model.Dialog;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface DialogRepository extends JpaRepository<Dialog, Long> {
@@ -48,19 +49,19 @@ public interface DialogRepository extends JpaRepository<Dialog, Long> {
                 ORDER BY dialog_id, created_at DESC
             ) m ON m.dialog_id = d.id
             LEFT JOIN users s ON m.sender_id = s.id
-            WHERE LOWER(u.user_name) LIKE LOWER(CONCAT('%', :query, '%'))
+            WHERE LOWER(u.user_name) LIKE LOWER(CONCAT('%', :query, '%')) AND (:user IS NULL OR u.id = :user)
             ORDER BY d.last_message_at DESC
             """, nativeQuery = true)
-    List<DialogWithLastMessageDto> findDialogsWithLastMessageNative(String query);
+    List<DialogWithLastMessageDto> findDialogsWithLastMessageNative(String query, Optional<Long> user);
 
     @Query(value = """
             SELECT 
                 count(1)
             FROM dialogs d
             JOIN users u ON d.user_id = u.id
-            WHERE LOWER(u.user_name) LIKE LOWER(CONCAT('%', :query, '%'))
+            WHERE LOWER(u.user_name) LIKE LOWER(CONCAT('%', :query, '%')) AND (:user IS NULL OR u.id = :user)
             """, nativeQuery = true)
-    Integer countDialogsWithLastMessageNative(String query);
+    Integer countDialogsWithLastMessageNative(String query, Optional<Long> user);
 
     @Query("SELECT sum(d.unreadCount) FROM Dialog d")
     Integer unreadCount();

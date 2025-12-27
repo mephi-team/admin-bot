@@ -55,6 +55,7 @@ public class QuestionDataProvider {
                                                 .question(u.getText())
                                                 .date(LocalDateTime.ofInstant(u.getCreatedAt(), ZoneId.of("UTC")))
                                                 .user(u.getUser().getUserName())
+                                                .userId(u.getUser().getId())
                                                 .role(u.getRole())
                                                 .direction(u.getDirection() != null ? u.getDirection().getName() : "")
                                                 .answer(u.getAnswers().isEmpty() ? "" : u.getAnswers().stream().sorted(Comparator.comparingLong(UserAnswer::getId)).toList().getLast().getAnswerText())

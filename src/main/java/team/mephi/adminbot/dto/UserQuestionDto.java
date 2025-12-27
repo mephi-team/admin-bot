@@ -11,6 +11,7 @@ public class UserQuestionDto {
     Long id;
     String question;
     LocalDateTime date;
+    Long userId;
     String user;
     String role;
     String direction;

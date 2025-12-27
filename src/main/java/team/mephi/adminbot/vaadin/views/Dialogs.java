@@ -3,8 +3,6 @@ package team.mephi.adminbot.vaadin.views;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.splitlayout.SplitLayout;
-import com.vaadin.flow.router.BeforeEnterEvent;
-import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
 import team.mephi.adminbot.repository.DialogRepository;
@@ -14,7 +12,7 @@ import team.mephi.adminbot.vaadin.components.DialogListComponent;
 
 @Route(value = "/dialogs/:dialogId?", layout = DialogsLayout.class)
 @RolesAllowed("ADMIN")
-public class Dialogs extends VerticalLayout implements BeforeEnterObserver {
+public class Dialogs extends VerticalLayout {
 
     public Dialogs(DialogRepository dialogRepository, MessageRepository messageRepository) {
         setSizeFull();
@@ -33,10 +31,5 @@ public class Dialogs extends VerticalLayout implements BeforeEnterObserver {
         contentLayout.setSizeFull();
 
         add(new H1(getTranslation("page_dialogs_title")), contentLayout);
-    }
-
-    @Override
-    public void beforeEnter(BeforeEnterEvent event) {
-        System.out.println("!!! q = " + event.getLocation().getQueryParameters());
     }
 }
