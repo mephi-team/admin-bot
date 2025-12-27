@@ -35,14 +35,14 @@ public class StudentView extends VerticalLayout {
 
         var grid = new Grid<>(UserDto.class, false);
         grid.addColumn(UserDto::getFullName).setHeader(getTranslation("grid_student_header_name_label")).setSortable(true).setFrozen(true)
-                .setAutoWidth(true).setFlexGrow(0).setKey("name");
+                .setAutoWidth(true).setFlexGrow(0).setKey("lastName");
         grid.addColumn(UserDto::getEmail).setHeader(getTranslation("grid_student_header_email_label")).setSortable(true).setKey("email");
-        grid.addColumn(UserDto::getTgName).setHeader(getTranslation("grid_student_header_telegram_label")).setSortable(true).setKey("telegram");
-        grid.addColumn(UserDto::getPhoneNumber).setHeader(getTranslation("grid_student_header_phone_label")).setSortable(true).setKey("phone");
+        grid.addColumn(UserDto::getTgName).setHeader(getTranslation("grid_student_header_telegram_label")).setSortable(true).setKey("tgName");
+        grid.addColumn(UserDto::getPhoneNumber).setHeader(getTranslation("grid_student_header_phone_label")).setSortable(true).setKey("phoneNumber");
         grid.addColumn(UserDto::getCohort).setHeader(getTranslation("grid_student_header_cohort_label")).setSortable(true).setKey("cohort");
         grid.addColumn(UserDto::getDirection).setHeader(getTranslation("grid_student_header_direction_label")).setSortable(true).setKey("direction");
         grid.addColumn(UserDto::getCity).setHeader(getTranslation("grid_student_header_city_label")).setSortable(true).setKey("city");
-        grid.addColumn(UserDto::getCity).setHeader(getTranslation("grid_student_header_tutor_label")).setSortable(true).setKey("tutor");
+        grid.addColumn(UserDto::getCity).setHeader(getTranslation("grid_student_header_tutor_label")).setKey("tutor");
 
         grid.addComponentColumn(item -> {
             Span group = new Span();

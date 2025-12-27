@@ -3,6 +3,7 @@ package team.mephi.adminbot.repository;
 import jakarta.persistence.Tuple;
 import jakarta.transaction.Transactional;
 import org.jspecify.annotations.NonNull;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -114,7 +115,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "LOWER(COALESCE(u.email, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
             "LOWER(COALESCE(u.phoneNumber, '')) LIKE LOWER(CONCAT('%', :query, '%'))" +
             ")")
-    List<User> findAllByRoleAndName(String role, String query);
+    List<User> findAllByRoleAndName(String role, String query, Pageable pageable);
 
     //@Query("SELECT count(u )FROM User u JOIN u.role WHERE u.deleted = false AND u.role.name = :role AND (" +
     @Query("SELECT count(u )FROM User u JOIN u.role WHERE u.role.name = :role AND (" +

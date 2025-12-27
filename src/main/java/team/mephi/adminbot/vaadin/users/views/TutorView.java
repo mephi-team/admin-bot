@@ -35,11 +35,11 @@ public class TutorView extends VerticalLayout {
 
         var grid = new Grid<>(TutorWithCounts.class, false);
         grid.addColumn(TutorWithCounts::getFullName).setHeader(getTranslation("grid_tutor_header_name_label")).setSortable(true).setFrozen(true)
-                .setAutoWidth(true).setFlexGrow(0).setKey("name");
+                .setAutoWidth(true).setFlexGrow(0).setKey("last_name");
         grid.addColumn(TutorWithCounts::getEmail).setHeader(getTranslation("grid_tutor_header_email_label")).setSortable(true).setKey("email");
-        grid.addColumn(TutorWithCounts::getTgId).setHeader(getTranslation("grid_tutor_header_telegram_label")).setSortable(true).setKey("telegram");
-        grid.addColumn(TutorWithCounts::getDirections).setHeader(getTranslation("grid_tutor_header_direction_label")).setSortable(true).setKey("direction");
-        grid.addColumn(TutorWithCounts::getStudentCount).setHeader(getTranslation("grid_tutor_header_curatorship_label")).setSortable(true).setKey("curatorship");
+        grid.addColumn(TutorWithCounts::getTgId).setHeader(getTranslation("grid_tutor_header_telegram_label")).setSortable(true).setKey("tg_name");
+        grid.addColumn(TutorWithCounts::getDirections).setHeader(getTranslation("grid_tutor_header_direction_label")).setKey("direction");
+        grid.addColumn(TutorWithCounts::getStudentCount).setHeader(getTranslation("grid_tutor_header_curatorship_label")).setKey("curatorship");
 
         grid.addComponentColumn(item -> {
             Button dropButton = new Button(getTranslation("grid_tutor_action_curatorship_label"), e -> actions.onTutoring(item.getId()));

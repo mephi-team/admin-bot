@@ -2,6 +2,7 @@ package team.mephi.adminbot.repository;
 
 import jakarta.transaction.Transactional;
 import org.jspecify.annotations.NonNull;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -28,7 +29,7 @@ public interface TutorRepository extends JpaRepository<Tutor, Long> {
                               LOWER(t.first_name) LIKE LOWER(CONCAT('%', :query, '%'))
                     GROUP BY t.id
             """, nativeQuery = true)
-    List<TutorWithCounts> findAllWithDirectionsAndStudents(String query);
+    List<TutorWithCounts> findAllWithDirectionsAndStudents(String query, Pageable pageable);
 
     @Query("SELECT count(t) FROM Tutor t WHERE LOWER(t.firstName) LIKE LOWER(CONCAT('%', :query, '%')) or LOWER(t.lastName) LIKE LOWER(CONCAT('%', :query, '%'))")
     Integer countByName(String query);

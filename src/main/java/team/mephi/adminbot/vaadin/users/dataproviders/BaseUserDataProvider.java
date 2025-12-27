@@ -1,15 +1,18 @@
 package team.mephi.adminbot.vaadin.users.dataproviders;
 
-import com.vaadin.flow.data.provider.CallbackDataProvider;
-import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
-import com.vaadin.flow.data.provider.DataProvider;
+import com.vaadin.flow.data.provider.*;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.dto.UserDto;
 import team.mephi.adminbot.model.User;
 import team.mephi.adminbot.repository.RoleRepository;
 import team.mephi.adminbot.repository.UserRepository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public abstract class BaseUserDataProvider implements UserDataProvider {
 
@@ -26,7 +29,19 @@ public abstract class BaseUserDataProvider implements UserDataProvider {
     public ConfigurableFilterDataProvider<UserDto, Void, String> getFilterableProvider() {
         if (provider == null) {
             CallbackDataProvider<UserDto, String> base = new CallbackDataProvider<>(
-                    query -> userRepository.findAllByRoleAndName(getRole(), query.getFilter().orElse(""))
+                    query -> {
+                        List<QuerySortOrder> sortOrders = query.getSortOrders();
+                        Sort sort = Sort.by(sortOrders.stream()
+                                .map(so -> so.getDirection() == SortDirection.ASCENDING
+                                        ? Sort.Order.asc(so.getSorted())
+                                        : Sort.Order.desc(so.getSorted()))
+                                .collect(Collectors.toList()));
+                        Pageable pageable = PageRequest.of(
+                                query.getOffset() / query.getLimit(),
+                                query.getLimit(),
+                                sort
+                        );
+                        return userRepository.findAllByRoleAndName(getRole(), query.getFilter().orElse(""), pageable)
                             .stream()
                             .map(u -> new UserDto(
                                     u.getId(),
@@ -41,9 +56,8 @@ public abstract class BaseUserDataProvider implements UserDataProvider {
                                     u.getCity(),
                                     u.getStatus() != null ? u.getStatus().name() : "",
                                     u.getDeleted()
-                            ))
-                            .skip(query.getOffset())
-                            .limit(query.getLimit()),
+                            ));
+                        },
                     query -> userRepository.countByRoleAndName(getRole(), query.getFilter().orElse("")),
                     UserDto::getId
             );
