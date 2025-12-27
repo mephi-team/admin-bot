@@ -17,7 +17,7 @@ public class TutoringDialog  extends Dialog  {
     public TutoringDialog() {
         var form = new TutorForm();
         binder.bindInstanceFields(form);
-        setHeaderTitle("Пользователь");
+        setHeaderTitle("dialog_tutor_curatorship_title");
         add(form);
         getFooter().add(new Button(getTranslation("cancel_button"), e -> close()), saveButton);
     }
