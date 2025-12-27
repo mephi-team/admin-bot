@@ -20,7 +20,7 @@ import team.mephi.adminbot.repository.UserQuestionRepository;
 public class Dashboard extends VerticalLayout {
     public Dashboard(DialogRepository dialogRepository, UserQuestionRepository userQuestionRepository) {
         setAlignItems(Alignment.CENTER);
-        add(new H1("Управление чат-ботом УЦ"));
+        add(new H1(getTranslation("page_dashboard_title")));
 
         HorizontalLayout layout = new HorizontalLayout();
         layout.setPadding(false);
@@ -35,46 +35,46 @@ public class Dashboard extends VerticalLayout {
         card1.addThemeVariants(CardVariant.LUMO_ELEVATED);
         card1.setHeaderPrefix(new Icon(VaadinIcon.ENVELOPE_O));
         card1.setWidth("300px");
-        card1.setTitle(new Div("Рассылки"));
-        card1.addToFooter(new RouterLink("Перейти →", Mailings.class));
+        card1.setTitle(new Div(getTranslation("page_dashboard_mailing_card_title")));
+        card1.addToFooter(new RouterLink(getTranslation("go_button"), Mailings.class));
 
         Card card2 = new Card();
         card2.setMinHeight("136px");
         card2.addThemeVariants(CardVariant.LUMO_ELEVATED);
         card2.setHeaderPrefix(new Icon(VaadinIcon.CHAT));
         card2.setWidth("300px");
-        card2.setTitle(new Div("Диалоги"));
+        card2.setTitle(new Div(getTranslation("page_dashboard_dialogs_card_title")));
         Span newDialogs = new Span(dialogRepository.unreadCount().toString());
         newDialogs.getElement().getThemeList().add("badge success");
-        card2.add(new Span(newDialogs, new Span(" новых сообщения")));
-        card2.addToFooter(new RouterLink("Перейти →", Dialogs.class));
+        card2.add(new Span(newDialogs, new Span(" "), new Span(getTranslation("page_dashboard_dialogs_card_new_messages"))));
+        card2.addToFooter(new RouterLink(getTranslation("go_button"), Dialogs.class));
 
         Card card3 = new Card();
         card3.setMinHeight("136px");
         card3.addThemeVariants(CardVariant.LUMO_ELEVATED);
         card3.setHeaderPrefix(new Icon(VaadinIcon.QUESTION));
         card3.setWidth("300px");
-        card3.setTitle(new Div("Вопросы"));
+        card3.setTitle(new Div(getTranslation("page_dashboard_questions_card_title")));
         Span newQuestions = new Span(userQuestionRepository.countNewQuestion().toString());
         newQuestions.getElement().getThemeList().add("badge success");
-        card3.add(new Span(newQuestions, new Span(" новых вопроса")));
-        card3.addToFooter(new RouterLink("Перейти →", Questions.class));
+        card3.add(new Span(newQuestions, new Span(" "), new Span(getTranslation("page_dashboard_questions_card_new_questions"))));
+        card3.addToFooter(new RouterLink(getTranslation("go_button"), Questions.class));
 
         Card card4 = new Card();
         card4.setMinHeight("136px");
         card4.addThemeVariants(CardVariant.LUMO_ELEVATED);
         card4.setHeaderPrefix(new Icon(VaadinIcon.USERS));
         card4.setWidth("300px");
-        card4.setTitle(new Div("Пользователи"));
-        card4.addToFooter(new RouterLink("Перейти →", Users.class));
+        card4.setTitle(new Div(getTranslation("page_dashboard_users_card_title")));
+        card4.addToFooter(new RouterLink(getTranslation("go_button"), Users.class));
 
         Card card5 = new Card();
         card5.setMinHeight("136px");
         card5.addThemeVariants(CardVariant.LUMO_ELEVATED);
         card5.setHeaderPrefix(new Icon(VaadinIcon.BAR_CHART));
         card5.setWidth("300px");
-        card5.setTitle(new Div("Аналитика"));
-        card5.addToFooter(new RouterLink("Перейти →", Analytics.class));
+        card5.setTitle(new Div(getTranslation("page_dashboard_analytics_card_title")));
+        card5.addToFooter(new RouterLink(getTranslation("go_button"), Analytics.class));
 
         layout.add(card1, card2, card3, card4, card5);
 
