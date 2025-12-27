@@ -8,6 +8,7 @@ import team.mephi.adminbot.model.UserQuestion;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserQuestionRepository extends JpaRepository<UserQuestion, Long> {
@@ -24,5 +25,8 @@ public interface UserQuestionRepository extends JpaRepository<UserQuestion, Long
     Integer countNewQuestion();
 
     long countByCreatedAtAfter(Instant createdAt);
+
+    @Query("SELECT q FROM UserQuestion q JOIN FETCH q.user JOIN FETCH q.direction WHERE q.id = :id")
+    Optional<UserQuestion> findById(Long id);
 }
 

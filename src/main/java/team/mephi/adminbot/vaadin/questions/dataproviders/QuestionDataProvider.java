@@ -4,12 +4,14 @@ import com.vaadin.flow.data.provider.*;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import team.mephi.adminbot.dto.SimpleQuestion;
 import team.mephi.adminbot.dto.UserQuestionDto;
 import team.mephi.adminbot.repository.UserQuestionRepository;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class QuestionDataProvider {
@@ -59,6 +61,10 @@ public class QuestionDataProvider {
 
     public DataProvider<UserQuestionDto, ?> getDataProvider() {
         return getFilterableProvider();
+    }
+
+    public Optional<SimpleQuestion> findById(Long id) {
+        return questionRepository.findById(id).map(t -> new SimpleQuestion(t.getId(), t.getUser().getUserName(), t.getRole(), t.getDirection().getName(), t.getText()));
     }
 
     public void deleteAllById(Iterable<Long> ids) {

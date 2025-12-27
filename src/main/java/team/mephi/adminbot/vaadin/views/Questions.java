@@ -14,6 +14,8 @@ import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
 import team.mephi.adminbot.dto.UserQuestionDto;
 import team.mephi.adminbot.vaadin.components.*;
+import team.mephi.adminbot.vaadin.questions.components.AnswerDialog;
+import team.mephi.adminbot.vaadin.questions.components.AnswerDialogFactory;
 import team.mephi.adminbot.vaadin.questions.dataproviders.QuestionDataProvider;
 import team.mephi.adminbot.vaadin.questions.service.QuestionPresenterFactory;
 
@@ -25,11 +27,13 @@ import java.util.Set;
 @PermitAll
 public class Questions extends VerticalLayout {
     private final SimpleConfirmDialog dialogDelete;
+    private final AnswerDialog answerDialog;
 
     private final QuestionDataProvider provider;
     private List<Long> selectedIds;
 
-    public Questions(QuestionPresenterFactory factory) {
+    public Questions(QuestionPresenterFactory factory, AnswerDialogFactory dialogFactory) {
+        this.answerDialog = dialogFactory.create();
         this.provider = factory.createDataProvider();
 
         this.dialogDelete = new SimpleConfirmDialog(
@@ -60,7 +64,7 @@ public class Questions extends VerticalLayout {
 
         grid.addComponentColumn(item -> {
             Span group = new Span();
-            Button responseButton = new Button(getTranslation("grid_question_action_answer_label"), e -> System.out.println(item));
+            Button responseButton = new Button(getTranslation("grid_question_action_answer_label"), e -> onAnswer(item.getId()));
             Button chatButton = new Button(new Icon(VaadinIcon.CHAT),e -> UI.getCurrent().navigate(Dialogs.class, new QueryParameters(Map.of("userId", List.of("" + item.getId())))));
             Button deleteButton = new Button(new Icon(VaadinIcon.TRASH), e -> onDelete(List.of(item.getId())));
             group.add(responseButton, chatButton, deleteButton);
@@ -86,6 +90,10 @@ public class Questions extends VerticalLayout {
         settingsPopover.setTarget(settingsBtn);
 
         add(new SearchFragment(searchField, settingsBtn), gsa, grid);
+    }
+
+    private void onAnswer(Long id) {
+        provider.findById(id).ifPresent(answerDialog::showDialogForEdit);
     }
 
     private void onDelete(List<Long> selectedIds) {
