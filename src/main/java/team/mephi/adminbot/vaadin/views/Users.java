@@ -99,6 +99,7 @@ public class Users extends VerticalLayout implements UserViewCallback {
                     }
                     @Override
                     public void showDialogForView(SimpleUser user) {
+                        editorDialog.setHeaderTitle("dialog_users_view_title");
                         editorDialog.openForView(user);
                     }
                     @Override
