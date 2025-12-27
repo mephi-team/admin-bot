@@ -48,7 +48,7 @@ public class TutorView extends VerticalLayout {
                 UI.getCurrent().navigate(Dialogs.class, new QueryParameters(Map.of("userId", List.of("" + item.getId()))));
             });
             Button editButton = new Button(new Icon(VaadinIcon.PENCIL), e -> actions.onEdit(item.getId()));
-            Button blockButton = new Button(new Icon(VaadinIcon.BAN), e -> actions.onBlock(List.of(item.getId())));
+            Button blockButton = new Button(new Icon(VaadinIcon.BAN), e -> actions.onBlock(item.getId()));
             if (item.getDelete()) {
                 blockButton.getElement().getStyle().set("color", "red");
             } else {

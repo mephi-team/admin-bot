@@ -42,11 +42,11 @@ public class ExpertView extends VerticalLayout {
         grid.addColumn(UserDto::getDirection).setHeader(getTranslation("grid_expert_header_direction_label")).setSortable(true).setKey("direction");
 
         grid.addComponentColumn(item -> {
-            Button dropButton = new Button(getTranslation("grid_expert_action_delete_label"), new Icon(VaadinIcon.CLOSE), e -> System.out.println(item));
+            Button dropButton = new Button(getTranslation("grid_expert_action_delete_label"), new Icon(VaadinIcon.CLOSE), e -> actions.onDelete(List.of(item.getId())));
             Button viewButton = new Button(new Icon(VaadinIcon.EYE), e -> actions.onView(item.getId()));
             Button chatButton = new Button(new Icon(VaadinIcon.CHAT), e -> UI.getCurrent().navigate(Dialogs.class, new QueryParameters(Map.of("userId", List.of("" + item.getId())))));
             Button editButton = new Button(new Icon(VaadinIcon.PENCIL), e -> actions.onEdit(item.getId()));
-            Button deleteButton = new Button(new Icon(VaadinIcon.BAN), e -> actions.onDelete(List.of(item.getId())));
+            Button deleteButton = new Button(new Icon(VaadinIcon.BAN), e -> actions.onBlock(item.getId()));
             if (item.getDelete()) {
                 deleteButton.getElement().getStyle().set("color", "red");
             } else {

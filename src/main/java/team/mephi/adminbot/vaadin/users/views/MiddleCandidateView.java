@@ -61,7 +61,7 @@ public class MiddleCandidateView extends VerticalLayout {
             Button viewButton = new Button(new Icon(VaadinIcon.EYE), e -> actions.onView(item.getId()));
             Button chatButton = new Button(new Icon(VaadinIcon.CHAT), e -> UI.getCurrent().navigate(Dialogs.class, new QueryParameters(Map.of("userId", List.of("" + item.getId())))));
             Button editButton = new Button(new Icon(VaadinIcon.PENCIL), e -> actions.onEdit(item.getId()));
-            Button deleteButton = new Button(new Icon(VaadinIcon.BAN), e -> actions.onDelete(List.of(item.getId())));
+            Button deleteButton = new Button(new Icon(VaadinIcon.BAN), e -> actions.onBlock(item.getId()));
             if (item.getDelete()) {
                 deleteButton.getElement().getStyle().set("color", "red");
             } else {

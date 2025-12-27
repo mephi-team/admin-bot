@@ -36,7 +36,7 @@ public class GuestsView extends VerticalLayout {
 
         grid.addComponentColumn(item -> {
             Button viewButton = new Button(new Icon(VaadinIcon.EYE), e -> actions.onView(item.getId()));
-            Button deleteButton = new Button(new Icon(VaadinIcon.BAN), e -> actions.onBlock(List.of(item.getId())));
+            Button deleteButton = new Button(new Icon(VaadinIcon.BAN), e -> actions.onBlock(item.getId()));
             if (item.getStatus().equals(UserStatus.BLOCKED.name())) {
                 deleteButton.getElement().getStyle().set("color", "red");
             } else {

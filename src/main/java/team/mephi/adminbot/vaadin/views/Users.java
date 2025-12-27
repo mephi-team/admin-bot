@@ -21,10 +21,7 @@ import team.mephi.adminbot.vaadin.CRUDPresenter;
 import team.mephi.adminbot.vaadin.components.SimpleConfirmDialog;
 import team.mephi.adminbot.vaadin.components.UserCountBadge;
 import team.mephi.adminbot.vaadin.users.actions.UserActions;
-import team.mephi.adminbot.vaadin.users.components.TutoringDialog;
-import team.mephi.adminbot.vaadin.users.components.TutoringDialogFactory;
-import team.mephi.adminbot.vaadin.users.components.UserEditorDialog;
-import team.mephi.adminbot.vaadin.users.components.UserEditorDialogFactory;
+import team.mephi.adminbot.vaadin.users.components.*;
 import team.mephi.adminbot.vaadin.users.service.*;
 import team.mephi.adminbot.vaadin.users.tabs.UserTabProvider;
 
@@ -35,9 +32,11 @@ import java.util.*;
 public class Users extends VerticalLayout implements UserViewCallback {
     private final UserEditorDialog editorDialog;
     private final TutoringDialog tutoringDialog;
-    private final SimpleConfirmDialog dialogBlock;
+    private final BlockDialog blockDialog;
+    private final SimpleConfirmDialog dialogDelete;
     private final SimpleConfirmDialog dialogAccept;
     private final SimpleConfirmDialog dialogReject;
+    private final SimpleConfirmDialog dialogExpel;
 
     private final TabSheet tabSheet = new TabSheet();
     private final List<String> rolesInOrder = new ArrayList<>();
@@ -50,7 +49,8 @@ public class Users extends VerticalLayout implements UserViewCallback {
         @Override public void onDelete(List<Long> ids) {}
         @Override public void onAccept(List<Long> ids) {}
         @Override public void onReject(List<Long> ids) {}
-        @Override public void onBlock(List<Long> ids) {}
+        @Override public void onBlock(Long id) {}
+        @Override public void onExpel(List<Long> ids) {}
     };
 
     public Users(
@@ -58,14 +58,16 @@ public class Users extends VerticalLayout implements UserViewCallback {
             UsersPresenterFactory presenterFactory,
             UserEditorDialogFactory dialogFactory,
             UserCountService userCountService,
-            TutoringDialogFactory tutoringDialogFactory
+            TutoringDialogFactory tutoringDialogFactory,
+            BlockDialogFactory blockDialogFactory
     ) {
         this.editorDialog = dialogFactory.create();
         this.tutoringDialog = tutoringDialogFactory.create();
+        this.blockDialog = blockDialogFactory.create();
 
-        this.dialogBlock = new SimpleConfirmDialog(
-                "dialog_block_users_title", "dialog_block_users_text", "dialog_block_users_action",
-                "dialog_block_users_all_title", "dialog_block_users_all_text"
+        this.dialogDelete = new SimpleConfirmDialog(
+                "dialog_delete_users_title", "dialog_delete_users_text", "dialog_delete_users_action",
+                "dialog_delete_users_all_title", "dialog_delete_users_all_text"
         );
         this.dialogAccept = new SimpleConfirmDialog(
                 "dialog_accept_users_title", "dialog_accept_users_text", "dialog_accept_users_action",
@@ -74,6 +76,10 @@ public class Users extends VerticalLayout implements UserViewCallback {
         this.dialogReject = new SimpleConfirmDialog(
                 "dialog_reject_users_title", "dialog_reject_users_text", "dialog_reject_users_action",
                 "dialog_reject_users_all_title", "dialog_reject_users_all_text"
+        );
+        this.dialogExpel = new SimpleConfirmDialog(
+                "dialog_expel_users_title", "dialog_expel_users_text", "dialog_expel_users_action",
+                "dialog_expel_users_all_title", "dialog_expel_users_all_text"
         );
 
         setSizeFull();
@@ -114,7 +120,7 @@ public class Users extends VerticalLayout implements UserViewCallback {
                     }
                     @Override
                     public void confirmDelete(List<Long> ids, Runnable onConfirm) {
-                        dialogBlock.showForConfirm(ids.size(), onConfirm);
+                        dialogDelete.showForConfirm(ids.size(), onConfirm);
                     }
                     @Override
                     public void showNotificationForNew() {
@@ -136,6 +142,16 @@ public class Users extends VerticalLayout implements UserViewCallback {
                     @Override
                     public void showNotificationForTutoring(Long id) {
                         Notification.show("Test", 3000, Notification.Position.TOP_END);
+                    }
+
+                    @Override
+                    public void showDialogForBlock(SimpleUser user) {
+                        blockDialog.openForView(user);
+                    }
+
+                    @Override
+                    public void showNotificationForBlock(Long id) {
+                        Notification.show("notification_users_blocked", 3000, Notification.Position.TOP_END);
                     }
                 });
             } else {
@@ -211,7 +227,7 @@ public class Users extends VerticalLayout implements UserViewCallback {
 
     @Override
     public void confirmDelete(List<Long> ids, Runnable onConfirm) {
-        dialogBlock.showForConfirm(ids.size(), onConfirm);
+        dialogDelete.showForConfirm(ids.size(), onConfirm);
     }
 
     @Override
@@ -226,7 +242,17 @@ public class Users extends VerticalLayout implements UserViewCallback {
 
     @Override
     public void showNotificationForDelete(List<Long> ids) {
-        Notification.show(makeNotification("notification_users_blocked", "notification_users_blocked_all", ids.size()), 3000, Notification.Position.TOP_END);
+        Notification.show(makeNotification("notification_users_deleted", "notification_users_blocked_all", ids.size()), 3000, Notification.Position.TOP_END);
+    }
+
+    @Override
+    public void showDialogForBlock(SimpleUser user) {
+        blockDialog.openForView(user);
+    }
+
+    @Override
+    public void confirmExpel(List<Long> ids, Runnable onConfirm) {
+        dialogExpel.showForConfirm(ids.size(), onConfirm);
     }
 
     @Override
@@ -247,6 +273,16 @@ public class Users extends VerticalLayout implements UserViewCallback {
     @Override
     public void showNotificationForReject(List<Long> ids) {
         Notification.show(makeNotification("notification_users_rejected", "notification_users_rejected_all", ids.size()), 3000, Notification.Position.TOP_END);
+    }
+
+    @Override
+    public void showNotificationForBlock(Long id) {
+        Notification.show("notification_users_blocked", 3000, Notification.Position.TOP_END);
+    }
+
+    @Override
+    public void showNotificationForExpel(List<Long> ids) {
+        Notification.show(getTranslation("notification_users_expel"), 3000, Notification.Position.TOP_END);
     }
 
     private String makeNotification(String single, String plural, int count) {

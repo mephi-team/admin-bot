@@ -7,5 +7,6 @@ import java.util.List;
 public interface UserActions extends CRUDActions {
     void onAccept(List<Long> ids);
     void onReject(List<Long> ids);
-    void onBlock(List<Long> ids);
+    void onBlock(Long id);
+    void onExpel(List<Long> ids);
 }

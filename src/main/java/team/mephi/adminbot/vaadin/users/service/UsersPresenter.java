@@ -32,11 +32,21 @@ public class UsersPresenter extends CRUDPresenter<SimpleUser> implements UserAct
     }
 
     @Override
-    public void onBlock(List<Long> ids) {
-        view.confirmDelete(ids, () -> {
-            dataProvider.blockAllById(ids);
-            dataProvider.getDataProvider().refreshAll();
-            view.showNotificationForDelete(ids);
+    public void onBlock(Long id) {
+        dataProvider.findById(id).ifPresent(m -> {
+            view.showDialogForBlock(m);
+            view.setOnSaveCallback(() -> {
+                dataProvider.blockAllById(List.of(m.getId()));
+                dataProvider.getDataProvider().refreshAll();
+                view.showNotificationForBlock(m.getId());
+            });
+        });
+    }
+
+    @Override
+    public void onExpel(List<Long> ids) {
+        view.confirmExpel(ids, () -> {
+            view.showNotificationForExpel(ids);
         });
     }
 }
