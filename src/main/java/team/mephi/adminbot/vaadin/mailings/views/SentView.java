@@ -43,13 +43,13 @@ public class SentView extends VerticalLayout {
         setPadding(false);
 
         Grid<MailingList> grid = new Grid<>(MailingList.class, false);
-        grid.addColumn(MailingList::getDate).setHeader(getTranslation("grid_mailing_header_date_label")).setSortable(true).setKey("date");
-        grid.addColumn(MailingList::getUsers).setHeader(getTranslation("grid_mailing_header_users_label")).setSortable(true).setKey("users");
-        grid.addColumn(MailingList::getCohort).setHeader(getTranslation("grid_mailing_header_cohort_label")).setSortable(true).setKey("cohort");
-        grid.addColumn(MailingList::getDirection).setHeader(getTranslation("grid_mailing_header_direction_label")).setSortable(true).setKey("direction");
-        grid.addColumn(MailingList::getCurator).setHeader(getTranslation("grid_mailing_header_curator_label")).setSortable(true).setKey("curator");
-        grid.addColumn(MailingList::getCity).setHeader(getTranslation("grid_mailing_header_city_label")).setSortable(true).setKey("city");
-        grid.addColumn(MailingList::getText).setHeader(getTranslation("grid_mailing_header_text_label")).setSortable(true).setKey("text");
+        grid.addColumn(MailingList::getDate).setHeader(getTranslation("grid_mailing_header_date_label")).setSortable(true).setKey("created_at");
+        grid.addColumn(MailingList::getUsers).setHeader(getTranslation("grid_mailing_header_users_label")).setSortable(true).setKey("filters->>'users'");
+        grid.addColumn(MailingList::getCohort).setHeader(getTranslation("grid_mailing_header_cohort_label")).setSortable(true).setKey("filters->>'cohort'");
+        grid.addColumn(MailingList::getDirection).setHeader(getTranslation("grid_mailing_header_direction_label")).setSortable(true).setKey("filters->>'direction'");
+        grid.addColumn(MailingList::getCurator).setHeader(getTranslation("grid_mailing_header_curator_label")).setSortable(true).setKey("filters->>'curator'");
+        grid.addColumn(MailingList::getCity).setHeader(getTranslation("grid_mailing_header_city_label")).setSortable(true).setKey("filters->>'city'");
+        grid.addColumn(MailingList::getText).setHeader(getTranslation("grid_mailing_header_text_label")).setSortable(true).setKey("description");
         grid.addColumn(createStatusComponentRenderer()).setHeader(getTranslation("grid_mailing_header_status_label")).setSortable(true).setKey("status");
 
         grid.addComponentColumn(item -> {
@@ -66,7 +66,7 @@ public class SentView extends VerticalLayout {
 
         grid.setDataProvider(provider.getDataProvider());
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
-        grid.setMultiSort(true, Grid.MultiSortPriority.APPEND);
+//        grid.setMultiSort(true, Grid.MultiSortPriority.APPEND);
         grid.addSelectionListener(selection -> {
             selectedIds = selection.getAllSelectedItems().stream().map(MailingList::getId).toList();
             gsa.setCount(selectedIds.size());

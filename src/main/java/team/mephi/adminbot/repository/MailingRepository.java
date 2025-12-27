@@ -1,6 +1,7 @@
 package team.mephi.adminbot.repository;
 
 import jakarta.persistence.Tuple;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -18,8 +19,8 @@ public interface MailingRepository extends JpaRepository<Mailing, Long> {
     @Query("SELECT m FROM Mailing m JOIN fetch m.createdBy JOIN FETCH m.createdBy")
     List<Mailing> findAllWithUsers();
 
-    @Query("SELECT m FROM Mailing m WHERE LOWER(m.name) LIKE LOWER(CONCAT('%', :query, '%')) AND m.status IN :statuses ORDER BY m.createdAt DESC")
-    List<Mailing> findMailingByName(String query, List<MailingStatus> statuses);
+    @Query(value = "SELECT * FROM mailings m WHERE LOWER(m.name) LIKE LOWER(CONCAT('%', :query, '%')) AND m.status IN :statuses", nativeQuery = true)
+    List<Mailing> findMailingByName(String query, List<String> statuses, Pageable pageable);
 
     @Query("SELECT count(m) FROM Mailing m WHERE LOWER(m.name) LIKE LOWER(CONCAT('%', :query, '%')) AND m.status IN :statuses")
     Integer countByName(String query, List<MailingStatus> statuses);

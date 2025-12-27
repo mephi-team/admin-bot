@@ -31,7 +31,7 @@ public class TemplateView extends VerticalLayout {
 
         Grid<TemplateListDto> grid = new Grid<>(TemplateListDto.class, false);
         grid.addColumn(TemplateListDto::getName).setHeader(getTranslation("grid_template_header_name_label")).setSortable(true).setKey("name");
-        grid.addColumn(TemplateListDto::getText).setHeader(getTranslation("grid_template_header_text_label")).setSortable(true).setKey("text");
+        grid.addColumn(TemplateListDto::getText).setHeader(getTranslation("grid_template_header_text_label")).setSortable(true).setKey("bodyText");
 
         grid.addComponentColumn(item -> {
             Div group = new Div();
@@ -44,7 +44,7 @@ public class TemplateView extends VerticalLayout {
 
         grid.setDataProvider(provider.getDataProvider());
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
-        grid.setMultiSort(true, Grid.MultiSortPriority.APPEND);
+//        grid.setMultiSort(true, Grid.MultiSortPriority.APPEND);
         grid.addSelectionListener(selection -> {
             selectedIds = selection.getAllSelectedItems().stream().map(TemplateListDto::getId).toList();
             gsa.setCount(selectedIds.size());

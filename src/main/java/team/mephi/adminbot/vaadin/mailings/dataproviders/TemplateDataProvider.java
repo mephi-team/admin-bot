@@ -1,14 +1,17 @@
 package team.mephi.adminbot.vaadin.mailings.dataproviders;
 
-import com.vaadin.flow.data.provider.CallbackDataProvider;
-import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
-import com.vaadin.flow.data.provider.DataProvider;
+import com.vaadin.flow.data.provider.*;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import team.mephi.adminbot.dto.SimpleTemplate;
 import team.mephi.adminbot.dto.TemplateListDto;
 import team.mephi.adminbot.model.MailTemplate;
 import team.mephi.adminbot.repository.MailTemplateRepository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class TemplateDataProvider implements MailingDataProvider<SimpleTemplate> {
     private final MailTemplateRepository mailTemplateRepository;
@@ -22,15 +25,24 @@ public class TemplateDataProvider implements MailingDataProvider<SimpleTemplate>
         if (provider == null) {
             provider = new CallbackDataProvider<TemplateListDto, String>(
                     query -> {
-                        return mailTemplateRepository.findAllByName(query.getFilter().orElse(""))
+                        List<QuerySortOrder> sortOrders = query.getSortOrders();
+                        Sort sort = Sort.by(sortOrders.stream()
+                                .map(so -> so.getDirection() == SortDirection.ASCENDING
+                                        ? Sort.Order.asc(so.getSorted())
+                                        : Sort.Order.desc(so.getSorted()))
+                                .collect(Collectors.toList()));
+                        Pageable pageable = PageRequest.of(
+                                query.getOffset() / query.getLimit(),
+                                query.getLimit(),
+                                sort
+                        );
+                        return mailTemplateRepository.findAllByName(query.getFilter().orElse(""), pageable)
                                 .stream()
                                 .map(m -> TemplateListDto.builder()
                                         .id(m.getId())
                                         .name(m.getName())
                                         .text(m.getBodyText())
-                                        .build())
-                                .skip(query.getOffset()) // Пропускаем уже загруженные элементы
-                                .limit(query.getLimit()); // Берем только нужное количество
+                                        .build());
                     },
                     query -> mailTemplateRepository.countByName(query.getFilter().orElse("")),
                     TemplateListDto::getId

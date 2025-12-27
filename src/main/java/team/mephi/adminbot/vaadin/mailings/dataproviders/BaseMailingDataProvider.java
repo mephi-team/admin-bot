@@ -1,8 +1,10 @@
 package team.mephi.adminbot.vaadin.mailings.dataproviders;
 
-import com.vaadin.flow.data.provider.CallbackDataProvider;
-import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
-import com.vaadin.flow.data.provider.DataProvider;
+import com.vaadin.flow.data.provider.*;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.JpaSort;
 import team.mephi.adminbot.dto.MailingList;
 import team.mephi.adminbot.dto.SimpleMailing;
 import team.mephi.adminbot.model.Mailing;
@@ -31,8 +33,22 @@ public abstract class BaseMailingDataProvider implements MailingDataProvider<Sim
     public ConfigurableFilterDataProvider<MailingList, Void, String> getFilterableProvider() {
         if (provider == null) {
             provider = new CallbackDataProvider<MailingList, String>(
-                    query -> {
-                        return mailingRepository.findMailingByName(query.getFilter().orElse(""), getStatuses())
+                            query -> {
+                        List<QuerySortOrder> sortOrders = query.getSortOrders();
+                        Sort sort = JpaSort.by(
+                                sortOrders.stream()
+                                        .map(so -> JpaSort.unsafe(
+                                                so.getDirection() == SortDirection.ASCENDING ? Sort.Direction.ASC : Sort.Direction.DESC,
+                                                so.getSorted()).stream().findAny().orElseThrow()
+                                        )
+                                        .collect(Collectors.toList())
+                        );
+                        Pageable pageable = PageRequest.of(
+                                query.getOffset() / query.getLimit(),
+                                query.getLimit(),
+                                sort
+                        );
+                        return mailingRepository.findMailingByName(query.getFilter().orElse(""), getStatuses().stream().map(Enum::name).toList(), pageable)
                                 .stream()
                                 .map(m -> MailingList.builder()
                                         .id(m.getId())
@@ -45,9 +61,7 @@ public abstract class BaseMailingDataProvider implements MailingDataProvider<Sim
                                         .city(m.getFilters() != null ? m.getFilters().getCity() : "")
                                         .text(m.getDescription())
                                         .status(m.getStatus().name())
-                                        .build())
-                                .skip(query.getOffset()) // Пропускаем уже загруженные элементы
-                                .limit(query.getLimit()); // Берем только нужное количество
+                                        .build());
                     },
                     query -> mailingRepository.countByName(query.getFilter().orElse(""), getStatuses()),
                     MailingList::getId
