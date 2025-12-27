@@ -134,7 +134,8 @@ public class DataInitializer {
                 User.builder().tgId("tg_1005").email("test5@example.com").userName("Екатерина Волкова").firstName("Екатерина").lastName("Волкова").role(studentRole).direction(analytics).status(UserStatus.ACTIVE).build(),
                 User.builder().tgId("tg_1006").email("test6@example.com").userName("Анна Козлова").firstName("Анна").lastName("Козлова").role(visitorRole).status(UserStatus.ACTIVE).build(),
                 User.builder().tgId("tg_1007").email("test7@example.com").userName("Петр Иванов").firstName("Петр").lastName("Иванов").role(freeListenerRole).direction(python).status(UserStatus.ACTIVE).build(),
-                User.builder().tgId("tg_1008").email("test8@example.com").userName("Сергей Смирнов").firstName("Сергей").lastName("Смирнов").role(lcExpertRole).status(UserStatus.ACTIVE).build()
+                User.builder().tgId("tg_1008").email("test8@example.com").userName("Сергей Смирнов").firstName("Сергей").lastName("Смирнов").role(lcExpertRole).status(UserStatus.ACTIVE).build(),
+                User.builder().tgId("tg_1009").email("admin1@example.com").userName("Admin").firstName("Admin").lastName("Admin").role(lcExpertRole).status(UserStatus.ACTIVE).build()
         );
         userRepository.saveAll(users);
         System.out.printf("  → Создано %d пользователей%n", users.size());

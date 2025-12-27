@@ -26,7 +26,7 @@ public interface UserQuestionRepository extends JpaRepository<UserQuestion, Long
 
     long countByCreatedAtAfter(Instant createdAt);
 
-    @Query("SELECT q FROM UserQuestion q JOIN FETCH q.user JOIN FETCH q.direction WHERE q.id = :id")
-    Optional<UserQuestion> findById(Long id);
+    @Query("SELECT q FROM UserQuestion q JOIN FETCH q.user JOIN FETCH q.direction LEFT JOIN FETCH q.answers WHERE q.id = :id")
+    Optional<UserQuestion> findByIdWithDeps(Long id);
 }
 

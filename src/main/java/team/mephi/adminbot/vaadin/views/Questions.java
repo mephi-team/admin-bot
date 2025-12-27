@@ -11,7 +11,9 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.QueryParameters;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.spring.security.AuthenticationContext;
 import jakarta.annotation.security.PermitAll;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import team.mephi.adminbot.dto.UserQuestionDto;
 import team.mephi.adminbot.vaadin.components.*;
 import team.mephi.adminbot.vaadin.questions.components.AnswerDialog;
@@ -26,13 +28,15 @@ import java.util.Set;
 @Route(value = "/questions", layout = DialogsLayout.class)
 @PermitAll
 public class Questions extends VerticalLayout {
+    private final AuthenticationContext authContext;
     private final SimpleConfirmDialog dialogDelete;
     private final AnswerDialog answerDialog;
 
     private final QuestionDataProvider provider;
     private List<Long> selectedIds;
 
-    public Questions(QuestionPresenterFactory factory, AnswerDialogFactory dialogFactory) {
+    public Questions(AuthenticationContext authContext, QuestionPresenterFactory factory, AnswerDialogFactory dialogFactory) {
+        this.authContext = authContext;
         this.answerDialog = dialogFactory.create();
         this.provider = factory.createDataProvider();
 
@@ -93,7 +97,22 @@ public class Questions extends VerticalLayout {
     }
 
     private void onAnswer(Long id) {
-        provider.findById(id).ifPresent(answerDialog::showDialogForEdit);
+        provider.findById(id).ifPresent(m -> {
+            answerDialog.showDialogForEdit(m);
+            answerDialog.setOnSaveCallback(() -> {
+                var editedItem = answerDialog.getEditedItem();
+                if (editedItem != null) {
+                    var user = authContext.getAuthenticatedUser(DefaultOidcUser.class).orElseThrow();
+                    provider.saveAnswer(editedItem.getId(), user.getUserInfo().getEmail(), editedItem.getAnswer());
+                    provider.getDataProvider().refreshAll();
+                    showNotificationForEdit(id);
+                }
+            });
+        });
+    }
+
+    private void showNotificationForEdit(Long id) {
+        Notification.show(getTranslation("notification_answer_send"), 3000, Notification.Position.TOP_END);
     }
 
     private void onDelete(List<Long> selectedIds) {

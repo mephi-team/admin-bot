@@ -11,6 +11,7 @@ public class AnswerForm extends FormLayout {
     private final TextField role = new TextField();
     private final TextField direction = new TextField();
     private final TextField text = new TextField();
+    private final TextArea answer = new TextArea();
     public AnswerForm() {
         setAutoResponsive(true);
         setLabelsAside(true);
@@ -22,6 +23,6 @@ public class AnswerForm extends FormLayout {
         addFormItem(text, getTranslation("dialog_answer_text_label"));
 
         add(new H4(getTranslation("dialog_answer_text_title")));
-        add(new TextArea());
+        add(answer);
     }
 }

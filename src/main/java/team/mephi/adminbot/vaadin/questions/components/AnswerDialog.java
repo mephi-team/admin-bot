@@ -23,6 +23,12 @@ public class AnswerDialog extends Dialog {
         getFooter().add(answerButton);
     }
 
+    public SimpleQuestion getEditedItem() {
+        SimpleQuestion question = new SimpleQuestion();
+        binder.writeBeanIfValid(question);
+        return question;
+    }
+
     private void onAnswer() {
         if(binder.validate().isOk()) {
             if (onSaveCallback != null) {
