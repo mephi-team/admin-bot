@@ -3,6 +3,7 @@ package team.mephi.adminbot.vaadin.users.views;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridMultiSelectionModel;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -33,7 +34,8 @@ public class FreeListenerView extends VerticalLayout {
         setPadding(false);
 
         var grid = new Grid<>(UserDto.class, false);
-        grid.addColumn(UserDto::getFullName).setHeader(getTranslation("grid_free_listener_header_name_label")).setSortable(true).setKey("name");
+        grid.addColumn(UserDto::getFullName).setHeader(getTranslation("grid_free_listener_header_name_label")).setSortable(true).setFrozen(true)
+                .setAutoWidth(true).setFlexGrow(0).setKey("name");
         grid.addColumn(UserDto::getEmail).setHeader(getTranslation("grid_free_listener_header_email_label")).setSortable(true).setKey("email");
         grid.addColumn(UserDto::getTgName).setHeader(getTranslation("grid_free_listener_header_telegram_label")).setSortable(true).setKey("telegram");
         grid.addColumn(UserDto::getPhoneNumber).setHeader(getTranslation("grid_free_listener_header_phone_label")).setSortable(true).setKey("phone");
@@ -58,7 +60,8 @@ public class FreeListenerView extends VerticalLayout {
         }).setHeader(getTranslation("grid_header_actions_label")).setWidth("340px").setFlexGrow(0).setKey("actions");
 
         grid.setDataProvider(provider.getDataProvider());
-        grid.setSelectionMode(Grid.SelectionMode.MULTI);
+        GridMultiSelectionModel<UserDto> selectionModel = (GridMultiSelectionModel<UserDto>) grid.setSelectionMode(Grid.SelectionMode.MULTI);
+        selectionModel.setSelectionColumnFrozen(true);
         grid.setSizeFull();
         grid.addSelectionListener(sel -> {
             selectedIds = sel.getAllSelectedItems().stream().map(UserDto::getId).toList();

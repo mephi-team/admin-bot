@@ -3,6 +3,7 @@ package team.mephi.adminbot.vaadin.users.views;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridMultiSelectionModel;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -11,7 +12,6 @@ import com.vaadin.flow.router.QueryParameters;
 import team.mephi.adminbot.dto.TutorWithCounts;
 import team.mephi.adminbot.vaadin.components.*;
 import team.mephi.adminbot.vaadin.users.actions.TutorActions;
-import team.mephi.adminbot.vaadin.users.actions.UserActions;
 import team.mephi.adminbot.vaadin.users.dataproviders.TutorDataProvider;
 import team.mephi.adminbot.vaadin.views.Dialogs;
 
@@ -34,7 +34,8 @@ public class TutorView extends VerticalLayout {
         setPadding(false);
 
         var grid = new Grid<>(TutorWithCounts.class, false);
-        grid.addColumn(TutorWithCounts::getFullName).setHeader(getTranslation("grid_tutor_header_name_label")).setSortable(true).setKey("name");
+        grid.addColumn(TutorWithCounts::getFullName).setHeader(getTranslation("grid_tutor_header_name_label")).setSortable(true).setFrozen(true)
+                .setAutoWidth(true).setFlexGrow(0).setKey("name");
         grid.addColumn(TutorWithCounts::getEmail).setHeader(getTranslation("grid_tutor_header_email_label")).setSortable(true).setKey("email");
         grid.addColumn(TutorWithCounts::getTgId).setHeader(getTranslation("grid_tutor_header_telegram_label")).setSortable(true).setKey("telegram");
         grid.addColumn(TutorWithCounts::getDirections).setHeader(getTranslation("grid_tutor_header_direction_label")).setSortable(true).setKey("direction");
@@ -57,7 +58,8 @@ public class TutorView extends VerticalLayout {
         }).setHeader(getTranslation("grid_header_actions_label")).setWidth("330px").setFlexGrow(0).setKey("actions");
 
         grid.setDataProvider(provider.getDataProvider());
-        grid.setSelectionMode(Grid.SelectionMode.MULTI);
+        GridMultiSelectionModel<TutorWithCounts> selectionModel = (GridMultiSelectionModel<TutorWithCounts>) grid.setSelectionMode(Grid.SelectionMode.MULTI);
+        selectionModel.setSelectionColumnFrozen(true);
         grid.setSizeFull();
         grid.addSelectionListener(sel -> {
             selectedIds = sel.getAllSelectedItems().stream().map(TutorWithCounts::getId).toList();
