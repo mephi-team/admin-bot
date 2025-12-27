@@ -33,7 +33,7 @@ public class QuestionDataProvider {
                         Pageable pageable = PageRequest.of(
                                 query.getOffset() / query.getLimit(),
                                 query.getLimit(),
-                                sort
+                                sort.isUnsorted() ? Sort.by("createdAt").descending() : sort
                         );
                         return questionRepository.findAllByText(query.getFilter().orElse(""), pageable)
                                 .stream()

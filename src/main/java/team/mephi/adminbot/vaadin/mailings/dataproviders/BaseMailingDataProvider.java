@@ -33,7 +33,7 @@ public abstract class BaseMailingDataProvider implements MailingDataProvider<Sim
     public ConfigurableFilterDataProvider<MailingList, Void, String> getFilterableProvider() {
         if (provider == null) {
             provider = new CallbackDataProvider<MailingList, String>(
-                            query -> {
+                    query -> {
                         List<QuerySortOrder> sortOrders = query.getSortOrders();
                         Sort sort = JpaSort.by(
                                 sortOrders.stream()
@@ -46,7 +46,7 @@ public abstract class BaseMailingDataProvider implements MailingDataProvider<Sim
                         Pageable pageable = PageRequest.of(
                                 query.getOffset() / query.getLimit(),
                                 query.getLimit(),
-                                sort
+                                sort.isUnsorted() ? Sort.by("created_at").descending() : sort
                         );
                         return mailingRepository.findMailingByName(query.getFilter().orElse(""), getStatuses().stream().map(Enum::name).toList(), pageable)
                                 .stream()

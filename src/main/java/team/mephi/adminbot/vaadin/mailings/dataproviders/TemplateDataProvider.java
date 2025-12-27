@@ -34,7 +34,7 @@ public class TemplateDataProvider implements MailingDataProvider<SimpleTemplate>
                         Pageable pageable = PageRequest.of(
                                 query.getOffset() / query.getLimit(),
                                 query.getLimit(),
-                                sort
+                                sort.isUnsorted() ? Sort.by("createdAt").descending() : sort
                         );
                         return mailTemplateRepository.findAllByName(query.getFilter().orElse(""), pageable)
                                 .stream()

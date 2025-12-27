@@ -39,7 +39,7 @@ public abstract class BaseUserDataProvider implements UserDataProvider {
                         Pageable pageable = PageRequest.of(
                                 query.getOffset() / query.getLimit(),
                                 query.getLimit(),
-                                sort
+                                sort.isUnsorted() ? Sort.by("createdAt").descending() : sort
                         );
                         return userRepository.findAllByRoleAndName(getRole(), query.getFilter().orElse(""), pageable)
                             .stream()

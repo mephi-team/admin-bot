@@ -36,7 +36,7 @@ public class TutorDataProvider implements UserDataProvider {
                         Pageable pageable = PageRequest.of(
                                 query.getOffset() / query.getLimit(),
                                 query.getLimit(),
-                                sort
+                                sort.isUnsorted() ? Sort.by("id").descending() : sort
                         );
                         return tutorRepository.findAllWithDirectionsAndStudents(query.getFilter().orElse(""), pageable)
                             .stream()
