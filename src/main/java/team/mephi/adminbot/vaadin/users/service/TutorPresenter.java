@@ -20,12 +20,11 @@ public class TutorPresenter extends CRUDPresenter<SimpleUser> implements TutorAc
     @Override
     public void onTutoring(Long id) {
         dataProvider.findById(id).ifPresent(view::showDialogForTutoring);
-        view.showNotificationForTutoring(id);
+//        view.showNotificationForTutoring(id);
     }
 
     @Override
     public void onBlock(List<Long> ids) {
-        System.out.println("!!!! block " + ids);
         view.confirmDelete(ids, () -> {
             dataProvider.blockAllById(ids);
             dataProvider.getDataProvider().refreshAll();
