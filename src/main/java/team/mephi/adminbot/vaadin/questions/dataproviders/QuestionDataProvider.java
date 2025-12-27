@@ -1,13 +1,16 @@
 package team.mephi.adminbot.vaadin.questions.dataproviders;
 
-import com.vaadin.flow.data.provider.CallbackDataProvider;
-import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
-import com.vaadin.flow.data.provider.DataProvider;
+import com.vaadin.flow.data.provider.*;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import team.mephi.adminbot.dto.UserQuestionDto;
 import team.mephi.adminbot.repository.UserQuestionRepository;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class QuestionDataProvider {
     private final  UserQuestionRepository questionRepository;
@@ -20,7 +23,19 @@ public class QuestionDataProvider {
     public ConfigurableFilterDataProvider<UserQuestionDto, Void, String> getFilterableProvider() {
         if (provider == null) {
             provider = new CallbackDataProvider<UserQuestionDto, String>(
-                    query -> questionRepository.findAllByText(query.getFilter().orElse(""))
+                    query -> {
+                        List<QuerySortOrder> sortOrders = query.getSortOrders();
+                        Sort sort = Sort.by(sortOrders.stream()
+                                .map(so -> so.getDirection() == SortDirection.ASCENDING
+                                        ? Sort.Order.asc(so.getSorted())
+                                        : Sort.Order.desc(so.getSorted()))
+                                .collect(Collectors.toList()));
+                        Pageable pageable = PageRequest.of(
+                                query.getOffset() / query.getLimit(),
+                                query.getLimit(),
+                                sort
+                        );
+                        return questionRepository.findAllByText(query.getFilter().orElse(""), pageable)
                                 .stream()
                                 .map(u -> UserQuestionDto
                                                 .builder()
@@ -32,9 +47,8 @@ public class QuestionDataProvider {
 //                                    .direction(u.getDirection() != null ? u.getDirection().getName() : "")
                                                 .answer(!u.getAnswers().isEmpty() ? u.getAnswers().getLast().getAnswerText() : "")
                                                 .build()
-                                )
-                                .skip(query.getOffset())
-                                .limit(query.getLimit()),
+                                );
+                        },
                     query -> questionRepository.countByText(query.getFilter().orElse("")),
                     UserQuestionDto::getId
             ).withConfigurableFilter();

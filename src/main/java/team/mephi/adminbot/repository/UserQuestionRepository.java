@@ -1,5 +1,6 @@
 package team.mephi.adminbot.repository;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -11,7 +12,7 @@ import java.util.List;
 @Repository
 public interface UserQuestionRepository extends JpaRepository<UserQuestion, Long> {
     @Query("SELECT q FROM UserQuestion q JOIN FETCH q.user LEFT JOIN FETCH q.user.direction LEFT JOIN FETCH q.answers WHERE LOWER(q.text) LIKE LOWER(CONCAT('%', :query, '%'))")
-    List<UserQuestion> findAllByText(String query);
+    List<UserQuestion> findAllByText(String query, Pageable pageable);
 
     @Query("SELECT count(q) FROM UserQuestion q WHERE LOWER(q.text) LIKE LOWER(CONCAT('%', :query, '%'))")
     Integer countByText(String query);

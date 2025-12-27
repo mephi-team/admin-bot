@@ -51,12 +51,12 @@ public class Questions extends VerticalLayout {
 
         Grid<UserQuestionDto> grid = new Grid<>(UserQuestionDto.class, false);
 
-        grid.addColumn(UserQuestionDto::getQuestion).setHeader(getTranslation("grid_question_header_question_label")).setSortable(true).setKey("question");
-        grid.addColumn(UserQuestionDto::getDate).setHeader(getTranslation("grid_question_header_date_label")).setSortable(true).setKey("date");
-        grid.addColumn(UserQuestionDto::getUser).setHeader(getTranslation("grid_question_header_author_label")).setSortable(true).setKey("author");
+        grid.addColumn(UserQuestionDto::getQuestion).setHeader(getTranslation("grid_question_header_question_label")).setSortable(true).setKey("text");
+        grid.addColumn(UserQuestionDto::getDate).setHeader(getTranslation("grid_question_header_date_label")).setSortable(true).setKey("createdAt");
+        grid.addColumn(UserQuestionDto::getUser).setHeader(getTranslation("grid_question_header_author_label")).setSortable(true).setKey("user");
         grid.addColumn(UserQuestionDto::getRole).setHeader(getTranslation("grid_question_header_role_label")).setSortable(true).setKey("role");
         grid.addColumn(UserQuestionDto::getDirection).setHeader(getTranslation("grid_question_header_direction_label")).setSortable(true).setKey("direction");
-        grid.addColumn(UserQuestionDto::getAnswer).setHeader(getTranslation("grid_question_header_answer_label")).setSortable(true).setKey("answer");
+        grid.addColumn(UserQuestionDto::getAnswer).setHeader(getTranslation("grid_question_header_answer_label")).setKey("answers");
 
         grid.addComponentColumn(item -> {
             Span group = new Span();
@@ -69,7 +69,7 @@ public class Questions extends VerticalLayout {
 
         grid.setDataProvider(provider.getDataProvider());
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
-        grid.setMultiSort(true, Grid.MultiSortPriority.APPEND);
+//        grid.setMultiSort(true, Grid.MultiSortPriority.APPEND);
         grid.addSelectionListener(selection -> {
             selectedIds = selection.getAllSelectedItems().stream().map(UserQuestionDto::getId).toList();
             gsa.setCount(selectedIds.size());
