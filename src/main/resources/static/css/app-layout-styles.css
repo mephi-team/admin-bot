@@ -73,3 +73,7 @@ vaadin-tabsheet::part(content) {
 vaadin-message-input {
     padding: 0;
 }
+/* фикс для FF */
+vaadin-virtual-list > div[role='listitem'] {
+    display: grid;
+}

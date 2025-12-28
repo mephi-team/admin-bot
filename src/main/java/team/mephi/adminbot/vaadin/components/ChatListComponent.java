@@ -58,7 +58,7 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
         v.setHeightFull();
         v.getElement().getStyle().set("border", "1px solid #eaeaee");
         v.getElement().getStyle().set("border-radius", "12px");
-        v.setPadding(false);
+//        v.setPadding(false);
 //        header.setPadding(true);
         v.add(header, chatList, emptyMessage);
 
@@ -110,9 +110,10 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
             String date = item.message.getDate().toString(); // Z означает UTC
             Div time = new Div();
             time.getElement().executeJs("const f=new Intl.DateTimeFormat(navigator.language, {hour: 'numeric', minute: 'numeric'});this.innerHTML=f.format(new Date($0));", date);
+            message.addClassNames(LumoUtility.Display.GRID);
             message.getStyle()
                     .set("padding", "12px")
-                    .set("margin", "4px 8px")
+                    .set("margin", "4px 0px")
                     .set("border-radius", "12px")
                     .set("max-width", "70%")
                     .set("background", item.message.getSenderType().equals("USER") ? "#e1f5fe" : "#f1f1f1");
@@ -199,6 +200,7 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
 
     private void getHeader() {
         header.removeAll();
+        header.setPadding(false);
         header.setSpacing(0, Unit.PIXELS);
         if (Objects.nonNull(dialogId)) {
             dialogRepository.findByIdWithUser(dialogId).ifPresent(dialog -> {
