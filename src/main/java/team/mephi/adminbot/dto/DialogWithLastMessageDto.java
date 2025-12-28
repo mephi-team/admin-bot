@@ -14,7 +14,8 @@ public class DialogWithLastMessageDto {
     private String userFirstName;
     private String userRoleDescription;
     private String userExternalId;
-    private Object lastMessageAt;
+    private LocalDateTime lastMessageAt;
+    private Integer unreadCount;
     private String lastMessageText;
     private String lastMessageSenderType;
     private String lastMessageSenderName; // например, "Иванов А."
@@ -26,6 +27,7 @@ public class DialogWithLastMessageDto {
             String userRoleDescription,
             String userExternalId,
             Object lastMessageAtRaw, // примет Timestamp
+            Integer unreadCount,
             String lastMessageText,
             String lastMessageSenderType,
             String lastMessageSenderName
@@ -35,6 +37,7 @@ public class DialogWithLastMessageDto {
         this.userFirstName = userFirstName;
         this.userRoleDescription = userRoleDescription;
         this.userExternalId = userExternalId;
+        this.unreadCount = unreadCount;
         this.lastMessageText = lastMessageText;
         this.lastMessageSenderType = lastMessageSenderType;
         this.lastMessageSenderName = lastMessageSenderName;
@@ -42,7 +45,7 @@ public class DialogWithLastMessageDto {
         if (lastMessageAtRaw instanceof Timestamp) {
             this.lastMessageAt = ((Timestamp) lastMessageAtRaw).toLocalDateTime();
         } else if (lastMessageAtRaw instanceof LocalDateTime) {
-            this.lastMessageAt = lastMessageAtRaw;
+            this.lastMessageAt = (LocalDateTime) lastMessageAtRaw;
         } else if (lastMessageAtRaw instanceof Instant) {
             this.lastMessageAt = LocalDateTime.ofInstant((Instant) lastMessageAtRaw, ZoneId.of("UTC"));
         } else {

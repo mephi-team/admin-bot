@@ -3,6 +3,7 @@ package team.mephi.adminbot.vaadin.views;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridMultiSelectionModel;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
@@ -59,7 +60,8 @@ public class Questions extends VerticalLayout {
 
         Grid<UserQuestionDto> grid = new Grid<>(UserQuestionDto.class, false);
 
-        grid.addColumn(UserQuestionDto::getQuestion).setHeader(getTranslation("grid_question_header_question_label")).setSortable(true).setKey("text");
+        grid.addColumn(UserQuestionDto::getQuestion).setHeader(getTranslation("grid_question_header_question_label")).setSortable(true).setFrozen(true)
+                .setAutoWidth(true).setFlexGrow(0).setKey("text");
         grid.addColumn(UserQuestionDto::getDate).setHeader(getTranslation("grid_question_header_date_label")).setSortable(true).setKey("createdAt");
         grid.addColumn(UserQuestionDto::getUser).setHeader(getTranslation("grid_question_header_author_label")).setSortable(true).setKey("user");
         grid.addColumn(UserQuestionDto::getRole).setHeader(getTranslation("grid_question_header_role_label")).setSortable(true).setKey("role");
@@ -76,7 +78,8 @@ public class Questions extends VerticalLayout {
         }).setHeader(getTranslation("grid_header_actions_label")).setWidth("220px").setFlexGrow(0).setKey("actions");
 
         grid.setDataProvider(provider.getDataProvider());
-        grid.setSelectionMode(Grid.SelectionMode.MULTI);
+        GridMultiSelectionModel<?> selectionModel = (GridMultiSelectionModel<?>) grid.setSelectionMode(Grid.SelectionMode.MULTI);
+        selectionModel.setSelectionColumnFrozen(true);
 //        grid.setMultiSort(true, Grid.MultiSortPriority.APPEND);
         grid.addSelectionListener(selection -> {
             selectedIds = selection.getAllSelectedItems().stream().map(UserQuestionDto::getId).toList();

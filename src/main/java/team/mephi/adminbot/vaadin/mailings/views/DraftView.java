@@ -2,6 +2,7 @@ package team.mephi.adminbot.vaadin.mailings.views;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridMultiSelectionModel;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
@@ -43,7 +44,8 @@ public class DraftView extends VerticalLayout {
         setPadding(false);
 
         Grid<MailingList> grid = new Grid<>(MailingList.class, false);
-        grid.addColumn(MailingList::getDate).setHeader(getTranslation("grid_mailing_header_date_label")).setSortable(true).setKey("created_at");
+        grid.addColumn(MailingList::getDate).setHeader(getTranslation("grid_mailing_header_date_label")).setSortable(true).setFrozen(true)
+                .setAutoWidth(true).setFlexGrow(0).setKey("created_at");
         grid.addColumn(MailingList::getUsers).setHeader(getTranslation("grid_mailing_header_users_label")).setSortable(true).setKey("filters->>'users'");
         grid.addColumn(MailingList::getCohort).setHeader(getTranslation("grid_mailing_header_cohort_label")).setSortable(true).setKey("filters->>'cohort'");
         grid.addColumn(MailingList::getDirection).setHeader(getTranslation("grid_mailing_header_direction_label")).setSortable(true).setKey("filters->>'direction'");
@@ -62,7 +64,8 @@ public class DraftView extends VerticalLayout {
         }).setHeader(getTranslation("grid_header_actions_label")).setWidth("120px").setFlexGrow(0).setKey("actions");
 
         grid.setDataProvider(provider.getDataProvider());
-        grid.setSelectionMode(Grid.SelectionMode.MULTI);
+        GridMultiSelectionModel<?> selectionModel = (GridMultiSelectionModel<?>) grid.setSelectionMode(Grid.SelectionMode.MULTI);
+        selectionModel.setSelectionColumnFrozen(true);
 //        grid.setMultiSort(true, Grid.MultiSortPriority.APPEND);
         grid.addSelectionListener(selection -> {
             selectedIds = selection.getAllSelectedItems().stream().map(MailingList::getId).toList();

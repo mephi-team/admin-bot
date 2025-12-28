@@ -11,6 +11,6 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
     Integer countByDialogId(Long dialogId);
 
-    @Query(value = "SELECT COUNT(DISTINCT CAST(created_at AS DATE)) FROM dialog_messages WHERE dialog_id = :dialogId", nativeQuery = true)
+    @Query(value = "SELECT COUNT(DISTINCT CAST(created_at AT TIME ZONE 'UTC' AS DATE)) FROM dialog_messages WHERE dialog_id = :dialogId", nativeQuery = true)
     Integer countByDialogIdAndCreatedAt(Long dialogId);
 }

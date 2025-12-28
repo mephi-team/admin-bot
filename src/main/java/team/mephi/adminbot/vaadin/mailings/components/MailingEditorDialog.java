@@ -31,7 +31,7 @@ public class MailingEditorDialog extends Dialog {
         var form2 = new TemplateFormTab();
 
         binder.forField(form1.getUser())
-                .withValidator(Objects::nonNull, "Пользователь обязателен")
+                .withValidator(Objects::nonNull, getTranslation("form_mailing_user_validation_message"))
                 .withConverter(UserDto::getId, userId -> userService.getById(userId).orElse(null))
                 .bind("userId");
         binder.bindInstanceFields(form1);

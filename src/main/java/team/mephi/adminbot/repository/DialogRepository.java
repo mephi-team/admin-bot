@@ -33,6 +33,7 @@ public interface DialogRepository extends JpaRepository<Dialog, Long> {
                 r.description AS userRoleDescription,
                 u.tg_id AS userExternalId,
                 d.last_message_at AS lastMessageAt,
+                d.unread_count AS unreadCount,
                 m.text AS lastMessageText,
                 m.sender_type AS lastMessageSenderType,
                 CASE

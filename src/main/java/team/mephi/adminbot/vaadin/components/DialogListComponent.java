@@ -19,6 +19,7 @@ import team.mephi.adminbot.repository.DialogRepository;
 import team.mephi.adminbot.vaadin.views.Dialogs;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
@@ -68,11 +69,17 @@ public class DialogListComponent extends VerticalLayout implements AfterNavigati
         fullName.setText(item.getUserLastName() + " " + item.getUserFirstName());
         header.add(fullName);
 
-        Span date = new Span();
+        Span right = new Span();
+        Span date = formatDate(item.getLastMessageAt());
         date.addClassName("text-muted");
         date.getStyle().set("white-space", "nowrap");
-        date.setText(formatDate((LocalDateTime) item.getLastMessageAt()));
-        header.add(date);
+        right.add(date);
+        if (item.getUnreadCount() > 0) {
+            Span counter = new Span("" + item.getUnreadCount());
+            counter.getElement().getThemeList().add("badge success");
+            right.add(new Span(" "), counter);
+        }
+        header.add(right);
 
         mainContent.add(header);
 
@@ -138,24 +145,27 @@ public class DialogListComponent extends VerticalLayout implements AfterNavigati
                             .skip(query.getOffset())
                             .limit(query.getLimit());
                 },
-                query -> dialogRepository.countDialogsWithLastMessageNative(searchField.getValue(), Optional.ofNullable(getCurrentUserId()))
+                query -> dialogRepository.countDialogsWithLastMessageNative(searchField.getValue(), Optional.ofNullable(getCurrentUserId())),
+                DialogWithLastMessageDto::getDialogId
         );
 
         return dataProvider.withConfigurableFilter();
     }
 
-    private String formatDate(LocalDateTime dateTime) {
-        if (dateTime == null) return "";
+    private Span formatDate(LocalDateTime dateTime) {
+        Span date = new Span();
+        if (dateTime == null) return date;
 
         DateTimeFormatter todayFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String datePart = dateTime.format(todayFormatter);
         String todayPart = today.format(todayFormatter);
 
         if (datePart.equals(todayPart)) {
-            return dateTime.format(DateTimeFormatter.ofPattern("HH:mm"));
+            date.getElement().executeJs("const f=new Intl.DateTimeFormat(navigator.language, {hour: 'numeric', minute: 'numeric'});this.innerHTML=f.format(new Date($0));", dateTime.toInstant(ZoneOffset.UTC).toString());
         } else {
-            return dateTime.format(DateTimeFormatter.ofPattern("dd MMM"));
+            date.getElement().executeJs("const f=new Intl.DateTimeFormat(navigator.language, {day: 'numeric', month: 'short'});this.innerHTML=f.format(new Date($0));", dateTime.toInstant(ZoneOffset.UTC).toString());
         }
+        return date;
     }
 
     @Override

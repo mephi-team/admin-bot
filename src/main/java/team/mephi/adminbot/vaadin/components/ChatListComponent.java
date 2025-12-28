@@ -70,9 +70,11 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
         chatInput.setWidthFull();
         chatInput.addSubmitListener(submitEvent -> {
             var message = new Message();
-            message.setDialog(dialogRepository.findById(dialogId).orElseThrow());
-            message.setCreatedAt(Instant.now());
-            message.setUpdatedAt(Instant.now());
+            var dialog = dialogRepository.findById(dialogId).orElseThrow();
+            var createdAt = Instant.now();
+            message.setDialog(dialog);
+            message.setCreatedAt(createdAt);
+            message.setUpdatedAt(createdAt);
             message.setSenderType(MessageSenderType.EXPERT);
             var user = authContext.getAuthenticatedUser(DefaultOidcUser.class).orElseThrow();
             var email = user.getUserInfo().getEmail();
@@ -80,6 +82,9 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
             message.setStatus(MessageStatus.SENT);
             message.setText(submitEvent.getValue());
             messageRepository.save(message);
+            dialog.setLastMessageAt(createdAt);
+            dialog.setUnreadCount(0);
+            dialogRepository.save(dialog);
             provider.refreshAll();
             chatList.scrollToEnd();
         });

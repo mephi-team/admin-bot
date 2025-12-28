@@ -1,6 +1,7 @@
 package team.mephi.adminbot.vaadin.mailings.components;
 
 import com.vaadin.flow.component.accordion.Accordion;
+import com.vaadin.flow.component.accordion.AccordionPanel;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -61,13 +62,13 @@ public class MailingForm extends FormLayout {
         MultiSelectListBox<String> listBox = new MultiSelectListBox<>();
         listBox.setItems("Test Text 1", "Test Text 2", "Test Text 3");
         listBox.select("Test Text 1", "Test Text 3");
-        FormItem box = addFormItem(listBox, "Фамилия Имя");
+        FormItem box = addFormItem(listBox, getTranslation("form_mailing_first_name_last_name_label"));
 
         VerticalLayout personalInformationLayout = new VerticalLayout(name, box);
         personalInformationLayout.setSpacing(false);
         personalInformationLayout.setPadding(false);
 
-        accordion.add("Выбранные получатели (5)", personalInformationLayout);
+        accordion.add(new AccordionPanel(new Span(new Span(getTranslation("form_mailing_accordion_label")), new Span(" (5)")), personalInformationLayout));
         accordion.close();
 
         add(accordion);
