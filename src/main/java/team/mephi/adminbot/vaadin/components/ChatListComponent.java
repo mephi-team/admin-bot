@@ -19,37 +19,61 @@ import team.mephi.adminbot.repository.MessageRepository;
 import team.mephi.adminbot.repository.UserRepository;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ChatListComponent extends VerticalLayout implements AfterNavigationObserver {
     private static final LocalDateTime today = LocalDateTime.now();
-    private final CallbackDataProvider<MessagesForListDto, Long> provider;
+    private final CallbackDataProvider<ChatListItem, Long> provider;
     MessageInput chatInput;
-    VirtualList<MessagesForListDto> chatList;
+    VirtualList<ChatListItem> chatList;
     Div emptyMessage = new Div(getTranslation("page_dialogs_chat_not_selected"));
-    ComponentRenderer<Div, MessagesForListDto> cardRenderer = new ComponentRenderer<>(item -> {
-        var card = new Div();
-        card.getStyle().set("min-height", "50px");
-        card.getStyle().set("max-width", "50%");
-        card.getStyle().set("padding", "16px");
-        card.getStyle().set("margin", "16px");
-        card.getStyle().set("border-radius", "24px");
-        if (item.getSenderType().equals("USER")) {
-            card.getElement().getStyle().set("background-color", "#2168df1a");
-            card.getStyle().set("border-end-end-radius", "0");
-            card.getStyle().set("justify-self", "end");
+    ComponentRenderer<Div, ChatListItem> cardRenderer = new ComponentRenderer<>(item -> {
+        Div container = new Div();
+        if (item.isHeader) {
+            // Заголовок даты
+            Div header = new Div(item.dateLabel);
+            header.getStyle()
+                    .set("text-align", "center")
+                    .set("font-size", "0.8rem")
+                    .set("color", "#6c757d")
+                    .set("margin", "12px 0")
+                    .set("font-weight", "600");
+            container.add(header);
         } else {
-            card.getElement().getStyle().set("background-color", "#eaeaee");
-            card.getStyle().set("border-end-start-radius", "0");
+            Div message = new Div(item.message.getText());
+            String date = formatDateForDisplay(item.message.getDate());
+            Div time = new Div(date);
+            message.getStyle()
+                    .set("padding", "12px")
+                    .set("margin", "4px 8px")
+                    .set("border-radius", "12px")
+                    .set("max-width", "70%")
+                    .set("background", item.message.getSenderType().equals("USER") ? "#e1f5fe" : "#f1f1f1");
+            if (item.message.getSenderType().equals("USER")) {
+                message.getStyle().set("border-end-end-radius", "0");
+                message.getStyle().set("justify-self", "end");
+            } else {
+                message.getStyle().set("border-end-start-radius", "0");
+                time.getStyle().set("justify-self", "start");
+            }
+            message.add(time);
+            time.getStyle().set("font-size", "0.75rem").set("color", "#888").set("text-align", "right");
+            container.add(message);
         }
-        Div text = new Div(item.getText());
-        Div date = new Div(item.getDate());
-        card.add(text, date);
-        return card;
+        return container;
     });
+
+    private String formatDateForDisplay(Instant instant) {
+        if (instant == null) return "";
+        LocalDateTime date = instant.atZone(ZoneId.of("UTC")).toLocalDateTime();
+        return date.format(DateTimeFormatter.ofPattern("HH:mm", new Locale("ru")));
+    }
+
     private Long dialogId;
 
     public ChatListComponent(AuthenticationContext authContext, DialogRepository dialogRepository, MessageRepository messageRepository, UserRepository userRepository) {
@@ -92,15 +116,36 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
         getElement().getStyle().set("padding-block-start", "0");
     }
 
-    private CallbackDataProvider<MessagesForListDto, Long> getProvider(MessageRepository messageRepository) {
+    private CallbackDataProvider<ChatListItem, Long> getProvider(MessageRepository messageRepository) {
         return new CallbackDataProvider<>(
                 query -> {
-                    return messageRepository.findAllByDialogId(dialogId)
-                            .stream().map(a -> new MessagesForListDto(a.getId(), a.getText(), formatDate(a.getCreatedAt()), a.getSenderType().name()))
+                    List<MessagesForListDto> messages = messageRepository.findAllByDialogId(dialogId)
+                            .stream()
+                            .map(m -> new MessagesForListDto(
+                                    m.getId(),
+                                    m.getText(),
+                                    m.getCreatedAt(),
+                                    m.getSenderType().name()
+                            ))
+                            .sorted(Comparator.comparing(m -> m.getDate().atZone(ZoneId.of("UTC")).toLocalDate())) // сортировка по дате
+                            .toList();
+
+                    // --- Группировка по дате ---
+                    Map<LocalDate, List<MessagesForListDto>> grouped = messages.stream()
+                            .collect(Collectors.groupingBy(m -> m.getDate().atZone(ZoneId.of("UTC")).toLocalDate(), LinkedHashMap::new, Collectors.toList()));
+
+                    // --- Преобразование в список с заголовками ---
+                    List<ChatListItem> result = new ArrayList<>();
+                    for (Map.Entry<LocalDate, List<MessagesForListDto>> entry : grouped.entrySet()) {
+                        result.add(ChatListItem.header(entry.getKey().toString()));
+                        entry.getValue().forEach(msg -> result.add(ChatListItem.message(msg)));
+                    }
+
+                    return result.stream()
                             .skip(query.getOffset())
                             .limit(query.getLimit());
                 },
-                query -> messageRepository.countByDialogId(dialogId)
+                query -> messageRepository.countByDialogId(dialogId) + messageRepository.countByDialogIdAndCreatedAt(dialogId)
         );
     }
 
@@ -133,6 +178,32 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
             return local.format(DateTimeFormatter.ofPattern("HH:mm"));
         } else {
             return local.format(DateTimeFormatter.ofPattern("dd MMMM"));
+        }
+    }
+
+    private static class ChatListItem {
+        private final boolean isHeader;
+        private final String dateLabel; // только для isHeader = true
+        private final MessagesForListDto message; // только для isHeader = false
+
+        private ChatListItem(String dateLabel) {
+            this.isHeader = true;
+            this.dateLabel = dateLabel;
+            this.message = null;
+        }
+
+        private ChatListItem(MessagesForListDto message) {
+            this.isHeader = false;
+            this.dateLabel = null;
+            this.message = message;
+        }
+
+        public static ChatListItem header(String label) {
+            return new ChatListItem(label);
+        }
+
+        public static ChatListItem message(MessagesForListDto msg) {
+            return new ChatListItem(msg);
         }
     }
 }
