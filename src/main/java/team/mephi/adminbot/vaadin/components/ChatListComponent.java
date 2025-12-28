@@ -1,6 +1,8 @@
 package team.mephi.adminbot.vaadin.components;
 
+import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.messages.MessageInput;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.virtuallist.VirtualList;
@@ -9,6 +11,7 @@ import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.spring.security.AuthenticationContext;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import team.mephi.adminbot.dto.MessagesForListDto;
 import team.mephi.adminbot.model.Message;
@@ -28,15 +31,18 @@ import java.util.stream.Collectors;
 
 public class ChatListComponent extends VerticalLayout implements AfterNavigationObserver {
     private static final LocalDateTime today = LocalDateTime.now();
+    private final DialogRepository dialogRepository;
     private final CallbackDataProvider<ChatListItem, Long> provider;
     MessageInput chatInput;
     VirtualList<ChatListItem> chatList;
     Div emptyMessage = new Div(getTranslation("page_dialogs_chat_not_selected"));
+    VerticalLayout header = new VerticalLayout();
 
     private Long dialogId;
 
     public ChatListComponent(AuthenticationContext authContext, DialogRepository dialogRepository, MessageRepository messageRepository, UserRepository userRepository) {
         this.provider = getProvider(messageRepository);
+        this.dialogRepository = dialogRepository;
 
         chatList = new VirtualList<>();
         chatList.setDataProvider(provider);
@@ -50,7 +56,9 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
         v.getElement().getStyle().set("border", "1px solid #eaeaee");
         v.getElement().getStyle().set("border-radius", "12px");
         v.setPadding(false);
-        v.add(chatList, emptyMessage);
+
+//        header.setPadding(true);
+        v.add(header, chatList, emptyMessage);
 
         chatInput = new MessageInput();
         chatInput.setWidthFull();
@@ -76,7 +84,6 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
     }
 
     ComponentRenderer<Div, ChatListItem> cardRenderer = new ComponentRenderer<>(item -> {
-        Div container = new Div();
         if (item.isHeader) {
             // Заголовок даты
             Div header = new Div(item.dateLabel);
@@ -86,7 +93,7 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
                     .set("color", "#6c757d")
                     .set("margin", "12px 0")
                     .set("font-weight", "600");
-            container.add(header);
+            return header;
         } else {
             Div message = new Div(item.message.getText());
             String date = item.message.getDate().toString(); // Z означает UTC
@@ -103,13 +110,13 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
                 message.getStyle().set("justify-self", "end");
             } else {
                 message.getStyle().set("border-end-start-radius", "0");
+                message.getStyle().set("justify-self", "start");
                 time.getStyle().set("justify-self", "start");
             }
             message.add(time);
             time.getStyle().set("font-size", "0.75rem").set("color", "#888").set("text-align", "right");
-            container.add(message);
+            return message;
         }
-        return container;
     });
 
     private CallbackDataProvider<ChatListItem, Long> getProvider(MessageRepository messageRepository) {
@@ -159,6 +166,7 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
             chatList.setVisible(false);
             emptyMessage.setVisible(true);
         }
+        getHeader();
         provider.refreshAll();
     }
 
@@ -173,6 +181,25 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
             return "Сегодня";
         } else {
             return date.format(DateTimeFormatter.ofPattern("dd MMMM"));
+        }
+    }
+
+    private void getHeader() {
+        header.removeAll();
+        header.setSpacing(0, Unit.PIXELS);
+        if (Objects.nonNull(dialogId)) {
+            dialogRepository.findByIdWithUser(dialogId).ifPresent(dialog -> {
+                Span user = new Span(dialog.getUser().getUserName());
+                user.addClassNames(LumoUtility.FontWeight.BOLD);
+                Span login = new Span(dialog.getUser().getTgId());
+                header.add(new Div(user, new Span(", @"), login));
+                Span role = new Span(dialog.getUser().getRole().getDescription());
+                Span direction = new Span(dialog.getDirection().getName());
+                Span cohort = new Span(dialog.getUser().getCohort());
+                var secondLine = new Div(role, new Span(" | "), direction, new Span(" , "), cohort);
+                secondLine.addClassNames(LumoUtility.TextColor.SECONDARY, LumoUtility.FontSize.SMALL);
+                header.add(secondLine);
+            });
         }
     }
 

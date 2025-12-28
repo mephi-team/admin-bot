@@ -65,4 +65,7 @@ public interface DialogRepository extends JpaRepository<Dialog, Long> {
 
     @Query("SELECT sum(d.unreadCount) FROM Dialog d")
     Integer unreadCount();
+
+    @Query("SELECT d FROM Dialog d JOIN FETCH d.user JOIN FETCH d.user.role JOIN FETCH d.direction WHERE d.id = :id")
+    Optional<Dialog> findByIdWithUser(Long id);
 }
