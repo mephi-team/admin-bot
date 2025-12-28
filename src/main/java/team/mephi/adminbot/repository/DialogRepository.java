@@ -36,7 +36,7 @@ public interface DialogRepository extends JpaRepository<Dialog, Long> {
                 m.text AS lastMessageText,
                 m.sender_type AS lastMessageSenderType,
                 CASE
-                    WHEN m.sender_type = 'user' THEN
+                    WHEN m.sender_type = 'USER' THEN
                         CONCAT(s.last_name, ' ', SUBSTRING(s.first_name, 1, 1), '.')
                     ELSE 'Администратор'
                     END AS lastMessageSenderName
