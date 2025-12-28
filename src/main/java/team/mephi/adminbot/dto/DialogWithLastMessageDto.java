@@ -5,7 +5,7 @@ import lombok.Data;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.ZoneOffset;
 
 @Data
 public class DialogWithLastMessageDto {
@@ -14,7 +14,7 @@ public class DialogWithLastMessageDto {
     private String userFirstName;
     private String userRoleDescription;
     private String userExternalId;
-    private LocalDateTime lastMessageAt;
+    private Instant lastMessageAt;
     private Integer unreadCount;
     private String lastMessageText;
     private String lastMessageSenderType;
@@ -43,11 +43,11 @@ public class DialogWithLastMessageDto {
         this.lastMessageSenderName = lastMessageSenderName;
 
         if (lastMessageAtRaw instanceof Timestamp) {
-            this.lastMessageAt = ((Timestamp) lastMessageAtRaw).toLocalDateTime();
+            this.lastMessageAt = ((Timestamp) lastMessageAtRaw).toInstant();
         } else if (lastMessageAtRaw instanceof LocalDateTime) {
-            this.lastMessageAt = (LocalDateTime) lastMessageAtRaw;
+            this.lastMessageAt = ((LocalDateTime) lastMessageAtRaw).toInstant(ZoneOffset.UTC);
         } else if (lastMessageAtRaw instanceof Instant) {
-            this.lastMessageAt = LocalDateTime.ofInstant((Instant) lastMessageAtRaw, ZoneId.of("UTC"));
+            this.lastMessageAt = (Instant) lastMessageAtRaw;
         } else {
             this.lastMessageAt = null;
         }

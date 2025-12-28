@@ -18,7 +18,7 @@ import team.mephi.adminbot.dto.DialogWithLastMessageDto;
 import team.mephi.adminbot.repository.DialogRepository;
 import team.mephi.adminbot.vaadin.views.Dialogs;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -27,7 +27,7 @@ import java.util.Optional;
 
 @AnonymousAllowed
 public class DialogListComponent extends VerticalLayout implements AfterNavigationObserver, BeforeEnterObserver {
-    private final LocalDateTime today;
+    private final Instant today;
     protected ConfigurableFilterDataProvider<DialogWithLastMessageDto, Void, String> provider;
     private Long activeDialogId;
     @Getter
@@ -116,7 +116,7 @@ public class DialogListComponent extends VerticalLayout implements AfterNavigati
     });
 
     public DialogListComponent(DialogRepository dialogRepository) {
-        this.today = LocalDateTime.now();
+        this.today = Instant.now();
 
         setHeightFull();
         setPadding(false);
@@ -152,18 +152,18 @@ public class DialogListComponent extends VerticalLayout implements AfterNavigati
         return dataProvider.withConfigurableFilter();
     }
 
-    private Span formatDate(LocalDateTime dateTime) {
+    private Span formatDate(Instant dateTime) {
         Span date = new Span();
         if (dateTime == null) return date;
 
         DateTimeFormatter todayFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String datePart = dateTime.format(todayFormatter);
-        String todayPart = today.format(todayFormatter);
+        String datePart = dateTime.atZone(ZoneOffset.UTC).format(todayFormatter);
+        String todayPart = today.atZone(ZoneOffset.UTC).format(todayFormatter);
 
         if (datePart.equals(todayPart)) {
-            date.getElement().executeJs("const f=new Intl.DateTimeFormat(navigator.language, {hour: 'numeric', minute: 'numeric'});this.innerHTML=f.format(new Date($0));", dateTime.toInstant(ZoneOffset.UTC).toString());
+            date.getElement().executeJs("const f=new Intl.DateTimeFormat(navigator.language, {hour: 'numeric', minute: 'numeric'});this.innerHTML=f.format(new Date($0));", dateTime.toString());
         } else {
-            date.getElement().executeJs("const f=new Intl.DateTimeFormat(navigator.language, {day: 'numeric', month: 'short'});this.innerHTML=f.format(new Date($0));", dateTime.toInstant(ZoneOffset.UTC).toString());
+            date.getElement().executeJs("const f=new Intl.DateTimeFormat(navigator.language, {day: 'numeric', month: 'short'});this.innerHTML=f.format(new Date($0));", dateTime.toString());
         }
         return date;
     }
