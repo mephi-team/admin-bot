@@ -46,8 +46,9 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
             container.add(header);
         } else {
             Div message = new Div(item.message.getText());
-            String date = formatDateForDisplay(item.message.getDate());
-            Div time = new Div(date);
+            String date = item.message.getDate().toString(); // Z означает UTC
+            Div time = new Div();
+            time.getElement().executeJs("const f=new Intl.DateTimeFormat(navigator.language, {hour: 'numeric', minute: 'numeric'});this.innerHTML=f.format(new Date($0));", date);
             message.getStyle()
                     .set("padding", "12px")
                     .set("margin", "4px 8px")
