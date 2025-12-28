@@ -13,6 +13,7 @@ import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 import lombok.Getter;
 import team.mephi.adminbot.dto.DialogWithLastMessageDto;
 import team.mephi.adminbot.repository.DialogRepository;
@@ -36,7 +37,8 @@ public class DialogListComponent extends VerticalLayout implements AfterNavigati
     ComponentRenderer<RouterLink, DialogWithLastMessageDto> cardRenderer = new ComponentRenderer<>(item -> {
         RouterLink link = new RouterLink();
         link.setHighlightCondition((a, e) -> false);
-        link.setClassName("dialog-item text-body");
+        link.addClassNames(LumoUtility.TextColor.BODY, LumoUtility.Overflow.HIDDEN);
+        link.getElement().getStyle().set("text-decoration", "none");
 
         link.setRoute(Dialogs.class, new RouteParameters("dialogId", item.getDialogId().toString()));
         if (currentUserId != null) {
@@ -44,17 +46,14 @@ public class DialogListComponent extends VerticalLayout implements AfterNavigati
         }
 
         Div content = new Div();
-        content.addClassNames("d-flex", "align-items-start");
-        content.getElement().getStyle().set("padding", "12px");
-        content.getElement().getStyle().set("border-radius", "12px");
+        content.addClassNames(LumoUtility.Display.FLEX, LumoUtility.Padding.MEDIUM, LumoUtility.BorderRadius.LARGE);
 
         if (item.getDialogId().equals(activeDialogId)) {
-            link.addClassNames("bg-primary", "bg-opacity-10");
-            content.getElement().getStyle().set("background-color", "#d3e1f9");
+            content.addClassNames(LumoUtility.Background.PRIMARY_10);
         }
 
         Div mainContent = new Div();
-        mainContent.addClassNames("flex-grow-1", "overflow-hidden");
+        mainContent.addClassNames(LumoUtility.Overflow.HIDDEN, LumoUtility.Flex.AUTO);
         content.add(mainContent);
 
         // Заголовок: ФИО + дата
@@ -64,15 +63,14 @@ public class DialogListComponent extends VerticalLayout implements AfterNavigati
         header.setAlignItems(FlexComponent.Alignment.START);
 
         Span fullName = new Span();
-        fullName.getStyle().set("font-weight", "bold");
-        fullName.getStyle().set("white-space", "nowrap");
+        fullName.addClassNames(LumoUtility.FontWeight.BOLD, LumoUtility.Whitespace.NOWRAP, LumoUtility.Overflow.HIDDEN, LumoUtility.TextOverflow.ELLIPSIS);
         fullName.setText(item.getUserLastName() + " " + item.getUserFirstName());
         header.add(fullName);
 
         Span right = new Span();
+        right.addClassNames(LumoUtility.Whitespace.NOWRAP);
         Span date = formatDate(item.getLastMessageAt());
-        date.addClassName("text-muted");
-        date.getStyle().set("white-space", "nowrap");
+        date.addClassNames(LumoUtility.FontSize.XSMALL, LumoUtility.Whitespace.NOWRAP, LumoUtility.TextColor.SECONDARY);
         right.add(date);
         if (item.getUnreadCount() > 0) {
             Span counter = new Span("" + item.getUnreadCount());
@@ -85,8 +83,7 @@ public class DialogListComponent extends VerticalLayout implements AfterNavigati
 
         // Роль и externalId
         Span roleInfo = new Span();
-        roleInfo.addClassNames("text-muted", "small");
-        roleInfo.getStyle().set("white-space", "nowrap");
+        roleInfo.addClassNames(LumoUtility.Whitespace.NOWRAP, LumoUtility.FontSize.XSMALL, LumoUtility.TextColor.SECONDARY);
         roleInfo.setText(
                 item.getUserRoleDescription().toLowerCase() +
                         " | @" + item.getUserExternalId()
@@ -95,14 +92,10 @@ public class DialogListComponent extends VerticalLayout implements AfterNavigati
 
         // Последнее сообщение
         Span lastMessage = new Span();
-        lastMessage.addClassNames("text-truncate", "mt-1");
-        lastMessage.getElement().getStyle().set("display", "block");
-        lastMessage.getElement().getStyle().set("white-space", "nowrap");
-        lastMessage.getElement().getStyle().set("text-overflow", "ellipsis");
-        lastMessage.getElement().getStyle().set("overflow", "hidden");
+        lastMessage.addClassNames(LumoUtility.FontSize.SMALL, LumoUtility.Display.BLOCK, LumoUtility.Whitespace.NOWRAP, LumoUtility.Overflow.HIDDEN, LumoUtility.TextOverflow.ELLIPSIS);
 
         Span senderName = new Span();
-        senderName.addClassName("text-primary");
+        senderName.addClassName(LumoUtility.TextColor.PRIMARY);
         senderName.setText(item.getLastMessageSenderName());
 
         Span messageText = new Span();
