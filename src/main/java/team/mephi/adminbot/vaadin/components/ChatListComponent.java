@@ -8,8 +8,15 @@ import com.vaadin.flow.data.provider.CallbackDataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.AfterNavigationObserver;
+import com.vaadin.flow.spring.security.AuthenticationContext;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import team.mephi.adminbot.dto.MessagesForListDto;
+import team.mephi.adminbot.model.Message;
+import team.mephi.adminbot.model.enums.MessageSenderType;
+import team.mephi.adminbot.model.enums.MessageStatus;
+import team.mephi.adminbot.repository.DialogRepository;
 import team.mephi.adminbot.repository.MessageRepository;
+import team.mephi.adminbot.repository.UserRepository;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -45,7 +52,7 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
     });
     private Long dialogId;
 
-    public ChatListComponent(MessageRepository messageRepository) {
+    public ChatListComponent(AuthenticationContext authContext, DialogRepository dialogRepository, MessageRepository messageRepository, UserRepository userRepository) {
         this.provider = getProvider(messageRepository);
 
         chatList = new VirtualList<>();
@@ -64,6 +71,21 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
 
         chatInput = new MessageInput();
         chatInput.setWidthFull();
+        chatInput.addSubmitListener(submitEvent -> {
+            var message = new Message();
+            message.setDialog(dialogRepository.findById(dialogId).orElseThrow());
+            message.setCreatedAt(Instant.now());
+            message.setUpdatedAt(Instant.now());
+            message.setSenderType(MessageSenderType.EXPERT);
+            var user = authContext.getAuthenticatedUser(DefaultOidcUser.class).orElseThrow();
+            var email = user.getUserInfo().getEmail();
+            message.setSender(userRepository.findByEmail(email).orElseThrow());
+            message.setStatus(MessageStatus.SENT);
+            message.setText(submitEvent.getValue());
+            messageRepository.save(message);
+            provider.refreshAll();
+            chatList.scrollToEnd();
+        });
         add(v, chatInput);
 
         setHeightFull();
