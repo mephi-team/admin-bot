@@ -137,7 +137,7 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
                     // --- Преобразование в список с заголовками ---
                     List<ChatListItem> result = new ArrayList<>();
                     for (Map.Entry<LocalDate, List<MessagesForListDto>> entry : grouped.entrySet()) {
-                        result.add(ChatListItem.header(entry.getKey().toString()));
+                        result.add(ChatListItem.header(formatDate(entry.getKey())));
                         entry.getValue().forEach(msg -> result.add(ChatListItem.message(msg)));
                     }
 
@@ -166,18 +166,17 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
         provider.refreshAll();
     }
 
-    private String formatDate(Instant dateTime) {
-        LocalDateTime local = LocalDateTime.ofInstant(dateTime, ZoneId.of("UTC"));
-        if (dateTime == null) return "";
+    private String formatDate(LocalDate date) {
+        if (date == null) return "";
 
         DateTimeFormatter todayFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String datePart = local.format(todayFormatter);
+        String datePart = date.format(todayFormatter);
         String todayPart = today.format(todayFormatter);
 
         if (datePart.equals(todayPart)) {
-            return local.format(DateTimeFormatter.ofPattern("HH:mm"));
+            return "Сегодня";
         } else {
-            return local.format(DateTimeFormatter.ofPattern("dd MMMM"));
+            return date.format(DateTimeFormatter.ofPattern("dd MMMM"));
         }
     }
 
