@@ -4,6 +4,7 @@ import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.messages.MessageInput;
+import com.vaadin.flow.component.messages.MessageInputI18n;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.virtuallist.VirtualList;
 import com.vaadin.flow.data.provider.CallbackDataProvider;
@@ -58,11 +59,14 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
         v.getElement().getStyle().set("border", "1px solid #eaeaee");
         v.getElement().getStyle().set("border-radius", "12px");
         v.setPadding(false);
-
 //        header.setPadding(true);
         v.add(header, chatList, emptyMessage);
 
         chatInput = new MessageInput();
+        var tr = new MessageInputI18n();
+        tr.setSend(getTranslation("chat.send"));
+        tr.setMessage(getTranslation("chat.placeholder"));
+        chatInput.setI18n(tr);
         chatInput.setWidthFull();
         chatInput.addSubmitListener(submitEvent -> {
             var message = new Message();
@@ -162,8 +166,10 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
             provider.withConfigurableFilter().setFilter(dialogId);
             chatInput.setVisible(true);
             chatList.setVisible(true);
+            header.setVisible(true);
             emptyMessage.setVisible(false);
         } else {
+            header.setVisible(false);
             chatInput.setVisible(false);
             chatList.setVisible(false);
             emptyMessage.setVisible(true);

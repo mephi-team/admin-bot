@@ -69,3 +69,7 @@ a[router-link][highlight] {
 vaadin-tabsheet::part(content) {
     padding-inline: 0;
 }
+
+vaadin-message-input {
+    padding: 0;
+}
