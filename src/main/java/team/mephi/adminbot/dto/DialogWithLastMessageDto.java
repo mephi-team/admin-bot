@@ -3,7 +3,9 @@ package team.mephi.adminbot.dto;
 import lombok.Data;
 
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Data
 public class DialogWithLastMessageDto {
@@ -41,6 +43,8 @@ public class DialogWithLastMessageDto {
             this.lastMessageAt = ((Timestamp) lastMessageAtRaw).toLocalDateTime();
         } else if (lastMessageAtRaw instanceof LocalDateTime) {
             this.lastMessageAt = lastMessageAtRaw;
+        } else if (lastMessageAtRaw instanceof Instant) {
+            this.lastMessageAt = LocalDateTime.ofInstant((Instant) lastMessageAtRaw, ZoneId.of("UTC"));
         } else {
             this.lastMessageAt = null;
         }

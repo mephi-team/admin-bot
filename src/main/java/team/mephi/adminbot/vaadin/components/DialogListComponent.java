@@ -13,6 +13,7 @@ import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
+import lombok.Getter;
 import team.mephi.adminbot.dto.DialogWithLastMessageDto;
 import team.mephi.adminbot.repository.DialogRepository;
 import team.mephi.adminbot.vaadin.views.Dialogs;
@@ -28,16 +29,18 @@ public class DialogListComponent extends VerticalLayout implements AfterNavigati
     private final LocalDateTime today;
     protected ConfigurableFilterDataProvider<DialogWithLastMessageDto, Void, String> provider;
     private Long activeDialogId;
-    private static Optional<Long> userId;
+    @Getter
+    private Long currentUserId;
+
     ComponentRenderer<RouterLink, DialogWithLastMessageDto> cardRenderer = new ComponentRenderer<>(item -> {
         RouterLink link = new RouterLink();
         link.setHighlightCondition((a, e) -> false);
         link.setClassName("dialog-item text-body");
 
         link.setRoute(Dialogs.class, new RouteParameters("dialogId", item.getDialogId().toString()));
-        userId.ifPresent(id -> {
-            link.setQueryParameters(new QueryParameters(Map.of("userId", List.of("" + id))));
-        });
+        if (currentUserId != null) {
+            link.setQueryParameters(new QueryParameters(Map.of("userId", List.of("" + currentUserId))));
+        }
 
         Div content = new Div();
         content.addClassNames("d-flex", "align-items-start");
@@ -127,22 +130,18 @@ public class DialogListComponent extends VerticalLayout implements AfterNavigati
         add(searchField, list);
     }
 
-    private static ConfigurableFilterDataProvider<DialogWithLastMessageDto, Void, String> getProvider(DialogRepository dialogRepository, TextField searchField) {
+    private ConfigurableFilterDataProvider<DialogWithLastMessageDto, Void, String> getProvider(DialogRepository dialogRepository, TextField searchField) {
         CallbackDataProvider<DialogWithLastMessageDto, String> dataProvider = new CallbackDataProvider<>(
                 query -> {
-                    return dialogRepository.findDialogsWithLastMessageNative(searchField.getValue(), getUserId())
+                    return dialogRepository.findDialogsWithLastMessageNative(searchField.getValue(), Optional.ofNullable(getCurrentUserId()))
                             .stream()
                             .skip(query.getOffset())
                             .limit(query.getLimit());
                 },
-                query -> dialogRepository.countDialogsWithLastMessageNative(searchField.getValue(), userId)
+                query -> dialogRepository.countDialogsWithLastMessageNative(searchField.getValue(), Optional.ofNullable(getCurrentUserId()))
         );
 
         return dataProvider.withConfigurableFilter();
-    }
-
-    private static Optional<Long> getUserId() {
-        return userId;
     }
 
     private String formatDate(LocalDateTime dateTime) {
@@ -179,6 +178,6 @@ public class DialogListComponent extends VerticalLayout implements AfterNavigati
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
-        userId = event.getLocation().getQueryParameters().getSingleParameter("userId").map(Long::parseLong);
+        currentUserId = event.getLocation().getQueryParameters().getSingleParameter("userId").map(Long::parseLong).orElse(null);
     }
 }
