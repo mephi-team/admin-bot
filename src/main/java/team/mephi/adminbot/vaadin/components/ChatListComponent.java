@@ -52,6 +52,8 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
         emptyMessage.getElement().getStyle().set("padding", "1em");
 
         VerticalLayout v = new VerticalLayout();
+        v.setSpacing(0, Unit.PIXELS);
+//        v.addClassNames(LumoUtility.BorderRadius.LARGE);
         v.setHeightFull();
         v.getElement().getStyle().set("border", "1px solid #eaeaee");
         v.getElement().getStyle().set("border-radius", "12px");
