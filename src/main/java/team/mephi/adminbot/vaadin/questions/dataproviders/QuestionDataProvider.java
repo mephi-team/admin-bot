@@ -53,7 +53,7 @@ public class QuestionDataProvider {
                                                 .builder()
                                                 .id(u.getId())
                                                 .question(u.getText())
-                                                .date(LocalDateTime.ofInstant(u.getCreatedAt(), ZoneId.of("UTC")))
+                                                .date(u.getCreatedAt())
                                                 .user(u.getUser().getUserName())
                                                 .userId(u.getUser().getId())
                                                 .role(u.getRole())

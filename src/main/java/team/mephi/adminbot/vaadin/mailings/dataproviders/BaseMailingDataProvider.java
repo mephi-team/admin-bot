@@ -53,7 +53,7 @@ public abstract class BaseMailingDataProvider implements MailingDataProvider<Sim
                                 .map(m -> MailingList.builder()
                                         .id(m.getId())
                                         .name(m.getName())
-                                        .date(LocalDateTime.ofInstant(m.getCreatedAt(), ZoneId.of("UTC")))
+                                        .date(m.getCreatedAt())
                                         .users(m.getFilters() != null ? m.getFilters().getUsers() : "")
                                         .cohort(m.getFilters() != null ? m.getFilters().getCohort() : "")
                                         .direction(m.getFilters() != null ? m.getFilters().getDirection() : "")

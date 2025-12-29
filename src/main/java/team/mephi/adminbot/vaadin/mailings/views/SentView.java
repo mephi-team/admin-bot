@@ -8,13 +8,16 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.data.renderer.ComponentRenderer;
+import com.vaadin.flow.data.renderer.*;
 import com.vaadin.flow.function.SerializableBiConsumer;
 import team.mephi.adminbot.dto.MailingList;
 import team.mephi.adminbot.vaadin.components.*;
 import team.mephi.adminbot.vaadin.mailings.actions.MailingActions;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.SentDataProvider;
 
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.List;
 import java.util.Set;
 
@@ -43,8 +46,12 @@ public class SentView extends VerticalLayout {
         setSizeFull();
         setPadding(false);
 
+        LocalDateTimeRenderer<MailingList> dateRenderer = new LocalDateTimeRenderer<>(
+                d -> d.getDate().atZone(ZoneOffset.of("+03:00")).toLocalDateTime(),
+                () -> DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.SHORT));
+
         Grid<MailingList> grid = new Grid<>(MailingList.class, false);
-        grid.addColumn(MailingList::getDate).setHeader(getTranslation("grid_mailing_header_date_label")).setSortable(true).setFrozen(true)
+        grid.addColumn(dateRenderer).setHeader(getTranslation("grid_mailing_header_date_label")).setSortable(true).setFrozen(true)
                 .setAutoWidth(true).setFlexGrow(0).setKey("created_at");
         grid.addColumn(MailingList::getUsers).setHeader(getTranslation("grid_mailing_header_users_label")).setSortable(true).setKey("filters->>'users'");
         grid.addColumn(MailingList::getCohort).setHeader(getTranslation("grid_mailing_header_cohort_label")).setSortable(true).setKey("filters->>'cohort'");

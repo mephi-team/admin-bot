@@ -10,6 +10,7 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
 import com.vaadin.flow.router.QueryParameters;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.security.AuthenticationContext;
@@ -22,6 +23,9 @@ import team.mephi.adminbot.vaadin.questions.components.AnswerDialogFactory;
 import team.mephi.adminbot.vaadin.questions.dataproviders.QuestionDataProvider;
 import team.mephi.adminbot.vaadin.questions.service.QuestionPresenterFactory;
 
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -58,11 +62,14 @@ public class Questions extends VerticalLayout {
 
         setSizeFull();
 
-        Grid<UserQuestionDto> grid = new Grid<>(UserQuestionDto.class, false);
+        LocalDateTimeRenderer<UserQuestionDto> dateRenderer = new LocalDateTimeRenderer<>(
+                d -> d.getDate().atZone(ZoneOffset.of("+03:00")).toLocalDateTime(),
+                () -> DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.SHORT));
 
+        Grid<UserQuestionDto> grid = new Grid<>(UserQuestionDto.class, false);
         grid.addColumn(UserQuestionDto::getQuestion).setHeader(getTranslation("grid_question_header_question_label")).setSortable(true).setFrozen(true)
                 .setAutoWidth(true).setFlexGrow(0).setKey("text");
-        grid.addColumn(UserQuestionDto::getDate).setHeader(getTranslation("grid_question_header_date_label")).setSortable(true).setKey("createdAt");
+        grid.addColumn(dateRenderer).setHeader(getTranslation("grid_question_header_date_label")).setSortable(true).setKey("createdAt");
         grid.addColumn(UserQuestionDto::getUser).setHeader(getTranslation("grid_question_header_author_label")).setSortable(true).setKey("user");
         grid.addColumn(UserQuestionDto::getRole).setHeader(getTranslation("grid_question_header_role_label")).setSortable(true).setKey("role");
         grid.addColumn(UserQuestionDto::getDirection).setHeader(getTranslation("grid_question_header_direction_label")).setSortable(true).setKey("direction");
