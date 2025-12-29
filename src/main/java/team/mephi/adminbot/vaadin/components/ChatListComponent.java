@@ -99,7 +99,7 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
             String date = item.message.getDate().toString(); // Z означает UTC
             Div time = new Div();
             time.getElement().executeJs("const f=new Intl.DateTimeFormat(navigator.language, {hour: 'numeric', minute: 'numeric'});this.innerHTML=f.format(new Date($0));", date);
-            message.addClassNames(LumoUtility.Display.GRID, LumoUtility.Margin.Vertical.XSMALL);
+            message.addClassNames(LumoUtility.Display.GRID, LumoUtility.Margin.Vertical.XSMALL, LumoUtility.Overflow.HIDDEN);
             message.getStyle().set("padding", "12px").set("border-radius", "12px").set("max-width", "70%");
             if (item.message.getSenderType().equals("USER")) {
                 message.addClassNames(LumoUtility.Background.PRIMARY_10);
