@@ -48,7 +48,7 @@ public class SentView extends VerticalLayout {
 
         LocalDateTimeRenderer<MailingList> dateRenderer = new LocalDateTimeRenderer<>(
                 d -> d.getDate().atZone(ZoneOffset.of("+03:00")).toLocalDateTime(),
-                () -> DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.SHORT));
+                () -> DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
 
         Grid<MailingList> grid = new Grid<>(MailingList.class, false);
         grid.addColumn(dateRenderer).setHeader(getTranslation("grid_mailing_header_date_label")).setSortable(true).setFrozen(true)

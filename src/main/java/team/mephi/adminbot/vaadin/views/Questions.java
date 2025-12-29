@@ -64,7 +64,7 @@ public class Questions extends VerticalLayout {
 
         LocalDateTimeRenderer<UserQuestionDto> dateRenderer = new LocalDateTimeRenderer<>(
                 d -> d.getDate().atZone(ZoneOffset.of("+03:00")).toLocalDateTime(),
-                () -> DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.SHORT));
+                () -> DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
 
         Grid<UserQuestionDto> grid = new Grid<>(UserQuestionDto.class, false);
         grid.addColumn(UserQuestionDto::getQuestion).setHeader(getTranslation("grid_question_header_question_label")).setSortable(true).setFrozen(true)
