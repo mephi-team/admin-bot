@@ -23,6 +23,7 @@ import team.mephi.adminbot.vaadin.components.SimpleConfirmDialog;
 import team.mephi.adminbot.vaadin.components.UserCountBadge;
 import team.mephi.adminbot.vaadin.users.actions.UserActions;
 import team.mephi.adminbot.vaadin.users.components.*;
+import team.mephi.adminbot.vaadin.users.presenter.*;
 import team.mephi.adminbot.vaadin.users.service.*;
 import team.mephi.adminbot.vaadin.users.tabs.UserTabProvider;
 
@@ -30,7 +31,7 @@ import java.util.*;
 
 @Route("/users")
 @RolesAllowed("ADMIN")
-public class Users extends VerticalLayout implements UserViewCallback {
+public class Users extends VerticalLayout implements StudentViewCallback {
     private final UserEditorDialog editorDialog;
     private final TutoringDialog tutoringDialog;
     private final BlockDialog blockDialog;
@@ -51,7 +52,6 @@ public class Users extends VerticalLayout implements UserViewCallback {
         @Override public void onAccept(List<Long> ids) {}
         @Override public void onReject(List<Long> ids) {}
         @Override public void onBlock(Long id) {}
-        @Override public void onExpel(List<Long> ids) {}
     };
 
     public Users(
@@ -155,6 +155,10 @@ public class Users extends VerticalLayout implements UserViewCallback {
                         Notification.show("notification_users_blocked", 3000, Notification.Position.TOP_END);
                     }
                 });
+            } else if (tabId.equals("visitor")) {
+                presenter = new GuestPresenter(dataProvider, this);
+            } else if (tabId.equals("student") || tabId.equals("free_listener")) {
+                presenter = new StudentPresenter(dataProvider, this);
             } else {
                 presenter = new UsersPresenter(dataProvider, this);
             }

@@ -1,4 +1,4 @@
-package team.mephi.adminbot.vaadin.users.service;
+package team.mephi.adminbot.vaadin.users.presenter;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import team.mephi.adminbot.repository.RoleRepository;

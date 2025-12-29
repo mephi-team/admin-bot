@@ -1,26 +1,20 @@
-package team.mephi.adminbot.vaadin.users.service;
+package team.mephi.adminbot.vaadin.users.presenter;
 
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.vaadin.CRUDPresenter;
-import team.mephi.adminbot.vaadin.users.actions.TutorActions;
+import team.mephi.adminbot.vaadin.users.actions.BlockingActions;
 import team.mephi.adminbot.vaadin.users.dataproviders.UserDataProvider;
 
 import java.util.List;
 
-public class TutorPresenter extends CRUDPresenter<SimpleUser> implements TutorActions {
+public class BlockingPresenter extends CRUDPresenter<SimpleUser> implements BlockingActions {
     private final UserDataProvider dataProvider;
-    private final TutorViewCallback view;
+    private final BlockingViewCallback view;
 
-    public TutorPresenter(UserDataProvider dataProvider, TutorViewCallback view) {
+    public BlockingPresenter(UserDataProvider dataProvider, BlockingViewCallback view) {
         super(dataProvider, view);
         this.dataProvider = dataProvider;
         this.view = view;
-    }
-
-    @Override
-    public void onTutoring(Long id) {
-        dataProvider.findById(id).ifPresent(view::showDialogForTutoring);
-//        view.showNotificationForTutoring(id);
     }
 
     @Override

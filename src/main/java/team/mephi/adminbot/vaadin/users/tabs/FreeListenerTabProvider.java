@@ -4,7 +4,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import team.mephi.adminbot.vaadin.CRUDActions;
 import team.mephi.adminbot.vaadin.CRUDDataProvider;
-import team.mephi.adminbot.vaadin.users.actions.UserActions;
+import team.mephi.adminbot.vaadin.users.actions.StudentActions;
 import team.mephi.adminbot.vaadin.users.dataproviders.FreeListenerDataProvider;
 import team.mephi.adminbot.vaadin.users.views.FreeListenerView;
 
@@ -27,6 +27,6 @@ public class FreeListenerTabProvider implements UserTabProvider {
 
     @Override
     public Component createTabContent(CRUDDataProvider<?> dataProvider, CRUDActions actions) {
-        return new FreeListenerView((FreeListenerDataProvider) dataProvider, (UserActions) actions);
+        return new FreeListenerView((FreeListenerDataProvider) dataProvider, (StudentActions) actions);
     }
 }
