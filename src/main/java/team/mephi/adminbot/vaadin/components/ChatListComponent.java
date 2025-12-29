@@ -22,10 +22,7 @@ import team.mephi.adminbot.repository.DialogRepository;
 import team.mephi.adminbot.repository.MessageRepository;
 import team.mephi.adminbot.repository.UserRepository;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -50,17 +47,13 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
         chatList.setRenderer(cardRenderer);
 
         emptyMessage.setVisible(false);
-        emptyMessage.getElement().getStyle().set("padding", "1em");
 
-        VerticalLayout v = new VerticalLayout();
-        v.setSpacing(0, Unit.PIXELS);
-//        v.addClassNames(LumoUtility.BorderRadius.LARGE);
-        v.setHeightFull();
-        v.getElement().getStyle().set("border", "1px solid #eaeaee");
-        v.getElement().getStyle().set("border-radius", "12px");
-//        v.setPadding(false);
-//        header.setPadding(true);
-        v.add(header, chatList, emptyMessage);
+        VerticalLayout bordered = new VerticalLayout();
+        bordered.setHeightFull();
+        bordered.setSpacing(0, Unit.PIXELS);
+        bordered.addClassNames(LumoUtility.Border.ALL, LumoUtility.BorderColor.CONTRAST_10);
+        bordered.getElement().getStyle().set("border-radius", "12px");
+        bordered.add(header, chatList, emptyMessage);
 
         chatInput = new MessageInput();
         var tr = new MessageInputI18n();
@@ -88,45 +81,37 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
             provider.refreshAll();
             chatList.scrollToEnd();
         });
-        add(v, chatInput);
+        add(bordered, chatInput);
 
         setHeightFull();
-        getElement().getStyle().set("padding-block-start", "0");
+        addClassNames(LumoUtility.Padding.Top.NONE);
     }
 
     ComponentRenderer<Div, ChatListItem> cardRenderer = new ComponentRenderer<>(item -> {
         if (item.isHeader) {
             // Заголовок даты
             Div header = new Div(item.dateLabel);
-            header.getStyle()
-                    .set("text-align", "center")
-                    .set("font-size", "0.8rem")
-                    .set("color", "#6c757d")
-                    .set("margin", "12px 0")
-                    .set("font-weight", "600");
+            header.addClassNames(LumoUtility.TextAlignment.CENTER, LumoUtility.FontSize.XXSMALL, LumoUtility.FontWeight.SEMIBOLD);
+            header.addClassNames(LumoUtility.TextColor.SECONDARY, LumoUtility.Margin.Vertical.SMALL);
             return header;
         } else {
             Div message = new Div(item.message.getText());
             String date = item.message.getDate().toString(); // Z означает UTC
             Div time = new Div();
             time.getElement().executeJs("const f=new Intl.DateTimeFormat(navigator.language, {hour: 'numeric', minute: 'numeric'});this.innerHTML=f.format(new Date($0));", date);
-            message.addClassNames(LumoUtility.Display.GRID);
-            message.getStyle()
-                    .set("padding", "12px")
-                    .set("margin", "4px 0px")
-                    .set("border-radius", "12px")
-                    .set("max-width", "70%")
-                    .set("background", item.message.getSenderType().equals("USER") ? "#e1f5fe" : "#f1f1f1");
+            message.addClassNames(LumoUtility.Display.GRID, LumoUtility.Margin.Vertical.XSMALL);
+            message.getStyle().set("padding", "12px").set("border-radius", "12px").set("max-width", "70%");
             if (item.message.getSenderType().equals("USER")) {
-                message.getStyle().set("border-end-end-radius", "0");
-                message.getStyle().set("justify-self", "end");
+                message.addClassNames(LumoUtility.Background.PRIMARY_10);
+                message.getStyle().set("border-end-end-radius", "0").set("justify-self", "end");
+                time.addClassNames(LumoUtility.TextAlignment.RIGHT);
             } else {
-                message.getStyle().set("border-end-start-radius", "0");
-                message.getStyle().set("justify-self", "start");
-                time.getStyle().set("justify-self", "start");
+                message.addClassNames(LumoUtility.Background.CONTRAST_10);
+                message.getStyle().set("border-end-start-radius", "0").set("justify-self", "start");
+                time.addClassNames(LumoUtility.TextAlignment.LEFT);
             }
             message.add(time);
-            time.getStyle().set("font-size", "0.75rem").set("color", "#888").set("text-align", "right");
+            time.addClassNames(LumoUtility.FontSize.XXSMALL, LumoUtility.TextColor.SECONDARY);
             return message;
         }
     });
@@ -142,12 +127,12 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
                                     m.getCreatedAt(),
                                     m.getSenderType().name()
                             ))
-                            .sorted(Comparator.comparing(m -> m.getDate().atZone(ZoneId.of("UTC")).toLocalDate())) // сортировка по дате
+                            .sorted(Comparator.comparing(m -> m.getDate().atZone(ZoneOffset.of("+03:00")).toLocalDate())) // сортировка по дате
                             .toList();
 
                     // --- Группировка по дате ---
                     Map<LocalDate, List<MessagesForListDto>> grouped = messages.stream()
-                            .collect(Collectors.groupingBy(m -> m.getDate().atZone(ZoneId.of("UTC")).toLocalDate(), LinkedHashMap::new, Collectors.toList()));
+                            .collect(Collectors.groupingBy(m -> m.getDate().atZone(ZoneOffset.of("+03:00")).toLocalDate(), LinkedHashMap::new, Collectors.toList()));
 
                     // --- Преобразование в список с заголовками ---
                     List<ChatListItem> result = new ArrayList<>();
