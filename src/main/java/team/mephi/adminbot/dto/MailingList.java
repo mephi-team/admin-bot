@@ -3,14 +3,14 @@ package team.mephi.adminbot.dto;
 import lombok.Builder;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Data
 @Builder
 public class MailingList {
     Long id;
     String name;
-    LocalDateTime date;
+    Instant date;
     String users;
     String cohort;
     String direction;
