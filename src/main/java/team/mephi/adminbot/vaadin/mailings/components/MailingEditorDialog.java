@@ -8,6 +8,7 @@ import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.function.SerializableRunnable;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 import lombok.Setter;
 import team.mephi.adminbot.dto.SimpleMailing;
 import team.mephi.adminbot.dto.UserDto;
@@ -46,12 +47,12 @@ public class MailingEditorDialog extends Dialog {
         saveButton.setVisible(false);
         saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         next.setIconAfterText(true);
-        next.getStyle().set("margin-right", "auto");
+        next.addClassNames(LumoUtility.Margin.Right.AUTO);
         next.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         next.addClickListener(s -> {
             tabSheet.setSelectedTab(tab2);
         });
-        prev.getStyle().set("margin-right", "auto");
+        prev.addClassNames(LumoUtility.Margin.Right.AUTO);
         prev.addClickListener(s -> {
             tabSheet.setSelectedTab(tab1);
         });

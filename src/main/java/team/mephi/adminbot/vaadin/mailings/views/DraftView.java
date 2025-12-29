@@ -11,6 +11,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
 import com.vaadin.flow.function.SerializableBiConsumer;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 import team.mephi.adminbot.dto.MailingList;
 import team.mephi.adminbot.vaadin.components.*;
 import team.mephi.adminbot.vaadin.CRUDActions;
@@ -18,7 +19,6 @@ import team.mephi.adminbot.vaadin.mailings.dataproviders.DraftDataProvider;
 
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.List;
 import java.util.Set;
 
@@ -64,7 +64,7 @@ public class DraftView extends VerticalLayout {
 
         grid.addComponentColumn(item -> {
             Div group = new Div();
-            group.getElement().getStyle().set("text-align","end");
+            group.addClassNames(LumoUtility.TextAlignment.RIGHT);
             Button editButton = new Button(new Icon(VaadinIcon.EDIT), e -> actions.onEdit(item.getId()));
             Button deleteButton = new Button(new Icon(VaadinIcon.TRASH), e -> actions.onDelete(List.of(item.getId())));
             group.add(editButton, deleteButton);

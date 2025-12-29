@@ -23,12 +23,10 @@ public class RightDrawer extends Section {
         this.onSaveCallback = onSaveCallback;
         this.onCloseCallback = onCloseCallback;
 
-        getElement().getStyle().set("position", "fixed");
+        addClassNames(LumoUtility.Position.FIXED, LumoUtility.ZIndex.SMALL, LumoUtility.Background.CONTRAST);
         getElement().getStyle().set("top", "0");
         getElement().getStyle().set("right", "0");
         getElement().getStyle().set("bottom", "0");
-        getElement().getStyle().set("z-index", "1");
-        getElement().getStyle().set("background-color", "white");
 
         var header = new HorizontalLayout();
         header.add(new H2(title), new Button(new Icon(VaadinIcon.CLOSE), this::close));

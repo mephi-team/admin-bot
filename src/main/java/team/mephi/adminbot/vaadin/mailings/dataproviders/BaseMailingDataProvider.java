@@ -14,8 +14,6 @@ import team.mephi.adminbot.model.objects.Filters;
 import team.mephi.adminbot.repository.MailingRepository;
 import team.mephi.adminbot.repository.UserRepository;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

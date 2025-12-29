@@ -10,6 +10,7 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.renderer.*;
 import com.vaadin.flow.function.SerializableBiConsumer;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 import team.mephi.adminbot.dto.MailingList;
 import team.mephi.adminbot.vaadin.components.*;
 import team.mephi.adminbot.vaadin.mailings.actions.MailingActions;
@@ -17,7 +18,6 @@ import team.mephi.adminbot.vaadin.mailings.dataproviders.SentDataProvider;
 
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.List;
 import java.util.Set;
 
@@ -63,7 +63,7 @@ public class SentView extends VerticalLayout {
 
         grid.addComponentColumn(item -> {
             Div group = new Div();
-            group.getElement().getStyle().set("text-align","end");
+            group.addClassNames(LumoUtility.TextAlignment.RIGHT);
             Button retryButton = new Button(new Icon(VaadinIcon.ROTATE_RIGHT), e -> actions.onRetry(item.getId()));
             retryButton.setVisible(item.getStatus().equals("PAUSED"));
             Button cancelButton = new Button(new Icon(VaadinIcon.CLOSE_CIRCLE_O), e -> actions.onCancel(item.getId()));

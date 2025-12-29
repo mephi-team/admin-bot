@@ -3,6 +3,7 @@ package team.mephi.adminbot.vaadin.components;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 
 public class GridSelectActions extends HorizontalLayout {
     Span countControl;
@@ -11,7 +12,7 @@ public class GridSelectActions extends HorizontalLayout {
     public GridSelectActions(String text, Component... components) {
         countControl = new Span(String.valueOf(selectedCount));
         Span prefix = new Span(new Span(text), new Span(" "),countControl);
-        prefix.getElement().getStyle().set("font-weight", "bold");
+        prefix.addClassNames(LumoUtility.FontWeight.BOLD);
         setAlignItems(Alignment.CENTER);
 
         add(prefix);

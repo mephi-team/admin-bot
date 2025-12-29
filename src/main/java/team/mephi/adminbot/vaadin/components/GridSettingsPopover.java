@@ -10,6 +10,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.popover.Popover;
 import com.vaadin.flow.component.popover.PopoverPosition;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashSet;
@@ -22,8 +23,7 @@ public class GridSettingsPopover extends Popover {
         setPosition(PopoverPosition.BOTTOM_END);
 
         Div heading = new Div(getTranslation("grid_settings_popover_header"));
-        heading.getStyle().set("font-weight", "600");
-        heading.getStyle().set("padding", "var(--lumo-space-xs)");
+        heading.addClassNames(LumoUtility.FontWeight.BOLD, LumoUtility.Padding.XSMALL);
 
 //        List<String> columns = List.of("firstName", "lastName", "email",
 //                "phone", "birthday", "profession");
