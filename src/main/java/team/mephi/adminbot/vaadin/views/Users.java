@@ -14,6 +14,7 @@ import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.function.SerializableRunnable;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.security.RolesAllowed;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.vaadin.CRUDActions;
@@ -179,8 +180,7 @@ public class Users extends VerticalLayout implements UserViewCallback {
         });
         primaryButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         Div buttons = new Div(new Button(getTranslation("page_users_create_from_file_button"), new Icon(VaadinIcon.FILE_ADD)), primaryButton);
-        buttons.getElement().getStyle().set("display", "flex");
-        buttons.getElement().getStyle().set("gap", "24px");
+        buttons.addClassNames(LumoUtility.Display.FLEX, LumoUtility.Gap.MEDIUM);
         top.addToEnd(buttons);
         return top;
     }

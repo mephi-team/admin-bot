@@ -9,6 +9,7 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.QueryParameters;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 import team.mephi.adminbot.dto.TutorWithCounts;
 import team.mephi.adminbot.vaadin.components.*;
 import team.mephi.adminbot.vaadin.users.actions.TutorActions;
@@ -50,9 +51,9 @@ public class TutorView extends VerticalLayout {
             Button editButton = new Button(new Icon(VaadinIcon.PENCIL), e -> actions.onEdit(item.getId()));
             Button blockButton = new Button(new Icon(VaadinIcon.BAN), e -> actions.onBlock(item.getId()));
             if (item.getDelete()) {
-                blockButton.getElement().getStyle().set("color", "red");
+                blockButton.addClassNames(LumoUtility.TextColor.ERROR);
             } else {
-                blockButton.getElement().getStyle().set("color", "black");
+                blockButton.addClassNames(LumoUtility.TextColor.BODY);
             }
             return new Span(dropButton, viewButton, chatButton, editButton, blockButton);
         }).setHeader(getTranslation("grid_header_actions_label")).setWidth("330px").setFlexGrow(0).setKey("actions");

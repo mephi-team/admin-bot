@@ -9,7 +9,9 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.QueryParameters;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 import team.mephi.adminbot.dto.UserDto;
+import team.mephi.adminbot.model.enums.UserStatus;
 import team.mephi.adminbot.vaadin.components.*;
 import team.mephi.adminbot.vaadin.users.actions.UserActions;
 import team.mephi.adminbot.vaadin.users.dataproviders.StudentDataProvider;
@@ -50,13 +52,13 @@ public class StudentView extends VerticalLayout {
             Button viewButton = new Button(new Icon(VaadinIcon.EYE), e -> actions.onView(item.getId()));
             Button chatButton = new Button(new Icon(VaadinIcon.CHAT), e -> UI.getCurrent().navigate(Dialogs.class, new QueryParameters(Map.of("userId", List.of("" + item.getId())))));
             Button editButton = new Button(new Icon(VaadinIcon.PENCIL), e -> actions.onEdit(item.getId()));
-            Button deleteButton = new Button(new Icon(VaadinIcon.BAN), e -> actions.onBlock(item.getId()));
-            if (item.getDelete()) {
-                deleteButton.getElement().getStyle().set("color", "red");
+            Button blockButton = new Button(new Icon(VaadinIcon.BAN), e -> actions.onBlock(item.getId()));
+            if (item.getStatus().equals(UserStatus.BLOCKED.name())) {
+                blockButton.addClassNames(LumoUtility.TextColor.ERROR);
             } else {
-                deleteButton.getElement().getStyle().set("color", "black");
+                blockButton.addClassNames(LumoUtility.TextColor.BODY);
             }
-            group.add(dropButton, viewButton, chatButton, editButton, deleteButton);
+            group.add(dropButton, viewButton, chatButton, editButton, blockButton);
             return group;
         }).setHeader(getTranslation("grid_header_actions_label")).setWidth("340px").setFlexGrow(0).setKey("actions");
 

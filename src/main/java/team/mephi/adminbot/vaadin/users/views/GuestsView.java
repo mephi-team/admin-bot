@@ -6,6 +6,7 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 import team.mephi.adminbot.dto.UserDto;
 import team.mephi.adminbot.model.enums.UserStatus;
 import team.mephi.adminbot.vaadin.components.*;
@@ -36,13 +37,13 @@ public class GuestsView extends VerticalLayout {
 
         grid.addComponentColumn(item -> {
             Button viewButton = new Button(new Icon(VaadinIcon.EYE), e -> actions.onView(item.getId()));
-            Button deleteButton = new Button(new Icon(VaadinIcon.BAN), e -> actions.onBlock(item.getId()));
+            Button blockButton = new Button(new Icon(VaadinIcon.BAN), e -> actions.onBlock(item.getId()));
             if (item.getStatus().equals(UserStatus.BLOCKED.name())) {
-                deleteButton.getElement().getStyle().set("color", "red");
+                blockButton.addClassNames(LumoUtility.TextColor.ERROR);
             } else {
-                deleteButton.getElement().getStyle().set("color", "black");
+                blockButton.addClassNames(LumoUtility.TextColor.BODY);
             }
-            return new Span(viewButton, deleteButton);
+            return new Span(viewButton, blockButton);
         }).setHeader(getTranslation("grid_header_actions_label")).setWidth("120px").setFlexGrow(0).setKey("actions");
 
         grid.setDataProvider(provider.getDataProvider());
