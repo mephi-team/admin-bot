@@ -5,7 +5,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.JpaSort;
-import team.mephi.adminbot.dto.MailingList;
 import team.mephi.adminbot.dto.SimpleMailing;
 import team.mephi.adminbot.model.Mailing;
 import team.mephi.adminbot.model.enums.Channels;
@@ -22,16 +21,16 @@ import java.util.stream.Collectors;
 public abstract class BaseMailingDataProvider implements CRUDDataProvider<SimpleMailing> {
     private final MailingRepository mailingRepository;
     private final UserRepository userRepository;
-    private ConfigurableFilterDataProvider<MailingList, Void, String> provider;
+    private ConfigurableFilterDataProvider<SimpleMailing, Void, String> provider;
 
     public BaseMailingDataProvider(MailingRepository mailingRepository, UserRepository userRepository) {
         this.mailingRepository = mailingRepository;
         this.userRepository = userRepository;
     }
 
-    public ConfigurableFilterDataProvider<MailingList, Void, String> getFilterableProvider() {
+    public ConfigurableFilterDataProvider<SimpleMailing, Void, String> getFilterableProvider() {
         if (provider == null) {
-            provider = new CallbackDataProvider<MailingList, String>(
+            provider = new CallbackDataProvider<SimpleMailing, String>(
                     query -> {
                         List<QuerySortOrder> sortOrders = query.getSortOrders();
                         Sort sort = JpaSort.by(
@@ -49,21 +48,35 @@ public abstract class BaseMailingDataProvider implements CRUDDataProvider<Simple
                         );
                         return mailingRepository.findMailingByName(query.getFilter().orElse(""), getStatuses().stream().map(Enum::name).toList(), pageable)
                                 .stream()
-                                .map(m -> MailingList.builder()
-                                        .id(m.getId())
-                                        .name(m.getName())
-                                        .date(m.getCreatedAt())
-                                        .users(m.getFilters() != null ? m.getFilters().getUsers() : "")
-                                        .cohort(m.getFilters() != null ? m.getFilters().getCohort() : "")
-                                        .direction(m.getFilters() != null ? m.getFilters().getDirection() : "")
-                                        .curator(m.getFilters() != null ? m.getFilters().getCurator() : "")
-                                        .city(m.getFilters() != null ? m.getFilters().getCity() : "")
-                                        .text(m.getDescription())
-                                        .status(m.getStatus().name())
-                                        .build());
+                                .map(m -> new SimpleMailing(
+                                        m.getId(),
+                                        m.getName(),
+                                        m.getDescription(),
+                                        m.getStatus().name(),
+                                        m.getCreatedBy().getId(),
+                                        m.getChannels().stream().map(Enum::name).collect(Collectors.toSet()),
+                                        m.getFilters() != null ? m.getFilters().getUsers() : "",
+                                        m.getFilters() != null ? m.getFilters().getCohort() : "",
+                                        m.getFilters() != null ? m.getFilters().getDirection() : "",
+                                        m.getFilters() != null ? m.getFilters().getDirection() : "",
+                                        m.getCreatedAt(),
+                                        m.getFilters() != null ? m.getFilters().getCurator() : ""
+                                ));
+//                                .map(m -> MailingList.builder()
+//                                        .id(m.getId())
+//                                        .name(m.getName())
+//                                        .date(m.getCreatedAt())
+//                                        .users(m.getFilters() != null ? m.getFilters().getUsers() : "")
+//                                        .cohort(m.getFilters() != null ? m.getFilters().getCohort() : "")
+//                                        .direction(m.getFilters() != null ? m.getFilters().getDirection() : "")
+//                                        .curator(m.getFilters() != null ? m.getFilters().getCurator() : "")
+//                                        .city(m.getFilters() != null ? m.getFilters().getDirection() : "")
+//                                        .text(m.getDescription())
+//                                        .status(m.getStatus().name())
+//                                        .build());
                     },
                     query -> mailingRepository.countByName(query.getFilter().orElse(""), getStatuses()),
-                    MailingList::getId
+                    SimpleMailing::getId
             ).withConfigurableFilter();
         }
 
@@ -71,13 +84,13 @@ public abstract class BaseMailingDataProvider implements CRUDDataProvider<Simple
     }
 
     @Override
-    public DataProvider<MailingList, ?> getDataProvider() {
+    public DataProvider<SimpleMailing, ?> getDataProvider() {
         return getFilterableProvider();
     }
 
     @Override
     public Optional<SimpleMailing> findById(Long id) {
-        return mailingRepository.findById(id).map(t -> new SimpleMailing(t.getId(), t.getName(), t.getDescription(), t.getStatus().name(), t.getCreatedBy().getId(), t.getChannels().stream().map(Enum::name).collect(Collectors.toSet()), t.getFilters().getUsers(), t.getFilters().getCohort(), t.getFilters().getDirection(), t.getFilters().getCity()));
+        return mailingRepository.findById(id).map(t -> new SimpleMailing(t.getId(), t.getName(), t.getDescription(), t.getStatus().name(), t.getCreatedBy().getId(), t.getChannels().stream().map(Enum::name).collect(Collectors.toSet()), t.getFilters().getUsers(), t.getFilters().getCohort(), t.getFilters().getDirection(), t.getFilters().getCity(), t.getCreatedAt(), t.getFilters().getCurator()));
     }
 
     @Override
@@ -97,7 +110,7 @@ public abstract class BaseMailingDataProvider implements CRUDDataProvider<Simple
         }
         result.setChannels(mailing.getChannels().stream().map(Channels::valueOf).toList());
         mailingRepository.save(result);
-        return new SimpleMailing(result.getId(), result.getName(), result.getDescription(), result.getStatus().name(), result.getCreatedBy().getId(), result.getChannels().stream().map(Enum::name).collect(Collectors.toSet()), result.getFilters().getUsers(), result.getFilters().getCohort(), result.getFilters().getDirection(), result.getFilters().getCity());
+        return new SimpleMailing(result.getId(), result.getName(), result.getDescription(), result.getStatus().name(), result.getCreatedBy().getId(), result.getChannels().stream().map(Enum::name).collect(Collectors.toSet()), result.getFilters().getUsers(), result.getFilters().getCohort(), result.getFilters().getDirection(), result.getFilters().getCity(), result.getCreatedAt(), result.getFilters().getCurator());
     }
 
     @Override

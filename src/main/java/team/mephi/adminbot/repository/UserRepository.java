@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.model.User;
 import team.mephi.adminbot.model.enums.UserStatus;
 
@@ -160,6 +159,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
                 ));
     }
 
-    @Query("SELECT new team.mephi.adminbot.dto.SimpleUser(u.id, u.role.code, u.firstName, u.lastName, u.email, u.tgId) FROM User u WHERE u.id = :id")
-    Optional<SimpleUser> findSimpleUserById(@NonNull Long id);
+    @Query("SELECT u FROM User u JOIN FETCH u.role JOIN FETCH u.direction WHERE u.id = :id")
+    Optional<User> findSimpleUserById(@NonNull Long id);
 }

@@ -12,7 +12,7 @@ import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
 import com.vaadin.flow.function.SerializableBiConsumer;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import team.mephi.adminbot.dto.MailingList;
+import team.mephi.adminbot.dto.SimpleMailing;
 import team.mephi.adminbot.vaadin.components.*;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.DraftDataProvider;
 import team.mephi.adminbot.vaadin.mailings.presenter.MailingsPresenter;
@@ -25,7 +25,7 @@ import java.util.Set;
 public class DraftView extends VerticalLayout {
     private List<Long> selectedIds;
 
-    private static final SerializableBiConsumer<Span, MailingList> statusComponentUpdater = (
+    private static final SerializableBiConsumer<Span, SimpleMailing> statusComponentUpdater = (
             span, person) -> {
         String theme = switch (person.getStatus()) {
             case "ACTIVE" -> String.format("badge %s", "success");
@@ -48,25 +48,25 @@ public class DraftView extends VerticalLayout {
         setSizeFull();
         setPadding(false);
 
-        LocalDateTimeRenderer<MailingList> dateRenderer = new LocalDateTimeRenderer<>(
+        LocalDateTimeRenderer<SimpleMailing> dateRenderer = new LocalDateTimeRenderer<>(
                 d -> d.getDate().atZone(ZoneOffset.of("+03:00")).toLocalDateTime(),
                 () -> DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
 
-        Grid<MailingList> grid = new Grid<>(MailingList.class, false);
+        Grid<SimpleMailing> grid = new Grid<>(SimpleMailing.class, false);
         grid.addColumn(dateRenderer).setHeader(getTranslation("grid_mailing_header_date_label")).setSortable(true).setFrozen(true)
                 .setAutoWidth(true).setFlexGrow(0).setKey("created_at");
-        grid.addColumn(MailingList::getUsers).setHeader(getTranslation("grid_mailing_header_users_label")).setSortable(true).setKey("filters->>'users'");
-        grid.addColumn(MailingList::getCohort).setHeader(getTranslation("grid_mailing_header_cohort_label")).setSortable(true).setKey("filters->>'cohort'");
-        grid.addColumn(MailingList::getDirection).setHeader(getTranslation("grid_mailing_header_direction_label")).setSortable(true).setKey("filters->>'direction'");
-        grid.addColumn(MailingList::getCurator).setHeader(getTranslation("grid_mailing_header_curator_label")).setSortable(true).setKey("filters->>'curator'");
-        grid.addColumn(MailingList::getCity).setHeader(getTranslation("grid_mailing_header_city_label")).setSortable(true).setKey("filters->>'city'");
-        grid.addColumn(MailingList::getText).setHeader(getTranslation("grid_mailing_header_text_label")).setSortable(true).setKey("description");
+        grid.addColumn(SimpleMailing::getUsers).setHeader(getTranslation("grid_mailing_header_users_label")).setSortable(true).setKey("filters->>'users'");
+        grid.addColumn(SimpleMailing::getCohort).setHeader(getTranslation("grid_mailing_header_cohort_label")).setSortable(true).setKey("filters->>'cohort'");
+        grid.addColumn(SimpleMailing::getDirection).setHeader(getTranslation("grid_mailing_header_direction_label")).setSortable(true).setKey("filters->>'direction'");
+        grid.addColumn(SimpleMailing::getCurator).setHeader(getTranslation("grid_mailing_header_curator_label")).setSortable(true).setKey("filters->>'curator'");
+        grid.addColumn(SimpleMailing::getCity).setHeader(getTranslation("grid_mailing_header_city_label")).setSortable(true).setKey("filters->>'city'");
+        grid.addColumn(SimpleMailing::getText).setHeader(getTranslation("grid_mailing_header_text_label")).setSortable(true).setKey("description");
         grid.addColumn(createStatusComponentRenderer()).setHeader(getTranslation("grid_mailing_header_status_label")).setSortable(true).setKey("status");
 
         grid.addComponentColumn(item -> {
             Div group = new Div();
             group.addClassNames(LumoUtility.TextAlignment.RIGHT);
-            Button editButton = new Button(new Icon(VaadinIcon.EDIT), e -> actions.onEdit(item.getId()));
+            Button editButton = new Button(new Icon(VaadinIcon.EDIT), e -> actions.onEdit(item));
             Button deleteButton = new Button(new Icon(VaadinIcon.TRASH), e -> actions.onDelete(List.of(item.getId())));
             group.add(editButton, deleteButton);
             return group;
@@ -77,7 +77,7 @@ public class DraftView extends VerticalLayout {
         selectionModel.setSelectionColumnFrozen(true);
 //        grid.setMultiSort(true, Grid.MultiSortPriority.APPEND);
         grid.addSelectionListener(selection -> {
-            selectedIds = selection.getAllSelectedItems().stream().map(MailingList::getId).toList();
+            selectedIds = selection.getAllSelectedItems().stream().map(SimpleMailing::getId).toList();
             gsa.setCount(selectedIds.size());
         });
         provider.getFilterableProvider().addDataProviderListener(e -> {
@@ -96,7 +96,7 @@ public class DraftView extends VerticalLayout {
         add(new SearchFragment(searchField, settingsBtn), gsa, grid);
     }
 
-    private static ComponentRenderer<Span, MailingList> createStatusComponentRenderer() {
+    private static ComponentRenderer<Span, SimpleMailing> createStatusComponentRenderer() {
         return new ComponentRenderer<>(Span::new, statusComponentUpdater);
     }
 }

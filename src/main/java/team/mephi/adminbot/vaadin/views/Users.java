@@ -12,7 +12,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.TabSheet;
-import com.vaadin.flow.function.SerializableRunnable;
+import com.vaadin.flow.function.SerializableConsumer;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.security.RolesAllowed;
@@ -120,26 +120,21 @@ public class Users extends VerticalLayout implements StudentViewCallback, TutorV
     }
 
     @Override
-    public SimpleUser getEditedItem() {
-        return editorDialog.getEditedUser();
-    }
-
-    @Override
     public void showDialogForView(SimpleUser user) {
         editorDialog.setHeaderTitle("dialog_users_view_title");
         editorDialog.openForView(user);
     }
 
     @Override
-    public void showDialogForEdit(Object user, SerializableRunnable callback) {
+    public void showDialogForEdit(Object user, SerializableConsumer<?> callback) {
         editorDialog.setHeaderTitle("dialog_users_edit_title");
-        editorDialog.openForEdit((SimpleUser) user, callback);
+        editorDialog.openForEdit((SimpleUser) user, (SerializableConsumer<SimpleUser>) callback);
     }
 
     @Override
-    public void showDialogForNew(String role, SerializableRunnable callback) {
+    public void showDialogForNew(String role, SerializableConsumer<?> callback) {
         editorDialog.setHeaderTitle("dialog_users_new_title");
-        editorDialog.openForNew(role, callback);
+        editorDialog.openForNew(role, (SerializableConsumer<SimpleUser>) callback);
     }
 
     @Override
@@ -163,7 +158,7 @@ public class Users extends VerticalLayout implements StudentViewCallback, TutorV
     }
 
     @Override
-    public void showDialogForBlock(SimpleUser user, SerializableRunnable callback) {
+    public void showDialogForBlock(SimpleUser user, SerializableConsumer<SimpleUser> callback) {
         blockDialog.openForView(user, callback);
     }
 

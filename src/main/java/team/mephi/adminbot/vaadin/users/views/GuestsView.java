@@ -7,7 +7,7 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import team.mephi.adminbot.dto.UserDto;
+import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.model.enums.UserStatus;
 import team.mephi.adminbot.vaadin.components.*;
 import team.mephi.adminbot.vaadin.users.dataproviders.GuestsDataProvider;
@@ -31,13 +31,13 @@ public class GuestsView extends VerticalLayout {
         setSizeFull();
         setPadding(false);
 
-        var grid = new Grid<>(UserDto.class, false);
-        grid.addColumn(UserDto::getFullName).setHeader(getTranslation("grid_guests_header_name_label")).setSortable(true).setKey("userName");
-        grid.addColumn(UserDto::getTgName).setHeader(getTranslation("grid_guests_header_telegram_label")).setSortable(true).setKey("tgName");
-        grid.addColumn(UserDto::getPdConsent).setHeader(getTranslation("grid_guests_header_pd_consent_label")).setSortable(true).setKey("pdConsent");
+        var grid = new Grid<>(SimpleUser.class, false);
+        grid.addColumn(SimpleUser::getTgName).setHeader(getTranslation("grid_guests_header_name_label")).setSortable(true).setKey("tgName");
+        grid.addColumn(SimpleUser::getTgId).setHeader(getTranslation("grid_guests_header_telegram_label")).setSortable(true).setKey("tgId");
+        grid.addColumn(SimpleUser::getPdConsent).setHeader(getTranslation("grid_guests_header_pd_consent_label")).setSortable(true).setKey("pdConsent");
 
         grid.addComponentColumn(item -> {
-            Button viewButton = new Button(new Icon(VaadinIcon.EYE), e -> actions.onView(item.getId()));
+            Button viewButton = new Button(new Icon(VaadinIcon.EYE), e -> actions.onView(item));
             Button blockButton = new Button(new Icon(VaadinIcon.BAN), e -> actions.onBlock(item.getId()));
             if (item.getStatus().equals(UserStatus.BLOCKED.name())) {
                 blockButton.addClassNames(LumoUtility.TextColor.ERROR);
@@ -51,7 +51,7 @@ public class GuestsView extends VerticalLayout {
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
         grid.setSizeFull();
         grid.addSelectionListener(sel -> {
-            selectedIds = sel.getAllSelectedItems().stream().map(UserDto::getId).toList();
+            selectedIds = sel.getAllSelectedItems().stream().map(SimpleUser::getId).toList();
             gsa.setCount(selectedIds.size());
         });
 

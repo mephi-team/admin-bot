@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.UpdateTimestamp;
 import team.mephi.adminbot.model.enums.UserStatus;
 
@@ -43,6 +44,7 @@ import java.util.Set;
         @Index(name = "idx_users_role_code", columnList = "role_code"),
         @Index(name = "idx_users_direction_id", columnList = "direction_id")
 })
+@DynamicUpdate
 public class User {
 
     /**
@@ -224,7 +226,7 @@ public class User {
     /**
      * Диалоги, в которых участвует пользователь.
      */
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @Builder.Default
     private List<Dialog> dialogs = new ArrayList<>();
 

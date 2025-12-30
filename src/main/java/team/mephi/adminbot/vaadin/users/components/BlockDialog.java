@@ -4,7 +4,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
-import com.vaadin.flow.function.SerializableRunnable;
+import com.vaadin.flow.function.SerializableConsumer;
 import team.mephi.adminbot.dto.SimpleUser;
 
 public class BlockDialog extends Dialog {
@@ -12,7 +12,7 @@ public class BlockDialog extends Dialog {
     private final Button saveButton = new Button(getTranslation("save_button"), e -> onSave());
     private final TabSheet tabSheet = new TabSheet();
 
-    private SerializableRunnable onSaveCallback;
+    private SerializableConsumer<SimpleUser> onSaveCallback;
 
     public BlockDialog() {
         var form1 = new WarningForm();
@@ -26,7 +26,7 @@ public class BlockDialog extends Dialog {
         getFooter().add(new Button(getTranslation("cancel_button"), e -> close()), saveButton);
     }
 
-    public void openForView(SimpleUser user, SerializableRunnable callback) {
+    public void openForView(SimpleUser user, SerializableConsumer<SimpleUser> callback) {
         this.onSaveCallback = callback;
         binder.readBean(user);
         binder.setReadOnly(true);
@@ -37,7 +37,9 @@ public class BlockDialog extends Dialog {
     private void onSave() {
         if(binder.validate().isOk()) {
             if (onSaveCallback != null) {
-                onSaveCallback.run();
+                SimpleUser user = new SimpleUser();
+                binder.writeBeanIfValid(user);
+                onSaveCallback.accept(user);
             }
             close();
         }

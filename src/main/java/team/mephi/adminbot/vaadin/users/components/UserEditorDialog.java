@@ -3,7 +3,7 @@ package team.mephi.adminbot.vaadin.users.components;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
-import com.vaadin.flow.function.SerializableRunnable;
+import com.vaadin.flow.function.SerializableConsumer;
 import team.mephi.adminbot.dto.RoleDto;
 import team.mephi.adminbot.dto.SimpleUser;
 
@@ -13,7 +13,7 @@ public class UserEditorDialog extends Dialog {
     private final BeanValidationBinder<SimpleUser> binder = new BeanValidationBinder<>(SimpleUser.class);
     private final Button saveButton = new Button(getTranslation("save_button"), e -> onSave());
 
-    private SerializableRunnable onSaveCallback;
+    private SerializableConsumer<SimpleUser> onSaveCallback;
 
     public UserEditorDialog(RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService) {
         var form = new UserForm(roleService, cohortService, directionService, cityService);
@@ -38,7 +38,7 @@ public class UserEditorDialog extends Dialog {
         open();
     }
 
-    public void openForEdit(SimpleUser user, SerializableRunnable callback) {
+    public void openForEdit(SimpleUser user, SerializableConsumer<SimpleUser> callback) {
         this.onSaveCallback = callback;
         binder.readBean(user);
         binder.setReadOnly(false);
@@ -46,7 +46,7 @@ public class UserEditorDialog extends Dialog {
         open();
     }
 
-    public void openForNew(String role, SerializableRunnable callback) {
+    public void openForNew(String role, SerializableConsumer<SimpleUser> callback) {
         this.onSaveCallback = callback;
         SimpleUser newUser = new SimpleUser();
         newUser.setRole(role);
@@ -59,16 +59,12 @@ public class UserEditorDialog extends Dialog {
     private void onSave() {
         if(binder.validate().isOk()) {
             if (onSaveCallback != null) {
-                onSaveCallback.run();
+                SimpleUser user = new SimpleUser();
+                binder.writeBeanIfValid(user);
+                onSaveCallback.accept(user);
             }
             close();
         }
-    }
-
-    public SimpleUser getEditedUser() {
-        SimpleUser user = new SimpleUser();
-        binder.writeBeanIfValid(user);
-        return user;
     }
 
     @Override

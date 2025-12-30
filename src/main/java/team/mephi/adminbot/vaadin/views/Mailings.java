@@ -11,7 +11,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.TabSheet;
-import com.vaadin.flow.function.SerializableRunnable;
+import com.vaadin.flow.function.SerializableConsumer;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
 import team.mephi.adminbot.dto.SimpleMailing;
@@ -143,38 +143,29 @@ public class Mailings extends VerticalLayout implements MailingViewCallback {
     }
 
     @Override
-    public Object getEditedItem() {
-        if (getCurrentRole().equals("templates")) {
-            return templateEditorDialog.getEditedItem();
-        } else {
-            return mailingEditorDialog.getEditedItem();
-        }
-    }
-
-    @Override
     public void showDialogForView(SimpleMailing user) {
 
     }
 
     @Override
-    public void showDialogForNew(String role, SerializableRunnable callback) {
+    public void showDialogForNew(String role, SerializableConsumer<?> callback) {
         if (getCurrentRole().equals("templates")) {
             templateEditorDialog.setHeaderTitle("dialog_template_new_title");
-            templateEditorDialog.showDialogForNew(callback);
+            templateEditorDialog.showDialogForNew((SerializableConsumer<SimpleTemplate>) callback);
         } else {
             mailingEditorDialog.setHeaderTitle("dialog_mailing_new_title");
-            mailingEditorDialog.showDialogForNew(callback);
+            mailingEditorDialog.showDialogForNew((SerializableConsumer<SimpleMailing>) callback);
         }
     }
 
     @Override
-    public void showDialogForEdit(Object mailing, SerializableRunnable callback) {
+    public void showDialogForEdit(Object mailing, SerializableConsumer<?> callback) {
         if (getCurrentRole().equals("templates")) {
             templateEditorDialog.setHeaderTitle("dialog_template_edit_title");
-            templateEditorDialog.showDialogForEdit((SimpleTemplate) mailing, callback);
+            templateEditorDialog.showDialogForEdit((SimpleTemplate) mailing, (SerializableConsumer<SimpleTemplate>) callback);
         } else {
             mailingEditorDialog.setHeaderTitle("dialog_mailing_edit_title");
-            mailingEditorDialog.showDialogForEdit((SimpleMailing) mailing, callback);
+            mailingEditorDialog.showDialogForEdit((SimpleMailing) mailing, (SerializableConsumer<SimpleMailing>) callback);
         }
     }
 

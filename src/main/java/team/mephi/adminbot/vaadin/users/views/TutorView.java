@@ -10,7 +10,8 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.QueryParameters;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import team.mephi.adminbot.dto.TutorWithCounts;
+import team.mephi.adminbot.dto.SimpleUser;
+import team.mephi.adminbot.model.enums.UserStatus;
 import team.mephi.adminbot.vaadin.components.*;
 import team.mephi.adminbot.vaadin.users.dataproviders.TutorDataProvider;
 import team.mephi.adminbot.vaadin.users.presenter.TutorPresenter;
@@ -35,23 +36,23 @@ public class TutorView extends VerticalLayout {
         setSizeFull();
         setPadding(false);
 
-        var grid = new Grid<>(TutorWithCounts.class, false);
-        grid.addColumn(TutorWithCounts::getFullName).setHeader(getTranslation("grid_tutor_header_name_label")).setSortable(true).setFrozen(true)
+        var grid = new Grid<>(SimpleUser.class, false);
+        grid.addColumn(SimpleUser::getFullName).setHeader(getTranslation("grid_tutor_header_name_label")).setSortable(true).setFrozen(true)
                 .setAutoWidth(true).setFlexGrow(0).setKey("last_name");
-        grid.addColumn(TutorWithCounts::getEmail).setHeader(getTranslation("grid_tutor_header_email_label")).setSortable(true).setKey("email");
-        grid.addColumn(TutorWithCounts::getTgId).setHeader(getTranslation("grid_tutor_header_telegram_label")).setSortable(true).setKey("tg_name");
-        grid.addColumn(TutorWithCounts::getDirections).setHeader(getTranslation("grid_tutor_header_direction_label")).setKey("direction");
-        grid.addColumn(TutorWithCounts::getStudentCount).setHeader(getTranslation("grid_tutor_header_curatorship_label")).setKey("curatorship");
+        grid.addColumn(SimpleUser::getEmail).setHeader(getTranslation("grid_tutor_header_email_label")).setSortable(true).setKey("email");
+        grid.addColumn(SimpleUser::getTgId).setHeader(getTranslation("grid_tutor_header_telegram_label")).setSortable(true).setKey("tg_name");
+        grid.addColumn(SimpleUser::getDirection).setHeader(getTranslation("grid_tutor_header_direction_label")).setKey("direction");
+        grid.addColumn(SimpleUser::getStudentCount).setHeader(getTranslation("grid_tutor_header_curatorship_label")).setKey("curatorship");
 
         grid.addComponentColumn(item -> {
             Button dropButton = new Button(getTranslation("grid_tutor_action_curatorship_label"), e -> actions.onTutoring(item.getId()));
-            Button viewButton = new Button(new Icon(VaadinIcon.EYE), e -> actions.onView(item.getId()));
+            Button viewButton = new Button(new Icon(VaadinIcon.EYE), e -> actions.onView(item));
             Button chatButton = new Button(new Icon(VaadinIcon.CHAT), e -> {
                 UI.getCurrent().navigate(Dialogs.class, new QueryParameters(Map.of("userId", List.of("" + item.getId()))));
             });
-            Button editButton = new Button(new Icon(VaadinIcon.PENCIL), e -> actions.onEdit(item.getId()));
+            Button editButton = new Button(new Icon(VaadinIcon.PENCIL), e -> actions.onEdit(item));
             Button blockButton = new Button(new Icon(VaadinIcon.BAN), e -> actions.onBlock(item.getId()));
-            if (item.getDelete()) {
+            if (item.getStatus().equals(UserStatus.BLOCKED.name())) {
                 blockButton.addClassNames(LumoUtility.TextColor.ERROR);
             } else {
                 blockButton.addClassNames(LumoUtility.TextColor.BODY);
@@ -60,11 +61,11 @@ public class TutorView extends VerticalLayout {
         }).setHeader(getTranslation("grid_header_actions_label")).setWidth("330px").setFlexGrow(0).setKey("actions");
 
         grid.setDataProvider(provider.getDataProvider());
-        GridMultiSelectionModel<TutorWithCounts> selectionModel = (GridMultiSelectionModel<TutorWithCounts>) grid.setSelectionMode(Grid.SelectionMode.MULTI);
+        GridMultiSelectionModel<SimpleUser> selectionModel = (GridMultiSelectionModel<SimpleUser>) grid.setSelectionMode(Grid.SelectionMode.MULTI);
         selectionModel.setSelectionColumnFrozen(true);
         grid.setSizeFull();
         grid.addSelectionListener(sel -> {
-            selectedIds = sel.getAllSelectedItems().stream().map(TutorWithCounts::getId).toList();
+            selectedIds = sel.getAllSelectedItems().stream().map(SimpleUser::getId).toList();
             gsa.setCount(selectedIds.size());
         });
 

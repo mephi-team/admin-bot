@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
 import java.util.Set;
 
 @Data
@@ -28,4 +29,6 @@ public class SimpleMailing {
     private String direction;
     @NotEmpty
     private String city;
+    private Instant date;
+    private String curator;
 }

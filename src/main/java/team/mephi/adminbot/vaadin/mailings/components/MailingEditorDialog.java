@@ -7,7 +7,7 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
-import com.vaadin.flow.function.SerializableRunnable;
+import com.vaadin.flow.function.SerializableConsumer;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import team.mephi.adminbot.dto.SimpleMailing;
 import team.mephi.adminbot.dto.UserDto;
@@ -23,7 +23,7 @@ public class MailingEditorDialog extends Dialog {
     private final Button next = new Button(getTranslation("next_button"), VaadinIcon.ARROW_RIGHT.create());
     private final Button prev = new Button(getTranslation("prev_button"), VaadinIcon.ARROW_LEFT.create());
 
-    private SerializableRunnable onSaveCallback;
+    private SerializableConsumer<SimpleMailing> onSaveCallback;
 
     public MailingEditorDialog(UserService userService) {
         var form1 = new MailingForm(userService);
@@ -76,7 +76,7 @@ public class MailingEditorDialog extends Dialog {
         });
     }
 
-    public void showDialogForNew(SerializableRunnable callback) {
+    public void showDialogForNew(SerializableConsumer<SimpleMailing> callback) {
         this.onSaveCallback = callback;
         var newMailing = new SimpleMailing();
         newMailing.setUserId(0L);
@@ -87,7 +87,7 @@ public class MailingEditorDialog extends Dialog {
         open();
     }
 
-    public void showDialogForEdit(SimpleMailing mailing, SerializableRunnable callback) {
+    public void showDialogForEdit(SimpleMailing mailing, SerializableConsumer<SimpleMailing> callback) {
         this.onSaveCallback = callback;
         binder.readBean(mailing);
         binder.setReadOnly(false);
@@ -99,16 +99,12 @@ public class MailingEditorDialog extends Dialog {
     private void onSave() {
         if(binder.validate().isOk()) {
             if (onSaveCallback != null) {
-                onSaveCallback.run();
+                SimpleMailing mailing = new SimpleMailing();
+                binder.writeBeanIfValid(mailing);
+                onSaveCallback.accept(mailing);
             }
             close();
         }
-    }
-
-    public SimpleMailing getEditedItem() {
-        SimpleMailing mailing = new SimpleMailing();
-        binder.writeBeanIfValid(mailing);
-        return mailing;
     }
 
     @Override

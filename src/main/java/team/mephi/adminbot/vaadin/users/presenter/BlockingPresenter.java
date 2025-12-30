@@ -19,7 +19,7 @@ public class BlockingPresenter extends CRUDPresenter<SimpleUser> implements Bloc
     @Override
     public void onBlock(Long id) {
         dataProvider.findById(id).ifPresent(m -> {
-            view.showDialogForBlock(m, () -> {
+            view.showDialogForBlock(m, (callback) -> {
                 dataProvider.blockAllById(List.of(m.getId()));
                 dataProvider.getDataProvider().refreshAll();
                 view.showNotificationForBlock(m.getId());

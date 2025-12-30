@@ -2,7 +2,7 @@ package team.mephi.adminbot.vaadin;
 
 import java.util.List;
 
-public class CRUDPresenter<T> implements CRUDActions, DataProvider<T> {
+public class CRUDPresenter<T> implements CRUDActions<T>, DataProvider<T> {
     private final CRUDDataProvider<T> dataProvider;
     protected final CRUDViewCallback<T> view;
 
@@ -13,8 +13,7 @@ public class CRUDPresenter<T> implements CRUDActions, DataProvider<T> {
 
     @Override
     public void onCreate(String role) {
-        view.showDialogForNew(role, () -> {
-            var newMailing = view.getEditedItem();
+        view.showDialogForNew(role, (newMailing) -> {
             if (newMailing != null) {
                 dataProvider.save((T) newMailing);
                 dataProvider.getDataProvider().refreshAll();
@@ -24,22 +23,21 @@ public class CRUDPresenter<T> implements CRUDActions, DataProvider<T> {
     }
 
     @Override
-    public void onView(Long id) {
-        dataProvider.findById(id).ifPresent(view::showDialogForView);
+    public void onView(T user) {
+        view.showDialogForView(user);
     }
 
     @Override
-    public void onEdit(Long id) {
-        dataProvider.findById(id).ifPresent(m -> {
-            view.showDialogForEdit(m, () -> {
-                var editedItem = view.getEditedItem();
+    public void onEdit(T item) {
+//        dataProvider.findById(id).ifPresent(m -> {
+            view.showDialogForEdit(item, (editedItem) -> {
                 if (editedItem != null) {
-                    dataProvider.save((T) editedItem);
-                    dataProvider.getDataProvider().refreshAll();
-                    view.showNotificationForEdit(id);
+                    editedItem = dataProvider.save((T) editedItem);
+                    dataProvider.getDataProvider().refreshItem((T) editedItem);
+                    view.showNotificationForEdit(0L);
                 }
             });
-        });
+//        });
     }
 
     @Override

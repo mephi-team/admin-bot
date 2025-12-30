@@ -19,9 +19,10 @@ public class UserForm extends FormLayout {
     private TextField firstName = new TextField();
     private TextField lastName = new TextField();
     private EmailField email = new EmailField();
-    private TextField telegram = new TextField();
+    private TextField tgId = new TextField();
     private TextField phoneNumber = new TextField();
     private TextField id = new TextField();
+    private TextField fullName = new TextField();
 
     public UserForm(RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService) {
         roles.setItemsPageable(roleService::getAllRoles);
@@ -45,11 +46,12 @@ public class UserForm extends FormLayout {
 
         id.setVisible(false);
         add(id);
+        add(fullName);
         addFormItem(roles, getTranslation("form_users_roles_label"));
         addFormItem(firstName, getTranslation("form_users_first_name_label"));
         addFormItem(lastName, getTranslation("form_users_last_name_label"));
         addFormItem(email, getTranslation("form_users_email_label"));
-        addFormItem(telegram, getTranslation("form_users_telegram_label"));
+        addFormItem(tgId, getTranslation("form_users_telegram_label"));
         addFormItem(phoneNumber, getTranslation("form_users_phone_number_label"));
         addFormItem(cohorts, getTranslation("form_users_cohorts_label"));
         addFormItem(directions, getTranslation("form_users_directions_label"));

@@ -7,7 +7,7 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import team.mephi.adminbot.dto.TemplateListDto;
+import team.mephi.adminbot.dto.SimpleTemplate;
 import team.mephi.adminbot.vaadin.components.*;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.TemplateDataProvider;
 import team.mephi.adminbot.vaadin.mailings.presenter.TemplatePresenter;
@@ -31,14 +31,14 @@ public class TemplateView extends VerticalLayout {
         setSizeFull();
         setPadding(false);
 
-        Grid<TemplateListDto> grid = new Grid<>(TemplateListDto.class, false);
-        grid.addColumn(TemplateListDto::getName).setHeader(getTranslation("grid_template_header_name_label")).setSortable(true).setKey("name");
-        grid.addColumn(TemplateListDto::getText).setHeader(getTranslation("grid_template_header_text_label")).setSortable(true).setKey("bodyText");
+        Grid<SimpleTemplate> grid = new Grid<>(SimpleTemplate.class, false);
+        grid.addColumn(SimpleTemplate::getName).setHeader(getTranslation("grid_template_header_name_label")).setSortable(true).setKey("name");
+        grid.addColumn(SimpleTemplate::getText).setHeader(getTranslation("grid_template_header_text_label")).setSortable(true).setKey("bodyText");
 
         grid.addComponentColumn(item -> {
             Div group = new Div();
             group.addClassNames(LumoUtility.TextAlignment.RIGHT);
-            Button editButton = new Button(new Icon(VaadinIcon.EDIT), e -> actions.onEdit(item.getId()));
+            Button editButton = new Button(new Icon(VaadinIcon.EDIT), e -> actions.onEdit(item));
             Button deleteButton = new Button(new Icon(VaadinIcon.TRASH), e -> actions.onDelete(List.of(item.getId())));
             group.add(editButton, deleteButton);
             return group;
@@ -48,7 +48,7 @@ public class TemplateView extends VerticalLayout {
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
 //        grid.setMultiSort(true, Grid.MultiSortPriority.APPEND);
         grid.addSelectionListener(selection -> {
-            selectedIds = selection.getAllSelectedItems().stream().map(TemplateListDto::getId).toList();
+            selectedIds = selection.getAllSelectedItems().stream().map(SimpleTemplate::getId).toList();
             gsa.setCount(selectedIds.size());
         });
         provider.getFilterableProvider().addDataProviderListener(e -> {

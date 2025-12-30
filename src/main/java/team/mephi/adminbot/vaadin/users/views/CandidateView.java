@@ -10,7 +10,8 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.QueryParameters;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import team.mephi.adminbot.dto.UserDto;
+import team.mephi.adminbot.dto.SimpleUser;
+import team.mephi.adminbot.model.enums.UserStatus;
 import team.mephi.adminbot.vaadin.components.*;
 import team.mephi.adminbot.vaadin.users.dataproviders.CandidateDataProvider;
 import team.mephi.adminbot.vaadin.users.presenter.UsersPresenter;
@@ -43,25 +44,25 @@ public class CandidateView extends VerticalLayout {
         setSizeFull();
         setPadding(false);
 
-        var grid = new Grid<>(UserDto.class, false);
-        grid.addColumn(UserDto::getFullName).setHeader(getTranslation("grid_candidate_header_name_label")).setSortable(true).setFrozen(true)
+        var grid = new Grid<>(SimpleUser.class, false);
+        grid.addColumn(SimpleUser::getFullName).setHeader(getTranslation("grid_candidate_header_name_label")).setSortable(true).setFrozen(true)
                 .setAutoWidth(true).setFlexGrow(0).setKey("lastName");
-        grid.addColumn(UserDto::getEmail).setHeader(getTranslation("grid_candidate_header_email_label")).setSortable(true).setKey("email");
-        grid.addColumn(UserDto::getTgName).setHeader(getTranslation("grid_candidate_header_telegram_label")).setSortable(true).setKey("tgName");
-        grid.addColumn(UserDto::getPhoneNumber).setHeader(getTranslation("grid_candidate_header_phone_label")).setSortable(true).setKey("phoneNumber");
-        grid.addColumn(UserDto::getPdConsent).setHeader(getTranslation("grid_candidate_header_pd_consent_label")).setSortable(true).setKey("pdConsent");
-        grid.addColumn(UserDto::getCohort).setHeader(getTranslation("grid_candidate_header_cohort_label")).setSortable(true).setKey("cohort");
-        grid.addColumn(UserDto::getDirection).setHeader(getTranslation("grid_candidate_header_direction_label")).setSortable(true).setKey("direction");
-        grid.addColumn(UserDto::getCity).setHeader(getTranslation("grid_candidate_header_city_label")).setSortable(true).setKey("city");
+        grid.addColumn(SimpleUser::getEmail).setHeader(getTranslation("grid_candidate_header_email_label")).setSortable(true).setKey("email");
+        grid.addColumn(SimpleUser::getTgId).setHeader(getTranslation("grid_candidate_header_telegram_label")).setSortable(true).setKey("tgId");
+        grid.addColumn(SimpleUser::getPhoneNumber).setHeader(getTranslation("grid_candidate_header_phone_label")).setSortable(true).setKey("phoneNumber");
+        grid.addColumn(SimpleUser::getPdConsent).setHeader(getTranslation("grid_candidate_header_pd_consent_label")).setSortable(true).setKey("pdConsent");
+        grid.addColumn(SimpleUser::getCohort).setHeader(getTranslation("grid_candidate_header_cohort_label")).setSortable(true).setKey("cohort");
+        grid.addColumn(SimpleUser::getDirection).setHeader(getTranslation("grid_candidate_header_direction_label")).setSortable(true).setKey("direction");
+        grid.addColumn(SimpleUser::getCity).setHeader(getTranslation("grid_candidate_header_city_label")).setSortable(true).setKey("city");
 
         grid.addComponentColumn(item -> {
             Button confirmButton = new Button(new Icon(VaadinIcon.CHECK), e -> actions.onAccept(List.of(item.getId())));
             Button rejectButton = new Button(new Icon(VaadinIcon.CLOSE), e -> actions.onReject(List.of(item.getId())));
-            Button viewButton = new Button(new Icon(VaadinIcon.EYE), e -> actions.onView(item.getId()));
+            Button viewButton = new Button(new Icon(VaadinIcon.EYE), e -> actions.onView(item));
             Button chatButton = new Button(new Icon(VaadinIcon.CHAT), e -> UI.getCurrent().navigate(Dialogs.class, new QueryParameters(Map.of("userId", List.of("" + item.getId())))));
-            Button editButton = new Button(new Icon(VaadinIcon.PENCIL), e -> actions.onEdit(item.getId()));
+            Button editButton = new Button(new Icon(VaadinIcon.PENCIL), e -> actions.onEdit(item));
             Button blockButton = new Button(new Icon(VaadinIcon.BAN), e -> actions.onBlock(item.getId()));
-            if (item.getDelete()) {
+            if (UserStatus.BLOCKED.name().equals(item.getStatus())) {
                 blockButton.addClassNames(LumoUtility.TextColor.ERROR);
             } else {
                 blockButton.addClassNames(LumoUtility.TextColor.BODY);
@@ -70,11 +71,11 @@ public class CandidateView extends VerticalLayout {
         }).setHeader(getTranslation("grid_header_actions_label")).setWidth("290px").setFlexGrow(0).setKey("actions");
 
         grid.setDataProvider(provider.getDataProvider());
-        GridMultiSelectionModel<UserDto> selectionModel = (GridMultiSelectionModel<UserDto>) grid.setSelectionMode(Grid.SelectionMode.MULTI);
+        GridMultiSelectionModel<SimpleUser> selectionModel = (GridMultiSelectionModel<SimpleUser>) grid.setSelectionMode(Grid.SelectionMode.MULTI);
         selectionModel.setSelectionColumnFrozen(true);
         grid.setSizeFull();
         grid.addSelectionListener(sel -> {
-            selectedIds = sel.getAllSelectedItems().stream().map(UserDto::getId).toList();
+            selectedIds = sel.getAllSelectedItems().stream().map(SimpleUser::getId).toList();
             gsa.setCount(selectedIds.size());
         });
 

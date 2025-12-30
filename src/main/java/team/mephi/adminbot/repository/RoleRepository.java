@@ -1,5 +1,6 @@
 package team.mephi.adminbot.repository;
 
+import jakarta.persistence.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import team.mephi.adminbot.model.Role;
 
@@ -10,6 +11,7 @@ import java.util.Optional;
  *
  * <p>Роли являются справочными данными и обычно загружаются по коду (code).
  */
+@Cacheable
 public interface RoleRepository extends JpaRepository<Role, String> {
     /**
      * Находит роль по названию.

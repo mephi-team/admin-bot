@@ -18,15 +18,15 @@ public class TutorDataProvider implements UserDataProvider {
 
     private final TutorRepository tutorRepository;
 
-    private ConfigurableFilterDataProvider<TutorWithCounts, Void, String> provider;
+    private ConfigurableFilterDataProvider<SimpleUser, Void, String> provider;
 
     public TutorDataProvider(TutorRepository tutorRepository) {
         this.tutorRepository = tutorRepository;
     }
 
-    public ConfigurableFilterDataProvider<TutorWithCounts, Void, String> getFilterableProvider() {
+    public ConfigurableFilterDataProvider<SimpleUser, Void, String> getFilterableProvider() {
         if (provider == null) {
-            CallbackDataProvider<TutorWithCounts, String> base = new CallbackDataProvider<>(
+            CallbackDataProvider<SimpleUser, String> base = new CallbackDataProvider<>(
                     query -> {
                         List<QuerySortOrder> sortOrders = query.getSortOrders();
                         Sort sort = Sort.by(sortOrders.stream()
@@ -41,11 +41,17 @@ public class TutorDataProvider implements UserDataProvider {
                         );
                         return tutorRepository.findAllWithDirectionsAndStudents(query.getFilter().orElse(""), pageable)
                             .stream()
-                            .skip(query.getOffset())
-                            .limit(query.getLimit());
+                                .map(u -> SimpleUser.builder()
+                                        .id(u.getId())
+                                        .fullName(u.getFullName())
+                                        .email(u.getEmail())
+                                        .tgId(u.getTgId())
+                                        .studentCount(u.getStudentCount())
+                                        .status("ACTIVE")
+                                        .build());
                         },
                     query -> tutorRepository.countByName(query.getFilter().orElse("")),
-                    TutorWithCounts::getId
+                    SimpleUser::getId
             );
             provider = base.withConfigurableFilter();
         }
@@ -53,7 +59,7 @@ public class TutorDataProvider implements UserDataProvider {
     }
 
     @Override
-    public DataProvider<TutorWithCounts, ?> getDataProvider() {
+    public DataProvider<SimpleUser, ?> getDataProvider() {
         return getFilterableProvider();
     }
 
@@ -70,9 +76,9 @@ public class TutorDataProvider implements UserDataProvider {
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
         user.setEmail(dto.getEmail());
-        user.setTgId(dto.getTelegram());
+        user.setTgId(dto.getTgId());
         user = tutorRepository.save(user);
-        return new SimpleUser(user.getId(), "tutor", user.getFirstName(), user.getLastName(), user.getEmail(), user.getTgId());
+        return new SimpleUser();
     }
 
     @Override

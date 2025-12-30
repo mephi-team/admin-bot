@@ -16,15 +16,15 @@ import java.util.stream.Collectors;
 
 public class TemplateDataProvider implements CRUDDataProvider<SimpleTemplate> {
     private final MailTemplateRepository mailTemplateRepository;
-    private ConfigurableFilterDataProvider<TemplateListDto, Void, String> provider;
+    private ConfigurableFilterDataProvider<SimpleTemplate, Void, String> provider;
 
     public TemplateDataProvider(MailTemplateRepository mailTemplateRepository) {
         this.mailTemplateRepository = mailTemplateRepository;
     }
 
-    public ConfigurableFilterDataProvider<TemplateListDto, Void, String> getFilterableProvider() {
+    public ConfigurableFilterDataProvider<SimpleTemplate, Void, String> getFilterableProvider() {
         if (provider == null) {
-            provider = new CallbackDataProvider<TemplateListDto, String>(
+            provider = new CallbackDataProvider<SimpleTemplate, String>(
                     query -> {
                         List<QuerySortOrder> sortOrders = query.getSortOrders();
                         Sort sort = Sort.by(sortOrders.stream()
@@ -39,14 +39,19 @@ public class TemplateDataProvider implements CRUDDataProvider<SimpleTemplate> {
                         );
                         return mailTemplateRepository.findAllByName(query.getFilter().orElse(""), pageable)
                                 .stream()
-                                .map(m -> TemplateListDto.builder()
-                                        .id(m.getId())
-                                        .name(m.getName())
-                                        .text(m.getBodyText())
-                                        .build());
+                                .map(m -> new SimpleTemplate(
+                                        m.getId(),
+                                        m.getName(),
+                                        m.getBodyText()
+                                ));
+//                                .map(m -> TemplateListDto.builder()
+//                                        .id(m.getId())
+//                                        .name(m.getName())
+//                                        .text(m.getBodyText())
+//                                        .build());
                     },
                     query -> mailTemplateRepository.countByName(query.getFilter().orElse("")),
-                    TemplateListDto::getId
+                    SimpleTemplate::getId
             ).withConfigurableFilter();
         }
 
@@ -54,7 +59,7 @@ public class TemplateDataProvider implements CRUDDataProvider<SimpleTemplate> {
     }
 
     @Override
-    public DataProvider<TemplateListDto, ?> getDataProvider() {
+    public DataProvider<SimpleTemplate, ?> getDataProvider() {
         return getFilterableProvider();
     }
 

@@ -3,14 +3,14 @@ package team.mephi.adminbot.vaadin.mailings.components;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
-import com.vaadin.flow.function.SerializableRunnable;
+import com.vaadin.flow.function.SerializableConsumer;
 import team.mephi.adminbot.dto.SimpleTemplate;
 
 public class TemplateEditorDialog extends Dialog {
     private final BeanValidationBinder<SimpleTemplate> binder = new BeanValidationBinder<>(SimpleTemplate.class);
     private final Button saveButton = new Button(getTranslation("save_button"), e -> onSave());
 
-    private SerializableRunnable onSaveCallback;
+    private SerializableConsumer<SimpleTemplate> onSaveCallback;
 
     public TemplateEditorDialog() {
         var form = new TemplateForm();
@@ -22,7 +22,7 @@ public class TemplateEditorDialog extends Dialog {
         getFooter().add(saveButton);
     }
 
-    public void showDialogForNew(SerializableRunnable callback) {
+    public void showDialogForNew(SerializableConsumer<SimpleTemplate> callback) {
         this.onSaveCallback = callback;
         var newTemplate = new SimpleTemplate();
         binder.readBean(newTemplate);
@@ -31,7 +31,7 @@ public class TemplateEditorDialog extends Dialog {
         open();
     }
 
-    public void showDialogForEdit(SimpleTemplate template, SerializableRunnable callback) {
+    public void showDialogForEdit(SimpleTemplate template, SerializableConsumer<SimpleTemplate> callback) {
         this.onSaveCallback = callback;
         binder.readBean(template);
         binder.setReadOnly(false);
@@ -39,16 +39,12 @@ public class TemplateEditorDialog extends Dialog {
         open();
     }
 
-    public SimpleTemplate getEditedItem() {
-        SimpleTemplate template = new SimpleTemplate();
-        binder.writeBeanIfValid(template);
-        return template;
-    }
-
     private void onSave() {
         if(binder.validate().isOk()) {
             if (onSaveCallback != null) {
-                onSaveCallback.run();
+                SimpleTemplate template = new SimpleTemplate();
+                binder.writeBeanIfValid(template);
+                onSaveCallback.accept(template);
             }
             close();
         }
