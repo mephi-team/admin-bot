@@ -6,8 +6,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import team.mephi.adminbot.dto.SimpleUser;
-import team.mephi.adminbot.repository.RoleRepository;
-import team.mephi.adminbot.repository.UserRepository;
 import team.mephi.adminbot.vaadin.users.presenter.UserDataProvider;
 import team.mephi.adminbot.vaadin.users.service.UserCountService;
 
@@ -17,15 +15,11 @@ import java.util.stream.Collectors;
 
 public abstract class BaseUserDataProvider implements UserDataProvider {
     private final UserCountService userService;
-    private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
 
     private ConfigurableFilterDataProvider<SimpleUser, Void, String> provider;
 
-    public BaseUserDataProvider(UserRepository userRepository, RoleRepository roleRepository, UserCountService userService) {
+    public BaseUserDataProvider(UserCountService userService) {
         this.userService = userService;
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
     }
 
     public ConfigurableFilterDataProvider<SimpleUser, Void, String> getFilterableProvider() {
@@ -43,24 +37,9 @@ public abstract class BaseUserDataProvider implements UserDataProvider {
                                 query.getLimit(),
                                 sort.isUnsorted() ? Sort.by("createdAt").descending() : sort
                         );
-                        return userRepository.findAllByRoleAndName(getRole(), query.getFilter().orElse(""), pageable)
-                            .stream()
-                            .map(u -> SimpleUser.builder()
-                                    .id(u.getId())
-                                    .role(u.getRole().getName())
-                                    .firstName(u.getFirstName())
-                                    .lastName(u.getLastName())
-                                    .fullName(u.getUserName())
-                                    .phoneNumber(u.getPhoneNumber())
-                                    .tgId(u.getTgId())
-                                    .tgName(u.getTgName())
-                                    .email(u.getEmail())
-                                    .phoneNumber(u.getPhoneNumber())
-                                    .pdConsent(u.getPdConsent())
-                                    .status(u.getStatus().name())
-                                    .build());
+                        return userService.findAllByRoleAndName(getRole(), query.getFilter().orElse(""), pageable);
                         },
-                    query -> userRepository.countByRoleAndName(getRole(), query.getFilter().orElse("")),
+                    query -> userService.countByRoleAndName(getRole(), query.getFilter().orElse("")),
                     SimpleUser::getId
             );
             provider = base.withConfigurableFilter();
@@ -86,12 +65,12 @@ public abstract class BaseUserDataProvider implements UserDataProvider {
 
     @Override
     public void deleteAllById(Iterable<Long> ids) {
-        userRepository.deleteAllById(ids);
+        userService.deleteAllById(ids);
     }
 
     @Override
     public void blockAllById(Iterable<Long> ids) {
-        userRepository.blockAllById(ids);
+        userService.blockAllById(ids);
     }
 
     protected abstract String getRole();

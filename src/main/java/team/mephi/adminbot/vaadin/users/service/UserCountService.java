@@ -1,26 +1,25 @@
 package team.mephi.adminbot.vaadin.users.service;
 
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.model.Role;
 import team.mephi.adminbot.model.User;
 import team.mephi.adminbot.model.enums.UserStatus;
-import team.mephi.adminbot.repository.RoleRepository;
 import team.mephi.adminbot.repository.UserRepository;
 
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @Service
 public class UserCountService {
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
 
-    public UserCountService(UserRepository userRepository, RoleRepository roleRepository) {
+    public UserCountService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
     }
 
     public Map<String, Long> getAllCounts() {
@@ -72,5 +71,36 @@ public class UserCountService {
                 .pdConsent(user.getPdConsent())
                 .fullName(user.getUserName())
                 .build();
+    }
+
+    public void deleteAllById(Iterable<Long> ids) {
+        userRepository.deleteAllById(ids);
+    }
+
+    public void blockAllById(Iterable<Long> ids) {
+        userRepository.blockAllById(ids);
+    }
+
+    public Stream<SimpleUser> findAllByRoleAndName(String role, String query, Pageable pageable) {
+        return userRepository.findAllByRoleAndName(role, query, pageable)
+                .stream()
+                .map(u -> SimpleUser.builder()
+                        .id(u.getId())
+                        .role(u.getRole().getName())
+                        .firstName(u.getFirstName())
+                        .lastName(u.getLastName())
+                        .fullName(u.getUserName())
+                        .phoneNumber(u.getPhoneNumber())
+                        .tgId(u.getTgId())
+                        .tgName(u.getTgName())
+                        .email(u.getEmail())
+                        .phoneNumber(u.getPhoneNumber())
+                        .pdConsent(u.getPdConsent())
+                        .status(u.getStatus().name())
+                        .build());
+    }
+
+    public Integer countByRoleAndName(String role, String query) {
+        return userRepository.countByRoleAndName(role, query);
     }
 }
