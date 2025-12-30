@@ -8,6 +8,7 @@ import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.dto.TutorWithCounts;
 import team.mephi.adminbot.model.Tutor;
 import team.mephi.adminbot.repository.TutorRepository;
+import team.mephi.adminbot.vaadin.users.presenter.UserDataProvider;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,4 +1,4 @@
-package team.mephi.adminbot.vaadin.users.dataproviders;
+package team.mephi.adminbot.vaadin.users.presenter;
 
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.vaadin.CRUDDataProvider;

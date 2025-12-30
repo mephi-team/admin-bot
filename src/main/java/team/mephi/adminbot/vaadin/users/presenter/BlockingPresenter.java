@@ -3,7 +3,6 @@ package team.mephi.adminbot.vaadin.users.presenter;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.vaadin.CRUDPresenter;
 import team.mephi.adminbot.vaadin.users.actions.BlockingActions;
-import team.mephi.adminbot.vaadin.users.dataproviders.UserDataProvider;
 
 import java.util.List;
 

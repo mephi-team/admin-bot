@@ -1,7 +1,6 @@
 package team.mephi.adminbot.vaadin.users.presenter;
 
 import team.mephi.adminbot.vaadin.users.actions.TutorActions;
-import team.mephi.adminbot.vaadin.users.dataproviders.UserDataProvider;
 
 public class TutorPresenter extends BlockingPresenter implements TutorActions {
     private final UserDataProvider dataProvider;

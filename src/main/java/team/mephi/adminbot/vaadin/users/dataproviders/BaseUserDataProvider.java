@@ -9,6 +9,7 @@ import team.mephi.adminbot.dto.UserDto;
 import team.mephi.adminbot.model.User;
 import team.mephi.adminbot.repository.RoleRepository;
 import team.mephi.adminbot.repository.UserRepository;
+import team.mephi.adminbot.vaadin.users.presenter.UserDataProvider;
 
 import java.util.List;
 import java.util.Optional;

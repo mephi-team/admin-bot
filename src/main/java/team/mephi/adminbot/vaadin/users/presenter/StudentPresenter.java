@@ -1,7 +1,6 @@
 package team.mephi.adminbot.vaadin.users.presenter;
 
 import team.mephi.adminbot.vaadin.users.actions.StudentActions;
-import team.mephi.adminbot.vaadin.users.dataproviders.UserDataProvider;
 
 import java.util.List;
 
