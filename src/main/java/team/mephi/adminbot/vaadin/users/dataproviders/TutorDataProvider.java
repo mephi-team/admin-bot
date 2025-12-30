@@ -5,7 +5,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import team.mephi.adminbot.dto.SimpleUser;
-import team.mephi.adminbot.dto.TutorWithCounts;
 import team.mephi.adminbot.model.Tutor;
 import team.mephi.adminbot.repository.TutorRepository;
 import team.mephi.adminbot.vaadin.users.presenter.UserDataProvider;
@@ -43,6 +42,7 @@ public class TutorDataProvider implements UserDataProvider {
                             .stream()
                                 .map(u -> SimpleUser.builder()
                                         .id(u.getId())
+                                        .role("tutor")
                                         .fullName(u.getFullName())
                                         .email(u.getEmail())
                                         .tgId(u.getTgId())

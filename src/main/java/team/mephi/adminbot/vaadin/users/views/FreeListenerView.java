@@ -51,7 +51,7 @@ public class FreeListenerView extends VerticalLayout {
             Button viewButton = new Button(new Icon(VaadinIcon.EYE), e -> actions.onView(item));
             Button chatButton = new Button(new Icon(VaadinIcon.CHAT), e -> UI.getCurrent().navigate(Dialogs.class, new QueryParameters(Map.of("userId", List.of("" + item.getId())))));
             Button editButton = new Button(new Icon(VaadinIcon.PENCIL), e -> actions.onEdit(item));
-            Button blockButton = new Button(new Icon(VaadinIcon.BAN), e -> actions.onBlock(item.getId()));
+            Button blockButton = new Button(new Icon(VaadinIcon.BAN), e -> actions.onBlock(item));
             if (item.getStatus().equals(UserStatus.BLOCKED.name())) {
                 blockButton.addClassNames(LumoUtility.TextColor.ERROR);
             } else {

@@ -6,7 +6,7 @@ import team.mephi.adminbot.vaadin.users.actions.BlockingActions;
 
 import java.util.List;
 
-public class BlockingPresenter extends CRUDPresenter<SimpleUser> implements BlockingActions {
+public class BlockingPresenter extends CRUDPresenter<SimpleUser> implements BlockingActions<SimpleUser> {
     private final UserDataProvider dataProvider;
     private final BlockingViewCallback view;
 
@@ -17,13 +17,13 @@ public class BlockingPresenter extends CRUDPresenter<SimpleUser> implements Bloc
     }
 
     @Override
-    public void onBlock(Long id) {
-        dataProvider.findById(id).ifPresent(m -> {
+    public void onBlock(SimpleUser m) {
+//        dataProvider.findById(id).ifPresent(m -> {
             view.showDialogForBlock(m, (callback) -> {
                 dataProvider.blockAllById(List.of(m.getId()));
                 dataProvider.getDataProvider().refreshAll();
                 view.showNotificationForBlock(m.getId());
             });
-        });
+//        });
     }
 }
