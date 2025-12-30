@@ -9,7 +9,6 @@ import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.function.SerializableRunnable;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import lombok.Setter;
 import team.mephi.adminbot.dto.SimpleMailing;
 import team.mephi.adminbot.dto.UserDto;
 
@@ -24,7 +23,6 @@ public class MailingEditorDialog extends Dialog {
     private final Button next = new Button(getTranslation("next_button"), VaadinIcon.ARROW_RIGHT.create());
     private final Button prev = new Button(getTranslation("prev_button"), VaadinIcon.ARROW_LEFT.create());
 
-    @Setter
     private SerializableRunnable onSaveCallback;
 
     public MailingEditorDialog(UserService userService) {
@@ -78,7 +76,8 @@ public class MailingEditorDialog extends Dialog {
         });
     }
 
-    public void showDialogForNew() {
+    public void showDialogForNew(SerializableRunnable callback) {
+        this.onSaveCallback = callback;
         var newMailing = new SimpleMailing();
         newMailing.setUserId(0L);
         binder.readBean(newMailing);
@@ -88,7 +87,8 @@ public class MailingEditorDialog extends Dialog {
         open();
     }
 
-    public void showDialogForEdit(SimpleMailing mailing) {
+    public void showDialogForEdit(SimpleMailing mailing, SerializableRunnable callback) {
+        this.onSaveCallback = callback;
         binder.readBean(mailing);
         binder.setReadOnly(false);
 //        saveButton.setVisible(true);

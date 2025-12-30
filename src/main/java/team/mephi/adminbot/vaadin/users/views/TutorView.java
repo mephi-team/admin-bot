@@ -12,8 +12,8 @@ import com.vaadin.flow.router.QueryParameters;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import team.mephi.adminbot.dto.TutorWithCounts;
 import team.mephi.adminbot.vaadin.components.*;
-import team.mephi.adminbot.vaadin.users.actions.TutorActions;
 import team.mephi.adminbot.vaadin.users.dataproviders.TutorDataProvider;
+import team.mephi.adminbot.vaadin.users.presenter.TutorPresenter;
 import team.mephi.adminbot.vaadin.views.Dialogs;
 
 import java.util.List;
@@ -23,7 +23,8 @@ import java.util.Set;
 public class TutorView extends VerticalLayout {
     private List<Long> selectedIds;
 
-    public TutorView(TutorDataProvider provider, TutorActions actions) {
+    public TutorView(TutorPresenter actions) {
+        TutorDataProvider provider = (TutorDataProvider) actions.getDataProvider();
         var gsa = new GridSelectActions(getTranslation("grid_users_actions_label"),
                 new Button(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), e -> {
                     if (!selectedIds.isEmpty())

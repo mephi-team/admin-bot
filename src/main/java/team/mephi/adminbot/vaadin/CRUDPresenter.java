@@ -2,7 +2,7 @@ package team.mephi.adminbot.vaadin;
 
 import java.util.List;
 
-public class CRUDPresenter<T> implements CRUDActions {
+public class CRUDPresenter<T> implements CRUDActions, DataProvider<T> {
     private final CRUDDataProvider<T> dataProvider;
     protected final CRUDViewCallback<T> view;
 
@@ -13,11 +13,10 @@ public class CRUDPresenter<T> implements CRUDActions {
 
     @Override
     public void onCreate(String role) {
-        view.showDialogForNew(role);
-        view.setOnSaveCallback(() -> {
-            T newMailing = view.getEditedItem();
+        view.showDialogForNew(role, () -> {
+            var newMailing = view.getEditedItem();
             if (newMailing != null) {
-                dataProvider.save(newMailing);
+                dataProvider.save((T) newMailing);
                 dataProvider.getDataProvider().refreshAll();
                 view.showNotificationForNew();
             }
@@ -32,11 +31,10 @@ public class CRUDPresenter<T> implements CRUDActions {
     @Override
     public void onEdit(Long id) {
         dataProvider.findById(id).ifPresent(m -> {
-            view.showDialogForEdit(m);
-            view.setOnSaveCallback(() -> {
-                T editedItem = view.getEditedItem();
+            view.showDialogForEdit(m, () -> {
+                var editedItem = view.getEditedItem();
                 if (editedItem != null) {
-                    dataProvider.save(editedItem);
+                    dataProvider.save((T) editedItem);
                     dataProvider.getDataProvider().refreshAll();
                     view.showNotificationForEdit(id);
                 }
@@ -51,5 +49,10 @@ public class CRUDPresenter<T> implements CRUDActions {
             dataProvider.getDataProvider().refreshAll();
             view.showNotificationForDelete(ids);
         });
+    }
+
+    @Override
+    public CRUDDataProvider<T> getDataProvider() {
+        return this.dataProvider;
     }
 }

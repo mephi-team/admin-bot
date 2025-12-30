@@ -14,8 +14,8 @@ import com.vaadin.flow.function.SerializableBiConsumer;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import team.mephi.adminbot.dto.MailingList;
 import team.mephi.adminbot.vaadin.components.*;
-import team.mephi.adminbot.vaadin.CRUDActions;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.DraftDataProvider;
+import team.mephi.adminbot.vaadin.mailings.presenter.MailingsPresenter;
 
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -35,7 +35,8 @@ public class DraftView extends VerticalLayout {
         span.setText(person.getStatus());
     };
 
-    public DraftView(DraftDataProvider provider, CRUDActions actions) {
+    public DraftView(MailingsPresenter actions) {
+        DraftDataProvider provider = (DraftDataProvider) actions.getDataProvider();
         var gsa = new GridSelectActions(getTranslation("grid_mailing_actions_label"),
                 new Button(getTranslation("grid_mailing_actions_delete_label"), VaadinIcon.TRASH.create(), e -> {
                     if (!selectedIds.isEmpty()) {

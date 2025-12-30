@@ -13,8 +13,8 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 import team.mephi.adminbot.dto.UserDto;
 import team.mephi.adminbot.model.enums.UserStatus;
 import team.mephi.adminbot.vaadin.components.*;
-import team.mephi.adminbot.vaadin.users.actions.StudentActions;
 import team.mephi.adminbot.vaadin.users.dataproviders.FreeListenerDataProvider;
+import team.mephi.adminbot.vaadin.users.presenter.StudentPresenter;
 import team.mephi.adminbot.vaadin.views.Dialogs;
 
 import java.util.List;
@@ -24,7 +24,8 @@ import java.util.Set;
 public class FreeListenerView extends VerticalLayout {
     private List<Long> selectedIds;
 
-    public FreeListenerView(FreeListenerDataProvider provider, StudentActions actions) {
+    public FreeListenerView(StudentPresenter actions) {
+        FreeListenerDataProvider provider = (FreeListenerDataProvider) actions.getDataProvider();
         var gsa = new GridSelectActions(getTranslation("grid_users_actions_label"),
                 new Button(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), e -> {
                     if (!selectedIds.isEmpty())

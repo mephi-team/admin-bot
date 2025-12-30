@@ -3,9 +3,7 @@ package team.mephi.adminbot.vaadin.users.tabs;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import team.mephi.adminbot.vaadin.CRUDActions;
-import team.mephi.adminbot.vaadin.CRUDDataProvider;
-import team.mephi.adminbot.vaadin.users.actions.TutorActions;
-import team.mephi.adminbot.vaadin.users.dataproviders.TutorDataProvider;
+import team.mephi.adminbot.vaadin.users.presenter.TutorPresenter;
 import team.mephi.adminbot.vaadin.users.views.TutorView;
 
 @SpringComponent
@@ -26,7 +24,7 @@ public class TutorTabProvider implements UserTabProvider {
     }
 
     @Override
-    public Component createTabContent(CRUDDataProvider<?> dataProvider, CRUDActions actions) {
-        return new TutorView((TutorDataProvider) dataProvider, (TutorActions) actions);
+    public Component createTabContent(CRUDActions actions) {
+        return new TutorView((TutorPresenter) actions);
     }
 }

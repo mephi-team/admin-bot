@@ -13,12 +13,13 @@ import team.mephi.adminbot.model.enums.MailingStatus;
 import team.mephi.adminbot.model.objects.Filters;
 import team.mephi.adminbot.repository.MailingRepository;
 import team.mephi.adminbot.repository.UserRepository;
+import team.mephi.adminbot.vaadin.CRUDDataProvider;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public abstract class BaseMailingDataProvider implements MailingDataProvider<SimpleMailing> {
+public abstract class BaseMailingDataProvider implements CRUDDataProvider<SimpleMailing> {
     private final MailingRepository mailingRepository;
     private final UserRepository userRepository;
     private ConfigurableFilterDataProvider<MailingList, Void, String> provider;

@@ -21,11 +21,10 @@ import team.mephi.adminbot.vaadin.components.*;
 import team.mephi.adminbot.vaadin.questions.components.AnswerDialog;
 import team.mephi.adminbot.vaadin.questions.components.AnswerDialogFactory;
 import team.mephi.adminbot.vaadin.questions.dataproviders.QuestionDataProvider;
-import team.mephi.adminbot.vaadin.questions.service.QuestionPresenterFactory;
+import team.mephi.adminbot.vaadin.questions.dataproviders.QuestionDataProviderFactory;
 
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -40,7 +39,7 @@ public class Questions extends VerticalLayout {
     private final QuestionDataProvider provider;
     private List<Long> selectedIds;
 
-    public Questions(AuthenticationContext authContext, QuestionPresenterFactory factory, AnswerDialogFactory dialogFactory) {
+    public Questions(AuthenticationContext authContext, QuestionDataProviderFactory factory, AnswerDialogFactory dialogFactory) {
         this.authContext = authContext;
         this.answerDialog = dialogFactory.create();
         this.provider = factory.createDataProvider();

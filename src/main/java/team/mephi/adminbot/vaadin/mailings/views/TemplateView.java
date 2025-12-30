@@ -9,8 +9,8 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import team.mephi.adminbot.dto.TemplateListDto;
 import team.mephi.adminbot.vaadin.components.*;
-import team.mephi.adminbot.vaadin.CRUDActions;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.TemplateDataProvider;
+import team.mephi.adminbot.vaadin.mailings.presenter.TemplatePresenter;
 
 import java.util.List;
 import java.util.Set;
@@ -18,7 +18,8 @@ import java.util.Set;
 public class TemplateView extends VerticalLayout {
     private List<Long> selectedIds;
 
-    public TemplateView(TemplateDataProvider provider, CRUDActions actions) {
+    public TemplateView(TemplatePresenter actions) {
+        TemplateDataProvider provider = (TemplateDataProvider) actions.getDataProvider();
         var gsa = new GridSelectActions(getTranslation("grid_template_actions_label"),
                 new Button(getTranslation("grid_template_actions_delete_label"), VaadinIcon.TRASH.create(), e -> {
                     if (!selectedIds.isEmpty()) {

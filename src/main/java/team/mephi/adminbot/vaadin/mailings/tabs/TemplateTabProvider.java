@@ -4,8 +4,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import team.mephi.adminbot.vaadin.CRUDActions;
-import team.mephi.adminbot.vaadin.CRUDDataProvider;
-import team.mephi.adminbot.vaadin.mailings.dataproviders.TemplateDataProvider;
+import team.mephi.adminbot.vaadin.mailings.presenter.TemplatePresenter;
 import team.mephi.adminbot.vaadin.mailings.views.TemplateView;
 
 @SpringComponent
@@ -22,8 +21,8 @@ public class TemplateTabProvider implements MailingTabProvider {
     }
 
     @Override
-    public Component createTabContent(CRUDDataProvider<?> templateDataProvider, CRUDActions actions) {
-        return new TemplateView((TemplateDataProvider) templateDataProvider, actions);
+    public Component createTabContent(CRUDActions actions) {
+        return new TemplateView((TemplatePresenter) actions);
     }
 
     @Override

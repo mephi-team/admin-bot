@@ -22,11 +22,9 @@ import team.mephi.adminbot.vaadin.mailings.components.MailingEditorDialog;
 import team.mephi.adminbot.vaadin.mailings.components.MailingEditorDialogFactory;
 import team.mephi.adminbot.vaadin.mailings.components.TemplateEditorDialog;
 import team.mephi.adminbot.vaadin.mailings.components.TemplateEditorDialogFactory;
-import team.mephi.adminbot.vaadin.mailings.dataproviders.MailingDataProvider;
 import team.mephi.adminbot.vaadin.mailings.service.MailingCountService;
-import team.mephi.adminbot.vaadin.mailings.service.MailingPresenterFactory;
-import team.mephi.adminbot.vaadin.mailings.service.MailingViewCallback;
-import team.mephi.adminbot.vaadin.mailings.service.MailingsPresenter;
+import team.mephi.adminbot.vaadin.mailings.presenter.MailingPresenterFactory;
+import team.mephi.adminbot.vaadin.mailings.presenter.MailingViewCallback;
 import team.mephi.adminbot.vaadin.mailings.tabs.MailingTabProvider;
 
 import java.util.*;
@@ -34,7 +32,7 @@ import java.util.*;
 
 @Route(value = "/mailings", layout = DialogsLayout.class)
 @RolesAllowed("ADMIN")
-public class Mailings extends VerticalLayout {
+public class Mailings extends VerticalLayout implements MailingViewCallback {
     private final TabSheet tabSheet = new TabSheet();
     private final Button primaryButton = new Button(getTranslation("page_mailing_create_mailing_button"), new Icon(VaadinIcon.PLUS));
 
@@ -47,13 +45,6 @@ public class Mailings extends VerticalLayout {
 
     private final List<String> rolesInOrder = new ArrayList<>();
     private final Map<String, CRUDActions> actions = new HashMap<>();
-
-    private static final CRUDActions NO_OP_ACTIONS = new CRUDActions() {
-        @Override public void onCreate(String role) {}
-        @Override public void onView(Long id) {}
-        @Override public void onEdit(Long id) {}
-        @Override public void onDelete(List<Long> ids) {}
-    };
 
     public Mailings(
             List<MailingTabProvider> tabProviders,
@@ -87,119 +78,8 @@ public class Mailings extends VerticalLayout {
 
         for (var provider : tabProviders) {
             var tabId = provider.getTabId();
-            CRUDPresenter<?> presenter;
-            MailingDataProvider<?> dataProvider =  presenterFactory.createDataProvider(tabId);
-            if (tabId.equals("templates")) {
-                presenter = new CRUDPresenter<>((MailingDataProvider<SimpleTemplate>)dataProvider, new CRUDViewCallbackBase<>() {
-                    @Override
-                    public void setOnSaveCallback(SerializableRunnable callback) {
-                        templateEditorDialog.setOnSaveCallback(callback);
-                    }
-                    @Override
-                    public SimpleTemplate getEditedItem() {
-                        return templateEditorDialog.getEditedItem();
-                    }
-                    @Override
-                    public void showDialogForEdit(SimpleTemplate mailing) {
-                        templateEditorDialog.setHeaderTitle("dialog_template_edit_title");
-                        templateEditorDialog.showDialogForEdit(mailing);
-                    }
-                    @Override
-                    public void showDialogForNew(String role) {
-                        templateEditorDialog.setHeaderTitle("dialog_template_new_title");
-                        templateEditorDialog.showDialogForNew();
-                    }
-                    @Override
-                    public void confirmDelete(List<Long> ids, Runnable onConfirm) {
-                        dialogTemplateDelete.showForConfirm(ids.size(), onConfirm);
-                    }
-                    @Override
-                    public void showNotificationForNew() {
-                        Notification.show(getTranslation("notification_mailing_created"), 3000, Notification.Position.TOP_END);
-                    }
-                    @Override
-                    public void showNotificationForEdit(Long id) {
-                        Notification.show(getTranslation("notification_mailing_saved"), 3000, Notification.Position.TOP_END);
-                    }
-                    @Override
-                    public void showNotificationForDelete(List<Long> ids) {
-                        String message = getTranslation("notification_template_delete");
-                        if (ids.size() > 1) {
-                            message = getTranslation("notification_template_delete_all", ids.size());
-                        }
-                        Notification.show(message, 3000, Notification.Position.TOP_END);
-                    }
-                });
-            } else {
-                presenter = new MailingsPresenter((MailingDataProvider<SimpleMailing>) dataProvider, new MailingViewCallback() {
-                    @Override
-                    public void confirmCancel(Long id, Runnable onConfirm) {
-                        dialogCancel.showForConfirm(1, onConfirm);
-                    }
-
-                    @Override
-                    public void confirmRetry(Long id, Runnable onConfirm) {
-                        dialogRetry.showForConfirm(1, onConfirm);
-                    }
-
-                    @Override
-                    public void showNotificationForCancel(Long id) {
-                        Notification.show(getTranslation("notification_mailing_cancel"), 3000, Notification.Position.TOP_END);
-                    }
-
-                    @Override
-                    public void showNotificationForRetry(Long id) {
-                        Notification.show(getTranslation("notification_mailing_retry"), 3000, Notification.Position.TOP_END);
-                    }
-
-                    @Override
-                    public void setOnSaveCallback(SerializableRunnable callback) {
-                        mailingEditorDialog.setOnSaveCallback(callback);
-                    }
-                    @Override
-                    public SimpleMailing getEditedItem() {
-                        return mailingEditorDialog.getEditedItem();
-                    }
-
-                    @Override
-                    public void showDialogForView(SimpleMailing user) {
-
-                    }
-
-                    @Override
-                    public void showDialogForEdit(SimpleMailing mailing) {
-                        mailingEditorDialog.setHeaderTitle("dialog_mailing_edit_title");
-                        mailingEditorDialog.showDialogForEdit(mailing);
-                    }
-                    @Override
-                    public void showDialogForNew(String role) {
-                        mailingEditorDialog.setHeaderTitle("dialog_mailing_new_title");
-                        mailingEditorDialog.showDialogForNew();
-                    }
-
-                    @Override
-                    public void confirmDelete(List<Long> ids, Runnable onConfirm) {
-                        dialogMailingDelete.showForConfirm(ids.size(), onConfirm);
-                    }
-                    @Override
-                    public void showNotificationForNew() {
-                        Notification.show(getTranslation("notification_mailing_created"), 3000, Notification.Position.TOP_END);
-                    }
-                    @Override
-                    public void showNotificationForEdit(Long id) {
-                        Notification.show(getTranslation("notification_mailing_saved"), 3000, Notification.Position.TOP_END);
-                    }
-                    @Override
-                    public void showNotificationForDelete(List<Long> ids) {
-                        String message = getTranslation("notification_mailing_delete");
-                        if (ids.size() > 1) {
-                            message = getTranslation("notification_mailing_delete_all", ids.size());
-                        }
-                        Notification.show(message, 3000, Notification.Position.TOP_END);
-                    }
-                });
-            }
-            var content = provider.createTabContent(dataProvider, presenter);
+            var presenter = presenterFactory.createPresenter(tabId, this);
+            var content = provider.createTabContent(presenter);
 
             rolesInOrder.add(tabId);
             actions.put(tabId, presenter);
@@ -239,6 +119,98 @@ public class Mailings extends VerticalLayout {
     }
 
     private CRUDActions getCurrentAction() {
-        return actions.getOrDefault(getCurrentRole(), NO_OP_ACTIONS);
+        return actions.get(getCurrentRole());
+    }
+
+    @Override
+    public void confirmCancel(Long id, Runnable onConfirm) {
+        dialogCancel.showForConfirm(1, onConfirm);
+    }
+
+    @Override
+    public void confirmRetry(Long id, Runnable onConfirm) {
+        dialogRetry.showForConfirm(1, onConfirm);
+    }
+
+    @Override
+    public void showNotificationForCancel(Long id) {
+        Notification.show(getTranslation("notification_mailing_cancel"), 3000, Notification.Position.TOP_END);
+    }
+
+    @Override
+    public void showNotificationForRetry(Long id) {
+        Notification.show(getTranslation("notification_mailing_retry"), 3000, Notification.Position.TOP_END);
+    }
+
+    @Override
+    public Object getEditedItem() {
+        if (getCurrentRole().equals("templates")) {
+            return templateEditorDialog.getEditedItem();
+        } else {
+            return mailingEditorDialog.getEditedItem();
+        }
+    }
+
+    @Override
+    public void showDialogForView(SimpleMailing user) {
+
+    }
+
+    @Override
+    public void showDialogForNew(String role, SerializableRunnable callback) {
+        if (getCurrentRole().equals("templates")) {
+            templateEditorDialog.setHeaderTitle("dialog_template_new_title");
+            templateEditorDialog.showDialogForNew(callback);
+        } else {
+            mailingEditorDialog.setHeaderTitle("dialog_mailing_new_title");
+            mailingEditorDialog.showDialogForNew(callback);
+        }
+    }
+
+    @Override
+    public void showDialogForEdit(Object mailing, SerializableRunnable callback) {
+        if (getCurrentRole().equals("templates")) {
+            templateEditorDialog.setHeaderTitle("dialog_template_edit_title");
+            templateEditorDialog.showDialogForEdit((SimpleTemplate) mailing, callback);
+        } else {
+            mailingEditorDialog.setHeaderTitle("dialog_mailing_edit_title");
+            mailingEditorDialog.showDialogForEdit((SimpleMailing) mailing, callback);
+        }
+    }
+
+    @Override
+    public void confirmDelete(List<Long> ids, Runnable onConfirm) {
+        if (getCurrentRole().equals("templates")) {
+            dialogTemplateDelete.showForConfirm(ids.size(), onConfirm);
+        } else {
+            dialogMailingDelete.showForConfirm(ids.size(), onConfirm);
+        }
+    }
+
+    @Override
+    public void showNotificationForNew() {
+        Notification.show(getTranslation("notification_mailing_created"), 3000, Notification.Position.TOP_END);
+    }
+
+    @Override
+    public void showNotificationForEdit(Long id) {
+        Notification.show(getTranslation("notification_mailing_saved"), 3000, Notification.Position.TOP_END);
+    }
+
+    @Override
+    public void showNotificationForDelete(List<Long> ids) {
+        if (getCurrentRole().equals("templates")) {
+            String message = getTranslation("notification_template_delete");
+            if (ids.size() > 1) {
+                message = getTranslation("notification_template_delete_all", ids.size());
+            }
+            Notification.show(message, 3000, Notification.Position.TOP_END);
+        } else {
+            String message = getTranslation("notification_mailing_delete");
+            if (ids.size() > 1) {
+                message = getTranslation("notification_mailing_delete_all", ids.size());
+            }
+            Notification.show(message, 3000, Notification.Position.TOP_END);
+        }
     }
 }

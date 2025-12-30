@@ -10,8 +10,8 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 import team.mephi.adminbot.dto.UserDto;
 import team.mephi.adminbot.model.enums.UserStatus;
 import team.mephi.adminbot.vaadin.components.*;
-import team.mephi.adminbot.vaadin.users.actions.GuestActions;
 import team.mephi.adminbot.vaadin.users.dataproviders.GuestsDataProvider;
+import team.mephi.adminbot.vaadin.users.presenter.GuestPresenter;
 
 import java.util.List;
 import java.util.Set;
@@ -19,7 +19,8 @@ import java.util.Set;
 public class GuestsView extends VerticalLayout {
     private List<Long> selectedIds;
 
-    public GuestsView(GuestsDataProvider provider, GuestActions actions) {
+    public GuestsView(GuestPresenter actions) {
+        GuestsDataProvider provider = (GuestsDataProvider) actions.getDataProvider();
         var gsa = new GridSelectActions(getTranslation("grid_users_actions_label"),
                 new Button(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), e -> {
                     if (!selectedIds.isEmpty())

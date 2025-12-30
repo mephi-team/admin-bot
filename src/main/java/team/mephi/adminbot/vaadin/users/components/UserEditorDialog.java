@@ -4,7 +4,6 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.function.SerializableRunnable;
-import lombok.Setter;
 import team.mephi.adminbot.dto.RoleDto;
 import team.mephi.adminbot.dto.SimpleUser;
 
@@ -14,7 +13,6 @@ public class UserEditorDialog extends Dialog {
     private final BeanValidationBinder<SimpleUser> binder = new BeanValidationBinder<>(SimpleUser.class);
     private final Button saveButton = new Button(getTranslation("save_button"), e -> onSave());
 
-    @Setter
     private SerializableRunnable onSaveCallback;
 
     public UserEditorDialog(RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService) {
@@ -40,14 +38,16 @@ public class UserEditorDialog extends Dialog {
         open();
     }
 
-    public void openForEdit(SimpleUser user) {
+    public void openForEdit(SimpleUser user, SerializableRunnable callback) {
+        this.onSaveCallback = callback;
         binder.readBean(user);
         binder.setReadOnly(false);
         saveButton.setVisible(true);
         open();
     }
 
-    public void openForNew(String role) {
+    public void openForNew(String role, SerializableRunnable callback) {
+        this.onSaveCallback = callback;
         SimpleUser newUser = new SimpleUser();
         newUser.setRole(role);
         binder.readBean(newUser);

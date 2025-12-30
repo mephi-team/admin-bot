@@ -12,8 +12,8 @@ import com.vaadin.flow.router.QueryParameters;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import team.mephi.adminbot.dto.UserDto;
 import team.mephi.adminbot.vaadin.components.*;
-import team.mephi.adminbot.vaadin.users.actions.UserActions;
 import team.mephi.adminbot.vaadin.users.dataproviders.CandidateDataProvider;
+import team.mephi.adminbot.vaadin.users.presenter.UsersPresenter;
 import team.mephi.adminbot.vaadin.views.Dialogs;
 
 import java.util.List;
@@ -23,7 +23,8 @@ import java.util.Set;
 public class CandidateView extends VerticalLayout {
     private List<Long> selectedIds;
 
-    public CandidateView(CandidateDataProvider provider, UserActions actions) {
+    public CandidateView(UsersPresenter actions) {
+        CandidateDataProvider provider = (CandidateDataProvider) actions.getDataProvider();
         var gsa = new GridSelectActions(getTranslation("grid_users_actions_label"),
                 new Button(getTranslation("grid_candidate_actions_accept_label"), VaadinIcon.CHECK.create(), e -> {
                     if (!selectedIds.isEmpty())

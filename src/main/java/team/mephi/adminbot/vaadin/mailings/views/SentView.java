@@ -13,8 +13,8 @@ import com.vaadin.flow.function.SerializableBiConsumer;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import team.mephi.adminbot.dto.MailingList;
 import team.mephi.adminbot.vaadin.components.*;
-import team.mephi.adminbot.vaadin.mailings.actions.MailingActions;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.SentDataProvider;
+import team.mephi.adminbot.vaadin.mailings.presenter.MailingsPresenter;
 
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -34,7 +34,8 @@ public class SentView extends VerticalLayout {
         span.setText(person.getStatus());
     };
 
-    public SentView(SentDataProvider provider, MailingActions actions) {
+    public SentView(MailingsPresenter actions) {
+        SentDataProvider provider = (SentDataProvider) actions.getDataProvider();
         var gsa = new GridSelectActions(getTranslation("grid_mailing_actions_label"),
                 new Button(getTranslation("grid_mailing_actions_delete_label"), VaadinIcon.TRASH.create(), e -> {
                     if (!selectedIds.isEmpty()) {

@@ -5,7 +5,6 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.function.SerializableRunnable;
-import lombok.Setter;
 import team.mephi.adminbot.dto.SimpleUser;
 
 public class BlockDialog extends Dialog {
@@ -13,7 +12,6 @@ public class BlockDialog extends Dialog {
     private final Button saveButton = new Button(getTranslation("save_button"), e -> onSave());
     private final TabSheet tabSheet = new TabSheet();
 
-    @Setter
     private SerializableRunnable onSaveCallback;
 
     public BlockDialog() {
@@ -28,7 +26,8 @@ public class BlockDialog extends Dialog {
         getFooter().add(new Button(getTranslation("cancel_button"), e -> close()), saveButton);
     }
 
-    public void openForView(SimpleUser user) {
+    public void openForView(SimpleUser user, SerializableRunnable callback) {
+        this.onSaveCallback = callback;
         binder.readBean(user);
         binder.setReadOnly(true);
         saveButton.setVisible(false);

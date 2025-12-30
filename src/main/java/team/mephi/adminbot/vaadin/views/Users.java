@@ -18,10 +18,8 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.security.RolesAllowed;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.vaadin.CRUDActions;
-import team.mephi.adminbot.vaadin.CRUDPresenter;
 import team.mephi.adminbot.vaadin.components.SimpleConfirmDialog;
 import team.mephi.adminbot.vaadin.components.UserCountBadge;
-import team.mephi.adminbot.vaadin.users.actions.UserActions;
 import team.mephi.adminbot.vaadin.users.components.*;
 import team.mephi.adminbot.vaadin.users.presenter.*;
 import team.mephi.adminbot.vaadin.users.service.*;
@@ -31,7 +29,7 @@ import java.util.*;
 
 @Route("/users")
 @RolesAllowed("ADMIN")
-public class Users extends VerticalLayout implements StudentViewCallback {
+public class Users extends VerticalLayout implements StudentViewCallback, TutorViewCallback {
     private final UserEditorDialog editorDialog;
     private final TutoringDialog tutoringDialog;
     private final BlockDialog blockDialog;
@@ -43,16 +41,6 @@ public class Users extends VerticalLayout implements StudentViewCallback {
     private final TabSheet tabSheet = new TabSheet();
     private final List<String> rolesInOrder = new ArrayList<>();
     private final Map<String, CRUDActions> actions = new HashMap<>();
-
-    private static final UserActions NO_OP_ACTIONS = new UserActions() {
-        @Override public void onCreate(String role) {}
-        @Override public void onView(Long id) {}
-        @Override public void onEdit(Long id) {}
-        @Override public void onDelete(List<Long> ids) {}
-        @Override public void onAccept(List<Long> ids) {}
-        @Override public void onReject(List<Long> ids) {}
-        @Override public void onBlock(Long id) {}
-    };
 
     public Users(
             List<UserTabProvider> tabProviders,
@@ -92,78 +80,8 @@ public class Users extends VerticalLayout implements StudentViewCallback {
         // Создаём вкладки
         for (var provider : tabProviders) {
             var tabId = provider.getTabId();
-            var dataProvider = presenterFactory.createDataProvider(tabId);
-            CRUDPresenter<?> presenter;
-            if (tabId.equals("tutor")) {
-                presenter = new TutorPresenter(dataProvider, new TutorViewCallback() {
-                    @Override
-                    public void setOnSaveCallback(SerializableRunnable callback) {
-                        editorDialog.setOnSaveCallback(callback);
-                    }
-                    @Override
-                    public SimpleUser getEditedItem() {
-                        return editorDialog.getEditedUser();
-                    }
-                    @Override
-                    public void showDialogForView(SimpleUser user) {
-                        editorDialog.setHeaderTitle("dialog_users_view_title");
-                        editorDialog.openForView(user);
-                    }
-                    @Override
-                    public void showDialogForNew(String role) {
-                        editorDialog.setHeaderTitle("dialog_users_new_title");
-                        editorDialog.openForNew(role);
-                    }
-                    @Override
-                    public void showDialogForEdit(SimpleUser user) {
-                        editorDialog.setHeaderTitle("dialog_users_edit_title");
-                        editorDialog.openForEdit(user);
-                    }
-                    @Override
-                    public void confirmDelete(List<Long> ids, Runnable onConfirm) {
-                        dialogDelete.showForConfirm(ids.size(), onConfirm);
-                    }
-                    @Override
-                    public void showNotificationForNew() {
-                        Notification.show(getTranslation("notification_users_created"), 3000, Notification.Position.TOP_END);
-                    }
-                    @Override
-                    public void showNotificationForEdit(Long id) {
-                        Notification.show(getTranslation("notification_users_created"), 3000, Notification.Position.TOP_END);
-                    }
-                    @Override
-                    public void showNotificationForDelete(List<Long> ids) {
-                        Notification.show(makeNotification("notification_users_blocked", "notification_users_blocked_all", ids.size()), 3000, Notification.Position.TOP_END);
-                    }
-
-                    @Override
-                    public void showDialogForTutoring(SimpleUser user) {
-                        tutoringDialog.openForView(user);
-                    }
-                    @Override
-                    public void showNotificationForTutoring(Long id) {
-                        Notification.show("Test", 3000, Notification.Position.TOP_END);
-                    }
-
-                    @Override
-                    public void showDialogForBlock(SimpleUser user) {
-                        blockDialog.openForView(user);
-                    }
-
-                    @Override
-                    public void showNotificationForBlock(Long id) {
-                        Notification.show("notification_users_blocked", 3000, Notification.Position.TOP_END);
-                    }
-                });
-            } else if (tabId.equals("visitor")) {
-                presenter = new GuestPresenter(dataProvider, this);
-            } else if (tabId.equals("student") || tabId.equals("free_listener")) {
-                presenter = new StudentPresenter(dataProvider, this);
-            } else {
-                presenter = new UsersPresenter(dataProvider, this);
-            }
-
-            var content = provider.createTabContent(dataProvider, presenter);
+            var presenter = presenterFactory.createPresenter(tabId, this);
+            var content = provider.createTabContent(presenter);
 
             rolesInOrder.add(tabId);
             actions.put(tabId, presenter);
@@ -198,12 +116,7 @@ public class Users extends VerticalLayout implements StudentViewCallback {
     }
 
     private CRUDActions getCurrentAction() {
-        return actions.getOrDefault(getCurrentRole(), NO_OP_ACTIONS);
-    }
-
-    @Override
-    public void setOnSaveCallback(SerializableRunnable callback) {
-        editorDialog.setOnSaveCallback(callback);
+        return actions.get(getCurrentRole());
     }
 
     @Override
@@ -218,15 +131,15 @@ public class Users extends VerticalLayout implements StudentViewCallback {
     }
 
     @Override
-    public void showDialogForEdit(SimpleUser user) {
+    public void showDialogForEdit(Object user, SerializableRunnable callback) {
         editorDialog.setHeaderTitle("dialog_users_edit_title");
-        editorDialog.openForEdit(user);
+        editorDialog.openForEdit((SimpleUser) user, callback);
     }
 
     @Override
-    public void showDialogForNew(String role) {
+    public void showDialogForNew(String role, SerializableRunnable callback) {
         editorDialog.setHeaderTitle("dialog_users_new_title");
-        editorDialog.openForNew(role);
+        editorDialog.openForNew(role, callback);
     }
 
     @Override
@@ -250,8 +163,8 @@ public class Users extends VerticalLayout implements StudentViewCallback {
     }
 
     @Override
-    public void showDialogForBlock(SimpleUser user) {
-        blockDialog.openForView(user);
+    public void showDialogForBlock(SimpleUser user, SerializableRunnable callback) {
+        blockDialog.openForView(user, callback);
     }
 
     @Override
@@ -287,6 +200,16 @@ public class Users extends VerticalLayout implements StudentViewCallback {
     @Override
     public void showNotificationForExpel(List<Long> ids) {
         Notification.show(getTranslation("notification_users_expel"), 3000, Notification.Position.TOP_END);
+    }
+
+    @Override
+    public void showDialogForTutoring(SimpleUser user) {
+        tutoringDialog.openForView(user);
+    }
+
+    @Override
+    public void showNotificationForTutoring(Long id) {
+        Notification.show("Test", 3000, Notification.Position.TOP_END);
     }
 
     private String makeNotification(String single, String plural, int count) {

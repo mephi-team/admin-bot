@@ -1,4 +1,4 @@
-package team.mephi.adminbot.vaadin.mailings.service;
+package team.mephi.adminbot.vaadin.mailings.presenter;
 
 import team.mephi.adminbot.dto.SimpleMailing;
 import team.mephi.adminbot.vaadin.CRUDViewCallback;

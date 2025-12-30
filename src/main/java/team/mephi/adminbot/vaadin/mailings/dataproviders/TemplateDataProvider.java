@@ -8,12 +8,13 @@ import team.mephi.adminbot.dto.SimpleTemplate;
 import team.mephi.adminbot.dto.TemplateListDto;
 import team.mephi.adminbot.model.MailTemplate;
 import team.mephi.adminbot.repository.MailTemplateRepository;
+import team.mephi.adminbot.vaadin.CRUDDataProvider;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class TemplateDataProvider implements MailingDataProvider<SimpleTemplate> {
+public class TemplateDataProvider implements CRUDDataProvider<SimpleTemplate> {
     private final MailTemplateRepository mailTemplateRepository;
     private ConfigurableFilterDataProvider<TemplateListDto, Void, String> provider;
 
