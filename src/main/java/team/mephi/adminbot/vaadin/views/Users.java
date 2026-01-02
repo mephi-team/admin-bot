@@ -30,6 +30,7 @@ import java.util.*;
 @Route("/users")
 @RolesAllowed("ADMIN")
 public class Users extends VerticalLayout implements StudentViewCallback, TutorViewCallback {
+    private final FileUploadDialog fileUploadDialog;
     private final UserEditorDialog editorDialog;
     private final TutoringDialog tutoringDialog;
     private final BlockDialog blockDialog;
@@ -45,11 +46,13 @@ public class Users extends VerticalLayout implements StudentViewCallback, TutorV
     public Users(
             List<UserTabProvider> tabProviders,
             UsersPresenterFactory presenterFactory,
+            FileUploadDialogFactory uploaderFactory,
             UserEditorDialogFactory dialogFactory,
             UserCountService userCountService,
             TutoringDialogFactory tutoringDialogFactory,
             BlockDialogFactory blockDialogFactory
     ) {
+        this.fileUploadDialog = uploaderFactory.create();
         this.editorDialog = dialogFactory.create();
         this.tutoringDialog = tutoringDialogFactory.create();
         this.blockDialog = blockDialogFactory.create();
@@ -97,11 +100,14 @@ public class Users extends VerticalLayout implements StudentViewCallback, TutorV
         top.setWidthFull();
         top.addToStart(new H1(getTranslation("page_users_title")));
 
+        var secondaryButton = new Button(getTranslation("page_users_create_from_file_button"), new Icon(VaadinIcon.FILE_ADD), e -> {
+            fileUploadDialog.open();
+        });
         var primaryButton = new Button(getTranslation("page_users_create_user_button"), new Icon(VaadinIcon.PLUS), e -> {
             getCurrentAction().onCreate(getCurrentRole());
         });
         primaryButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        Div buttons = new Div(new Button(getTranslation("page_users_create_from_file_button"), new Icon(VaadinIcon.FILE_ADD)), primaryButton);
+        Div buttons = new Div(secondaryButton, primaryButton);
         buttons.addClassNames(LumoUtility.Display.FLEX, LumoUtility.Gap.MEDIUM);
         top.addToEnd(buttons);
         return top;
