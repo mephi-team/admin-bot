@@ -51,7 +51,7 @@ public class StudentView extends VerticalLayout {
             Span group = new Span();
             Button dropButton = new Button(getTranslation("grid_student_action_drop_label"), new Icon(VaadinIcon.CLOSE), e -> actions.onExpel(List.of(item.getId())));
             Button viewButton = new Button(new Icon(VaadinIcon.EYE), e -> actions.onView(item));
-            Button chatButton = new Button(new Icon(VaadinIcon.CHAT), e -> UI.getCurrent().navigate(Dialogs.class, new QueryParameters(Map.of("userId", List.of("" + item.getId())))));
+            Button chatButton = new Button(new Icon(VaadinIcon.CHAT), e -> UI.getCurrent().navigate(Dialogs.class, QueryParameters.of("userId", "" + item.getId())));
             Button editButton = new Button(new Icon(VaadinIcon.PENCIL), e -> actions.onEdit(item));
             Button blockButton = new Button(new Icon(VaadinIcon.BAN), e -> actions.onBlock(item));
             if (item.getStatus().equals(UserStatus.BLOCKED.name())) {

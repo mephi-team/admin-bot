@@ -11,7 +11,6 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.page.History;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.function.SerializableConsumer;
@@ -97,12 +96,11 @@ public class Users extends VerticalLayout implements StudentViewCallback, TutorV
             Span tabContent = new Span(new Span(getTranslation(provider.getTabLabel())), new UserCountBadge(userCount));
             tabSheet.add(new Tab(tabContent), content, provider.getPosition());
         }
-        History history = UI.getCurrent().getPage().getHistory();
         tabSheet.addSelectedChangeListener(e -> {
             var selectedTab = tabSheet.getSelectedIndex();
             if (selectedTab > -1) {
                 currentTab = rolesInOrder.get(selectedTab);
-                history.replaceState(null,  "users?tab=" + currentTab);
+                UI.getCurrent().navigate(getClass(), QueryParameters.of("tab", currentTab));
             }
         });
     }

@@ -41,7 +41,6 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Optional<RoleDto> getByCode(String code) {
         if (Objects.isNull(roleByDto) || roleByDto.isEmpty()) init();
-        System.out.println("!!! roleByDto " + roleByDto + " , code " + code);
         return Optional.of(roleByDto.get(code));
     }
 }
