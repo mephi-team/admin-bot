@@ -1,5 +1,6 @@
 package team.mephi.adminbot.vaadin.views;
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Div;
@@ -10,10 +11,11 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.page.History;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.function.SerializableConsumer;
-import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.*;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.security.RolesAllowed;
 import team.mephi.adminbot.dto.SimpleUser;
@@ -29,7 +31,7 @@ import java.util.*;
 
 @Route("/users")
 @RolesAllowed("ADMIN")
-public class Users extends VerticalLayout implements StudentViewCallback, TutorViewCallback {
+public class Users extends VerticalLayout implements StudentViewCallback, TutorViewCallback, BeforeEnterObserver {
     private final FileUploadDialog fileUploadDialog;
     private final UserEditorDialog editorDialog;
     private final TutoringDialog tutoringDialog;
@@ -42,6 +44,8 @@ public class Users extends VerticalLayout implements StudentViewCallback, TutorV
     private final TabSheet tabSheet = new TabSheet();
     private final List<String> rolesInOrder = new ArrayList<>();
     private final Map<String, CRUDActions> actions = new HashMap<>();
+
+    private String currentTab;
 
     public Users(
             List<UserTabProvider> tabProviders,
@@ -93,6 +97,14 @@ public class Users extends VerticalLayout implements StudentViewCallback, TutorV
             Span tabContent = new Span(new Span(getTranslation(provider.getTabLabel())), new UserCountBadge(userCount));
             tabSheet.add(new Tab(tabContent), content, provider.getPosition());
         }
+        History history = UI.getCurrent().getPage().getHistory();
+        tabSheet.addSelectedChangeListener(e -> {
+            var selectedTab = tabSheet.getSelectedIndex();
+            if (selectedTab > -1) {
+                currentTab = rolesInOrder.get(selectedTab);
+                history.replaceState(null,  "users?tab=" + currentTab);
+            }
+        });
     }
 
     private HorizontalLayout createHeader() {
@@ -114,11 +126,7 @@ public class Users extends VerticalLayout implements StudentViewCallback, TutorV
     }
 
     private String getCurrentRole() {
-        var selectedTab = tabSheet.getSelectedIndex();
-        if (selectedTab > -1) {
-            return rolesInOrder.get(selectedTab);
-        }
-        return "visitor";
+        return currentTab;
     }
 
     private CRUDActions getCurrentAction() {
@@ -218,5 +226,11 @@ public class Users extends VerticalLayout implements StudentViewCallback, TutorV
             return getTranslation(plural, count);
         }
         return getTranslation(single);
+    }
+
+    @Override
+    public void beforeEnter(BeforeEnterEvent event) {
+        currentTab = event.getLocation().getQueryParameters().getSingleParameter("tab").orElse("visitor");
+        tabSheet.setSelectedIndex(rolesInOrder.indexOf(currentTab));
     }
 }
