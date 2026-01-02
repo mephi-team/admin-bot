@@ -47,3 +47,5 @@ src/main/frontend/generated/
 
 # keycloak
 keycloak-data
+
+storage
