@@ -62,7 +62,7 @@ public class MiddleCandidateView extends VerticalLayout {
             Button confirmButton = new Button(new Icon(VaadinIcon.CHECK), e -> actions.onAccept(List.of(item.getId())));
             Button rejectButton = new Button(new Icon(VaadinIcon.CLOSE), e -> actions.onReject(List.of(item.getId())));
             Button viewButton = new Button(new Icon(VaadinIcon.EYE), e -> actions.onView(item));
-            Button chatButton = new Button(new Icon(VaadinIcon.CHAT), e -> UI.getCurrent().navigate(Dialogs.class, QueryParameters.of("userId", "" + item.getId())));
+            Button chatButton = new Button(new Icon(VaadinIcon.CHAT), e -> UI.getCurrent().navigate(Dialogs.class, QueryParameters.of("userId", item.getId().toString())));
             Button editButton = new Button(new Icon(VaadinIcon.PENCIL), e -> actions.onEdit(item));
             Button blockButton = new Button(new Icon(VaadinIcon.BAN), e -> actions.onBlock(item));
             if (item.getStatus().equals(UserStatus.BLOCKED.name())) {
