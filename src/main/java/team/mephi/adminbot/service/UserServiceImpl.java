@@ -77,6 +77,7 @@ public class UserServiceImpl implements UserService {
         user.setPhoneNumber(dto.getPhoneNumber());
         user.setCity(dto.getCity());
         user.setDirection(Direction.builder().id(dto.getDirection().getId()).name(dto.getDirection().getName()).build());
+        user.setCohort(dto.getCohort());
 
         if (Objects.isNull(user.getStatus())){
             user.setStatus(UserStatus.ACTIVE);
@@ -96,6 +97,8 @@ public class UserServiceImpl implements UserService {
                 .fullName(user.getUserName())
                 .city(user.getCity())
                 .direction(SimpleDirection.builder().id(user.getDirection().getId()).name(user.getDirection().getName()).build())
+                .cohort(user.getCohort())
+                .status(user.getStatus().name())
                 .build();
     }
 
@@ -127,7 +130,8 @@ public class UserServiceImpl implements UserService {
                         .pdConsent(u.getPdConsent())
                         .status(u.getStatus().name())
                         .city(u.getCity())
-                        .direction(Objects.nonNull(u.getDirection()) ? SimpleDirection.builder().id(u.getDirection().getId()).name(u.getDirection().getName()).build() : SimpleDirection.builder().build())
+                        .direction(Objects.nonNull(u.getDirection()) ? SimpleDirection.builder().id(u.getDirection().getId()).name(u.getDirection().getName()).build() : null)
+                        .cohort(u.getCohort())
                         .build());
     }
 

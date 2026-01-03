@@ -9,13 +9,11 @@ import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.function.SerializableConsumer;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import team.mephi.adminbot.dto.CityDto;
-import team.mephi.adminbot.dto.SimpleDirection;
-import team.mephi.adminbot.dto.SimpleMailing;
-import team.mephi.adminbot.dto.UserDto;
+import team.mephi.adminbot.dto.*;
 import team.mephi.adminbot.service.UserService;
 import team.mephi.adminbot.service.CityService;
 import team.mephi.adminbot.service.DirectionService;
+import team.mephi.adminbot.service.CohortService;
 
 import java.util.Objects;
 
@@ -30,14 +28,18 @@ public class MailingEditorDialog extends Dialog {
 
     private SerializableConsumer<SimpleMailing> onSaveCallback;
 
-    public MailingEditorDialog(UserService userService, DirectionService directionService, CityService cityService) {
-        var form1 = new MailingForm(userService, directionService, cityService);
+    public MailingEditorDialog(UserService userService, CohortService cohortService, DirectionService directionService, CityService cityService) {
+        var form1 = new MailingForm(userService, cohortService, directionService, cityService);
         var form2 = new TemplateFormTab();
 
         binder.forField(form1.getUser())
                 .withValidator(Objects::nonNull, getTranslation("form_mailing_user_validation_message"))
                 .withConverter(UserDto::getId, userId -> userService.getById(userId).orElse(null))
                 .bind("userId");
+        binder.forField(form1.getCohort())
+                .withValidator(Objects::nonNull, getTranslation("form_mailing_direction_validation_message"))
+                .withConverter(CohortDto::getName, cohort -> cohortService.getByName(cohort).orElse(null))
+                .bind("cohort");
         binder.forField(form1.getDirection())
                 .withValidator(Objects::nonNull, getTranslation("form_mailing_direction_validation_message"))
                 .withConverter(SimpleDirection::getName, direction -> directionService.getByName(direction).orElse(null))

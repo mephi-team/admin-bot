@@ -43,10 +43,12 @@ public class TutorDataProvider implements UserDataProvider {
                                 .map(u -> SimpleUser.builder()
                                         .id(u.getId())
                                         .role("tutor")
-                                        .fullName(u.getFullName())
+                                        .fullName(u.getLastName() + " " + u.getFirstName())
+                                        .firstName(u.getFirstName())
+                                        .lastName(u.getLastName())
                                         .email(u.getEmail())
                                         .tgId(u.getTgId())
-                                        .studentCount(u.getStudentCount())
+                                        .studentCount(u.getStudentAssignments().size())
                                         .status("ACTIVE")
                                         .build());
                         },

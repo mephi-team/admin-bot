@@ -5,9 +5,11 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.function.SerializableConsumer;
 import team.mephi.adminbot.dto.CityDto;
+import team.mephi.adminbot.dto.CohortDto;
 import team.mephi.adminbot.dto.RoleDto;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.service.CityService;
+import team.mephi.adminbot.service.CohortService;
 import team.mephi.adminbot.service.DirectionService;
 
 import java.util.Objects;
@@ -24,7 +26,12 @@ public class UserEditorDialog extends Dialog {
                 .withValidator(Objects::nonNull, getTranslation("form_users_roles_validation_message"))
                 .withConverter(RoleDto::getCode, roleCode -> roleService.getByCode(roleCode).orElse(null))
                 .bind("role");
+        binder.forField(form.getCohorts())
+                .withValidator(Objects::nonNull, getTranslation("form_users_cohort_validation_message"))
+                .withConverter(CohortDto::getName, cohort -> cohortService.getByName(cohort).orElse(null))
+                .bind("cohort");
         binder.forField(form.getDirections())
+                .withValidator(Objects::nonNull, getTranslation("form_users_direction_validation_message"))
                 .bind("direction");
         binder.forField(form.getCities())
                 .withValidator(Objects::nonNull, getTranslation("form_users_cities_validation_message"))

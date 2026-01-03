@@ -11,11 +11,13 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import lombok.Getter;
 import team.mephi.adminbot.dto.CityDto;
+import team.mephi.adminbot.dto.CohortDto;
 import team.mephi.adminbot.dto.SimpleDirection;
 import team.mephi.adminbot.dto.UserDto;
 import team.mephi.adminbot.service.UserService;
 import team.mephi.adminbot.service.CityService;
 import team.mephi.adminbot.service.DirectionService;
+import team.mephi.adminbot.service.CohortService;
 
 import java.util.List;
 
@@ -27,7 +29,7 @@ public class MailingForm extends FormLayout {
     @Getter
     private final ComboBox<String> users = new ComboBox<>();
     @Getter
-    private final ComboBox<String> cohort = new ComboBox<>();
+    private final ComboBox<CohortDto> cohort = new ComboBox<>();
     @Getter
     private final ComboBox<SimpleDirection> direction = new ComboBox<>();
     @Getter
@@ -35,7 +37,7 @@ public class MailingForm extends FormLayout {
     @Getter
     private final ComboBox<UserDto> user = new ComboBox<>();
 
-    public MailingForm(UserService userService, DirectionService directionService, CityService cityService) {
+    public MailingForm(UserService userService, CohortService cohortService, DirectionService directionService, CityService cityService) {
         channels.setItems("Email", "Telegram");
 
         user.setItemsPageable(userService::getAllUsers);
@@ -48,7 +50,8 @@ public class MailingForm extends FormLayout {
         city.setRequiredIndicatorVisible(true);
 
         users.setItems(List.of("students", "candidate"));
-        cohort.setItems(List.of("summer2025", "winter2025"));
+        cohort.setItemsPageable(cohortService::getAllCohorts);
+        cohort.setItemLabelGenerator(CohortDto::getName);
         direction.setItemsPageable(directionService::getAllDirections);
         direction.setItemLabelGenerator(SimpleDirection::getName);
         city.setItemsPageable(cityService::getAllCities);

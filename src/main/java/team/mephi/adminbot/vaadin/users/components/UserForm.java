@@ -10,9 +10,11 @@ import team.mephi.adminbot.dto.CohortDto;
 import team.mephi.adminbot.dto.SimpleDirection;
 import team.mephi.adminbot.dto.RoleDto;
 import team.mephi.adminbot.service.CityService;
+import team.mephi.adminbot.service.CohortService;
 import team.mephi.adminbot.service.DirectionService;
 
 public class UserForm extends FormLayout {
+    @Getter
     private ComboBox<CohortDto> cohorts = new ComboBox<>();
     @Getter
     private ComboBox<SimpleDirection> directions = new ComboBox<>();
