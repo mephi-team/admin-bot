@@ -6,19 +6,19 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import team.mephi.adminbot.dto.SimpleUser;
+import team.mephi.adminbot.service.UserService;
 import team.mephi.adminbot.vaadin.users.presenter.UserDataProvider;
-import team.mephi.adminbot.vaadin.users.service.UserCountService;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 public abstract class BaseUserDataProvider implements UserDataProvider {
-    private final UserCountService userService;
+    private final UserService userService;
 
     private ConfigurableFilterDataProvider<SimpleUser, Void, String> provider;
 
-    public BaseUserDataProvider(UserCountService userService) {
+    public BaseUserDataProvider(UserService userService) {
         this.userService = userService;
     }
 

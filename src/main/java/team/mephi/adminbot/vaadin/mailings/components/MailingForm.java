@@ -11,6 +11,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import lombok.Getter;
 import team.mephi.adminbot.dto.UserDto;
+import team.mephi.adminbot.service.UserService;
 
 import java.util.List;
 

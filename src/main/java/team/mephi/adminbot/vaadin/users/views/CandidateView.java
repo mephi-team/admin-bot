@@ -18,7 +18,6 @@ import team.mephi.adminbot.vaadin.users.presenter.UsersPresenter;
 import team.mephi.adminbot.vaadin.views.Dialogs;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public class CandidateView extends VerticalLayout {

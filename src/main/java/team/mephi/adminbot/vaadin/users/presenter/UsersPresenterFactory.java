@@ -4,15 +4,15 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import team.mephi.adminbot.repository.TutorRepository;
 import team.mephi.adminbot.vaadin.CRUDPresenter;
 import team.mephi.adminbot.vaadin.CRUDViewCallback;
+import team.mephi.adminbot.service.UserService;
 import team.mephi.adminbot.vaadin.users.dataproviders.*;
-import team.mephi.adminbot.vaadin.users.service.UserCountService;
 
 @SpringComponent
 public class UsersPresenterFactory {
     private final TutorRepository tutorRepository;
-    private final UserCountService userService;
+    private final UserService userService;
 
-    public UsersPresenterFactory(TutorRepository tutorRepository, UserCountService userService) {
+    public UsersPresenterFactory(TutorRepository tutorRepository, UserService userService) {
         this.tutorRepository = tutorRepository;
         this.userService = userService;
     }

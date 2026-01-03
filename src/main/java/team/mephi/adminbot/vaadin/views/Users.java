@@ -18,12 +18,12 @@ import com.vaadin.flow.router.*;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.security.RolesAllowed;
 import team.mephi.adminbot.dto.SimpleUser;
+import team.mephi.adminbot.service.UserService;
 import team.mephi.adminbot.vaadin.CRUDActions;
 import team.mephi.adminbot.vaadin.components.SimpleConfirmDialog;
 import team.mephi.adminbot.vaadin.components.UserCountBadge;
 import team.mephi.adminbot.vaadin.users.components.*;
 import team.mephi.adminbot.vaadin.users.presenter.*;
-import team.mephi.adminbot.vaadin.users.service.*;
 import team.mephi.adminbot.vaadin.users.tabs.UserTabProvider;
 
 import java.util.*;
@@ -51,7 +51,7 @@ public class Users extends VerticalLayout implements StudentViewCallback, TutorV
             UsersPresenterFactory presenterFactory,
             FileUploadDialogFactory uploaderFactory,
             UserEditorDialogFactory dialogFactory,
-            UserCountService userCountService,
+            UserService userService,
             TutoringDialogFactory tutoringDialogFactory,
             BlockDialogFactory blockDialogFactory
     ) {
@@ -92,7 +92,7 @@ public class Users extends VerticalLayout implements StudentViewCallback, TutorV
             rolesInOrder.add(tabId);
             actions.put(tabId, presenter);
 
-            var userCount = userCountService.getAllCounts().getOrDefault(provider.getTabId(), 0L);
+            var userCount = userService.getAllCounts().getOrDefault(provider.getTabId(), 0L);
             Span tabContent = new Span(new Span(getTranslation(provider.getTabLabel())), new UserCountBadge(userCount));
             tabSheet.add(new Tab(tabContent), content, provider.getPosition());
         }

@@ -94,7 +94,7 @@ public class User {
     @Column(name = "phone_number", unique = true)
     private String phoneNumber;
 
-    @Column(name = "city", unique = true)
+    @Column(name = "city")
     private String city;
 
     /**

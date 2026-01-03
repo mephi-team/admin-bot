@@ -1,10 +1,10 @@
 package team.mephi.adminbot.vaadin.users.dataproviders;
 
-import team.mephi.adminbot.vaadin.users.service.UserCountService;
+import team.mephi.adminbot.service.UserService;
 
 public class ExpertDataProvider extends BaseUserDataProvider {
 
-    public ExpertDataProvider(UserCountService userService) {
+    public ExpertDataProvider(UserService userService) {
         super(userService);
     }
 

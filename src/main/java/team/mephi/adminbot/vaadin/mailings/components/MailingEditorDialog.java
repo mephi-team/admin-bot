@@ -11,6 +11,7 @@ import com.vaadin.flow.function.SerializableConsumer;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import team.mephi.adminbot.dto.SimpleMailing;
 import team.mephi.adminbot.dto.UserDto;
+import team.mephi.adminbot.service.UserService;
 
 import java.util.Objects;
 

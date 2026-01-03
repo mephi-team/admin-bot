@@ -30,4 +30,5 @@ public class SimpleUser {
     private String city;
     private Boolean pdConsent;
     private long studentCount;
+    private String tutor;
 }

@@ -1,10 +1,10 @@
 package team.mephi.adminbot.vaadin.users.dataproviders;
 
-import team.mephi.adminbot.vaadin.users.service.UserCountService;
+import team.mephi.adminbot.service.UserService;
 
 public class MiddleCandidateDataProvider extends BaseUserDataProvider {
 
-    public MiddleCandidateDataProvider(UserCountService userService) {
+    public MiddleCandidateDataProvider(UserService userService) {
         super(userService);
     }
 

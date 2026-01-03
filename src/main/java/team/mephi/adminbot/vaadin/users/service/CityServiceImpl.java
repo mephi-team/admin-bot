@@ -10,13 +10,19 @@ import java.util.Optional;
 
 @Service
 public class CityServiceImpl implements CityService {
+
+    private final List<CityDto> cities = List.of(
+            new CityDto("9cfa1706-2ab2-4ebb-b9f4-76b08b71e26e", "Москва"),
+            new CityDto("bd7ab214-fb32-4591-be65-80bc67b91401", "Омск")
+    );
+
     @Override
     public List<CityDto> getAllCities(Pageable pageable, String query) {
-        return List.of(new CityDto(1L, "Москва"));
+        return cities;
     }
 
     @Override
-    public Optional<CityDto> getById(Long id) {
-        return Optional.empty();
+    public Optional<CityDto> getById(String id) {
+        return cities.stream().filter(c -> c.getId().equals(id)).findAny();
     }
 }

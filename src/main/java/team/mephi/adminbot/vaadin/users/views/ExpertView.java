@@ -18,7 +18,6 @@ import team.mephi.adminbot.vaadin.users.presenter.UsersPresenter;
 import team.mephi.adminbot.vaadin.views.Dialogs;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public class ExpertView extends VerticalLayout {
@@ -50,7 +49,7 @@ public class ExpertView extends VerticalLayout {
             Button chatButton = new Button(new Icon(VaadinIcon.CHAT), e -> UI.getCurrent().navigate(Dialogs.class, QueryParameters.of("userId", item.getId().toString())));
             Button editButton = new Button(new Icon(VaadinIcon.PENCIL), e -> actions.onEdit(item));
             Button blockButton = new Button(new Icon(VaadinIcon.BAN), e -> actions.onBlock(item));
-            if (item.getStatus().equals(UserStatus.BLOCKED.name())) {
+            if (UserStatus.BLOCKED.name().equals(item.getStatus())) {
                 blockButton.addClassNames(LumoUtility.TextColor.ERROR);
             } else {
                 blockButton.addClassNames(LumoUtility.TextColor.BODY);

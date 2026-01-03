@@ -1,10 +1,10 @@
 package team.mephi.adminbot.vaadin.users.dataproviders;
 
-import team.mephi.adminbot.vaadin.users.service.UserCountService;
+import team.mephi.adminbot.service.UserService;
 
 public class FreeListenerDataProvider extends BaseUserDataProvider {
 
-    public FreeListenerDataProvider(UserCountService userService) {
+    public FreeListenerDataProvider(UserService userService) {
         super(userService);
     }
 

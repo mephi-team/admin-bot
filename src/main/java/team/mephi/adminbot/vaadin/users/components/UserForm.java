@@ -13,6 +13,7 @@ import team.mephi.adminbot.dto.RoleDto;
 public class UserForm extends FormLayout {
     private ComboBox<CohortDto> cohorts = new ComboBox<>();
     private ComboBox<DirectionDto> directions = new ComboBox<>();
+    @Getter
     private ComboBox<CityDto> cities = new ComboBox<>();
     @Getter
     private ComboBox<RoleDto> roles = new ComboBox<>();

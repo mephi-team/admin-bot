@@ -4,6 +4,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.function.SerializableConsumer;
+import team.mephi.adminbot.dto.CityDto;
 import team.mephi.adminbot.dto.RoleDto;
 import team.mephi.adminbot.dto.SimpleUser;
 
@@ -21,6 +22,10 @@ public class UserEditorDialog extends Dialog {
                 .withValidator(Objects::nonNull, "Роль обязательна")
                 .withConverter(RoleDto::getCode, roleCode -> roleService.getByCode(roleCode).orElse(null))
                 .bind("role");
+        binder.forField(form.getCities())
+                .withValidator(Objects::nonNull, "Город обязателен")
+                .withConverter(CityDto::getId, cityId -> cityService.getById(cityId).orElse(null))
+                .bind("city");
         binder.bindInstanceFields(form);
 
         setHeaderTitle(getTranslation("dialog_users_new_title"));

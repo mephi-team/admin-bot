@@ -18,7 +18,6 @@ import team.mephi.adminbot.vaadin.users.presenter.StudentPresenter;
 import team.mephi.adminbot.vaadin.views.Dialogs;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public class StudentView extends VerticalLayout {
@@ -45,7 +44,7 @@ public class StudentView extends VerticalLayout {
         grid.addColumn(SimpleUser::getCohort).setHeader(getTranslation("grid_student_header_cohort_label")).setSortable(true).setKey("cohort");
         grid.addColumn(SimpleUser::getDirection).setHeader(getTranslation("grid_student_header_direction_label")).setSortable(true).setKey("direction");
         grid.addColumn(SimpleUser::getCity).setHeader(getTranslation("grid_student_header_city_label")).setSortable(true).setKey("city");
-        grid.addColumn(SimpleUser::getCity).setHeader(getTranslation("grid_student_header_tutor_label")).setKey("tutor");
+        grid.addColumn(SimpleUser::getTutor).setHeader(getTranslation("grid_student_header_tutor_label")).setKey("tutor");
 
         grid.addComponentColumn(item -> {
             Span group = new Span();
@@ -54,7 +53,7 @@ public class StudentView extends VerticalLayout {
             Button chatButton = new Button(new Icon(VaadinIcon.CHAT), e -> UI.getCurrent().navigate(Dialogs.class, QueryParameters.of("userId", item.getId().toString())));
             Button editButton = new Button(new Icon(VaadinIcon.PENCIL), e -> actions.onEdit(item));
             Button blockButton = new Button(new Icon(VaadinIcon.BAN), e -> actions.onBlock(item));
-            if (item.getStatus().equals(UserStatus.BLOCKED.name())) {
+            if (UserStatus.BLOCKED.name().equals(item.getStatus())) {
                 blockButton.addClassNames(LumoUtility.TextColor.ERROR);
             } else {
                 blockButton.addClassNames(LumoUtility.TextColor.BODY);

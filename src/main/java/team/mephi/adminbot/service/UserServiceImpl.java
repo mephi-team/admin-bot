@@ -1,31 +1,50 @@
-package team.mephi.adminbot.vaadin.users.service;
+package team.mephi.adminbot.service;
 
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import team.mephi.adminbot.dto.SimpleUser;
+import team.mephi.adminbot.dto.UserDto;
 import team.mephi.adminbot.model.Role;
 import team.mephi.adminbot.model.User;
 import team.mephi.adminbot.model.enums.UserStatus;
 import team.mephi.adminbot.repository.UserRepository;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 @Service
-public class UserCountService {
+public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
-    public UserCountService(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
+    @Override
+    public List<UserDto> getAllUsers(Pageable pageable, String query) {
+        return userRepository.searchAll(query)
+                .stream()
+                .map(u -> UserDto.builder().id(u.getId()).userName(u.getUserName()).build())
+                .skip(pageable.getOffset()) // Пропускаем уже загруженные элементы
+                .limit(pageable.getPageSize())
+                .toList();
+    }
+
+    @Override
+    public Optional<UserDto> getById(Long id) {
+        return userRepository.findById(id).map(u -> UserDto.builder().id(u.getId()).userName(u.getUserName()).build());
+    }
+
+    @Override
     public Map<String, Long> getAllCounts() {
         return userRepository.countsByRole();
     }
 
+    @Override
     public Optional<SimpleUser> findById(Long id) {
         return userRepository.findSimpleUserById(id).map(u -> SimpleUser.builder()
                 .id(u.getId())
@@ -41,6 +60,7 @@ public class UserCountService {
     }
 
     @Transactional
+    @Override
     public SimpleUser save(SimpleUser dto) {
         User user = dto.getId() != null
                 ? userRepository.findById(dto.getId()).orElse(new User())
@@ -53,6 +73,7 @@ public class UserCountService {
         user.setEmail(dto.getEmail());
         user.setTgId(dto.getTgId());
         user.setPhoneNumber(dto.getPhoneNumber());
+        user.setCity(dto.getCity());
 
         if (Objects.isNull(user.getStatus())){
             user.setStatus(UserStatus.ACTIVE);
@@ -70,17 +91,21 @@ public class UserCountService {
                 .phoneNumber(user.getPhoneNumber())
                 .pdConsent(user.getPdConsent())
                 .fullName(user.getUserName())
+                .city(user.getCity())
                 .build();
     }
 
+    @Override
     public void deleteAllById(Iterable<Long> ids) {
         userRepository.deleteAllById(ids);
     }
 
+    @Override
     public void blockAllById(Iterable<Long> ids) {
         userRepository.blockAllById(ids);
     }
 
+    @Override
     public Stream<SimpleUser> findAllByRoleAndName(String role, String query, Pageable pageable) {
         return userRepository.findAllByRoleAndName(role, query, pageable)
                 .stream()
@@ -97,9 +122,11 @@ public class UserCountService {
                         .phoneNumber(u.getPhoneNumber())
                         .pdConsent(u.getPdConsent())
                         .status(u.getStatus().name())
+                        .city(u.getCity())
                         .build());
     }
 
+    @Override
     public Integer countByRoleAndName(String role, String query) {
         return userRepository.countByRoleAndName(role, query);
     }

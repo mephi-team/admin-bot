@@ -1,6 +1,7 @@
 package team.mephi.adminbot.vaadin.mailings.components;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import team.mephi.adminbot.service.UserService;
 
 @SpringComponent
 public class MailingEditorDialogFactory {
