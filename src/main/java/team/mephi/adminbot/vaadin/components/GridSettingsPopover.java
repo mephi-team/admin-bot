@@ -11,13 +11,14 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.popover.Popover;
 import com.vaadin.flow.component.popover.PopoverPosition;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import org.apache.commons.lang3.StringUtils;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class GridSettingsPopover extends Popover {
-    public GridSettingsPopover(Grid<?> grid, Set<String> exclude) {
+    public GridSettingsPopover(Grid<?> grid, Set<String> disabled, Set<String> exclude) {
         setModal(true);
         setBackdropVisible(true);
         setPosition(PopoverPosition.BOTTOM_END);
@@ -27,28 +28,27 @@ public class GridSettingsPopover extends Popover {
 
 //        List<String> columns = List.of("firstName", "lastName", "email",
 //                "phone", "birthday", "profession");
-        var columns = grid.getColumns().stream().map(Grid.Column::getKey).toList();
+        var columns = grid.getColumns().stream().map(Grid.Column::getKey).filter(c -> !exclude.contains(c)).toList();
 
         CheckboxGroup<String> group = new CheckboxGroup<>();
         group.addThemeVariants(CheckboxGroupVariant.LUMO_VERTICAL);
         group.setItems(columns);
         group.setItemLabelGenerator((item) -> {
-            String label = StringUtils
-                    .join(StringUtils.splitByCharacterTypeCamelCase(item), " ");
-            return StringUtils.capitalize(label.toLowerCase());
+            var label = Arrays.stream(item.replaceAll("[^a-zA-Z\\s]", " ").replaceAll("(?<=\\p{Lower})(?=\\p{Upper})", " ").toLowerCase().split("\\s+")).filter(s -> !s.isEmpty()).collect(Collectors.joining("_"));
+            return getTranslation("grid_settings_" + label + "_label");
         });
         group.addValueChangeListener((e) -> {
-            columns.stream().forEach((key) -> {
+            columns.forEach((key) -> {
                 grid.getColumnByKey(key).setVisible(e.getValue().contains(key));
             });
         });
 
         Set<String> defaultColumns = new HashSet<>(columns);//Set.of("firstName", "lastName", "email", "profession");
-        defaultColumns.removeAll(exclude);
+        defaultColumns.removeAll(disabled);
         group.setValue(defaultColumns);
 
         Button showAll = new Button(getTranslation("grid_settings_popover_action_show_all"), (e) -> {
-            group.setValue(new HashSet<String>(columns));
+            group.setValue(new HashSet<>(columns));
         });
         showAll.addThemeVariants(ButtonVariant.LUMO_SMALL);
 

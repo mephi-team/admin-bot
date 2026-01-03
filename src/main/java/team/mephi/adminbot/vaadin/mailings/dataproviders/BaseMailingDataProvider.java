@@ -58,7 +58,7 @@ public abstract class BaseMailingDataProvider implements CRUDDataProvider<Simple
                                         m.getFilters() != null ? m.getFilters().getUsers() : "",
                                         m.getFilters() != null ? m.getFilters().getCohort() : "",
                                         m.getFilters() != null ? m.getFilters().getDirection() : "",
-                                        m.getFilters() != null ? m.getFilters().getDirection() : "",
+                                        m.getFilters() != null ? m.getFilters().getCity() : "",
                                         m.getCreatedAt(),
                                         m.getFilters() != null ? m.getFilters().getCurator() : ""
                                 ));

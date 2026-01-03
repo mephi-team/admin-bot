@@ -61,7 +61,7 @@ public class TemplateView extends VerticalLayout {
         });
 
         var settingsBtn = new GridSettingsButton();
-        var settingsPopover = new GridSettingsPopover(grid, Set.of());
+        var settingsPopover = new GridSettingsPopover(grid, Set.of(), Set.of("actions"));
         settingsPopover.setTarget(settingsBtn);
 
         add(new SearchFragment(searchField, settingsBtn), gsa, grid);

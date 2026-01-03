@@ -86,7 +86,7 @@ public class MiddleCandidateView extends VerticalLayout {
         searchField.addValueChangeListener(e -> provider.getFilterableProvider().setFilter(e.getValue()));
 
         var settingsBtn = new GridSettingsButton();
-        var settingsPopover = new GridSettingsPopover(grid, Set.of());
+        var settingsPopover = new GridSettingsPopover(grid, Set.of(), Set.of("actions"));
         settingsPopover.setTarget(settingsBtn);
 
         var downloadBtn = new Button(VaadinIcon.DOWNLOAD_ALT.create());
