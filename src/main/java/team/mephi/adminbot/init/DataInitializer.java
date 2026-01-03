@@ -206,7 +206,7 @@ public class DataInitializer {
                     .createdBy(userRepository.findById(1L + random.nextLong(userRepository.count())).orElseThrow())
                     .name("Test " + i)
                     .channels(List.of(Channels.Email))
-                    .filters(Filters.builder().users("students").cohort("summer2025").direction("Java").city("Москва").curator("Иванов").build())
+                    .filters(Filters.builder().users("students").cohort("Лето 2025").direction("Java").city("Москва").curator("Иванов").build())
                     .status(statuses.get(random.nextInt(statuses.size())))
                     .build());
         }
