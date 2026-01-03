@@ -7,6 +7,7 @@ import com.vaadin.flow.function.SerializableConsumer;
 import team.mephi.adminbot.dto.CityDto;
 import team.mephi.adminbot.dto.RoleDto;
 import team.mephi.adminbot.dto.SimpleUser;
+import team.mephi.adminbot.service.CityService;
 
 import java.util.Objects;
 
@@ -19,12 +20,12 @@ public class UserEditorDialog extends Dialog {
     public UserEditorDialog(RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService) {
         var form = new UserForm(roleService, cohortService, directionService, cityService);
         binder.forField(form.getRoles())
-                .withValidator(Objects::nonNull, "Роль обязательна")
+                .withValidator(Objects::nonNull, getTranslation("form_users_roles_validation_message"))
                 .withConverter(RoleDto::getCode, roleCode -> roleService.getByCode(roleCode).orElse(null))
                 .bind("role");
         binder.forField(form.getCities())
-                .withValidator(Objects::nonNull, "Город обязателен")
-                .withConverter(CityDto::getId, cityId -> cityService.getById(cityId).orElse(null))
+                .withValidator(Objects::nonNull, getTranslation("form_users_cities_validation_message"))
+                .withConverter(CityDto::getName, city -> cityService.getByName(city).orElse(null))
                 .bind("city");
         binder.bindInstanceFields(form);
 

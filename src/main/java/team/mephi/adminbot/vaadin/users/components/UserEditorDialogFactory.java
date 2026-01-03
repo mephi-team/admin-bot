@@ -1,6 +1,7 @@
 package team.mephi.adminbot.vaadin.users.components;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import team.mephi.adminbot.service.CityService;
 
 @SpringComponent
 public class UserEditorDialogFactory {

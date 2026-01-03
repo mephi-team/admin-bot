@@ -10,8 +10,10 @@ import com.vaadin.flow.component.listbox.MultiSelectListBox;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import lombok.Getter;
+import team.mephi.adminbot.dto.CityDto;
 import team.mephi.adminbot.dto.UserDto;
 import team.mephi.adminbot.service.UserService;
+import team.mephi.adminbot.service.CityService;
 
 import java.util.List;
 
@@ -25,11 +27,12 @@ public class MailingForm extends FormLayout {
     @Getter
     private final ComboBox<String> cohort = new ComboBox<>();
     private final ComboBox<String> direction = new ComboBox<>();
-    private final ComboBox<String> city = new ComboBox<>();
+    @Getter
+    private final ComboBox<CityDto> city = new ComboBox<>();
     @Getter
     private final ComboBox<UserDto> user = new ComboBox<>();
 
-    public MailingForm(UserService userService) {
+    public MailingForm(UserService userService, CityService cityService) {
         channels.setItems("Email", "Telegram");
 
         user.setItemsPageable(userService::getAllUsers);
@@ -44,7 +47,8 @@ public class MailingForm extends FormLayout {
         users.setItems(List.of("students", "candidate"));
         cohort.setItems(List.of("summer2025", "winter2025"));
         direction.setItems(List.of("Java", "Python"));
-        city.setItems(List.of("Москва", "Омск"));
+        city.setItemsPageable(cityService::getAllCities);
+        city.setItemLabelGenerator(CityDto::getName);
 
         setAutoResponsive(true);
         setLabelsAside(true);
