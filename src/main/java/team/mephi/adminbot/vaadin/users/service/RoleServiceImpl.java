@@ -20,7 +20,6 @@ public class RoleServiceImpl implements RoleService {
     private Map<String, RoleDto> roleByDto;
 
     public RoleServiceImpl(RoleRepository roleRepository) {
-        System.out.println("!!! RoleServiceImpl");
         this.roleRepository = roleRepository;
         init();
     }
