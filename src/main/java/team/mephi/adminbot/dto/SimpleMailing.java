@@ -20,7 +20,7 @@ public class SimpleMailing {
     private String status;
     private Long userId;
     @NotEmpty
-    private Set<String> channels;
+    private Set<String> channels = Set.of("Email", "Telegram");
     @NotEmpty
     private String users;
     @NotEmpty

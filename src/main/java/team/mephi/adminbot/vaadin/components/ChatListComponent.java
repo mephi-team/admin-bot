@@ -56,10 +56,10 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
         bordered.add(header, chatList, emptyMessage);
 
         chatInput = new MessageInput();
-        var tr = new MessageInputI18n();
-        tr.setSend(getTranslation("chat.send"));
-        tr.setMessage(getTranslation("chat.placeholder"));
-        chatInput.setI18n(tr);
+        var i18n = new MessageInputI18n();
+        i18n.setSend(getTranslation("chat.send"));
+        i18n.setMessage(getTranslation("chat.placeholder"));
+        chatInput.setI18n(i18n);
         chatInput.setWidthFull();
         chatInput.addSubmitListener(submitEvent -> {
             var message = new Message();
