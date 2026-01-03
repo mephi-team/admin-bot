@@ -26,7 +26,6 @@ import team.mephi.adminbot.vaadin.questions.dataproviders.QuestionDataProviderFa
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 @Route(value = "/questions", layout = DialogsLayout.class)
@@ -127,7 +126,7 @@ public class Questions extends VerticalLayout {
     private void onDelete(List<Long> selectedIds) {
         dialogDelete.showForConfirm(selectedIds.size(), () -> {
             provider.deleteAllById(selectedIds);
-            provider.refresh();
+            provider.getDataProvider().refreshAll();
             if (selectedIds.size() > 1) {
                 Notification.show(getTranslation("notification_question_delete_all", selectedIds.size()), 3000, Notification.Position.TOP_END);
             } else {

@@ -80,12 +80,6 @@ public class QuestionDataProvider {
         questionRepository.deleteAllById(ids);
     }
 
-    public void refresh() {
-        if (provider != null) {
-            provider.refreshAll();
-        }
-    }
-
     public void saveAnswer(Long question, String user, String text) {
         var answer = UserAnswer.builder()
                 .status(answerRepository.countByQuestionId(question) == 0 ? AnswerStatus.SENT : AnswerStatus.UPDATED)
