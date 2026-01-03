@@ -18,6 +18,7 @@ import team.mephi.adminbot.vaadin.users.presenter.TutorPresenter;
 import team.mephi.adminbot.vaadin.views.Dialogs;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 public class TutorView extends VerticalLayout {
@@ -40,7 +41,7 @@ public class TutorView extends VerticalLayout {
                 .setAutoWidth(true).setFlexGrow(0).setKey("last_name");
         grid.addColumn(SimpleUser::getEmail).setHeader(getTranslation("grid_tutor_header_email_label")).setSortable(true).setKey("email");
         grid.addColumn(SimpleUser::getTgId).setHeader(getTranslation("grid_tutor_header_telegram_label")).setSortable(true).setKey("tg_name");
-        grid.addColumn(SimpleUser::getDirection).setHeader(getTranslation("grid_tutor_header_direction_label")).setKey("direction");
+        grid.addColumn(u -> Objects.nonNull(u.getDirection()) ? u.getDirection().getName() : "").setHeader(getTranslation("grid_tutor_header_direction_label")).setKey("direction");
         grid.addColumn(SimpleUser::getStudentCount).setHeader(getTranslation("grid_tutor_header_curatorship_label")).setKey("curatorship");
 
         grid.addComponentColumn(item -> {

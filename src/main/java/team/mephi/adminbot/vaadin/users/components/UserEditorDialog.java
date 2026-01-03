@@ -8,6 +8,7 @@ import team.mephi.adminbot.dto.CityDto;
 import team.mephi.adminbot.dto.RoleDto;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.service.CityService;
+import team.mephi.adminbot.service.DirectionService;
 
 import java.util.Objects;
 
@@ -23,6 +24,8 @@ public class UserEditorDialog extends Dialog {
                 .withValidator(Objects::nonNull, getTranslation("form_users_roles_validation_message"))
                 .withConverter(RoleDto::getCode, roleCode -> roleService.getByCode(roleCode).orElse(null))
                 .bind("role");
+        binder.forField(form.getDirections())
+                .bind("direction");
         binder.forField(form.getCities())
                 .withValidator(Objects::nonNull, getTranslation("form_users_cities_validation_message"))
                 .withConverter(CityDto::getName, city -> cityService.getByName(city).orElse(null))

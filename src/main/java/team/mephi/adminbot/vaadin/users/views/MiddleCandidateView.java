@@ -20,6 +20,7 @@ import team.mephi.adminbot.vaadin.users.presenter.UsersPresenter;
 import team.mephi.adminbot.vaadin.views.Dialogs;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 public class MiddleCandidateView extends VerticalLayout {
@@ -53,7 +54,7 @@ public class MiddleCandidateView extends VerticalLayout {
         grid.addColumn(SimpleUser::getPhoneNumber).setHeader(getTranslation("grid_middle_candidate_header_phone_label")).setSortable(true).setKey("phoneNumber");
         grid.addColumn(SimpleUser::getPdConsent).setHeader(getTranslation("grid_middle_candidate_header_pd_consent_label")).setSortable(true).setKey("pdConsent");
         grid.addColumn(SimpleUser::getCohort).setHeader(getTranslation("grid_middle_candidate_header_cohort_label")).setSortable(true).setKey("cohort");
-        grid.addColumn(SimpleUser::getDirection).setHeader(getTranslation("grid_middle_candidate_header_direction_label")).setSortable(true).setKey("direction");
+        grid.addColumn(u -> Objects.nonNull(u.getDirection()) ? u.getDirection().getName() : "").setHeader(getTranslation("grid_middle_candidate_header_direction_label")).setSortable(true).setKey("direction");
         grid.addColumn(SimpleUser::getCity).setHeader(getTranslation("grid_middle_candidate_header_city_label")).setSortable(true).setKey("city");
         grid.addColumn(createStatusComponentRenderer()).setHeader(getTranslation("grid_middle_candidate_header_status_label")).setSortable(true).setKey("status");
 

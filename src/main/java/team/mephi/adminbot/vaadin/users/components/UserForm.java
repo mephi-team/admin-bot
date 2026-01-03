@@ -7,13 +7,15 @@ import com.vaadin.flow.component.textfield.TextField;
 import lombok.Getter;
 import team.mephi.adminbot.dto.CityDto;
 import team.mephi.adminbot.dto.CohortDto;
-import team.mephi.adminbot.dto.DirectionDto;
+import team.mephi.adminbot.dto.SimpleDirection;
 import team.mephi.adminbot.dto.RoleDto;
 import team.mephi.adminbot.service.CityService;
+import team.mephi.adminbot.service.DirectionService;
 
 public class UserForm extends FormLayout {
     private ComboBox<CohortDto> cohorts = new ComboBox<>();
-    private ComboBox<DirectionDto> directions = new ComboBox<>();
+    @Getter
+    private ComboBox<SimpleDirection> directions = new ComboBox<>();
     @Getter
     private ComboBox<CityDto> cities = new ComboBox<>();
     @Getter
@@ -34,7 +36,7 @@ public class UserForm extends FormLayout {
         cohorts.setItemLabelGenerator(CohortDto::getName);
         cohorts.setRequiredIndicatorVisible(true);
         directions.setItemsPageable(directionService::getAllDirections);
-        directions.setItemLabelGenerator(DirectionDto::getName);
+        directions.setItemLabelGenerator(SimpleDirection::getName);
         directions.setRequiredIndicatorVisible(true);
         cities.setItemsPageable(cityService::getAllCities);
         cities.setItemLabelGenerator(CityDto::getName);

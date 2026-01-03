@@ -18,6 +18,7 @@ import team.mephi.adminbot.vaadin.users.presenter.StudentPresenter;
 import team.mephi.adminbot.vaadin.views.Dialogs;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 public class FreeListenerView extends VerticalLayout {
@@ -42,7 +43,7 @@ public class FreeListenerView extends VerticalLayout {
         grid.addColumn(SimpleUser::getTgName).setHeader(getTranslation("grid_free_listener_header_telegram_label")).setSortable(true).setKey("tgName");
         grid.addColumn(SimpleUser::getPhoneNumber).setHeader(getTranslation("grid_free_listener_header_phone_label")).setSortable(true).setKey("phoneNumber");
         grid.addColumn(SimpleUser::getCohort).setHeader(getTranslation("grid_free_listener_header_cohort_label")).setSortable(true).setKey("cohort");
-        grid.addColumn(SimpleUser::getDirection).setHeader(getTranslation("grid_free_listener_header_direction_label")).setSortable(true).setKey("direction");
+        grid.addColumn(u -> Objects.nonNull(u.getDirection()) ? u.getDirection().getName() : "").setHeader(getTranslation("grid_free_listener_header_direction_label")).setSortable(true).setKey("direction");
         grid.addColumn(SimpleUser::getCity).setHeader(getTranslation("grid_free_listener_header_city_label")).setSortable(true).setKey("city");
 
         grid.addComponentColumn(item -> {

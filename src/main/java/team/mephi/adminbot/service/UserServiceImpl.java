@@ -3,8 +3,10 @@ package team.mephi.adminbot.service;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import team.mephi.adminbot.dto.SimpleDirection;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.dto.UserDto;
+import team.mephi.adminbot.model.Direction;
 import team.mephi.adminbot.model.Role;
 import team.mephi.adminbot.model.User;
 import team.mephi.adminbot.model.enums.UserStatus;
@@ -74,6 +76,7 @@ public class UserServiceImpl implements UserService {
         user.setTgId(dto.getTgId());
         user.setPhoneNumber(dto.getPhoneNumber());
         user.setCity(dto.getCity());
+        user.setDirection(Direction.builder().id(dto.getDirection().getId()).name(dto.getDirection().getName()).build());
 
         if (Objects.isNull(user.getStatus())){
             user.setStatus(UserStatus.ACTIVE);
@@ -92,6 +95,7 @@ public class UserServiceImpl implements UserService {
                 .pdConsent(user.getPdConsent())
                 .fullName(user.getUserName())
                 .city(user.getCity())
+                .direction(SimpleDirection.builder().id(user.getDirection().getId()).name(user.getDirection().getName()).build())
                 .build();
     }
 
@@ -123,6 +127,7 @@ public class UserServiceImpl implements UserService {
                         .pdConsent(u.getPdConsent())
                         .status(u.getStatus().name())
                         .city(u.getCity())
+                        .direction(Objects.nonNull(u.getDirection()) ? SimpleDirection.builder().id(u.getDirection().getId()).name(u.getDirection().getName()).build() : SimpleDirection.builder().build())
                         .build());
     }
 

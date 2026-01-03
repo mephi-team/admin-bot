@@ -65,7 +65,16 @@ public class TutorDataProvider implements UserDataProvider {
 
     @Override
     public Optional<SimpleUser> findById(Long id) {
-        return tutorRepository.findSimpleUserById(id);
+        return tutorRepository.findSimpleUserById(id).map(t -> SimpleUser.builder()
+                .id(t.getId())
+                .role("tutor")
+                .firstName(t.getFirstName())
+                .lastName(t.getLastName())
+                .email(t.getEmail())
+                .phoneNumber(t.getPhone())
+                .tgId(t.getTgId())
+                .tgName(t.getTgName())
+                .build());
     }
 
     @Override

@@ -18,6 +18,7 @@ import team.mephi.adminbot.vaadin.users.presenter.UsersPresenter;
 import team.mephi.adminbot.vaadin.views.Dialogs;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 public class ExpertView extends VerticalLayout {
@@ -41,7 +42,7 @@ public class ExpertView extends VerticalLayout {
         grid.addColumn(SimpleUser::getEmail).setHeader(getTranslation("grid_expert_header_email_label")).setSortable(true).setKey("email");
         grid.addColumn(SimpleUser::getTgName).setHeader(getTranslation("grid_expert_header_telegram_label")).setSortable(true).setKey("tgName");
         grid.addColumn(SimpleUser::getCohort).setHeader(getTranslation("grid_expert_header_cohort_label")).setSortable(true).setKey("cohort");
-        grid.addColumn(SimpleUser::getDirection).setHeader(getTranslation("grid_expert_header_direction_label")).setSortable(true).setKey("direction");
+        grid.addColumn(u -> Objects.nonNull(u.getDirection()) ? u.getDirection().getName() : "").setHeader(getTranslation("grid_expert_header_direction_label")).setSortable(true).setKey("direction");
 
         grid.addComponentColumn(item -> {
             Button dropButton = new Button(getTranslation("grid_expert_action_delete_label"), new Icon(VaadinIcon.CLOSE), e -> actions.onDelete(List.of(item.getId())));

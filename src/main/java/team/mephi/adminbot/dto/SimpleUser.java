@@ -26,7 +26,7 @@ public class SimpleUser {
     private String fullName;
     private String tgName;
     private String cohort;
-    private String direction;
+    private SimpleDirection direction;
     private String city;
     private Boolean pdConsent;
     private long studentCount;
