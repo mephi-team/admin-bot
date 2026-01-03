@@ -58,7 +58,6 @@ public abstract class BaseUserDataProvider implements UserDataProvider {
     }
 
     @Override
-    @Transactional
     public SimpleUser save(SimpleUser dto) {
         return userService.save(dto);
     }
