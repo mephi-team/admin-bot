@@ -68,12 +68,12 @@ public class DataInitializer {
                 if (!hasDirections) initDirections();
                 if (!hasRoles) initRoles();
                 if (!hasUsers) initUsers();
+                if (!hasTutors) initTutors();
                 if (!hasQuestions) initQuestions();
                 if (!hasAnswers) initAnswers();
                 if (!hasBroadcasts) initBroadcasts();
                 if (!hasTemplates) initTemplates();
                 if (!hasDialogs) initDialogs(); // зависит от пользователей
-                if (!hasTutors) initTutors();
 
                 System.out.println("✅ Тестовые данные успешно созданы.");
             }
@@ -143,8 +143,8 @@ public class DataInitializer {
 
     private void initTutors() {
         List<Tutor> tutors = Arrays.asList(
-                Tutor.builder().userName("test1").firstName("Сергей").lastName("Иванов").phone("+79991234567").email("test1@example.com").build(),
-                Tutor.builder().userName("test2").firstName("Николай").lastName("Александров").phone("+79997654321").email("test2@example.com").build()
+                Tutor.builder().userName("Сергей Иванов").firstName("Сергей").lastName("Иванов").phone("+79991234567").email("test1@example.org").build(),
+                Tutor.builder().userName("Николай Александров").firstName("Николай").lastName("Александров").phone("+79997654321").email("test2@example.org").build()
         );
         tutorRepository.saveAll(tutors);
         System.out.printf("  → Создано %d кураторов%n", tutors.size());
@@ -203,11 +203,12 @@ public class DataInitializer {
         List<Mailing> broadcasts = new ArrayList<>();
         for (int i = 1; i <= 100; i++) {
             var user = userRepository.findById(1L + random.nextLong(userRepository.count())).orElseThrow();
+            var curator = tutorRepository.findById(1L + random.nextLong(tutorRepository.count())).orElseThrow();
             broadcasts.add(Mailing.builder()
                     .createdBy(user)
                     .name("Test " + i)
                     .channels(List.of(Channels.Email))
-                    .filters(Filters.builder().users("student").cohort("Лето 2025").direction("Java").city("Москва").curator(user.getUserName()).build())
+                    .filters(Filters.builder().users("Студенты").cohort("Лето 2025").direction("Java").city("Москва").curator(curator.getUserName()).build())
                     .status(statuses.get(random.nextInt(statuses.size())))
                     .build());
         }

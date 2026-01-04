@@ -40,7 +40,7 @@ public class MailingEditorDialog extends Dialog {
                 .bind(SimpleMailing::getCurator, SimpleMailing::setCurator);
         binder.forField(form1.getUsers())
                 .withValidator(Objects::nonNull, getTranslation("form_mailing_users_validation_message"))
-                .withConverter(RoleDto::getCode, role -> roleService.getByCode(role).orElse(roleService.getAllRoles().getFirst()))
+                .withConverter(RoleDto::getName, role -> roleService.getByName(role).orElse(roleService.getAllRoles().getFirst()))
                 .bind(SimpleMailing::getUsers, SimpleMailing::setUsers);
         binder.forField(form1.getCohort())
                 .withValidator(Objects::nonNull, getTranslation("form_mailing_direction_validation_message"))

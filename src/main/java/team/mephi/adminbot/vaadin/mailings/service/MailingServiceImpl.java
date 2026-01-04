@@ -36,7 +36,7 @@ public class MailingServiceImpl implements MailingService {
         var result = mailing.getId() != null
                 ? mailingRepository.findById(mailing.getId()).orElse(new Mailing())
                 : new Mailing();
-//        result.setName(mailing.getName());
+        result.setName(mailing.getName());
         result.setDescription(mailing.getText());
         if (Objects.isNull(result.getCreatedBy()))
             result.setCreatedBy(userRepository.findByEmail(user.getUserInfo().getEmail()).orElseThrow());

@@ -7,17 +7,14 @@ import team.mephi.adminbot.repository.RoleRepository;
 import team.mephi.adminbot.vaadin.users.components.RoleService;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class RoleServiceImpl implements RoleService {
 
     private final RoleRepository roleRepository;
     private List<RoleDto> roles;
-    private Map<String, RoleDto> roleByDto;
 
     public RoleServiceImpl(RoleRepository roleRepository) {
         this.roleRepository = roleRepository;
@@ -28,7 +25,6 @@ public class RoleServiceImpl implements RoleService {
         this.roles = roleRepository.findAll().stream()
                 .map(r -> new RoleDto(r.getCode(), r.getName()))
                 .toList();
-        this.roleByDto = roles.stream().collect(Collectors.toMap(RoleDto::getCode, item -> item));
     }
 
     @Override
@@ -46,7 +42,14 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Optional<RoleDto> getByCode(String code) {
         if (Objects.isNull(code)) return Optional.empty();
-        if (Objects.isNull(roleByDto) || roleByDto.isEmpty()) init();
-        return Optional.of(roleByDto.get(code));
+        if (Objects.isNull(roles) || roles.isEmpty()) init();
+        return roles.stream().filter(r -> r.getCode().equals(code)).findAny();
+    }
+
+    @Override
+    public Optional<RoleDto> getByName(String name) {
+        if (Objects.isNull(name)) return Optional.empty();
+        if (Objects.isNull(roles) || roles.isEmpty()) init();
+        return roles.stream().filter(r -> r.getName().equals(name)).findAny();
     }
 }

@@ -10,4 +10,5 @@ public interface RoleService {
     List<RoleDto> getAllRoles();
     List<RoleDto> getAllRoles(Pageable pageable, String query);
     Optional<RoleDto> getByCode(String code);
+    Optional<RoleDto> getByName(String name);
 }

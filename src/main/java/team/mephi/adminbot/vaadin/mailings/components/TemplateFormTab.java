@@ -25,7 +25,7 @@ public class TemplateFormTab extends FormLayout {
         var newMessage = new TemplateMessage(getTranslation("form_mailing_message_new_message_label"), "new");
         var fromTemplate = new TemplateMessage(getTranslation("form_mailing_message_from_template_label"), "template");
         radioGroup.setItems(newMessage, fromTemplate);
-        radioGroup.setValue(fromTemplate);
+        radioGroup.setValue(newMessage);
         radioGroup.setItemLabelGenerator(TemplateMessage::getName);
 
         ComboBox<String> templates = new ComboBox<>();
