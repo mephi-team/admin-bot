@@ -13,6 +13,7 @@ import java.util.Optional;
 public class DirectionServiceImpl implements DirectionService {
 
     private final DirectionRepository directionRepository;
+    private List<SimpleDirection> directions;
 
     public DirectionServiceImpl(DirectionRepository directionRepository) {
         this.directionRepository = directionRepository;
@@ -20,13 +21,8 @@ public class DirectionServiceImpl implements DirectionService {
 
     @Override
     public List<SimpleDirection> getAllDirections(Pageable pageable, String query) {
-        return directionRepository.findAll()
-                .stream()
-                .map(d -> SimpleDirection.builder()
-                        .id(d.getId())
-                        .name(d.getName())
-                        .build())
-                .toList();
+        if (Objects.isNull(directions)) initDirections();
+        return directions;
     }
 
     @Override
@@ -41,10 +37,17 @@ public class DirectionServiceImpl implements DirectionService {
 
     @Override
     public Optional<SimpleDirection> getByName(String name) {
-        return directionRepository.findByName(name)
+        if (Objects.isNull(directions)) initDirections();
+        return directions.stream().filter(d -> d.getName().equals(name)).findAny();
+    }
+
+    private void initDirections() {
+        directions = directionRepository.findAll()
+                .stream()
                 .map(d -> SimpleDirection.builder()
                         .id(d.getId())
                         .name(d.getName())
-                        .build());
+                        .build())
+                .toList();
     }
 }
