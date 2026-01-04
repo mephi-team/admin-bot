@@ -19,6 +19,7 @@ public class UserEditorDialog extends Dialog {
     private final Button saveButton = new Button(getTranslation("save_button"), e -> onSave());
 
     private SerializableConsumer<SimpleUser> onSaveCallback;
+    private SimpleUser user;
 
     public UserEditorDialog(RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService) {
         var form = new UserForm(roleService, cohortService, directionService, cityService);
@@ -55,6 +56,7 @@ public class UserEditorDialog extends Dialog {
     }
 
     public void openForEdit(SimpleUser user, SerializableConsumer<SimpleUser> callback) {
+        this.user = user;
         this.onSaveCallback = callback;
         binder.readBean(user);
         binder.setReadOnly(false);
@@ -75,7 +77,6 @@ public class UserEditorDialog extends Dialog {
     private void onSave() {
         if(binder.validate().isOk()) {
             if (onSaveCallback != null) {
-                SimpleUser user = new SimpleUser();
                 binder.writeBeanIfValid(user);
                 onSaveCallback.accept(user);
             }

@@ -29,15 +29,13 @@ public class CRUDPresenter<T> implements CRUDActions<T>, DataProvider<T> {
 
     @Override
     public void onEdit(T item) {
-//        dataProvider.findById(id).ifPresent(m -> {
-            view.showDialogForEdit(item, (editedItem) -> {
-                if (editedItem != null) {
-                    editedItem = dataProvider.save((T) editedItem);
-                    dataProvider.getDataProvider().refreshItem((T) editedItem);
-                    view.showNotificationForEdit(0L);
-                }
-            });
-//        });
+        view.showDialogForEdit(item, (editedItem) -> {
+            if (editedItem != null) {
+                editedItem = dataProvider.save((T) editedItem);
+                dataProvider.getDataProvider().refreshItem((T) editedItem);
+                view.showNotificationForEdit(0L);
+            }
+        });
     }
 
     @Override

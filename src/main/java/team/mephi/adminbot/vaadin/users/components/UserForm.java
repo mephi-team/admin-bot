@@ -15,22 +15,24 @@ import team.mephi.adminbot.service.DirectionService;
 
 public class UserForm extends FormLayout {
     @Getter
-    private ComboBox<CohortDto> cohorts = new ComboBox<>();
-    @Getter
-    private ComboBox<SimpleDirection> directions = new ComboBox<>();
-    @Getter
-    private ComboBox<CityDto> cities = new ComboBox<>();
-    @Getter
     private ComboBox<RoleDto> roles = new ComboBox<>();
     private TextField firstName = new TextField();
     private TextField lastName = new TextField();
     private EmailField email = new EmailField();
     private TextField tgId = new TextField();
     private TextField phoneNumber = new TextField();
-    private TextField id = new TextField();
-    private TextField fullName = new TextField();
+    @Getter
+    private ComboBox<CohortDto> cohorts = new ComboBox<>();
+    @Getter
+    private ComboBox<SimpleDirection> directions = new ComboBox<>();
+    @Getter
+    private ComboBox<CityDto> cities = new ComboBox<>();
 
     public UserForm(RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService) {
+        setAutoResponsive(true);
+        setLabelsAside(true);
+        setExpandFields(true);
+
         roles.setItemsPageable(roleService::getAllRoles);
         roles.setItemLabelGenerator(RoleDto::getName);
         roles.setRequiredIndicatorVisible(true);
@@ -44,15 +46,6 @@ public class UserForm extends FormLayout {
         cities.setItemLabelGenerator(CityDto::getName);
         cities.setRequiredIndicatorVisible(true);
 
-        setAutoResponsive(true);
-        setLabelsAside(true);
-        setWidthFull();
-        setExpandFields(true);
-        setExpandColumns(true);
-
-        id.setVisible(false);
-        add(id);
-        add(fullName);
         addFormItem(roles, getTranslation("form_users_roles_label"));
         addFormItem(firstName, getTranslation("form_users_first_name_label"));
         addFormItem(lastName, getTranslation("form_users_last_name_label"));
