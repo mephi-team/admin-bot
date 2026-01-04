@@ -202,11 +202,12 @@ public class DataInitializer {
 
         List<Mailing> broadcasts = new ArrayList<>();
         for (int i = 1; i <= 100; i++) {
+            var user = userRepository.findById(1L + random.nextLong(userRepository.count())).orElseThrow();
             broadcasts.add(Mailing.builder()
-                    .createdBy(userRepository.findById(1L + random.nextLong(userRepository.count())).orElseThrow())
+                    .createdBy(user)
                     .name("Test " + i)
                     .channels(List.of(Channels.Email))
-                    .filters(Filters.builder().users("students").cohort("Лето 2025").direction("Java").city("Москва").curator("Иванов").build())
+                    .filters(Filters.builder().users("students").cohort("Лето 2025").direction("Java").city("Москва").curator(user.getUserName()).build())
                     .status(statuses.get(random.nextInt(statuses.size())))
                     .build());
         }

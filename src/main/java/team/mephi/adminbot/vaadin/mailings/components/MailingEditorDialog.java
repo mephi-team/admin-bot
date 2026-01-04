@@ -106,7 +106,6 @@ public class MailingEditorDialog extends Dialog {
         this.onSaveCallback = callback;
         binder.readBean(mailing);
         binder.setReadOnly(false);
-//        saveButton.setVisible(true);
         tabSheet.setSelectedTab(tab1);
         open();
     }
