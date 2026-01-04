@@ -207,7 +207,7 @@ public class DataInitializer {
                     .createdBy(user)
                     .name("Test " + i)
                     .channels(List.of(Channels.Email))
-                    .filters(Filters.builder().users("students").cohort("Лето 2025").direction("Java").city("Москва").curator(user.getUserName()).build())
+                    .filters(Filters.builder().users("student").cohort("Лето 2025").direction("Java").city("Москва").curator(user.getUserName()).build())
                     .status(statuses.get(random.nextInt(statuses.size())))
                     .build());
         }

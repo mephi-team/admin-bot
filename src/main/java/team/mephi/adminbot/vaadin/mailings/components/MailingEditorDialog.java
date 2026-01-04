@@ -14,6 +14,7 @@ import team.mephi.adminbot.service.UserService;
 import team.mephi.adminbot.service.CityService;
 import team.mephi.adminbot.service.DirectionService;
 import team.mephi.adminbot.service.CohortService;
+import team.mephi.adminbot.vaadin.users.components.RoleService;
 
 import java.util.Objects;
 
@@ -28,14 +29,18 @@ public class MailingEditorDialog extends Dialog {
 
     private SerializableConsumer<SimpleMailing> onSaveCallback;
 
-    public MailingEditorDialog(UserService userService, CohortService cohortService, DirectionService directionService, CityService cityService) {
-        var form1 = new MailingForm(userService, cohortService, directionService, cityService);
+    public MailingEditorDialog(UserService userService, RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService) {
+        var form1 = new MailingForm(userService, roleService, cohortService, directionService, cityService);
         var form2 = new TemplateFormTab();
 
         binder.forField(form1.getUser())
                 .withValidator(Objects::nonNull, getTranslation("form_mailing_user_validation_message"))
                 .withConverter(UserDto::getId, userId -> userService.getById(userId).orElse(null))
                 .bind("userId");
+        binder.forField(form1.getUsers())
+                .withValidator(Objects::nonNull, getTranslation("form_mailing_users_validation_message"))
+                .withConverter(RoleDto::getCode, role -> roleService.getByCode(role).orElse(roleService.getAllRoles().getFirst()))
+                .bind("users");
         binder.forField(form1.getCohort())
                 .withValidator(Objects::nonNull, getTranslation("form_mailing_direction_validation_message"))
                 .withConverter(CohortDto::getName, cohort -> cohortService.getByName(cohort).orElse(null))
@@ -97,7 +102,6 @@ public class MailingEditorDialog extends Dialog {
         newMailing.setUserId(0L);
         binder.readBean(newMailing);
         binder.setReadOnly(false);
-//        saveButton.setVisible(true);
         tabSheet.setSelectedTab(tab1);
         open();
     }

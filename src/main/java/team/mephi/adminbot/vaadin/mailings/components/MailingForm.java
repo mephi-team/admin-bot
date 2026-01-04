@@ -10,24 +10,19 @@ import com.vaadin.flow.component.listbox.MultiSelectListBox;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import lombok.Getter;
-import team.mephi.adminbot.dto.CityDto;
-import team.mephi.adminbot.dto.CohortDto;
-import team.mephi.adminbot.dto.SimpleDirection;
-import team.mephi.adminbot.dto.UserDto;
+import team.mephi.adminbot.dto.*;
 import team.mephi.adminbot.service.UserService;
 import team.mephi.adminbot.service.CityService;
 import team.mephi.adminbot.service.DirectionService;
 import team.mephi.adminbot.service.CohortService;
-
-import java.util.List;
+import team.mephi.adminbot.vaadin.users.components.RoleService;
 
 public class MailingForm extends FormLayout {
-    private final TextField id = new TextField();
     @Getter
     private final TextField name = new TextField();
     private final CheckboxGroup<String> channels = new CheckboxGroup<>();
     @Getter
-    private final ComboBox<String> users = new ComboBox<>();
+    private final ComboBox<RoleDto> users = new ComboBox<>();
     @Getter
     private final ComboBox<CohortDto> cohort = new ComboBox<>();
     @Getter
@@ -37,7 +32,7 @@ public class MailingForm extends FormLayout {
     @Getter
     private final ComboBox<UserDto> user = new ComboBox<>();
 
-    public MailingForm(UserService userService, CohortService cohortService, DirectionService directionService, CityService cityService) {
+    public MailingForm(UserService userService, RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService) {
         channels.setItems("Email", "Telegram");
 
         user.setItemsPageable(userService::getAllUsers);
@@ -49,7 +44,8 @@ public class MailingForm extends FormLayout {
         user.setRequiredIndicatorVisible(true);
         city.setRequiredIndicatorVisible(true);
 
-        users.setItems(List.of("students", "candidate"));
+        users.setItemsPageable(roleService::getAllRoles);
+        users.setItemLabelGenerator(RoleDto::getName);
         cohort.setItemsPageable(cohortService::getAllCohorts);
         cohort.setItemLabelGenerator(CohortDto::getName);
         direction.setItemsPageable(directionService::getAllDirections);

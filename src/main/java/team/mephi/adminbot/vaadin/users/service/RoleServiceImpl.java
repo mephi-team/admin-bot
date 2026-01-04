@@ -32,6 +32,12 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    public List<RoleDto> getAllRoles() {
+        if (Objects.isNull(roles) || roles.isEmpty()) init();
+        return roles;
+    }
+
+    @Override
     public List<RoleDto> getAllRoles(Pageable pageable, String query) {
         if (Objects.isNull(roles) || roles.isEmpty()) init();
         return roles;
@@ -39,6 +45,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Optional<RoleDto> getByCode(String code) {
+        if (Objects.isNull(code)) return Optional.empty();
         if (Objects.isNull(roleByDto) || roleByDto.isEmpty()) init();
         return Optional.of(roleByDto.get(code));
     }

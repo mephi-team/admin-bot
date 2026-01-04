@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RoleService {
+    List<RoleDto> getAllRoles();
     List<RoleDto> getAllRoles(Pageable pageable, String query);
     Optional<RoleDto> getByCode(String code);
 }
