@@ -82,14 +82,14 @@ public class DataInitializer {
 
     private void initRoles() {
         List<Role> roles = Arrays.asList(
-                Role.builder().code("student").name("student").description("Студенты").build(),
-                Role.builder().code("candidate").name("candidate").description("Кандидаты").build(),
-                Role.builder().code("visitor").name("visitor").description("Посетители").build(),
-                Role.builder().code("free_listener").name("free_listener").description("Слушатели").build(),
-                Role.builder().code("middle_candidate").name("middle_candidate").description("Миддл-кандидаты").build(),
-                Role.builder().code("lc_expert").name("lc_expert").description("Эксперты").build(),
-                Role.builder().code("extuser").name("extuser").description("Внешние пользователи").build(),
-                Role.builder().code("tutor").name("tutor").description("Кураторы").build()
+                Role.builder().code("student").name("Студенты").description("Студенты").build(),
+                Role.builder().code("candidate").name("Кандидаты").description("Кандидаты").build(),
+                Role.builder().code("visitor").name("Посетители").description("Посетители").build(),
+                Role.builder().code("free_listener").name("Слушатели").description("Слушатели").build(),
+                Role.builder().code("middle_candidate").name("Миддл-кандидаты").description("Миддл-кандидаты").build(),
+                Role.builder().code("lc_expert").name("Эксперты").description("Эксперты").build(),
+                Role.builder().code("extuser").name("Внешние пользователи").description("Внешние пользователи").build(),
+                Role.builder().code("tutor").name("Кураторы").description("Кураторы").build()
         );
         roleRepository.saveAll(roles);
         System.out.printf("  → Создано %d ролей%n", roles.size());
@@ -109,17 +109,17 @@ public class DataInitializer {
 
     private void initUsers() {
         // Получаем роли по имени
-        Role studentRole = roleRepository.findByName("student")
+        Role studentRole = roleRepository.findByCode("student")
                 .orElseThrow(() -> new RuntimeException("Роль 'student' не найдена"));
-        Role candidateRole = roleRepository.findByName("candidate")
+        Role candidateRole = roleRepository.findByCode("candidate")
                 .orElseThrow(() -> new RuntimeException("Роль 'candidate' не найдена"));
-        Role middleCandidateRole = roleRepository.findByName("middle_candidate")
+        Role middleCandidateRole = roleRepository.findByCode("middle_candidate")
                 .orElseThrow(() -> new RuntimeException("Роль 'middle_candidate' не найдена"));
-        Role visitorRole = roleRepository.findByName("visitor")
+        Role visitorRole = roleRepository.findByCode("visitor")
                 .orElseThrow(() -> new RuntimeException("Роль 'visitor' не найдена"));
-        Role freeListenerRole = roleRepository.findByName("free_listener")
+        Role freeListenerRole = roleRepository.findByCode("free_listener")
                 .orElseThrow(() -> new RuntimeException("Роль 'free_listener' не найдена"));
-        Role lcExpertRole = roleRepository.findByName("lc_expert")
+        Role lcExpertRole = roleRepository.findByCode("lc_expert")
                 .orElseThrow(() -> new RuntimeException("Роль 'lc_expert' не найдена"));
 
         Direction java = directionRepository.findById(1L).orElseThrow();
@@ -153,7 +153,7 @@ public class DataInitializer {
     private void initQuestions() {
         Random random = new Random();
 
-        String student = roleRepository.findByName("student").get().getName();
+        String student = roleRepository.findByCode("student").get().getName();
         List<User> students = userRepository.findAllByRole(student);
 
         List<UserQuestion> questions = Arrays.asList(
@@ -182,7 +182,7 @@ public class DataInitializer {
     private void initAnswers() {
         Random random = new Random();
 
-        String expert = roleRepository.findByName("lc_expert").get().getName();
+        String expert = roleRepository.findByCode("lc_expert").get().getName();
         List<User> experts = userRepository.findAllByRole(expert);
 
         List<UserAnswer> answers = Arrays.asList(
