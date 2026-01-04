@@ -100,11 +100,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u JOIN fetch u.role")
     List<User> findAllWithRoles();
 
-    @Query("SELECT u FROM User u JOIN fetch u.role LEFT JOIN FETCH u.direction WHERE u.role.name = :role")
+    @Query("SELECT u FROM User u JOIN fetch u.role LEFT JOIN FETCH u.direction WHERE u.role.code = :role")
     List<User> findAllByRole(String role);
 
-    //@Query("SELECT u FROM User u JOIN fetch u.role LEFT JOIN FETCH u.direction WHERE u.deleted = false AND u.role.name = :role AND (" +
-    @Query("SELECT u FROM User u JOIN fetch u.role LEFT JOIN FETCH u.direction WHERE u.role.name = :role AND (" +
+    @Query("SELECT u FROM User u JOIN fetch u.role LEFT JOIN FETCH u.direction WHERE u.role.code = :role AND (" +
             "LOWER(COALESCE(u.userName, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
             "LOWER(COALESCE(u.name, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
             "LOWER(COALESCE(u.firstName, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
@@ -116,8 +115,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             ")")
     List<User> findAllByRoleAndName(String role, String query, Pageable pageable);
 
-    //@Query("SELECT count(u )FROM User u JOIN u.role WHERE u.deleted = false AND u.role.name = :role AND (" +
-    @Query("SELECT count(u )FROM User u JOIN u.role WHERE u.role.name = :role AND (" +
+    @Query("SELECT count(u )FROM User u JOIN u.role WHERE u.role.code = :role AND (" +
             "LOWER(COALESCE(u.userName, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
             "LOWER(COALESCE(u.name, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
             "LOWER(COALESCE(u.firstName, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
@@ -144,11 +142,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Modifying
     void blockAllById(@Param("ids") Iterable<? extends Long> ids);
 
-    @Query("SELECT count(u) FROM User u WHERE u.role.name = :role")
+    @Query("SELECT count(u) FROM User u WHERE u.role.code = :role")
     Integer countByRole(String role);
 
-    @Query("SELECT u.role.name, count(u) FROM User u GROUP BY u.role.name UNION ALL SELECT 'tutor', count(t) FROM Tutor t")
-//    @Query("SELECT u.role.name, count(u) FROM User u WHERE u.deleted = false GROUP BY u.role.name UNION ALL SELECT 'tutor', count(t) FROM Tutor t")
+    @Query("SELECT u.role.code, count(u) FROM User u GROUP BY u.role.code UNION ALL SELECT 'tutor', count(t) FROM Tutor t")
     List<Tuple> countsByRoleTuples();
 
     default Map<String, Long> countsByRole() {
