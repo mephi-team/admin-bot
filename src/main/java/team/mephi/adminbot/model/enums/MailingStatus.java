@@ -13,6 +13,7 @@ public enum MailingStatus {
     DRAFT,
     ACTIVE,
     PAUSED,
-    FINISHED
+    FINISHED,
+    ERROR
 }
 

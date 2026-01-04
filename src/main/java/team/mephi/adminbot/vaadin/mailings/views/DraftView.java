@@ -28,11 +28,14 @@ public class DraftView extends VerticalLayout {
     private static final SerializableBiConsumer<Span, SimpleMailing> statusComponentUpdater = (
             span, person) -> {
         String theme = switch (person.getStatus()) {
-            case "ACTIVE" -> String.format("badge %s", "success");
+            case "ACTIVE" -> "badge";
+            case "DRAFT" -> String.format("badge %s", "contrast");
+            case "PAUSED" -> String.format("badge %s", "warning");
+            case "FINISHED" -> String.format("badge %s", "success");
             default -> String.format("badge %s", "error");
         };
         span.getElement().setAttribute("theme", theme);
-        span.setText(person.getStatus());
+        span.setText(span.getTranslation("mailing_status_" + person.getStatus().toLowerCase() + "_label"));
     };
 
     public DraftView(MailingsPresenter actions) {
