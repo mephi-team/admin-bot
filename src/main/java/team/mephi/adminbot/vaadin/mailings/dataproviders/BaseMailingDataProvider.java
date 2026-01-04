@@ -86,7 +86,7 @@ public abstract class BaseMailingDataProvider implements CRUDDataProvider<Simple
 
     @Override
     public void deleteAllById(Iterable<Long> ids) {
-        mailingRepository.deleteAllById(ids);
+        mailingService.deleteAllById(ids);
     }
 
     protected abstract List<MailingStatus> getStatuses();

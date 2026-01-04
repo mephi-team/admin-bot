@@ -58,4 +58,10 @@ public class MailingServiceImpl implements MailingService {
                 .status(result.getStatus().name())
                 .build();
     }
+
+    @Override
+    @Transactional
+    public void deleteAllById(Iterable<Long> ids) {
+        mailingRepository.deleteAllById(ids);
+    }
 }
