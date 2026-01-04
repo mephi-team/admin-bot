@@ -10,6 +10,7 @@ import team.mephi.adminbot.model.Direction;
 import team.mephi.adminbot.model.Role;
 import team.mephi.adminbot.model.User;
 import team.mephi.adminbot.model.enums.UserStatus;
+import team.mephi.adminbot.repository.TutorRepository;
 import team.mephi.adminbot.repository.UserRepository;
 
 import java.util.List;
@@ -21,9 +22,13 @@ import java.util.stream.Stream;
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final TutorRepository tutorRepository;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    private List<UserDto> curators;
+
+    public UserServiceImpl(UserRepository userRepository, TutorRepository tutorRepository) {
         this.userRepository = userRepository;
+        this.tutorRepository = tutorRepository;
     }
 
     @Override
@@ -141,10 +146,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<UserDto> findByUserName(String name) {
-        return userRepository.findByUserName(name).map(u -> UserDto.builder()
+    public List<UserDto> findAllCurators(Pageable pageable, String s) {
+        if (Objects.isNull(curators)) initCurators();
+        return curators;
+    }
+
+    @Override
+    public Optional<UserDto> findCuratorByUserName(String name) {
+        if (Objects.isNull(curators)) initCurators();
+        return curators.stream().filter(c -> c.getUserName().equals(name)).findAny();
+    }
+
+    private void initCurators() {
+        curators = tutorRepository.findAll().stream().map(u -> UserDto.builder()
                 .id(u.getId())
                 .userName(u.getUserName())
-                .build());
+                .build()).toList();
     }
 }

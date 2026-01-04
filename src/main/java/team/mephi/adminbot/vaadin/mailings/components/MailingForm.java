@@ -54,7 +54,7 @@ public class MailingForm extends FormLayout {
         city.setItemLabelGenerator(CityDto::getName);
         city.setRequiredIndicatorVisible(true);
 
-        curator.setItemsPageable(userService::getAllUsers);
+        curator.setItemsPageable(userService::findAllCurators);
         curator.setItemLabelGenerator(UserDto::getUserName);
         curator.setRequiredIndicatorVisible(true);
 
