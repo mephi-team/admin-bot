@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import team.mephi.adminbot.model.enums.Channels;
@@ -48,6 +49,7 @@ import java.util.Map;
         @Index(name = "idx_mailings_created_by", columnList = "created_by"),
         @Index(name = "idx_mailings_template_id", columnList = "template_id")
 })
+@DynamicUpdate
 public class Mailing {
     /**
      * Уникальный идентификатор рассылки.

@@ -16,24 +16,22 @@ public class MailingsPresenter extends CRUDPresenter<SimpleMailing> implements M
     }
 
     @Override
-    public void onCancel(Long id) {
-        view.confirmCancel(id, () -> {
-            var edit = dataProvider.findById(id).orElseThrow();
+    public void onCancel(SimpleMailing item) {
+        view.confirmCancel(item, (edit) -> {
             edit.setStatus("FINISHED");
             dataProvider.save(edit);
-            dataProvider.getDataProvider().refreshAll();
-            view.showNotificationForCancel(id);
+            dataProvider.getDataProvider().refreshItem(edit);
+            view.showNotificationForCancel(edit.getId());
         });
     }
 
     @Override
-    public void onRetry(Long id) {
-        view.confirmRetry(id, () -> {
-            var edit = dataProvider.findById(id).orElseThrow();
+    public void onRetry(SimpleMailing item) {
+        view.confirmRetry(item, (edit) -> {
             edit.setStatus("ACTIVE");
             dataProvider.save(edit);
-            dataProvider.getDataProvider().refreshAll();
-            view.showNotificationForRetry(id);
+            dataProvider.getDataProvider().refreshItem(edit);
+            view.showNotificationForRetry(edit.getId());
         });
     }
 }

@@ -139,4 +139,12 @@ public class UserServiceImpl implements UserService {
     public Integer countByRoleAndName(String role, String query) {
         return userRepository.countByRoleAndName(role, query);
     }
+
+    @Override
+    public Optional<UserDto> findByUserName(String name) {
+        return userRepository.findByUserName(name).map(u -> UserDto.builder()
+                .id(u.getId())
+                .userName(u.getUserName())
+                .build());
+    }
 }

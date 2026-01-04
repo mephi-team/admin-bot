@@ -5,7 +5,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import team.mephi.adminbot.dto.SimpleTemplate;
-import team.mephi.adminbot.dto.TemplateListDto;
 import team.mephi.adminbot.model.MailTemplate;
 import team.mephi.adminbot.repository.MailTemplateRepository;
 import team.mephi.adminbot.vaadin.CRUDDataProvider;
@@ -44,11 +43,6 @@ public class TemplateDataProvider implements CRUDDataProvider<SimpleTemplate> {
                                         m.getName(),
                                         m.getBodyText()
                                 ));
-//                                .map(m -> TemplateListDto.builder()
-//                                        .id(m.getId())
-//                                        .name(m.getName())
-//                                        .text(m.getBodyText())
-//                                        .build());
                     },
                     query -> mailTemplateRepository.countByName(query.getFilter().orElse("")),
                     SimpleTemplate::getId

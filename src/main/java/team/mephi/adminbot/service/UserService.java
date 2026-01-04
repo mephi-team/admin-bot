@@ -19,4 +19,5 @@ public interface UserService {
     void blockAllById(Iterable<Long> ids);
     Stream<SimpleUser> findAllByRoleAndName(String role, String query, Pageable pageable);
     Integer countByRoleAndName(String role, String query);
+    Optional<UserDto> findByUserName(String name);
 }

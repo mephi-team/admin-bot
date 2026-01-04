@@ -123,13 +123,13 @@ public class Mailings extends VerticalLayout implements MailingViewCallback {
     }
 
     @Override
-    public void confirmCancel(Long id, Runnable onConfirm) {
-        dialogCancel.showForConfirm(1, onConfirm);
+    public void confirmCancel(SimpleMailing id, SerializableConsumer<SimpleMailing> onConfirm) {
+        dialogCancel.showForConfirm(1, () -> onConfirm.accept(id));
     }
 
     @Override
-    public void confirmRetry(Long id, Runnable onConfirm) {
-        dialogRetry.showForConfirm(1, onConfirm);
+    public void confirmRetry(SimpleMailing id, SerializableConsumer<SimpleMailing> onConfirm) {
+        dialogRetry.showForConfirm(1, () -> onConfirm.accept(id));
     }
 
     @Override
@@ -184,7 +184,7 @@ public class Mailings extends VerticalLayout implements MailingViewCallback {
     }
 
     @Override
-    public void showNotificationForEdit(Long id) {
+    public void showNotificationForEdit(Object id) {
         Notification.show(getTranslation("notification_mailing_saved"), 3000, Notification.Position.TOP_END);
     }
 

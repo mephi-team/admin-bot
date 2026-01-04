@@ -6,10 +6,10 @@ import java.util.List;
 
 public interface CRUDViewCallback<T> {
     void showDialogForView(T user);
-    void showDialogForNew(String role, SerializableConsumer<?> callback);
-    void showDialogForEdit(Object user, SerializableConsumer<?> callback);
+    void showDialogForNew(String type, SerializableConsumer<?> callback);
+    void showDialogForEdit(Object item, SerializableConsumer<?> callback);
     void confirmDelete(List<Long> ids, Runnable onConfirm);
     void showNotificationForNew();
-    void showNotificationForEdit(Long id);
+    void showNotificationForEdit(Object id);
     void showNotificationForDelete(List<Long> ids);
 }

@@ -2,15 +2,14 @@ package team.mephi.adminbot.vaadin.mailings.dataproviders;
 
 import team.mephi.adminbot.model.enums.MailingStatus;
 import team.mephi.adminbot.repository.MailingRepository;
-import team.mephi.adminbot.repository.UserRepository;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class SentDataProvider extends BaseMailingDataProvider {
 
-    public SentDataProvider(MailingRepository mailingRepository, UserRepository userRepository) {
-        super(mailingRepository, userRepository);
+    public SentDataProvider(MailingService mailingService, MailingRepository mailingRepository) {
+        super(mailingService, mailingRepository);
     }
 
     @Override

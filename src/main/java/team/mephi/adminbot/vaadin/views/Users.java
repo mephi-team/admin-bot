@@ -160,7 +160,7 @@ public class Users extends VerticalLayout implements StudentViewCallback, TutorV
     }
 
     @Override
-    public void showNotificationForEdit(Long id) {
+    public void showNotificationForEdit(Object id) {
         Notification.show(getTranslation("notification_users_saved"), 3000, Notification.Position.TOP_END);
     }
 

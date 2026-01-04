@@ -5,33 +5,33 @@ import team.mephi.adminbot.dto.SimpleMailing;
 import team.mephi.adminbot.dto.SimpleTemplate;
 import team.mephi.adminbot.repository.MailTemplateRepository;
 import team.mephi.adminbot.repository.MailingRepository;
-import team.mephi.adminbot.repository.UserRepository;
 import team.mephi.adminbot.vaadin.CRUDDataProvider;
 import team.mephi.adminbot.vaadin.CRUDPresenter;
 import team.mephi.adminbot.vaadin.CRUDViewCallback;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.DraftDataProvider;
+import team.mephi.adminbot.vaadin.mailings.dataproviders.MailingService;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.SentDataProvider;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.TemplateDataProvider;
 
 @SpringComponent
 public class MailingPresenterFactory {
+    private final MailingService mailingService;
     private final MailingRepository mailingRepository;
-    private final UserRepository userRepository;
     private final MailTemplateRepository mailTemplateRepository;
 
     public MailingPresenterFactory(
+            MailingService mailingService,
             MailingRepository mailingRepository,
-            UserRepository userRepository,
             MailTemplateRepository mailTemplateRepository) {
+        this.mailingService = mailingService;
         this.mailingRepository = mailingRepository;
-        this.userRepository = userRepository;
         this.mailTemplateRepository = mailTemplateRepository;
     }
 
     private CRUDDataProvider<?> createDataProvider(String role) {
         return switch (role) {
-            case "sent" -> new SentDataProvider(mailingRepository, userRepository);
-            case "draft" -> new DraftDataProvider(mailingRepository, userRepository);
+            case "sent" -> new SentDataProvider(mailingService, mailingRepository);
+            case "draft" -> new DraftDataProvider(mailingService, mailingRepository);
             case "templates" -> new TemplateDataProvider(mailTemplateRepository);
             default -> throw new IllegalArgumentException("Unknown provider: " + role);
         };

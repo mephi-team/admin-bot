@@ -30,38 +30,40 @@ public class MailingForm extends FormLayout {
     @Getter
     private final ComboBox<CityDto> city = new ComboBox<>();
     @Getter
-    private final ComboBox<UserDto> user = new ComboBox<>();
+    private final ComboBox<UserDto> curator = new ComboBox<>();
 
     public MailingForm(UserService userService, RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService) {
+        setAutoResponsive(true);
+        setLabelsAside(true);
+
         channels.setItems("Email", "Telegram");
-
-        user.setItemsPageable(userService::getAllUsers);
-        user.setItemLabelGenerator(UserDto::getUserName);
-
-        users.setRequiredIndicatorVisible(true);
-        cohort.setRequiredIndicatorVisible(true);
-        direction.setRequiredIndicatorVisible(true);
-        user.setRequiredIndicatorVisible(true);
-        city.setRequiredIndicatorVisible(true);
 
         users.setItemsPageable(roleService::getAllRoles);
         users.setItemLabelGenerator(RoleDto::getName);
+        users.setRequiredIndicatorVisible(true);
+
         cohort.setItemsPageable(cohortService::getAllCohorts);
         cohort.setItemLabelGenerator(CohortDto::getName);
+        cohort.setRequiredIndicatorVisible(true);
+
         direction.setItemsPageable(directionService::getAllDirections);
         direction.setItemLabelGenerator(SimpleDirection::getName);
+        direction.setRequiredIndicatorVisible(true);
+
         city.setItemsPageable(cityService::getAllCities);
         city.setItemLabelGenerator(CityDto::getName);
+        city.setRequiredIndicatorVisible(true);
 
-        setAutoResponsive(true);
-        setLabelsAside(true);
+        curator.setItemsPageable(userService::getAllUsers);
+        curator.setItemLabelGenerator(UserDto::getUserName);
+        curator.setRequiredIndicatorVisible(true);
 
         addFormItem(channels, getTranslation("form_mailing_channels_label"));
         addFormItem(users, getTranslation("form_mailing_users_label"));
         addFormItem(cohort, getTranslation("form_mailing_cohort_label"));
         addFormItem(direction, getTranslation("form_mailing_direction_label"));
         addFormItem(city, getTranslation("form_mailing_city_label"));
-        addFormItem(user, getTranslation("form_mailing_user_label"));
+        addFormItem(curator, getTranslation("form_mailing_curator_label"));
 
         Accordion accordion = new Accordion();
 

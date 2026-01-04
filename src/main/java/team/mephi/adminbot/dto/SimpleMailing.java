@@ -2,6 +2,7 @@ package team.mephi.adminbot.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import java.time.Instant;
 import java.util.Set;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class SimpleMailing {
@@ -18,7 +20,6 @@ public class SimpleMailing {
     @NotEmpty
     private String text;
     private String status;
-    private Long userId;
     @NotEmpty
     private Set<String> channels = Set.of("Email", "Telegram");
     @NotEmpty

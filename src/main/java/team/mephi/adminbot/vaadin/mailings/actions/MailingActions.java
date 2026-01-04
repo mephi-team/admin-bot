@@ -4,6 +4,6 @@ import team.mephi.adminbot.dto.SimpleMailing;
 import team.mephi.adminbot.vaadin.CRUDActions;
 
 public interface MailingActions extends CRUDActions<SimpleMailing> {
-    void onCancel(Long ids);
-    void onRetry(Long ids);
+    void onCancel(SimpleMailing ids);
+    void onRetry(SimpleMailing ids);
 }
