@@ -33,15 +33,17 @@ public class SimpleConfirmDialog extends ConfirmDialog {
         this.textAll = textAll;
         this.onConfirm = onConfirm;
 
-        var closeButton = new Button(VaadinIcon.CLOSE.create(), e -> close());
-        closeButton.addClassNames(LumoUtility.AlignSelf.END);
+        var closeButton = new Button(VaadinIcon.CLOSE_BIG.create() , e -> close());
+        closeButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
+        closeButton.addClassNames(LumoUtility.AlignSelf.END, LumoUtility.Background.TINT, LumoUtility.TextColor.BODY);
         var headerText = new Div(getTranslation(title));
+        headerText.addClassNames(LumoUtility.FontWeight.BOLD);
         headerText.setWidthFull();
         var icon = VaadinIcon.EXCLAMATION_CIRCLE_O.create();
         icon.addClassNames(LumoUtility.TextColor.WARNING);
         var header = new Div(icon, headerText, closeButton);
         header.setWidthFull();
-        header.addClassNames(LumoUtility.Display.FLEX, LumoUtility.AlignItems.CENTER, LumoUtility.Grid.FLOW_COLUMN, LumoUtility.Gap.SMALL);
+        header.addClassNames(LumoUtility.Display.FLEX, LumoUtility.Gap.MEDIUM, LumoUtility.AlignItems.CENTER);
         setHeader(header);
         setText(getTranslation(text));
         var confirmButton = new Button(getTranslation(action), VaadinIcon.TRASH.create());
