@@ -1,6 +1,11 @@
 package team.mephi.adminbot.vaadin.components;
 
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,9 +33,20 @@ public class SimpleConfirmDialog extends ConfirmDialog {
         this.textAll = textAll;
         this.onConfirm = onConfirm;
 
-        setHeader(getTranslation(title));
+        var closeButton = new Button(VaadinIcon.CLOSE.create(), e -> close());
+        closeButton.addClassNames(LumoUtility.AlignSelf.END);
+        var headerText = new Div(getTranslation(title));
+        headerText.setWidthFull();
+        var icon = VaadinIcon.EXCLAMATION_CIRCLE_O.create();
+        icon.addClassNames(LumoUtility.TextColor.WARNING);
+        var header = new Div(icon, headerText, closeButton);
+        header.setWidthFull();
+        header.addClassNames(LumoUtility.Display.FLEX, LumoUtility.AlignItems.CENTER, LumoUtility.Grid.FLOW_COLUMN, LumoUtility.Gap.SMALL);
+        setHeader(header);
         setText(getTranslation(text));
-        setConfirmText(getTranslation(action));
+        var confirmButton = new Button(getTranslation(action), VaadinIcon.TRASH.create());
+        confirmButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        setConfirmButton(confirmButton);
 
         setCancelable(true);
         setCancelText(getTranslation("cancel_button"));
