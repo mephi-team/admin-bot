@@ -118,7 +118,7 @@ public class UserServiceImpl implements UserService {
                 .stream()
                 .map(u -> SimpleUser.builder()
                         .id(u.getId())
-                        .role(u.getRole().getName())
+                        .role(u.getRole().getCode())
                         .firstName(u.getFirstName())
                         .lastName(u.getLastName())
                         .fullName(u.getUserName())

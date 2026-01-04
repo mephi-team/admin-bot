@@ -8,5 +8,4 @@ import lombok.Data;
 public class RoleDto {
     private String code;
     private String name;
-    private String description;
 }

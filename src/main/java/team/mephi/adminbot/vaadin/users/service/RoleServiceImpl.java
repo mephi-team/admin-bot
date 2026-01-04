@@ -26,7 +26,7 @@ public class RoleServiceImpl implements RoleService {
 
     void init() {
         this.roles = roleRepository.findAll().stream()
-                .map(r -> new RoleDto(r.getCode(), r.getName(), r.getDescription()))
+                .map(r -> new RoleDto(r.getCode(), r.getName()))
                 .toList();
         this.roleByDto = roles.stream().collect(Collectors.toMap(RoleDto::getCode, item -> item));
     }

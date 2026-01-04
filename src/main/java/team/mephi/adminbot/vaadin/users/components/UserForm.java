@@ -32,7 +32,7 @@ public class UserForm extends FormLayout {
 
     public UserForm(RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService) {
         roles.setItemsPageable(roleService::getAllRoles);
-        roles.setItemLabelGenerator(RoleDto::getDescription);
+        roles.setItemLabelGenerator(RoleDto::getName);
         roles.setRequiredIndicatorVisible(true);
         cohorts.setItemsPageable(cohortService::getAllCohorts);
         cohorts.setItemLabelGenerator(CohortDto::getName);

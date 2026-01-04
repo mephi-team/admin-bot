@@ -153,25 +153,25 @@ public class DataInitializer {
     private void initQuestions() {
         Random random = new Random();
 
-        String student = roleRepository.findByCode("student").get().getName();
-        List<User> students = userRepository.findAllByRole(student);
+        Role student = roleRepository.findByCode("student").get();
+        List<User> students = userRepository.findAllByRole(student.getCode());
 
         List<UserQuestion> questions = Arrays.asList(
-                UserQuestion.builder().status(QuestionStatus.NEW).role(student).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Как поступить в Flexiq?").build(),
-                UserQuestion.builder().status(QuestionStatus.ANSWERED).role(student).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Сколько длится обучение?").build(),
-                UserQuestion.builder().status(QuestionStatus.ANSWERED).role(student).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Есть ли рассрочка?").build(),
-                UserQuestion.builder().status(QuestionStatus.ANSWERED).role(student).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Нужен ли опыт для поступления?").build(),
-                UserQuestion.builder().status(QuestionStatus.IN_PROGRESS).role(student).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Выдают ли диплом?").build(),
-                UserQuestion.builder().status(QuestionStatus.NEW).role(student).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Как поступить в Flexiq?").build(),
-                UserQuestion.builder().status(QuestionStatus.ANSWERED).role(student).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Сколько длится обучение?").build(),
-                UserQuestion.builder().status(QuestionStatus.ANSWERED).role(student).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Есть ли рассрочка?").build(),
-                UserQuestion.builder().status(QuestionStatus.ANSWERED).role(student).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Нужен ли опыт для поступления?").build(),
-                UserQuestion.builder().status(QuestionStatus.IN_PROGRESS).role(student).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Выдают ли диплом?").build(),
-                UserQuestion.builder().status(QuestionStatus.NEW).role(student).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Как поступить в Flexiq?").build(),
-                UserQuestion.builder().status(QuestionStatus.ANSWERED).role(student).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Сколько длится обучение?").build(),
-                UserQuestion.builder().status(QuestionStatus.ANSWERED).role(student).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Есть ли рассрочка?").build(),
-                UserQuestion.builder().status(QuestionStatus.ANSWERED).role(student).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Нужен ли опыт для поступления?").build(),
-                UserQuestion.builder().status(QuestionStatus.IN_PROGRESS).role(student).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Выдают ли диплом?").build()
+                UserQuestion.builder().status(QuestionStatus.NEW).role(student.getName()).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Как поступить в Flexiq?").build(),
+                UserQuestion.builder().status(QuestionStatus.ANSWERED).role(student.getName()).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Сколько длится обучение?").build(),
+                UserQuestion.builder().status(QuestionStatus.ANSWERED).role(student.getName()).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Есть ли рассрочка?").build(),
+                UserQuestion.builder().status(QuestionStatus.ANSWERED).role(student.getName()).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Нужен ли опыт для поступления?").build(),
+                UserQuestion.builder().status(QuestionStatus.IN_PROGRESS).role(student.getName()).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Выдают ли диплом?").build(),
+                UserQuestion.builder().status(QuestionStatus.NEW).role(student.getName()).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Как поступить в Flexiq?").build(),
+                UserQuestion.builder().status(QuestionStatus.ANSWERED).role(student.getName()).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Сколько длится обучение?").build(),
+                UserQuestion.builder().status(QuestionStatus.ANSWERED).role(student.getName()).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Есть ли рассрочка?").build(),
+                UserQuestion.builder().status(QuestionStatus.ANSWERED).role(student.getName()).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Нужен ли опыт для поступления?").build(),
+                UserQuestion.builder().status(QuestionStatus.IN_PROGRESS).role(student.getName()).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Выдают ли диплом?").build(),
+                UserQuestion.builder().status(QuestionStatus.NEW).role(student.getName()).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Как поступить в Flexiq?").build(),
+                UserQuestion.builder().status(QuestionStatus.ANSWERED).role(student.getName()).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Сколько длится обучение?").build(),
+                UserQuestion.builder().status(QuestionStatus.ANSWERED).role(student.getName()).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Есть ли рассрочка?").build(),
+                UserQuestion.builder().status(QuestionStatus.ANSWERED).role(student.getName()).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Нужен ли опыт для поступления?").build(),
+                UserQuestion.builder().status(QuestionStatus.IN_PROGRESS).role(student.getName()).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Выдают ли диплом?").build()
         );
         // Устанавливаем createdAt вручную, если в конструкторе не задано
         questions.forEach(q -> q.setCreatedAt(Instant.now().minusSeconds(new Random().nextInt(10) * DAY_SECONDS)));
@@ -182,7 +182,7 @@ public class DataInitializer {
     private void initAnswers() {
         Random random = new Random();
 
-        String expert = roleRepository.findByCode("lc_expert").get().getName();
+        String expert = roleRepository.findByCode("lc_expert").get().getCode();
         List<User> experts = userRepository.findAllByRole(expert);
 
         List<UserAnswer> answers = Arrays.asList(
