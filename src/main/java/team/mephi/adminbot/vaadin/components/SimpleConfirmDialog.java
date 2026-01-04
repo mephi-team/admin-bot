@@ -14,6 +14,7 @@ public class SimpleConfirmDialog extends ConfirmDialog {
     private final String text;
     private final String headerAll;
     private final String textAll;
+    private final Div headerText = new Div();
     @Getter
     @Setter
     private Runnable onConfirm;
@@ -36,7 +37,6 @@ public class SimpleConfirmDialog extends ConfirmDialog {
         var closeButton = new Button(VaadinIcon.CLOSE_BIG.create() , e -> close());
         closeButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
         closeButton.addClassNames(LumoUtility.AlignSelf.END, LumoUtility.Background.TINT, LumoUtility.TextColor.BODY);
-        var headerText = new Div(getTranslation(title));
         headerText.addClassNames(LumoUtility.FontWeight.BOLD);
         headerText.setWidthFull();
         var icon = VaadinIcon.EXCLAMATION_CIRCLE_O.create();
@@ -63,10 +63,10 @@ public class SimpleConfirmDialog extends ConfirmDialog {
 
     public void showForConfirm(int count, Runnable onConfirm) {
         if (count > 1) {
-            setHeader(getTranslation(this.headerAll));
-            setText(getTranslation(textAll, count));
+            headerText.setText(getTranslation(this.headerAll, count));
+            setText(getTranslation(this.textAll, count));
         } else {
-            setHeader(getTranslation(this.header));
+            headerText.setText(getTranslation(this.header));
             setText(getTranslation(this.text));
         }
         this.onConfirm = onConfirm;
