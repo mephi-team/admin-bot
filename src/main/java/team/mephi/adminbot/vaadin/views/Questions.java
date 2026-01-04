@@ -15,8 +15,7 @@ import com.vaadin.flow.router.QueryParameters;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.security.AuthenticationContext;
 import jakarta.annotation.security.PermitAll;
-import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
-import team.mephi.adminbot.dto.UserQuestionDto;
+import team.mephi.adminbot.dto.SimpleQuestion;
 import team.mephi.adminbot.vaadin.components.*;
 import team.mephi.adminbot.vaadin.questions.components.AnswerDialog;
 import team.mephi.adminbot.vaadin.questions.components.AnswerDialogFactory;
@@ -26,20 +25,19 @@ import team.mephi.adminbot.vaadin.questions.dataproviders.QuestionDataProviderFa
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Route(value = "/questions", layout = DialogsLayout.class)
 @PermitAll
 public class Questions extends VerticalLayout {
-    private final AuthenticationContext authContext;
     private final SimpleConfirmDialog dialogDelete;
     private final AnswerDialog answerDialog;
 
     private final QuestionDataProvider provider;
     private List<Long> selectedIds;
 
-    public Questions(AuthenticationContext authContext, QuestionDataProviderFactory factory, AnswerDialogFactory dialogFactory) {
-        this.authContext = authContext;
+    public Questions(QuestionDataProviderFactory factory, AnswerDialogFactory dialogFactory) {
         this.answerDialog = dialogFactory.create();
         this.provider = factory.createDataProvider();
 
@@ -60,23 +58,23 @@ public class Questions extends VerticalLayout {
 
         setSizeFull();
 
-        LocalDateTimeRenderer<UserQuestionDto> dateRenderer = new LocalDateTimeRenderer<>(
-                d -> d.getDate().atZone(ZoneOffset.of("+03:00")).toLocalDateTime(),
+        LocalDateTimeRenderer<SimpleQuestion> dateRenderer = new LocalDateTimeRenderer<>(
+                d -> Objects.isNull(d.getDate()) ? null : d.getDate().atZone(ZoneOffset.of("+03:00")).toLocalDateTime(),
                 () -> DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
 
-        Grid<UserQuestionDto> grid = new Grid<>(UserQuestionDto.class, false);
-        grid.addColumn(UserQuestionDto::getQuestion).setHeader(getTranslation("grid_question_header_question_label")).setSortable(true).setFrozen(true)
+        Grid<SimpleQuestion> grid = new Grid<>(SimpleQuestion.class, false);
+        grid.addColumn(SimpleQuestion::getText).setHeader(getTranslation("grid_question_header_question_label")).setSortable(true).setFrozen(true)
                 .setAutoWidth(true).setFlexGrow(0).setKey("text");
         grid.addColumn(dateRenderer).setHeader(getTranslation("grid_question_header_date_label")).setSortable(true).setKey("createdAt");
-        grid.addColumn(UserQuestionDto::getUser).setHeader(getTranslation("grid_question_header_author_label")).setSortable(true).setKey("user");
-        grid.addColumn(UserQuestionDto::getRole).setHeader(getTranslation("grid_question_header_role_label")).setSortable(true).setKey("role");
-        grid.addColumn(UserQuestionDto::getDirection).setHeader(getTranslation("grid_question_header_direction_label")).setSortable(true).setKey("direction");
-        grid.addColumn(UserQuestionDto::getAnswer).setHeader(getTranslation("grid_question_header_answer_label")).setKey("answers");
+        grid.addColumn(SimpleQuestion::getAuthor).setHeader(getTranslation("grid_question_header_author_label")).setSortable(true).setKey("user");
+        grid.addColumn(SimpleQuestion::getRole).setHeader(getTranslation("grid_question_header_role_label")).setSortable(true).setKey("role");
+        grid.addColumn(SimpleQuestion::getDirection).setHeader(getTranslation("grid_question_header_direction_label")).setSortable(true).setKey("direction");
+        grid.addColumn(SimpleQuestion::getAnswer).setHeader(getTranslation("grid_question_header_answer_label")).setKey("answers");
 
         grid.addComponentColumn(item -> {
             Span group = new Span();
-            Button responseButton = new Button(getTranslation("grid_question_action_answer_label"), e -> onAnswer(item.getId()));
-            Button chatButton = new Button(new Icon(VaadinIcon.CHAT),e -> UI.getCurrent().navigate(Dialogs.class, QueryParameters.of("userId", "" + item.getUserId())));
+            Button responseButton = new Button(getTranslation("grid_question_action_answer_label"), e -> onAnswer(item));
+            Button chatButton = new Button(new Icon(VaadinIcon.CHAT),e -> UI.getCurrent().navigate(Dialogs.class, QueryParameters.of("userId", "" + item.getAuthorId())));
             Button deleteButton = new Button(new Icon(VaadinIcon.TRASH), e -> onDelete(List.of(item.getId())));
             group.add(responseButton, chatButton, deleteButton);
             return group;
@@ -87,7 +85,7 @@ public class Questions extends VerticalLayout {
         selectionModel.setSelectionColumnFrozen(true);
 //        grid.setMultiSort(true, Grid.MultiSortPriority.APPEND);
         grid.addSelectionListener(selection -> {
-            selectedIds = selection.getAllSelectedItems().stream().map(UserQuestionDto::getId).toList();
+            selectedIds = selection.getAllSelectedItems().stream().map(SimpleQuestion::getId).toList();
             gsa.setCount(selectedIds.size());
         });
         provider.getFilterableProvider().addDataProviderListener(e -> {
@@ -104,18 +102,13 @@ public class Questions extends VerticalLayout {
         add(new SearchFragment(searchField, settingsBtn), gsa, grid);
     }
 
-    private void onAnswer(Long id) {
-        provider.findById(id).ifPresent(m -> {
-            answerDialog.showDialogForEdit(m);
-            answerDialog.setOnSaveCallback(() -> {
-                var editedItem = answerDialog.getEditedItem();
-                if (editedItem != null) {
-                    var user = authContext.getAuthenticatedUser(DefaultOidcUser.class).orElseThrow();
-                    provider.saveAnswer(editedItem.getId(), user.getUserInfo().getEmail(), editedItem.getAnswer());
-                    provider.getDataProvider().refreshAll();
-                    showNotificationForEdit(id);
-                }
-            });
+    private void onAnswer(SimpleQuestion question) {
+        answerDialog.showDialogForEdit(question, (editedItem) -> {
+            if (editedItem != null) {
+                var savedAnswer = provider.saveAnswer(editedItem);
+                provider.getDataProvider().refreshItem(savedAnswer);
+                showNotificationForEdit(question.getId());
+            }
         });
     }
 

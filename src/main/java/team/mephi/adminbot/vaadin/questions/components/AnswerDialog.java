@@ -4,16 +4,15 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
-import com.vaadin.flow.function.SerializableRunnable;
-import lombok.Setter;
+import com.vaadin.flow.function.SerializableConsumer;
 import team.mephi.adminbot.dto.SimpleQuestion;
 
 public class AnswerDialog extends Dialog {
     private final BeanValidationBinder<SimpleQuestion> binder = new BeanValidationBinder<>(SimpleQuestion.class);
     private final Button answerButton = new Button(getTranslation("dialog_answer_button"), VaadinIcon.PAPERPLANE_O.create(), e -> onAnswer());
 
-    @Setter
-    private SerializableRunnable onSaveCallback;
+    private SerializableConsumer<SimpleQuestion> onSaveCallback;
+    private SimpleQuestion question;
 
     public AnswerDialog() {
         var form = new AnswerForm();
@@ -29,22 +28,20 @@ public class AnswerDialog extends Dialog {
                 answerButton.setEnabled(e.getBinder().isValid()));
     }
 
-    public SimpleQuestion getEditedItem() {
-        SimpleQuestion question = new SimpleQuestion();
-        binder.writeBeanIfValid(question);
-        return question;
-    }
-
     private void onAnswer() {
         if(binder.validate().isOk()) {
             if (onSaveCallback != null) {
-                onSaveCallback.run();
+                binder.writeBeanIfValid(question);
+                onSaveCallback.accept(question);
             }
             close();
         }
     }
 
-    public void showDialogForEdit(SimpleQuestion question) {
+    public void showDialogForEdit(SimpleQuestion question, SerializableConsumer<SimpleQuestion> callback) {
+        this.question = question;
+        this.onSaveCallback = callback;
+
         binder.readBean(question);
         binder.setReadOnly(false);
 

@@ -1,5 +1,7 @@
 package team.mephi.adminbot.vaadin.questions.dataproviders;
 
+import team.mephi.adminbot.dto.SimpleQuestion;
+
 public interface QuestionService {
-    void saveAnswer(Long question, String user, String text);
+    SimpleQuestion saveAnswer(SimpleQuestion question);
 }

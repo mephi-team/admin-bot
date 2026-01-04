@@ -5,7 +5,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import team.mephi.adminbot.dto.SimpleQuestion;
-import team.mephi.adminbot.dto.UserQuestionDto;
 import team.mephi.adminbot.model.UserAnswer;
 import team.mephi.adminbot.repository.UserQuestionRepository;
 
@@ -17,16 +16,16 @@ import java.util.stream.Collectors;
 public class QuestionDataProvider {
     private final QuestionService questionService;
     private final UserQuestionRepository questionRepository;
-    private ConfigurableFilterDataProvider<UserQuestionDto, Void, String> provider;
+    private ConfigurableFilterDataProvider<SimpleQuestion, Void, String> provider;
 
     public QuestionDataProvider(QuestionService questionService, UserQuestionRepository questionRepository) {
         this.questionService = questionService;
         this.questionRepository = questionRepository;
     }
 
-    public ConfigurableFilterDataProvider<UserQuestionDto, Void, String> getFilterableProvider() {
+    public ConfigurableFilterDataProvider<SimpleQuestion, Void, String> getFilterableProvider() {
         if (provider == null) {
-            provider = new CallbackDataProvider<UserQuestionDto, String>(
+            provider = new CallbackDataProvider<SimpleQuestion, String>(
                     query -> {
                         List<QuerySortOrder> sortOrders = query.getSortOrders();
                         Sort sort = Sort.by(sortOrders.stream()
@@ -41,40 +40,38 @@ public class QuestionDataProvider {
                         );
                         return questionRepository.findAllByText(query.getFilter().orElse(""), pageable)
                                 .stream()
-                                .map(u -> UserQuestionDto
-                                                .builder()
-                                                .id(u.getId())
-                                                .question(u.getText())
-                                                .date(u.getCreatedAt())
-                                                .user(u.getUser().getUserName())
-                                                .userId(u.getUser().getId())
-                                                .role(u.getRole())
-                                                .direction(u.getDirection() != null ? u.getDirection().getName() : "")
-                                                .answer(u.getAnswers().isEmpty() ? "" : u.getAnswers().stream().sorted(Comparator.comparingLong(UserAnswer::getId)).toList().getLast().getAnswerText())
-                                                .build()
-                                );
+                                .map(u -> SimpleQuestion.builder()
+                                        .id(u.getId())
+                                        .text(u.getText())
+                                        .date(u.getCreatedAt())
+                                        .authorId(u.getUser().getId())
+                                        .author(u.getUser().getUserName())
+                                        .role(u.getRole())
+                                        .direction(u.getDirection().getName())
+                                        .answer(u.getAnswers().isEmpty() ? "" : u.getAnswers().stream().sorted(Comparator.comparingLong(UserAnswer::getId)).toList().getLast().getAnswerText())
+                                        .build());
                         },
                     query -> questionRepository.countByText(query.getFilter().orElse("")),
-                    UserQuestionDto::getId
+                    SimpleQuestion::getId
             ).withConfigurableFilter();
         }
 
         return provider;
     }
 
-    public DataProvider<UserQuestionDto, ?> getDataProvider() {
+    public DataProvider<SimpleQuestion, ?> getDataProvider() {
         return getFilterableProvider();
     }
 
     public Optional<SimpleQuestion> findById(Long id) {
-        return questionRepository.findByIdWithDeps(id).map(t -> new SimpleQuestion(t.getId(), t.getUser().getUserName(), t.getRole(), t.getDirection().getName(), t.getText(), t.getAnswers().isEmpty() ? "" : t.getAnswers().stream().sorted(Comparator.comparingLong(UserAnswer::getId)).toList().getLast().getAnswerText()));
+        return questionRepository.findByIdWithDeps(id).map(t -> SimpleQuestion.builder().build());
     }
 
     public void deleteAllById(Iterable<Long> ids) {
         questionRepository.deleteAllById(ids);
     }
 
-    public void saveAnswer(Long question, String user, String text) {
-        questionService.saveAnswer(question, user, text);
+    public SimpleQuestion saveAnswer(SimpleQuestion question) {
+        return questionService.saveAnswer(question);
     }
 }
