@@ -32,7 +32,7 @@ public class TemplateView extends VerticalLayout {
         setPadding(false);
 
         Grid<SimpleTemplate> grid = new Grid<>(SimpleTemplate.class, false);
-        grid.addColumn(SimpleTemplate::getName).setHeader(getTranslation("grid_template_header_name_label")).setSortable(true).setKey("name");
+        grid.addColumn(SimpleTemplate::getName).setHeader(getTranslation("grid_template_header_name_label")).setWidth("300px").setFlexGrow(0).setSortable(true).setResizable(true).setKey("name");
         grid.addColumn(SimpleTemplate::getText).setHeader(getTranslation("grid_template_header_text_label")).setSortable(true).setKey("bodyText");
 
         grid.addComponentColumn(item -> {
