@@ -2,7 +2,8 @@ package team.mephi.adminbot.vaadin.users.components;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
-import com.vaadin.flow.component.tabs.TabSheet;
+import com.vaadin.flow.component.tabs.Tab;
+import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.function.SerializableConsumer;
 import team.mephi.adminbot.dto.SimpleUser;
@@ -10,19 +11,34 @@ import team.mephi.adminbot.dto.SimpleUser;
 public class BlockDialog extends Dialog {
     private final BeanValidationBinder<SimpleUser> binder = new BeanValidationBinder<>(SimpleUser.class);
     private final Button saveButton = new Button(getTranslation("save_button"), e -> onSave());
-    private final TabSheet tabSheet = new TabSheet();
+    private final Tabs tabs = new Tabs();
+    private final Tab tab1 = new Tab(getTranslation("dialog_user_block_tab_warning_label"));
+    private final Tab tab2 = new Tab(getTranslation("dialog_user_block_tab_block_label"));
 
     private SerializableConsumer<SimpleUser> onSaveCallback;
 
     public BlockDialog() {
+        var form = new BlockUserInfo();
         var form1 = new WarningForm();
         var form2 = new BlockForm();
-        tabSheet.add(getTranslation("dialog_user_block_tab_warning_label"), form1);
-        tabSheet.add(getTranslation("dialog_user_block_tab_block_label"), form2);
+        var form3 = new BlockUserMessage();
+        form2.setVisible(false);
+        tabs.add(tab1, tab2);
+        tabs.addSelectedChangeListener(e -> {
+           if (e.getSelectedTab().equals(tab1)){
+               form1.setVisible(true);
+               form2.setVisible(false);
+           } else {
+               form1.setVisible(false);
+               form2.setVisible(true);
+           }
+        });
+        binder.bindInstanceFields(form);
         binder.bindInstanceFields(form1);
         binder.bindInstanceFields(form2);
+
         setHeaderTitle("dialog_user_block_title");
-        add(tabSheet);
+        add(tabs, form, form1, form2, form3);
         getFooter().add(new Button(getTranslation("cancel_button"), e -> close()), saveButton);
     }
 
@@ -31,6 +47,7 @@ public class BlockDialog extends Dialog {
         binder.readBean(user);
         binder.setReadOnly(true);
         saveButton.setVisible(false);
+        tabs.setSelectedTab(tab1);
         open();
     }
 
