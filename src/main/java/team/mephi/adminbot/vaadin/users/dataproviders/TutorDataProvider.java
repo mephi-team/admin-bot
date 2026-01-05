@@ -5,6 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import team.mephi.adminbot.dto.SimpleUser;
+import team.mephi.adminbot.model.StudentTutor;
 import team.mephi.adminbot.repository.TutorRepository;
 import team.mephi.adminbot.vaadin.users.presenter.UserDataProvider;
 
@@ -49,7 +50,7 @@ public class TutorDataProvider implements UserDataProvider {
                                         .lastName(u.getLastName())
                                         .email(u.getEmail())
                                         .tgId(u.getTgId())
-                                        .studentCount(u.getStudentAssignments().size())
+                                        .studentCount(u.getStudentAssignments().stream().filter(StudentTutor::getIsActive).toList().size())
                                         .students(u.getStudentAssignments().stream().map(s -> SimpleUser.builder().id(s.getId()).build()).toList())
                                         .status("ACTIVE")
                                         .build());
@@ -78,7 +79,7 @@ public class TutorDataProvider implements UserDataProvider {
                 .phoneNumber(t.getPhone())
                 .tgId(t.getTgId())
                 .tgName(t.getTgName())
-                .students(t.getStudentAssignments().stream().map(s -> SimpleUser.builder().id(s.getStudent().getId()).fullName(s.getStudent().getUserName()).build()).toList())
+                .students(t.getStudentAssignments().stream().filter(StudentTutor::getIsActive).map(s -> SimpleUser.builder().id(s.getStudent().getId()).fullName(s.getStudent().getUserName()).build()).toList())
                 .build());
     }
 

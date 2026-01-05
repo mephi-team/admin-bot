@@ -31,14 +31,18 @@ public class TutorServiceImpl implements TutorService {
         user.setLastName(dto.getLastName());
         user.setEmail(dto.getEmail());
         user.setTgId(dto.getTgId());
-        var td = dto.getStudents().stream().map(
+        var prevActive = user.getStudentAssignments().stream().filter(StudentTutor::getIsActive).map(st -> st.getStudent().getId()).toList();
+        var prevInActive = user.getStudentAssignments().stream().filter(u -> !u.getIsActive()).map(st -> st.getStudent().getId()).toList();
+        var current = dto.getStudents().stream().map(SimpleUser::getId).collect(Collectors.toSet());
+        current.retainAll(prevActive);
+        var td = dto.getStudents().stream().filter(s -> !prevActive.contains(s.getId())).map(
                 u -> StudentTutor.builder()
-                        .mode(StudentTutorMode.INITIAL)
+                        .mode(prevInActive.contains(u.getId()) ? StudentTutorMode.REASSIGN : StudentTutorMode.INITIAL)
                         .tutor(Tutor.builder().id(dto.getId()).build())
                         .student(User.builder().id(u.getId()).build())
                         .build()
         ).collect(Collectors.toSet());
-        user.getStudentAssignments().clear();
+        user.getStudentAssignments().forEach(s -> {if (!current.contains(s.getStudent().getId())) s.setIsActive(false);});
         user.getStudentAssignments().addAll(td);
         user = tutorRepository.save(user);
         return SimpleUser.builder().build();
