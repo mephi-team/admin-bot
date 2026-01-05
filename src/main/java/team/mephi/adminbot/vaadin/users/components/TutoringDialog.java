@@ -6,6 +6,7 @@ import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.function.SerializableRunnable;
 import lombok.Setter;
 import team.mephi.adminbot.dto.SimpleUser;
+import team.mephi.adminbot.service.UserService;
 
 public class TutoringDialog  extends Dialog  {
     private final BeanValidationBinder<SimpleUser> binder = new BeanValidationBinder<>(SimpleUser.class);
@@ -14,8 +15,8 @@ public class TutoringDialog  extends Dialog  {
     @Setter
     private SerializableRunnable onSaveCallback;
 
-    public TutoringDialog() {
-        var form = new TutorForm();
+    public TutoringDialog(UserService userService) {
+        var form = new TutorForm(userService);
         binder.bindInstanceFields(form);
         setHeaderTitle("dialog_tutor_curatorship_title");
         add(form);
