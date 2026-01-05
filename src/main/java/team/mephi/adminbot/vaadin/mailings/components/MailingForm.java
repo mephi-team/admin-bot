@@ -37,6 +37,8 @@ public class MailingForm extends FormLayout {
     private final ComboBox<CityDto> city = new ComboBox<>();
     @Getter
     private final ComboBox<UserDto> curator = new ComboBox<>();
+    @Getter
+    private final MultiSelectListBox<SimpleUser> listBox = new MultiSelectListBox<>();
 
     public MailingForm(UserService userService, RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService) {
         var provider = new CallbackDataProvider<SimpleUser, String>(
@@ -90,7 +92,6 @@ public class MailingForm extends FormLayout {
         Span name = new Span("Список выбранных получателей соответствует заданным выше фильтрам");
         name.addClassNames(LumoUtility.FontSize.SMALL);
 
-        MultiSelectListBox<SimpleUser> listBox = new MultiSelectListBox<>();
         listBox.setDataProvider(provider);
         listBox.setItemLabelGenerator(u -> u.getFullName() + ", @" + u.getTgId());
         FormItem box = addFormItem(listBox, getTranslation("form_mailing_first_name_last_name_label"));

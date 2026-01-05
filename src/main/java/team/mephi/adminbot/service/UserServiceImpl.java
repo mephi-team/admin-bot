@@ -32,6 +32,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<UserDto> getAllUsers() {
+        return userRepository.findAll()
+                .stream()
+                .map(u -> UserDto.builder()
+                        .id(u.getId())
+                        .userName(u.getUserName())
+                        .tgName(u.getTgId())
+                        .build()
+                )
+                .toList();
+    }
+
+    @Override
     public List<UserDto> getAllUsers(Pageable pageable, String query) {
         return userRepository.searchAll(query)
                 .stream()

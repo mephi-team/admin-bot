@@ -7,6 +7,7 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
+import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.function.SerializableConsumer;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import team.mephi.adminbot.dto.*;
@@ -17,6 +18,7 @@ import team.mephi.adminbot.service.CohortService;
 import team.mephi.adminbot.vaadin.users.components.RoleService;
 
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class MailingEditorDialog extends Dialog {
     private final BeanValidationBinder<SimpleMailing> binder = new BeanValidationBinder<>(SimpleMailing.class);
@@ -29,6 +31,7 @@ public class MailingEditorDialog extends Dialog {
 
     private SerializableConsumer<SimpleMailing> onSaveCallback;
     private SimpleMailing mailing;
+    private Binder.Binding<SimpleMailing, String> binding1;
 
     public MailingEditorDialog(UserService userService, RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService) {
         var form1 = new MailingForm(userService, roleService, cohortService, directionService, cityService);
@@ -54,6 +57,29 @@ public class MailingEditorDialog extends Dialog {
                 .withValidator(Objects::nonNull, getTranslation("form_mailing_city_validation_message"))
                 .withConverter(CityDto::getName, user -> cityService.getByName(user).orElse(null))
                 .bind(SimpleMailing::getCity, SimpleMailing::setCity);
+        binder.forField(form1.getListBox())
+                .withValidator(Objects::nonNull,"")
+                .withConverter(
+                        s->s.stream().map(SimpleUser::getTgId).toList(),
+                        users -> userService.getAllUsers()
+                                .stream()
+                                .filter(u -> {
+                                    System.out.println("!!!!! filter " + u + " users " + users);
+                                    return users.contains(u.getTgName());
+                                })
+                                .map(s -> SimpleUser.builder()
+                                        .id(s.getId())
+                                        .fullName(s.getFullName())
+                                        .tgId(s.getTgName())
+                                        .build()
+                                )
+                                .collect(Collectors.toSet())
+                )
+                .bind(SimpleMailing::getRecipients, SimpleMailing::setRecipients);
+        binding1 = binder.forField(form2.getText1())
+                .withValidator(e-> !e.isBlank(), "")
+                .bind(SimpleMailing::getText, SimpleMailing::setText);
+        binding1.setValidatorsDisabled(true);
         binder.bindInstanceFields(form1);
         binder.bindInstanceFields(form2);
 
@@ -87,23 +113,24 @@ public class MailingEditorDialog extends Dialog {
         });
 
         tabSheet.addSelectedChangeListener(l -> {
+            System.out.println("!!! SelectedChangeListener");
            if (tab1.isSelected()) {
                saveButton.setVisible(false);
                prev.setVisible(false);
                next.setVisible(true);
+               binding1.setValidatorsDisabled(true);
            } else if (tab2.isSelected()) {
                saveButton.setVisible(true);
                prev.setVisible(true);
                next.setVisible(false);
-               binder.forField(form2.getText1())
-                       .withValidator(e-> !e.isBlank(), "")
-                       .bind(SimpleMailing::getText, SimpleMailing::setText);
+               binding1.setValidatorsDisabled(false);
            }
         });
     }
 
     public void showDialogForNew(SerializableConsumer<SimpleMailing> callback) {
         this.mailing = new SimpleMailing();
+        System.out.println("!!! mailing " + mailing);
         this.onSaveCallback = callback;
         binder.readBean(mailing);
         binder.setReadOnly(false);
@@ -112,6 +139,7 @@ public class MailingEditorDialog extends Dialog {
     }
 
     public void showDialogForEdit(SimpleMailing mailing, SerializableConsumer<SimpleMailing> callback) {
+        System.out.println("!!! showDialogForEdit " + mailing);
         this.mailing = mailing;
         this.onSaveCallback = callback;
         binder.readBean(mailing);

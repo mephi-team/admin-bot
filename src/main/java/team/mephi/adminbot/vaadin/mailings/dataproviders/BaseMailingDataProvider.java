@@ -53,6 +53,7 @@ public abstract class BaseMailingDataProvider implements CRUDDataProvider<Simple
                                         .curator(m.getFilters() != null ? m.getFilters().getCurator() : "")
                                         .city(m.getFilters() != null ? m.getFilters().getCity() : "")
                                         .channels(m.getChannels().stream().map(Enum::name).collect(Collectors.toSet()))
+                                        .recipients(m.getReasonCode() != null ? m.getReasonCode().getUsers() : List.of())
                                         .text(m.getDescription())
                                         .status(m.getStatus().name())
                                         .build());

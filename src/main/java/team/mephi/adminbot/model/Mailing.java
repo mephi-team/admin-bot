@@ -12,6 +12,7 @@ import org.hibernate.type.SqlTypes;
 import team.mephi.adminbot.model.enums.Channels;
 import team.mephi.adminbot.model.enums.MailingStatus;
 import team.mephi.adminbot.model.objects.Filters;
+import team.mephi.adminbot.model.objects.ReasonCode;
 
 import java.time.Instant;
 import java.util.List;
@@ -140,7 +141,7 @@ public class Mailing {
      */
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "reason_code", columnDefinition = "jsonb")
-    private Map<String, Object> reasonCode;
+    private ReasonCode reasonCode;
 
     /**
      * Задачи выполнения рассылки.

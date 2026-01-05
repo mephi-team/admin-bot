@@ -9,6 +9,7 @@ import team.mephi.adminbot.model.Mailing;
 import team.mephi.adminbot.model.enums.Channels;
 import team.mephi.adminbot.model.enums.MailingStatus;
 import team.mephi.adminbot.model.objects.Filters;
+import team.mephi.adminbot.model.objects.ReasonCode;
 import team.mephi.adminbot.repository.MailingRepository;
 import team.mephi.adminbot.repository.UserRepository;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.MailingService;
@@ -43,6 +44,7 @@ public class MailingServiceImpl implements MailingService {
         result.setFilters(Filters.builder().curator(mailing.getCurator()).direction(mailing.getDirection()).city(mailing.getCity()).users(mailing.getUsers()).cohort(mailing.getCohort()).build());
         result.setStatus(Objects.isNull(mailing.getStatus()) ? MailingStatus.DRAFT : MailingStatus.valueOf(mailing.getStatus()));
         result.setChannels(mailing.getChannels().stream().map(Channels::valueOf).toList());
+        result.setReasonCode(ReasonCode.builder().users(mailing.getRecipients()).build());
         result = mailingRepository.save(result);
 
         return SimpleMailing.builder()
@@ -56,6 +58,7 @@ public class MailingServiceImpl implements MailingService {
                 .city(result.getFilters() != null ? result.getFilters().getCity() : "")
                 .text(result.getDescription())
                 .status(result.getStatus().name())
+                .recipients(result.getReasonCode().getUsers())
                 .build();
     }
 

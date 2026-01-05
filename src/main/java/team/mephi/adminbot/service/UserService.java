@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 public interface UserService {
+    List<UserDto> getAllUsers();
     List<UserDto> getAllUsers(Pageable pageable, String query);
     Optional<UserDto> getById(Long id);
     Map<String, Long> getAllCounts();
