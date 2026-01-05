@@ -6,6 +6,7 @@ import team.mephi.adminbot.dto.RoleDto;
 import team.mephi.adminbot.repository.RoleRepository;
 import team.mephi.adminbot.vaadin.users.components.RoleService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -14,7 +15,7 @@ import java.util.Optional;
 public class RoleServiceImpl implements RoleService {
 
     private final RoleRepository roleRepository;
-    private List<RoleDto> roles;
+    private final List<RoleDto> roles = new ArrayList<>(List.of(RoleDto.builder().code(null).name("Все").build()));
 
     public RoleServiceImpl(RoleRepository roleRepository) {
         this.roleRepository = roleRepository;
@@ -22,34 +23,34 @@ public class RoleServiceImpl implements RoleService {
     }
 
     void init() {
-        this.roles = roleRepository.findAll().stream()
+        this.roles.addAll(roleRepository.findAll().stream()
                 .map(r -> new RoleDto(r.getCode(), r.getName()))
-                .toList();
+                .toList());
     }
 
     @Override
     public List<RoleDto> getAllRoles() {
-        if (Objects.isNull(roles) || roles.isEmpty()) init();
+        if (roles.size() < 2) init();
         return roles;
     }
 
     @Override
     public List<RoleDto> getAllRoles(Pageable pageable, String query) {
-        if (Objects.isNull(roles) || roles.isEmpty()) init();
+        if (roles.size() < 2) init();
         return roles;
     }
 
     @Override
     public Optional<RoleDto> getByCode(String code) {
         if (Objects.isNull(code)) return Optional.empty();
-        if (Objects.isNull(roles) || roles.isEmpty()) init();
+        if (roles.size() < 2) init();
         return roles.stream().filter(r -> r.getCode().equals(code)).findAny();
     }
 
     @Override
     public Optional<RoleDto> getByName(String name) {
         if (Objects.isNull(name)) return Optional.empty();
-        if (Objects.isNull(roles) || roles.isEmpty()) init();
+        if (roles.size() < 2) init();
         return roles.stream().filter(r -> r.getName().equals(name)).findAny();
     }
 }

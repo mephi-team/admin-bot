@@ -19,6 +19,7 @@ public interface UserService {
     void deleteAllById(Iterable<Long> ids);
     void blockAllById(Iterable<Long> ids);
     Stream<SimpleUser> findAllByRoleAndName(String role, String query, Pageable pageable);
+    Stream<SimpleUser> findAllByRoleCodeLikeAndCohortLikeAndDirectionCodeLikeAndCityLike(String role, String cohort, Long direction, String city, Long tutor, Pageable pageable);
     Integer countByRoleAndName(String role, String query);
     List<UserDto> findAllCurators(Pageable pageable, String s);
     Optional<UserDto> findCuratorByUserName(String name);

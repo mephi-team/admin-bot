@@ -43,12 +43,16 @@ public class MailingForm extends FormLayout {
 
     public MailingForm(UserService userService, RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService) {
         var provider = new CallbackDataProvider<SimpleUser, String>(
-                query->{
-                    Pageable pageable = PageRequest.of(
-                            query.getOffset() / query.getLimit(),
-                            query.getLimit()
+                query -> {
+                    Pageable pageable = PageRequest.of(query.getOffset() / query.getLimit(), query.getLimit());
+                    return userService.findAllByRoleCodeLikeAndCohortLikeAndDirectionCodeLikeAndCityLike(
+                            Objects.isNull(users.getValue()) ? null : users.getValue().getCode(),
+                            Objects.isNull(cohort.getValue()) ? null : cohort.getValue().getName(),
+                            Objects.isNull(direction.getValue()) ? null : direction.getValue().getId(),
+                            Objects.isNull(city.getValue()) || Objects.isNull(city.getValue().getId()) ? null : city.getValue().getName(),
+                            (Objects.isNull(curator.getValue()) ? null : curator.getValue().getId()),
+                            pageable
                     );
-                    return userService.findAllByRoleAndName(Objects.isNull(users.getValue()) ? "" : users.getValue().getCode(), "", pageable);
                 },
                 q -> userService.countByRoleAndName(Objects.isNull(users.getValue()) ? "" : users.getValue().getCode(), ""),
                 SimpleUser::getId
@@ -61,24 +65,26 @@ public class MailingForm extends FormLayout {
         users.setItemsPageable(roleService::getAllRoles);
         users.setItemLabelGenerator(RoleDto::getName);
         users.setRequiredIndicatorVisible(true);
-        users.addValueChangeListener(e -> {
-            provider.refreshAll();
-        });
+        users.addValueChangeListener(e -> provider.refreshAll());
 
         cohort.setItemsPageable(cohortService::getAllCohorts);
-        cohort.setItemLabelGenerator(CohortDto::getName);
+        cohort.setItemLabelGenerator(c -> c.getName() + (c.getCurrent() ? " (текущий)" : ""));
         cohort.setRequiredIndicatorVisible(true);
+        cohort.addValueChangeListener(e -> provider.refreshAll());
 
         direction.setItemsPageable(directionService::getAllDirections);
         direction.setItemLabelGenerator(SimpleDirection::getName);
         direction.setRequiredIndicatorVisible(true);
+        direction.addValueChangeListener(e -> provider.refreshAll());
 
         city.setItemsPageable(cityService::getAllCities);
         city.setItemLabelGenerator(CityDto::getName);
         city.setRequiredIndicatorVisible(true);
+        city.addValueChangeListener(e -> provider.refreshAll());
 
         curator.setItemsPageable(userService::findAllCurators);
         curator.setItemLabelGenerator(UserDto::getUserName);
+        curator.addValueChangeListener(e -> provider.refreshAll());
 //        curator.setRequiredIndicatorVisible(true);
 
         addFormItem(channels, getTranslation("form_mailing_channels_label"));

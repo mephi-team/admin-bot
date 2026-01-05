@@ -13,10 +13,7 @@ import team.mephi.adminbot.model.enums.UserStatus;
 import team.mephi.adminbot.repository.TutorRepository;
 import team.mephi.adminbot.repository.UserRepository;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Stream;
 
 @Service
@@ -24,7 +21,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final TutorRepository tutorRepository;
 
-    private List<UserDto> curators;
+    private final List<UserDto> curators = new ArrayList<>(List.of(UserDto.builder().userName("Все").build()));
 
     public UserServiceImpl(UserRepository userRepository, TutorRepository tutorRepository) {
         this.userRepository = userRepository;
@@ -154,26 +151,49 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Stream<SimpleUser> findAllByRoleCodeLikeAndCohortLikeAndDirectionCodeLikeAndCityLike(String role, String cohort, Long direction, String city, Long tutor, Pageable pageable) {
+        return userRepository.findAllByRoleCodeLikeAndCohortLikeAndDirectionCodeLikeAndCityLike(role, cohort, direction, city, tutor)
+                .stream()
+                .map(u -> SimpleUser.builder()
+                        .id(u.getId())
+                        .role(u.getRole().getCode())
+                        .firstName(u.getFirstName())
+                        .lastName(u.getLastName())
+                        .fullName(u.getUserName())
+                        .phoneNumber(u.getPhoneNumber())
+                        .tgId(u.getTgId())
+                        .tgName(u.getTgName())
+                        .email(u.getEmail())
+                        .phoneNumber(u.getPhoneNumber())
+                        .pdConsent(u.getPdConsent())
+                        .status(u.getStatus().name())
+                        .city(u.getCity())
+                        .direction(Objects.nonNull(u.getDirection()) ? SimpleDirection.builder().id(u.getDirection().getId()).name(u.getDirection().getName()).build() : null)
+                        .cohort(u.getCohort())
+                        .build());
+    }
+
+    @Override
     public Integer countByRoleAndName(String role, String query) {
         return userRepository.countByRoleAndName(role, query);
     }
 
     @Override
     public List<UserDto> findAllCurators(Pageable pageable, String s) {
-        if (Objects.isNull(curators)) initCurators();
+        if (curators.size() < 2) initCurators();
         return curators;
     }
 
     @Override
     public Optional<UserDto> findCuratorByUserName(String name) {
-        if (Objects.isNull(curators)) initCurators();
+        if (curators.size() < 2) initCurators();
         return curators.stream().filter(c -> c.getUserName().equals(name)).findAny();
     }
 
     private void initCurators() {
-        curators = tutorRepository.findAll().stream().map(u -> UserDto.builder()
+        curators.addAll(tutorRepository.findAll().stream().map(u -> UserDto.builder()
                 .id(u.getId())
                 .userName(u.getUserName())
-                .build()).toList();
+                .build()).toList());
     }
 }

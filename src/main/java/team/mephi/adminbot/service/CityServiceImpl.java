@@ -11,6 +11,7 @@ import java.util.Optional;
 public class CityServiceImpl implements CityService {
 
     private final List<CityDto> cities = List.of(
+            new CityDto(null, "Все"),
             new CityDto("9cfa1706-2ab2-4ebb-b9f4-76b08b71e26e", "Москва"),
             new CityDto("bd7ab214-fb32-4591-be65-80bc67b91401", "Омск"),
             new CityDto("4e62388e-6e82-4ea2-aa0f-5571661c7358", "Санкт-Петербург")

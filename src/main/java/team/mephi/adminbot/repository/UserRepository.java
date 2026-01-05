@@ -115,6 +115,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
             ")")
     List<User> findAllByRoleAndName(String role, String query, Pageable pageable);
 
+    @Query("SELECT u FROM User u JOIN FETCH u.direction JOIN FETCH u.role LEFT JOIN u.tutorAssignments ta  " +
+            "WHERE (u.role.code ILIKE :role OR  :role IS NULL) " +
+            "AND (u.cohort ilike :cohort OR :cohort IS NULL)" +
+            "AND (u.direction.id = :direction OR :direction IS NULL)" +
+            "AND (u.city ilike :city OR :city IS NULL)" +
+            "AND (ta.tutor.id = :tutor OR :tutor IS NULL)")
+    List<User> findAllByRoleCodeLikeAndCohortLikeAndDirectionCodeLikeAndCityLike(String role, String cohort, Long direction, String city, Long tutor);
+
     @Query("SELECT count(u )FROM User u JOIN u.role WHERE u.role.code = :role AND (" +
             "LOWER(COALESCE(u.userName, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
             "LOWER(COALESCE(u.name, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +

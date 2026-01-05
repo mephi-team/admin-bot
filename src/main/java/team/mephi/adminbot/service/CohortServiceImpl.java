@@ -11,11 +11,11 @@ import java.util.Optional;
 public class CohortServiceImpl implements CohortService {
 
     private final List<CohortDto> cohorts = List.of(
-            new CohortDto("4e62388e-6e82-4ea2-aa0f-5571661c7358", "Весна 2026 (текущий)"),
-            new CohortDto("d7f480c7-5e1d-4652-91de-82b9bde324d4", "Зима 2025"),
-            new CohortDto("bd7ab214-fb32-4591-be65-80bc67b91401", "Осень 2025"),
-            new CohortDto("47822b46-a33b-4f9a-aee0-50937f6baff4", "Лето 2025"),
-            new CohortDto("9cfa1706-2ab2-4ebb-b9f4-76b08b71e26e", "Весна 2025")
+            new CohortDto("4e62388e-6e82-4ea2-aa0f-5571661c7358", "Весна 2026", true),
+            new CohortDto("d7f480c7-5e1d-4652-91de-82b9bde324d4", "Зима 2025", false),
+            new CohortDto("bd7ab214-fb32-4591-be65-80bc67b91401", "Осень 2025", false),
+            new CohortDto("47822b46-a33b-4f9a-aee0-50937f6baff4", "Лето 2025", false),
+            new CohortDto("9cfa1706-2ab2-4ebb-b9f4-76b08b71e26e", "Весна 2025", false)
     );
 
     @Override

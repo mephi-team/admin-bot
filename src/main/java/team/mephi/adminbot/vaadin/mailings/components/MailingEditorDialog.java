@@ -39,7 +39,7 @@ public class MailingEditorDialog extends Dialog {
 
         binder.forField(form1.getCurator())
 //                .withValidator(Objects::nonNull, getTranslation("form_mailing_curator_validation_message"))
-                .withConverter(UserDto::getUserName, user -> userService.findCuratorByUserName(user).orElse(UserDto.builder().id(0L).userName("").build()))
+                .withConverter(UserDto::getUserName, user -> userService.findCuratorByUserName(user).orElse(UserDto.builder().userName("").build()))
                 .bind(SimpleMailing::getCurator, SimpleMailing::setCurator);
         binder.forField(form1.getUsers())
                 .withValidator(Objects::nonNull, getTranslation("form_mailing_users_validation_message"))
