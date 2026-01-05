@@ -9,13 +9,19 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.listbox.MultiSelectListBox;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.provider.CallbackDataProvider;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 import lombok.Getter;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import team.mephi.adminbot.dto.*;
 import team.mephi.adminbot.service.UserService;
 import team.mephi.adminbot.service.CityService;
 import team.mephi.adminbot.service.DirectionService;
 import team.mephi.adminbot.service.CohortService;
 import team.mephi.adminbot.vaadin.users.components.RoleService;
+
+import java.util.Objects;
 
 public class MailingForm extends FormLayout {
     @Getter
@@ -33,6 +39,17 @@ public class MailingForm extends FormLayout {
     private final ComboBox<UserDto> curator = new ComboBox<>();
 
     public MailingForm(UserService userService, RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService) {
+        var provider = new CallbackDataProvider<SimpleUser, String>(
+                query->{
+                    Pageable pageable = PageRequest.of(
+                            query.getOffset() / query.getLimit(),
+                            query.getLimit()
+                    );
+                    return userService.findAllByRoleAndName(Objects.isNull(users.getValue()) ? "" : users.getValue().getCode(), "", pageable);
+                },
+                q -> userService.countByRoleAndName(Objects.isNull(users.getValue()) ? "" : users.getValue().getCode(), ""),
+                SimpleUser::getId
+        );
         setAutoResponsive(true);
         setLabelsAside(true);
 
@@ -41,6 +58,9 @@ public class MailingForm extends FormLayout {
         users.setItemsPageable(roleService::getAllRoles);
         users.setItemLabelGenerator(RoleDto::getName);
         users.setRequiredIndicatorVisible(true);
+        users.addValueChangeListener(e -> {
+            provider.refreshAll();
+        });
 
         cohort.setItemsPageable(cohortService::getAllCohorts);
         cohort.setItemLabelGenerator(CohortDto::getName);
@@ -56,7 +76,7 @@ public class MailingForm extends FormLayout {
 
         curator.setItemsPageable(userService::findAllCurators);
         curator.setItemLabelGenerator(UserDto::getUserName);
-        curator.setRequiredIndicatorVisible(true);
+//        curator.setRequiredIndicatorVisible(true);
 
         addFormItem(channels, getTranslation("form_mailing_channels_label"));
         addFormItem(users, getTranslation("form_mailing_users_label"));
@@ -68,10 +88,11 @@ public class MailingForm extends FormLayout {
         Accordion accordion = new Accordion();
 
         Span name = new Span("Список выбранных получателей соответствует заданным выше фильтрам");
+        name.addClassNames(LumoUtility.FontSize.SMALL);
 
-        MultiSelectListBox<String> listBox = new MultiSelectListBox<>();
-        listBox.setItems("Test Text 1", "Test Text 2", "Test Text 3");
-        listBox.select("Test Text 1", "Test Text 3");
+        MultiSelectListBox<SimpleUser> listBox = new MultiSelectListBox<>();
+        listBox.setDataProvider(provider);
+        listBox.setItemLabelGenerator(u -> u.getFullName() + ", @" + u.getTgId());
         FormItem box = addFormItem(listBox, getTranslation("form_mailing_first_name_last_name_label"));
 
         VerticalLayout personalInformationLayout = new VerticalLayout(name, box);
@@ -79,7 +100,7 @@ public class MailingForm extends FormLayout {
         personalInformationLayout.setPadding(false);
 
         accordion.add(new AccordionPanel(new Span(new Span(getTranslation("form_mailing_accordion_label")), new Span(" (5)")), personalInformationLayout));
-        accordion.close();
+//        accordion.close();
 
         add(accordion);
     }

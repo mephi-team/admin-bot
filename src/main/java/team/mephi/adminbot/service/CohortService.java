@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CohortService {
+    List<CohortDto> getAllCohorts();
     List<CohortDto> getAllCohorts(Pageable pageable, String query);
     Optional<CohortDto> getById(String id);
     Optional<CohortDto> getByName(String name);

@@ -11,11 +11,10 @@ import lombok.Getter;
 import java.util.List;
 
 public class TemplateFormTab extends FormLayout {
-    private final TextField id = new TextField();
     @Getter
-    private final TextField name = new TextField();
+    private final TextField name1 = new TextField();
     @Getter
-    private final TextArea text = new TextArea();
+    private final TextArea text1 = new TextArea();
 
     public TemplateFormTab() {
         setAutoResponsive(true);
@@ -37,15 +36,16 @@ public class TemplateFormTab extends FormLayout {
         TextField link = new TextField();
         link.setValue("https://telemost.360.yandex.ru/j/000000000");
 
-        text.setMinRows(10);
+        text1.setMinRows(10);
+        text1.setRequiredIndicatorVisible(true);
 
         addFormItem(radioGroup, getTranslation("form_mailing_message_label"));
         FormItem templateItem = addFormItem(templates, getTranslation("form_mailing_template_label"));
-        FormItem textItem = addFormItem(text, getTranslation("form_template_text_label"));
+        FormItem textItem = addFormItem(text1, getTranslation("form_template_text_label"));
         FormItem createLinkItem = addFormItem(createLink, getTranslation("form_mailing_create_meeting_label"));
         FormItem linkItem = addFormItem(link, getTranslation("form_mailing_meeting_link_label"));
         FormItem saveItem = addFormItem(saveTemplate, getTranslation("form_mailing_save_as_new_label"));
-        FormItem nameItem = addFormItem(name, getTranslation("form_template_name_label"));
+        FormItem nameItem = addFormItem(name1, getTranslation("form_template_name_label"));
 
         templateItem.setVisible(false);
         nameItem.setVisible(false);
@@ -53,7 +53,7 @@ public class TemplateFormTab extends FormLayout {
         linkItem.setEnabled(false);
 
         templates.addValueChangeListener(v -> {
-           text.setValue(v.getValue());
+           text1.setValue(v.getValue());
         });
 
         createLink.addValueChangeListener(v -> linkItem.setVisible(v.getValue()));

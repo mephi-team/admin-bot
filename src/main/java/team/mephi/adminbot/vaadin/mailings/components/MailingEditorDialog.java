@@ -35,16 +35,16 @@ public class MailingEditorDialog extends Dialog {
         var form2 = new TemplateFormTab();
 
         binder.forField(form1.getCurator())
-                .withValidator(Objects::nonNull, getTranslation("form_mailing_curator_validation_message"))
-                .withConverter(UserDto::getUserName, user -> userService.findCuratorByUserName(user).orElse(null))
+//                .withValidator(Objects::nonNull, getTranslation("form_mailing_curator_validation_message"))
+                .withConverter(UserDto::getUserName, user -> userService.findCuratorByUserName(user).orElse(UserDto.builder().id(0L).userName("").build()))
                 .bind(SimpleMailing::getCurator, SimpleMailing::setCurator);
         binder.forField(form1.getUsers())
                 .withValidator(Objects::nonNull, getTranslation("form_mailing_users_validation_message"))
-                .withConverter(RoleDto::getName, role -> roleService.getByName(role).orElse(roleService.getAllRoles().getFirst()))
+                .withConverter(RoleDto::getName, role -> roleService.getByName(role).orElse(null))
                 .bind(SimpleMailing::getUsers, SimpleMailing::setUsers);
         binder.forField(form1.getCohort())
                 .withValidator(Objects::nonNull, getTranslation("form_mailing_direction_validation_message"))
-                .withConverter(CohortDto::getName, cohort -> cohortService.getByName(cohort).orElse(null))
+                .withConverter(CohortDto::getName, cohort -> cohortService.getByName(cohort).orElse(cohortService.getAllCohorts().getFirst()))
                 .bind(SimpleMailing::getCohort, SimpleMailing::setCohort);
         binder.forField(form1.getDirection())
                 .withValidator(Objects::nonNull, getTranslation("form_mailing_direction_validation_message"))
@@ -81,8 +81,10 @@ public class MailingEditorDialog extends Dialog {
                 prev,
                 saveButton);
 
-        binder.addStatusChangeListener(e ->
-                saveButton.setEnabled(e.getBinder().isValid()));
+        binder.addStatusChangeListener(e -> {
+            next.setEnabled(e.getBinder().isValid());
+            saveButton.setEnabled(e.getBinder().isValid());
+        });
 
         tabSheet.addSelectedChangeListener(l -> {
            if (tab1.isSelected()) {
@@ -93,6 +95,9 @@ public class MailingEditorDialog extends Dialog {
                saveButton.setVisible(true);
                prev.setVisible(true);
                next.setVisible(false);
+               binder.forField(form2.getText1())
+                       .withValidator(e-> !e.isBlank(), "")
+                       .bind(SimpleMailing::getText, SimpleMailing::setText);
            }
         });
     }

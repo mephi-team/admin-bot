@@ -19,6 +19,11 @@ public class CohortServiceImpl implements CohortService {
     );
 
     @Override
+    public List<CohortDto> getAllCohorts() {
+        return cohorts;
+    }
+
+    @Override
     public List<CohortDto> getAllCohorts(Pageable pageable, String query) {
         return cohorts;
     }
