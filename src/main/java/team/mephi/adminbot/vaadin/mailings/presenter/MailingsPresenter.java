@@ -18,7 +18,7 @@ public class MailingsPresenter extends CRUDPresenter<SimpleMailing> implements M
     @Override
     public void onCancel(SimpleMailing item) {
         view.confirmCancel(item, (edit) -> {
-            edit.setStatus("FINISHED");
+            edit.setStatus("CANCELED");
             dataProvider.save(edit);
             dataProvider.getDataProvider().refreshItem(edit);
             view.showNotificationForCancel(edit.getId());

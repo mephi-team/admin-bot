@@ -69,7 +69,7 @@ public class SentView extends VerticalLayout {
             Div group = new Div();
             group.addClassNames(LumoUtility.TextAlignment.RIGHT);
             Button retryButton = new Button(new Icon(VaadinIcon.ROTATE_RIGHT), e -> actions.onRetry(item));
-            retryButton.setVisible(item.getStatus().equals("PAUSED"));
+            retryButton.setVisible(item.getStatus().equals("PAUSED") || item.getStatus().equals("ERROR"));
             Button cancelButton = new Button(new Icon(VaadinIcon.CLOSE_CIRCLE_O), e -> actions.onCancel(item));
             cancelButton.setVisible(item.getStatus().equals("ACTIVE"));
             Button deleteButton = new Button(new Icon(VaadinIcon.TRASH), e -> actions.onDelete(List.of(item.getId())));
