@@ -210,8 +210,8 @@ public class Users extends VerticalLayout implements StudentViewCallback, TutorV
     }
 
     @Override
-    public void showDialogForTutoring(SimpleUser user) {
-        tutoringDialog.openForView(user);
+    public void showDialogForTutoring(SimpleUser user, SerializableConsumer<SimpleUser> callback) {
+        tutoringDialog.openForEdit(user, callback);
     }
 
     @Override

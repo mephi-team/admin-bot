@@ -35,6 +35,6 @@ public interface TutorRepository extends JpaRepository<Tutor, Long> {
     @Modifying
     void blockAllById(@Param("ids") Iterable<? extends Long> ids);
 
-    @Query("SELECT t FROM Tutor t WHERE t.id = :id")
+    @Query("SELECT t FROM Tutor t LEFT JOIN FETCH t.studentAssignments sa LEFT JOIN FETCH sa.student WHERE t.id = :id")
     Optional<Tutor> findSimpleUserById(@NonNull Long id);
 }

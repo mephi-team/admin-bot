@@ -5,6 +5,7 @@ import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.CallbackDataProvider;
+import lombok.Getter;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import team.mephi.adminbot.dto.SimpleDirection;
@@ -16,6 +17,8 @@ public class TutorForm extends FormLayout {
     private TextField lastName = new TextField();
     private TextField tgId = new TextField();
     private ComboBox<SimpleDirection> direction = new ComboBox<>();
+    @Getter
+    private MultiSelectComboBox<SimpleUser> comboBox = new MultiSelectComboBox<>();
 
     public TutorForm(UserService userService) {
         var provider = new CallbackDataProvider<SimpleUser, String>(
@@ -31,7 +34,6 @@ public class TutorForm extends FormLayout {
         setLabelsAside(true);
         setExpandFields(true);
 
-        MultiSelectComboBox<SimpleUser> comboBox = new MultiSelectComboBox<>();
         comboBox.setItems(provider);
         comboBox.setItemLabelGenerator(SimpleUser::getFullName);
         comboBox.setAutoExpand(MultiSelectComboBox.AutoExpandMode.VERTICAL);

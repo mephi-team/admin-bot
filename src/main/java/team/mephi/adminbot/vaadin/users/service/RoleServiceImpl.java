@@ -44,7 +44,7 @@ public class RoleServiceImpl implements RoleService {
     public Optional<RoleDto> getByCode(String code) {
         if (Objects.isNull(code)) return Optional.empty();
         if (roles.size() < 2) init();
-        return roles.stream().filter(r -> r.getCode().equals(code)).findAny();
+        return roles.stream().filter(r -> code.equals(r.getCode())).findAny();
     }
 
     @Override

@@ -5,7 +5,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import team.mephi.adminbot.dto.SimpleUser;
-import team.mephi.adminbot.model.Tutor;
 import team.mephi.adminbot.repository.TutorRepository;
 import team.mephi.adminbot.vaadin.users.presenter.UserDataProvider;
 
@@ -15,11 +14,13 @@ import java.util.stream.Collectors;
 
 public class TutorDataProvider implements UserDataProvider {
 
+    private final TutorService tutorService;
     private final TutorRepository tutorRepository;
 
     private ConfigurableFilterDataProvider<SimpleUser, Void, String> provider;
 
-    public TutorDataProvider(TutorRepository tutorRepository) {
+    public TutorDataProvider(TutorService tutorService, TutorRepository tutorRepository) {
+        this.tutorService = tutorService;
         this.tutorRepository = tutorRepository;
     }
 
@@ -49,6 +50,7 @@ public class TutorDataProvider implements UserDataProvider {
                                         .email(u.getEmail())
                                         .tgId(u.getTgId())
                                         .studentCount(u.getStudentAssignments().size())
+                                        .students(u.getStudentAssignments().stream().map(s -> SimpleUser.builder().id(s.getId()).build()).toList())
                                         .status("ACTIVE")
                                         .build());
                         },
@@ -76,20 +78,13 @@ public class TutorDataProvider implements UserDataProvider {
                 .phoneNumber(t.getPhone())
                 .tgId(t.getTgId())
                 .tgName(t.getTgName())
+                .students(t.getStudentAssignments().stream().map(s -> SimpleUser.builder().id(s.getStudent().getId()).fullName(s.getStudent().getUserName()).build()).toList())
                 .build());
     }
 
     @Override
     public SimpleUser save(SimpleUser dto) {
-        Tutor user = dto.getId() != null
-                ? tutorRepository.findById(dto.getId()).orElse(new Tutor())
-                : new Tutor();
-        user.setFirstName(dto.getFirstName());
-        user.setLastName(dto.getLastName());
-        user.setEmail(dto.getEmail());
-        user.setTgId(dto.getTgId());
-        user = tutorRepository.save(user);
-        return new SimpleUser();
+        return tutorService.save(dto);
     }
 
     @Override
