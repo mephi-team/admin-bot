@@ -74,7 +74,7 @@ public class MailingEditorDialog extends Dialog {
                 )
                 .bind(SimpleMailing::getRecipients, SimpleMailing::setRecipients);
         binding1 = binder.forField(form2.getText1())
-                .withValidator(e-> !e.isBlank(), "")
+                .withValidator(e-> !e.isBlank(), getTranslation("form_template_text_validation_message"))
                 .bind(SimpleMailing::getText, SimpleMailing::setText);
         binding1.setValidatorsDisabled(true);
         binder.bindInstanceFields(form1);
