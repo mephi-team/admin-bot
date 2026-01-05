@@ -39,6 +39,7 @@ public class MailingForm extends FormLayout {
     private final ComboBox<UserDto> curator = new ComboBox<>();
     @Getter
     private final MultiSelectListBox<SimpleUser> listBox = new MultiSelectListBox<>();
+    private final Span counter = new Span("(0)");
 
     public MailingForm(UserService userService, RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService) {
         var provider = new CallbackDataProvider<SimpleUser, String>(
@@ -89,18 +90,22 @@ public class MailingForm extends FormLayout {
 
         Accordion accordion = new Accordion();
 
-        Span name = new Span("Список выбранных получателей соответствует заданным выше фильтрам");
+        Span name = new Span(getTranslation("form_mailing_accordion_description_label"));
         name.addClassNames(LumoUtility.FontSize.SMALL);
 
+        listBox.addClassNames(LumoUtility.FontSize.SMALL);
         listBox.setDataProvider(provider);
         listBox.setItemLabelGenerator(u -> u.getFullName() + ", @" + u.getTgId());
+        listBox.addSelectionListener(e -> {
+            counter.setText("(" +  e.getAllSelectedItems().size() + ")");
+        });
         FormItem box = addFormItem(listBox, getTranslation("form_mailing_first_name_last_name_label"));
 
         VerticalLayout personalInformationLayout = new VerticalLayout(name, box);
         personalInformationLayout.setSpacing(false);
         personalInformationLayout.setPadding(false);
 
-        accordion.add(new AccordionPanel(new Span(new Span(getTranslation("form_mailing_accordion_label")), new Span(" (5)")), personalInformationLayout));
+        accordion.add(new AccordionPanel(new Span(new Span(getTranslation("form_mailing_accordion_label")), new Span(" "), counter), personalInformationLayout));
 //        accordion.close();
 
         add(accordion);

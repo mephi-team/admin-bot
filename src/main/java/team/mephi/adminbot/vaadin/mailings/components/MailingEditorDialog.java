@@ -58,15 +58,12 @@ public class MailingEditorDialog extends Dialog {
                 .withConverter(CityDto::getName, user -> cityService.getByName(user).orElse(null))
                 .bind(SimpleMailing::getCity, SimpleMailing::setCity);
         binder.forField(form1.getListBox())
-                .withValidator(Objects::nonNull,"")
+                .withValidator(s -> !s.isEmpty(), getTranslation("form_mailing_first_name_last_name_validation_message"))
                 .withConverter(
                         s->s.stream().map(SimpleUser::getTgId).toList(),
                         users -> userService.getAllUsers()
                                 .stream()
-                                .filter(u -> {
-                                    System.out.println("!!!!! filter " + u + " users " + users);
-                                    return users.contains(u.getTgName());
-                                })
+                                .filter(u -> users.contains(u.getTgName()))
                                 .map(s -> SimpleUser.builder()
                                         .id(s.getId())
                                         .fullName(s.getFullName())
@@ -113,24 +110,22 @@ public class MailingEditorDialog extends Dialog {
         });
 
         tabSheet.addSelectedChangeListener(l -> {
-            System.out.println("!!! SelectedChangeListener");
-           if (tab1.isSelected()) {
-               saveButton.setVisible(false);
-               prev.setVisible(false);
-               next.setVisible(true);
-               binding1.setValidatorsDisabled(true);
-           } else if (tab2.isSelected()) {
-               saveButton.setVisible(true);
-               prev.setVisible(true);
-               next.setVisible(false);
-               binding1.setValidatorsDisabled(false);
+            if (tab1.isSelected()) {
+                saveButton.setVisible(false);
+                prev.setVisible(false);
+                next.setVisible(true);
+                binding1.setValidatorsDisabled(true);
+            } else if (tab2.isSelected()) {
+                saveButton.setVisible(true);
+                prev.setVisible(true);
+                next.setVisible(false);
+                binding1.setValidatorsDisabled(false);
            }
         });
     }
 
     public void showDialogForNew(SerializableConsumer<SimpleMailing> callback) {
         this.mailing = new SimpleMailing();
-        System.out.println("!!! mailing " + mailing);
         this.onSaveCallback = callback;
         binder.readBean(mailing);
         binder.setReadOnly(false);
@@ -139,7 +134,6 @@ public class MailingEditorDialog extends Dialog {
     }
 
     public void showDialogForEdit(SimpleMailing mailing, SerializableConsumer<SimpleMailing> callback) {
-        System.out.println("!!! showDialogForEdit " + mailing);
         this.mailing = mailing;
         this.onSaveCallback = callback;
         binder.readBean(mailing);

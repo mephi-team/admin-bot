@@ -15,7 +15,6 @@ public class CRUDPresenter<T> implements CRUDActions<T>, DataProvider<T> {
     public void onCreate(String role) {
         view.showDialogForNew(role, (newMailing) -> {
             if (newMailing != null) {
-                System.out.println("!!! onCreate " + newMailing);
                 dataProvider.save((T) newMailing);
                 dataProvider.getDataProvider().refreshAll();
                 view.showNotificationForNew();
