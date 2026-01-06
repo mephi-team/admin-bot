@@ -33,9 +33,9 @@ public class MailingEditorDialog extends Dialog {
     private SimpleMailing mailing;
     private Binder.Binding<SimpleMailing, String> binding1;
 
-    public MailingEditorDialog(UserService userService, RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService) {
+    public MailingEditorDialog(UserService userService, RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService, TemplateService templateService) {
         var form1 = new MailingForm(userService, roleService, cohortService, directionService, cityService);
-        var form2 = new TemplateFormTab();
+        var form2 = new TemplateFormTab(templateService);
 
         binder.forField(form1.getCurator())
 //                .withValidator(Objects::nonNull, getTranslation("form_mailing_curator_validation_message"))

@@ -7,6 +7,7 @@ import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import lombok.Getter;
+import team.mephi.adminbot.dto.SimpleTemplate;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ public class TemplateFormTab extends FormLayout {
     @Getter
     private final TextArea text1 = new TextArea();
 
-    public TemplateFormTab() {
+    public TemplateFormTab(TemplateService templateService) {
         setAutoResponsive(true);
         setLabelsAside(true);
         setExpandFields(true);
@@ -29,8 +30,9 @@ public class TemplateFormTab extends FormLayout {
         radioGroup.setValue(newMessage);
         radioGroup.setItemLabelGenerator(TemplateMessage::getName);
 
-        ComboBox<String> templates = new ComboBox<>();
-        templates.setItems(List.of("Шаблон 1", "Шаблон 2"));
+        ComboBox<SimpleTemplate> templates = new ComboBox<>();
+        templates.setItemsPageable(templateService::findAll);
+        templates.setItemLabelGenerator(SimpleTemplate::getName);
 
         Checkbox createLink = new Checkbox();
         Checkbox saveTemplate = new Checkbox();
@@ -55,7 +57,7 @@ public class TemplateFormTab extends FormLayout {
         linkItem.setEnabled(false);
 
         templates.addValueChangeListener(v -> {
-           text1.setValue(v.getValue());
+           text1.setValue(v.getValue().getText());
         });
 
         createLink.addValueChangeListener(v -> linkItem.setVisible(v.getValue()));
