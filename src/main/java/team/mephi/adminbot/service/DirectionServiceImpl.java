@@ -21,6 +21,12 @@ public class DirectionServiceImpl implements DirectionService {
     }
 
     @Override
+    public List<SimpleDirection> getAllDirections() {
+        if (directions.size() < 2) initDirections();
+        return directions;
+    }
+
+    @Override
     public List<SimpleDirection> getAllDirections(Pageable pageable, String query) {
         if (directions.size() < 2) initDirections();
         return directions;

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CityService {
+    List<CityDto> getAllCities();
     List<CityDto> getAllCities(Pageable pageable, String query);
     Optional<CityDto> getById(String id);
     Optional<CityDto> getByName(String name);

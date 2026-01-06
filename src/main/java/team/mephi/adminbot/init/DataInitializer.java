@@ -8,6 +8,10 @@ import team.mephi.adminbot.model.*;
 import team.mephi.adminbot.model.enums.*;
 import team.mephi.adminbot.model.objects.Filters;
 import team.mephi.adminbot.repository.*;
+import team.mephi.adminbot.service.CityService;
+import team.mephi.adminbot.service.CohortService;
+import team.mephi.adminbot.service.DirectionService;
+import team.mephi.adminbot.service.RoleService;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -48,6 +52,18 @@ public class DataInitializer {
 
     @Autowired
     private TutorRepository tutorRepository;
+
+    @Autowired
+    private CityService cityService;
+
+    @Autowired
+    private CohortService cohortService;
+
+    @Autowired
+    private RoleService roleService;
+
+    @Autowired
+    private DirectionService directionService;
 
     @Bean
     public ApplicationRunner initTestData() {
@@ -144,7 +160,10 @@ public class DataInitializer {
     private void initTutors() {
         List<Tutor> tutors = Arrays.asList(
                 Tutor.builder().userName("Сергей Иванов").firstName("Сергей").lastName("Иванов").phone("+79991234567").email("test1@example.org").tgId("tg_name_1010").build(),
-                Tutor.builder().userName("Николай Александров").firstName("Николай").lastName("Александров").phone("+79997654321").email("test2@example.org").tgId("tg_name_1011").build()
+                Tutor.builder().userName("Николай Александров").firstName("Николай").lastName("Александров").phone("+79997654321").email("test2@example.org").tgId("tg_name_1011").build(),
+                Tutor.builder().userName("Екатерина Козлова").firstName("Екатерина").lastName("Козлова").phone("+79991111111").email("test3@example.org").tgId("tg_name_1012").build(),
+                Tutor.builder().userName("Петр Петров").firstName("Петр").lastName("Петров").phone("+79992222222").email("test4@example.org").tgId("tg_name_1013").build(),
+                Tutor.builder().userName("Иван Иванов").firstName("Иван").lastName("Иванов").phone("+79993333333").email("test5@example.org").tgId("tg_name_1014").build()
         );
         tutorRepository.saveAll(tutors);
         System.out.printf("  → Создано %d кураторов%n", tutors.size());
@@ -199,6 +218,10 @@ public class DataInitializer {
     private void initBroadcasts() {
         Random random = new Random();
         List<MailingStatus> statuses = Arrays.stream(MailingStatus.values()).toList();
+        var roles = roleService.getAllRoles();
+        var directions = directionService.getAllDirections();
+        var cohorts = cohortService.getAllCohorts();
+        var cities = cityService.getAllCities();
 
         List<Mailing> broadcasts = new ArrayList<>();
         for (int i = 1; i <= 100; i++) {
@@ -208,7 +231,13 @@ public class DataInitializer {
                     .createdBy(user)
                     .name("Test " + i)
                     .channels(List.of(Channels.Email))
-                    .filters(Filters.builder().users("Студенты").cohort("Лето 2025").direction("Java").city("Москва").curator(curator.getUserName()).build())
+                    .filters(Filters.builder()
+                            .users(roles.get(random.nextInt(0, roles.size())).getName())
+                            .cohort(cohorts.get(random.nextInt(0, cohorts.size())).getName())
+                            .direction(directions.get(random.nextInt(0, directions.size())).getName())
+                            .city(cities.get(random.nextInt(0, cities.size())).getName())
+                            .curator(curator.getUserName())
+                            .build())
                     .status(statuses.get(random.nextInt(statuses.size())))
                     .build());
         }

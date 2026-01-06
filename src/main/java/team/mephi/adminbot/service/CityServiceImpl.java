@@ -18,6 +18,11 @@ public class CityServiceImpl implements CityService {
     );
 
     @Override
+    public List<CityDto> getAllCities() {
+        return cities;
+    }
+
+    @Override
     public List<CityDto> getAllCities(Pageable pageable, String query) {
         return cities;
     }
