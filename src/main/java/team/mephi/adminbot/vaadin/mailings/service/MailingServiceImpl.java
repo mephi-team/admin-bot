@@ -2,6 +2,7 @@ package team.mephi.adminbot.vaadin.mailings.service;
 
 import com.vaadin.flow.spring.security.AuthenticationContext;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.stereotype.Service;
 import team.mephi.adminbot.dto.SimpleMailing;
@@ -14,8 +15,11 @@ import team.mephi.adminbot.repository.MailingRepository;
 import team.mephi.adminbot.repository.UserRepository;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.MailingService;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class MailingServiceImpl implements MailingService {
@@ -47,25 +51,47 @@ public class MailingServiceImpl implements MailingService {
         result.setReasonCode(ReasonCode.builder().users(mailing.getRecipients()).build());
         result = mailingRepository.save(result);
 
-        return SimpleMailing.builder()
-                .id(result.getId())
-                .date(result.getCreatedAt())
-                .users(result.getFilters() != null ? result.getFilters().getUsers() : "")
-                .cohort(result.getFilters() != null ? result.getFilters().getCohort() : "")
-                .direction(result.getFilters() != null ? result.getFilters().getDirection() : "")
-                .curator(result.getFilters() != null ? result.getFilters().getCurator() : "")
-                .channels(result.getChannels().stream().map(Enum::name).collect(Collectors.toSet()))
-                .city(result.getFilters() != null ? result.getFilters().getCity() : "")
-                .name(result.getName())
-                .text(result.getDescription())
-                .status(result.getStatus().name())
-                .recipients(result.getReasonCode().getUsers())
-                .build();
+        return mapToSimple(result);
+    }
+
+    @Override
+    public Optional<SimpleMailing> findById(Long id) {
+        return mailingRepository.findById(id)
+                .map(this::mapToSimple);
+    }
+
+    @Override
+    public Stream<SimpleMailing> findMailingByName(String name, List<String> statuses, Pageable pageable) {
+        return mailingRepository.findMailingByName(name, statuses, pageable)
+                .stream()
+                .map(this::mapToSimple);
+    }
+
+    @Override
+    public Integer countByName(String name, List<MailingStatus> statuses) {
+        return mailingRepository.countByName(name, statuses);
     }
 
     @Override
     @Transactional
     public void deleteAllById(Iterable<Long> ids) {
         mailingRepository.deleteAllById(ids);
+    }
+
+    private SimpleMailing mapToSimple(Mailing mailing) {
+        return SimpleMailing.builder()
+                .id(mailing.getId())
+                .date(mailing.getCreatedAt())
+                .users(mailing.getFilters() != null ? mailing.getFilters().getUsers() : "")
+                .cohort(mailing.getFilters() != null ? mailing.getFilters().getCohort() : "")
+                .direction(mailing.getFilters() != null ? mailing.getFilters().getDirection() : "")
+                .curator(mailing.getFilters() != null ? mailing.getFilters().getCurator() : "")
+                .city(mailing.getFilters() != null ? mailing.getFilters().getCity() : "")
+                .channels(mailing.getChannels().stream().map(Enum::name).collect(Collectors.toSet()))
+                .recipients(mailing.getReasonCode() != null ? mailing.getReasonCode().getUsers() : List.of())
+                .name(mailing.getName())
+                .text(mailing.getDescription())
+                .status(mailing.getStatus().name())
+                .build();
     }
 }
