@@ -165,7 +165,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     }
 
     @Query("SELECT u FROM User u JOIN FETCH u.role JOIN FETCH u.direction WHERE u.id = :id")
-    Optional<User> findSimpleUserById(@NonNull Long id);
+    Optional<User> findByIdWithRoleAndDirection(@NonNull Long id);
 
     List<User> findAllByRoleCode(String role);
     Optional<User> findByRoleCodeAndUserName(String role, String name);

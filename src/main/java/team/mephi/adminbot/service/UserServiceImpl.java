@@ -63,17 +63,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<SimpleUser> findById(Long id) {
-        return userRepository.findSimpleUserById(id).map(u -> SimpleUser.builder()
-                .id(u.getId())
-                .role(u.getRole().getName())
-                .fullName(u.getUserName())
-                .firstName(u.getFirstName())
-                .lastName(u.getLastName())
-                .email(u.getEmail())
-                .phoneNumber(u.getPhoneNumber())
-                .tgId(u.getTgId())
-                .status(u.getStatus().name())
-                .build());
+        return userRepository.findByIdWithRoleAndDirection(id)
+                .map(this::mapToSimple);
     }
 
     @Transactional
@@ -100,21 +91,7 @@ public class UserServiceImpl implements UserService {
 
         user = userRepository.save(user);
 
-        return SimpleUser.builder()
-                .id(user.getId())
-                .role(user.getRole().getCode())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .email(user.getEmail())
-                .tgId(user.getTgId())
-                .phoneNumber(user.getPhoneNumber())
-                .pdConsent(user.getPdConsent())
-                .fullName(user.getUserName())
-                .city(user.getCity())
-                .direction(SimpleDirection.builder().id(user.getDirection().getId()).name(user.getDirection().getName()).build())
-                .cohort(user.getCohort())
-                .status(user.getStatus().name())
-                .build();
+        return mapToSimple(user);
     }
 
     @Override
@@ -131,46 +108,14 @@ public class UserServiceImpl implements UserService {
     public Stream<SimpleUser> findAllByRoleAndName(String role, String query, Pageable pageable) {
         return userRepository.findAllByRoleAndName(role, query, pageable)
                 .stream()
-                .map(u -> SimpleUser.builder()
-                        .id(u.getId())
-                        .role(u.getRole().getCode())
-                        .firstName(u.getFirstName())
-                        .lastName(u.getLastName())
-                        .fullName(u.getUserName())
-                        .phoneNumber(u.getPhoneNumber())
-                        .tgId(u.getTgId())
-                        .tgName(u.getTgName())
-                        .email(u.getEmail())
-                        .phoneNumber(u.getPhoneNumber())
-                        .pdConsent(u.getPdConsent())
-                        .status(u.getStatus().name())
-                        .city(u.getCity())
-                        .direction(Objects.nonNull(u.getDirection()) ? SimpleDirection.builder().id(u.getDirection().getId()).name(u.getDirection().getName()).build() : null)
-                        .cohort(u.getCohort())
-                        .build());
+                .map(this::mapToSimple);
     }
 
     @Override
     public Stream<SimpleUser> findAllByRoleCodeLikeAndCohortLikeAndDirectionCodeLikeAndCityLike(String role, String cohort, Long direction, String city, Long tutor, Pageable pageable) {
         return userRepository.findAllByRoleCodeLikeAndCohortLikeAndDirectionCodeLikeAndCityLike(role, cohort, direction, city, tutor)
                 .stream()
-                .map(u -> SimpleUser.builder()
-                        .id(u.getId())
-                        .role(u.getRole().getCode())
-                        .firstName(u.getFirstName())
-                        .lastName(u.getLastName())
-                        .fullName(u.getUserName())
-                        .phoneNumber(u.getPhoneNumber())
-                        .tgId(u.getTgId())
-                        .tgName(u.getTgName())
-                        .email(u.getEmail())
-                        .phoneNumber(u.getPhoneNumber())
-                        .pdConsent(u.getPdConsent())
-                        .status(u.getStatus().name())
-                        .city(u.getCity())
-                        .direction(Objects.nonNull(u.getDirection()) ? SimpleDirection.builder().id(u.getDirection().getId()).name(u.getDirection().getName()).build() : null)
-                        .cohort(u.getCohort())
-                        .build());
+                .map(this::mapToSimple);
     }
 
     @Override
@@ -195,5 +140,25 @@ public class UserServiceImpl implements UserService {
                 .id(u.getId())
                 .userName(u.getUserName())
                 .build()).toList());
+    }
+
+    private SimpleUser mapToSimple(User user) {
+        return SimpleUser.builder()
+                .id(user.getId())
+                .role(user.getRole().getCode())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .fullName(user.getUserName())
+                .phoneNumber(user.getPhoneNumber())
+                .tgId(user.getTgId())
+                .tgName(user.getTgName())
+                .email(user.getEmail())
+                .phoneNumber(user.getPhoneNumber())
+                .pdConsent(user.getPdConsent())
+                .status(user.getStatus().name())
+                .city(user.getCity())
+                .direction(Objects.nonNull(user.getDirection()) ? SimpleDirection.builder().id(user.getDirection().getId()).name(user.getDirection().getName()).build() : null)
+                .cohort(user.getCohort())
+                .build();
     }
 }
