@@ -59,6 +59,8 @@ public class MailingForm extends FormLayout {
         );
         setAutoResponsive(true);
         setLabelsAside(true);
+        setExpandFields(true);
+        setExpandColumns(true);
 
         channels.setItems("Email", "Telegram");
 

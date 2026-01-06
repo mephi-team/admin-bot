@@ -120,8 +120,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "AND (u.cohort ilike :cohort OR :cohort IS NULL)" +
             "AND (u.direction.id = :direction OR :direction IS NULL)" +
             "AND (u.city ilike :city OR :city IS NULL)" +
-            "AND (ta.tutor.id = :tutor OR :tutor IS NULL)" +
-            "AND ta.isActive")
+            "AND ((ta.tutor.id = :tutor AND ta.isActive) OR :tutor IS NULL)")
     List<User> findAllByRoleCodeLikeAndCohortLikeAndDirectionCodeLikeAndCityLike(String role, String cohort, Long direction, String city, Long tutor);
 
     @Query("SELECT count(u) FROM User u JOIN u.role WHERE u.role.code = :role AND (" +

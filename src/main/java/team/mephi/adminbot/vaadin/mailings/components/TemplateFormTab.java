@@ -19,6 +19,8 @@ public class TemplateFormTab extends FormLayout {
     public TemplateFormTab() {
         setAutoResponsive(true);
         setLabelsAside(true);
+        setExpandFields(true);
+        setExpandColumns(true);
 
         RadioButtonGroup<TemplateMessage> radioGroup = new RadioButtonGroup<>();
         var newMessage = new TemplateMessage(getTranslation("form_mailing_message_new_message_label"), "new");

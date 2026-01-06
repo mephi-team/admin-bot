@@ -85,6 +85,8 @@ public class MailingEditorDialog extends Dialog {
 
         setHeaderTitle("dialog_mailing_new_title");
         add(tabSheet);
+        setWidth("100%");
+        setMaxWidth("500px");
 
         saveButton.setVisible(false);
         saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
