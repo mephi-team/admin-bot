@@ -43,6 +43,8 @@ public class UserEditorDialog extends Dialog {
 
         setHeaderTitle(getTranslation("dialog_users_new_title"));
         add(form);
+        setWidth("100%");
+        setMaxWidth("500px");
         getFooter().add(new Button(getTranslation("cancel_button"), e -> close()), saveButton);
 
         binder.addStatusChangeListener(e ->

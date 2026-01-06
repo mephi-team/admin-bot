@@ -33,6 +33,7 @@ public class UserForm extends FormLayout {
         setAutoResponsive(true);
         setLabelsAside(true);
         setExpandFields(true);
+        setExpandColumns(true);
 
         roles.setItemsPageable(roleService::getAllRoles);
         roles.setItemLabelGenerator(RoleDto::getName);

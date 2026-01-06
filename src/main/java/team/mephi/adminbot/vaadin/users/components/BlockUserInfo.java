@@ -12,6 +12,7 @@ public class BlockUserInfo extends FormLayout  {
         setAutoResponsive(true);
         setLabelsAside(true);
         setExpandFields(true);
+        setExpandColumns(true);
 
         addFormItem(firstName, getTranslation("form_user_block_first_name_label"));
         addFormItem(lastName, getTranslation("form_user_block_last_name_label"));

@@ -21,6 +21,8 @@ public class TutoringDialog  extends Dialog  {
         binder.bindInstanceFields(form);
         setHeaderTitle("dialog_tutor_curatorship_title");
         add(form);
+        setWidth("100%");
+        setMaxWidth("500px");
         getFooter().add(new Button(getTranslation("cancel_button"), e -> close()), saveButton);
         binder.forField(form.getComboBox())
               .withConverter(s -> {

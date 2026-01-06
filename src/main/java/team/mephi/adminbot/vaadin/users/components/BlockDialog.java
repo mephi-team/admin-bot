@@ -39,6 +39,8 @@ public class BlockDialog extends Dialog {
 
         setHeaderTitle("dialog_user_block_title");
         add(tabs, form, form1, form2, form3);
+        setWidth("100%");
+        setMaxWidth("500px");
         getFooter().add(new Button(getTranslation("cancel_button"), e -> close()), saveButton);
     }
 

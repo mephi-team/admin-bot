@@ -33,6 +33,7 @@ public class TutorForm extends FormLayout {
         setAutoResponsive(true);
         setLabelsAside(true);
         setExpandFields(true);
+        setExpandColumns(true);
 
         firstName.setReadOnly(true);
         lastName.setReadOnly(true);
