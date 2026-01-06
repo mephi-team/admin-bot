@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import team.mephi.adminbot.dto.SimpleTemplate;
 import team.mephi.adminbot.vaadin.CRUDDataProvider;
-import team.mephi.adminbot.vaadin.mailings.components.TemplateService;
+import team.mephi.adminbot.service.TemplateService;
 
 import java.util.List;
 import java.util.Optional;

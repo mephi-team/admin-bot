@@ -8,6 +8,7 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import lombok.Getter;
 import team.mephi.adminbot.dto.SimpleTemplate;
+import team.mephi.adminbot.service.TemplateService;
 
 public class TemplateFormTab extends FormLayout {
     @Getter

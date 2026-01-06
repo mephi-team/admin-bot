@@ -1,4 +1,4 @@
-package team.mephi.adminbot.vaadin.mailings.service;
+package team.mephi.adminbot.service;
 
 import com.vaadin.flow.spring.security.AuthenticationContext;
 import jakarta.transaction.Transactional;
@@ -13,7 +13,6 @@ import team.mephi.adminbot.model.objects.Filters;
 import team.mephi.adminbot.model.objects.ReasonCode;
 import team.mephi.adminbot.repository.MailingRepository;
 import team.mephi.adminbot.repository.UserRepository;
-import team.mephi.adminbot.vaadin.mailings.dataproviders.MailingService;
 
 import java.util.List;
 import java.util.Objects;

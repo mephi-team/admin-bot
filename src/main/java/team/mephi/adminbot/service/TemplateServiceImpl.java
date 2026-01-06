@@ -1,4 +1,4 @@
-package team.mephi.adminbot.vaadin.mailings.service;
+package team.mephi.adminbot.service;
 
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Pageable;
@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import team.mephi.adminbot.dto.SimpleTemplate;
 import team.mephi.adminbot.model.MailTemplate;
 import team.mephi.adminbot.repository.MailTemplateRepository;
-import team.mephi.adminbot.vaadin.mailings.components.TemplateService;
 
 import java.util.List;
 import java.util.Optional;

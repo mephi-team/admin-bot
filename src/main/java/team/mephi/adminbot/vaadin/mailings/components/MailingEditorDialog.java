@@ -11,11 +11,7 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.function.SerializableConsumer;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import team.mephi.adminbot.dto.*;
-import team.mephi.adminbot.service.UserService;
-import team.mephi.adminbot.service.CityService;
-import team.mephi.adminbot.service.DirectionService;
-import team.mephi.adminbot.service.CohortService;
-import team.mephi.adminbot.service.RoleService;
+import team.mephi.adminbot.service.*;
 
 import java.util.Objects;
 import java.util.stream.Collectors;

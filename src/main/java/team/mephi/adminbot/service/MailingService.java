@@ -1,4 +1,4 @@
-package team.mephi.adminbot.vaadin.mailings.dataproviders;
+package team.mephi.adminbot.service;
 
 import org.springframework.data.domain.Pageable;
 import team.mephi.adminbot.dto.SimpleMailing;

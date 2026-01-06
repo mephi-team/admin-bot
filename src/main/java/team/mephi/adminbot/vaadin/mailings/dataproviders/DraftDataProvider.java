@@ -1,6 +1,7 @@
 package team.mephi.adminbot.vaadin.mailings.dataproviders;
 
 import team.mephi.adminbot.model.enums.MailingStatus;
+import team.mephi.adminbot.service.MailingService;
 
 import java.util.List;
 

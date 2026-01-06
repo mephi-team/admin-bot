@@ -6,9 +6,9 @@ import team.mephi.adminbot.dto.SimpleTemplate;
 import team.mephi.adminbot.vaadin.CRUDDataProvider;
 import team.mephi.adminbot.vaadin.CRUDPresenter;
 import team.mephi.adminbot.vaadin.CRUDViewCallback;
-import team.mephi.adminbot.vaadin.mailings.components.TemplateService;
+import team.mephi.adminbot.service.TemplateService;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.DraftDataProvider;
-import team.mephi.adminbot.vaadin.mailings.dataproviders.MailingService;
+import team.mephi.adminbot.service.MailingService;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.SentDataProvider;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.TemplateDataProvider;
 

@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.JpaSort;
 import team.mephi.adminbot.dto.SimpleMailing;
 import team.mephi.adminbot.model.enums.MailingStatus;
+import team.mephi.adminbot.service.MailingService;
 import team.mephi.adminbot.vaadin.CRUDDataProvider;
 
 import java.util.List;
