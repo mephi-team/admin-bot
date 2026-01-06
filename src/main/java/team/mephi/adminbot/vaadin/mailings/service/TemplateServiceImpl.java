@@ -23,21 +23,17 @@ public class TemplateServiceImpl implements TemplateService {
 
     @Override
     public List<SimpleTemplate> findAll() {
-        return mailTemplateRepository.findAll().stream().map(t -> SimpleTemplate.builder()
-                .id(t.getId())
-                .name(t.getName())
-                .text(t.getBodyText())
-                .build()
-        ).toList();
+        return mailTemplateRepository.findAll()
+                .stream()
+                .map(this::mapToSimple)
+                .toList();
     }
 
     @Override
     public List<SimpleTemplate> findAll(Pageable pageable, String s) {
-        return mailTemplateRepository.findAllByName(s, pageable).stream().map(t -> SimpleTemplate.builder()
-                .id(t.getId())
-                .name(t.getName())
-                .text(t.getBodyText())
-                .build())
+        return mailTemplateRepository.findAllByName(s, pageable)
+                .stream()
+                .map(this::mapToSimple)
                 .toList();
     }
 
@@ -51,23 +47,20 @@ public class TemplateServiceImpl implements TemplateService {
         result.setSubject(template.getName());
         result.setBodyText(template.getText());
         mailTemplateRepository.save(result);
-        return new SimpleTemplate(result.getId(), result.getName(), result.getBodyText());
+        return mapToSimple(result);
     }
 
     @Override
     public Optional<SimpleTemplate> findById(Long id) {
-        return mailTemplateRepository.findById(id).map(t -> new SimpleTemplate(t.getId(),t.getName(), t.getBodyText()));
+        return mailTemplateRepository.findById(id)
+                .map(this::mapToSimple);
     }
 
     @Override
     public Stream<SimpleTemplate> findAllByName(String name, Pageable pageable) {
         return mailTemplateRepository.findAllByName(name, pageable)
                 .stream()
-                .map(m -> new SimpleTemplate(
-                        m.getId(),
-                        m.getName(),
-                        m.getBodyText()
-                ));
+                .map(this::mapToSimple);
     }
 
     @Override
@@ -78,5 +71,13 @@ public class TemplateServiceImpl implements TemplateService {
     @Override
     public void deleteAllById(Iterable<Long> ids) {
         mailTemplateRepository.deleteAllById(ids);
+    }
+
+    private SimpleTemplate mapToSimple(MailTemplate template) {
+        return SimpleTemplate.builder()
+                .id(template.getId())
+                .name(template.getName())
+                .text(template.getBodyText())
+                .build();
     }
 }
