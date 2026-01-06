@@ -68,10 +68,10 @@ public class UserEditorDialog extends Dialog {
     }
 
     public void openForNew(String role, SerializableConsumer<SimpleUser> callback) {
+        this.user = new SimpleUser();
         this.onSaveCallback = callback;
-        SimpleUser newUser = new SimpleUser();
-        newUser.setRole(role);
-        binder.readBean(newUser);
+        user.setRole(role);
+        binder.readBean(user);
         binder.setReadOnly(false);
         saveButton.setVisible(true);
         open();
