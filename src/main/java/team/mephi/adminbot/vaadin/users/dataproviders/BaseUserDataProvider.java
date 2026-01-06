@@ -1,7 +1,6 @@
 package team.mephi.adminbot.vaadin.users.dataproviders;
 
 import com.vaadin.flow.data.provider.*;
-import jakarta.transaction.Transactional;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;

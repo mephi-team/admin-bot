@@ -22,6 +22,8 @@ public class AnswerDialog extends Dialog {
 
         setHeaderTitle("dialog_answer_title");
         add(form);
+        setWidth("100%");
+        setMaxWidth("500px");
         getFooter().add(answerButton);
 
         binder.addStatusChangeListener(e ->
@@ -43,7 +45,6 @@ public class AnswerDialog extends Dialog {
         this.onSaveCallback = callback;
 
         binder.readBean(question);
-        binder.setReadOnly(false);
 
         open();
     }

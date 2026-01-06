@@ -6,7 +6,6 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 
 public class AnswerForm extends FormLayout {
-    private final TextField id = new TextField();
     private final TextField author = new TextField();
     private final TextField role = new TextField();
     private final TextField direction = new TextField();
@@ -16,11 +15,18 @@ public class AnswerForm extends FormLayout {
         setAutoResponsive(true);
         setLabelsAside(true);
         setExpandFields(true);
+        setExpandColumns(true);
 
-        addFormItem(author, getTranslation("dialog_answer_author_label")).setEnabled(false);
-        addFormItem(role, getTranslation("dialog_answer_role_label")).setEnabled(false);
-        addFormItem(direction, getTranslation("dialog_answer_direction_label")).setEnabled(false);
-        addFormItem(text, getTranslation("dialog_answer_text_label")).setEnabled(false);
+        author.setReadOnly(true);
+        role.setReadOnly(true);
+        direction.setReadOnly(true);
+        text.setReadOnly(true);
+        answer.setMinRows(4);
+
+        addFormItem(author, getTranslation("dialog_answer_author_label"));
+        addFormItem(role, getTranslation("dialog_answer_role_label"));
+        addFormItem(direction, getTranslation("dialog_answer_direction_label"));
+        addFormItem(text, getTranslation("dialog_answer_text_label"));
 
         add(new H4(getTranslation("dialog_answer_text_title")));
         add(answer);
