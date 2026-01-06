@@ -4,5 +4,5 @@ import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.vaadin.CRUDActions;
 
 public interface TutorActions extends CRUDActions<SimpleUser>, BlockingActions<SimpleUser> {
-    void onTutoring(Long id);
+    void onTutoring(SimpleUser item);
 }

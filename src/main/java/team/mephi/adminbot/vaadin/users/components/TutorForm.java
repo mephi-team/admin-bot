@@ -34,8 +34,13 @@ public class TutorForm extends FormLayout {
         setLabelsAside(true);
         setExpandFields(true);
 
+        firstName.setReadOnly(true);
+        lastName.setReadOnly(true);
+        tgId.setReadOnly(true);
+        direction.setReadOnly(true);
+
         comboBox.setItems(provider);
-        comboBox.setItemLabelGenerator(SimpleUser::getFullName);
+        comboBox.setItemLabelGenerator(u -> u.getFullName() + " @" + u.getTgId());
         comboBox.setAutoExpand(MultiSelectComboBox.AutoExpandMode.VERTICAL);
 
         addFormItem(firstName, getTranslation("form_tutor_curatorship_first_name_label"));

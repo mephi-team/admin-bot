@@ -14,7 +14,7 @@ import java.util.Optional;
 
 public interface TutorRepository extends JpaRepository<Tutor, Long> {
 
-    @Query("SELECT t FROM Tutor t LEFT JOIN FETCH t.studentAssignments LEFT JOIN FETCH t.directions WHERE LOWER(t.lastName) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(t.firstName) LIKE LOWER(CONCAT('%', :query, '%'))")
+    @Query("SELECT t FROM Tutor t LEFT JOIN FETCH t.studentAssignments sa LEFT JOIN FETCH t.directions LEFT JOIN FETCH sa.student WHERE LOWER(t.lastName) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(t.firstName) LIKE LOWER(CONCAT('%', :query, '%'))")
     List<Tutor> findAllWithDirectionsAndStudents(String query, Pageable pageable);
 
     @Query("SELECT count(t) FROM Tutor t WHERE LOWER(t.firstName) LIKE LOWER(CONCAT('%', :query, '%')) or LOWER(t.lastName) LIKE LOWER(CONCAT('%', :query, '%'))")

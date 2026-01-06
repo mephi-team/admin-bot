@@ -49,9 +49,10 @@ public class TutorDataProvider implements UserDataProvider {
                                         .firstName(u.getFirstName())
                                         .lastName(u.getLastName())
                                         .email(u.getEmail())
+                                        .phoneNumber(u.getPhone())
                                         .tgId(u.getTgId())
                                         .studentCount(u.getStudentAssignments().stream().filter(StudentTutor::getIsActive).toList().size())
-                                        .students(u.getStudentAssignments().stream().map(s -> SimpleUser.builder().id(s.getId()).build()).toList())
+                                        .students(u.getStudentAssignments().stream().filter(StudentTutor::getIsActive).map(s -> SimpleUser.builder().id(s.getStudent().getId()).fullName(s.getStudent().getUserName()).tgId(s.getStudent().getTgId()).build()).toList())
                                         .status("ACTIVE")
                                         .build());
                         },

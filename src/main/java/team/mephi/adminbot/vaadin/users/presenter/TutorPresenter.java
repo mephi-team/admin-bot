@@ -1,5 +1,6 @@
 package team.mephi.adminbot.vaadin.users.presenter;
 
+import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.vaadin.users.actions.TutorActions;
 
 import java.util.Objects;
@@ -15,15 +16,13 @@ public class TutorPresenter extends BlockingPresenter implements TutorActions {
     }
 
     @Override
-    public void onTutoring(Long id) {
-        dataProvider.findById(id).ifPresent(item -> {
-            view.showDialogForTutoring(item, editedItem -> {
-                if (Objects.nonNull(editedItem)) {
-                    dataProvider.save(editedItem);
-                    dataProvider.getDataProvider().refreshAll();
-                    view.showNotificationForTutoring(id);
-                }
-            });
+    public void onTutoring(SimpleUser item) {
+        view.showDialogForTutoring(item, editedItem -> {
+            if (Objects.nonNull(editedItem)) {
+                editedItem = dataProvider.save(editedItem);
+                dataProvider.getDataProvider().refreshItem(editedItem);
+                view.showNotificationForTutoring(item.getId());
+            }
         });
     }
 }

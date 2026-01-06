@@ -45,6 +45,16 @@ public class TutorServiceImpl implements TutorService {
         user.getStudentAssignments().forEach(s -> {if (!current.contains(s.getStudent().getId())) s.setIsActive(false);});
         user.getStudentAssignments().addAll(td);
         user = tutorRepository.save(user);
-        return SimpleUser.builder().build();
+        return SimpleUser.builder()
+                .id(user.getId())
+                .role("tutor")
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .phoneNumber(user.getPhone())
+                .tgId(user.getTgId())
+                .studentCount(user.getStudentAssignments().stream().filter(StudentTutor::getIsActive).toList().size())
+                .students(user.getStudentAssignments().stream().filter(StudentTutor::getIsActive).map(s -> SimpleUser.builder().id(s.getStudent().getId()).fullName(s.getStudent().getUserName()).tgId(s.getStudent().getTgId()).build()).toList())
+                .build();
     }
 }
