@@ -37,15 +37,15 @@ public class StudentView extends VerticalLayout {
         setPadding(false);
 
         var grid = new Grid<>(SimpleUser.class, false);
-        grid.addColumn(SimpleUser::getFullName).setHeader(getTranslation("grid_student_header_name_label")).setSortable(true).setFrozen(true)
+        grid.addColumn(SimpleUser::getFullName).setHeader(getTranslation("grid_student_header_name_label")).setSortable(true).setResizable(true).setFrozen(true)
                 .setAutoWidth(true).setFlexGrow(0).setKey("lastName");
-        grid.addColumn(SimpleUser::getEmail).setHeader(getTranslation("grid_student_header_email_label")).setSortable(true).setKey("email");
-        grid.addColumn(SimpleUser::getTgName).setHeader(getTranslation("grid_student_header_telegram_label")).setSortable(true).setKey("tgName");
-        grid.addColumn(SimpleUser::getPhoneNumber).setHeader(getTranslation("grid_student_header_phone_label")).setSortable(true).setKey("phoneNumber");
-        grid.addColumn(SimpleUser::getCohort).setHeader(getTranslation("grid_student_header_cohort_label")).setSortable(true).setKey("cohort");
-        grid.addColumn(u -> Objects.nonNull(u.getDirection()) ? u.getDirection().getName() : "").setHeader(getTranslation("grid_student_header_direction_label")).setSortable(true).setKey("direction");
-        grid.addColumn(SimpleUser::getCity).setHeader(getTranslation("grid_student_header_city_label")).setSortable(true).setKey("city");
-        grid.addColumn(SimpleUser::getTutor).setHeader(getTranslation("grid_student_header_tutor_label")).setKey("tutor");
+        grid.addColumn(SimpleUser::getEmail).setHeader(getTranslation("grid_student_header_email_label")).setSortable(true).setResizable(true).setKey("email");
+        grid.addColumn(SimpleUser::getTgName).setHeader(getTranslation("grid_student_header_telegram_label")).setSortable(true).setResizable(true).setKey("tgName");
+        grid.addColumn(SimpleUser::getPhoneNumber).setHeader(getTranslation("grid_student_header_phone_label")).setSortable(true).setResizable(true).setKey("phoneNumber");
+        grid.addColumn(SimpleUser::getCohort).setHeader(getTranslation("grid_student_header_cohort_label")).setSortable(true).setResizable(true).setKey("cohort");
+        grid.addColumn(u -> Objects.nonNull(u.getDirection()) ? u.getDirection().getName() : "").setHeader(getTranslation("grid_student_header_direction_label")).setSortable(true).setResizable(true).setKey("direction");
+        grid.addColumn(SimpleUser::getCity).setHeader(getTranslation("grid_student_header_city_label")).setSortable(true).setResizable(true).setKey("city");
+        grid.addColumn(SimpleUser::getTutor).setHeader(getTranslation("grid_student_header_tutor_label")).setResizable(true).setKey("tutor");
 
         grid.addComponentColumn(item -> {
             Span group = new Span();

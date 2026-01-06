@@ -37,12 +37,12 @@ public class ExpertView extends VerticalLayout {
         setPadding(false);
 
         var grid = new Grid<>(SimpleUser.class, false);
-        grid.addColumn(SimpleUser::getFullName).setHeader(getTranslation("grid_expert_header_name_label")).setSortable(true).setFrozen(true)
+        grid.addColumn(SimpleUser::getFullName).setHeader(getTranslation("grid_expert_header_name_label")).setSortable(true).setResizable(true).setFrozen(true)
                 .setAutoWidth(true).setFlexGrow(0).setKey("lastName");
-        grid.addColumn(SimpleUser::getEmail).setHeader(getTranslation("grid_expert_header_email_label")).setSortable(true).setKey("email");
-        grid.addColumn(SimpleUser::getTgName).setHeader(getTranslation("grid_expert_header_telegram_label")).setSortable(true).setKey("tgName");
-        grid.addColumn(SimpleUser::getCohort).setHeader(getTranslation("grid_expert_header_cohort_label")).setSortable(true).setKey("cohort");
-        grid.addColumn(u -> Objects.nonNull(u.getDirection()) ? u.getDirection().getName() : "").setHeader(getTranslation("grid_expert_header_direction_label")).setSortable(true).setKey("direction");
+        grid.addColumn(SimpleUser::getEmail).setHeader(getTranslation("grid_expert_header_email_label")).setSortable(true).setResizable(true).setKey("email");
+        grid.addColumn(SimpleUser::getTgName).setHeader(getTranslation("grid_expert_header_telegram_label")).setSortable(true).setResizable(true).setKey("tgName");
+        grid.addColumn(SimpleUser::getCohort).setHeader(getTranslation("grid_expert_header_cohort_label")).setSortable(true).setResizable(true).setKey("cohort");
+        grid.addColumn(u -> Objects.nonNull(u.getDirection()) ? u.getDirection().getName() : "").setHeader(getTranslation("grid_expert_header_direction_label")).setSortable(true).setResizable(true).setKey("direction");
 
         grid.addComponentColumn(item -> {
             Button dropButton = new Button(getTranslation("grid_expert_action_delete_label"), new Icon(VaadinIcon.CLOSE), e -> actions.onDelete(List.of(item.getId())));

@@ -99,6 +99,7 @@ public class MailingForm extends FormLayout {
         Span name = new Span(getTranslation("form_mailing_accordion_description_label"));
         name.addClassNames(LumoUtility.FontSize.SMALL);
 
+        listBox.setWidthFull();
         listBox.addClassNames(LumoUtility.FontSize.SMALL);
         listBox.setDataProvider(provider);
         listBox.setItemLabelGenerator(u -> u.getFullName() + ", @" + u.getTgId());
@@ -106,6 +107,7 @@ public class MailingForm extends FormLayout {
             counter.setText("(" +  e.getAllSelectedItems().size() + ")");
         });
         FormItem box = addFormItem(listBox, getTranslation("form_mailing_first_name_last_name_label"));
+        box.addClassNames(LumoUtility.Width.FULL);
 
         VerticalLayout personalInformationLayout = new VerticalLayout(name, box);
         personalInformationLayout.setSpacing(false);

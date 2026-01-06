@@ -32,9 +32,9 @@ public class GuestsView extends VerticalLayout {
         setPadding(false);
 
         var grid = new Grid<>(SimpleUser.class, false);
-        grid.addColumn(SimpleUser::getTgName).setHeader(getTranslation("grid_guests_header_name_label")).setSortable(true).setKey("tgName");
-        grid.addColumn(SimpleUser::getTgId).setHeader(getTranslation("grid_guests_header_telegram_label")).setSortable(true).setKey("tgId");
-        grid.addColumn(SimpleUser::getPdConsent).setHeader(getTranslation("grid_guests_header_pd_consent_label")).setSortable(true).setKey("pdConsent");
+        grid.addColumn(SimpleUser::getTgName).setHeader(getTranslation("grid_guests_header_name_label")).setSortable(true).setResizable(true).setKey("tgName");
+        grid.addColumn(SimpleUser::getTgId).setHeader(getTranslation("grid_guests_header_telegram_label")).setSortable(true).setResizable(true).setKey("tgId");
+        grid.addColumn(SimpleUser::getPdConsent).setHeader(getTranslation("grid_guests_header_pd_consent_label")).setSortable(true).setResizable(true).setKey("pdConsent");
 
         grid.addComponentColumn(item -> {
             Button viewButton = new Button(new Icon(VaadinIcon.EYE), e -> actions.onView(item));
