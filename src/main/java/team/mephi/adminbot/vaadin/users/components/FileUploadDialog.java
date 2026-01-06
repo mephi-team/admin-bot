@@ -10,6 +10,7 @@ import com.vaadin.flow.spring.security.AuthenticationContext;
 import org.jspecify.annotations.NonNull;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import team.mephi.adminbot.dto.SimpleFile;
+import team.mephi.adminbot.service.FileService;
 
 import java.io.IOException;
 import java.util.Arrays;

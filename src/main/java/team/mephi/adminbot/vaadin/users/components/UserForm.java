@@ -12,6 +12,7 @@ import team.mephi.adminbot.dto.RoleDto;
 import team.mephi.adminbot.service.CityService;
 import team.mephi.adminbot.service.CohortService;
 import team.mephi.adminbot.service.DirectionService;
+import team.mephi.adminbot.service.RoleService;
 
 public class UserForm extends FormLayout {
     @Getter

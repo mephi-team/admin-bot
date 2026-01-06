@@ -1,11 +1,10 @@
-package team.mephi.adminbot.vaadin.users.service;
+package team.mephi.adminbot.service;
 
 import org.springframework.stereotype.Service;
 import team.mephi.adminbot.dto.SimpleFile;
 import team.mephi.adminbot.model.StoredFile;
 import team.mephi.adminbot.repository.FileRepository;
 import team.mephi.adminbot.repository.UserRepository;
-import team.mephi.adminbot.vaadin.users.components.FileService;
 
 import java.io.IOException;
 import java.nio.file.Files;

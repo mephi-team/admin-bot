@@ -4,6 +4,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import team.mephi.adminbot.service.CityService;
 import team.mephi.adminbot.service.CohortService;
 import team.mephi.adminbot.service.DirectionService;
+import team.mephi.adminbot.service.RoleService;
 
 @SpringComponent
 public class UserEditorDialogFactory {

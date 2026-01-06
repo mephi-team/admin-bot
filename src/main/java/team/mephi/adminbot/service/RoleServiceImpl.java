@@ -1,10 +1,9 @@
-package team.mephi.adminbot.vaadin.users.service;
+package team.mephi.adminbot.service;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import team.mephi.adminbot.dto.RoleDto;
 import team.mephi.adminbot.repository.RoleRepository;
-import team.mephi.adminbot.vaadin.users.components.RoleService;
 
 import java.util.ArrayList;
 import java.util.List;

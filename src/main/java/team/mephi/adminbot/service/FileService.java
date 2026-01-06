@@ -1,4 +1,4 @@
-package team.mephi.adminbot.vaadin.users.components;
+package team.mephi.adminbot.service;
 
 import team.mephi.adminbot.dto.SimpleFile;
 

@@ -11,6 +11,7 @@ import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.service.CityService;
 import team.mephi.adminbot.service.CohortService;
 import team.mephi.adminbot.service.DirectionService;
+import team.mephi.adminbot.service.RoleService;
 
 import java.util.Objects;
 

@@ -2,6 +2,7 @@ package team.mephi.adminbot.vaadin.users.components;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.security.AuthenticationContext;
+import team.mephi.adminbot.service.FileService;
 
 @SpringComponent
 public class FileUploadDialogFactory {

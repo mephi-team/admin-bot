@@ -19,7 +19,7 @@ import team.mephi.adminbot.service.UserService;
 import team.mephi.adminbot.service.CityService;
 import team.mephi.adminbot.service.DirectionService;
 import team.mephi.adminbot.service.CohortService;
-import team.mephi.adminbot.vaadin.users.components.RoleService;
+import team.mephi.adminbot.service.RoleService;
 
 import java.util.Objects;
 
