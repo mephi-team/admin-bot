@@ -3,6 +3,7 @@ package team.mephi.adminbot.vaadin.mailings.views;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -64,6 +65,8 @@ public class TemplateView extends VerticalLayout {
         var settingsPopover = new GridSettingsPopover(grid, Set.of(), Set.of("actions"));
         settingsPopover.setTarget(settingsBtn);
 
-        add(new SearchFragment(searchField, settingsBtn), gsa, grid);
+        var downloadBtn = new Button(VaadinIcon.DOWNLOAD_ALT.create());
+
+        add(new SearchFragment(searchField, new Span(settingsBtn, downloadBtn)), gsa, grid);
     }
 }

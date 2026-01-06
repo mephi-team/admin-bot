@@ -99,7 +99,9 @@ public class Questions extends VerticalLayout {
         var settingsPopover = new GridSettingsPopover(grid, Set.of(), Set.of("actions"));
         settingsPopover.setTarget(settingsBtn);
 
-        add(new SearchFragment(searchField, settingsBtn), gsa, grid);
+        var downloadBtn = new Button(VaadinIcon.DOWNLOAD_ALT.create());
+
+        add(new SearchFragment(searchField, new Span(settingsBtn, downloadBtn)), gsa, grid);
     }
 
     private void onAnswer(SimpleQuestion question) {
