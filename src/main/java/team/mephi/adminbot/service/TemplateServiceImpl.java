@@ -77,6 +77,7 @@ public class TemplateServiceImpl implements TemplateService {
                 .id(template.getId())
                 .name(template.getName())
                 .text(template.getBodyText())
+                .date(template.getCreatedAt())
                 .build();
     }
 }
