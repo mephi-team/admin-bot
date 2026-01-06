@@ -9,8 +9,6 @@ import com.vaadin.flow.component.textfield.TextField;
 import lombok.Getter;
 import team.mephi.adminbot.dto.SimpleTemplate;
 
-import java.util.List;
-
 public class TemplateFormTab extends FormLayout {
     @Getter
     private final TextField name1 = new TextField();
@@ -54,10 +52,11 @@ public class TemplateFormTab extends FormLayout {
         templateItem.setVisible(false);
         nameItem.setVisible(false);
         linkItem.setVisible(false);
-        linkItem.setEnabled(false);
+        link.setReadOnly(true);
 
         templates.addValueChangeListener(v -> {
-           text1.setValue(v.getValue().getText());
+            name1.setValue(v.getValue().getName());
+            text1.setValue(v.getValue().getText());
         });
 
         createLink.addValueChangeListener(v -> linkItem.setVisible(v.getValue()));
@@ -72,14 +71,14 @@ public class TemplateFormTab extends FormLayout {
                 if (saveTemplate.getValue()) {
                     nameItem.setVisible(true);
                 }
-                textItem.setEnabled(true);
+                text1.setReadOnly(false);
             } else {
                 templateItem.setVisible(true);
                 createLinkItem.setVisible(false);
                 linkItem.setVisible(false);
                 saveItem.setVisible(false);
                 nameItem.setVisible(false);
-                textItem.setEnabled(false);
+                text1.setReadOnly(true);
             }
         });
     }

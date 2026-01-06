@@ -230,6 +230,7 @@ public class DataInitializer {
             broadcasts.add(Mailing.builder()
                     .createdBy(user)
                     .name("Test " + i)
+                    .description("Text " + i)
                     .channels(List.of(Channels.Email))
                     .filters(Filters.builder()
                             .users(roles.get(random.nextInt(0, roles.size())).getName())

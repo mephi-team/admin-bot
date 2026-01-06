@@ -73,6 +73,8 @@ public class MailingEditorDialog extends Dialog {
                                 .collect(Collectors.toSet())
                 )
                 .bind(SimpleMailing::getRecipients, SimpleMailing::setRecipients);
+        binder.forField(form2.getName1())
+                .bind(SimpleMailing::getName, SimpleMailing::setName);
         binding1 = binder.forField(form2.getText1())
                 .withValidator(e-> !e.isBlank(), getTranslation("form_template_text_validation_message"))
                 .bind(SimpleMailing::getText, SimpleMailing::setText);

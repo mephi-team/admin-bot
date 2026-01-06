@@ -24,8 +24,6 @@ import team.mephi.adminbot.service.RoleService;
 import java.util.Objects;
 
 public class MailingForm extends FormLayout {
-    @Getter
-    private final TextField name = new TextField();
     private final CheckboxGroup<String> channels = new CheckboxGroup<>();
     @Getter
     private final ComboBox<RoleDto> users = new ComboBox<>();

@@ -56,6 +56,7 @@ public class MailingServiceImpl implements MailingService {
                 .curator(result.getFilters() != null ? result.getFilters().getCurator() : "")
                 .channels(result.getChannels().stream().map(Enum::name).collect(Collectors.toSet()))
                 .city(result.getFilters() != null ? result.getFilters().getCity() : "")
+                .name(result.getName())
                 .text(result.getDescription())
                 .status(result.getStatus().name())
                 .recipients(result.getReasonCode().getUsers())
