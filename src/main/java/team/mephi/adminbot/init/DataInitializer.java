@@ -143,8 +143,8 @@ public class DataInitializer {
 
     private void initTutors() {
         List<Tutor> tutors = Arrays.asList(
-                Tutor.builder().userName("Сергей Иванов").firstName("Сергей").lastName("Иванов").phone("+79991234567").email("test1@example.org").build(),
-                Tutor.builder().userName("Николай Александров").firstName("Николай").lastName("Александров").phone("+79997654321").email("test2@example.org").build()
+                Tutor.builder().userName("Сергей Иванов").firstName("Сергей").lastName("Иванов").phone("+79991234567").email("test1@example.org").tgId("tg_name_1010").build(),
+                Tutor.builder().userName("Николай Александров").firstName("Николай").lastName("Александров").phone("+79997654321").email("test2@example.org").tgId("tg_name_1011").build()
         );
         tutorRepository.saveAll(tutors);
         System.out.printf("  → Создано %d кураторов%n", tutors.size());
