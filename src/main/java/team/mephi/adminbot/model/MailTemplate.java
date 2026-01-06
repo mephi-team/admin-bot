@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
@@ -51,6 +52,7 @@ import java.util.Map;
         @Index(name = "idx_mail_templates_created_by", columnList = "created_by"),
         @Index(name = "idx_mail_templates_name", columnList = "name")
 })
+@DynamicUpdate
 public class MailTemplate {
     /**
      * Уникальный идентификатор шаблона.

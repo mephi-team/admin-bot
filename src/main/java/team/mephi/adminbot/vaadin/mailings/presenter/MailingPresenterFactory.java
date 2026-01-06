@@ -8,6 +8,7 @@ import team.mephi.adminbot.repository.MailingRepository;
 import team.mephi.adminbot.vaadin.CRUDDataProvider;
 import team.mephi.adminbot.vaadin.CRUDPresenter;
 import team.mephi.adminbot.vaadin.CRUDViewCallback;
+import team.mephi.adminbot.vaadin.mailings.components.TemplateService;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.DraftDataProvider;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.MailingService;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.SentDataProvider;
@@ -16,23 +17,23 @@ import team.mephi.adminbot.vaadin.mailings.dataproviders.TemplateDataProvider;
 @SpringComponent
 public class MailingPresenterFactory {
     private final MailingService mailingService;
+    private final TemplateService templateService;
     private final MailingRepository mailingRepository;
-    private final MailTemplateRepository mailTemplateRepository;
 
     public MailingPresenterFactory(
             MailingService mailingService,
-            MailingRepository mailingRepository,
-            MailTemplateRepository mailTemplateRepository) {
+            TemplateService templateService,
+            MailingRepository mailingRepository) {
         this.mailingService = mailingService;
+        this.templateService = templateService;
         this.mailingRepository = mailingRepository;
-        this.mailTemplateRepository = mailTemplateRepository;
     }
 
     private CRUDDataProvider<?> createDataProvider(String role) {
         return switch (role) {
             case "sent" -> new SentDataProvider(mailingService, mailingRepository);
             case "draft" -> new DraftDataProvider(mailingService, mailingRepository);
-            case "templates" -> new TemplateDataProvider(mailTemplateRepository);
+            case "templates" -> new TemplateDataProvider(templateService);
             default -> throw new IllegalArgumentException("Unknown provider: " + role);
         };
     }

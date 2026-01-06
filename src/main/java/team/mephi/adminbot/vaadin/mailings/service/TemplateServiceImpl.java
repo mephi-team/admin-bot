@@ -1,12 +1,16 @@
 package team.mephi.adminbot.vaadin.mailings.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import team.mephi.adminbot.dto.SimpleTemplate;
+import team.mephi.adminbot.model.MailTemplate;
 import team.mephi.adminbot.repository.MailTemplateRepository;
 import team.mephi.adminbot.vaadin.mailings.components.TemplateService;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 @Service
 public class TemplateServiceImpl implements TemplateService {
@@ -35,5 +39,44 @@ public class TemplateServiceImpl implements TemplateService {
                 .text(t.getBodyText())
                 .build())
                 .toList();
+    }
+
+    @Override
+    @Transactional
+    public SimpleTemplate save(SimpleTemplate template) {
+        var result = template.getId() != null
+                ? mailTemplateRepository.findById(template.getId()).orElse(new MailTemplate())
+                : new MailTemplate();
+        result.setName(template.getName());
+        result.setSubject(template.getName());
+        result.setBodyText(template.getText());
+        mailTemplateRepository.save(result);
+        return new SimpleTemplate(result.getId(), result.getName(), result.getBodyText());
+    }
+
+    @Override
+    public Optional<SimpleTemplate> findById(Long id) {
+        return mailTemplateRepository.findById(id).map(t -> new SimpleTemplate(t.getId(),t.getName(), t.getBodyText()));
+    }
+
+    @Override
+    public Stream<SimpleTemplate> findAllByName(String name, Pageable pageable) {
+        return mailTemplateRepository.findAllByName(name, pageable)
+                .stream()
+                .map(m -> new SimpleTemplate(
+                        m.getId(),
+                        m.getName(),
+                        m.getBodyText()
+                ));
+    }
+
+    @Override
+    public Integer countByName(String name) {
+        return mailTemplateRepository.countByName(name);
+    }
+
+    @Override
+    public void deleteAllById(Iterable<Long> ids) {
+        mailTemplateRepository.deleteAllById(ids);
     }
 }

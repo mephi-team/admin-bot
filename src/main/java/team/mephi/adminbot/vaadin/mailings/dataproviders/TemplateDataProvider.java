@@ -5,20 +5,19 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import team.mephi.adminbot.dto.SimpleTemplate;
-import team.mephi.adminbot.model.MailTemplate;
-import team.mephi.adminbot.repository.MailTemplateRepository;
 import team.mephi.adminbot.vaadin.CRUDDataProvider;
+import team.mephi.adminbot.vaadin.mailings.components.TemplateService;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class TemplateDataProvider implements CRUDDataProvider<SimpleTemplate> {
-    private final MailTemplateRepository mailTemplateRepository;
+    private final TemplateService templateService;
     private ConfigurableFilterDataProvider<SimpleTemplate, Void, String> provider;
 
-    public TemplateDataProvider(MailTemplateRepository mailTemplateRepository) {
-        this.mailTemplateRepository = mailTemplateRepository;
+    public TemplateDataProvider(TemplateService templateService) {
+        this.templateService = templateService;
     }
 
     public ConfigurableFilterDataProvider<SimpleTemplate, Void, String> getFilterableProvider() {
@@ -36,15 +35,9 @@ public class TemplateDataProvider implements CRUDDataProvider<SimpleTemplate> {
                                 query.getLimit(),
                                 sort.isUnsorted() ? Sort.by("createdAt").descending() : sort
                         );
-                        return mailTemplateRepository.findAllByName(query.getFilter().orElse(""), pageable)
-                                .stream()
-                                .map(m -> new SimpleTemplate(
-                                        m.getId(),
-                                        m.getName(),
-                                        m.getBodyText()
-                                ));
+                        return templateService.findAllByName(query.getFilter().orElse(""), pageable);
                     },
-                    query -> mailTemplateRepository.countByName(query.getFilter().orElse("")),
+                    query -> templateService.countByName(query.getFilter().orElse("")),
                     SimpleTemplate::getId
             ).withConfigurableFilter();
         }
@@ -59,23 +52,16 @@ public class TemplateDataProvider implements CRUDDataProvider<SimpleTemplate> {
 
     @Override
     public Optional<SimpleTemplate> findById(Long id) {
-        return mailTemplateRepository.findById(id).map(t -> new SimpleTemplate(t.getId(),t.getName(), t.getBodyText()));
+        return templateService.findById(id);
     }
 
     @Override
     public SimpleTemplate save(SimpleTemplate template) {
-        var result = template.getId() != null
-                ? mailTemplateRepository.findById(template.getId()).orElse(new MailTemplate())
-                : new MailTemplate();
-        result.setName(template.getName());
-        result.setSubject(template.getName());
-        result.setBodyText(template.getText());
-        mailTemplateRepository.save(result);
-        return new SimpleTemplate(result.getId(), result.getName(), result.getBodyText());
+        return templateService.save(template);
     }
 
     @Override
     public void deleteAllById(Iterable<Long> ids) {
-        mailTemplateRepository.deleteAllById(ids);
+        templateService.deleteAllById(ids);
     }
 }
