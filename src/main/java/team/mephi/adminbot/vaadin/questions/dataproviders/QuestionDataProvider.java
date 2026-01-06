@@ -5,6 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import team.mephi.adminbot.dto.SimpleQuestion;
+import team.mephi.adminbot.service.QuestionService;
 
 import java.util.List;
 import java.util.Optional;

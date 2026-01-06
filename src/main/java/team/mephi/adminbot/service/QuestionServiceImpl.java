@@ -1,4 +1,4 @@
-package team.mephi.adminbot.vaadin.questions.service;
+package team.mephi.adminbot.service;
 
 import com.vaadin.flow.spring.security.AuthenticationContext;
 import jakarta.transaction.Transactional;
@@ -12,7 +12,6 @@ import team.mephi.adminbot.model.enums.AnswerStatus;
 import team.mephi.adminbot.repository.UserAnswerRepository;
 import team.mephi.adminbot.repository.UserQuestionRepository;
 import team.mephi.adminbot.repository.UserRepository;
-import team.mephi.adminbot.vaadin.questions.dataproviders.QuestionService;
 
 import java.time.Instant;
 import java.util.Comparator;
