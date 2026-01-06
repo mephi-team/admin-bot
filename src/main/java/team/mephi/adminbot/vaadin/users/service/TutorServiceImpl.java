@@ -48,32 +48,12 @@ public class TutorServiceImpl implements TutorService {
         user.getStudentAssignments().forEach(s -> {if (!current.contains(s.getStudent().getId())) s.setIsActive(false);});
         user.getStudentAssignments().addAll(td);
         user = tutorRepository.save(user);
-        return SimpleUser.builder()
-                .id(user.getId())
-                .role("tutor")
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .email(user.getEmail())
-                .phoneNumber(user.getPhone())
-                .tgId(user.getTgId())
-                .studentCount(user.getStudentAssignments().stream().filter(StudentTutor::getIsActive).toList().size())
-                .students(user.getStudentAssignments().stream().filter(StudentTutor::getIsActive).map(s -> SimpleUser.builder().id(s.getStudent().getId()).fullName(s.getStudent().getUserName()).tgId(s.getStudent().getTgId()).build()).toList())
-                .build();
+        return mapToSimpleUser(user);
     }
 
     @Override
     public Optional<SimpleUser> findById(Long id) {
-        return tutorRepository.findSimpleUserById(id).map(t -> SimpleUser.builder()
-                .id(t.getId())
-                .role("tutor")
-                .firstName(t.getFirstName())
-                .lastName(t.getLastName())
-                .email(t.getEmail())
-                .phoneNumber(t.getPhone())
-                .tgId(t.getTgId())
-                .tgName(t.getTgName())
-                .students(t.getStudentAssignments().stream().filter(StudentTutor::getIsActive).map(s -> SimpleUser.builder().id(s.getStudent().getId()).fullName(s.getStudent().getUserName()).build()).toList())
-                .build());
+        return tutorRepository.findByIdWithStudent(id).map(this::mapToSimpleUser);
     }
 
     @Override
@@ -90,23 +70,27 @@ public class TutorServiceImpl implements TutorService {
     public Stream<SimpleUser> findAllByName(String name, Pageable pageable) {
         return tutorRepository.findAllWithDirectionsAndStudents(name, pageable)
                 .stream()
-                .map(u -> SimpleUser.builder()
-                        .id(u.getId())
-                        .role("tutor")
-                        .fullName(u.getLastName() + " " + u.getFirstName())
-                        .firstName(u.getFirstName())
-                        .lastName(u.getLastName())
-                        .email(u.getEmail())
-                        .phoneNumber(u.getPhone())
-                        .tgId(u.getTgId())
-                        .studentCount(u.getStudentAssignments().stream().filter(StudentTutor::getIsActive).toList().size())
-                        .students(u.getStudentAssignments().stream().filter(StudentTutor::getIsActive).map(s -> SimpleUser.builder().id(s.getStudent().getId()).fullName(s.getStudent().getUserName()).tgId(s.getStudent().getTgId()).build()).toList())
-                        .status("ACTIVE")
-                        .build());
+                .map(this::mapToSimpleUser);
     }
 
     @Override
     public Integer countByName(String name) {
         return tutorRepository.countByName(name);
+    }
+
+    private SimpleUser mapToSimpleUser(Tutor tutor) {
+        return SimpleUser.builder()
+                .id(tutor.getId())
+                .role("tutor")
+                .fullName(tutor.getLastName() + " " + tutor.getFirstName())
+                .firstName(tutor.getFirstName())
+                .lastName(tutor.getLastName())
+                .email(tutor.getEmail())
+                .phoneNumber(tutor.getPhone())
+                .tgId(tutor.getTgId())
+                .studentCount(tutor.getStudentAssignments().stream().filter(StudentTutor::getIsActive).toList().size())
+                .students(tutor.getStudentAssignments().stream().filter(StudentTutor::getIsActive).map(s -> SimpleUser.builder().id(s.getStudent().getId()).fullName(s.getStudent().getUserName()).tgId(s.getStudent().getTgId()).build()).toList())
+                .status("ACTIVE")
+                .build();
     }
 }
