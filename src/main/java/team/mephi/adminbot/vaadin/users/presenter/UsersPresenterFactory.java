@@ -10,12 +10,10 @@ import team.mephi.adminbot.vaadin.users.dataproviders.*;
 @SpringComponent
 public class UsersPresenterFactory {
     private final TutorService tutorService;
-    private final TutorRepository tutorRepository;
     private final UserService userService;
 
-    public UsersPresenterFactory(TutorService tutorService, TutorRepository tutorRepository, UserService userService) {
+    public UsersPresenterFactory(TutorService tutorService, UserService userService) {
         this.tutorService = tutorService;
-        this.tutorRepository = tutorRepository;
         this.userService = userService;
     }
 
@@ -27,7 +25,7 @@ public class UsersPresenterFactory {
             case "visitor" -> new GuestsDataProvider(userService);
             case "middle_candidate" -> new MiddleCandidateDataProvider(userService);
             case "student" -> new StudentDataProvider(userService);
-            case "tutor" -> new TutorDataProvider(tutorService, tutorRepository);
+            case "tutor" -> new TutorDataProvider(tutorService);
             default -> throw new IllegalArgumentException("Unknown provider: " + role);
         };
     }

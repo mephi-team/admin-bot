@@ -16,13 +16,11 @@ import java.util.stream.Collectors;
 public class TutorDataProvider implements UserDataProvider {
 
     private final TutorService tutorService;
-    private final TutorRepository tutorRepository;
 
     private ConfigurableFilterDataProvider<SimpleUser, Void, String> provider;
 
-    public TutorDataProvider(TutorService tutorService, TutorRepository tutorRepository) {
+    public TutorDataProvider(TutorService tutorService) {
         this.tutorService = tutorService;
-        this.tutorRepository = tutorRepository;
     }
 
     public ConfigurableFilterDataProvider<SimpleUser, Void, String> getFilterableProvider() {
@@ -40,23 +38,9 @@ public class TutorDataProvider implements UserDataProvider {
                                 query.getLimit(),
                                 sort.isUnsorted() ? Sort.by("id").descending() : sort
                         );
-                        return tutorRepository.findAllWithDirectionsAndStudents(query.getFilter().orElse(""), pageable)
-                            .stream()
-                                .map(u -> SimpleUser.builder()
-                                        .id(u.getId())
-                                        .role("tutor")
-                                        .fullName(u.getLastName() + " " + u.getFirstName())
-                                        .firstName(u.getFirstName())
-                                        .lastName(u.getLastName())
-                                        .email(u.getEmail())
-                                        .phoneNumber(u.getPhone())
-                                        .tgId(u.getTgId())
-                                        .studentCount(u.getStudentAssignments().stream().filter(StudentTutor::getIsActive).toList().size())
-                                        .students(u.getStudentAssignments().stream().filter(StudentTutor::getIsActive).map(s -> SimpleUser.builder().id(s.getStudent().getId()).fullName(s.getStudent().getUserName()).tgId(s.getStudent().getTgId()).build()).toList())
-                                        .status("ACTIVE")
-                                        .build());
+                        return tutorService.findAllByName(query.getFilter().orElse(""), pageable);
                         },
-                    query -> tutorRepository.countByName(query.getFilter().orElse("")),
+                    query -> tutorService.countByName(query.getFilter().orElse("")),
                     SimpleUser::getId
             );
             provider = base.withConfigurableFilter();
@@ -71,17 +55,7 @@ public class TutorDataProvider implements UserDataProvider {
 
     @Override
     public Optional<SimpleUser> findById(Long id) {
-        return tutorRepository.findSimpleUserById(id).map(t -> SimpleUser.builder()
-                .id(t.getId())
-                .role("tutor")
-                .firstName(t.getFirstName())
-                .lastName(t.getLastName())
-                .email(t.getEmail())
-                .phoneNumber(t.getPhone())
-                .tgId(t.getTgId())
-                .tgName(t.getTgName())
-                .students(t.getStudentAssignments().stream().filter(StudentTutor::getIsActive).map(s -> SimpleUser.builder().id(s.getStudent().getId()).fullName(s.getStudent().getUserName()).build()).toList())
-                .build());
+        return tutorService.findById(id);
     }
 
     @Override
@@ -91,11 +65,11 @@ public class TutorDataProvider implements UserDataProvider {
 
     @Override
     public void deleteAllById(Iterable<Long> ids) {
-        tutorRepository.deleteAllById(ids);
+        tutorService.deleteAllById(ids);
     }
 
     @Override
     public void blockAllById(Iterable<Long> ids) {
-        tutorRepository.blockAllById(ids);
+        tutorService.blockAllById(ids);
     }
 }
