@@ -5,6 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import team.mephi.adminbot.dto.SimpleUser;
+import team.mephi.adminbot.service.TutorService;
 import team.mephi.adminbot.vaadin.users.presenter.UserDataProvider;
 
 import java.util.List;

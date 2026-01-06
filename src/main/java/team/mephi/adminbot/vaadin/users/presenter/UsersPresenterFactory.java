@@ -1,7 +1,7 @@
 package team.mephi.adminbot.vaadin.users.presenter;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import team.mephi.adminbot.repository.TutorRepository;
+import team.mephi.adminbot.service.TutorService;
 import team.mephi.adminbot.vaadin.CRUDPresenter;
 import team.mephi.adminbot.vaadin.CRUDViewCallback;
 import team.mephi.adminbot.service.UserService;

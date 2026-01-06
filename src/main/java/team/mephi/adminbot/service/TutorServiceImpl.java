@@ -1,4 +1,4 @@
-package team.mephi.adminbot.vaadin.users.service;
+package team.mephi.adminbot.service;
 
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Pageable;
@@ -9,7 +9,6 @@ import team.mephi.adminbot.model.Tutor;
 import team.mephi.adminbot.model.User;
 import team.mephi.adminbot.model.enums.StudentTutorMode;
 import team.mephi.adminbot.repository.TutorRepository;
-import team.mephi.adminbot.vaadin.users.dataproviders.TutorService;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
