@@ -43,7 +43,7 @@ public class DraftView extends VerticalLayout {
         var gsa = new GridSelectActions(getTranslation("grid_mailing_actions_label"),
                 new Button(getTranslation("grid_mailing_actions_delete_label"), VaadinIcon.TRASH.create(), e -> {
                     if (!selectedIds.isEmpty()) {
-                        actions.onDelete(selectedIds);
+                        actions.onDelete(selectedIds, selectedIds.size() > 1 ? "notification_mailing_delete_all" : "notification_mailing_delete", String.valueOf(selectedIds.size()));
                     }
                 })
         );
@@ -69,8 +69,8 @@ public class DraftView extends VerticalLayout {
         grid.addComponentColumn(item -> {
             Div group = new Div();
             group.addClassNames(LumoUtility.TextAlignment.RIGHT);
-            Button editButton = new Button(new Icon(VaadinIcon.EDIT), e -> actions.onEdit(item));
-            Button deleteButton = new Button(new Icon(VaadinIcon.TRASH), e -> actions.onDelete(List.of(item.getId())));
+            Button editButton = new Button(new Icon(VaadinIcon.EDIT), e -> actions.onEdit(item, "notification_mailing_saved"));
+            Button deleteButton = new Button(new Icon(VaadinIcon.TRASH), e -> actions.onDelete(List.of(item.getId()), "notification_mailing_delete"));
             group.add(editButton, deleteButton);
             return group;
         }).setHeader(getTranslation("grid_header_actions_label")).setWidth("120px").setFlexGrow(0).setKey("actions");

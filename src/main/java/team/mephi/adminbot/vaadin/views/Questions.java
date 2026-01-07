@@ -8,12 +8,10 @@ import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
 import com.vaadin.flow.router.QueryParameters;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.spring.security.AuthenticationContext;
 import jakarta.annotation.security.PermitAll;
 import team.mephi.adminbot.dto.SimpleQuestion;
 import team.mephi.adminbot.vaadin.components.*;
@@ -21,6 +19,8 @@ import team.mephi.adminbot.vaadin.questions.components.AnswerDialog;
 import team.mephi.adminbot.vaadin.questions.components.AnswerDialogFactory;
 import team.mephi.adminbot.vaadin.questions.dataproviders.QuestionDataProvider;
 import team.mephi.adminbot.vaadin.questions.dataproviders.QuestionDataProviderFactory;
+import team.mephi.adminbot.vaadin.service.NotificationService;
+import team.mephi.adminbot.vaadin.service.NotificationType;
 
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -31,15 +31,17 @@ import java.util.Set;
 @Route(value = "/questions", layout = DialogsLayout.class)
 @PermitAll
 public class Questions extends VerticalLayout {
+    private final NotificationService notificationService;
     private final SimpleConfirmDialog dialogDelete;
     private final AnswerDialog answerDialog;
 
     private final QuestionDataProvider provider;
     private List<Long> selectedIds;
 
-    public Questions(QuestionDataProviderFactory factory, AnswerDialogFactory dialogFactory) {
+    public Questions(QuestionDataProviderFactory factory, AnswerDialogFactory dialogFactory, NotificationService notificationService) {
         this.answerDialog = dialogFactory.create();
         this.provider = factory.createDataProvider();
+        this.notificationService = notificationService;
 
         this.dialogDelete = new SimpleConfirmDialog(
                 "dialog_delete_question_title", "dialog_delete_question_text", "dialog_delete_question_action",
@@ -109,24 +111,16 @@ public class Questions extends VerticalLayout {
             if (editedItem != null) {
                 var savedAnswer = provider.saveAnswer(editedItem);
                 provider.getDataProvider().refreshItem(savedAnswer);
-                showNotificationForEdit(question.getId());
+                notificationService.showNotification(NotificationType.EDIT, "notification_answer_send", ""+question.getId());
             }
         });
-    }
-
-    private void showNotificationForEdit(Long id) {
-        Notification.show(getTranslation("notification_answer_send"), 3000, Notification.Position.TOP_END);
     }
 
     private void onDelete(List<Long> selectedIds) {
         dialogDelete.showForConfirm(selectedIds.size(), () -> {
             provider.deleteAllById(selectedIds);
             provider.getDataProvider().refreshAll();
-            if (selectedIds.size() > 1) {
-                Notification.show(getTranslation("notification_question_delete_all", selectedIds.size()), 3000, Notification.Position.TOP_END);
-            } else {
-                Notification.show(getTranslation("notification_question_delete"), 3000, Notification.Position.TOP_END);
-            }
+            notificationService.showNotification(NotificationType.DELETE, selectedIds.size() > 1 ? "notification_question_delete_all" : "notification_question_delete", ""+selectedIds.size());
         });
     }
 }

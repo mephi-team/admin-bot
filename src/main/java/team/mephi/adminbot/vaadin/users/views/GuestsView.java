@@ -11,7 +11,7 @@ import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.model.enums.UserStatus;
 import team.mephi.adminbot.vaadin.components.*;
 import team.mephi.adminbot.vaadin.users.dataproviders.GuestsDataProvider;
-import team.mephi.adminbot.vaadin.users.presenter.GuestPresenter;
+import team.mephi.adminbot.vaadin.users.presenter.BlockingPresenter;
 
 import java.util.List;
 import java.util.Set;
@@ -19,12 +19,12 @@ import java.util.Set;
 public class GuestsView extends VerticalLayout {
     private List<Long> selectedIds;
 
-    public GuestsView(GuestPresenter actions) {
+    public GuestsView(BlockingPresenter actions) {
         GuestsDataProvider provider = (GuestsDataProvider) actions.getDataProvider();
         var gsa = new GridSelectActions(getTranslation("grid_users_actions_label"),
                 new Button(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), e -> {
                     if (!selectedIds.isEmpty())
-                        actions.onDelete(selectedIds);
+                        actions.onDelete(selectedIds, "notification_users_deleted");
                 })
         );
 
@@ -38,7 +38,7 @@ public class GuestsView extends VerticalLayout {
 
         grid.addComponentColumn(item -> {
             Button viewButton = new Button(new Icon(VaadinIcon.EYE), e -> actions.onView(item));
-            Button blockButton = new Button(new Icon(VaadinIcon.BAN), e -> actions.onBlock(item));
+            Button blockButton = new Button(new Icon(VaadinIcon.BAN), e -> actions.onBlock(item, "notification_users_blocked"));
             if (UserStatus.BLOCKED.name().equals(item.getStatus())) {
                 blockButton.addClassNames(LumoUtility.TextColor.ERROR);
             } else {

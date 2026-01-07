@@ -31,15 +31,15 @@ public class MiddleCandidateView extends VerticalLayout {
         var gsa = new GridSelectActions(getTranslation("grid_users_actions_label"),
                 new Button(getTranslation("grid_middle_candidate_actions_accept_label"), VaadinIcon.CHECK.create(), e -> {
                     if (!selectedIds.isEmpty())
-                        actions.onAccept(selectedIds);
+                        actions.onAccept(selectedIds, selectedIds.size() > 1 ? "notification_users_accepted_all" : "notification_users_accepted", "" + selectedIds.size());
                 }),
                 new Button(getTranslation("grid_middle_candidate_actions_reject_label"), VaadinIcon.CLOSE.create(), e -> {
                     if (!selectedIds.isEmpty())
-                        actions.onReject(selectedIds);
+                        actions.onReject(selectedIds, selectedIds.size() > 1 ? "notification_users_rejected_all" : "notification_users_rejected", "" + selectedIds.size());
                 }),
                 new Button(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), e -> {
                     if (!selectedIds.isEmpty())
-                        actions.onDelete(selectedIds);
+                        actions.onDelete(selectedIds, "notification_users_deleted");
                 })
         );
 
@@ -59,12 +59,12 @@ public class MiddleCandidateView extends VerticalLayout {
         grid.addColumn(createStatusComponentRenderer()).setHeader(getTranslation("grid_middle_candidate_header_status_label")).setSortable(true).setResizable(true).setKey("status");
 
         grid.addComponentColumn(item -> {
-            Button confirmButton = new Button(new Icon(VaadinIcon.CHECK), e -> actions.onAccept(List.of(item.getId())));
-            Button rejectButton = new Button(new Icon(VaadinIcon.CLOSE), e -> actions.onReject(List.of(item.getId())));
+            Button confirmButton = new Button(new Icon(VaadinIcon.CHECK), e -> actions.onAccept(List.of(item.getId()), "notification_users_accepted"));
+            Button rejectButton = new Button(new Icon(VaadinIcon.CLOSE), e -> actions.onReject(List.of(item.getId()), "notification_users_rejected"));
             Button viewButton = new Button(new Icon(VaadinIcon.EYE), e -> actions.onView(item));
             Button chatButton = new Button(new Icon(VaadinIcon.CHAT), e -> UI.getCurrent().navigate(Dialogs.class, QueryParameters.of("userId", item.getId().toString())));
-            Button editButton = new Button(new Icon(VaadinIcon.PENCIL), e -> actions.onEdit(item));
-            Button blockButton = new Button(new Icon(VaadinIcon.BAN), e -> actions.onBlock(item));
+            Button editButton = new Button(new Icon(VaadinIcon.PENCIL), e -> actions.onEdit(item, "notification_users_saved"));
+            Button blockButton = new Button(new Icon(VaadinIcon.BAN), e -> actions.onBlock(item, "notification_users_blocked"));
             if (UserStatus.BLOCKED.name().equals(item.getStatus())) {
                 blockButton.addClassNames(LumoUtility.TextColor.ERROR);
             } else {

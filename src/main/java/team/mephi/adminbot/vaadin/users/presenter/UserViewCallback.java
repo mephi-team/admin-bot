@@ -5,6 +5,4 @@ import java.util.List;
 public interface UserViewCallback extends BlockingViewCallback {
     void confirmAccept(List<Long> ids, Runnable onConfirm);
     void confirmReject(List<Long> ids, Runnable onConfirm);
-    void showNotificationForAccept(List<Long> ids);
-    void showNotificationForReject(List<Long> ids);
 }

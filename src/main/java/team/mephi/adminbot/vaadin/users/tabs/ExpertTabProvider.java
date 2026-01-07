@@ -24,7 +24,7 @@ public class ExpertTabProvider implements UserTabProvider {
     }
 
     @Override
-    public Component createTabContent(CRUDActions actions) {
+    public Component createTabContent(CRUDActions<?> actions) {
         return new ExpertView((UsersPresenter) actions);
     }
 }

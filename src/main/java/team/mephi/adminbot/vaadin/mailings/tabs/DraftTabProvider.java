@@ -19,7 +19,7 @@ public class DraftTabProvider implements MailingTabProvider {
     }
 
     @Override
-    public Component createTabContent(CRUDActions actions) {
+    public Component createTabContent(CRUDActions<?> actions) {
         return new DraftView((MailingsPresenter) actions);
     }
 

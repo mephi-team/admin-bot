@@ -6,5 +6,4 @@ import team.mephi.adminbot.vaadin.CRUDViewCallback;
 
 public interface BlockingViewCallback extends CRUDViewCallback<SimpleUser> {
     void showDialogForBlock(SimpleUser user, SerializableConsumer<SimpleUser> callback);
-    void showNotificationForBlock(Long id);
 }

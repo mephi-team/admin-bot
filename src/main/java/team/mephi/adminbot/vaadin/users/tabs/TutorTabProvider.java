@@ -24,7 +24,7 @@ public class TutorTabProvider implements UserTabProvider {
     }
 
     @Override
-    public Component createTabContent(CRUDActions actions) {
+    public Component createTabContent(CRUDActions<?> actions) {
         return new TutorView((TutorPresenter) actions);
     }
 }

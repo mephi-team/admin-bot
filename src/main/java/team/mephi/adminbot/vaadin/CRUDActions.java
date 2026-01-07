@@ -3,8 +3,8 @@ package team.mephi.adminbot.vaadin;
 import java.util.List;
 
 public interface CRUDActions <T> {
-    void onCreate(String type);
+    void onCreate(String type, String label, Object ... param);
     void onView(T item);
-    void onEdit(T item);
-    void onDelete(List<Long> ids);
+    void onEdit(T item, String label, Object ... param);
+    void onDelete(List<Long> ids, String label, Object ... param);
 }

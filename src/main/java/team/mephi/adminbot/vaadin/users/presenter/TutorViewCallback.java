@@ -5,5 +5,4 @@ import team.mephi.adminbot.dto.SimpleUser;
 
 public interface TutorViewCallback extends BlockingViewCallback {
     void showDialogForTutoring(SimpleUser user, SerializableConsumer<SimpleUser> callback);
-    void showNotificationForTutoring(Long id);
 }

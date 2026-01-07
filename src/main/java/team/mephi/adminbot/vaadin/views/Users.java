@@ -114,7 +114,7 @@ public class Users extends VerticalLayout implements StudentViewCallback, TutorV
             fileUploadDialog.open();
         });
         var primaryButton = new Button(getTranslation("page_users_create_user_button"), new Icon(VaadinIcon.PLUS), e -> {
-            getCurrentAction().onCreate(getCurrentRole());
+            getCurrentAction().onCreate(getCurrentRole(), "notification_users_created");
         });
         primaryButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         Div buttons = new Div(secondaryButton, primaryButton);
@@ -155,21 +155,6 @@ public class Users extends VerticalLayout implements StudentViewCallback, TutorV
     }
 
     @Override
-    public void showNotificationForNew() {
-        Notification.show(getTranslation("notification_users_created"), 3000, Notification.Position.TOP_END);
-    }
-
-    @Override
-    public void showNotificationForEdit(Object id) {
-        Notification.show(getTranslation("notification_users_saved"), 3000, Notification.Position.TOP_END);
-    }
-
-    @Override
-    public void showNotificationForDelete(List<Long> ids) {
-        Notification.show(makeNotification("notification_users_deleted", "notification_users_blocked_all", ids.size()), 3000, Notification.Position.TOP_END);
-    }
-
-    @Override
     public void showDialogForBlock(SimpleUser user, SerializableConsumer<SimpleUser> callback) {
         blockDialog.openForView(user, callback);
     }
@@ -190,40 +175,8 @@ public class Users extends VerticalLayout implements StudentViewCallback, TutorV
     }
 
     @Override
-    public void showNotificationForAccept(List<Long> ids) {
-        Notification.show(makeNotification("notification_users_accepted", "notification_users_accepted_all", ids.size()), 3000, Notification.Position.TOP_END);
-    }
-
-    @Override
-    public void showNotificationForReject(List<Long> ids) {
-        Notification.show(makeNotification("notification_users_rejected", "notification_users_rejected_all", ids.size()), 3000, Notification.Position.TOP_END);
-    }
-
-    @Override
-    public void showNotificationForBlock(Long id) {
-        Notification.show("notification_users_blocked", 3000, Notification.Position.TOP_END);
-    }
-
-    @Override
-    public void showNotificationForExpel(List<Long> ids) {
-        Notification.show(getTranslation("notification_users_expel"), 3000, Notification.Position.TOP_END);
-    }
-
-    @Override
     public void showDialogForTutoring(SimpleUser user, SerializableConsumer<SimpleUser> callback) {
         tutoringDialog.openForEdit(user, callback);
-    }
-
-    @Override
-    public void showNotificationForTutoring(Long id) {
-        Notification.show("Test", 3000, Notification.Position.TOP_END);
-    }
-
-    private String makeNotification(String single, String plural, int count) {
-        if (count > 1) {
-            return getTranslation(plural, count);
-        }
-        return getTranslation(single);
     }
 
     @Override

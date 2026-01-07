@@ -21,7 +21,7 @@ public class TemplateTabProvider implements MailingTabProvider {
     }
 
     @Override
-    public Component createTabContent(CRUDActions actions) {
+    public Component createTabContent(CRUDActions<?> actions) {
         return new TemplateView((TemplatePresenter) actions);
     }
 

@@ -19,7 +19,7 @@ public class SentTabProvider implements  MailingTabProvider {
     }
 
     @Override
-    public Component createTabContent(CRUDActions actions) {
+    public Component createTabContent(CRUDActions<?> actions) {
         return new SentView((MailingsPresenter) actions);
     }
 

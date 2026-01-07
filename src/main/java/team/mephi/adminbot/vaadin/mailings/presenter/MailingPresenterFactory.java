@@ -11,17 +11,21 @@ import team.mephi.adminbot.vaadin.mailings.dataproviders.DraftDataProvider;
 import team.mephi.adminbot.service.MailingService;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.SentDataProvider;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.TemplateDataProvider;
+import team.mephi.adminbot.vaadin.service.NotificationService;
 
 @SpringComponent
 public class MailingPresenterFactory {
     private final MailingService mailingService;
     private final TemplateService templateService;
+    private final NotificationService notificationService;
 
     public MailingPresenterFactory(
             MailingService mailingService,
-            TemplateService templateService) {
+            TemplateService templateService,
+            NotificationService notificationService) {
         this.mailingService = mailingService;
         this.templateService = templateService;
+        this.notificationService = notificationService;
     }
 
     private CRUDDataProvider<?> createDataProvider(String role) {
@@ -37,8 +41,8 @@ public class MailingPresenterFactory {
         CRUDDataProvider<?> dataProvider = createDataProvider(role);
 
         return switch (role) {
-            case "templates" -> new TemplatePresenter((CRUDDataProvider<SimpleTemplate>) dataProvider, (CRUDViewCallback<SimpleTemplate>) view);
-            default -> new MailingsPresenter((CRUDDataProvider<SimpleMailing>) dataProvider, (MailingViewCallback) view);
+            case "templates" -> new TemplatePresenter((CRUDDataProvider<SimpleTemplate>) dataProvider, (CRUDViewCallback<SimpleTemplate>) view, notificationService);
+            default -> new MailingsPresenter((CRUDDataProvider<SimpleMailing>) dataProvider, (MailingViewCallback) view, notificationService);
         };
     }
 }

@@ -29,7 +29,7 @@ public class TutorView extends VerticalLayout {
         var gsa = new GridSelectActions(getTranslation("grid_users_actions_label"),
                 new Button(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), e -> {
                     if (!selectedIds.isEmpty())
-                        actions.onDelete(selectedIds);
+                        actions.onDelete(selectedIds, "notification_users_deleted");
                 })
         );
 
@@ -45,11 +45,11 @@ public class TutorView extends VerticalLayout {
         grid.addColumn(SimpleUser::getStudentCount).setHeader(getTranslation("grid_tutor_header_curatorship_label")).setResizable(true).setKey("curatorship");
 
         grid.addComponentColumn(item -> {
-            Button dropButton = new Button(getTranslation("grid_tutor_action_curatorship_label"), e -> actions.onTutoring(item));
+            Button dropButton = new Button(getTranslation("grid_tutor_action_curatorship_label"), e -> actions.onTutoring(item, "Test"));
             Button viewButton = new Button(new Icon(VaadinIcon.EYE), e -> actions.onView(item));
             Button chatButton = new Button(new Icon(VaadinIcon.CHAT), e -> UI.getCurrent().navigate(Dialogs.class, QueryParameters.of("userId", item.getId().toString())));
-            Button editButton = new Button(new Icon(VaadinIcon.PENCIL), e -> actions.onEdit(item));
-            Button blockButton = new Button(new Icon(VaadinIcon.BAN), e -> actions.onBlock(item));
+            Button editButton = new Button(new Icon(VaadinIcon.PENCIL), e -> actions.onEdit(item, "notification_users_saved"));
+            Button blockButton = new Button(new Icon(VaadinIcon.BAN), e -> actions.onBlock(item, "notification_users_blocked"));
             if (UserStatus.BLOCKED.name().equals(item.getStatus())) {
                 blockButton.addClassNames(LumoUtility.TextColor.ERROR);
             } else {

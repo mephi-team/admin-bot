@@ -9,7 +9,4 @@ public interface CRUDViewCallback<T> {
     void showDialogForNew(String type, SerializableConsumer<?> callback);
     void showDialogForEdit(Object item, SerializableConsumer<?> callback);
     void confirmDelete(List<Long> ids, Runnable onConfirm);
-    void showNotificationForNew();
-    void showNotificationForEdit(Object id);
-    void showNotificationForDelete(List<Long> ids);
 }

@@ -24,7 +24,7 @@ public class CandidateTabProvider implements UserTabProvider {
     }
 
     @Override
-    public Component createTabContent(CRUDActions actions) {
+    public Component createTabContent(CRUDActions<?> actions) {
         return new CandidateView((UsersPresenter) actions);
     }
 }

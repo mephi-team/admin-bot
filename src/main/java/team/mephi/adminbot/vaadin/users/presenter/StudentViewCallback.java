@@ -4,5 +4,4 @@ import java.util.List;
 
 public interface StudentViewCallback extends UserViewCallback {
     void confirmExpel(List<Long> ids, Runnable onConfirm);
-    void showNotificationForExpel(List<Long> ids);
 }

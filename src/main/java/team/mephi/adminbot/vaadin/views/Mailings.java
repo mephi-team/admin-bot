@@ -44,7 +44,7 @@ public class Mailings extends VerticalLayout implements MailingViewCallback {
     private final SimpleConfirmDialog dialogRetry;
 
     private final List<String> rolesInOrder = new ArrayList<>();
-    private final Map<String, CRUDActions> actions = new HashMap<>();
+    private final Map<String, CRUDActions<?>> actions = new HashMap<>();
 
     public Mailings(
             List<MailingTabProvider> tabProviders,
@@ -103,7 +103,7 @@ public class Mailings extends VerticalLayout implements MailingViewCallback {
         top.addToStart(new H1(getTranslation("page_mailing_title")));
 
         primaryButton.addClickListener(e -> {
-            getCurrentAction().onCreate(getCurrentRole());
+            getCurrentAction().onCreate(getCurrentRole(), "notification_mailing_created");
         });
         primaryButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         top.addToEnd(primaryButton);
@@ -118,7 +118,7 @@ public class Mailings extends VerticalLayout implements MailingViewCallback {
         return "visitor";
     }
 
-    private CRUDActions getCurrentAction() {
+    private CRUDActions<?> getCurrentAction() {
         return actions.get(getCurrentRole());
     }
 
@@ -130,16 +130,6 @@ public class Mailings extends VerticalLayout implements MailingViewCallback {
     @Override
     public void confirmRetry(SimpleMailing id, SerializableConsumer<SimpleMailing> onConfirm) {
         dialogRetry.showForConfirm(1, () -> onConfirm.accept(id));
-    }
-
-    @Override
-    public void showNotificationForCancel(Long id) {
-        Notification.show(getTranslation("notification_mailing_cancel"), 3000, Notification.Position.TOP_END);
-    }
-
-    @Override
-    public void showNotificationForRetry(Long id) {
-        Notification.show(getTranslation("notification_mailing_retry"), 3000, Notification.Position.TOP_END);
     }
 
     @Override
@@ -175,33 +165,6 @@ public class Mailings extends VerticalLayout implements MailingViewCallback {
             dialogTemplateDelete.showForConfirm(ids.size(), onConfirm);
         } else {
             dialogMailingDelete.showForConfirm(ids.size(), onConfirm);
-        }
-    }
-
-    @Override
-    public void showNotificationForNew() {
-        Notification.show(getTranslation("notification_mailing_created"), 3000, Notification.Position.TOP_END);
-    }
-
-    @Override
-    public void showNotificationForEdit(Object id) {
-        Notification.show(getTranslation("notification_mailing_saved"), 3000, Notification.Position.TOP_END);
-    }
-
-    @Override
-    public void showNotificationForDelete(List<Long> ids) {
-        if (getCurrentRole().equals("templates")) {
-            String message = getTranslation("notification_template_delete");
-            if (ids.size() > 1) {
-                message = getTranslation("notification_template_delete_all", ids.size());
-            }
-            Notification.show(message, 3000, Notification.Position.TOP_END);
-        } else {
-            String message = getTranslation("notification_mailing_delete");
-            if (ids.size() > 1) {
-                message = getTranslation("notification_mailing_delete_all", ids.size());
-            }
-            Notification.show(message, 3000, Notification.Position.TOP_END);
         }
     }
 }

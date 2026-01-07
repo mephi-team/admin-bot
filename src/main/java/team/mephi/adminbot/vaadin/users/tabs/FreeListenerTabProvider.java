@@ -24,7 +24,7 @@ public class FreeListenerTabProvider implements UserTabProvider {
     }
 
     @Override
-    public Component createTabContent(CRUDActions actions) {
+    public Component createTabContent(CRUDActions<?> actions) {
         return new FreeListenerView((StudentPresenter) actions);
     }
 }
