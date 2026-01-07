@@ -40,7 +40,7 @@ public class TutorView extends VerticalLayout {
         grid.addColumn(SimpleUser::getFullName).setHeader(getTranslation("grid_tutor_header_name_label")).setSortable(true).setResizable(true).setFrozen(true)
                 .setAutoWidth(true).setFlexGrow(0).setKey("lastName");
         grid.addColumn(SimpleUser::getEmail).setHeader(getTranslation("grid_tutor_header_email_label")).setSortable(true).setResizable(true).setKey("email");
-        grid.addColumn(SimpleUser::getTgId).setHeader(getTranslation("grid_tutor_header_telegram_label")).setSortable(true).setResizable(true).setKey("tgName");
+        grid.addColumn(SimpleUser::getTgId).setHeader(getTranslation("grid_tutor_header_telegram_label")).setSortable(true).setResizable(true).setKey("tgId");
         grid.addColumn(u -> Objects.nonNull(u.getDirection()) ? u.getDirection().getName() : "").setHeader(getTranslation("grid_tutor_header_direction_label")).setResizable(true).setKey("direction");
         grid.addColumn(SimpleUser::getStudentCount).setHeader(getTranslation("grid_tutor_header_curatorship_label")).setResizable(true).setKey("curatorship");
 

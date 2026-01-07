@@ -29,6 +29,7 @@ public class TutorServiceImpl implements TutorService {
         Tutor user = dto.getId() != null
                 ? tutorRepository.findById(dto.getId()).orElse(new Tutor())
                 : new Tutor();
+        user.setUserName(dto.getLastName() + " " + dto.getFirstName());
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
         user.setEmail(dto.getEmail());
