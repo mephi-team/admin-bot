@@ -110,10 +110,10 @@ public class Users extends VerticalLayout implements StudentViewCallback, TutorV
         top.setWidthFull();
         top.addToStart(new H1(getTranslation("page_users_title")));
 
-        var secondaryButton = new Button(getTranslation("page_users_create_from_file_button"), new Icon(VaadinIcon.FILE_ADD), e -> {
+        var secondaryButton = new Button(getTranslation("page_users_create_from_file_button"), VaadinIcon.FILE_ADD.create(), e -> {
             fileUploadDialog.open();
         });
-        var primaryButton = new Button(getTranslation("page_users_create_user_button"), new Icon(VaadinIcon.PLUS), e -> {
+        var primaryButton = new Button(getTranslation("page_users_create_user_button"), VaadinIcon.PLUS.create(), e -> {
             getCurrentAction().onCreate(getCurrentRole(), "notification_users_created");
         });
         primaryButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);

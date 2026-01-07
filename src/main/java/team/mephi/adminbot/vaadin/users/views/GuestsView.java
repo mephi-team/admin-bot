@@ -37,8 +37,8 @@ public class GuestsView extends VerticalLayout {
         grid.addColumn(SimpleUser::getPdConsent).setHeader(getTranslation("grid_guests_header_pd_consent_label")).setSortable(true).setResizable(true).setKey("pdConsent");
 
         grid.addComponentColumn(item -> {
-            Button viewButton = new Button(new Icon(VaadinIcon.EYE), e -> actions.onView(item));
-            Button blockButton = new Button(new Icon(VaadinIcon.BAN), e -> actions.onBlock(item, "notification_users_blocked"));
+            Button viewButton = new Button(VaadinIcon.EYE.create(), e -> actions.onView(item));
+            Button blockButton = new Button(VaadinIcon.BAN.create(), e -> actions.onBlock(item, "notification_users_blocked"));
             if (UserStatus.BLOCKED.name().equals(item.getStatus())) {
                 blockButton.addClassNames(LumoUtility.TextColor.ERROR);
             } else {

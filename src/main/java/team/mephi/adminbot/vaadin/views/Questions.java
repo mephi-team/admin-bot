@@ -76,8 +76,8 @@ public class Questions extends VerticalLayout {
         grid.addComponentColumn(item -> {
             Span group = new Span();
             Button responseButton = new Button(getTranslation("grid_question_action_answer_label"), e -> onAnswer(item));
-            Button chatButton = new Button(new Icon(VaadinIcon.CHAT),e -> UI.getCurrent().navigate(Dialogs.class, QueryParameters.of("userId", "" + item.getAuthorId())));
-            Button deleteButton = new Button(new Icon(VaadinIcon.TRASH), e -> onDelete(List.of(item.getId())));
+            Button chatButton = new Button(VaadinIcon.CHAT.create(),e -> UI.getCurrent().navigate(Dialogs.class, QueryParameters.of("userId", "" + item.getAuthorId())));
+            Button deleteButton = new Button(VaadinIcon.TRASH.create(), e -> onDelete(List.of(item.getId())));
             group.add(responseButton, chatButton, deleteButton);
             return group;
         }).setHeader(getTranslation("grid_header_actions_label")).setWidth("220px").setFlexGrow(0).setKey("actions");

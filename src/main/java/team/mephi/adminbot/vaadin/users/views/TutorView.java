@@ -46,10 +46,10 @@ public class TutorView extends VerticalLayout {
 
         grid.addComponentColumn(item -> {
             Button dropButton = new Button(getTranslation("grid_tutor_action_curatorship_label"), e -> actions.onTutoring(item, "notification_tutors_updated"));
-            Button viewButton = new Button(new Icon(VaadinIcon.EYE), e -> actions.onView(item));
-            Button chatButton = new Button(new Icon(VaadinIcon.CHAT), e -> UI.getCurrent().navigate(Dialogs.class, QueryParameters.of("userId", item.getId().toString())));
-            Button editButton = new Button(new Icon(VaadinIcon.PENCIL), e -> actions.onEdit(item, "notification_users_saved"));
-            Button blockButton = new Button(new Icon(VaadinIcon.BAN), e -> actions.onBlock(item, "notification_users_blocked"));
+            Button viewButton = new Button(VaadinIcon.EYE.create(), e -> actions.onView(item));
+            Button chatButton = new Button(VaadinIcon.CHAT.create(), e -> UI.getCurrent().navigate(Dialogs.class, QueryParameters.of("userId", item.getId().toString())));
+            Button editButton = new Button(VaadinIcon.PENCIL.create(), e -> actions.onEdit(item, "notification_users_saved"));
+            Button blockButton = new Button(VaadinIcon.BAN.create(), e -> actions.onBlock(item, "notification_users_blocked"));
             if (UserStatus.BLOCKED.name().equals(item.getStatus())) {
                 blockButton.addClassNames(LumoUtility.TextColor.ERROR);
             } else {

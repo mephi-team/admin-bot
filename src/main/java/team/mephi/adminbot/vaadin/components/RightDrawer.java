@@ -6,7 +6,6 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Section;
-import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.function.SerializableRunnable;
@@ -29,7 +28,7 @@ public class RightDrawer extends Section {
         getElement().getStyle().set("bottom", "0");
 
         var header = new HorizontalLayout();
-        header.add(new H2(title), new Button(new Icon(VaadinIcon.CLOSE), this::close));
+        header.add(new H2(title), new Button(VaadinIcon.CLOSE.create(), this::close));
 
         saveBtn = new Button("Сохранить", this::save);
         saveBtn.addThemeVariants(ButtonVariant.LUMO_PRIMARY);

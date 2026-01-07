@@ -47,8 +47,8 @@ public class TemplateView extends VerticalLayout {
         grid.addComponentColumn(item -> {
             Div group = new Div();
             group.addClassNames(LumoUtility.TextAlignment.RIGHT);
-            Button editButton = new Button(new Icon(VaadinIcon.EDIT), e -> actions.onEdit(item, "notification_template_saved"));
-            Button deleteButton = new Button(new Icon(VaadinIcon.TRASH), e -> actions.onDelete(List.of(item.getId()), "notification_template_delete"));
+            Button editButton = new Button(VaadinIcon.EDIT.create(), e -> actions.onEdit(item, "notification_template_saved"));
+            Button deleteButton = new Button(VaadinIcon.TRASH.create(), e -> actions.onDelete(List.of(item.getId()), "notification_template_delete"));
             group.add(editButton, deleteButton);
             return group;
         }).setHeader(getTranslation("grid_header_actions_label")).setWidth("120px").setFlexGrow(0).setKey("actions");

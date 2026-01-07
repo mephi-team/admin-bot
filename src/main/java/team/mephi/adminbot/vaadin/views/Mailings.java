@@ -34,7 +34,7 @@ import java.util.*;
 @RolesAllowed("ADMIN")
 public class Mailings extends VerticalLayout implements MailingViewCallback {
     private final TabSheet tabSheet = new TabSheet();
-    private final Button primaryButton = new Button(getTranslation("page_mailing_create_mailing_button"), new Icon(VaadinIcon.PLUS));
+    private final Button primaryButton = new Button(getTranslation("page_mailing_create_mailing_button"), VaadinIcon.PLUS.create());
 
     private final MailingEditorDialog mailingEditorDialog;
     private final TemplateEditorDialog templateEditorDialog;
