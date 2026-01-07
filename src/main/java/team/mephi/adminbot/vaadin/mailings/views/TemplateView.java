@@ -9,9 +9,9 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import team.mephi.adminbot.dto.SimpleTemplate;
+import team.mephi.adminbot.vaadin.CRUDPresenter;
 import team.mephi.adminbot.vaadin.components.*;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.TemplateDataProvider;
-import team.mephi.adminbot.vaadin.mailings.presenter.TemplatePresenter;
 
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -21,7 +21,7 @@ import java.util.Set;
 public class TemplateView extends VerticalLayout {
     private List<Long> selectedIds;
 
-    public TemplateView(TemplatePresenter actions) {
+    public TemplateView(CRUDPresenter<SimpleTemplate> actions) {
         TemplateDataProvider provider = (TemplateDataProvider) actions.getDataProvider();
         var gsa = new GridSelectActions(getTranslation("grid_template_actions_label"),
                 new Button(getTranslation("grid_template_actions_delete_label"), VaadinIcon.TRASH.create(), e -> {

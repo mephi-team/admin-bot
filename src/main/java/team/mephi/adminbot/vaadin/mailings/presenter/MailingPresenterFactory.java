@@ -41,7 +41,7 @@ public class MailingPresenterFactory {
         CRUDDataProvider<?> dataProvider = createDataProvider(role);
 
         return switch (role) {
-            case "templates" -> new TemplatePresenter((CRUDDataProvider<SimpleTemplate>) dataProvider, (CRUDViewCallback<SimpleTemplate>) view, notificationService);
+            case "templates" -> new CRUDPresenter<>((CRUDDataProvider<SimpleTemplate>) dataProvider, (CRUDViewCallback<SimpleTemplate>) view, notificationService);
             default -> new MailingsPresenter((CRUDDataProvider<SimpleMailing>) dataProvider, (MailingViewCallback) view, notificationService);
         };
     }
