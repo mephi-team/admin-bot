@@ -12,26 +12,18 @@ import lombok.Setter;
 public class SimpleConfirmDialog extends ConfirmDialog {
     private final String header;
     private final String text;
-    private final String headerAll;
-    private final String textAll;
     private final Div headerText = new Div();
     @Getter
     @Setter
     private Runnable onConfirm;
 
     public SimpleConfirmDialog(String title, String text, String action) {
-        this(title, text, action, "", "", null);
+        this(title, text, action, null);
     }
 
-    public SimpleConfirmDialog(String title, String text, String action, String titleAll, String textAll) {
-        this(title, text, action, titleAll, textAll, null);
-    }
-
-    public SimpleConfirmDialog(String title, String text, String action, String titleAll, String textAll, Runnable onConfirm) {
+    public SimpleConfirmDialog(String title, String text, String action, Runnable onConfirm) {
         this.header = title;
         this.text = text;
-        this.headerAll = titleAll;
-        this.textAll = textAll;
         this.onConfirm = onConfirm;
 
         var closeButton = new Button(VaadinIcon.CLOSE_BIG.create() , e -> close());
@@ -61,14 +53,9 @@ public class SimpleConfirmDialog extends ConfirmDialog {
         });
     }
 
-    public void showForConfirm(int count, Runnable onConfirm) {
-        if (count > 1) {
-            headerText.setText(getTranslation(this.headerAll, count));
-            setText(getTranslation(this.textAll, count));
-        } else {
-            headerText.setText(getTranslation(this.header));
-            setText(getTranslation(this.text));
-        }
+    public void showForConfirm(Object count, Runnable onConfirm) {
+        headerText.setText(getTranslation(this.header, count));
+        setText(getTranslation(this.text, count));
         this.onConfirm = onConfirm;
         open();
     }

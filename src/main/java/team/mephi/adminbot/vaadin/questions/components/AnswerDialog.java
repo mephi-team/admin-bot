@@ -6,8 +6,9 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.function.SerializableConsumer;
 import team.mephi.adminbot.dto.SimpleQuestion;
+import team.mephi.adminbot.vaadin.SimpleDialog;
 
-public class AnswerDialog extends Dialog {
+public class AnswerDialog extends Dialog implements SimpleDialog<SimpleQuestion> {
     private final BeanValidationBinder<SimpleQuestion> binder = new BeanValidationBinder<>(SimpleQuestion.class);
     private final Button answerButton = new Button(getTranslation("dialog_answer_button"), VaadinIcon.PAPERPLANE_O.create(), e -> onAnswer());
 
@@ -40,11 +41,12 @@ public class AnswerDialog extends Dialog {
         }
     }
 
-    public void showDialogForEdit(SimpleQuestion question, SerializableConsumer<SimpleQuestion> callback) {
-        this.question = question;
+    @Override
+    public void showDialog(Object question, SerializableConsumer<SimpleQuestion> callback) {
+        this.question = (SimpleQuestion) question;
         this.onSaveCallback = callback;
 
-        binder.readBean(question);
+        binder.readBean(this.question);
 
         open();
     }

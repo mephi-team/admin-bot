@@ -6,10 +6,11 @@ import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.function.SerializableConsumer;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.service.UserService;
+import team.mephi.adminbot.vaadin.SimpleDialog;
 
 import java.util.*;
 
-public class TutoringDialog  extends Dialog  {
+public class TutoringDialog  extends Dialog implements SimpleDialog<SimpleUser> {
     private final BeanValidationBinder<SimpleUser> binder = new BeanValidationBinder<>(SimpleUser.class);
     private final Button saveButton = new Button(getTranslation("save_button"), e -> onSave());
 
@@ -35,17 +36,11 @@ public class TutoringDialog  extends Dialog  {
               .bind(SimpleUser::getStudents, SimpleUser::setStudents);
     }
 
-    public void openForView(SimpleUser user) {
-        binder.readBean(user);
-        binder.setReadOnly(true);
-        saveButton.setVisible(false);
-        open();
-    }
-
-    public void openForEdit(SimpleUser user, SerializableConsumer<SimpleUser> callback) {
-        this.user = user;
+    @Override
+    public void showDialog(Object user, SerializableConsumer<SimpleUser> callback) {
+        this.user = (SimpleUser) user;
         this.onSaveCallback = callback;
-        binder.readBean(user);
+        binder.readBean((SimpleUser) user);
 //        binder.setReadOnly(true);
 //        saveButton.setVisible(false);
         open();

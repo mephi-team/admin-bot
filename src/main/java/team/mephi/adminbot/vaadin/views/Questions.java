@@ -14,10 +14,9 @@ import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
 import team.mephi.adminbot.dto.SimpleQuestion;
 import team.mephi.adminbot.vaadin.components.*;
-import team.mephi.adminbot.vaadin.questions.components.AnswerDialog;
-import team.mephi.adminbot.vaadin.questions.components.AnswerDialogFactory;
 import team.mephi.adminbot.vaadin.questions.dataproviders.QuestionDataProvider;
 import team.mephi.adminbot.vaadin.questions.dataproviders.QuestionDataProviderFactory;
+import team.mephi.adminbot.vaadin.service.DialogService;
 import team.mephi.adminbot.vaadin.service.NotificationService;
 import team.mephi.adminbot.vaadin.service.NotificationType;
 
@@ -30,22 +29,16 @@ import java.util.Set;
 @Route(value = "/questions", layout = DialogsLayout.class)
 @PermitAll
 public class Questions extends VerticalLayout {
+    private final DialogService<?> dialogService;
     private final NotificationService notificationService;
-    private final SimpleConfirmDialog dialogDelete;
-    private final AnswerDialog answerDialog;
 
     private final QuestionDataProvider provider;
     private List<Long> selectedIds;
 
-    public Questions(QuestionDataProviderFactory factory, AnswerDialogFactory dialogFactory, NotificationService notificationService) {
-        this.answerDialog = dialogFactory.create();
+    public Questions(QuestionDataProviderFactory factory, DialogService<?> dialogService, NotificationService notificationService) {
         this.provider = factory.createDataProvider();
+        this.dialogService = dialogService;
         this.notificationService = notificationService;
-
-        this.dialogDelete = new SimpleConfirmDialog(
-                "dialog_delete_question_title", "dialog_delete_question_text", "dialog_delete_question_action",
-                "dialog_delete_question_all_title", "dialog_delete_question_all_text"
-        );
 
         add(new H1(getTranslation("page_question_title")));
 
@@ -106,20 +99,20 @@ public class Questions extends VerticalLayout {
     }
 
     private void onAnswer(SimpleQuestion question) {
-        answerDialog.showDialogForEdit(question, (editedItem) -> {
+        dialogService.showDialog(question, "answer_send", (editedItem) -> {
             if (editedItem != null) {
-                var savedAnswer = provider.saveAnswer(editedItem);
+                var savedAnswer = provider.saveAnswer((SimpleQuestion) editedItem);
                 provider.getDataProvider().refreshItem(savedAnswer);
-                notificationService.showNotification(NotificationType.EDIT, "notification_answer_send", ""+question.getId());
+                notificationService.showNotification(NotificationType.EDIT, "answer_send", question.getId());
             }
         });
     }
 
     private void onDelete(List<Long> selectedIds) {
-        dialogDelete.showForConfirm(selectedIds.size(), () -> {
+        dialogService.showConfirmDialog(selectedIds.size(), selectedIds.size() > 1 ? "delete_question_all" : "delete_question", (ignore) -> {
             provider.deleteAllById(selectedIds);
             provider.getDataProvider().refreshAll();
-            notificationService.showNotification(NotificationType.DELETE, selectedIds.size() > 1 ? "notification_question_delete_all" : "notification_question_delete", ""+selectedIds.size());
+            notificationService.showNotification(NotificationType.DELETE, selectedIds.size() > 1 ? "question_delete_all" : "question_delete", selectedIds.size());
         });
     }
 }

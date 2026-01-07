@@ -26,7 +26,7 @@ public class TemplateView extends VerticalLayout {
         var gsa = new GridSelectActions(getTranslation("grid_template_actions_label"),
                 new Button(getTranslation("grid_template_actions_delete_label"), VaadinIcon.TRASH.create(), e -> {
                     if (!selectedIds.isEmpty()) {
-                        actions.onDelete(selectedIds, selectedIds.size() > 1 ? "notification_template_delete_all" : "notification_template_delete", "" + selectedIds.size());
+                        actions.onDelete(selectedIds, selectedIds.size() > 1 ? "delete_template_all" : "delete_template", "" + selectedIds.size());
                     }
                 })
         );
@@ -46,8 +46,8 @@ public class TemplateView extends VerticalLayout {
         grid.addComponentColumn(item -> {
             Div group = new Div();
             group.addClassNames(LumoUtility.TextAlignment.RIGHT);
-            Button editButton = new Button(VaadinIcon.EDIT.create(), e -> actions.onEdit(item, "notification_template_saved"));
-            Button deleteButton = new Button(VaadinIcon.TRASH.create(), e -> actions.onDelete(List.of(item.getId()), "notification_template_delete"));
+            Button editButton = new Button(VaadinIcon.EDIT.create(), e -> actions.onEdit(item, "template_saved"));
+            Button deleteButton = new Button(VaadinIcon.TRASH.create(), e -> actions.onDelete(List.of(item.getId()), "delete_template"));
             group.add(editButton, deleteButton);
             return group;
         }).setHeader(getTranslation("grid_header_actions_label")).setWidth("120px").setFlexGrow(0).setKey("actions");

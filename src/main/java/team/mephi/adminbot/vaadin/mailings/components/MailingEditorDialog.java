@@ -12,11 +12,12 @@ import com.vaadin.flow.function.SerializableConsumer;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import team.mephi.adminbot.dto.*;
 import team.mephi.adminbot.service.*;
+import team.mephi.adminbot.vaadin.SimpleDialog;
 
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class MailingEditorDialog extends Dialog {
+public class MailingEditorDialog extends Dialog implements SimpleDialog<SimpleMailing> {
     private final BeanValidationBinder<SimpleMailing> binder = new BeanValidationBinder<>(SimpleMailing.class);
     private final Button saveButton = new Button(getTranslation("save_button"), e -> onSave());
     private final TabSheet tabSheet = new TabSheet();
@@ -124,19 +125,11 @@ public class MailingEditorDialog extends Dialog {
         });
     }
 
-    public void showDialogForNew(SerializableConsumer<SimpleMailing> callback) {
-        this.mailing = new SimpleMailing();
+    @Override
+    public void showDialog(Object mailing, SerializableConsumer<SimpleMailing> callback) {
+        this.mailing = Objects.isNull(mailing) ? new SimpleMailing() : (SimpleMailing) mailing;
         this.onSaveCallback = callback;
-        binder.readBean(mailing);
-        binder.setReadOnly(false);
-        tabSheet.setSelectedTab(tab1);
-        open();
-    }
-
-    public void showDialogForEdit(SimpleMailing mailing, SerializableConsumer<SimpleMailing> callback) {
-        this.mailing = mailing;
-        this.onSaveCallback = callback;
-        binder.readBean(mailing);
+        binder.readBean(this.mailing);
         binder.setReadOnly(false);
         tabSheet.setSelectedTab(tab1);
         open();

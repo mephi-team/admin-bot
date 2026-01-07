@@ -5,8 +5,11 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.function.SerializableConsumer;
 import team.mephi.adminbot.dto.SimpleTemplate;
+import team.mephi.adminbot.vaadin.SimpleDialog;
 
-public class TemplateEditorDialog extends Dialog {
+import java.util.Objects;
+
+public class TemplateEditorDialog extends Dialog implements SimpleDialog<SimpleTemplate> {
     private final BeanValidationBinder<SimpleTemplate> binder = new BeanValidationBinder<>(SimpleTemplate.class);
     private final Button saveButton = new Button(getTranslation("save_button"), e -> onSave());
 
@@ -22,18 +25,10 @@ public class TemplateEditorDialog extends Dialog {
         getFooter().add(saveButton);
     }
 
-    public void showDialogForNew(SerializableConsumer<SimpleTemplate> callback) {
+    public void showDialog(Object template, SerializableConsumer<SimpleTemplate> callback) {
+        if (Objects.isNull(template)) template = new SimpleTemplate();
         this.onSaveCallback = callback;
-        var newTemplate = new SimpleTemplate();
-        binder.readBean(newTemplate);
-        binder.setReadOnly(false);
-
-        open();
-    }
-
-    public void showDialogForEdit(SimpleTemplate template, SerializableConsumer<SimpleTemplate> callback) {
-        this.onSaveCallback = callback;
-        binder.readBean(template);
+        binder.readBean((SimpleTemplate) template);
         binder.setReadOnly(false);
 
         open();

@@ -28,7 +28,7 @@ public class ExpertView extends VerticalLayout {
         var gsa = new GridSelectActions(getTranslation("grid_users_actions_label"),
                 new Button(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), e -> {
                     if (!selectedIds.isEmpty())
-                        actions.onDelete(selectedIds, "notification_users_deleted");
+                        actions.onDelete(selectedIds, "delete_users");
                 })
         );
 
@@ -44,11 +44,11 @@ public class ExpertView extends VerticalLayout {
         grid.addColumn(u -> Objects.nonNull(u.getDirection()) ? u.getDirection().getName() : "").setHeader(getTranslation("grid_expert_header_direction_label")).setSortable(true).setResizable(true).setKey("direction");
 
         grid.addComponentColumn(item -> {
-            Button dropButton = new Button(getTranslation("grid_expert_action_delete_label"), VaadinIcon.CLOSE.create(), e -> actions.onDelete(List.of(item.getId()), "notification_users_deleted"));
-            Button viewButton = new Button(VaadinIcon.EYE.create(), e -> actions.onView(item));
+            Button dropButton = new Button(getTranslation("grid_expert_action_delete_label"), VaadinIcon.CLOSE.create(), e -> actions.onDelete(List.of(item.getId()), "delete_users"));
+            Button viewButton = new Button(VaadinIcon.EYE.create(), e -> actions.onView(item, "users_view"));
             Button chatButton = new Button(VaadinIcon.CHAT.create(), e -> UI.getCurrent().navigate(Dialogs.class, QueryParameters.of("userId", item.getId().toString())));
-            Button editButton = new Button(VaadinIcon.PENCIL.create(), e -> actions.onEdit(item, "notification_users_saved"));
-            Button blockButton = new Button(VaadinIcon.BAN.create(), e -> actions.onBlock(item, "notification_users_blocked"));
+            Button editButton = new Button(VaadinIcon.PENCIL.create(), e -> actions.onEdit(item, "users_edit"));
+            Button blockButton = new Button(VaadinIcon.BAN.create(), e -> actions.onBlock(item, "users_blocked"));
             if (UserStatus.BLOCKED.name().equals(item.getStatus())) {
                 blockButton.addClassNames(LumoUtility.TextColor.ERROR);
             } else {

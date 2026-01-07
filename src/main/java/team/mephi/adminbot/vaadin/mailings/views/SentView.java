@@ -41,7 +41,7 @@ public class SentView extends VerticalLayout {
         var gsa = new GridSelectActions(getTranslation("grid_mailing_actions_label"),
                 new Button(getTranslation("grid_mailing_actions_delete_label"), VaadinIcon.TRASH.create(), e -> {
                     if (!selectedIds.isEmpty()) {
-                        actions.onDelete(selectedIds, selectedIds.size() > 1 ? "notification_mailing_delete_all" : "notification_mailing_delete", String.valueOf(selectedIds.size()));
+                        actions.onDelete(selectedIds, selectedIds.size() > 1 ? "delete_mailing_all" : "delete_mailing", String.valueOf(selectedIds.size()));
                     }
                 })
         );
@@ -67,11 +67,11 @@ public class SentView extends VerticalLayout {
         grid.addComponentColumn(item -> {
             Div group = new Div();
             group.addClassNames(LumoUtility.TextAlignment.RIGHT);
-            Button retryButton = new Button(VaadinIcon.ROTATE_RIGHT.create(), e -> actions.onRetry(item, "notification_mailing_retry"));
+            Button retryButton = new Button(VaadinIcon.ROTATE_RIGHT.create(), e -> actions.onRetry(item, "retry_mailing"));
             retryButton.setVisible(item.getStatus().equals("PAUSED") || item.getStatus().equals("ERROR"));
-            Button cancelButton = new Button(VaadinIcon.CLOSE_CIRCLE_O.create(), e -> actions.onCancel(item, "notification_mailing_cancel"));
+            Button cancelButton = new Button(VaadinIcon.CLOSE_CIRCLE_O.create(), e -> actions.onCancel(item, "cancel_mailing"));
             cancelButton.setVisible(item.getStatus().equals("ACTIVE"));
-            Button deleteButton = new Button(VaadinIcon.TRASH.create(), e -> actions.onDelete(List.of(item.getId()), "notification_mailing_delete"));
+            Button deleteButton = new Button(VaadinIcon.TRASH.create(), e -> actions.onDelete(List.of(item.getId()), "delete_mailing"));
             group.add(retryButton, cancelButton, deleteButton);
             return group;
         }).setHeader(getTranslation("grid_header_actions_label")).setWidth("120px").setFlexGrow(0).setKey("actions");

@@ -12,10 +12,11 @@ import team.mephi.adminbot.service.CityService;
 import team.mephi.adminbot.service.CohortService;
 import team.mephi.adminbot.service.DirectionService;
 import team.mephi.adminbot.service.RoleService;
+import team.mephi.adminbot.vaadin.SimpleDialog;
 
 import java.util.Objects;
 
-public class UserEditorDialog extends Dialog {
+public class UserEditorDialog extends Dialog implements SimpleDialog<SimpleUser> {
     private final BeanValidationBinder<SimpleUser> binder = new BeanValidationBinder<>(SimpleUser.class);
     private final Button saveButton = new Button(getTranslation("save_button"), e -> onSave());
 
@@ -41,7 +42,7 @@ public class UserEditorDialog extends Dialog {
                 .bind("city");
         binder.bindInstanceFields(form);
 
-        setHeaderTitle(getTranslation("dialog_users_new_title"));
+        setHeaderTitle("dialog_users_new_title");
         add(form);
         setWidth("100%");
         setMaxWidth("500px");
@@ -51,29 +52,13 @@ public class UserEditorDialog extends Dialog {
                 saveButton.setEnabled(e.getBinder().isValid()));
     }
 
-    public void openForView(SimpleUser user) {
-        binder.readBean(user);
-        binder.setReadOnly(true);
-        saveButton.setVisible(false);
-        open();
-    }
-
-    public void openForEdit(SimpleUser user, SerializableConsumer<SimpleUser> callback) {
-        this.user = user;
+    @Override
+    public void showDialog(Object user, SerializableConsumer<SimpleUser> callback) {
+        this.user = (SimpleUser) user;
         this.onSaveCallback = callback;
-        binder.readBean(user);
-        binder.setReadOnly(false);
-        saveButton.setVisible(true);
-        open();
-    }
-
-    public void openForNew(String role, SerializableConsumer<SimpleUser> callback) {
-        this.user = new SimpleUser();
-        this.onSaveCallback = callback;
-        user.setRole(role);
-        binder.readBean(user);
-        binder.setReadOnly(false);
-        saveButton.setVisible(true);
+        binder.readBean(this.user);
+        binder.setReadOnly(Objects.isNull(callback));
+        saveButton.setVisible(Objects.nonNull(callback));
         open();
     }
 
