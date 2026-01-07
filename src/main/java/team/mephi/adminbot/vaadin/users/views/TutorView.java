@@ -45,7 +45,7 @@ public class TutorView extends VerticalLayout {
         grid.addColumn(SimpleUser::getStudentCount).setHeader(getTranslation("grid_tutor_header_curatorship_label")).setResizable(true).setKey("curatorship");
 
         grid.addComponentColumn(item -> {
-            Button dropButton = new Button(getTranslation("grid_tutor_action_curatorship_label"), e -> actions.onTutoring(item, "Test"));
+            Button dropButton = new Button(getTranslation("grid_tutor_action_curatorship_label"), e -> actions.onTutoring(item, "notification_tutors_updated"));
             Button viewButton = new Button(new Icon(VaadinIcon.EYE), e -> actions.onView(item));
             Button chatButton = new Button(new Icon(VaadinIcon.CHAT), e -> UI.getCurrent().navigate(Dialogs.class, QueryParameters.of("userId", item.getId().toString())));
             Button editButton = new Button(new Icon(VaadinIcon.PENCIL), e -> actions.onEdit(item, "notification_users_saved"));
