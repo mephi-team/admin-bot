@@ -42,7 +42,7 @@ public class Users extends VerticalLayout implements StudentViewCallback, TutorV
 
     private final TabSheet tabSheet = new TabSheet();
     private final List<String> rolesInOrder = new ArrayList<>();
-    private final Map<String, CRUDActions> actions = new HashMap<>();
+    private final Map<String, CRUDActions<?>> actions = new HashMap<>();
 
     private String currentTab;
 
@@ -127,7 +127,7 @@ public class Users extends VerticalLayout implements StudentViewCallback, TutorV
         return currentTab;
     }
 
-    private CRUDActions getCurrentAction() {
+    private CRUDActions<?> getCurrentAction() {
         return actions.get(getCurrentRole());
     }
 
