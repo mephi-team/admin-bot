@@ -4,10 +4,10 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import team.mephi.adminbot.dto.SimpleDirection;
+import team.mephi.adminbot.dto.SimplePd;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.dto.UserDto;
 import team.mephi.adminbot.model.*;
-import team.mephi.adminbot.model.enums.ConsentStatus;
 import team.mephi.adminbot.model.enums.UserStatus;
 import team.mephi.adminbot.repository.TutorRepository;
 import team.mephi.adminbot.repository.UserRepository;
@@ -154,7 +154,7 @@ public class UserServiceImpl implements UserService {
                 .email(user.getEmail())
                 .phoneNumber(user.getPhoneNumber())
                 .pdConsent(user.getPdConsent())
-                .pdConsentLog(user.getPdConsentLogs().stream().filter(p -> ConsentStatus.GRANTED.equals(p.getStatus())).map(PdConsentLog::getSource).toList())
+                .pdConsentLog(user.getPdConsentLogs().stream().map(pd -> SimplePd.builder().id(pd.getId()).source(pd.getSource()).status(pd.getStatus().name()).build()).toList())
                 .status(user.getStatus().name())
                 .city(user.getCity())
                 .direction(Objects.nonNull(user.getDirection()) ? SimpleDirection.builder().id(user.getDirection().getId()).name(user.getDirection().getName()).build() : null)

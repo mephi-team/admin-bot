@@ -31,6 +31,6 @@ public class SimpleUser {
     private SimpleDirection direction;
     private String city;
     private Boolean pdConsent;
-    private List<String> pdConsentLog;
+    private List<SimplePd> pdConsentLog;
     private String tutor;
 }

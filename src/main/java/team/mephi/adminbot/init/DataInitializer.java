@@ -36,6 +36,9 @@ public class DataInitializer {
     private UserRepository userRepository;
 
     @Autowired
+    private PdConsentLogRepository pdConsentLogRepository;
+
+    @Autowired
     private DialogRepository dialogRepository;
 
     @Autowired
@@ -71,6 +74,7 @@ public class DataInitializer {
             boolean hasDirections = directionRepository.count() > 0;
             boolean hasRoles = roleRepository.count() > 0;
             boolean hasUsers = userRepository.count() > 0;
+            boolean hasPdConsentLog = pdConsentLogRepository.count() > 0;
             boolean hasDialogs = dialogRepository.count() > 0;
             boolean hasQuestions = questionRepository.count() > 0;
             boolean hasAnswers = answerRepository.count() > 0;
@@ -84,6 +88,7 @@ public class DataInitializer {
                 if (!hasDirections) initDirections();
                 if (!hasRoles) initRoles();
                 if (!hasUsers) initUsers();
+                if (!hasPdConsentLog) initPdConsentLog();
                 if (!hasTutors) initTutors();
                 if (!hasQuestions) initQuestions();
                 if (!hasAnswers) initAnswers();
@@ -159,6 +164,28 @@ public class DataInitializer {
         );
         userRepository.saveAll(users);
         System.out.printf("  → Создано %d пользователей%n", users.size());
+    }
+
+    private void initPdConsentLog() {
+        Random random = new Random();
+        List<ConsentStatus> statuses = Arrays.stream(ConsentStatus.values()).toList();
+        List<String> roles = List.of("candidate", "middle_candidate", "visitor");
+        List<String> sources = List.of("Telegram", "Web", "Mobile App");
+        List<User> users = userRepository.findAll().stream().filter(u -> roles.contains(u.getRole().getCode())).toList();
+        List<PdConsentLog> logs = new ArrayList<>();
+        for (User user : users) {
+            int todayDialogs = 1 + random.nextInt(2); // 1 или 2 диалога "сегодня"
+            for (int i = 0; i < todayDialogs; i++) {
+                logs.add(PdConsentLog.builder()
+                        .user(user)
+                        .consentedAt(Instant.now().minusSeconds(new Random().nextInt(30) * DAY_SECONDS))
+                        .source(sources.get(random.nextInt(sources.size())))
+                        .status(statuses.get(random.nextInt(statuses.size())))
+                        .build());
+            }
+        }
+        pdConsentLogRepository.saveAll(logs);
+        System.out.printf("  → Создано %d записей согласия на обработку ПД%n", logs.size());
     }
 
     private void initTutors() {

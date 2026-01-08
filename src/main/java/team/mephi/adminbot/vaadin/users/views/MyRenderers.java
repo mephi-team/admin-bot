@@ -14,11 +14,16 @@ public class MyRenderers {
             Span span = new Span();
             Div content = new Div();
             content.addClassNames(LumoUtility.Display.FLEX, LumoUtility.FlexDirection.COLUMN);
-            content.add(new H4(span.getTranslation("popover_pd_title")), new Div(new Span(span.getTranslation("popover_pd_key_1")), new Span(" — "), new Span(user.getPdConsentLog().isEmpty() ? span.getTranslation("popover_pd_value_negative") : span.getTranslation("popover_pd_value_positive"))));
+            var allPdCount = user.getPdConsentLog().size();
+            var grantedPdCount = user.getPdConsentLog().stream().filter(pdLog -> pdLog.getStatus().equals("GRANTED")).count();
+            content.add(new H4(span.getTranslation("popover_pd_title")));
+            for (var pdLog : user.getPdConsentLog()) {
+                content.add(new Div(new Span(pdLog.getSource()), new Span(" — "), new Span(span.getTranslation("pd_status_" + pdLog.getStatus().toLowerCase()))));
+            }
             PdPopover popover = new PdPopover(content);
             popover.setTarget(span);
 
-            span.setText(span.getTranslation("popover_pd_text") + " " + user.getPdConsentLog().size() + "/1");
+            span.setText(span.getTranslation("popover_pd_text") + " " + grantedPdCount + "/" + allPdCount);
             span.addClassNames(LumoUtility.TextColor.PRIMARY);
             span.getElement().getStyle().set("text-decoration", "underline");
             return span;
