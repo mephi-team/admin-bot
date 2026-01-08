@@ -1,6 +1,6 @@
 package team.mephi.adminbot.vaadin.service;
 
-import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.icon.Icon;
 import org.springframework.stereotype.Service;
 import team.mephi.adminbot.vaadin.SimpleDialog;
 import team.mephi.adminbot.vaadin.components.SimpleConfirmDialog;
@@ -42,11 +42,13 @@ public class DialogFactoryImpl implements DialogFactory {
 
     @Override
     public SimpleDialog getDialog(String name) {
-        return registry.get(name).get();
+        var dialog = registry.get(name).get();
+        dialog.setHeaderTitle("dialog_" + name + "_title");
+        return dialog;
     }
 
     @Override
-    public SimpleConfirmDialog getConfirmDialog(String name) {
-        return new SimpleConfirmDialog("dialog_" + name + "_title","dialog_" + name + "_text","dialog_" + name + "_action");
+    public SimpleConfirmDialog getConfirmDialog(String name, Icon icon) {
+        return new SimpleConfirmDialog("dialog_" + name + "_title","dialog_" + name + "_text","dialog_" + name + "_action", icon, null);
     }
 }

@@ -1,5 +1,6 @@
 package team.mephi.adminbot.vaadin.mailings.presenter;
 
+import com.vaadin.flow.component.icon.VaadinIcon;
 import team.mephi.adminbot.dto.SimpleMailing;
 import team.mephi.adminbot.vaadin.CRUDDataProvider;
 import team.mephi.adminbot.vaadin.CRUDPresenter;
@@ -23,7 +24,7 @@ public class MailingsPresenter extends CRUDPresenter<SimpleMailing> implements M
 
     @Override
     public void onCancel(SimpleMailing item, String label, Object ... params) {
-        dialogService.showConfirmDialog(item, label, (edit) -> {
+        dialogService.showConfirmDialog(item, label, VaadinIcon.CLOSE_CIRCLE_O.create(), (edit) -> {
             edit.setStatus("CANCELED");
             dataProvider.save(edit);
             dataProvider.getDataProvider().refreshItem(edit);
@@ -33,7 +34,7 @@ public class MailingsPresenter extends CRUDPresenter<SimpleMailing> implements M
 
     @Override
     public void onRetry(SimpleMailing item, String label, Object ... params) {
-        dialogService.showConfirmDialog(item, label, (edit) -> {
+        dialogService.showConfirmDialog(item, label, VaadinIcon.ROTATE_RIGHT.create(), (edit) -> {
             edit.setStatus("ACTIVE");
             dataProvider.save(edit);
             dataProvider.getDataProvider().refreshItem(edit);

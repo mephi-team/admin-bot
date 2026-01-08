@@ -4,6 +4,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import lombok.Getter;
@@ -18,10 +19,10 @@ public class SimpleConfirmDialog extends ConfirmDialog {
     private Runnable onConfirm;
 
     public SimpleConfirmDialog(String title, String text, String action) {
-        this(title, text, action, null);
+        this(title, text, action, VaadinIcon.TRASH.create(), null);
     }
 
-    public SimpleConfirmDialog(String title, String text, String action, Runnable onConfirm) {
+    public SimpleConfirmDialog(String title, String text, String action, Icon actionIcon, Runnable onConfirm) {
         this.header = title;
         this.text = text;
         this.onConfirm = onConfirm;
@@ -38,7 +39,7 @@ public class SimpleConfirmDialog extends ConfirmDialog {
         header.addClassNames(LumoUtility.Display.FLEX, LumoUtility.Gap.MEDIUM, LumoUtility.AlignItems.CENTER);
         setHeader(header);
         setText(getTranslation(text));
-        var confirmButton = new Button(getTranslation(action), VaadinIcon.TRASH.create());
+        var confirmButton = new Button(getTranslation(action), actionIcon);
         confirmButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         setConfirmButton(confirmButton);
 

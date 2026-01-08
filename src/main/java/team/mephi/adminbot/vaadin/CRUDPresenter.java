@@ -1,5 +1,6 @@
 package team.mephi.adminbot.vaadin;
 
+import com.vaadin.flow.component.icon.VaadinIcon;
 import team.mephi.adminbot.vaadin.service.DialogService;
 import team.mephi.adminbot.vaadin.service.NotificationService;
 import team.mephi.adminbot.vaadin.service.NotificationType;
@@ -46,7 +47,7 @@ public class CRUDPresenter<T> implements CRUDActions<T>, DataProvider<T> {
 
     @Override
     public void onDelete(List<Long> ids, String label, Object ... param) {
-        dialogService.showConfirmDialog(ids.size(), label, (ignore) -> {
+        dialogService.showConfirmDialog(ids.size(), label, VaadinIcon.TRASH.create(), (ignore) -> {
             dataProvider.deleteAllById(ids);
             dataProvider.getDataProvider().refreshAll();
             notificationService.showNotification(NotificationType.DELETE, label, param);

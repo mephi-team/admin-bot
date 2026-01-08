@@ -109,7 +109,7 @@ public class Questions extends VerticalLayout {
     }
 
     private void onDelete(List<Long> selectedIds) {
-        dialogService.showConfirmDialog(selectedIds.size(), selectedIds.size() > 1 ? "delete_question_all" : "delete_question", (ignore) -> {
+        dialogService.showConfirmDialog(selectedIds.size(), selectedIds.size() > 1 ? "delete_question_all" : "delete_question", VaadinIcon.TRASH.create(), (ignore) -> {
             provider.deleteAllById(selectedIds);
             provider.getDataProvider().refreshAll();
             notificationService.showNotification(NotificationType.DELETE, selectedIds.size() > 1 ? "question_delete_all" : "question_delete", selectedIds.size());
