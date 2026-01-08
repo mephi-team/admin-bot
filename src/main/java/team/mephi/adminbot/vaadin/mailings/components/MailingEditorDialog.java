@@ -17,7 +17,7 @@ import team.mephi.adminbot.vaadin.SimpleDialog;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class MailingEditorDialog extends Dialog implements SimpleDialog<SimpleMailing> {
+public class MailingEditorDialog extends Dialog implements SimpleDialog {
     private final BeanValidationBinder<SimpleMailing> binder = new BeanValidationBinder<>(SimpleMailing.class);
     private final Button saveButton = new Button(getTranslation("save_button"), e -> onSave());
     private final TabSheet tabSheet = new TabSheet();
@@ -126,9 +126,9 @@ public class MailingEditorDialog extends Dialog implements SimpleDialog<SimpleMa
     }
 
     @Override
-    public void showDialog(Object mailing, SerializableConsumer<SimpleMailing> callback) {
+    public void showDialog(Object mailing, SerializableConsumer<?> callback) {
         this.mailing = Objects.isNull(mailing) ? new SimpleMailing() : (SimpleMailing) mailing;
-        this.onSaveCallback = callback;
+        this.onSaveCallback = (SerializableConsumer<SimpleMailing>) callback;
         binder.readBean(this.mailing);
         binder.setReadOnly(false);
         tabSheet.setSelectedTab(tab1);

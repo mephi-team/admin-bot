@@ -9,7 +9,7 @@ import com.vaadin.flow.function.SerializableConsumer;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.vaadin.SimpleDialog;
 
-public class BlockDialog extends Dialog implements SimpleDialog<SimpleUser> {
+public class BlockDialog extends Dialog implements SimpleDialog {
     private final BeanValidationBinder<SimpleUser> binder = new BeanValidationBinder<>(SimpleUser.class);
     private final Button saveButton = new Button(getTranslation("save_button"), e -> onSave());
     private final Tabs tabs = new Tabs();
@@ -46,8 +46,8 @@ public class BlockDialog extends Dialog implements SimpleDialog<SimpleUser> {
     }
 
     @Override
-    public void showDialog(Object item, SerializableConsumer<SimpleUser> callback) {
-        this.onSaveCallback = callback;
+    public void showDialog(Object item, SerializableConsumer<?> callback) {
+        this.onSaveCallback = (SerializableConsumer<SimpleUser>) callback;
         binder.readBean((SimpleUser) item);
         binder.setReadOnly(true);
         saveButton.setVisible(false);

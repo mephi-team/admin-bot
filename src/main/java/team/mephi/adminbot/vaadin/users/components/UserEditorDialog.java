@@ -16,7 +16,7 @@ import team.mephi.adminbot.vaadin.SimpleDialog;
 
 import java.util.Objects;
 
-public class UserEditorDialog extends Dialog implements SimpleDialog<SimpleUser> {
+public class UserEditorDialog extends Dialog implements SimpleDialog {
     private final BeanValidationBinder<SimpleUser> binder = new BeanValidationBinder<>(SimpleUser.class);
     private final Button saveButton = new Button(getTranslation("save_button"), e -> onSave());
 
@@ -53,9 +53,9 @@ public class UserEditorDialog extends Dialog implements SimpleDialog<SimpleUser>
     }
 
     @Override
-    public void showDialog(Object user, SerializableConsumer<SimpleUser> callback) {
+    public void showDialog(Object user, SerializableConsumer<?> callback) {
         this.user = (SimpleUser) user;
-        this.onSaveCallback = callback;
+        this.onSaveCallback = (SerializableConsumer<SimpleUser>) callback;
         binder.readBean(this.user);
         binder.setReadOnly(Objects.isNull(callback));
         saveButton.setVisible(Objects.nonNull(callback));

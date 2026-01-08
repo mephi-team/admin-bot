@@ -17,7 +17,7 @@ import java.util.function.Supplier;
 
 @Service
 public class DialogFactoryImpl implements DialogFactory {
-    private final Map<String, Supplier<SimpleDialog<?>>> registry = new HashMap<>();
+    private final Map<String, Supplier<SimpleDialog>> registry = new HashMap<>();
 
     public DialogFactoryImpl(
             UserEditorDialogFactory userEditorDialogFactory,
@@ -41,7 +41,7 @@ public class DialogFactoryImpl implements DialogFactory {
     }
 
     @Override
-    public SimpleDialog<?> getDialog(String name) {
+    public SimpleDialog getDialog(String name) {
         return registry.get(name).get();
     }
 

@@ -9,7 +9,7 @@ import team.mephi.adminbot.vaadin.SimpleDialog;
 
 import java.util.Objects;
 
-public class TemplateEditorDialog extends Dialog implements SimpleDialog<SimpleTemplate> {
+public class TemplateEditorDialog extends Dialog implements SimpleDialog {
     private final BeanValidationBinder<SimpleTemplate> binder = new BeanValidationBinder<>(SimpleTemplate.class);
     private final Button saveButton = new Button(getTranslation("save_button"), e -> onSave());
 
@@ -25,9 +25,9 @@ public class TemplateEditorDialog extends Dialog implements SimpleDialog<SimpleT
         getFooter().add(saveButton);
     }
 
-    public void showDialog(Object template, SerializableConsumer<SimpleTemplate> callback) {
+    public void showDialog(Object template, SerializableConsumer<?> callback) {
         if (Objects.isNull(template)) template = new SimpleTemplate();
-        this.onSaveCallback = callback;
+        this.onSaveCallback = (SerializableConsumer<SimpleTemplate>) callback;
         binder.readBean((SimpleTemplate) template);
         binder.setReadOnly(false);
 
