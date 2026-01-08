@@ -6,9 +6,7 @@ import org.springframework.stereotype.Service;
 import team.mephi.adminbot.dto.SimpleDirection;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.dto.UserDto;
-import team.mephi.adminbot.model.Direction;
-import team.mephi.adminbot.model.Role;
-import team.mephi.adminbot.model.User;
+import team.mephi.adminbot.model.*;
 import team.mephi.adminbot.model.enums.UserStatus;
 import team.mephi.adminbot.repository.TutorRepository;
 import team.mephi.adminbot.repository.UserRepository;
@@ -159,6 +157,7 @@ public class UserServiceImpl implements UserService {
                 .city(user.getCity())
                 .direction(Objects.nonNull(user.getDirection()) ? SimpleDirection.builder().id(user.getDirection().getId()).name(user.getDirection().getName()).build() : null)
                 .cohort(user.getCohort())
+                .tutor(user.getTutorAssignments().stream().filter(StudentTutor::getIsActive).findAny().orElseGet(() -> StudentTutor.builder().tutor(Tutor.builder().userName("").build()).build()).getTutor().getUserName())
                 .build();
     }
 }

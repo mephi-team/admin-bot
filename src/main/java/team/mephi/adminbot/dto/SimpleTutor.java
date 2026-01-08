@@ -30,8 +30,6 @@ public class SimpleTutor {
     private String cohort;
     private SimpleDirection direction;
     private String city;
-    private Boolean pdConsent;
     private long studentCount;
     private List<SimpleUser> students;
-    private String tutor;
 }
