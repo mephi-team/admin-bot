@@ -3,6 +3,7 @@ package team.mephi.adminbot.vaadin.users.presenter;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.vaadin.service.DialogService;
+import team.mephi.adminbot.vaadin.service.DialogType;
 import team.mephi.adminbot.vaadin.service.NotificationService;
 import team.mephi.adminbot.vaadin.service.NotificationType;
 import team.mephi.adminbot.vaadin.users.actions.StudentActions;
@@ -20,9 +21,9 @@ public class StudentPresenter extends UsersPresenter implements StudentActions {
     }
 
     @Override
-    public void onExpel(List<Long> ids, String label, Object ... params) {
-        dialogService.showConfirmDialog(ids.size(), label, VaadinIcon.CLOSE.create(), (ignore) -> {
-            notificationService.showNotification(NotificationType.EDIT, label, params);
+    public void onExpel(List<Long> ids, DialogType type, Object ... params) {
+        dialogService.showConfirmDialog(ids.size(), type, VaadinIcon.CLOSE.create(), (ignore) -> {
+            notificationService.showNotification(NotificationType.EDIT, type.getNotificationKey(), params);
         });
     }
 }

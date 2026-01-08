@@ -3,6 +3,7 @@ package team.mephi.adminbot.vaadin.users.presenter;
 import team.mephi.adminbot.dto.SimpleTutor;
 import team.mephi.adminbot.vaadin.CRUDPresenter;
 import team.mephi.adminbot.vaadin.service.DialogService;
+import team.mephi.adminbot.vaadin.service.DialogType;
 import team.mephi.adminbot.vaadin.service.NotificationService;
 import team.mephi.adminbot.vaadin.service.NotificationType;
 import team.mephi.adminbot.vaadin.users.actions.TutorActions;
@@ -23,22 +24,22 @@ public class TutorPresenter extends CRUDPresenter<SimpleTutor> implements TutorA
     }
 
     @Override
-    public void onTutoring(SimpleTutor item, String label, Object ... params) {
-        dialogService.showDialog(item, label, editedItem -> {
+    public void onTutoring(SimpleTutor item, DialogType type, Object ... params) {
+        dialogService.showDialog(item, type, editedItem -> {
             if (Objects.nonNull(editedItem)) {
                 editedItem = dataProvider.save(editedItem);
                 dataProvider.getDataProvider().refreshItem(editedItem);
-                notificationService.showNotification(NotificationType.EDIT, label, params);
+                notificationService.showNotification(NotificationType.EDIT, type.getNotificationKey(), params);
             }
         });
     }
 
     @Override
-    public void onBlock(SimpleTutor item, String label, Object... params) {
-        dialogService.showDialog(item, label, (callback) -> {
+    public void onBlock(SimpleTutor item, DialogType type, Object... params) {
+        dialogService.showDialog(item, type, (callback) -> {
             dataProvider.blockAllById(List.of(item.getId()));
             dataProvider.getDataProvider().refreshAll();
-            notificationService.showNotification(NotificationType.DELETE, label, params);
+            notificationService.showNotification(NotificationType.DELETE, type.getNotificationKey(), params);
         });
     }
 }

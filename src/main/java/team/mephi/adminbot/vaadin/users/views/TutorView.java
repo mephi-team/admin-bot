@@ -12,6 +12,7 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 import team.mephi.adminbot.dto.SimpleTutor;
 import team.mephi.adminbot.model.enums.UserStatus;
 import team.mephi.adminbot.vaadin.components.*;
+import team.mephi.adminbot.vaadin.service.DialogType;
 import team.mephi.adminbot.vaadin.users.dataproviders.TutorDataProviderImpl;
 import team.mephi.adminbot.vaadin.users.presenter.TutorPresenter;
 import team.mephi.adminbot.vaadin.views.Dialogs;
@@ -28,7 +29,7 @@ public class TutorView extends VerticalLayout {
         var gsa = new GridSelectActions(getTranslation("grid_users_actions_label"),
                 new Button(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), e -> {
                     if (!selectedIds.isEmpty())
-                        actions.onDelete(selectedIds, "delete_users");
+                        actions.onDelete(selectedIds, DialogType.DELETE_USERS);
                 })
         );
 
@@ -44,11 +45,11 @@ public class TutorView extends VerticalLayout {
         grid.addColumn(SimpleTutor::getStudentCount).setHeader(getTranslation("grid_tutor_header_curatorship_label")).setResizable(true).setKey("curatorship");
 
         grid.addComponentColumn(item -> {
-            Button dropButton = new Button(getTranslation("grid_tutor_action_curatorship_label"), e -> actions.onTutoring(item, "tutors_updated"));
-            Button viewButton = new Button(VaadinIcon.EYE.create(), e -> actions.onView(item, "tutors_view"));
+            Button dropButton = new Button(getTranslation("grid_tutor_action_curatorship_label"), e -> actions.onTutoring(item, DialogType.TUTORS_UPDATED));
+            Button viewButton = new Button(VaadinIcon.EYE.create(), e -> actions.onView(item, DialogType.TUTORS_VIEW));
             Button chatButton = new Button(VaadinIcon.CHAT.create(), e -> UI.getCurrent().navigate(Dialogs.class, QueryParameters.of("userId", item.getId().toString())));
-            Button editButton = new Button(VaadinIcon.PENCIL.create(), e -> actions.onEdit(item, "tutors_edit"));
-            Button blockButton = new Button(VaadinIcon.BAN.create(), e -> actions.onBlock(item, "users_blocked"));
+            Button editButton = new Button(VaadinIcon.PENCIL.create(), e -> actions.onEdit(item, DialogType.TUTORS_EDIT));
+            Button blockButton = new Button(VaadinIcon.BAN.create(), e -> actions.onBlock(item, DialogType.TUTORS_BLOCKED));
             if (UserStatus.BLOCKED.name().equals(item.getStatus())) {
                 blockButton.addClassNames(LumoUtility.TextColor.ERROR);
             } else {

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class NotificationServiceImpl implements NotificationService {
     @Override
     public void showNotification(NotificationType type, String message, Object... params) {
-        var notification = Notification.show(I18NProvider.translate("notification_" + message, params), 3000, Notification.Position.TOP_END);
+        var notification = Notification.show(I18NProvider.translate(message, params), 3000, Notification.Position.TOP_END);
         switch (type) {
             case NotificationType.EDIT -> notification.addThemeVariants(NotificationVariant.LUMO_WARNING);
             case NotificationType.DELETE -> notification.addThemeVariants(NotificationVariant.LUMO_CONTRAST);

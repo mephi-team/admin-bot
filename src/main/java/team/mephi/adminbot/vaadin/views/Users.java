@@ -18,6 +18,7 @@ import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.service.UserService;
 import team.mephi.adminbot.vaadin.CRUDActions;
 import team.mephi.adminbot.vaadin.components.UserCountBadge;
+import team.mephi.adminbot.vaadin.service.DialogType;
 import team.mephi.adminbot.vaadin.users.components.*;
 import team.mephi.adminbot.vaadin.users.presenter.*;
 import team.mephi.adminbot.vaadin.users.tabs.UserTabProvider;
@@ -80,7 +81,7 @@ public class Users extends VerticalLayout implements BeforeEnterObserver {
             fileUploadDialog.open();
         });
         var primaryButton = new Button(getTranslation("page_users_create_user_button"), VaadinIcon.PLUS.create(), e -> {
-            getCurrentAction().onCreate(SimpleUser.builder().role((String) getCurrentRole()).build(), "users_created");
+            getCurrentAction().onCreate(SimpleUser.builder().role((String) getCurrentRole()).build(), DialogType.USERS_CREATED);
         });
         primaryButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         Div buttons = new Div(secondaryButton, primaryButton);

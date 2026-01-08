@@ -17,6 +17,7 @@ import team.mephi.adminbot.vaadin.components.*;
 import team.mephi.adminbot.vaadin.questions.dataproviders.QuestionDataProvider;
 import team.mephi.adminbot.vaadin.questions.dataproviders.QuestionDataProviderFactory;
 import team.mephi.adminbot.vaadin.service.DialogService;
+import team.mephi.adminbot.vaadin.service.DialogType;
 import team.mephi.adminbot.vaadin.service.NotificationService;
 import team.mephi.adminbot.vaadin.service.NotificationType;
 
@@ -99,20 +100,20 @@ public class Questions extends VerticalLayout {
     }
 
     private void onAnswer(SimpleQuestion question) {
-        dialogService.showDialog(question, "answer_send", (editedItem) -> {
+        dialogService.showDialog(question, DialogType.ANSWER_SEND, (editedItem) -> {
             if (editedItem != null) {
                 var savedAnswer = provider.saveAnswer((SimpleQuestion) editedItem);
                 provider.getDataProvider().refreshItem(savedAnswer);
-                notificationService.showNotification(NotificationType.EDIT, "answer_send", question.getId());
+                notificationService.showNotification(NotificationType.EDIT, DialogType.ANSWER_SEND.getNotificationKey(), question.getId());
             }
         });
     }
 
     private void onDelete(List<Long> selectedIds) {
-        dialogService.showConfirmDialog(selectedIds.size(), selectedIds.size() > 1 ? "delete_question_all" : "delete_question", VaadinIcon.TRASH.create(), (ignore) -> {
+        dialogService.showConfirmDialog(selectedIds.size(), selectedIds.size() > 1 ? DialogType.DELETE_QUESTION_ALL : DialogType.DELETE_QUESTION, VaadinIcon.TRASH.create(), (ignore) -> {
             provider.deleteAllById(selectedIds);
             provider.getDataProvider().refreshAll();
-            notificationService.showNotification(NotificationType.DELETE, selectedIds.size() > 1 ? "question_delete_all" : "question_delete", selectedIds.size());
+            notificationService.showNotification(NotificationType.DELETE, selectedIds.size() > 1 ? DialogType.DELETE_QUESTION_ALL .getNotificationKey() : DialogType.DELETE_QUESTION.getNotificationKey(), selectedIds.size());
         });
     }
 }

@@ -12,6 +12,7 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.model.enums.UserStatus;
 import team.mephi.adminbot.vaadin.components.*;
+import team.mephi.adminbot.vaadin.service.DialogType;
 import team.mephi.adminbot.vaadin.users.dataproviders.CandidateDataProvider;
 import team.mephi.adminbot.vaadin.users.presenter.UsersPresenter;
 import team.mephi.adminbot.vaadin.views.Dialogs;
@@ -28,15 +29,15 @@ public class CandidateView extends VerticalLayout {
         var gsa = new GridSelectActions(getTranslation("grid_users_actions_label"),
                 new Button(getTranslation("grid_candidate_actions_accept_label"), VaadinIcon.CHECK.create(), e -> {
                     if (!selectedIds.isEmpty())
-                        actions.onAccept(selectedIds, selectedIds.size() > 1 ? "accept_users_all" : "accept_users", "" + selectedIds.size());
+                        actions.onAccept(selectedIds, selectedIds.size() > 1 ? DialogType.ACCEPT_USERS_ALL : DialogType.ACCEPT_USERS, "" + selectedIds.size());
                 }),
                 new Button(getTranslation("grid_candidate_actions_reject_label"), VaadinIcon.CLOSE.create(), e -> {
                     if (!selectedIds.isEmpty())
-                        actions.onReject(selectedIds, selectedIds.size() > 1 ? "reject_users_all" : "reject_users", "" + selectedIds.size());
+                        actions.onReject(selectedIds, selectedIds.size() > 1 ? DialogType.REJECT_USERS_ALL : DialogType.REJECT_USERS, "" + selectedIds.size());
                 }),
                 new Button(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), e -> {
                     if (!selectedIds.isEmpty())
-                        actions.onDelete(selectedIds, "delete_users");
+                        actions.onDelete(selectedIds, DialogType.DELETE_USERS);
                 })
         );
 
@@ -55,12 +56,12 @@ public class CandidateView extends VerticalLayout {
         grid.addColumn(SimpleUser::getCity).setHeader(getTranslation("grid_candidate_header_city_label")).setSortable(true).setResizable(true).setKey("city");
 
         grid.addComponentColumn(item -> {
-            Button confirmButton = new Button(VaadinIcon.CHECK.create(), e -> actions.onAccept(List.of(item.getId()), "accept_users"));
-            Button rejectButton = new Button(VaadinIcon.CLOSE.create(), e -> actions.onReject(List.of(item.getId()), "reject_users"));
-            Button viewButton = new Button(VaadinIcon.EYE.create(), e -> actions.onView(item, "users_view"));
+            Button confirmButton = new Button(VaadinIcon.CHECK.create(), e -> actions.onAccept(List.of(item.getId()), DialogType.ACCEPT_USERS));
+            Button rejectButton = new Button(VaadinIcon.CLOSE.create(), e -> actions.onReject(List.of(item.getId()), DialogType.REJECT_USERS));
+            Button viewButton = new Button(VaadinIcon.EYE.create(), e -> actions.onView(item, DialogType.USERS_VIEW));
             Button chatButton = new Button(VaadinIcon.CHAT.create(), e -> UI.getCurrent().navigate(Dialogs.class, QueryParameters.of("userId", item.getId().toString())));
-            Button editButton = new Button(VaadinIcon.PENCIL.create(), e -> actions.onEdit(item, "users_edit"));
-            Button blockButton = new Button(VaadinIcon.BAN.create(), e -> actions.onBlock(item, "users_blocked"));
+            Button editButton = new Button(VaadinIcon.PENCIL.create(), e -> actions.onEdit(item, DialogType.USERS_EDIT));
+            Button blockButton = new Button(VaadinIcon.BAN.create(), e -> actions.onBlock(item, DialogType.USERS_BLOCKED));
             if (UserStatus.BLOCKED.name().equals(item.getStatus())) {
                 blockButton.addClassNames(LumoUtility.TextColor.ERROR);
             } else {

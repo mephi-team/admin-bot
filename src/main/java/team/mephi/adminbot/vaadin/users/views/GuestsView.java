@@ -9,6 +9,7 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.model.enums.UserStatus;
 import team.mephi.adminbot.vaadin.components.*;
+import team.mephi.adminbot.vaadin.service.DialogType;
 import team.mephi.adminbot.vaadin.users.dataproviders.GuestsDataProvider;
 import team.mephi.adminbot.vaadin.users.presenter.BlockingPresenter;
 
@@ -23,7 +24,7 @@ public class GuestsView extends VerticalLayout {
         var gsa = new GridSelectActions(getTranslation("grid_users_actions_label"),
                 new Button(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), e -> {
                     if (!selectedIds.isEmpty())
-                        actions.onDelete(selectedIds, "delete_users");
+                        actions.onDelete(selectedIds, DialogType.DELETE_USERS);
                 })
         );
 
@@ -36,8 +37,8 @@ public class GuestsView extends VerticalLayout {
         grid.addColumn(MyRenderers.createPdRenderer()).setHeader(getTranslation("grid_guests_header_pd_consent_label")).setSortable(true).setResizable(true).setKey("pdConsent");
 
         grid.addComponentColumn(item -> {
-            Button viewButton = new Button(VaadinIcon.EYE.create(), e -> actions.onView(item, "users_view"));
-            Button blockButton = new Button(VaadinIcon.BAN.create(), e -> actions.onBlock(item, "users_blocked"));
+            Button viewButton = new Button(VaadinIcon.EYE.create(), e -> actions.onView(item, DialogType.USERS_VIEW));
+            Button blockButton = new Button(VaadinIcon.BAN.create(), e -> actions.onBlock(item, DialogType.USERS_BLOCKED));
             if (UserStatus.BLOCKED.name().equals(item.getStatus())) {
                 blockButton.addClassNames(LumoUtility.TextColor.ERROR);
             } else {

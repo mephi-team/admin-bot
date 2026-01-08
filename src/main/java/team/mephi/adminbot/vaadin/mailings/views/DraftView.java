@@ -15,6 +15,7 @@ import team.mephi.adminbot.dto.SimpleMailing;
 import team.mephi.adminbot.vaadin.components.*;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.DraftDataProvider;
 import team.mephi.adminbot.vaadin.mailings.presenter.MailingsPresenter;
+import team.mephi.adminbot.vaadin.service.DialogType;
 
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -42,7 +43,7 @@ public class DraftView extends VerticalLayout {
         var gsa = new GridSelectActions(getTranslation("grid_mailing_actions_label"),
                 new Button(getTranslation("grid_mailing_actions_delete_label"), VaadinIcon.TRASH.create(), e -> {
                     if (!selectedIds.isEmpty()) {
-                        actions.onDelete(selectedIds, selectedIds.size() > 1 ? "delete_mailing_all" : "delete_mailing", selectedIds.size());
+                        actions.onDelete(selectedIds, selectedIds.size() > 1 ? DialogType.DELETE_MAILING_ALL : DialogType.DELETE_MAILING, selectedIds.size());
                     }
                 })
         );
@@ -68,8 +69,8 @@ public class DraftView extends VerticalLayout {
         grid.addComponentColumn(item -> {
             Div group = new Div();
             group.addClassNames(LumoUtility.TextAlignment.RIGHT);
-            Button editButton = new Button(VaadinIcon.EDIT.create(), e -> actions.onEdit(item, "mailing_saved"));
-            Button deleteButton = new Button(VaadinIcon.TRASH.create(), e -> actions.onDelete(List.of(item.getId()), "delete_mailing"));
+            Button editButton = new Button(VaadinIcon.EDIT.create(), e -> actions.onEdit(item, DialogType.MAILING_SAVED));
+            Button deleteButton = new Button(VaadinIcon.TRASH.create(), e -> actions.onDelete(List.of(item.getId()), DialogType.DELETE_MAILING));
             group.add(editButton, deleteButton);
             return group;
         }).setHeader(getTranslation("grid_header_actions_label")).setWidth("120px").setFlexGrow(0).setKey("actions");

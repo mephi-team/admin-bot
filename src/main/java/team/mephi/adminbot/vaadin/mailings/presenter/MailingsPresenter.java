@@ -6,6 +6,7 @@ import team.mephi.adminbot.vaadin.CRUDDataProvider;
 import team.mephi.adminbot.vaadin.CRUDPresenter;
 import team.mephi.adminbot.vaadin.mailings.actions.MailingActions;
 import team.mephi.adminbot.vaadin.service.DialogService;
+import team.mephi.adminbot.vaadin.service.DialogType;
 import team.mephi.adminbot.vaadin.service.NotificationService;
 import team.mephi.adminbot.vaadin.service.NotificationType;
 
@@ -23,22 +24,22 @@ public class MailingsPresenter extends CRUDPresenter<SimpleMailing> implements M
     }
 
     @Override
-    public void onCancel(SimpleMailing item, String label, Object ... params) {
-        dialogService.showConfirmDialog(item, label, VaadinIcon.CLOSE_CIRCLE_O.create(), (edit) -> {
+    public void onCancel(SimpleMailing item, DialogType type, Object ... params) {
+        dialogService.showConfirmDialog(item, type, VaadinIcon.CLOSE_CIRCLE_O.create(), (edit) -> {
             edit.setStatus("CANCELED");
             dataProvider.save(edit);
             dataProvider.getDataProvider().refreshItem(edit);
-            notificationService.showNotification(NotificationType.EDIT, label, params);
+            notificationService.showNotification(NotificationType.EDIT, type.getNotificationKey(), params);
         });
     }
 
     @Override
-    public void onRetry(SimpleMailing item, String label, Object ... params) {
-        dialogService.showConfirmDialog(item, label, VaadinIcon.ROTATE_RIGHT.create(), (edit) -> {
+    public void onRetry(SimpleMailing item, DialogType type, Object ... params) {
+        dialogService.showConfirmDialog(item, type, VaadinIcon.ROTATE_RIGHT.create(), (edit) -> {
             edit.setStatus("ACTIVE");
             dataProvider.save(edit);
             dataProvider.getDataProvider().refreshItem(edit);
-            notificationService.showNotification(NotificationType.EDIT, label, params);
+            notificationService.showNotification(NotificationType.EDIT, type.getNotificationKey(), params);
         });
     }
 }

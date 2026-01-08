@@ -2,6 +2,8 @@ package team.mephi.adminbot.vaadin.service;
 
 import com.vaadin.flow.component.icon.Icon;
 import org.springframework.stereotype.Service;
+import team.mephi.adminbot.dto.SimpleTutor;
+import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.vaadin.SimpleDialog;
 import team.mephi.adminbot.vaadin.components.SimpleConfirmDialog;
 import team.mephi.adminbot.vaadin.mailings.components.MailingEditorDialogFactory;
@@ -17,7 +19,7 @@ import java.util.function.Supplier;
 
 @Service
 public class DialogFactoryImpl implements DialogFactory {
-    private final Map<String, Supplier<SimpleDialog>> registry = new HashMap<>();
+    private final Map<DialogType, Supplier<SimpleDialog>> registry = new HashMap<>();
 
     public DialogFactoryImpl(
             UserEditorDialogFactory userEditorDialogFactory,
@@ -27,30 +29,34 @@ public class DialogFactoryImpl implements DialogFactory {
             TemplateEditorDialogFactory templateDialogFactory,
             AnswerDialogFactory answerDialogFactory
     ) {
-        registry.put("users_created", userEditorDialogFactory::create);
-        registry.put("users_view", userEditorDialogFactory::create);
-        registry.put("users_edit", userEditorDialogFactory::create);
-        registry.put("users_blocked", blockDialogFactory::create);
-        registry.put("tutors_view", tutoringDialogFactory::create);
-        registry.put("tutors_updated", tutoringDialogFactory::create);
-        registry.put("tutors_edit", tutoringDialogFactory::create);
-        registry.put("sent_created", mailingDialogFactory::create);
-        registry.put("templates_created", templateDialogFactory::create);
-        registry.put("draft_created", mailingDialogFactory::create);
-        registry.put("mailing_saved", mailingDialogFactory::create);
-        registry.put("template_saved", templateDialogFactory::create);
-        registry.put("answer_send", answerDialogFactory::create);
+        registry.put(DialogType.USERS_CREATED, userEditorDialogFactory::create);
+        registry.put(DialogType.USERS_VIEW, userEditorDialogFactory::create);
+        registry.put(DialogType.USERS_EDIT, userEditorDialogFactory::create);
+        registry.put(DialogType.USERS_BLOCKED, () -> blockDialogFactory.create(SimpleUser.class));
+        registry.put(DialogType.TUTORS_BLOCKED, () -> blockDialogFactory.create(SimpleTutor.class));
+        registry.put(DialogType.TUTORS_VIEW, tutoringDialogFactory::create);
+        registry.put(DialogType.TUTORS_UPDATED, tutoringDialogFactory::create);
+        registry.put(DialogType.TUTORS_EDIT, tutoringDialogFactory::create);
+        registry.put(DialogType.SENT_CREATED, mailingDialogFactory::create);
+        registry.put(DialogType.TEMPLATES_CREATED, templateDialogFactory::create);
+        registry.put(DialogType.DRAFT_CREATED, mailingDialogFactory::create);
+        registry.put(DialogType.MAILING_SAVED, mailingDialogFactory::create);
+        registry.put(DialogType.TEMPLATE_SAVED, templateDialogFactory::create);
+        registry.put(DialogType.ANSWER_SEND, answerDialogFactory::create);
     }
 
     @Override
-    public SimpleDialog getDialog(String name) {
-        var dialog = registry.get(name).get();
-        dialog.setHeaderTitle("dialog_" + name + "_title");
+    public SimpleDialog getDialog(DialogType type) {
+        var supplier = registry.get(type);
+        if (supplier == null) throw new IllegalArgumentException("Dialog not registered: " + type);
+        var dialog = supplier.get();
+        dialog.setHeaderTitle(type.getDialogTitleKey());
         return dialog;
     }
 
     @Override
-    public SimpleConfirmDialog getConfirmDialog(String name, Icon icon) {
+    public SimpleConfirmDialog getConfirmDialog(DialogType type, Icon icon) {
+        var name = type.name().toLowerCase();
         return new SimpleConfirmDialog("dialog_" + name + "_title","dialog_" + name + "_text","dialog_" + name + "_action", icon, null);
     }
 }

@@ -4,6 +4,6 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.function.SerializableConsumer;
 
 public interface DialogService<T> {
-    void showDialog(Object user, String label, SerializableConsumer<T> callback);
-    void showConfirmDialog(Object user, String label, Icon icon, SerializableConsumer<T> callback);
+    void showDialog(Object user, DialogType type, SerializableConsumer<T> callback);
+    void showConfirmDialog(Object user, DialogType type, Icon icon, SerializableConsumer<T> callback);
 }

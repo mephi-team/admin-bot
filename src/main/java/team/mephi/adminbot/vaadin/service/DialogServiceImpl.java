@@ -14,12 +14,12 @@ public class DialogServiceImpl<T> implements DialogService<T> {
     }
 
     @Override
-    public void showDialog(Object item, String label, SerializableConsumer<T> callback) {
-        dialogFactory.getDialog(label).showDialog(item, callback);
+    public void showDialog(Object item, DialogType type, SerializableConsumer<T> callback) {
+        dialogFactory.getDialog(type).showDialog(item, callback);
     }
 
     @Override
-    public void showConfirmDialog(Object item, String label, Icon icon, SerializableConsumer<T> callback) {
-        dialogFactory.getConfirmDialog(label, icon).showForConfirm(item, () -> callback.accept((T) item));
+    public void showConfirmDialog(Object item, DialogType type, Icon icon, SerializableConsumer<T> callback) {
+        dialogFactory.getConfirmDialog(type, icon).showForConfirm(item, () -> callback.accept((T) item));
     }
 }

@@ -12,6 +12,7 @@ import team.mephi.adminbot.dto.SimpleTemplate;
 import team.mephi.adminbot.vaadin.CRUDPresenter;
 import team.mephi.adminbot.vaadin.components.*;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.TemplateDataProvider;
+import team.mephi.adminbot.vaadin.service.DialogType;
 
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -26,7 +27,7 @@ public class TemplateView extends VerticalLayout {
         var gsa = new GridSelectActions(getTranslation("grid_template_actions_label"),
                 new Button(getTranslation("grid_template_actions_delete_label"), VaadinIcon.TRASH.create(), e -> {
                     if (!selectedIds.isEmpty()) {
-                        actions.onDelete(selectedIds, selectedIds.size() > 1 ? "delete_template_all" : "delete_template", "" + selectedIds.size());
+                        actions.onDelete(selectedIds, selectedIds.size() > 1 ? DialogType.DELETE_TEMPLATE_ALL : DialogType.DELETE_TEMPLATE, "" + selectedIds.size());
                     }
                 })
         );
@@ -46,8 +47,8 @@ public class TemplateView extends VerticalLayout {
         grid.addComponentColumn(item -> {
             Div group = new Div();
             group.addClassNames(LumoUtility.TextAlignment.RIGHT);
-            Button editButton = new Button(VaadinIcon.EDIT.create(), e -> actions.onEdit(item, "template_saved"));
-            Button deleteButton = new Button(VaadinIcon.TRASH.create(), e -> actions.onDelete(List.of(item.getId()), "delete_template"));
+            Button editButton = new Button(VaadinIcon.EDIT.create(), e -> actions.onEdit(item, DialogType.TEMPLATE_SAVED));
+            Button deleteButton = new Button(VaadinIcon.TRASH.create(), e -> actions.onDelete(List.of(item.getId()), DialogType.DELETE_TEMPLATE));
             group.add(editButton, deleteButton);
             return group;
         }).setHeader(getTranslation("grid_header_actions_label")).setWidth("120px").setFlexGrow(0).setKey("actions");

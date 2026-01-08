@@ -16,6 +16,7 @@ import team.mephi.adminbot.vaadin.components.*;
 import team.mephi.adminbot.vaadin.mailings.service.MailingCountService;
 import team.mephi.adminbot.vaadin.mailings.presenter.MailingPresenterFactory;
 import team.mephi.adminbot.vaadin.mailings.tabs.MailingTabProvider;
+import team.mephi.adminbot.vaadin.service.DialogType;
 
 import java.util.*;
 
@@ -67,7 +68,7 @@ public class Mailings extends VerticalLayout {
         top.addToStart(new H1(getTranslation("page_mailing_title")));
 
         primaryButton.addClickListener(e -> {
-            getCurrentAction().onCreate(null, getCurrentRole()+"_created");
+            getCurrentAction().onCreate(null, getCreateDialogType());
         });
         primaryButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         top.addToEnd(primaryButton);
@@ -80,6 +81,16 @@ public class Mailings extends VerticalLayout {
             return rolesInOrder.get(selectedTab);
         }
         return "visitor";
+    }
+
+    private DialogType getCreateDialogType() {
+        String role = getCurrentRole();
+        // Простой маппинг ролей табов в DialogType; при необходимости расширить
+        return switch (role) {
+            case "templates" -> DialogType.TEMPLATES_CREATED;
+            case "draft", "drafts" -> DialogType.DRAFT_CREATED;
+            default -> DialogType.SENT_CREATED;
+        };
     }
 
     private CRUDActions<?> getCurrentAction() {

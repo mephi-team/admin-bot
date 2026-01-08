@@ -6,19 +6,22 @@ import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.function.SerializableConsumer;
-import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.vaadin.SimpleDialog;
 
-public class BlockDialog extends Dialog implements SimpleDialog {
-    private final BeanValidationBinder<SimpleUser> binder = new BeanValidationBinder<>(SimpleUser.class);
+public class BlockDialog<T> extends Dialog implements SimpleDialog {
+    private final BeanValidationBinder<T> binder;
     private final Button saveButton = new Button(getTranslation("save_button"), e -> onSave());
     private final Tabs tabs = new Tabs();
     private final Tab tab1 = new Tab(getTranslation("dialog_user_block_tab_warning_label"));
     private final Tab tab2 = new Tab(getTranslation("dialog_user_block_tab_block_label"));
 
-    private SerializableConsumer<SimpleUser> onSaveCallback;
+    private SerializableConsumer<T> onSaveCallback;
+    private final Class<T> beanType;
 
-    public BlockDialog() {
+    public BlockDialog(Class<T> beanType) {
+        this.beanType = beanType;
+        this.binder = new BeanValidationBinder<>(beanType);
+
         var form = new BlockUserInfo();
         var form1 = new WarningForm();
         var form2 = new BlockForm();
@@ -46,9 +49,10 @@ public class BlockDialog extends Dialog implements SimpleDialog {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void showDialog(Object item, SerializableConsumer<?> callback) {
-        this.onSaveCallback = (SerializableConsumer<SimpleUser>) callback;
-        binder.readBean((SimpleUser) item);
+        this.onSaveCallback = (SerializableConsumer<T>) callback;
+        binder.readBean(beanType.cast(item));
         binder.setReadOnly(true);
         saveButton.setVisible(false);
         tabs.setSelectedTab(tab1);
@@ -58,9 +62,13 @@ public class BlockDialog extends Dialog implements SimpleDialog {
     private void onSave() {
         if(binder.validate().isOk()) {
             if (onSaveCallback != null) {
-                SimpleUser user = new SimpleUser();
-                binder.writeBeanIfValid(user);
-                onSaveCallback.accept(user);
+                try {
+                    T user = beanType.getDeclaredConstructor().newInstance();
+                    binder.writeBeanIfValid(user);
+                    onSaveCallback.accept(user);
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
             }
             close();
         }
