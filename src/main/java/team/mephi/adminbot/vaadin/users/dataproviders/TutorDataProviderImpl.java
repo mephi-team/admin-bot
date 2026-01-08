@@ -4,27 +4,27 @@ import com.vaadin.flow.data.provider.*;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import team.mephi.adminbot.dto.SimpleUser;
+import team.mephi.adminbot.dto.SimpleTutor;
 import team.mephi.adminbot.service.TutorService;
-import team.mephi.adminbot.vaadin.users.presenter.UserDataProvider;
+import team.mephi.adminbot.vaadin.users.presenter.TutorDataProvider;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class TutorDataProvider implements UserDataProvider {
+public class TutorDataProviderImpl implements TutorDataProvider {
 
     private final TutorService tutorService;
 
-    private ConfigurableFilterDataProvider<SimpleUser, Void, String> provider;
+    private ConfigurableFilterDataProvider<SimpleTutor, Void, String> provider;
 
-    public TutorDataProvider(TutorService tutorService) {
+    public TutorDataProviderImpl(TutorService tutorService) {
         this.tutorService = tutorService;
     }
 
-    public ConfigurableFilterDataProvider<SimpleUser, Void, String> getFilterableProvider() {
+    public ConfigurableFilterDataProvider<SimpleTutor, Void, String> getFilterableProvider() {
         if (provider == null) {
-            CallbackDataProvider<SimpleUser, String> base = new CallbackDataProvider<>(
+            CallbackDataProvider<SimpleTutor, String> base = new CallbackDataProvider<>(
                     query -> {
                         List<QuerySortOrder> sortOrders = query.getSortOrders();
                         Sort sort = Sort.by(sortOrders.stream()
@@ -40,7 +40,7 @@ public class TutorDataProvider implements UserDataProvider {
                         return tutorService.findAllByName(query.getFilter().orElse(""), pageable);
                         },
                     query -> tutorService.countByName(query.getFilter().orElse("")),
-                    SimpleUser::getId
+                    SimpleTutor::getId
             );
             provider = base.withConfigurableFilter();
         }
@@ -48,17 +48,17 @@ public class TutorDataProvider implements UserDataProvider {
     }
 
     @Override
-    public DataProvider<SimpleUser, ?> getDataProvider() {
+    public DataProvider<SimpleTutor, ?> getDataProvider() {
         return getFilterableProvider();
     }
 
     @Override
-    public Optional<SimpleUser> findById(Long id) {
+    public Optional<SimpleTutor> findById(Long id) {
         return tutorService.findById(id);
     }
 
     @Override
-    public SimpleUser save(SimpleUser dto) {
+    public SimpleTutor save(SimpleTutor dto) {
         return tutorService.save(dto);
     }
 

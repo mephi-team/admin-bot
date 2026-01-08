@@ -31,7 +31,9 @@ public class DialogFactoryImpl implements DialogFactory {
         registry.put("users_view", userEditorDialogFactory::create);
         registry.put("users_edit", userEditorDialogFactory::create);
         registry.put("users_blocked", blockDialogFactory::create);
+        registry.put("tutors_view", tutoringDialogFactory::create);
         registry.put("tutors_updated", tutoringDialogFactory::create);
+        registry.put("tutors_edit", tutoringDialogFactory::create);
         registry.put("sent_created", mailingDialogFactory::create);
         registry.put("templates_created", templateDialogFactory::create);
         registry.put("draft_created", mailingDialogFactory::create);

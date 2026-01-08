@@ -3,6 +3,7 @@ package team.mephi.adminbot.service;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import team.mephi.adminbot.dto.SimpleTutor;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.model.StudentTutor;
 import team.mephi.adminbot.model.Tutor;
@@ -25,7 +26,7 @@ public class TutorServiceImpl implements TutorService {
 
     @Override
     @Transactional
-    public SimpleUser save(SimpleUser dto) {
+    public SimpleTutor save(SimpleTutor dto) {
         Tutor user = dto.getId() != null
                 ? tutorRepository.findById(dto.getId()).orElse(new Tutor())
                 : new Tutor();
@@ -52,7 +53,7 @@ public class TutorServiceImpl implements TutorService {
     }
 
     @Override
-    public Optional<SimpleUser> findById(Long id) {
+    public Optional<SimpleTutor> findById(Long id) {
         return tutorRepository.findByIdWithStudent(id).map(this::mapToSimpleUser);
     }
 
@@ -67,7 +68,7 @@ public class TutorServiceImpl implements TutorService {
     }
 
     @Override
-    public Stream<SimpleUser> findAllByName(String name, Pageable pageable) {
+    public Stream<SimpleTutor> findAllByName(String name, Pageable pageable) {
         return tutorRepository.findAllWithDirectionsAndStudents(name, pageable)
                 .stream()
                 .map(this::mapToSimpleUser);
@@ -78,8 +79,8 @@ public class TutorServiceImpl implements TutorService {
         return tutorRepository.countByName(name);
     }
 
-    private SimpleUser mapToSimpleUser(Tutor tutor) {
-        return SimpleUser.builder()
+    private SimpleTutor mapToSimpleUser(Tutor tutor) {
+        return SimpleTutor.builder()
                 .id(tutor.getId())
                 .role("tutor")
                 .fullName(tutor.getLastName() + " " + tutor.getFirstName())

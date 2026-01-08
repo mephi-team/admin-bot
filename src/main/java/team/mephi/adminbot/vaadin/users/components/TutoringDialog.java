@@ -4,6 +4,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.function.SerializableConsumer;
+import team.mephi.adminbot.dto.SimpleTutor;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.service.UserService;
 import team.mephi.adminbot.vaadin.SimpleDialog;
@@ -11,11 +12,11 @@ import team.mephi.adminbot.vaadin.SimpleDialog;
 import java.util.*;
 
 public class TutoringDialog  extends Dialog implements SimpleDialog {
-    private final BeanValidationBinder<SimpleUser> binder = new BeanValidationBinder<>(SimpleUser.class);
+    private final BeanValidationBinder<SimpleTutor> binder = new BeanValidationBinder<>(SimpleTutor.class);
     private final Button saveButton = new Button(getTranslation("save_button"), e -> onSave());
 
-    private SerializableConsumer<SimpleUser> onSaveCallback;
-    private SimpleUser user;
+    private SerializableConsumer<SimpleTutor> onSaveCallback;
+    private SimpleTutor user;
 
     public TutoringDialog(UserService userService) {
         var form = new TutorForm(userService);
@@ -33,14 +34,14 @@ public class TutoringDialog  extends Dialog implements SimpleDialog {
                   if (Objects.isNull(e)) return new HashSet<>();
                   return new HashSet<>(e);
               })
-              .bind(SimpleUser::getStudents, SimpleUser::setStudents);
+              .bind(SimpleTutor::getStudents, SimpleTutor::setStudents);
     }
 
     @Override
     public void showDialog(Object user, SerializableConsumer<?> callback) {
-        this.user = (SimpleUser) user;
-        this.onSaveCallback = (SerializableConsumer<SimpleUser>) callback;
-        binder.readBean((SimpleUser) user);
+        this.user = (SimpleTutor) user;
+        this.onSaveCallback = (SerializableConsumer<SimpleTutor>) callback;
+        binder.readBean((SimpleTutor) user);
 //        binder.setReadOnly(true);
 //        saveButton.setVisible(false);
         open();

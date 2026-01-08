@@ -9,10 +9,10 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.QueryParameters;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import team.mephi.adminbot.dto.SimpleUser;
+import team.mephi.adminbot.dto.SimpleTutor;
 import team.mephi.adminbot.model.enums.UserStatus;
 import team.mephi.adminbot.vaadin.components.*;
-import team.mephi.adminbot.vaadin.users.dataproviders.TutorDataProvider;
+import team.mephi.adminbot.vaadin.users.dataproviders.TutorDataProviderImpl;
 import team.mephi.adminbot.vaadin.users.presenter.TutorPresenter;
 import team.mephi.adminbot.vaadin.views.Dialogs;
 
@@ -24,7 +24,7 @@ public class TutorView extends VerticalLayout {
     private List<Long> selectedIds;
 
     public TutorView(TutorPresenter actions) {
-        TutorDataProvider provider = (TutorDataProvider) actions.getDataProvider();
+        TutorDataProviderImpl provider = (TutorDataProviderImpl) actions.getDataProvider();
         var gsa = new GridSelectActions(getTranslation("grid_users_actions_label"),
                 new Button(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), e -> {
                     if (!selectedIds.isEmpty())
@@ -35,19 +35,19 @@ public class TutorView extends VerticalLayout {
         setSizeFull();
         setPadding(false);
 
-        var grid = new Grid<>(SimpleUser.class, false);
-        grid.addColumn(SimpleUser::getFullName).setHeader(getTranslation("grid_tutor_header_name_label")).setSortable(true).setResizable(true).setFrozen(true)
+        var grid = new Grid<>(SimpleTutor.class, false);
+        grid.addColumn(SimpleTutor::getFullName).setHeader(getTranslation("grid_tutor_header_name_label")).setSortable(true).setResizable(true).setFrozen(true)
                 .setAutoWidth(true).setFlexGrow(0).setKey("lastName");
-        grid.addColumn(SimpleUser::getEmail).setHeader(getTranslation("grid_tutor_header_email_label")).setSortable(true).setResizable(true).setKey("email");
-        grid.addColumn(SimpleUser::getTgId).setHeader(getTranslation("grid_tutor_header_telegram_label")).setSortable(true).setResizable(true).setKey("tgId");
+        grid.addColumn(SimpleTutor::getEmail).setHeader(getTranslation("grid_tutor_header_email_label")).setSortable(true).setResizable(true).setKey("email");
+        grid.addColumn(SimpleTutor::getTgId).setHeader(getTranslation("grid_tutor_header_telegram_label")).setSortable(true).setResizable(true).setKey("tgId");
         grid.addColumn(u -> Objects.nonNull(u.getDirection()) ? u.getDirection().getName() : "").setHeader(getTranslation("grid_tutor_header_direction_label")).setResizable(true).setKey("direction");
-        grid.addColumn(SimpleUser::getStudentCount).setHeader(getTranslation("grid_tutor_header_curatorship_label")).setResizable(true).setKey("curatorship");
+        grid.addColumn(SimpleTutor::getStudentCount).setHeader(getTranslation("grid_tutor_header_curatorship_label")).setResizable(true).setKey("curatorship");
 
         grid.addComponentColumn(item -> {
             Button dropButton = new Button(getTranslation("grid_tutor_action_curatorship_label"), e -> actions.onTutoring(item, "tutors_updated"));
-            Button viewButton = new Button(VaadinIcon.EYE.create(), e -> actions.onView(item, "users_view"));
+            Button viewButton = new Button(VaadinIcon.EYE.create(), e -> actions.onView(item, "tutors_view"));
             Button chatButton = new Button(VaadinIcon.CHAT.create(), e -> UI.getCurrent().navigate(Dialogs.class, QueryParameters.of("userId", item.getId().toString())));
-            Button editButton = new Button(VaadinIcon.PENCIL.create(), e -> actions.onEdit(item, "users_edit"));
+            Button editButton = new Button(VaadinIcon.PENCIL.create(), e -> actions.onEdit(item, "tutors_edit"));
             Button blockButton = new Button(VaadinIcon.BAN.create(), e -> actions.onBlock(item, "users_blocked"));
             if (UserStatus.BLOCKED.name().equals(item.getStatus())) {
                 blockButton.addClassNames(LumoUtility.TextColor.ERROR);
@@ -58,11 +58,11 @@ public class TutorView extends VerticalLayout {
         }).setHeader(getTranslation("grid_header_actions_label")).setWidth("330px").setFlexGrow(0).setKey("actions");
 
         grid.setDataProvider(provider.getDataProvider());
-        GridMultiSelectionModel<SimpleUser> selectionModel = (GridMultiSelectionModel<SimpleUser>) grid.setSelectionMode(Grid.SelectionMode.MULTI);
+        GridMultiSelectionModel<SimpleTutor> selectionModel = (GridMultiSelectionModel<SimpleTutor>) grid.setSelectionMode(Grid.SelectionMode.MULTI);
         selectionModel.setSelectionColumnFrozen(true);
         grid.setSizeFull();
         grid.addSelectionListener(sel -> {
-            selectedIds = sel.getAllSelectedItems().stream().map(SimpleUser::getId).toList();
+            selectedIds = sel.getAllSelectedItems().stream().map(SimpleTutor::getId).toList();
             gsa.setCount(selectedIds.size());
         });
 
