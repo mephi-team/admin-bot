@@ -114,7 +114,11 @@ public class UserServiceImpl implements UserService {
     public Stream<SimpleUser> findAllByRoleCodeLikeAndCohortLikeAndDirectionCodeLikeAndCityLike(String role, String cohort, Long direction, String city, Long tutor, Pageable pageable) {
         return userRepository.findAllByRoleCodeLikeAndCohortLikeAndDirectionCodeLikeAndCityLike(role, cohort, direction, city, tutor)
                 .stream()
-                .map(this::mapToSimple);
+                .map(user -> SimpleUser.builder()
+                        .id(user.getId())
+                        .fullName(user.getUserName())
+                        .tgId(user.getTgId())
+                        .build());
     }
 
     @Override
