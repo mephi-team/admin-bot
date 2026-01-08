@@ -51,11 +51,11 @@ public class MiddleCandidateView extends VerticalLayout {
         grid.addColumn(SimpleUser::getEmail).setHeader(getTranslation("grid_middle_candidate_header_email_label")).setSortable(true).setResizable(true).setKey("email");
         grid.addColumn(SimpleUser::getTgName).setHeader(getTranslation("grid_middle_candidate_header_telegram_label")).setSortable(true).setResizable(true).setKey("tgName");
         grid.addColumn(SimpleUser::getPhoneNumber).setHeader(getTranslation("grid_middle_candidate_header_phone_label")).setSortable(true).setResizable(true).setKey("phoneNumber");
-        grid.addColumn(SimpleUser::getPdConsent).setHeader(getTranslation("grid_middle_candidate_header_pd_consent_label")).setSortable(true).setResizable(true).setKey("pdConsent");
+        grid.addColumn(MyRenderers.createPdRenderer()).setHeader(getTranslation("grid_middle_candidate_header_pd_consent_label")).setSortable(true).setResizable(true).setKey("pdConsent");
         grid.addColumn(SimpleUser::getCohort).setHeader(getTranslation("grid_middle_candidate_header_cohort_label")).setSortable(true).setResizable(true).setKey("cohort");
         grid.addColumn(u -> Objects.nonNull(u.getDirection()) ? u.getDirection().getName() : "").setHeader(getTranslation("grid_middle_candidate_header_direction_label")).setSortable(true).setResizable(true).setKey("direction");
         grid.addColumn(SimpleUser::getCity).setHeader(getTranslation("grid_middle_candidate_header_city_label")).setSortable(true).setResizable(true).setKey("city");
-        grid.addColumn(createStatusComponentRenderer()).setHeader(getTranslation("grid_middle_candidate_header_status_label")).setSortable(true).setResizable(true).setKey("status");
+        grid.addColumn(new ComponentRenderer<>(Span::new, statusComponentUpdater)).setHeader(getTranslation("grid_middle_candidate_header_status_label")).setSortable(true).setResizable(true).setKey("status");
 
         grid.addComponentColumn(item -> {
             Button confirmButton = new Button(VaadinIcon.CHECK.create(), e -> actions.onAccept(List.of(item.getId()), "accept_users"));
@@ -93,9 +93,6 @@ public class MiddleCandidateView extends VerticalLayout {
         add(new SearchFragment(searchField, new Span(settingsBtn, downloadBtn)), gsa, grid);
     }
 
-    private static ComponentRenderer<Span, SimpleUser> createStatusComponentRenderer() {
-        return new ComponentRenderer<>(Span::new, statusComponentUpdater);
-    }
     private static final SerializableBiConsumer<Span, SimpleUser> statusComponentUpdater = (
             span, person) -> {
         String theme = switch (person.getStatus()) {

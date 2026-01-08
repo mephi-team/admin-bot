@@ -49,7 +49,7 @@ public class CandidateView extends VerticalLayout {
         grid.addColumn(SimpleUser::getEmail).setHeader(getTranslation("grid_candidate_header_email_label")).setSortable(true).setResizable(true).setKey("email");
         grid.addColumn(SimpleUser::getTgId).setHeader(getTranslation("grid_candidate_header_telegram_label")).setSortable(true).setResizable(true).setKey("tgId");
         grid.addColumn(SimpleUser::getPhoneNumber).setHeader(getTranslation("grid_candidate_header_phone_label")).setSortable(true).setResizable(true).setKey("phoneNumber");
-        grid.addColumn(SimpleUser::getPdConsent).setHeader(getTranslation("grid_candidate_header_pd_consent_label")).setSortable(true).setResizable(true).setKey("pdConsent");
+        grid.addColumn(MyRenderers.createPdRenderer()).setHeader(getTranslation("grid_candidate_header_pd_consent_label")).setSortable(true).setResizable(true).setKey("pdConsent");
         grid.addColumn(SimpleUser::getCohort).setHeader(getTranslation("grid_candidate_header_cohort_label")).setSortable(true).setResizable(true).setKey("cohort");
         grid.addColumn(u -> Objects.nonNull(u.getDirection()) ? u.getDirection().getName() : "").setHeader(getTranslation("grid_candidate_header_direction_label")).setSortable(true).setResizable(true).setKey("direction");
         grid.addColumn(SimpleUser::getCity).setHeader(getTranslation("grid_candidate_header_city_label")).setSortable(true).setResizable(true).setKey("city");
