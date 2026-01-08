@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -29,5 +31,6 @@ public class SimpleUser {
     private SimpleDirection direction;
     private String city;
     private Boolean pdConsent;
+    private List<String> pdConsentLog;
     private String tutor;
 }

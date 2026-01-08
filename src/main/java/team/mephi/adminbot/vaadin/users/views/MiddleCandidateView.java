@@ -55,7 +55,7 @@ public class MiddleCandidateView extends VerticalLayout {
         grid.addColumn(SimpleUser::getCohort).setHeader(getTranslation("grid_middle_candidate_header_cohort_label")).setSortable(true).setResizable(true).setKey("cohort");
         grid.addColumn(u -> Objects.nonNull(u.getDirection()) ? u.getDirection().getName() : "").setHeader(getTranslation("grid_middle_candidate_header_direction_label")).setSortable(true).setResizable(true).setKey("direction");
         grid.addColumn(SimpleUser::getCity).setHeader(getTranslation("grid_middle_candidate_header_city_label")).setSortable(true).setResizable(true).setKey("city");
-        grid.addColumn(new ComponentRenderer<>(Span::new, statusComponentUpdater)).setHeader(getTranslation("grid_middle_candidate_header_status_label")).setSortable(true).setResizable(true).setKey("status");
+        grid.addColumn(MyRenderers.createStatusRenderer()).setHeader(getTranslation("grid_middle_candidate_header_status_label")).setSortable(true).setResizable(true).setKey("status");
 
         grid.addComponentColumn(item -> {
             Button confirmButton = new Button(VaadinIcon.CHECK.create(), e -> actions.onAccept(List.of(item.getId()), "accept_users"));
@@ -92,14 +92,4 @@ public class MiddleCandidateView extends VerticalLayout {
 
         add(new SearchFragment(searchField, new Span(settingsBtn, downloadBtn)), gsa, grid);
     }
-
-    private static final SerializableBiConsumer<Span, SimpleUser> statusComponentUpdater = (
-            span, person) -> {
-        String theme = switch (person.getStatus()) {
-            case "ACTIVE" -> String.format("badge %s", "success");
-            default -> String.format("badge %s", "error");
-        };
-        span.getElement().setAttribute("theme", theme);
-        span.setText(person.getStatus());
-    };
 }

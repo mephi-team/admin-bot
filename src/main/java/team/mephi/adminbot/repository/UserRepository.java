@@ -103,7 +103,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u JOIN fetch u.role LEFT JOIN FETCH u.direction WHERE u.role.code = :role")
     List<User> findAllByRole(String role);
 
-    @Query("SELECT u FROM User u JOIN fetch u.role LEFT JOIN FETCH u.direction LEFT JOIN FETCH u.tutorAssignments ta LEFT JOIN FETCH ta.tutor WHERE u.role.code = :role AND (" +
+    @Query("SELECT u FROM User u JOIN fetch u.role LEFT JOIN FETCH u.direction LEFT JOIN FETCH u.tutorAssignments ta LEFT JOIN FETCH ta.tutor LEFT JOIN FETCH u.pdConsentLogs WHERE u.role.code = :role AND (" +
             "LOWER(COALESCE(u.userName, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
             "LOWER(COALESCE(u.name, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
             "LOWER(COALESCE(u.firstName, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +

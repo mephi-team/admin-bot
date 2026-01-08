@@ -7,7 +7,7 @@ import com.vaadin.flow.component.popover.PopoverPosition;
 public class PdPopover extends Popover {
     public PdPopover(Component... components) {
         super(components);
-        setPosition(PopoverPosition.BOTTOM);
+        setPosition(PopoverPosition.BOTTOM_START);
         setOpenOnClick(false);
         setOpenOnHover(true);
         setOpenOnFocus(true);

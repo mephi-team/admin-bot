@@ -147,11 +147,15 @@ public class DataInitializer {
                 User.builder().tgId("tg_1002").tgName("tg_name_1002").email("test2@example.com").userName("Иван Петров").firstName("Иван").lastName("Петров").role(candidateRole).cohort("Зима 2025").direction(analytics).status(UserStatus.ACTIVE).build(),
                 User.builder().tgId("tg_1003").tgName("tg_name_1003").email("test3@example.com").userName("Мария Козлова").firstName("Мария").lastName("Козлова").role(candidateRole).cohort("Зима 2025").direction(python).status(UserStatus.BLOCKED).build(),
                 User.builder().tgId("tg_1004").tgName("tg_name_1004").email("test4@example.com").userName("Алексей Иванов").firstName("Алексей").lastName("Иванов").role(middleCandidateRole).cohort("Осень 2025").direction(java).status(UserStatus.ACTIVE).build(),
-                User.builder().tgId("tg_1005").tgName("tg_name_1005").email("test5@example.com").userName("Екатерина Волкова").firstName("Екатерина").lastName("Волкова").role(studentRole).cohort("Весна 2026").direction(analytics).status(UserStatus.ACTIVE).build(),
-                User.builder().tgId("tg_1006").tgName("tg_name_1006").email("test6@example.com").userName("Анна Козлова").firstName("Анна").lastName("Козлова").role(visitorRole).status(UserStatus.ACTIVE).build(),
-                User.builder().tgId("tg_1007").tgName("tg_name_1007").email("test7@example.com").userName("Петр Иванов").firstName("Петр").lastName("Иванов").role(freeListenerRole).direction(python).status(UserStatus.ACTIVE).build(),
-                User.builder().tgId("tg_1008").tgName("tg_name_1008").email("test8@example.com").userName("Сергей Смирнов").firstName("Сергей").lastName("Смирнов").role(lcExpertRole).status(UserStatus.ACTIVE).build(),
-                User.builder().tgId("tg_1009").tgName("tg_name_1009").email("admin1@example.com").userName("Admin").firstName("Admin").lastName("Admin").role(lcExpertRole).status(UserStatus.ACTIVE).build()
+                User.builder().tgId("tg_1005").tgName("tg_name_1005").email("test5@example.com").userName("Алексей Иванов").firstName("Алексей").lastName("Иванов").role(middleCandidateRole).cohort("Осень 2025").direction(java).status(UserStatus.BLOCKED).build(),
+                User.builder().tgId("tg_1006").tgName("tg_name_1006").email("test6@example.com").userName("Алексей Иванов").firstName("Алексей").lastName("Иванов").role(middleCandidateRole).cohort("Осень 2025").direction(java).status(UserStatus.PENDING).build(),
+                User.builder().tgId("tg_1007").tgName("tg_name_1007").email("test7@example.com").userName("Алексей Иванов").firstName("Алексей").lastName("Иванов").role(middleCandidateRole).cohort("Осень 2025").direction(java).status(UserStatus.EXPELLED).build(),
+                User.builder().tgId("tg_1008").tgName("tg_name_1008").email("test8@example.com").userName("Алексей Иванов").firstName("Алексей").lastName("Иванов").role(middleCandidateRole).cohort("Осень 2025").direction(java).status(UserStatus.INACTIVE).build(),
+                User.builder().tgId("tg_1009").tgName("tg_name_1009").email("test9@example.com").userName("Екатерина Волкова").firstName("Екатерина").lastName("Волкова").role(studentRole).cohort("Весна 2026").direction(analytics).status(UserStatus.ACTIVE).build(),
+                User.builder().tgId("tg_1010").tgName("tg_name_1010").email("test10@example.com").userName("Анна Козлова").firstName("Анна").lastName("Козлова").role(visitorRole).status(UserStatus.ACTIVE).build(),
+                User.builder().tgId("tg_1011").tgName("tg_name_1011").email("test11@example.com").userName("Петр Иванов").firstName("Петр").lastName("Иванов").role(freeListenerRole).direction(python).status(UserStatus.ACTIVE).build(),
+                User.builder().tgId("tg_1012").tgName("tg_name_1012").email("test12@example.com").userName("Сергей Смирнов").firstName("Сергей").lastName("Смирнов").role(lcExpertRole).status(UserStatus.ACTIVE).build(),
+                User.builder().tgId("tg_1013").tgName("tg_name_1013").email("admin1@example.com").userName("Admin").firstName("Admin").lastName("Admin").role(lcExpertRole).status(UserStatus.ACTIVE).build()
         );
         userRepository.saveAll(users);
         System.out.printf("  → Создано %d пользователей%n", users.size());
@@ -159,11 +163,11 @@ public class DataInitializer {
 
     private void initTutors() {
         List<Tutor> tutors = Arrays.asList(
-                Tutor.builder().userName("Сергей Иванов").firstName("Сергей").lastName("Иванов").phone("+79991234567").email("test1@example.org").tgId("tg_name_1010").build(),
-                Tutor.builder().userName("Николай Александров").firstName("Николай").lastName("Александров").phone("+79997654321").email("test2@example.org").tgId("tg_name_1011").build(),
-                Tutor.builder().userName("Екатерина Козлова").firstName("Екатерина").lastName("Козлова").phone("+79991111111").email("test3@example.org").tgId("tg_name_1012").build(),
-                Tutor.builder().userName("Петр Петров").firstName("Петр").lastName("Петров").phone("+79992222222").email("test4@example.org").tgId("tg_name_1013").build(),
-                Tutor.builder().userName("Иван Иванов").firstName("Иван").lastName("Иванов").phone("+79993333333").email("test5@example.org").tgId("tg_name_1014").build()
+                Tutor.builder().userName("Сергей Иванов").firstName("Сергей").lastName("Иванов").phone("+79991234567").email("test1@example.org").tgId("tg_name_1020").build(),
+                Tutor.builder().userName("Николай Александров").firstName("Николай").lastName("Александров").phone("+79997654321").email("test2@example.org").tgId("tg_name_1021").build(),
+                Tutor.builder().userName("Екатерина Козлова").firstName("Екатерина").lastName("Козлова").phone("+79991111111").email("test3@example.org").tgId("tg_name_1022").build(),
+                Tutor.builder().userName("Петр Петров").firstName("Петр").lastName("Петров").phone("+79992222222").email("test4@example.org").tgId("tg_name_1023").build(),
+                Tutor.builder().userName("Иван Иванов").firstName("Иван").lastName("Иванов").phone("+79993333333").email("test5@example.org").tgId("tg_name_1024").build()
         );
         tutorRepository.saveAll(tutors);
         System.out.printf("  → Создано %d кураторов%n", tutors.size());
