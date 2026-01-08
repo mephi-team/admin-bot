@@ -22,6 +22,7 @@ import team.mephi.adminbot.vaadin.service.DialogType;
 import team.mephi.adminbot.vaadin.users.components.*;
 import team.mephi.adminbot.vaadin.users.presenter.*;
 import team.mephi.adminbot.vaadin.users.tabs.UserTabProvider;
+import team.mephi.adminbot.vaadin.users.tabs.UserTabType;
 
 import java.util.*;
 
@@ -31,10 +32,10 @@ public class Users extends VerticalLayout implements BeforeEnterObserver {
     private final FileUploadDialog fileUploadDialog;
 
     private final TabSheet tabSheet = new TabSheet();
-    private final List<String> rolesInOrder = new ArrayList<>();
+    private final List<UserTabType> rolesInOrder = new ArrayList<>();
     private final Map<Object, CRUDActions<?>> actions = new HashMap<>();
 
-    private String currentTab;
+    private UserTabType currentTab;
 
     public Users(
             List<UserTabProvider> tabProviders,
@@ -59,7 +60,7 @@ public class Users extends VerticalLayout implements BeforeEnterObserver {
             rolesInOrder.add(tabId);
             actions.put(tabId, presenter);
 
-            var userCount = userService.getAllCounts().getOrDefault(provider.getTabId(), 0L);
+            var userCount = userService.getAllCounts().getOrDefault(provider.getTabId().name(), 0L);
             Span tabContent = new Span(new Span(getTranslation(provider.getTabLabel())), new UserCountBadge(userCount));
             tabSheet.add(new Tab(tabContent), content, provider.getPosition());
         }
@@ -67,7 +68,7 @@ public class Users extends VerticalLayout implements BeforeEnterObserver {
             var selectedTab = tabSheet.getSelectedIndex();
             if (selectedTab > -1) {
                 currentTab = rolesInOrder.get(selectedTab);
-                UI.getCurrent().navigate(getClass(), QueryParameters.of("tab", currentTab));
+                UI.getCurrent().navigate(getClass(), QueryParameters.of("tab", currentTab.name().toLowerCase()));
             }
         });
     }
@@ -100,7 +101,8 @@ public class Users extends VerticalLayout implements BeforeEnterObserver {
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
-        currentTab = event.getLocation().getQueryParameters().getSingleParameter("tab").orElse("visitor");
+        var currentTabText = event.getLocation().getQueryParameters().getSingleParameter("tab").orElse(UserTabType.VISITOR.name());
+        currentTab = UserTabType.valueOf(currentTabText.toUpperCase());
         tabSheet.setSelectedIndex(rolesInOrder.indexOf(currentTab));
     }
 }

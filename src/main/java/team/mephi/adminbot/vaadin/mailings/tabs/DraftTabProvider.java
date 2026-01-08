@@ -6,16 +6,18 @@ import team.mephi.adminbot.vaadin.CRUDActions;
 import team.mephi.adminbot.vaadin.mailings.presenter.MailingsPresenter;
 import team.mephi.adminbot.vaadin.mailings.views.DraftView;
 
+import static team.mephi.adminbot.vaadin.mailings.tabs.MailingTabType.DRAFT;
+
 @SpringComponent
 public class DraftTabProvider implements MailingTabProvider {
     @Override
-    public String getTabId() {
-        return "draft";
+    public MailingTabType getTabId() {
+        return DRAFT;
     }
 
     @Override
     public String getTabLabel() {
-        return "page_mailing_tab_draft_label";
+        return DRAFT.getTabLabelKey();
     }
 
     @Override
@@ -25,6 +27,6 @@ public class DraftTabProvider implements MailingTabProvider {
 
     @Override
     public Integer getPosition() {
-        return 2;
+        return DRAFT.ordinal();
     }
 }

@@ -2,6 +2,8 @@ package team.mephi.adminbot.vaadin.users.dataproviders;
 
 import team.mephi.adminbot.service.UserService;
 
+import static team.mephi.adminbot.vaadin.users.tabs.UserTabType.MIDDLE_CANDIDATE;
+
 public class MiddleCandidateDataProvider extends BaseUserDataProvider {
 
     public MiddleCandidateDataProvider(UserService userService) {
@@ -10,6 +12,6 @@ public class MiddleCandidateDataProvider extends BaseUserDataProvider {
 
     @Override
     protected String getRole() {
-        return "middle_candidate";
+        return MIDDLE_CANDIDATE.name();
     }
 }

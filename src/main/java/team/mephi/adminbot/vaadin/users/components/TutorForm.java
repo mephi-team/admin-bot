@@ -24,9 +24,9 @@ public class TutorForm extends FormLayout {
         var provider = new CallbackDataProvider<SimpleUser, String>(
                 query -> {
                     Pageable pageable = PageRequest.of(query.getOffset() / query.getLimit(), query.getLimit());
-                    return userService.findAllByRoleAndName("student", query.getFilter().orElse(""), pageable);
+                    return userService.findAllByRoleAndName("STUDENT", query.getFilter().orElse(""), pageable);
                 },
-                query -> userService.countByRoleAndName("student", query.getFilter().orElse("")),
+                query -> userService.countByRoleAndName("STUDENT", query.getFilter().orElse("")),
                 SimpleUser::getId
         );
 

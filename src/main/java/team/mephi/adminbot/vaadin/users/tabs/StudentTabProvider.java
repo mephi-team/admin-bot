@@ -6,21 +6,23 @@ import team.mephi.adminbot.vaadin.CRUDActions;
 import team.mephi.adminbot.vaadin.users.presenter.StudentPresenter;
 import team.mephi.adminbot.vaadin.users.views.StudentView;
 
+import static team.mephi.adminbot.vaadin.users.tabs.UserTabType.STUDENT;
+
 @SpringComponent
 public class StudentTabProvider implements UserTabProvider {
     @Override
     public Integer getPosition() {
-        return 3;
+        return STUDENT.ordinal();
     }
 
     @Override
-    public String getTabId() {
-        return "student";
+    public UserTabType getTabId() {
+        return STUDENT;
     }
 
     @Override
     public String getTabLabel() {
-        return "page_users_tab_student_label";
+        return STUDENT.getTabLabelKey();
     }
 
     @Override

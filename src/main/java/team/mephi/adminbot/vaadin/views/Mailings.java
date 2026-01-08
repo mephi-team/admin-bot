@@ -16,6 +16,7 @@ import team.mephi.adminbot.vaadin.components.*;
 import team.mephi.adminbot.vaadin.mailings.service.MailingCountService;
 import team.mephi.adminbot.vaadin.mailings.presenter.MailingPresenterFactory;
 import team.mephi.adminbot.vaadin.mailings.tabs.MailingTabProvider;
+import team.mephi.adminbot.vaadin.mailings.tabs.MailingTabType;
 import team.mephi.adminbot.vaadin.service.DialogType;
 
 import java.util.*;
@@ -27,8 +28,8 @@ public class Mailings extends VerticalLayout {
     private final TabSheet tabSheet = new TabSheet();
     private final Button primaryButton = new Button(getTranslation("page_mailing_create_mailing_button"), VaadinIcon.PLUS.create());
 
-    private final List<String> rolesInOrder = new ArrayList<>();
-    private final Map<String, CRUDActions<?>> actions = new HashMap<>();
+    private final List<MailingTabType> rolesInOrder = new ArrayList<>();
+    private final Map<MailingTabType, CRUDActions<?>> actions = new HashMap<>();
 
     public Mailings(
             List<MailingTabProvider> tabProviders,
@@ -49,7 +50,7 @@ public class Mailings extends VerticalLayout {
             rolesInOrder.add(tabId);
             actions.put(tabId, presenter);
 
-            var userCount = mailingCountService.getAllCounts().getOrDefault(provider.getTabId(), 0L);
+            var userCount = mailingCountService.getAllCounts().getOrDefault(provider.getTabId().name(), 0L);
             Span tabContent = new Span(new Span(getTranslation(provider.getTabLabel())), new UserCountBadge(userCount));
             tabSheet.add(new Tab(tabContent), content, provider.getPosition());
         }
@@ -75,21 +76,21 @@ public class Mailings extends VerticalLayout {
         return top;
     }
 
-    private String getCurrentRole() {
+    private MailingTabType getCurrentRole() {
         var selectedTab = tabSheet.getSelectedIndex();
         if (selectedTab > -1) {
             return rolesInOrder.get(selectedTab);
         }
-        return "visitor";
+        return MailingTabType.SENT;
     }
 
     private DialogType getCreateDialogType() {
-        String role = getCurrentRole();
+        MailingTabType role = getCurrentRole();
         // Простой маппинг ролей табов в DialogType; при необходимости расширить
         return switch (role) {
-            case "templates" -> DialogType.TEMPLATES_CREATED;
-            case "draft", "drafts" -> DialogType.DRAFT_CREATED;
-            default -> DialogType.SENT_CREATED;
+            case TEMPLATES -> DialogType.TEMPLATES_CREATED;
+            case DRAFT -> DialogType.DRAFT_CREATED;
+            case SENT -> DialogType.SENT_CREATED;
         };
     }
 

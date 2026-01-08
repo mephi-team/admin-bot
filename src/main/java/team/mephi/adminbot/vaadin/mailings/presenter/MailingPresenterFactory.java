@@ -10,6 +10,7 @@ import team.mephi.adminbot.vaadin.mailings.dataproviders.DraftDataProvider;
 import team.mephi.adminbot.service.MailingService;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.SentDataProvider;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.TemplateDataProvider;
+import team.mephi.adminbot.vaadin.mailings.tabs.MailingTabType;
 import team.mephi.adminbot.vaadin.service.DialogService;
 import team.mephi.adminbot.vaadin.service.NotificationService;
 
@@ -31,20 +32,19 @@ public class MailingPresenterFactory {
         this.notificationService = notificationService;
     }
 
-    private CRUDDataProvider<?> createDataProvider(String role) {
+    private CRUDDataProvider<?> createDataProvider(MailingTabType role) {
         return switch (role) {
-            case "sent" -> new SentDataProvider(mailingService);
-            case "draft" -> new DraftDataProvider(mailingService);
-            case "templates" -> new TemplateDataProvider(templateService);
-            default -> throw new IllegalArgumentException("Unknown provider: " + role);
+            case SENT -> new SentDataProvider(mailingService);
+            case DRAFT -> new DraftDataProvider(mailingService);
+            case TEMPLATES -> new TemplateDataProvider(templateService);
         };
     }
 
-    public CRUDPresenter<?> createPresenter(String role) {
+    public CRUDPresenter<?> createPresenter(MailingTabType role) {
         CRUDDataProvider<?> dataProvider = createDataProvider(role);
 
         return switch (role) {
-            case "templates" -> new CRUDPresenter<SimpleTemplate>((CRUDDataProvider<SimpleTemplate>) dataProvider, dialogService, notificationService);
+            case TEMPLATES -> new CRUDPresenter<SimpleTemplate>((CRUDDataProvider<SimpleTemplate>) dataProvider, dialogService, notificationService);
             default -> new MailingsPresenter((CRUDDataProvider<SimpleMailing>) dataProvider, dialogService, notificationService);
         };
     }

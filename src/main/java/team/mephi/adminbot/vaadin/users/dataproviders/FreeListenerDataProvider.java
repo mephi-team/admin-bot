@@ -2,6 +2,8 @@ package team.mephi.adminbot.vaadin.users.dataproviders;
 
 import team.mephi.adminbot.service.UserService;
 
+import static team.mephi.adminbot.vaadin.users.tabs.UserTabType.FREE_LISTENER;
+
 public class FreeListenerDataProvider extends BaseUserDataProvider {
 
     public FreeListenerDataProvider(UserService userService) {
@@ -10,6 +12,6 @@ public class FreeListenerDataProvider extends BaseUserDataProvider {
 
     @Override
     protected String getRole() {
-        return "free_listener";
+        return FREE_LISTENER.name();
     }
 }

@@ -8,17 +8,19 @@ import team.mephi.adminbot.vaadin.CRUDActions;
 import team.mephi.adminbot.vaadin.CRUDPresenter;
 import team.mephi.adminbot.vaadin.mailings.views.TemplateView;
 
+import static team.mephi.adminbot.vaadin.mailings.tabs.MailingTabType.TEMPLATES;
+
 @SpringComponent
 @UIScope
 public class TemplateTabProvider implements MailingTabProvider {
     @Override
-    public String getTabId() {
-        return "templates";
+    public MailingTabType getTabId() {
+        return TEMPLATES;
     }
 
     @Override
     public String getTabLabel() {
-        return "page_mailing_tab_templates_label";
+        return TEMPLATES.getTabLabelKey();
     }
 
     @Override
@@ -28,6 +30,6 @@ public class TemplateTabProvider implements MailingTabProvider {
 
     @Override
     public Integer getPosition() {
-        return 1;
+        return TEMPLATES.ordinal();
     }
 }

@@ -6,16 +6,18 @@ import team.mephi.adminbot.vaadin.CRUDActions;
 import team.mephi.adminbot.vaadin.mailings.presenter.MailingsPresenter;
 import team.mephi.adminbot.vaadin.mailings.views.SentView;
 
+import static team.mephi.adminbot.vaadin.mailings.tabs.MailingTabType.SENT;
+
 @SpringComponent
 public class SentTabProvider implements  MailingTabProvider {
     @Override
-    public String getTabId() {
-        return "sent";
+    public MailingTabType getTabId() {
+        return SENT;
     }
 
     @Override
     public String getTabLabel() {
-        return "page_mailing_tab_sent_label";
+        return SENT.getTabLabelKey();
     }
 
     @Override
@@ -25,6 +27,6 @@ public class SentTabProvider implements  MailingTabProvider {
 
     @Override
     public Integer getPosition() {
-        return 0;
+        return SENT.ordinal();
     }
 }

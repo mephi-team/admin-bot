@@ -6,21 +6,23 @@ import team.mephi.adminbot.vaadin.CRUDActions;
 import team.mephi.adminbot.vaadin.users.presenter.UsersPresenter;
 import team.mephi.adminbot.vaadin.users.views.ExpertView;
 
+import static team.mephi.adminbot.vaadin.users.tabs.UserTabType.LC_EXPERT;
+
 @SpringComponent
 public class ExpertTabProvider implements UserTabProvider {
     @Override
     public Integer getPosition() {
-        return 5;
+        return LC_EXPERT.ordinal();
     }
 
     @Override
-    public String getTabId() {
-        return "lc_expert";
+    public UserTabType getTabId() {
+        return LC_EXPERT;
     }
 
     @Override
     public String getTabLabel() {
-        return "page_users_tab_lc_expert_label";
+        return LC_EXPERT.getTabLabelKey();
     }
 
     @Override

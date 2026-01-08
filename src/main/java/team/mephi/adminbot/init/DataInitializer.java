@@ -20,6 +20,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import static team.mephi.adminbot.vaadin.users.tabs.UserTabType.*;
+
 @Configuration
 public class DataInitializer {
     private final Long DAY_SECONDS = 86400L;
@@ -103,14 +105,13 @@ public class DataInitializer {
 
     private void initRoles() {
         List<Role> roles = Arrays.asList(
-                Role.builder().code("student").name("Студенты").description("Студенты").build(),
-                Role.builder().code("candidate").name("Кандидаты").description("Кандидаты").build(),
-                Role.builder().code("visitor").name("Посетители").description("Посетители").build(),
-                Role.builder().code("free_listener").name("Слушатели").description("Слушатели").build(),
-                Role.builder().code("middle_candidate").name("Миддл-кандидаты").description("Миддл-кандидаты").build(),
-                Role.builder().code("lc_expert").name("Эксперты").description("Эксперты").build(),
-                Role.builder().code("extuser").name("Внешние пользователи").description("Внешние пользователи").build(),
-                Role.builder().code("tutor").name("Кураторы").description("Кураторы").build()
+                Role.builder().code(STUDENT.name()).name("Студенты").description("Студенты").build(),
+                Role.builder().code(CANDIDATE.name()).name("Кандидаты").description("Кандидаты").build(),
+                Role.builder().code(VISITOR.name()).name("Посетители").description("Посетители").build(),
+                Role.builder().code(FREE_LISTENER.name()).name("Слушатели").description("Слушатели").build(),
+                Role.builder().code(MIDDLE_CANDIDATE.name()).name("Миддл-кандидаты").description("Миддл-кандидаты").build(),
+                Role.builder().code(LC_EXPERT.name()).name("Эксперты").description("Эксперты").build(),
+                Role.builder().code(TUTOR.name()).name("Кураторы").description("Кураторы").build()
         );
         roleRepository.saveAll(roles);
         System.out.printf("  → Создано %d ролей%n", roles.size());
@@ -130,18 +131,18 @@ public class DataInitializer {
 
     private void initUsers() {
         // Получаем роли по имени
-        Role studentRole = roleRepository.findByCode("student")
-                .orElseThrow(() -> new RuntimeException("Роль 'student' не найдена"));
-        Role candidateRole = roleRepository.findByCode("candidate")
-                .orElseThrow(() -> new RuntimeException("Роль 'candidate' не найдена"));
-        Role middleCandidateRole = roleRepository.findByCode("middle_candidate")
-                .orElseThrow(() -> new RuntimeException("Роль 'middle_candidate' не найдена"));
-        Role visitorRole = roleRepository.findByCode("visitor")
-                .orElseThrow(() -> new RuntimeException("Роль 'visitor' не найдена"));
-        Role freeListenerRole = roleRepository.findByCode("free_listener")
-                .orElseThrow(() -> new RuntimeException("Роль 'free_listener' не найдена"));
-        Role lcExpertRole = roleRepository.findByCode("lc_expert")
-                .orElseThrow(() -> new RuntimeException("Роль 'lc_expert' не найдена"));
+        Role studentRole = roleRepository.findByCode(STUDENT.name())
+                .orElseThrow(() -> new RuntimeException("Роль 'STUDENT' не найдена"));
+        Role candidateRole = roleRepository.findByCode(CANDIDATE.name())
+                .orElseThrow(() -> new RuntimeException("Роль 'CANDIDATE' не найдена"));
+        Role middleCandidateRole = roleRepository.findByCode(MIDDLE_CANDIDATE.name())
+                .orElseThrow(() -> new RuntimeException("Роль 'MIDDLE_CANDIDATE' не найдена"));
+        Role visitorRole = roleRepository.findByCode(VISITOR.name())
+                .orElseThrow(() -> new RuntimeException("Роль 'VISITOR' не найдена"));
+        Role freeListenerRole = roleRepository.findByCode(FREE_LISTENER.name())
+                .orElseThrow(() -> new RuntimeException("Роль 'FREE_LISTENER' не найдена"));
+        Role lcExpertRole = roleRepository.findByCode(LC_EXPERT.name())
+                .orElseThrow(() -> new RuntimeException("Роль 'LC_EXPERT' не найдена"));
 
         Direction java = directionRepository.findById(1L).orElseThrow();
         Direction analytics = directionRepository.findById(2L).orElseThrow();
@@ -169,7 +170,7 @@ public class DataInitializer {
     private void initPdConsentLog() {
         Random random = new Random();
         List<ConsentStatus> statuses = Arrays.stream(ConsentStatus.values()).toList();
-        List<String> roles = List.of("candidate", "middle_candidate", "visitor");
+        List<String> roles = List.of(CANDIDATE.name(), MIDDLE_CANDIDATE.name(), VISITOR.name());
         List<String> sources = List.of("Telegram", "Web", "Mobile App");
         List<User> users = userRepository.findAll().stream().filter(u -> roles.contains(u.getRole().getCode())).toList();
         List<PdConsentLog> logs = new ArrayList<>();
@@ -203,7 +204,7 @@ public class DataInitializer {
     private void initQuestions() {
         Random random = new Random();
 
-        Role student = roleRepository.findByCode("student").get();
+        Role student = roleRepository.findByCode(STUDENT.name()).get();
         List<User> students = userRepository.findAllByRole(student.getCode());
 
         List<UserQuestion> questions = Arrays.asList(
@@ -232,7 +233,7 @@ public class DataInitializer {
     private void initAnswers() {
         Random random = new Random();
 
-        String expert = roleRepository.findByCode("lc_expert").get().getCode();
+        String expert = roleRepository.findByCode(LC_EXPERT.name()).get().getCode();
         List<User> experts = userRepository.findAllByRole(expert);
 
         List<UserAnswer> answers = Arrays.asList(

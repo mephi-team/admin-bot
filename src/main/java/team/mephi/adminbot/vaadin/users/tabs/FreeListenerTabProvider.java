@@ -6,21 +6,23 @@ import team.mephi.adminbot.vaadin.CRUDActions;
 import team.mephi.adminbot.vaadin.users.presenter.StudentPresenter;
 import team.mephi.adminbot.vaadin.users.views.FreeListenerView;
 
+import static team.mephi.adminbot.vaadin.users.tabs.UserTabType.FREE_LISTENER;
+
 @SpringComponent
 public class FreeListenerTabProvider implements UserTabProvider {
     @Override
     public Integer getPosition() {
-        return 4;
+        return FREE_LISTENER.ordinal();
     }
 
     @Override
-    public String getTabId() {
-        return "free_listener";
+    public UserTabType getTabId() {
+        return FREE_LISTENER;
     }
 
     @Override
     public String getTabLabel() {
-        return "page_users_tab_free_listener_label";
+        return FREE_LISTENER.getTabLabelKey();
     }
 
     @Override

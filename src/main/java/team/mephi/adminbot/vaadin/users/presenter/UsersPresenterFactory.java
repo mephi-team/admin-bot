@@ -10,6 +10,7 @@ import team.mephi.adminbot.service.UserService;
 import team.mephi.adminbot.vaadin.service.DialogService;
 import team.mephi.adminbot.vaadin.service.NotificationService;
 import team.mephi.adminbot.vaadin.users.dataproviders.*;
+import team.mephi.adminbot.vaadin.users.tabs.UserTabType;
 
 @SpringComponent
 public class UsersPresenterFactory {
@@ -25,26 +26,25 @@ public class UsersPresenterFactory {
         this.notificationService = notificationService;
     }
 
-    private CRUDDataProvider<?> createDataProvider(String role) {
+    private CRUDDataProvider<?> createDataProvider(UserTabType role) {
         return switch (role) {
-            case "candidate" -> new CandidateDataProvider(userService);
-            case "lc_expert" -> new ExpertDataProvider(userService);
-            case "free_listener" -> new FreeListenerDataProvider(userService);
-            case "visitor" -> new GuestsDataProvider(userService);
-            case "middle_candidate" -> new MiddleCandidateDataProvider(userService);
-            case "student" -> new StudentDataProvider(userService);
-            case "tutor" -> new TutorDataProviderImpl(tutorService);
-            default -> throw new IllegalArgumentException("Unknown provider: " + role);
+            case CANDIDATE -> new CandidateDataProvider(userService);
+            case LC_EXPERT -> new ExpertDataProvider(userService);
+            case FREE_LISTENER -> new FreeListenerDataProvider(userService);
+            case VISITOR -> new GuestsDataProvider(userService);
+            case MIDDLE_CANDIDATE -> new MiddleCandidateDataProvider(userService);
+            case STUDENT -> new StudentDataProvider(userService);
+            case TUTOR -> new TutorDataProviderImpl(tutorService);
         };
     }
 
-    public CRUDPresenter<?> createPresenter(String role) {
+    public CRUDPresenter<?> createPresenter(UserTabType role) {
         CRUDDataProvider<?> dataProvider = createDataProvider(role);
 
         return switch (role) {
-            case "tutor" -> new TutorPresenter((TutorDataProvider) dataProvider, (DialogService< SimpleTutor>) dialogService, notificationService);
-            case "visitor" -> new BlockingPresenter((UserDataProvider) dataProvider, (DialogService<SimpleUser>) dialogService, notificationService);
-            case "student", "free_listener" -> new StudentPresenter((UserDataProvider) dataProvider, (DialogService<SimpleUser>) dialogService, notificationService);
+            case TUTOR -> new TutorPresenter((TutorDataProvider) dataProvider, (DialogService< SimpleTutor>) dialogService, notificationService);
+            case VISITOR -> new BlockingPresenter((UserDataProvider) dataProvider, (DialogService<SimpleUser>) dialogService, notificationService);
+            case STUDENT, FREE_LISTENER -> new StudentPresenter((UserDataProvider) dataProvider, (DialogService<SimpleUser>) dialogService, notificationService);
             // candidate, middle_candidate, lc_expert
             default -> new UsersPresenter((UserDataProvider) dataProvider, (DialogService<SimpleUser>) dialogService, notificationService);
         };

@@ -6,21 +6,23 @@ import team.mephi.adminbot.vaadin.CRUDActions;
 import team.mephi.adminbot.vaadin.users.presenter.TutorPresenter;
 import team.mephi.adminbot.vaadin.users.views.TutorView;
 
+import static team.mephi.adminbot.vaadin.users.tabs.UserTabType.TUTOR;
+
 @SpringComponent
 public class TutorTabProvider implements UserTabProvider {
     @Override
     public Integer getPosition() {
-        return 6;
+        return TUTOR.ordinal();
     }
 
     @Override
-    public String getTabId() {
-        return "tutor";
+    public UserTabType getTabId() {
+        return TUTOR;
     }
 
     @Override
     public String getTabLabel() {
-        return "page_users_tab_tutor_label";
+        return TUTOR.getTabLabelKey();
     }
 
     @Override

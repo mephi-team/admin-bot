@@ -25,7 +25,7 @@ public interface MailingRepository extends JpaRepository<Mailing, Long> {
     @Query("SELECT count(m) FROM Mailing m WHERE LOWER(m.name) LIKE LOWER(CONCAT('%', :query, '%')) AND m.status IN :statuses")
     Integer countByName(String query, List<MailingStatus> statuses);
 
-    @Query("SELECT 'sent', count(m) FROM Mailing m WHERE m.status != team.mephi.adminbot.model.enums.MailingStatus.DRAFT UNION ALL SELECT 'draft', count(m) FROM Mailing m WHERE m.status = team.mephi.adminbot.model.enums.MailingStatus.DRAFT UNION ALL SELECT 'templates', count(t) FROM MailTemplate t")
+    @Query("SELECT 'SENT', count(m) FROM Mailing m WHERE m.status != team.mephi.adminbot.model.enums.MailingStatus.DRAFT UNION ALL SELECT 'DRAFT', count(m) FROM Mailing m WHERE m.status = team.mephi.adminbot.model.enums.MailingStatus.DRAFT UNION ALL SELECT 'TEMPLATES', count(t) FROM MailTemplate t")
     List<Tuple> countsByStatusTuples();
 
     default Map<String, Long> countsByStatus() {

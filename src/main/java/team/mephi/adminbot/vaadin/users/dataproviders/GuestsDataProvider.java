@@ -2,6 +2,8 @@ package team.mephi.adminbot.vaadin.users.dataproviders;
 
 import team.mephi.adminbot.service.UserService;
 
+import static team.mephi.adminbot.vaadin.users.tabs.UserTabType.VISITOR;
+
 public class GuestsDataProvider extends BaseUserDataProvider {
 
     public GuestsDataProvider(UserService userService) {
@@ -10,6 +12,6 @@ public class GuestsDataProvider extends BaseUserDataProvider {
 
     @Override
     protected String getRole() {
-        return "visitor";
+        return VISITOR.name();
     }
 }

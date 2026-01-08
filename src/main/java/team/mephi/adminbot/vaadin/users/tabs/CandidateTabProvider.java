@@ -6,21 +6,23 @@ import team.mephi.adminbot.vaadin.CRUDActions;
 import team.mephi.adminbot.vaadin.users.presenter.UsersPresenter;
 import team.mephi.adminbot.vaadin.users.views.CandidateView;
 
+import static team.mephi.adminbot.vaadin.users.tabs.UserTabType.CANDIDATE;
+
 @SpringComponent
 public class CandidateTabProvider implements UserTabProvider {
     @Override
     public Integer getPosition() {
-        return 1;
+        return CANDIDATE.ordinal();
     }
 
     @Override
-    public String getTabId() {
-        return "candidate";
+    public UserTabType getTabId() {
+        return CANDIDATE;
     }
 
     @Override
     public String getTabLabel() {
-        return "page_users_tab_candidate_label";
+        return CANDIDATE.getTabLabelKey();
     }
 
     @Override

@@ -6,21 +6,23 @@ import team.mephi.adminbot.vaadin.CRUDActions;
 import team.mephi.adminbot.vaadin.users.presenter.BlockingPresenter;
 import team.mephi.adminbot.vaadin.users.views.GuestsView;
 
+import static team.mephi.adminbot.vaadin.users.tabs.UserTabType.VISITOR;
+
 @SpringComponent
 public class GuestsTabProvider implements UserTabProvider {
     @Override
     public Integer getPosition() {
-        return 0;
+        return VISITOR.ordinal();
     }
 
     @Override
-    public String getTabId() {
-        return "visitor";
+    public UserTabType getTabId() {
+        return VISITOR;
     }
 
     @Override
     public String getTabLabel() {
-        return "page_users_tab_visitor_label";
+        return VISITOR.getTabLabelKey();
     }
 
     @Override
