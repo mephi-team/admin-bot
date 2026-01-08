@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -33,6 +32,6 @@ public class SimpleUser {
     private String city;
     private Boolean pdConsent;
     private long studentCount;
-    private List<SimpleUser> students = new ArrayList<>();
+    private List<SimpleUser> students;
     private String tutor;
 }

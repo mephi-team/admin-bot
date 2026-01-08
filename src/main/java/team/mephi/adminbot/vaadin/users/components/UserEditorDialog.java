@@ -42,7 +42,7 @@ public class UserEditorDialog extends Dialog implements SimpleDialog {
                 .bind("city");
         binder.bindInstanceFields(form);
 
-        setHeaderTitle("dialog_users_new_title");
+        setHeaderTitle("dialog_users_created_title");
         add(form);
         setWidth("100%");
         setMaxWidth("500px");

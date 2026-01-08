@@ -14,7 +14,9 @@ import team.mephi.adminbot.dto.*;
 import team.mephi.adminbot.service.*;
 import team.mephi.adminbot.vaadin.SimpleDialog;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class MailingEditorDialog extends Dialog implements SimpleDialog {
@@ -127,7 +129,12 @@ public class MailingEditorDialog extends Dialog implements SimpleDialog {
 
     @Override
     public void showDialog(Object mailing, SerializableConsumer<?> callback) {
-        this.mailing = Objects.isNull(mailing) ? new SimpleMailing() : (SimpleMailing) mailing;
+        this.mailing = Objects.isNull(mailing)
+                ? SimpleMailing.builder()
+                    .channels(Set.of("Email", "Telegram"))
+                    .recipients(List.of())
+                    .build()
+                : (SimpleMailing) mailing;
         this.onSaveCallback = (SerializableConsumer<SimpleMailing>) callback;
         binder.readBean(this.mailing);
         binder.setReadOnly(false);

@@ -22,7 +22,7 @@ public class SimpleMailing {
     private String text;
     private String status;
     @NotEmpty
-    private Set<String> channels = Set.of("Email", "Telegram");
+    private Set<String> channels;
     @NotEmpty
     private String users;
     @NotEmpty
@@ -33,5 +33,5 @@ public class SimpleMailing {
     private String city;
     private Instant date;
     private String curator;
-    private List<String> recipients = List.of();
+    private List<String> recipients;
 }
