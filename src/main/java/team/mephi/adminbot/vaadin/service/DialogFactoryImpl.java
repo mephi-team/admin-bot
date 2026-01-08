@@ -10,6 +10,7 @@ import team.mephi.adminbot.vaadin.mailings.components.MailingEditorDialogFactory
 import team.mephi.adminbot.vaadin.mailings.components.TemplateEditorDialogFactory;
 import team.mephi.adminbot.vaadin.questions.components.AnswerDialogFactory;
 import team.mephi.adminbot.vaadin.users.components.BlockDialogFactory;
+import team.mephi.adminbot.vaadin.users.components.TutorEditorDialogFactory;
 import team.mephi.adminbot.vaadin.users.components.TutoringDialogFactory;
 import team.mephi.adminbot.vaadin.users.components.UserEditorDialogFactory;
 
@@ -23,6 +24,7 @@ public class DialogFactoryImpl implements DialogFactory {
 
     public DialogFactoryImpl(
             UserEditorDialogFactory userEditorDialogFactory,
+            TutorEditorDialogFactory tutorEditorDialogFactory,
             BlockDialogFactory blockDialogFactory,
             TutoringDialogFactory tutoringDialogFactory,
             MailingEditorDialogFactory mailingDialogFactory,
@@ -30,13 +32,14 @@ public class DialogFactoryImpl implements DialogFactory {
             AnswerDialogFactory answerDialogFactory
     ) {
         registry.put(DialogType.USERS_CREATED, userEditorDialogFactory::create);
+        registry.put(DialogType.TUTORS_CREATED, tutorEditorDialogFactory::create);
         registry.put(DialogType.USERS_VIEW, userEditorDialogFactory::create);
         registry.put(DialogType.USERS_EDIT, userEditorDialogFactory::create);
         registry.put(DialogType.USERS_BLOCKED, () -> blockDialogFactory.create(SimpleUser.class));
         registry.put(DialogType.TUTORS_BLOCKED, () -> blockDialogFactory.create(SimpleTutor.class));
-        registry.put(DialogType.TUTORS_VIEW, tutoringDialogFactory::create);
+        registry.put(DialogType.TUTORS_VIEW, tutorEditorDialogFactory::create);
         registry.put(DialogType.TUTORS_UPDATED, tutoringDialogFactory::create);
-        registry.put(DialogType.TUTORS_EDIT, tutoringDialogFactory::create);
+        registry.put(DialogType.TUTORS_EDIT, tutorEditorDialogFactory::create);
         registry.put(DialogType.SENT_CREATED, mailingDialogFactory::create);
         registry.put(DialogType.TEMPLATES_CREATED, templateDialogFactory::create);
         registry.put(DialogType.DRAFT_CREATED, mailingDialogFactory::create);

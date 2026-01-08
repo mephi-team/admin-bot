@@ -18,6 +18,7 @@ import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.service.UserService;
 import team.mephi.adminbot.vaadin.CRUDActions;
 import team.mephi.adminbot.vaadin.components.UserCountBadge;
+import team.mephi.adminbot.vaadin.mailings.tabs.MailingTabType;
 import team.mephi.adminbot.vaadin.service.DialogType;
 import team.mephi.adminbot.vaadin.users.components.*;
 import team.mephi.adminbot.vaadin.users.presenter.*;
@@ -82,7 +83,7 @@ public class Users extends VerticalLayout implements BeforeEnterObserver {
             fileUploadDialog.open();
         });
         var primaryButton = new Button(getTranslation("page_users_create_user_button"), VaadinIcon.PLUS.create(), e -> {
-            getCurrentAction().onCreate(SimpleUser.builder().role((String) getCurrentRole()).build(), DialogType.USERS_CREATED);
+            getCurrentAction().onCreate(getCurrentRole().name(), getCreateDialogType());
         });
         primaryButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         Div buttons = new Div(secondaryButton, primaryButton);
@@ -91,8 +92,17 @@ public class Users extends VerticalLayout implements BeforeEnterObserver {
         return top;
     }
 
-    private Object getCurrentRole() {
+    private UserTabType getCurrentRole() {
         return currentTab;
+    }
+
+    private DialogType getCreateDialogType() {
+        UserTabType role = getCurrentRole();
+        // Простой маппинг ролей табов в DialogType; при необходимости расширить
+        return switch (role) {
+            case TUTOR -> DialogType.TUTORS_CREATED;
+            default -> DialogType.USERS_CREATED;
+        };
     }
 
     private CRUDActions<?> getCurrentAction() {

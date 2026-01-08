@@ -4,6 +4,7 @@ import lombok.Getter;
 
 public enum DialogType {
     USERS_CREATED,
+    TUTORS_CREATED,
     USERS_VIEW,
     USERS_EDIT,
     USERS_BLOCKED,

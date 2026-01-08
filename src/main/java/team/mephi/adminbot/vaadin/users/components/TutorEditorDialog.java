@@ -4,26 +4,24 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.function.SerializableConsumer;
-import team.mephi.adminbot.dto.CityDto;
-import team.mephi.adminbot.dto.CohortDto;
-import team.mephi.adminbot.dto.RoleDto;
-import team.mephi.adminbot.dto.SimpleUser;
+import team.mephi.adminbot.dto.*;
 import team.mephi.adminbot.service.CityService;
 import team.mephi.adminbot.service.CohortService;
 import team.mephi.adminbot.service.DirectionService;
 import team.mephi.adminbot.service.RoleService;
 import team.mephi.adminbot.vaadin.SimpleDialog;
 
+import java.util.List;
 import java.util.Objects;
 
-public class UserEditorDialog extends Dialog implements SimpleDialog {
-    private final BeanValidationBinder<SimpleUser> binder = new BeanValidationBinder<>(SimpleUser.class);
+public class TutorEditorDialog extends Dialog implements SimpleDialog {
+    private final BeanValidationBinder<SimpleTutor> binder = new BeanValidationBinder<>(SimpleTutor.class);
     private final Button saveButton = new Button(getTranslation("save_button"), e -> onSave());
 
-    private SerializableConsumer<SimpleUser> onSaveCallback;
-    private SimpleUser user;
+    private SerializableConsumer<SimpleTutor> onSaveCallback;
+    private SimpleTutor user;
 
-    public UserEditorDialog(RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService) {
+    public TutorEditorDialog(RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService) {
         var form = new UserForm(roleService, cohortService, directionService, cityService);
         binder.forField(form.getRoles())
                 .withValidator(Objects::nonNull, getTranslation("form_users_roles_validation_message"))
@@ -55,11 +53,11 @@ public class UserEditorDialog extends Dialog implements SimpleDialog {
     @Override
     public void showDialog(Object user, SerializableConsumer<?> callback) {
         if (user instanceof String) {
-            this.user = SimpleUser.builder().role((String) user).build();
+            this.user = SimpleTutor.builder().role((String) user).students(List.of()).build();
         } else {
-            this.user = (SimpleUser) user;
+            this.user = (SimpleTutor) user;
         }
-        this.onSaveCallback = (SerializableConsumer<SimpleUser>) callback;
+        this.onSaveCallback = (SerializableConsumer<SimpleTutor>) callback;
         binder.readBean(this.user);
         binder.setReadOnly(Objects.isNull(callback));
         saveButton.setVisible(Objects.nonNull(callback));
