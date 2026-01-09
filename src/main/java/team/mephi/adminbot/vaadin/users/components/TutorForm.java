@@ -12,6 +12,8 @@ import team.mephi.adminbot.dto.SimpleDirection;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.service.UserService;
 
+import java.util.Objects;
+
 public class TutorForm extends FormLayout {
     private TextField firstName = new TextField();
     private TextField lastName = new TextField();
@@ -24,9 +26,9 @@ public class TutorForm extends FormLayout {
         var provider = new CallbackDataProvider<SimpleUser, String>(
                 query -> {
                     Pageable pageable = PageRequest.of(query.getOffset() / query.getLimit(), query.getLimit());
-                    return userService.findAllByRoleAndName("STUDENT", query.getFilter().orElse(""), pageable);
+                    return userService.findAllForCuratorship(query.getFilter().orElse(""), pageable);
                 },
-                query -> userService.countByRoleAndName("STUDENT", query.getFilter().orElse("")),
+                query -> userService.countAllForCuratorship(query.getFilter().orElse("")),
                 SimpleUser::getId
         );
 
@@ -41,8 +43,15 @@ public class TutorForm extends FormLayout {
         direction.setReadOnly(true);
 
         comboBox.setItems(provider);
-        comboBox.setItemLabelGenerator(u -> u.getFullName() + " @" + u.getTgId());
+        comboBox.setItemLabelGenerator(u -> u.getFullName() + (Objects.nonNull(u.getTgId()) ? " @" + u.getTgId() : ""));
         comboBox.setAutoExpand(MultiSelectComboBox.AutoExpandMode.VERTICAL);
+        comboBox.addSelectionListener(e -> {
+            var selectedItems = e.getAddedSelection();
+            boolean hasInvalid = selectedItems.removeIf(item -> Objects.isNull(item.getId()));
+            if (hasInvalid) {
+                comboBox.setValue(selectedItems);
+            }
+        });
 
         addFormItem(firstName, getTranslation("form_tutor_curatorship_first_name_label"));
         addFormItem(lastName, getTranslation("form_tutor_curatorship_last_name_label"));

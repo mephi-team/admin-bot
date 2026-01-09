@@ -138,6 +138,27 @@ public class UserServiceImpl implements UserService {
         return curators.stream().filter(c -> c.getUserName().equals(name)).findAny();
     }
 
+    @Override
+    public Stream<SimpleUser> findAllForCuratorship(String name, Pageable pageable) {
+        var res = userRepository.findAllStudentsWithTutorAssignments(name, "STUDENT", pageable);
+        return res.isEmpty()
+                ? Stream.of(SimpleUser.builder().fullName("Нет элементов для выбора").build())
+                : res.stream().map(
+                u -> SimpleUser.builder()
+                        .id(u.getId())
+                        .fullName(u.getUserName())
+                        .firstName(u.getFirstName())
+                        .lastName(u.getLastName())
+                        .tgId(u.getTgId())
+                        .build());
+    }
+
+    @Override
+    public Integer countAllForCuratorship(String name) {
+        var count = userRepository.countAllStudentsWithTutorAssignments(name, "STUDENT");
+        return count > 0 ? count : 1;
+    }
+
     private void initCurators() {
         curators.addAll(tutorRepository.findAll().stream().map(u -> UserDto.builder()
                 .id(u.getId())
