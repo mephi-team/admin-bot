@@ -7,6 +7,7 @@ import com.vaadin.flow.function.SerializableConsumer;
 import team.mephi.adminbot.dto.*;
 import team.mephi.adminbot.service.*;
 import team.mephi.adminbot.vaadin.SimpleDialog;
+import team.mephi.adminbot.vaadin.components.FullNameField;
 
 import java.util.Objects;
 
@@ -20,18 +21,30 @@ public class UserEditorDialog extends Dialog implements SimpleDialog {
     public UserEditorDialog(RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService, TutorService tutorService) {
         var form = new UserForm(roleService, cohortService, directionService, cityService, tutorService);
         binder.forField(form.getRoles())
-                .withValidator(Objects::nonNull, getTranslation("form_users_roles_validation_message"))
+                .asRequired()
                 .withConverter(RoleDto::getCode, roleCode -> roleService.getByCode(roleCode).orElse(null))
                 .bind(SimpleUser::getRole, SimpleUser::setRole);
+        binder.forField(form.getFullNameField())
+                .asRequired()
+                .bind(
+                    s -> new FullNameField.FullName(s.getFirstName(), s.getLastName()),
+                    (s, t) -> {
+                        s.setFirstName(t.firstName());
+                        s.setLastName(t.lastName());
+                    }
+                );
+        binder.forField(form.getEmail()).asRequired().bind(SimpleUser::getEmail, SimpleUser::setEmail);
+        binder.forField(form.getTgId()).asRequired().bind(SimpleUser::getTgId, SimpleUser::setTgId);
+        binder.forField(form.getPhoneNumber()).asRequired().bind(SimpleUser::getPhoneNumber, SimpleUser::setPhoneNumber);
         binder.forField(form.getCohorts())
-                .withValidator(Objects::nonNull, getTranslation("form_users_cohort_validation_message"))
+                .asRequired()
                 .withConverter(CohortDto::getName, cohort -> cohortService.getByName(cohort).orElse(null))
                 .bind(SimpleUser::getCohort, SimpleUser::setCohort);
         binder.forField(form.getDirections())
-                .withValidator(Objects::nonNull, getTranslation("form_users_direction_validation_message"))
+                .asRequired()
                 .bind(SimpleUser::getDirection, SimpleUser::setDirection);
         binder.forField(form.getCities())
-                .withValidator(Objects::nonNull, getTranslation("form_users_cities_validation_message"))
+                .asRequired()
                 .withConverter(CityDto::getName, city -> cityService.getByName(city).orElse(null))
                 .bind(SimpleUser::getCity, SimpleUser::setCity);
         binder.forField(form.getTutor())

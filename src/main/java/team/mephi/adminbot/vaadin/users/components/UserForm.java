@@ -10,23 +10,18 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import team.mephi.adminbot.dto.*;
 import team.mephi.adminbot.service.*;
+import team.mephi.adminbot.vaadin.components.FullNameField;
 
 public class UserForm extends FormLayout {
-    @Getter
-    private ComboBox<RoleDto> roles = new ComboBox<>();
-    private TextField firstName = new TextField();
-    private TextField lastName = new TextField();
-    private EmailField email = new EmailField();
-    private TextField tgId = new TextField();
-    private TextField phoneNumber = new TextField();
-    @Getter
-    private ComboBox<CohortDto> cohorts = new ComboBox<>();
-    @Getter
-    private ComboBox<SimpleDirection> directions = new ComboBox<>();
-    @Getter
-    private ComboBox<CityDto> cities = new ComboBox<>();
-    @Getter
-    private ComboBox<SimpleTutor> tutor = new ComboBox<>();
+    @Getter private final ComboBox<RoleDto> roles = new ComboBox<>();
+    @Getter private final FullNameField fullNameField = new FullNameField();
+    @Getter private final EmailField email = new EmailField();
+    @Getter private final TextField tgId = new TextField();
+    @Getter private final TextField phoneNumber = new TextField();
+    @Getter private final ComboBox<CohortDto> cohorts = new ComboBox<>();
+    @Getter private final ComboBox<SimpleDirection> directions = new ComboBox<>();
+    @Getter private final ComboBox<CityDto> cities = new ComboBox<>();
+    @Getter private final ComboBox<SimpleTutor> tutor = new ComboBox<>();
 
     public UserForm(RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService, TutorService tutorService) {
         var tutorProvider = new CallbackDataProvider<SimpleTutor, String>(
@@ -44,28 +39,33 @@ public class UserForm extends FormLayout {
 
         roles.setItemsPageable(roleService::getAllRoles);
         roles.setItemLabelGenerator(RoleDto::getName);
-        roles.setRequiredIndicatorVisible(true);
+
         cohorts.setItemsPageable(cohortService::getAllCohorts);
         cohorts.setItemLabelGenerator(CohortDto::getName);
-        cohorts.setRequiredIndicatorVisible(true);
+
         directions.setItemsPageable(directionService::getAllDirections);
         directions.setItemLabelGenerator(SimpleDirection::getName);
-        directions.setRequiredIndicatorVisible(true);
+
         cities.setItemsPageable(cityService::getAllCities);
         cities.setItemLabelGenerator(CityDto::getName);
-        cities.setRequiredIndicatorVisible(true);
+
         tutor.setItems(tutorProvider);
         tutor.setItemLabelGenerator(SimpleTutor::getFullName);
 
         addFormItem(roles, getTranslation("form_users_roles_label"));
-        addFormItem(firstName, getTranslation("form_users_first_name_label"));
-        addFormItem(lastName, getTranslation("form_users_last_name_label"));
+        addFormItem(fullNameField, getTranslation("form_users_full_name_label"));
         addFormItem(email, getTranslation("form_users_email_label"));
         addFormItem(tgId, getTranslation("form_users_telegram_label"));
-        addFormItem(phoneNumber, getTranslation("form_users_phone_number_label"));
+        FormItem phoneForm = addFormItem(phoneNumber, getTranslation("form_users_phone_number_label"));
         addFormItem(cohorts, getTranslation("form_users_cohorts_label"));
         addFormItem(directions, getTranslation("form_users_directions_label"));
-        addFormItem(cities, getTranslation("form_users_cities_label"));
-        addFormItem(tutor, "test");
+        FormItem cityForm = addFormItem(cities, getTranslation("form_users_cities_label"));
+        FormItem tutorForm = addFormItem(tutor, getTranslation("form_users_tutor_label"));
+
+        roles.addValueChangeListener(e -> {
+            phoneForm.setVisible(!"LC_EXPERT".equals(e.getValue().getCode()));
+            cityForm.setVisible(!"LC_EXPERT".equals(e.getValue().getCode()));
+            tutorForm.setVisible("STUDENT".equals(e.getValue().getCode()));
+        });
     }
 }

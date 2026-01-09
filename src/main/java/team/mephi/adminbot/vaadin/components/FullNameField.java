@@ -13,14 +13,25 @@ public class FullNameField extends CustomField<FullNameField.FullName> {
     public FullNameField() {
         firstName.setMaxWidth("50%");
         lastName.setMaxWidth("50%");
+
+        firstName.setManualValidation(true);
+        lastName.setManualValidation(true);
+
+        firstName.addValueChangeListener(e -> updateValue());
+        lastName.addValueChangeListener(e -> updateValue());
+
         var content = new Div(lastName, firstName);
         content.addClassNames(LumoUtility.JustifyContent.BETWEEN);
         content.addClassNames(LumoUtility.Display.FLEX);
+
         add(content);
     }
 
     @Override
     protected FullName generateModelValue() {
+        if (firstName.isEmpty() || lastName.isEmpty()) {
+            return null;
+        }
         return new FullName(firstName.getValue(), lastName.getValue());
     }
 
@@ -35,6 +46,13 @@ public class FullNameField extends CustomField<FullNameField.FullName> {
         super.setReadOnly(readOnly);
         firstName.setReadOnly(readOnly);
         lastName.setReadOnly(readOnly);
+    }
+
+    @Override
+    public void setInvalid(boolean invalid) {
+        super.setInvalid(invalid);
+        firstName.setInvalid(invalid);
+        lastName.setInvalid(invalid);
     }
 
     public record FullName(String firstName, String lastName) {
