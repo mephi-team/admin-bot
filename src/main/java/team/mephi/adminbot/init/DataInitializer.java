@@ -15,10 +15,7 @@ import team.mephi.adminbot.service.RoleService;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static team.mephi.adminbot.vaadin.users.tabs.UserTabType.*;
 
@@ -59,6 +56,9 @@ public class DataInitializer {
     private TutorRepository tutorRepository;
 
     @Autowired
+    private TutorDirectionRepository tutorDirectionRepository;
+
+    @Autowired
     private CityService cityService;
 
     @Autowired
@@ -83,6 +83,7 @@ public class DataInitializer {
             boolean hasBroadcasts = mailingRepository.count() > 0;
             boolean hasTemplates = mailTemplateRepository.count() > 0;
             boolean hasTutors = tutorRepository.count() > 0;
+            boolean hasTutorDirections = tutorDirectionRepository.count() > 0;
 
             if (!hasUsers || !hasDialogs || !hasQuestions || !hasBroadcasts) {
                 System.out.println("🔁 Предзаполнение БД тестовыми данными...");
@@ -92,6 +93,7 @@ public class DataInitializer {
                 if (!hasUsers) initUsers();
                 if (!hasPdConsentLog) initPdConsentLog();
                 if (!hasTutors) initTutors();
+                if (!hasTutorDirections) initTutorDirections();
                 if (!hasQuestions) initQuestions();
                 if (!hasAnswers) initAnswers();
                 if (!hasBroadcasts) initBroadcasts();
@@ -101,6 +103,25 @@ public class DataInitializer {
                 System.out.println("✅ Тестовые данные успешно созданы.");
             }
         };
+    }
+
+    private void initTutorDirections() {
+        var tutors = tutorRepository.findAll();
+        var directions = directionRepository.findAll();
+        for (var tutor : tutors) {
+            // Каждый тьютор работает с 1-3 направлениями
+            Collections.shuffle(directions);
+            int count = 1 + new Random().nextInt(3);
+            for (int i = 0; i < count; i++) {
+                TutorDirection td = TutorDirection.builder()
+                        .tutor(tutor)
+                        .tutorId(tutor.getId())
+                        .direction(directions.get(i))
+                        .directionId(directions.get(i).getId())
+                        .build();
+                tutorDirectionRepository.save(td);
+            }
+        }
     }
 
     private void initRoles() {

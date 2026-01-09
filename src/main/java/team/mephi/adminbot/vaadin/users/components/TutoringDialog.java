@@ -4,8 +4,10 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.function.SerializableConsumer;
+import team.mephi.adminbot.dto.SimpleDirection;
 import team.mephi.adminbot.dto.SimpleTutor;
 import team.mephi.adminbot.dto.SimpleUser;
+import team.mephi.adminbot.service.DirectionService;
 import team.mephi.adminbot.service.UserService;
 import team.mephi.adminbot.vaadin.SimpleDialog;
 
@@ -18,15 +20,23 @@ public class TutoringDialog  extends Dialog implements SimpleDialog {
     private SerializableConsumer<SimpleTutor> onSaveCallback;
     private SimpleTutor user;
 
-    public TutoringDialog(UserService userService) {
-        var form = new TutorForm(userService);
-        binder.bindInstanceFields(form);
+    public TutoringDialog(UserService userService, DirectionService directionService) {
+        var form = new TutorForm(userService, directionService);
         setHeaderTitle("dialog_tutor_curatorship_title");
         add(form);
         setWidth("100%");
         setMaxWidth("500px");
         getFooter().add(new Button(getTranslation("cancel_button"), e -> close()), saveButton);
-        binder.forField(form.getComboBox())
+        binder.forField(form.getDirections())
+              .withConverter(s -> {
+                  if (Objects.isNull(s)) return new ArrayList<SimpleDirection>();
+                  return s.stream().toList();
+              }, e -> {
+                  if (Objects.isNull(e)) return new HashSet<>();
+                  return new HashSet<>(e);
+              })
+              .bind(SimpleTutor::getDirections, SimpleTutor::setDirections);
+        binder.forField(form.getStudents())
               .withConverter(s -> {
                   if (Objects.isNull(s)) return new ArrayList<SimpleUser>();
                   return s.stream().toList();
@@ -35,6 +45,7 @@ public class TutoringDialog  extends Dialog implements SimpleDialog {
                   return new HashSet<>(e);
               })
               .bind(SimpleTutor::getStudents, SimpleTutor::setStudents);
+        binder.bindInstanceFields(form);
     }
 
     @Override

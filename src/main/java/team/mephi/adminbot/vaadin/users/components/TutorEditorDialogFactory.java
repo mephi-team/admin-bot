@@ -1,10 +1,7 @@
 package team.mephi.adminbot.vaadin.users.components;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import team.mephi.adminbot.service.CityService;
-import team.mephi.adminbot.service.CohortService;
-import team.mephi.adminbot.service.DirectionService;
-import team.mephi.adminbot.service.RoleService;
+import team.mephi.adminbot.service.*;
 
 @SpringComponent
 public class TutorEditorDialogFactory {
@@ -12,16 +9,16 @@ public class TutorEditorDialogFactory {
     private final RoleService roleService;
     private final CohortService cohortService;
     private final DirectionService directionService;
-    private final CityService cityService;
+    private final UserService userService;
 
-    public TutorEditorDialogFactory(RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService) {
+    public TutorEditorDialogFactory(RoleService roleService, CohortService cohortService, DirectionService directionService, UserService userService) {
         this.roleService = roleService;
         this.cohortService = cohortService;
         this.directionService = directionService;
-        this.cityService = cityService;
+        this.userService = userService;
     }
 
     public TutorEditorDialog create() {
-        return new TutorEditorDialog(roleService, cohortService, directionService, cityService);
+        return new TutorEditorDialog(roleService, cohortService, directionService, userService);
     }
 }

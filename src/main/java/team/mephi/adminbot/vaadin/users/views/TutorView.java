@@ -9,6 +9,7 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.QueryParameters;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+import team.mephi.adminbot.dto.SimpleDirection;
 import team.mephi.adminbot.dto.SimpleTutor;
 import team.mephi.adminbot.model.enums.UserStatus;
 import team.mephi.adminbot.vaadin.components.*;
@@ -20,6 +21,7 @@ import team.mephi.adminbot.vaadin.views.Dialogs;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class TutorView extends VerticalLayout {
     private List<Long> selectedIds;
@@ -39,9 +41,10 @@ public class TutorView extends VerticalLayout {
         var grid = new Grid<>(SimpleTutor.class, false);
         grid.addColumn(SimpleTutor::getFullName).setHeader(getTranslation("grid_tutor_header_name_label")).setSortable(true).setResizable(true).setFrozen(true)
                 .setAutoWidth(true).setFlexGrow(0).setKey("lastName");
+        grid.addColumn(SimpleTutor::getCompetenceCenter).setHeader(getTranslation("grid_tutor_header_competence_center_label")).setSortable(true).setResizable(true).setKey("competenceCenter");
         grid.addColumn(SimpleTutor::getEmail).setHeader(getTranslation("grid_tutor_header_email_label")).setSortable(true).setResizable(true).setKey("email");
         grid.addColumn(SimpleTutor::getTgId).setHeader(getTranslation("grid_tutor_header_telegram_label")).setSortable(true).setResizable(true).setKey("tgId");
-        grid.addColumn(u -> Objects.nonNull(u.getDirection()) ? u.getDirection().getName() : "").setHeader(getTranslation("grid_tutor_header_direction_label")).setResizable(true).setKey("direction");
+        grid.addColumn(u -> Objects.nonNull(u.getDirections()) ? u.getDirections().stream().map(SimpleDirection::getName).collect(Collectors.joining(",")) : "").setHeader(getTranslation("grid_tutor_header_direction_label")).setResizable(true).setKey("direction");
         grid.addColumn(MyRenderers.createCuratorshipRenderer()).setHeader(getTranslation("grid_tutor_header_curatorship_label")).setResizable(true).setKey("curatorship");
 
         grid.addComponentColumn(item -> {

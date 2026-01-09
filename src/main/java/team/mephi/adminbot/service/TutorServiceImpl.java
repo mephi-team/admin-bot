@@ -3,6 +3,7 @@ package team.mephi.adminbot.service;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import team.mephi.adminbot.dto.SimpleDirection;
 import team.mephi.adminbot.dto.SimpleTutor;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.model.StudentTutor;
@@ -82,7 +83,7 @@ public class TutorServiceImpl implements TutorService {
     private SimpleTutor mapToSimpleUser(Tutor tutor) {
         return SimpleTutor.builder()
                 .id(tutor.getId())
-                .role("tutor")
+                .role("TUTOR")
                 .fullName(tutor.getLastName() + " " + tutor.getFirstName())
                 .firstName(tutor.getFirstName())
                 .lastName(tutor.getLastName())
@@ -91,6 +92,7 @@ public class TutorServiceImpl implements TutorService {
                 .tgId(tutor.getTgId())
                 .studentCount(tutor.getStudentAssignments().stream().filter(StudentTutor::getIsActive).toList().size())
                 .students(tutor.getStudentAssignments().stream().filter(StudentTutor::getIsActive).map(s -> SimpleUser.builder().id(s.getStudent().getId()).fullName(s.getStudent().getUserName()).tgId(s.getStudent().getTgId()).build()).toList())
+                .directions(tutor.getDirections().stream().map(d -> SimpleDirection.builder().id(d.getDirection().getId()).name(d.getDirection().getName()).build()).collect(Collectors.toList()))
                 .status("ACTIVE")
                 .build();
     }
