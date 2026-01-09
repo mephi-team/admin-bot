@@ -191,7 +191,7 @@ public class DataInitializer {
     private void initPdConsentLog() {
         Random random = new Random();
         List<ConsentStatus> statuses = Arrays.stream(ConsentStatus.values()).toList();
-        List<String> roles = List.of(CANDIDATE.name(), MIDDLE_CANDIDATE.name(), VISITOR.name());
+        List<String> roles = List.of(CANDIDATE.name(), MIDDLE_CANDIDATE.name(), VISITOR.name(), STUDENT.name());
         List<String> sources = List.of("Telegram", "Web", "Mobile App");
         List<User> users = userRepository.findAll().stream().filter(u -> roles.contains(u.getRole().getCode())).toList();
         List<PdConsentLog> logs = new ArrayList<>();

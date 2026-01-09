@@ -11,6 +11,7 @@ import team.mephi.adminbot.model.Tutor;
 import team.mephi.adminbot.model.User;
 import team.mephi.adminbot.model.enums.StudentTutorMode;
 import team.mephi.adminbot.repository.TutorRepository;
+import team.mephi.adminbot.repository.UserRepository;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,9 +21,11 @@ import java.util.stream.Stream;
 public class TutorServiceImpl implements TutorService {
 
     private final TutorRepository tutorRepository;
+    private final UserRepository userRepository;
 
-    public TutorServiceImpl(TutorRepository tutorRepository) {
+    public TutorServiceImpl(TutorRepository tutorRepository, UserRepository userRepository) {
         this.tutorRepository = tutorRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -37,12 +40,10 @@ public class TutorServiceImpl implements TutorService {
         user.setEmail(dto.getEmail());
         user.setTgId(dto.getTgId());
         var prevActive = user.getStudentAssignments().stream().filter(StudentTutor::getIsActive).map(st -> st.getStudent().getId()).toList();
-        var prevInActive = user.getStudentAssignments().stream().filter(u -> !u.getIsActive()).map(st -> st.getStudent().getId()).toList();
         var current = dto.getStudents().stream().map(SimpleUser::getId).collect(Collectors.toSet());
-        current.retainAll(prevActive);
         var td = dto.getStudents().stream().filter(s -> !prevActive.contains(s.getId())).map(
                 u -> StudentTutor.builder()
-                        .mode(prevInActive.contains(u.getId()) ? StudentTutorMode.REASSIGN : StudentTutorMode.INITIAL)
+                        .mode(userRepository.countByIdWithTutorAssignment(u.getId()) > 0 ? StudentTutorMode.REASSIGN : StudentTutorMode.INITIAL)
                         .tutor(Tutor.builder().id(dto.getId()).build())
                         .student(User.builder().id(u.getId()).build())
                         .build()

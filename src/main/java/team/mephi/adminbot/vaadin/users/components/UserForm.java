@@ -4,15 +4,12 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.provider.CallbackDataProvider;
 import lombok.Getter;
-import team.mephi.adminbot.dto.CityDto;
-import team.mephi.adminbot.dto.CohortDto;
-import team.mephi.adminbot.dto.SimpleDirection;
-import team.mephi.adminbot.dto.RoleDto;
-import team.mephi.adminbot.service.CityService;
-import team.mephi.adminbot.service.CohortService;
-import team.mephi.adminbot.service.DirectionService;
-import team.mephi.adminbot.service.RoleService;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import team.mephi.adminbot.dto.*;
+import team.mephi.adminbot.service.*;
 
 public class UserForm extends FormLayout {
     @Getter
@@ -28,8 +25,18 @@ public class UserForm extends FormLayout {
     private ComboBox<SimpleDirection> directions = new ComboBox<>();
     @Getter
     private ComboBox<CityDto> cities = new ComboBox<>();
+    @Getter
+    private ComboBox<SimpleTutor> tutor = new ComboBox<>();
 
-    public UserForm(RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService) {
+    public UserForm(RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService, TutorService tutorService) {
+        var tutorProvider = new CallbackDataProvider<SimpleTutor, String>(
+                query -> {
+                    Pageable pageable = PageRequest.of(query.getOffset() / query.getLimit(), query.getLimit());
+                    return tutorService.findAllByName(query.getFilter().orElse(""), pageable);
+                },
+                query -> tutorService.countByName(query.getFilter().orElse(""))
+        );
+
         setAutoResponsive(true);
         setLabelsAside(true);
         setExpandFields(true);
@@ -47,6 +54,8 @@ public class UserForm extends FormLayout {
         cities.setItemsPageable(cityService::getAllCities);
         cities.setItemLabelGenerator(CityDto::getName);
         cities.setRequiredIndicatorVisible(true);
+        tutor.setItems(tutorProvider);
+        tutor.setItemLabelGenerator(SimpleTutor::getFullName);
 
         addFormItem(roles, getTranslation("form_users_roles_label"));
         addFormItem(firstName, getTranslation("form_users_first_name_label"));
@@ -57,5 +66,6 @@ public class UserForm extends FormLayout {
         addFormItem(cohorts, getTranslation("form_users_cohorts_label"));
         addFormItem(directions, getTranslation("form_users_directions_label"));
         addFormItem(cities, getTranslation("form_users_cities_label"));
+        addFormItem(tutor, "test");
     }
 }

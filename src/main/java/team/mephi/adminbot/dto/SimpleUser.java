@@ -32,5 +32,5 @@ public class SimpleUser {
     private String city;
     private Boolean pdConsent;
     private List<SimplePd> pdConsentLog;
-    private String tutor;
+    private SimpleTutor tutor;
 }

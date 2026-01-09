@@ -316,7 +316,7 @@ public class User {
      * Один студент может иметь множество записей о назначениях на разных тьюторов.
      * Связь через таблицу student_tutor.
      */
-    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
     private Set<StudentTutor> tutorAssignments = new HashSet<>();
 

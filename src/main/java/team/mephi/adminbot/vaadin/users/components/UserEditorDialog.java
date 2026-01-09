@@ -4,14 +4,8 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.function.SerializableConsumer;
-import team.mephi.adminbot.dto.CityDto;
-import team.mephi.adminbot.dto.CohortDto;
-import team.mephi.adminbot.dto.RoleDto;
-import team.mephi.adminbot.dto.SimpleUser;
-import team.mephi.adminbot.service.CityService;
-import team.mephi.adminbot.service.CohortService;
-import team.mephi.adminbot.service.DirectionService;
-import team.mephi.adminbot.service.RoleService;
+import team.mephi.adminbot.dto.*;
+import team.mephi.adminbot.service.*;
 import team.mephi.adminbot.vaadin.SimpleDialog;
 
 import java.util.Objects;
@@ -23,23 +17,25 @@ public class UserEditorDialog extends Dialog implements SimpleDialog {
     private SerializableConsumer<SimpleUser> onSaveCallback;
     private SimpleUser user;
 
-    public UserEditorDialog(RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService) {
-        var form = new UserForm(roleService, cohortService, directionService, cityService);
+    public UserEditorDialog(RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService, TutorService tutorService) {
+        var form = new UserForm(roleService, cohortService, directionService, cityService, tutorService);
         binder.forField(form.getRoles())
                 .withValidator(Objects::nonNull, getTranslation("form_users_roles_validation_message"))
                 .withConverter(RoleDto::getCode, roleCode -> roleService.getByCode(roleCode).orElse(null))
-                .bind("role");
+                .bind(SimpleUser::getRole, SimpleUser::setRole);
         binder.forField(form.getCohorts())
                 .withValidator(Objects::nonNull, getTranslation("form_users_cohort_validation_message"))
                 .withConverter(CohortDto::getName, cohort -> cohortService.getByName(cohort).orElse(null))
-                .bind("cohort");
+                .bind(SimpleUser::getCohort, SimpleUser::setCohort);
         binder.forField(form.getDirections())
                 .withValidator(Objects::nonNull, getTranslation("form_users_direction_validation_message"))
-                .bind("direction");
+                .bind(SimpleUser::getDirection, SimpleUser::setDirection);
         binder.forField(form.getCities())
                 .withValidator(Objects::nonNull, getTranslation("form_users_cities_validation_message"))
                 .withConverter(CityDto::getName, city -> cityService.getByName(city).orElse(null))
-                .bind("city");
+                .bind(SimpleUser::getCity, SimpleUser::setCity);
+        binder.forField(form.getTutor())
+                .bind(SimpleUser::getTutor, SimpleUser::setTutor);
         binder.bindInstanceFields(form);
 
         setHeaderTitle("dialog_users_created_title");
