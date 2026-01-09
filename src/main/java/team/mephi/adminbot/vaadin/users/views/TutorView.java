@@ -42,7 +42,7 @@ public class TutorView extends VerticalLayout {
         grid.addColumn(SimpleTutor::getEmail).setHeader(getTranslation("grid_tutor_header_email_label")).setSortable(true).setResizable(true).setKey("email");
         grid.addColumn(SimpleTutor::getTgId).setHeader(getTranslation("grid_tutor_header_telegram_label")).setSortable(true).setResizable(true).setKey("tgId");
         grid.addColumn(u -> Objects.nonNull(u.getDirection()) ? u.getDirection().getName() : "").setHeader(getTranslation("grid_tutor_header_direction_label")).setResizable(true).setKey("direction");
-        grid.addColumn(SimpleTutor::getStudentCount).setHeader(getTranslation("grid_tutor_header_curatorship_label")).setResizable(true).setKey("curatorship");
+        grid.addColumn(MyRenderers.createCuratorshipRenderer()).setHeader(getTranslation("grid_tutor_header_curatorship_label")).setResizable(true).setKey("curatorship");
 
         grid.addComponentColumn(item -> {
             Button dropButton = new Button(getTranslation("grid_tutor_action_curatorship_label"), e -> actions.onTutoring(item, DialogType.TUTORS_UPDATED));
