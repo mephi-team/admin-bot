@@ -11,14 +11,17 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import team.mephi.adminbot.dto.*;
 import team.mephi.adminbot.service.*;
+import team.mephi.adminbot.vaadin.components.FullNameField;
 
 import java.util.Objects;
 
 public class TutorEditForm extends FormLayout {
     @Getter
     private ComboBox<RoleDto> roles = new ComboBox<>();
-    private TextField firstName = new TextField();
-    private TextField lastName = new TextField();
+    @Getter
+    private FullNameField fullNameField = new FullNameField();
+//    private TextField firstName = new TextField();
+//    private TextField lastName = new TextField();
     private TextField centerOfCompetence = new TextField();
     private EmailField email = new EmailField();
     private TextField tgId = new TextField();
@@ -52,6 +55,7 @@ public class TutorEditForm extends FormLayout {
         cohorts.setRequiredIndicatorVisible(true);
         directions.setItemsPageable(directionService::getAllDirections);
         directions.setItemLabelGenerator(SimpleDirection::getName);
+        directions.setAutoExpand(MultiSelectComboBox.AutoExpandMode.VERTICAL);
         directions.setRequiredIndicatorVisible(true);
         students.setItems(studentsProvider);
         students.setItemLabelGenerator(u -> u.getFullName() + (Objects.nonNull(u.getTgId()) ? " @" + u.getTgId() : ""));
@@ -59,8 +63,9 @@ public class TutorEditForm extends FormLayout {
         students.setRequiredIndicatorVisible(true);
 
         addFormItem(roles, getTranslation("form_users_roles_label"));
-        addFormItem(firstName, getTranslation("form_users_first_name_label"));
-        addFormItem(lastName, getTranslation("form_users_last_name_label"));
+        addFormItem(fullNameField, getTranslation("form_users_full_name_label"));
+//        addFormItem(firstName, getTranslation("form_users_first_name_label"));
+//        addFormItem(lastName, getTranslation("form_users_last_name_label"));
         addFormItem(centerOfCompetence, getTranslation("form_users_competence_center_label"));
         addFormItem(email, getTranslation("form_users_email_label"));
         addFormItem(tgId, getTranslation("form_users_telegram_label"));

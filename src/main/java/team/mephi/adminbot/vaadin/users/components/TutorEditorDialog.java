@@ -7,6 +7,7 @@ import com.vaadin.flow.function.SerializableConsumer;
 import team.mephi.adminbot.dto.*;
 import team.mephi.adminbot.service.*;
 import team.mephi.adminbot.vaadin.SimpleDialog;
+import team.mephi.adminbot.vaadin.components.FullNameField;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -22,6 +23,9 @@ public class TutorEditorDialog extends Dialog implements SimpleDialog {
 
     public TutorEditorDialog(RoleService roleService, CohortService cohortService, DirectionService directionService, UserService userService) {
         var form = new TutorEditForm(roleService, cohortService, directionService, userService);
+        binder.forField(form.getFullNameField())
+                .bind(s -> new FullNameField.FullName(s.getFirstName(),s.getLastName()),
+                        (s, t) -> {s.setFirstName(t.firstName());s.setLastName(t.lastName());});
         binder.forField(form.getRoles())
                 .withValidator(Objects::nonNull, getTranslation("form_users_roles_validation_message"))
                 .withConverter(RoleDto::getCode, roleCode -> roleService.getByCode(roleCode).orElse(null))

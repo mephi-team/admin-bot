@@ -10,6 +10,7 @@ import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.service.DirectionService;
 import team.mephi.adminbot.service.UserService;
 import team.mephi.adminbot.vaadin.SimpleDialog;
+import team.mephi.adminbot.vaadin.components.FullNameField;
 
 import java.util.*;
 
@@ -27,6 +28,9 @@ public class TutoringDialog  extends Dialog implements SimpleDialog {
         setWidth("100%");
         setMaxWidth("500px");
         getFooter().add(new Button(getTranslation("cancel_button"), e -> close()), saveButton);
+        binder.forField(form.getFullNameField())
+                .bind(s -> new FullNameField.FullName(s.getFirstName(),s.getLastName()),
+                        (s, t) -> {s.setFirstName(t.firstName());s.setLastName(t.lastName());});
         binder.forField(form.getDirections())
               .withConverter(s -> {
                   if (Objects.isNull(s)) return new ArrayList<SimpleDirection>();
