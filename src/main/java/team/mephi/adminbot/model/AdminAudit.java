@@ -6,25 +6,24 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
-
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
 
 /**
  * Лог аудита административных действий.
- *
+ * <p>
  * Здесь сохраняется история того,
  * кто, что и когда сделал в системе.
- *
+ * <p>
  * Таблица используется для:
  * - отслеживания действий администраторов и системы
  * - разборов ошибок и странного поведения
  * - отчётности и ответственности (кто нажал кнопку)
- *
+ * <p>
  * Важно:
  * записи в этом логе никогда не изменяются.
  * Новые записи только добавляются.
@@ -47,7 +46,7 @@ public class AdminAudit {
 
     /**
      * Пользователь, который выполнил действие.
-     *
+     * <p>
      * Ссылка на users.id.
      * Связь используется только для чтения
      * и может быть пустой (например, системные действия).
@@ -58,7 +57,7 @@ public class AdminAudit {
 
     /**
      * Тип сущности, над которой было выполнено действие.
-     *
+     * <p>
      * Например: USER, MAILING, DIALOG, SCRIPT_TASK.
      */
     @Column(name = "entity_type", nullable = false)
@@ -66,7 +65,7 @@ public class AdminAudit {
 
     /**
      * ID конкретной сущности, над которой было действие.
-     *
+     * <p>
      * Может быть null, если действие не связано
      * с конкретной записью.
      */
@@ -75,7 +74,7 @@ public class AdminAudit {
 
     /**
      * Название выполненного действия.
-     *
+     * <p>
      * Например: CREATE, UPDATE, ASSIGN, SEND, REASSIGN.
      */
     @Column(name = "action", nullable = false)
@@ -83,12 +82,12 @@ public class AdminAudit {
 
     /**
      * Дополнительные детали действия в формате JSON.
-     *
+     * <p>
      * Может содержать:
      * - состояние до и после
      * - параметры операции
      * - любые служебные данные
-     *
+     * <p>
      * Поле необязательное.
      */
     @JdbcTypeCode(SqlTypes.JSON)
@@ -97,7 +96,7 @@ public class AdminAudit {
 
     /**
      * Дата и время, когда произошло действие.
-     *
+     * <p>
      * Заполняется автоматически при создании записи
      * и больше никогда не изменяется.
      */

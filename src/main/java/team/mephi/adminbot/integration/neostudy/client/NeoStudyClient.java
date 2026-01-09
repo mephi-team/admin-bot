@@ -22,12 +22,12 @@ import java.util.List;
 
 /**
  * Клиент для работы с API NeoStudy.
- *
+ * <p>
  * Этот класс инкапсулирует все HTTP-запросы к NeoStudy:
  * - работа с пользователями (создание, обновление, получение)
  * - работа с курсами
  * - работа с записями на курсы
- *
+ * <p>
  * Внутри уже есть:
  * - централизованная обработка ошибок
  * - логирование запросов и ответов
@@ -38,20 +38,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class NeoStudyClient {
 
-    // WebClient с заранее настроенными таймаутами и авторизацией
-    @Qualifier("neostudyWebClient")
-    private final WebClient webClient;
-
-    // Настройки интеграции (retry, таймауты и т.д.)
-    private final NeoStudyProperties properties;
-
-    // ObjectMapper для разбора ошибок NeoStudy
-    private final ObjectMapper objectMapper;
-
     // Пути API NeoStudy
     private static final String USERS_ENDPOINT = "/api/v1/users";
     private static final String COURSES_ENDPOINT = "/api/v1/courses";
     private static final String ENROLLMENTS_ENDPOINT = "/api/v1/enrollments";
+    // WebClient с заранее настроенными таймаутами и авторизацией
+    @Qualifier("neostudyWebClient")
+    private final WebClient webClient;
+    // Настройки интеграции (retry, таймауты и т.д.)
+    private final NeoStudyProperties properties;
+    // ObjectMapper для разбора ошибок NeoStudy
+    private final ObjectMapper objectMapper;
 
     /**
      * Создаёт пользователя в NeoStudy.
@@ -296,7 +293,7 @@ public class NeoStudyClient {
 
     /**
      * Создаёт правила retry для реактивных запросов.
-     *
+     * <p>
      * Повторяем запросы:
      * - при ошибках 5xx
      * - при таймаутах
@@ -368,7 +365,7 @@ public class NeoStudyClient {
 
     /**
      * Пытается достать понятное сообщение об ошибке из ответа NeoStudy.
-     *
+     * <p>
      * Если NeoStudy вернул JSON с описанием ошибки —
      * пробуем его разобрать.
      */

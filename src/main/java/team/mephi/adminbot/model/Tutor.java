@@ -9,9 +9,10 @@ import lombok.NoArgsConstructor;
 import java.util.HashSet;
 import java.util.Set;
 
+
 /**
  * Сущность тьютора / куратора.
- *
+ * <p>
  * Тьютор представляет собой преподавателя или куратора,
  * который работает со студентами по определенным направлениям.
  */
@@ -20,7 +21,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "tutor")
+@Table(name = "tutors")
 public class Tutor {
 
     /**
@@ -50,7 +51,7 @@ public class Tutor {
 
     /**
      * Telegram ID тьютора.
-     *
+     * <p>
      * Может быть пустым, если тьютор не имеет аккаунта в Telegram.
      */
     @Column(name = "tg_id")
@@ -59,7 +60,7 @@ public class Tutor {
     /**
      * Номер телефона тьютора.
      */
-    @Column(name = "phone")
+    @Column(name = "phone_number")
     private String phone;
 
     /**
@@ -74,27 +75,34 @@ public class Tutor {
     @Column(name = "notes")
     private String notes;
 
+    @Column(name = "deleted")
+    private Boolean deleted;
+
     // ===== Связи с другими сущностями =====
 
     /**
      * История назначений студентов на этого тьютора.
-     *
+     * <p>
      * Один тьютор может иметь много записей о назначениях студентов.
      * Связь через таблицу student_tutor.
      */
-    @OneToMany(mappedBy = "tutor", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "tutor", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private Set<StudentTutor> studentAssignments = new HashSet<>();
 
     /**
      * Направления, с которыми работает тьютор.
-     *
+     * <p>
      * Связь многие-ко-многим через таблицу tutor_directions.
      */
     @OneToMany(mappedBy = "tutor", fetch = FetchType.LAZY)
     @Builder.Default
     private Set<TutorDirection> directions = new HashSet<>();
 
+    @PrePersist
+    protected void onCreate() {
+        this.deleted = false;
+    }
     // ===== equals() и hashCode() =====
 
     /**

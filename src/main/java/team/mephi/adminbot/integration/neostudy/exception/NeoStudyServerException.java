@@ -2,10 +2,10 @@ package team.mephi.adminbot.integration.neostudy.exception;
 
 /**
  * Исключение для серверных ошибок NeoStudy.
- *
+ * <p>
  * Используется, когда NeoStudy возвращает HTTP-ошибки 5xx,
  * то есть проблема возникла на стороне самого сервиса.
- *
+ * <p>
  * Примеры таких ошибок:
  * - 500 Internal Server Error
  * - 502 Bad Gateway

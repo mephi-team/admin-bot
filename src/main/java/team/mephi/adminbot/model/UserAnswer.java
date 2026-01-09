@@ -51,7 +51,7 @@ public class UserAnswer {
 
     /**
      * Вопрос, на который дан ответ.
-     *
+     * <p>
      * Связь с таблицей users_questions (users_questions.id).
      * Обязательное поле.
      */
@@ -61,7 +61,7 @@ public class UserAnswer {
 
     /**
      * Текст ответа.
-     *
+     * <p>
      * Обязательное поле, хранится как TEXT в базе данных.
      */
     @Column(name = "answer_text", nullable = false, columnDefinition = "TEXT")
@@ -69,7 +69,7 @@ public class UserAnswer {
 
     /**
      * Пользователь, который предоставил ответ.
-     *
+     * <p>
      * Связь с таблицей users (users.id).
      * Должен быть пользователем с ролью admin или lc_expert.
      * Обязательное поле.
@@ -80,7 +80,7 @@ public class UserAnswer {
 
     /**
      * Дата и время, когда был предоставлен ответ.
-     *
+     * <p>
      * Обязательное поле. Устанавливается явно в бизнес-логике.
      */
     @Column(name = "answered_at", nullable = false)
@@ -88,7 +88,7 @@ public class UserAnswer {
 
     /**
      * Текущий статус ответа.
-     *
+     * <p>
      * Может быть: DRAFT, SENT, UPDATED.
      * Обязательное поле.
      */

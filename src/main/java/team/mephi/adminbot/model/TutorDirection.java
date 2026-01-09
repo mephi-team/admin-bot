@@ -10,10 +10,10 @@ import java.io.Serializable;
 
 /**
  * Сущность связи между тьюторами и направлениями.
- *
+ * <p>
  * Представляет многие-ко-многим связь между Tutor и Direction
  * через таблицу tutor_directions.
- *
+ * <p>
  * Использует композитный первичный ключ (tutor_id, direction_id).
  */
 @Data

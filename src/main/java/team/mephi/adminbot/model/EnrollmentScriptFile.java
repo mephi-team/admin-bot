@@ -1,14 +1,9 @@
 package team.mephi.adminbot.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import team.mephi.adminbot.model.enums.ScriptTaskStatus;
-
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import team.mephi.adminbot.model.enums.ScriptTaskStatus;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -16,15 +11,15 @@ import java.util.List;
 
 /**
  * Загруженный Excel-файл для скрипта массовой регистрации.
- *
+ * <p>
  * Каждый файл — это отдельный источник данных,
  * который проходит определённый жизненный цикл обработки:
- *
+ * <p>
  * - PENDING   — файл загружен и ожидает обработки
  * - RUNNING   — файл сейчас обрабатывается
  * - COMPLETED — обработка успешно завершена
  * - FAILED    — при обработке произошла ошибка
- *
+ * <p>
  * Файл связан с задачами обработки (EnrollmentScriptTask):
  * один файл → несколько задач.
  * При удалении файла связанные задачи автоматически НЕ удаляются.
@@ -55,7 +50,7 @@ public class EnrollmentScriptFile {
 
     /**
      * Пользователь, который загрузил файл.
-     *
+     * <p>
      * Всегда обязателен.
      * Загружается лениво.
      */
@@ -65,7 +60,7 @@ public class EnrollmentScriptFile {
 
     /**
      * Дата и время загрузки файла.
-     *
+     * <p>
      * Устанавливается один раз при создании
      * и дальше не изменяется.
      */
@@ -75,10 +70,10 @@ public class EnrollmentScriptFile {
 
     /**
      * Текущий статус обработки файла.
-     *
+     * <p>
      * Показывает, на каком этапе
      * находится обработка.
-     *
+     * <p>
      * По умолчанию — PENDING.
      */
     @Enumerated(EnumType.STRING)
@@ -87,7 +82,7 @@ public class EnrollmentScriptFile {
 
     /**
      * Задачи обработки, связанные с этим файлом.
-     *
+     * <p>
      * Один файл может иметь несколько задач.
      * Удаление файла НЕ удаляет задачи автоматически.
      */
@@ -100,7 +95,7 @@ public class EnrollmentScriptFile {
 
     /**
      * Инициализация значений перед сохранением в базу.
-     *
+     * <p>
      * Если значения не заданы:
      * - uploadedAt ставится в текущее время
      * - status устанавливается в PENDING

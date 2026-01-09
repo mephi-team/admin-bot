@@ -17,7 +17,7 @@
 //import static org.mockito.ArgumentMatchers.anyString;
 //import static org.mockito.Mockito.*;
 //
-///**
+/// **
 // * Юнит-тесты для UserController без поднятия Spring-контекста.
 // */
 //@ExtendWith(MockitoExtension.class)

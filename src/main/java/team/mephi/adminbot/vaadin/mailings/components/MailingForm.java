@@ -1,0 +1,121 @@
+package team.mephi.adminbot.vaadin.mailings.components;
+
+import com.vaadin.flow.component.accordion.Accordion;
+import com.vaadin.flow.component.accordion.AccordionPanel;
+import com.vaadin.flow.component.checkbox.CheckboxGroup;
+import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.listbox.MultiSelectListBox;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.provider.CallbackDataProvider;
+import com.vaadin.flow.theme.lumo.LumoUtility;
+import lombok.Getter;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import team.mephi.adminbot.dto.*;
+import team.mephi.adminbot.service.UserService;
+import team.mephi.adminbot.service.CityService;
+import team.mephi.adminbot.service.DirectionService;
+import team.mephi.adminbot.service.CohortService;
+import team.mephi.adminbot.service.RoleService;
+
+import java.util.Objects;
+
+public class MailingForm extends FormLayout {
+    private final CheckboxGroup<String> channels = new CheckboxGroup<>();
+    @Getter
+    private final ComboBox<RoleDto> users = new ComboBox<>();
+    @Getter
+    private final ComboBox<CohortDto> cohort = new ComboBox<>();
+    @Getter
+    private final ComboBox<SimpleDirection> direction = new ComboBox<>();
+    @Getter
+    private final ComboBox<CityDto> city = new ComboBox<>();
+    @Getter
+    private final ComboBox<UserDto> curator = new ComboBox<>();
+    @Getter
+    private final MultiSelectListBox<SimpleUser> listBox = new MultiSelectListBox<>();
+    private final Span counter = new Span("(0)");
+
+    public MailingForm(UserService userService, RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService) {
+        var provider = new CallbackDataProvider<SimpleUser, String>(
+                query -> {
+                    Pageable pageable = PageRequest.of(query.getOffset() / query.getLimit(), query.getLimit());
+                    return userService.findAllByRoleCodeLikeAndCohortLikeAndDirectionCodeLikeAndCityLike(
+                            Objects.isNull(users.getValue()) ? null : users.getValue().getCode(),
+                            Objects.isNull(cohort.getValue()) ? null : cohort.getValue().getName(),
+                            Objects.isNull(direction.getValue()) ? null : direction.getValue().getId(),
+                            Objects.isNull(city.getValue()) || Objects.isNull(city.getValue().getId()) ? null : city.getValue().getName(),
+                            (Objects.isNull(curator.getValue()) ? null : curator.getValue().getId()),
+                            pageable
+                    );
+                },
+                q -> userService.countByRoleAndName(Objects.isNull(users.getValue()) ? "" : users.getValue().getCode(), ""),
+                SimpleUser::getId
+        );
+        setAutoResponsive(true);
+        setLabelsAside(true);
+        setExpandFields(true);
+        setExpandColumns(true);
+
+        channels.setItems("Email", "Telegram");
+
+        users.setItemsPageable(roleService::getAllRoles);
+        users.setItemLabelGenerator(RoleDto::getName);
+        users.setRequiredIndicatorVisible(true);
+        users.addValueChangeListener(e -> provider.refreshAll());
+
+        cohort.setItemsPageable(cohortService::getAllCohorts);
+        cohort.setItemLabelGenerator(c -> c.getName() + (c.getCurrent() ? " (текущий)" : ""));
+        cohort.setRequiredIndicatorVisible(true);
+        cohort.addValueChangeListener(e -> provider.refreshAll());
+
+        direction.setItemsPageable(directionService::getAllDirections);
+        direction.setItemLabelGenerator(SimpleDirection::getName);
+        direction.setRequiredIndicatorVisible(true);
+        direction.addValueChangeListener(e -> provider.refreshAll());
+
+        city.setItemsPageable(cityService::getAllCities);
+        city.setItemLabelGenerator(CityDto::getName);
+        city.setRequiredIndicatorVisible(true);
+        city.addValueChangeListener(e -> provider.refreshAll());
+
+        curator.setItemsPageable(userService::findAllCurators);
+        curator.setItemLabelGenerator(UserDto::getUserName);
+        curator.addValueChangeListener(e -> provider.refreshAll());
+//        curator.setRequiredIndicatorVisible(true);
+
+        addFormItem(channels, getTranslation("form_mailing_channels_label"));
+        addFormItem(users, getTranslation("form_mailing_users_label"));
+        addFormItem(cohort, getTranslation("form_mailing_cohort_label"));
+        addFormItem(direction, getTranslation("form_mailing_direction_label"));
+        addFormItem(city, getTranslation("form_mailing_city_label"));
+        addFormItem(curator, getTranslation("form_mailing_curator_label"));
+
+        Accordion accordion = new Accordion();
+
+        Span name = new Span(getTranslation("form_mailing_accordion_description_label"));
+        name.addClassNames(LumoUtility.FontSize.SMALL);
+
+        listBox.setWidthFull();
+        listBox.addClassNames(LumoUtility.FontSize.SMALL);
+        listBox.setDataProvider(provider);
+        listBox.setItemLabelGenerator(u -> u.getFullName() + ", @" + u.getTgId());
+        listBox.addSelectionListener(e -> {
+            counter.setText("(" +  e.getAllSelectedItems().size() + ")");
+        });
+        FormItem box = addFormItem(listBox, getTranslation("form_mailing_first_name_last_name_label"));
+        box.addClassNames(LumoUtility.Width.FULL);
+
+        VerticalLayout personalInformationLayout = new VerticalLayout(name, box);
+        personalInformationLayout.setSpacing(false);
+        personalInformationLayout.setPadding(false);
+
+        accordion.add(new AccordionPanel(new Span(new Span(getTranslation("form_mailing_accordion_label")), new Span(" "), counter), personalInformationLayout));
+//        accordion.close();
+
+        add(accordion);
+    }
+}

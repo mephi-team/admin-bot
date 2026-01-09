@@ -1,34 +1,29 @@
 package team.mephi.adminbot.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import team.mephi.adminbot.model.enums.EnrollmentStatus;
-
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import team.mephi.adminbot.model.enums.EnrollmentStatus;
 
 import java.time.Instant;
 
 /**
  * Сущность ссылки для записи пользователя вне основного флоу.
- *
+ * <p>
  * Проще говоря:
  * это персональная ссылка, по которой конкретный пользователь
  * может пройти и завершить процесс зачисления.
- *
+ * <p>
  * Для каждой ссылки отслеживается:
  * - её жизненный цикл (создана → отправлена → использована / истекла / ошибка)
  * - была ли ссылка отправлена пользователю
  * - срок действия (если он есть)
  * - причина ошибки или истечения срока
- *
+ * <p>
  * Связи:
  * - каждая ссылка относится к одному батчу зачисления
  * - каждая ссылка создаётся для одного конкретного пользователя
- *
+ * <p>
  * Ограничения и правила:
  * - сама ссылка должна быть уникальной
  * - дата создания не меняется после сохранения
@@ -68,7 +63,7 @@ public class EnrollmentLink {
 
     /**
      * Сама ссылка (URL).
-     *
+     * <p>
      * Должна быть уникальной в рамках всей системы.
      */
     @Column(name = "link", nullable = false)
@@ -76,7 +71,7 @@ public class EnrollmentLink {
 
     /**
      * Дата и время создания ссылки.
-     *
+     * <p>
      * Проставляется автоматически
      * и больше никогда не изменяется.
      */
@@ -86,7 +81,7 @@ public class EnrollmentLink {
 
     /**
      * Дата и время, после которых ссылка считается недействительной.
-     *
+     * <p>
      * Может быть null — тогда ссылка не имеет срока действия.
      * Если указана, должна быть позже createdAt.
      */
@@ -95,7 +90,7 @@ public class EnrollmentLink {
 
     /**
      * Признак того, что ссылка была отправлена пользователю.
-     *
+     * <p>
      * По умолчанию false.
      */
     @Column(name = "is_sent", nullable = false)
@@ -104,7 +99,7 @@ public class EnrollmentLink {
 
     /**
      * Текущий статус ссылки.
-     *
+     * <p>
      * Отражает её состояние:
      * PENDING, SENT, USED, EXPIRED, FAILED.
      */
@@ -114,7 +109,7 @@ public class EnrollmentLink {
 
     /**
      * Причина текущего статуса.
-     *
+     * <p>
      * Используется, например, для ошибок
      * или пояснения, почему ссылка истекла.
      * Может быть пустым.
@@ -124,7 +119,7 @@ public class EnrollmentLink {
 
     /**
      * Метод, который вызывается перед сохранением новой ссылки.
-     *
+     * <p>
      * Делает следующее:
      * - гарантирует, что sent = false
      * - если статус не задан — ставит PENDING
@@ -144,7 +139,7 @@ public class EnrollmentLink {
 
     /**
      * Метод, который вызывается перед обновлением записи.
-     *
+     * <p>
      * Проверяет, что дата истечения
      * (если она указана) корректна.
      */
@@ -155,10 +150,10 @@ public class EnrollmentLink {
 
     /**
      * Проверка корректности даты истечения.
-     *
+     * <p>
      * Если expiresAt указана, она должна быть
      * строго позже createdAt.
-     *
+     * <p>
      * Иначе выбрасывается исключение.
      */
     private void validateExpirationDate() {

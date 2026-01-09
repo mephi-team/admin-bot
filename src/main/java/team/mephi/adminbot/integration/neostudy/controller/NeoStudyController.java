@@ -22,14 +22,14 @@ import java.util.Optional;
 
 /**
  * REST-контроллер для интеграции с NeoStudy.
- *
+ * <p>
  * Здесь находятся эндпоинты для:
  * - регистрации пользователей в NeoStudy
  * - синхронизации пользователей
  * - синхронизации курсов (направлений)
  * - записи пользователей на курсы
  * - приёма вебхуков от NeoStudy
- *
+ * <p>
  * Все эндпоинты доступны только администраторам (ROLE_ADMIN).
  */
 @Slf4j
@@ -45,7 +45,7 @@ public class NeoStudyController {
 
     /**
      * POST /api/neostudy/users/{userId}/register
-     *
+     * <p>
      * Регистрирует пользователя из нашей базы в системе NeoStudy.
      */
     @PostMapping("/users/{userId}/register")
@@ -82,7 +82,7 @@ public class NeoStudyController {
 
     /**
      * POST /api/neostudy/users/{userId}/sync
-     *
+     * <p>
      * Синхронизирует данные пользователя с NeoStudy
      * (обновляет информацию в NeoStudy или у нас).
      */
@@ -118,7 +118,7 @@ public class NeoStudyController {
 
     /**
      * POST /api/neostudy/courses/sync
-     *
+     * <p>
      * Загружает курсы из NeoStudy и синхронизирует их
      * с нашей базой направлений.
      */
@@ -161,9 +161,9 @@ public class NeoStudyController {
 
     /**
      * POST /api/neostudy/enrollments
-     *
+     * <p>
      * Записывает пользователя на курс в NeoStudy.
-     *
+     * <p>
      * В теле запроса ожидаются:
      * - userId — ID пользователя
      * - directionId — ID направления (курса)
@@ -220,12 +220,12 @@ public class NeoStudyController {
 
     /**
      * POST /api/neostudy/webhooks
-     *
+     * <p>
      * Принимает вебхуки от NeoStudy.
-     *
+     * <p>
      * NeoStudy присылает сюда события,
      * например изменение статуса записи на курс.
-     *
+     * <p>
      * В продакшене рекомендуется добавить
      * проверку подписи вебхука.
      */
@@ -260,7 +260,7 @@ public class NeoStudyController {
 
     /**
      * GET /api/neostudy/health
-     *
+     * <p>
      * Простой эндпоинт для проверки,
      * что интеграция с NeoStudy работает.
      */

@@ -1,11 +1,16 @@
 package team.mephi.adminbot.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.UpdateTimestamp;
 import team.mephi.adminbot.model.enums.UserStatus;
 
@@ -17,7 +22,7 @@ import java.util.Set;
 
 /**
  * Основная сущность пользователя системы.
- *
+ * <p>
  * Описывает кандидата или студента и содержит:
  * - личные данные
  * - роль и направление
@@ -39,6 +44,7 @@ import java.util.Set;
         @Index(name = "idx_users_role_code", columnList = "role_code"),
         @Index(name = "idx_users_direction_id", columnList = "direction_id")
 })
+@DynamicUpdate
 public class User {
 
     /**
@@ -50,7 +56,7 @@ public class User {
 
     /**
      * Telegram ID пользователя.
-     *
+     * <p>
      * Уникальный идентификатор аккаунта в Telegram.
      */
     @Column(name = "tg_id", unique = true)
@@ -64,7 +70,7 @@ public class User {
 
     /**
      * Имя пользователя.
-     *
+     * <p>
      * Основное поле с именем, которое используется в системе.
      */
     @Column(name = "user_name")
@@ -72,28 +78,34 @@ public class User {
 
     /**
      * Email пользователя.
-     *
+     * <p>
      * Должен быть уникальным.
      */
     @Column(name = "email", unique = true)
+    @NotBlank(message = "Email обязателен")
+    @Email
     private String email;
 
     /**
      * Номер телефона пользователя.
-     *
+     * <p>
      * Также должен быть уникальным.
      */
     @Column(name = "phone_number", unique = true)
     private String phoneNumber;
 
+    @Column(name = "city")
+    private String city;
+
     /**
      * Роль пользователя в системе.
-     *
+     * <p>
      * Связь с таблицей ролей (roles.code).
      * Каждый пользователь имеет ровно одну роль.
      */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_code", referencedColumnName = "code", nullable = false)
+    @NotNull(message = "Роль обязательна")
     private Role role;
 
     /**
@@ -105,7 +117,7 @@ public class User {
 
     /**
      * Когорта пользователя.
-     *
+     * <p>
      * Например, поток или набор.
      */
     @Column(name = "cohort")
@@ -113,16 +125,16 @@ public class User {
 
     /**
      * Текущий статус пользователя.
-     *
+     * <p>
      * Например: активен, отчислён, заблокирован и т.п.
      */
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
+    @Column(name = "status")
     private UserStatus status;
 
     /**
      * Флаг согласия на обработку персональных данных.
-     *
+     * <p>
      * true — пользователь дал согласие
      * false — согласие не получено
      */
@@ -139,7 +151,7 @@ public class User {
 
     /**
      * Флаг отзыва доступа пользователя.
-     *
+     * <p>
      * true — доступ отозван
      * false — доступ активен
      */
@@ -161,11 +173,13 @@ public class User {
     @UpdateTimestamp
     private Instant updatedAt;
 
+    @Column
+    private Boolean deleted;
     // ===== Устаревшие поля (оставлены для совместимости) =====
 
     /**
      * @deprecated Используй tgId.
-     *
+     * <p>
      * Старый внешний идентификатор пользователя
      * (Telegram, WhatsApp и т.п.).
      */
@@ -181,14 +195,20 @@ public class User {
     private String name;
 
     @Column(name = "first_name")
+    @NotBlank(message = "Имя обязательно")
+    @Size(min = 2, max = 50, message = "Имя должно быть от 2 до 50 символов")
+//    @NotEmpty(message = "Имя не должно быть пустым")
     private String firstName;
 
     @Column(name = "last_name")
+    @NotBlank(message = "Фамилия обязательна")
+    @Size(min = 2, max = 50, message = "Фамилия должна быть от 2 до 50 символов")
+//    @NotEmpty(message = "Фамилия не должна быть пустой")
     private String lastName;
 
     /**
      * ID пользователя в системе NeoStudy.
-     *
+     * <p>
      * Хранит идентификатор, под которым пользователь
      * зарегистрирован в NeoStudy.
      */
@@ -206,7 +226,7 @@ public class User {
     /**
      * Диалоги, в которых участвует пользователь.
      */
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @Builder.Default
     private List<Dialog> dialogs = new ArrayList<>();
 
@@ -233,7 +253,7 @@ public class User {
 
     /**
      * Заявки пользователя на поступление.
-     *
+     * <p>
      * Все заявки / формы записи, поданные этим пользователем.
      */
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
@@ -292,7 +312,7 @@ public class User {
 
     /**
      * История назначений этого пользователя (студента) на тьюторов.
-     *
+     * <p>
      * Один студент может иметь множество записей о назначениях на разных тьюторов.
      * Связь через таблицу student_tutor.
      */
@@ -312,6 +332,7 @@ public class User {
         if (this.updatedAt == null) {
             this.updatedAt = now;
         }
+        this.deleted = false;
     }
 
     /**

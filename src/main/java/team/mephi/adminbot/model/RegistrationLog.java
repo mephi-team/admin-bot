@@ -1,11 +1,7 @@
 package team.mephi.adminbot.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
@@ -53,7 +49,7 @@ public class RegistrationLog {
 
     /**
      * Пользователь, для которого выполняется операция регистрации.
-     *
+     * <p>
      * Связь: Many-to-One (много записей лога для одного пользователя).
      * Загрузка: LAZY (ленивая загрузка для оптимизации производительности).
      * Каскады: без каскадного удаления (REMOVE не применяется к User).
@@ -64,7 +60,7 @@ public class RegistrationLog {
 
     /**
      * Действие, которое было выполнено в процессе регистрации.
-     *
+     * <p>
      * Примеры: REGISTER, IDP_PENDING, SCRIPT_STARTED, SCRIPT_FINISHED и т.д.
      */
     @Enumerated(EnumType.STRING)
@@ -73,7 +69,7 @@ public class RegistrationLog {
 
     /**
      * Дополнительные данные операции в формате JSON.
-     *
+     * <p>
      * Хранится в PostgreSQL как jsonb для эффективной работы с JSON-данными.
      * Может содержать произвольную структуру данных, специфичную для конкретного действия.
      */
@@ -83,7 +79,7 @@ public class RegistrationLog {
 
     /**
      * Статус выполнения операции регистрации.
-     *
+     * <p>
      * Может быть: SUCCESS, FAILED, IN_PROGRESS.
      */
     @Enumerated(EnumType.STRING)
@@ -92,7 +88,7 @@ public class RegistrationLog {
 
     /**
      * Дата и время создания записи лога.
-     *
+     * <p>
      * Устанавливается автоматически при создании записи и не может быть изменена после вставки.
      * Это поле является неизменяемым (immutable) для обеспечения целостности аудита.
      */

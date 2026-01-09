@@ -3,7 +3,8 @@ package team.mephi.adminbot.model;
 import org.junit.jupiter.api.Test;
 import team.mephi.adminbot.model.enums.AnswerStatus;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 /**
  * Юнит-тесты для сущности UserAnswer.

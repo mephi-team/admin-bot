@@ -6,8 +6,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import team.mephi.adminbot.model.Question;
-import team.mephi.adminbot.repository.QuestionRepository;
+import team.mephi.adminbot.model.UserQuestion;
+import team.mephi.adminbot.repository.UserQuestionRepository;
 
 import java.util.List;
 
@@ -15,21 +15,21 @@ import java.util.List;
 public class QuestionController {
 
     @Autowired
-    private QuestionRepository questionRepository;
+    private UserQuestionRepository questionRepository;
 
     // Отображение страницы с вопросами
     @GetMapping("/questions")
     public String questionsPage(Model model) {
-        List<Question> questions = questionRepository.findAll();
+        List<UserQuestion> questions = questionRepository.findAll();
         model.addAttribute("questions", questions);
-        model.addAttribute("newQuestion", new Question());
+        model.addAttribute("newQuestion", new UserQuestion());
         model.addAttribute("currentUri", "questions");
         return "questions";
     }
 
     // Обработка добавления нового вопроса
     @PostMapping("/questions")
-    public String addQuestion(@ModelAttribute("newQuestion") Question question) {
+    public String addQuestion(@ModelAttribute("newQuestion") UserQuestion question) {
         questionRepository.save(question);
         return "redirect:/questions";
     }

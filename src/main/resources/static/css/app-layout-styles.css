@@ -1,0 +1,79 @@
+html, body, #outlet {
+    overflow: hidden;
+}
+/* Отключаем прокрутку для основной области контента AppLayout */
+vaadin-app-layout::part(content) {
+    overflow: hidden !important;
+}
+
+/* Стандартная ширина панели (полный текст) */
+vaadin-app-layout::part(drawer) {
+    --vaadin-app-layout-drawer-width: 220px; /* Ширина с текстом */
+    width: var(--vaadin-app-layout-drawer-width);
+    --lumo-base-color: #d3e1f9;
+    border-end-end-radius: 12px;
+    border-start-end-radius: 12px;
+}
+
+/* Стили для режима "только иконки", когда присутствует атрибут "mini-variant" */
+vaadin-app-layout[mini-variant]::part(drawer) {
+    --vaadin-app-layout-drawer-width: 68px; /* Ширина только для иконок */
+    width: var(--vaadin-app-layout-drawer-width) !important;
+    border-end-end-radius: 0;
+    border-start-end-radius: 0;
+}
+
+vaadin-side-nav-item::part(link) {
+    --lumo-space-xs: 12px;
+    --lumo-space-s: 12px;
+    --_child-indent: 10px;
+}
+vaadin-side-nav-item::part(content) {
+    --lumo-border-radius-m: 16px;
+}
+
+vaadin-side-nav-item[current] {
+    --lumo-primary-color-10pct: #2653ae;
+    --vaadin-selection-color-text: #fff;
+}
+
+
+vaadin-side-nav-item > vaadin-icon {
+    color: #162143;
+}
+
+vaadin-side-nav-item:hover > vaadin-icon {
+    color: #fff;
+}
+
+vaadin-side-nav-item::part(link):hover {
+    --lumo-header-text-color: #fff;
+}
+
+vaadin-side-nav-item[current] > vaadin-icon {
+    color: #fff;
+}
+
+vaadin-button:hover {
+    /*background-color: red;*/
+}
+
+vaadin-button:hover > vaadin-icon {
+    /*color: white;*/
+}
+
+a[router-link][highlight] {
+    font-weight: bold;
+}
+
+vaadin-tabsheet::part(content) {
+    padding-inline: 0;
+}
+
+vaadin-message-input {
+    padding: 0;
+}
+/* фикс для FF */
+vaadin-virtual-list > div[role='listitem'] {
+    display: grid;
+}

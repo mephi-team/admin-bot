@@ -43,7 +43,7 @@ import java.util.Set;
 public class Expert {
     /**
      * Идентификатор пользователя (shared primary key).
-     *
+     * <p>
      * Используется как первичный ключ и внешний ключ к users.id.
      * Значение берется из связанного объекта User через @MapsId.
      */
@@ -53,7 +53,7 @@ public class Expert {
 
     /**
      * Связанный пользователь (1-to-1 с shared primary key).
-     *
+     * <p>
      * Использует @MapsId для разделения первичного ключа с User.
      * Загружается лениво для оптимизации производительности.
      */
@@ -64,7 +64,7 @@ public class Expert {
 
     /**
      * Telegram ID для уведомлений.
-     *
+     * <p>
      * Используется для отправки уведомлений эксперту через Telegram.
      * Может быть null, если уведомления не настроены.
      */
@@ -73,19 +73,19 @@ public class Expert {
 
     /**
      * Предпочтительные временные окна для уведомлений.
-     *
+     * <p>
      * Хранится как PostgreSQL jsonb.
      * Может содержать:
      * - временные диапазоны (например, "09:00-18:00")
      * - дни недели (например, ["MONDAY", "TUESDAY", "WEDNESDAY"])
      * - настройки часового пояса
      * - другие предпочтения по времени уведомлений
-     *
+     * <p>
      * Пример структуры:
      * {
-     *   "timeRanges": [{"start": "09:00", "end": "18:00"}],
-     *   "weekdays": ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"],
-     *   "timezone": "Europe/Moscow"
+     * "timeRanges": [{"start": "09:00", "end": "18:00"}],
+     * "weekdays": ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"],
+     * "timezone": "Europe/Moscow"
      * }
      */
     @JdbcTypeCode(SqlTypes.JSON)
@@ -94,10 +94,10 @@ public class Expert {
 
     /**
      * Флаг активности эксперта.
-     *
+     * <p>
      * true - эксперт активен и может получать назначения и уведомления
      * false - эксперт деактивирован (исключен из назначений, уведомления остановлены)
-     *
+     * <p>
      * По умолчанию: true
      */
     @Column(name = "is_active", nullable = false)
@@ -106,7 +106,7 @@ public class Expert {
 
     /**
      * Направления, по которым работает эксперт.
-     *
+     * <p>
      * Many-to-many связь с Direction через таблицу expert_directions.
      * Загружается лениво для оптимизации производительности.
      * Использует Set для предотвращения дубликатов.

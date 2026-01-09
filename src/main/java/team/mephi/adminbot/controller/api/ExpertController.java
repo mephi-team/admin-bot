@@ -3,14 +3,9 @@ package team.mephi.adminbot.controller.api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import team.mephi.adminbot.model.Question;
-import team.mephi.adminbot.repository.QuestionRepository;
+import org.springframework.web.bind.annotation.*;
+import team.mephi.adminbot.model.UserQuestion;
+import team.mephi.adminbot.repository.UserQuestionRepository;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,11 +13,12 @@ import java.util.Map;
 
 /**
  * REST-контроллер для работы эксперта LC.
- *
+ * <p>
  * Все методы этого контроллера доступны только пользователям
  * с ролью ROLE_LC_EXPERT.
- *
+ * <p>
  * Доступ ограничен с помощью аннотации:
+ *
  * @PreAuthorize("hasRole('LC_EXPERT')")
  */
 @RestController
@@ -32,18 +28,18 @@ public class ExpertController {
 
     // Репозиторий для работы с вопросами в базе данных
     @Autowired
-    private QuestionRepository questionRepository;
+    private UserQuestionRepository questionRepository;
 
     /**
      * GET /api/expert/questions
-     *
+     * <p>
      * Возвращает список всех вопросов.
      * Доступно только эксперту.
      */
     @GetMapping("/questions")
-    public ResponseEntity<List<Question>> getAllQuestions() {
+    public ResponseEntity<List<UserQuestion>> getAllQuestions() {
         // Получаем все вопросы из базы данных
-        List<Question> questions = questionRepository.findAll();
+        List<UserQuestion> questions = questionRepository.findAll();
 
         // Отдаём список вопросов клиенту
         return ResponseEntity.ok(questions);
@@ -51,13 +47,13 @@ public class ExpertController {
 
     /**
      * GET /api/expert/questions/{id}
-     *
+     * <p>
      * Возвращает один конкретный вопрос по его ID.
      * Если вопрос не найден — вернётся 404.
      * Доступно только эксперту.
      */
     @GetMapping("/questions/{id}")
-    public ResponseEntity<Question> getQuestionById(@PathVariable Long id) {
+    public ResponseEntity<UserQuestion> getQuestionById(@PathVariable Long id) {
         return questionRepository.findById(id)
                 // Если вопрос найден — возвращаем его
                 .map(ResponseEntity::ok)
@@ -67,33 +63,33 @@ public class ExpertController {
 
     /**
      * PUT /api/expert/questions/{id}
-     *
+     * <p>
      * Обновляет данные вопроса.
      * Можно изменить текст вопроса и/или текст ответа.
-     *
+     * <p>
      * Обновляются только те поля, которые пришли в запросе.
      * Доступно только эксперту.
      */
     @PutMapping("/questions/{id}")
-    public ResponseEntity<Question> updateQuestion(
+    public ResponseEntity<UserQuestion> updateQuestion(
             @PathVariable Long id,
-            @RequestBody Question question) {
+            @RequestBody UserQuestion question) {
 
         return questionRepository.findById(id)
                 .map(existingQuestion -> {
 
                     // Если передан новый текст вопроса — обновляем его
-                    if (question.getQuestionText() != null) {
-                        existingQuestion.setQuestionText(question.getQuestionText());
+                    if (question.getText() != null) {
+                        existingQuestion.setText(question.getText());
                     }
 
                     // Если передан новый текст ответа — обновляем его
-                    if (question.getAnswerText() != null) {
-                        existingQuestion.setAnswerText(question.getAnswerText());
-                    }
+//                    if (question.getAnswerText() != null) {
+//                        existingQuestion.setAnswerText(question.getAnswerText());
+//                    }
 
                     // Сохраняем обновлённый вопрос в базе
-                    Question updated = questionRepository.save(existingQuestion);
+                    UserQuestion updated = questionRepository.save(existingQuestion);
 
                     // Возвращаем обновлённый объект
                     return ResponseEntity.ok(updated);
@@ -104,11 +100,11 @@ public class ExpertController {
 
     /**
      * GET /api/expert/stats
-     *
+     * <p>
      * Возвращает простую статистику для экрана эксперта:
      * - общее количество вопросов
      * - текущее время на сервере
-     *
+     * <p>
      * Доступно только эксперту.
      */
     @GetMapping("/stats")

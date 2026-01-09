@@ -1,14 +1,9 @@
 package team.mephi.adminbot.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import team.mephi.adminbot.model.enums.ConsentStatus;
-
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import team.mephi.adminbot.model.enums.ConsentStatus;
 
 import java.time.Instant;
 
@@ -55,7 +50,7 @@ public class PdConsentLog {
 
     /**
      * Пользователь, для которого было зарегистрировано событие согласия.
-     *
+     * <p>
      * Связь: Many-to-One (много записей лога для одного пользователя).
      * Загрузка: LAZY (ленивая загрузка для оптимизации производительности).
      * Каскады: без каскадного удаления (REMOVE не применяется к User).
@@ -66,7 +61,7 @@ public class PdConsentLog {
 
     /**
      * Дата и время, когда произошло событие согласия.
-     *
+     * <p>
      * Устанавливается автоматически при создании записи (если не задано явно)
      * и не может быть изменена после вставки. Это поле является неизменяемым (immutable)
      * для обеспечения целостности аудита.
@@ -77,7 +72,7 @@ public class PdConsentLog {
 
     /**
      * Источник согласия, откуда пришло согласие пользователя.
-     *
+     * <p>
      * Примеры значений: telegram_bot, web_form, admin_panel, import, api и т.д.
      * Это поле помогает отслеживать, каким способом пользователь предоставил или отозвал согласие.
      */
@@ -86,7 +81,7 @@ public class PdConsentLog {
 
     /**
      * Статус согласия на момент события.
-     *
+     * <p>
      * Может быть: GRANTED (предоставлено), REVOKED (отозвано), PENDING (ожидает обработки).
      * Это поле отражает состояние согласия в момент регистрации события.
      */
