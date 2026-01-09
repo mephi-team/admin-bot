@@ -71,6 +71,6 @@ public class TutorEditForm extends FormLayout {
         addFormItem(tgId, getTranslation("form_users_telegram_label"));
         addFormItem(cohorts, getTranslation("form_users_cohorts_label"));
         addFormItem(directions, getTranslation("form_users_directions_label"));
-        addFormItem(students, getTranslation("form_users_cities_label"));
+        addFormItem(students, getTranslation("form_tutor_curatorship_students_label"));
     }
 }

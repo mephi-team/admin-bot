@@ -6,9 +6,7 @@ import org.springframework.stereotype.Service;
 import team.mephi.adminbot.dto.SimpleDirection;
 import team.mephi.adminbot.dto.SimpleTutor;
 import team.mephi.adminbot.dto.SimpleUser;
-import team.mephi.adminbot.model.StudentTutor;
-import team.mephi.adminbot.model.Tutor;
-import team.mephi.adminbot.model.User;
+import team.mephi.adminbot.model.*;
 import team.mephi.adminbot.model.enums.StudentTutorMode;
 import team.mephi.adminbot.repository.TutorRepository;
 import team.mephi.adminbot.repository.UserRepository;
@@ -39,17 +37,28 @@ public class TutorServiceImpl implements TutorService {
         user.setLastName(dto.getLastName());
         user.setEmail(dto.getEmail());
         user.setTgId(dto.getTgId());
-        var prevActive = user.getStudentAssignments().stream().filter(StudentTutor::getIsActive).map(st -> st.getStudent().getId()).toList();
-        var current = dto.getStudents().stream().map(SimpleUser::getId).collect(Collectors.toSet());
-        var td = dto.getStudents().stream().filter(s -> !prevActive.contains(s.getId())).map(
+        var prevActiveAssignment = user.getStudentAssignments().stream().filter(StudentTutor::getIsActive).map(st -> st.getStudent().getId()).toList();
+        var currentAssignment = dto.getStudents().stream().map(SimpleUser::getId).collect(Collectors.toSet());
+        var sa = dto.getStudents().stream().filter(s -> !prevActiveAssignment.contains(s.getId())).map(
                 u -> StudentTutor.builder()
                         .mode(userRepository.countByIdWithTutorAssignment(u.getId()) > 0 ? StudentTutorMode.REASSIGN : StudentTutorMode.INITIAL)
                         .tutor(Tutor.builder().id(dto.getId()).build())
                         .student(User.builder().id(u.getId()).build())
                         .build()
         ).collect(Collectors.toSet());
-        user.getStudentAssignments().forEach(s -> {if (!current.contains(s.getStudent().getId())) s.setIsActive(false);});
-        user.getStudentAssignments().addAll(td);
+        user.getStudentAssignments().forEach(s -> {if (!currentAssignment.contains(s.getStudent().getId())) s.setIsActive(false);});
+        user.getStudentAssignments().addAll(sa);
+        var prevDirection = user.getDirections().stream().map(TutorDirection::getDirectionId).toList();
+        var currentDirection = dto.getDirections().stream().map(SimpleDirection::getId).collect(Collectors.toSet());
+        var td = dto.getDirections().stream().filter(s -> !prevDirection.contains(s.getId())).map(
+                t -> TutorDirection.builder()
+                        .tutorId(dto.getId())
+                        .directionId(t.getId())
+                        .direction(Direction.builder().id(t.getId()).build())
+                        .build()
+        ).collect(Collectors.toSet());
+        user.getDirections().retainAll(user.getDirections().stream().filter(s -> currentDirection.contains(s.getDirectionId())).toList());
+        user.getDirections().addAll(td);
         user = tutorRepository.save(user);
         return mapToSimpleUser(user);
     }

@@ -3,6 +3,7 @@ package team.mephi.adminbot.vaadin.users.components;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
+import com.vaadin.flow.data.binder.ValidationResult;
 import com.vaadin.flow.function.SerializableConsumer;
 import team.mephi.adminbot.dto.*;
 import team.mephi.adminbot.service.*;
@@ -35,7 +36,17 @@ public class UserEditorDialog extends Dialog implements SimpleDialog {
                 );
         binder.forField(form.getEmail()).asRequired().bind(SimpleUser::getEmail, SimpleUser::setEmail);
         binder.forField(form.getTgId()).asRequired().bind(SimpleUser::getTgId, SimpleUser::setTgId);
-        binder.forField(form.getPhoneNumber()).asRequired().bind(SimpleUser::getPhoneNumber, SimpleUser::setPhoneNumber);
+        binder.forField(form.getPhoneNumber())
+                .withConverter(s -> (s != null && !s.isEmpty()) ? s : null, s -> (s != null && !s.isEmpty()) ? s : "")
+                .withValidator((value, context) -> {
+                    if (form.getPhoneNumber().getParent().map(p -> !p.isVisible()).orElse(false)) {
+                        return ValidationResult.ok();
+                    }
+                    return (value != null && !value.isEmpty())
+                            ? ValidationResult.ok()
+                            : ValidationResult.error("");
+                })
+                .bind(SimpleUser::getPhoneNumber, SimpleUser::setPhoneNumber);
         binder.forField(form.getCohorts())
                 .asRequired()
                 .withConverter(CohortDto::getName, cohort -> cohortService.getByName(cohort).orElse(null))
@@ -44,8 +55,16 @@ public class UserEditorDialog extends Dialog implements SimpleDialog {
                 .asRequired()
                 .bind(SimpleUser::getDirection, SimpleUser::setDirection);
         binder.forField(form.getCities())
-                .asRequired()
-                .withConverter(CityDto::getName, city -> cityService.getByName(city).orElse(null))
+                .withValidator((value, context) -> {
+                    if (!form.getCities().getParent().orElseThrow().isVisible()) {
+                        return ValidationResult.ok();
+                    }
+                    form.getCities().setRequiredIndicatorVisible(true);
+                    return (value != null)
+                            ? ValidationResult.ok()
+                            : ValidationResult.error("");
+                })
+                .withConverter(CityDto::getName, city -> cityService.getByName(city).orElse(new CityDto("", "")))
                 .bind(SimpleUser::getCity, SimpleUser::setCity);
         binder.forField(form.getTutor())
                 .bind(SimpleUser::getTutor, SimpleUser::setTutor);

@@ -66,6 +66,7 @@ public class UserForm extends FormLayout {
             phoneForm.setVisible(!"LC_EXPERT".equals(e.getValue().getCode()));
             cityForm.setVisible(!"LC_EXPERT".equals(e.getValue().getCode()));
             tutorForm.setVisible("STUDENT".equals(e.getValue().getCode()));
+            phoneNumber.setRequiredIndicatorVisible(!"LC_EXPERT".equals(e.getValue().getCode()));
         });
     }
 }
