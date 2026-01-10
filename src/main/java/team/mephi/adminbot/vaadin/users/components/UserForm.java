@@ -46,6 +46,7 @@ public class UserForm extends FormLayout {
 
         directions.setItemsPageable(directionService::getAllDirections);
         directions.setItemLabelGenerator(SimpleDirection::getName);
+        directions.setAutoExpand(MultiSelectComboBox.AutoExpandMode.VERTICAL);
         directions.addValueChangeListener(event -> {
             if (!"LC_EXPERT".equals(roles.getValue().getCode()) && event.getValue().size() > 1) {
                 directions.setValue(event.getOldValue());
