@@ -50,7 +50,7 @@ public class MiddleCandidateView extends VerticalLayout {
         grid.addColumn(SimpleUser::getFullName).setHeader(getTranslation("grid_middle_candidate_header_name_label")).setSortable(true).setResizable(true).setFrozen(true)
                 .setAutoWidth(true).setFlexGrow(0).setKey("lastName");
         grid.addColumn(SimpleUser::getEmail).setHeader(getTranslation("grid_middle_candidate_header_email_label")).setSortable(true).setResizable(true).setKey("email");
-        grid.addColumn(SimpleUser::getTgName).setHeader(getTranslation("grid_middle_candidate_header_telegram_label")).setSortable(true).setResizable(true).setKey("tgName");
+        grid.addColumn(SimpleUser::getTgId).setHeader(getTranslation("grid_middle_candidate_header_telegram_label")).setSortable(true).setResizable(true).setKey("tgId");
         grid.addColumn(SimpleUser::getPhoneNumber).setHeader(getTranslation("grid_middle_candidate_header_phone_label")).setSortable(true).setResizable(true).setKey("phoneNumber");
         grid.addColumn(MyRenderers.createPdRenderer()).setHeader(getTranslation("grid_middle_candidate_header_pd_consent_label")).setSortable(true).setResizable(true).setKey("pdConsent");
         grid.addColumn(SimpleUser::getCohort).setHeader(getTranslation("grid_middle_candidate_header_cohort_label")).setSortable(true).setResizable(true).setKey("cohort");
