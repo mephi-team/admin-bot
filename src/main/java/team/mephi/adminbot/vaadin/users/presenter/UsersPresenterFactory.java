@@ -3,6 +3,7 @@ package team.mephi.adminbot.vaadin.users.presenter;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import team.mephi.adminbot.dto.SimpleTutor;
 import team.mephi.adminbot.dto.SimpleUser;
+import team.mephi.adminbot.service.ExpertService;
 import team.mephi.adminbot.service.TutorService;
 import team.mephi.adminbot.vaadin.CRUDDataProvider;
 import team.mephi.adminbot.vaadin.CRUDPresenter;
@@ -16,12 +17,14 @@ import team.mephi.adminbot.vaadin.users.tabs.UserTabType;
 public class UsersPresenterFactory {
     private final TutorService tutorService;
     private final UserService userService;
+    private final ExpertService expertService;
     private final DialogService<?> dialogService;
     private final NotificationService notificationService;
 
-    public UsersPresenterFactory(TutorService tutorService, UserService userService, DialogService<SimpleUser> dialogService, NotificationService notificationService) {
+    public UsersPresenterFactory(TutorService tutorService, UserService userService, ExpertService expertService, DialogService<SimpleUser> dialogService, NotificationService notificationService) {
         this.tutorService = tutorService;
         this.userService = userService;
+        this.expertService = expertService;
         this.dialogService = dialogService;
         this.notificationService = notificationService;
     }
@@ -29,7 +32,7 @@ public class UsersPresenterFactory {
     private CRUDDataProvider<?> createDataProvider(UserTabType role) {
         return switch (role) {
             case CANDIDATE -> new CandidateDataProvider(userService);
-            case LC_EXPERT -> new ExpertDataProvider(userService);
+            case LC_EXPERT -> new ExpertDataProvider(userService, expertService);
             case FREE_LISTENER -> new FreeListenerDataProvider(userService);
             case VISITOR -> new GuestsDataProvider(userService);
             case MIDDLE_CANDIDATE -> new MiddleCandidateDataProvider(userService);
