@@ -77,3 +77,13 @@ vaadin-message-input {
 vaadin-virtual-list > div[role='listitem'] {
     display: grid;
 }
+
+vaadin-text-field.first::part(input-field) {
+    border-end-end-radius: 0;
+    border-start-end-radius: 0;
+}
+
+vaadin-text-field.last::part(input-field) {
+    border-end-start-radius: 0;
+    border-start-start-radius: 0;
+}

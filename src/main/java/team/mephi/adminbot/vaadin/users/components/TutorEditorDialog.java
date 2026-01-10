@@ -23,19 +23,26 @@ public class TutorEditorDialog extends Dialog implements SimpleDialog {
 
     public TutorEditorDialog(RoleService roleService, CohortService cohortService, DirectionService directionService, UserService userService) {
         var form = new TutorEditForm(roleService, cohortService, directionService, userService);
-        binder.forField(form.getFullNameField())
-                .bind(s -> new FullNameField.FullName(s.getFirstName(),s.getLastName()),
-                        (s, t) -> {s.setFirstName(t.firstName());s.setLastName(t.lastName());});
         binder.forField(form.getRoles())
-                .withValidator(Objects::nonNull, getTranslation("form_users_roles_validation_message"))
+                .asRequired()
                 .withConverter(RoleDto::getCode, roleCode -> roleService.getByCode(roleCode).orElse(null))
                 .bind(SimpleTutor::getRole, SimpleTutor::setRole);
+        binder.forField(form.getFullNameField())
+                .asRequired()
+                .bind(s -> new FullNameField.FullName(s.getFirstName(),s.getLastName()),
+                        (s, t) -> {s.setFirstName(t.firstName());s.setLastName(t.lastName());});
+        binder.forField(form.getEmail())
+                .asRequired()
+                .bind(SimpleTutor::getEmail, SimpleTutor::setEmail);
+        binder.forField(form.getTgId())
+                .asRequired()
+                .bind(SimpleTutor::getTgId, SimpleTutor::setTgId);
         binder.forField(form.getCohorts())
-                .withValidator(Objects::nonNull, getTranslation("form_users_cohort_validation_message"))
+                .asRequired()
                 .withConverter(CohortDto::getName, cohort -> cohortService.getByName(cohort).orElse(null))
                 .bind(SimpleTutor::getCohort, SimpleTutor::setCohort);
         binder.forField(form.getDirections())
-                .withValidator(Objects::nonNull, getTranslation("form_users_direction_validation_message"))
+                .asRequired()
                 .withConverter(s -> {
                     if (Objects.isNull(s)) return new ArrayList<SimpleDirection>();
                     return s.stream().toList();

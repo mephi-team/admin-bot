@@ -16,6 +16,9 @@ public class FullNameField extends CustomField<FullNameField.FullName> {
         firstName.setMaxWidth("50%");
         lastName.setMaxWidth("50%");
 
+        lastName.addClassName("first");
+        firstName.addClassName("last");
+
         firstName.setManualValidation(true);
         lastName.setManualValidation(true);
 
