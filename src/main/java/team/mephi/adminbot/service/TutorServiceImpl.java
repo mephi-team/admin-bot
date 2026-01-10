@@ -12,7 +12,10 @@ import team.mephi.adminbot.repository.StudentTutorRepository;
 import team.mephi.adminbot.repository.TutorRepository;
 import team.mephi.adminbot.repository.UserRepository;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -51,18 +54,28 @@ public class TutorServiceImpl implements TutorService {
         var prevActiveAssignment = tutor.getStudentAssignments().stream().filter(StudentTutor::getIsActive).map(st -> st.getStudent().getId()).toList();
         var currentAssignment = dto.getStudents().stream().map(SimpleUser::getId).collect(Collectors.toSet());
         tutor.getStudentAssignments().forEach(s -> {if (!currentAssignment.contains(s.getStudent().getId())) s.setIsActive(false);});
-        Tutor updatedTutor = tutorRepository.save(tutor);
-        var sa = dto.getStudents().stream().filter(s -> !prevActiveAssignment.contains(s.getId())).map(
+
+        if (Objects.nonNull(dto.getId())) {
+            var st = prepareStudentTutor(dto.getStudents().stream().filter(s -> !prevActiveAssignment.contains(s.getId())).toList(), dto.getId());
+            tutor.getStudentAssignments().addAll(st);
+            Tutor updatedTutor = tutorRepository.save(tutor);
+            return mapToSimpleUser(updatedTutor);
+        } else {
+            Tutor updatedTutor = tutorRepository.save(tutor);
+            var st = prepareStudentTutor(dto.getStudents().stream().filter(s -> !prevActiveAssignment.contains(s.getId())).toList(), updatedTutor.getId());
+            studentTutorRepository.saveAll(st);
+            return mapToSimpleUser(updatedTutor);
+        }
+    }
+
+    private Set<StudentTutor> prepareStudentTutor(List<SimpleUser> students, Long id) {
+        return students.stream().map(
                 u -> StudentTutor.builder()
                         .mode(userRepository.countByIdWithTutorAssignment(u.getId()) > 0 ? StudentTutorMode.REASSIGN : StudentTutorMode.INITIAL)
-                        .tutor(Tutor.builder().id(updatedTutor.getId()).build())
-                        .student(User.builder().id(u.getId()).build())
+                        .tutor(Tutor.builder().id(id).build())
+                        .student(User.builder().id(id).build())
                         .build()
         ).collect(Collectors.toSet());
-        if (!sa.isEmpty()) {
-            studentTutorRepository.saveAll(sa);
-        }
-        return mapToSimpleUser(updatedTutor);
     }
 
     @Override
