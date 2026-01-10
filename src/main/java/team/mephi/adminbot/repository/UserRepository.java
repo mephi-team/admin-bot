@@ -169,4 +169,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findAllByRoleCode(String role);
     Optional<User> findByRoleCodeAndUserName(String role, String name);
+
+    @Query("SELECT u FROM User u WHERE LOWER(u.lastName) LIKE LOWER(CONCAT('%', :query, '%')) AND (u.tutorAssignments IS EMPTY OR NOT EXISTS (SELECT 1 FROM StudentTutor st WHERE st.student = u AND st.isActive = true)) AND u.role.code = :role")
+    List<User> findAllStudentsWithTutorAssignments(String query, String role, Pageable pageable);
+
+    @Query("SELECT count(u) FROM User u WHERE LOWER(u.lastName) LIKE LOWER(CONCAT('%', :query, '%')) AND (u.tutorAssignments IS EMPTY OR NOT EXISTS (SELECT 1 FROM StudentTutor st WHERE st.student = u AND st.isActive = true)) AND u.role.code = :role")
+    Integer countAllStudentsWithTutorAssignments(String query, String role);
+
+    @Query("SELECT count(u) FROM User u JOIN u.tutorAssignments ta WHERE u.id = :id")
+    Integer countByIdWithTutorAssignment(Long id);
 }

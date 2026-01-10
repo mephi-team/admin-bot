@@ -23,4 +23,6 @@ public interface UserService {
     Integer countByRoleAndName(String role, String query);
     List<UserDto> findAllCurators(Pageable pageable, String s);
     Optional<UserDto> findCuratorByUserName(String name);
+    Stream<SimpleUser> findAllForCuratorship(String name, Pageable pageable);
+    Integer countAllForCuratorship(String name);
 }

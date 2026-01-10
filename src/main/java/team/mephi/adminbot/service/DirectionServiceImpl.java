@@ -33,6 +33,12 @@ public class DirectionServiceImpl implements DirectionService {
     }
 
     @Override
+    public Integer countAllDirections(String query) {
+        if (directions.size() < 2) initDirections();
+        return directions.size();
+    }
+
+    @Override
     public Optional<SimpleDirection> getById(Long id) {
         if (Objects.isNull(id)) return Optional.empty();
         return directionRepository.findById(id)

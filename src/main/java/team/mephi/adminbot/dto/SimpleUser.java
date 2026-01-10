@@ -1,6 +1,5 @@
 package team.mephi.adminbot.dto;
 
-import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,13 +14,9 @@ import java.util.List;
 public class SimpleUser {
     private Long id;
     private String role;
-    @NotEmpty
     private String firstName;
-    @NotEmpty
     private String lastName;
-    @NotEmpty
     private String email;
-    @NotEmpty
     private String phoneNumber;
     private String tgId;
     private String status;
@@ -32,5 +27,5 @@ public class SimpleUser {
     private String city;
     private Boolean pdConsent;
     private List<SimplePd> pdConsentLog;
-    private String tutor;
+    private SimpleTutor tutor;
 }

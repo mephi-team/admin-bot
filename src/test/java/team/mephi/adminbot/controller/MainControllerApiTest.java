@@ -10,7 +10,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import team.mephi.adminbot.repository.DialogRepository;
-import team.mephi.adminbot.repository.QuestionRepository;
+//import team.mephi.adminbot.repository.QuestionRepository;
 import team.mephi.adminbot.repository.UserRepository;
 
 /**
@@ -25,8 +25,8 @@ class MainControllerApiTest {
     @Mock
     private DialogRepository dialogRepository;
 
-    @Mock
-    private QuestionRepository questionRepository;
+//    @Mock
+//    private QuestionRepository questionRepository;
 
     @InjectMocks
     private MainController mainController;

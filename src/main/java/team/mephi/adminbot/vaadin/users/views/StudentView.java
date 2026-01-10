@@ -42,10 +42,11 @@ public class StudentView extends VerticalLayout {
         grid.addColumn(SimpleUser::getEmail).setHeader(getTranslation("grid_student_header_email_label")).setSortable(true).setResizable(true).setKey("email");
         grid.addColumn(SimpleUser::getTgName).setHeader(getTranslation("grid_student_header_telegram_label")).setSortable(true).setResizable(true).setKey("tgName");
         grid.addColumn(SimpleUser::getPhoneNumber).setHeader(getTranslation("grid_student_header_phone_label")).setSortable(true).setResizable(true).setKey("phoneNumber");
+        grid.addColumn(MyRenderers.createPdRenderer()).setHeader(getTranslation("grid_middle_candidate_header_pd_consent_label")).setSortable(true).setResizable(true).setKey("pdConsent");
         grid.addColumn(SimpleUser::getCohort).setHeader(getTranslation("grid_student_header_cohort_label")).setSortable(true).setResizable(true).setKey("cohort");
         grid.addColumn(u -> Objects.nonNull(u.getDirection()) ? u.getDirection().getName() : "").setHeader(getTranslation("grid_student_header_direction_label")).setSortable(true).setResizable(true).setKey("direction");
         grid.addColumn(SimpleUser::getCity).setHeader(getTranslation("grid_student_header_city_label")).setSortable(true).setResizable(true).setKey("city");
-        grid.addColumn(SimpleUser::getTutor).setHeader(getTranslation("grid_student_header_tutor_label")).setResizable(true).setKey("tutor");
+        grid.addColumn(t -> t.getTutor().getFullName()).setHeader(getTranslation("grid_student_header_tutor_label")).setResizable(true).setKey("tutor");
 
         grid.addComponentColumn(item -> {
             Span group = new Span();
@@ -76,7 +77,7 @@ public class StudentView extends VerticalLayout {
         searchField.addValueChangeListener(e -> provider.getFilterableProvider().setFilter(e.getValue()));
 
         var settingsBtn = new GridSettingsButton();
-        var settingsPopover = new GridSettingsPopover(grid, Set.of(), Set.of("actions"));
+        var settingsPopover = new GridSettingsPopover(grid, Set.of("pdConsent"), Set.of("actions"));
         settingsPopover.setTarget(settingsBtn);
 
         var downloadBtn = new Button(VaadinIcon.DOWNLOAD_ALT.create());

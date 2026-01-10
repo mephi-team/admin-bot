@@ -95,7 +95,7 @@ public class Tutor {
      * <p>
      * Связь многие-ко-многим через таблицу tutor_directions.
      */
-    @OneToMany(mappedBy = "tutor", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "tutor", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private Set<TutorDirection> directions = new HashSet<>();
 

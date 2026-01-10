@@ -3,15 +3,14 @@ package team.mephi.adminbot.service;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import team.mephi.adminbot.dto.SimpleDirection;
-import team.mephi.adminbot.dto.SimplePd;
-import team.mephi.adminbot.dto.SimpleUser;
-import team.mephi.adminbot.dto.UserDto;
+import team.mephi.adminbot.dto.*;
 import team.mephi.adminbot.model.*;
+import team.mephi.adminbot.model.enums.StudentTutorMode;
 import team.mephi.adminbot.model.enums.UserStatus;
 import team.mephi.adminbot.repository.TutorRepository;
 import team.mephi.adminbot.repository.UserRepository;
 
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -83,6 +82,17 @@ public class UserServiceImpl implements UserService {
         user.setCity(dto.getCity());
         user.setDirection(Direction.builder().id(dto.getDirection().getId()).name(dto.getDirection().getName()).build());
         user.setCohort(dto.getCohort());
+        var currentAssignment = user.getTutorAssignments();
+        if (Objects.nonNull(dto.getTutor().getId()) && currentAssignment.stream().noneMatch(a -> a.getIsActive() && a.getTutor().getId().equals(dto.getTutor().getId()))) {
+            user.getTutorAssignments().forEach(ta -> ta.setIsActive(false));
+            user.getTutorAssignments().add(StudentTutor.builder()
+                    .student(user)
+                    .mode(currentAssignment.isEmpty() ? StudentTutorMode.INITIAL : StudentTutorMode.REASSIGN)
+                    .isActive(true)
+                    .tutor(Tutor.builder().id(dto.getTutor().getId()).build())
+                    .assignedAt(Instant.now())
+                    .build());
+        }
 
         if (Objects.isNull(user.getStatus())){
             user.setStatus(UserStatus.ACTIVE);
@@ -138,6 +148,27 @@ public class UserServiceImpl implements UserService {
         return curators.stream().filter(c -> c.getUserName().equals(name)).findAny();
     }
 
+    @Override
+    public Stream<SimpleUser> findAllForCuratorship(String name, Pageable pageable) {
+        var res = userRepository.findAllStudentsWithTutorAssignments(name, "STUDENT", pageable);
+        return res.isEmpty()
+                ? Stream.of(SimpleUser.builder().fullName("Нет элементов для выбора").build())
+                : res.stream().map(
+                u -> SimpleUser.builder()
+                        .id(u.getId())
+                        .fullName(u.getUserName())
+                        .firstName(u.getFirstName())
+                        .lastName(u.getLastName())
+                        .tgId(u.getTgId())
+                        .build());
+    }
+
+    @Override
+    public Integer countAllForCuratorship(String name) {
+        var count = userRepository.countAllStudentsWithTutorAssignments(name, "STUDENT");
+        return count > 0 ? count : 1;
+    }
+
     private void initCurators() {
         curators.addAll(tutorRepository.findAll().stream().map(u -> UserDto.builder()
                 .id(u.getId())
@@ -146,6 +177,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private SimpleUser mapToSimple(User user) {
+        var tutor = user.getTutorAssignments().stream().filter(StudentTutor::getIsActive).findAny().orElseGet(() -> StudentTutor.builder().tutor(Tutor.builder().userName("").firstName("").lastName("").build()).build()).getTutor();
         return SimpleUser.builder()
                 .id(user.getId())
                 .role(user.getRole().getCode())
@@ -163,7 +195,7 @@ public class UserServiceImpl implements UserService {
                 .city(user.getCity())
                 .direction(Objects.nonNull(user.getDirection()) ? SimpleDirection.builder().id(user.getDirection().getId()).name(user.getDirection().getName()).build() : null)
                 .cohort(user.getCohort())
-                .tutor(user.getTutorAssignments().stream().filter(StudentTutor::getIsActive).findAny().orElseGet(() -> StudentTutor.builder().tutor(Tutor.builder().userName("").build()).build()).getTutor().getUserName())
+                .tutor(Objects.isNull(tutor) ? SimpleTutor.builder().build() : SimpleTutor.builder().id(tutor.getId()).fullName(tutor.getLastName() + " " + tutor.getFirstName()).build())
                 .build();
     }
 }

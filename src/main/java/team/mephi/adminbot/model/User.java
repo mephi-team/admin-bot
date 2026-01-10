@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -30,7 +31,7 @@ import java.util.Set;
  * - связи с другими сущностями (диалоги, сообщения, вопросы и т.д.)
  */
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -44,6 +45,7 @@ import java.util.Set;
         @Index(name = "idx_users_role_code", columnList = "role_code"),
         @Index(name = "idx_users_direction_id", columnList = "direction_id")
 })
+@Inheritance(strategy = InheritanceType.JOINED)
 @DynamicUpdate
 public class User {
 
@@ -316,7 +318,7 @@ public class User {
      * Один студент может иметь множество записей о назначениях на разных тьюторов.
      * Связь через таблицу student_tutor.
      */
-    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
     private Set<StudentTutor> tutorAssignments = new HashSet<>();
 

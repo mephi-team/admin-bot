@@ -19,6 +19,7 @@ public class SimpleTutor {
     private String firstName;
     @NotEmpty
     private String lastName;
+    private String competenceCenter;
     @NotEmpty
     private String email;
     @NotEmpty
@@ -28,7 +29,7 @@ public class SimpleTutor {
     private String fullName;
     private String tgName;
     private String cohort;
-    private SimpleDirection direction;
+    private List<SimpleDirection> directions;
     private String city;
     private long studentCount;
     private List<SimpleUser> students;

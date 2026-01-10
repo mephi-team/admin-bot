@@ -15,10 +15,7 @@ import team.mephi.adminbot.service.RoleService;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static team.mephi.adminbot.vaadin.users.tabs.UserTabType.*;
 
@@ -36,6 +33,9 @@ public class DataInitializer {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ExpertRepository expertRepository;
 
     @Autowired
     private PdConsentLogRepository pdConsentLogRepository;
@@ -59,6 +59,9 @@ public class DataInitializer {
     private TutorRepository tutorRepository;
 
     @Autowired
+    private TutorDirectionRepository tutorDirectionRepository;
+
+    @Autowired
     private CityService cityService;
 
     @Autowired
@@ -76,6 +79,7 @@ public class DataInitializer {
             boolean hasDirections = directionRepository.count() > 0;
             boolean hasRoles = roleRepository.count() > 0;
             boolean hasUsers = userRepository.count() > 0;
+            boolean hasExperts = expertRepository.count() > 0;
             boolean hasPdConsentLog = pdConsentLogRepository.count() > 0;
             boolean hasDialogs = dialogRepository.count() > 0;
             boolean hasQuestions = questionRepository.count() > 0;
@@ -83,6 +87,7 @@ public class DataInitializer {
             boolean hasBroadcasts = mailingRepository.count() > 0;
             boolean hasTemplates = mailTemplateRepository.count() > 0;
             boolean hasTutors = tutorRepository.count() > 0;
+            boolean hasTutorDirections = tutorDirectionRepository.count() > 0;
 
             if (!hasUsers || !hasDialogs || !hasQuestions || !hasBroadcasts) {
                 System.out.println("🔁 Предзаполнение БД тестовыми данными...");
@@ -90,8 +95,10 @@ public class DataInitializer {
                 if (!hasDirections) initDirections();
                 if (!hasRoles) initRoles();
                 if (!hasUsers) initUsers();
+                if (!hasExperts) initExperts();
                 if (!hasPdConsentLog) initPdConsentLog();
                 if (!hasTutors) initTutors();
+                if (!hasTutorDirections) initTutorDirections();
                 if (!hasQuestions) initQuestions();
                 if (!hasAnswers) initAnswers();
                 if (!hasBroadcasts) initBroadcasts();
@@ -101,6 +108,25 @@ public class DataInitializer {
                 System.out.println("✅ Тестовые данные успешно созданы.");
             }
         };
+    }
+
+    private void initTutorDirections() {
+        var tutors = tutorRepository.findAll();
+        var directions = directionRepository.findAll();
+        for (var tutor : tutors) {
+            // Каждый тьютор работает с 1-3 направлениями
+            Collections.shuffle(directions);
+            int count = 1 + new Random().nextInt(3);
+            for (int i = 0; i < count; i++) {
+                TutorDirection td = TutorDirection.builder()
+                        .tutor(tutor)
+                        .tutorId(tutor.getId())
+                        .direction(directions.get(i))
+                        .directionId(directions.get(i).getId())
+                        .build();
+                tutorDirectionRepository.save(td);
+            }
+        }
     }
 
     private void initRoles() {
@@ -141,8 +167,6 @@ public class DataInitializer {
                 .orElseThrow(() -> new RuntimeException("Роль 'VISITOR' не найдена"));
         Role freeListenerRole = roleRepository.findByCode(FREE_LISTENER.name())
                 .orElseThrow(() -> new RuntimeException("Роль 'FREE_LISTENER' не найдена"));
-        Role lcExpertRole = roleRepository.findByCode(LC_EXPERT.name())
-                .orElseThrow(() -> new RuntimeException("Роль 'LC_EXPERT' не найдена"));
 
         Direction java = directionRepository.findById(1L).orElseThrow();
         Direction analytics = directionRepository.findById(2L).orElseThrow();
@@ -159,18 +183,28 @@ public class DataInitializer {
                 User.builder().tgId("tg_1008").tgName("tg_name_1008").email("test8@example.com").userName("Алексей Иванов").firstName("Алексей").lastName("Иванов").role(middleCandidateRole).cohort("Осень 2025").direction(java).status(UserStatus.INACTIVE).build(),
                 User.builder().tgId("tg_1009").tgName("tg_name_1009").email("test9@example.com").userName("Екатерина Волкова").firstName("Екатерина").lastName("Волкова").role(studentRole).cohort("Весна 2026").direction(analytics).status(UserStatus.ACTIVE).build(),
                 User.builder().tgId("tg_1010").tgName("tg_name_1010").email("test10@example.com").userName("Анна Козлова").firstName("Анна").lastName("Козлова").role(visitorRole).status(UserStatus.ACTIVE).build(),
-                User.builder().tgId("tg_1011").tgName("tg_name_1011").email("test11@example.com").userName("Петр Иванов").firstName("Петр").lastName("Иванов").role(freeListenerRole).direction(python).status(UserStatus.ACTIVE).build(),
-                User.builder().tgId("tg_1012").tgName("tg_name_1012").email("test12@example.com").userName("Сергей Смирнов").firstName("Сергей").lastName("Смирнов").role(lcExpertRole).status(UserStatus.ACTIVE).build(),
-                User.builder().tgId("tg_1013").tgName("tg_name_1013").email("admin1@example.com").userName("Admin").firstName("Admin").lastName("Admin").role(lcExpertRole).status(UserStatus.ACTIVE).build()
+                User.builder().tgId("tg_1011").tgName("tg_name_1011").email("test11@example.com").userName("Петр Иванов").firstName("Петр").lastName("Иванов").role(freeListenerRole).direction(python).status(UserStatus.ACTIVE).build()
         );
         userRepository.saveAll(users);
         System.out.printf("  → Создано %d пользователей%n", users.size());
     }
 
+    private void initExperts() {
+        Role lcExpertRole = roleRepository.findByCode(LC_EXPERT.name())
+                .orElseThrow(() -> new RuntimeException("Роль 'LC_EXPERT' не найдена"));
+
+        List<Expert> experts = Arrays.asList(
+                Expert.builder().tgId("tg_1012").tgName("tg_name_1012").email("test12@example.com").userName("Сергей Смирнов").firstName("Сергей").lastName("Смирнов").role(lcExpertRole).status(UserStatus.ACTIVE).isActive(true).build(),
+                Expert.builder().tgId("tg_1013").tgName("tg_name_1013").email("admin1@example.com").userName("Admin").firstName("Admin").lastName("Admin").role(lcExpertRole).status(UserStatus.ACTIVE).isActive(true).build()
+        );
+        expertRepository.saveAll(experts);
+        System.out.printf("  → Создано %d экспертов'%n", experts.size());
+    }
+
     private void initPdConsentLog() {
         Random random = new Random();
         List<ConsentStatus> statuses = Arrays.stream(ConsentStatus.values()).toList();
-        List<String> roles = List.of(CANDIDATE.name(), MIDDLE_CANDIDATE.name(), VISITOR.name());
+        List<String> roles = List.of(CANDIDATE.name(), MIDDLE_CANDIDATE.name(), VISITOR.name(), STUDENT.name());
         List<String> sources = List.of("Telegram", "Web", "Mobile App");
         List<User> users = userRepository.findAll().stream().filter(u -> roles.contains(u.getRole().getCode())).toList();
         List<PdConsentLog> logs = new ArrayList<>();

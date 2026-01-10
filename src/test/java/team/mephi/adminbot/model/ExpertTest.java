@@ -23,20 +23,20 @@ class ExpertTest {
     void builder_shouldAllowExplicitIsActiveValue() {
         // given / when
         Expert expert = Expert.builder()
-                .userId(10L)
+                .id(10L)
                 .isActive(false)
                 .build();
 
         // then
-        assertEquals(10L, expert.getUserId());
+        assertEquals(10L, expert.getId());
         assertFalse(expert.getIsActive(), "isActive должен устанавливаться через builder");
     }
 
     @Test
     void equalsHashCodeAndToString_shouldWork() {
         // given
-        Expert e1 = Expert.builder().userId(1L).isActive(true).build();
-        Expert e2 = Expert.builder().userId(1L).isActive(true).build();
+        Expert e1 = Expert.builder().id(1L).isActive(true).build();
+        Expert e2 = Expert.builder().id(1L).isActive(true).build();
 
         // then
         assertEquals(e1, e2);

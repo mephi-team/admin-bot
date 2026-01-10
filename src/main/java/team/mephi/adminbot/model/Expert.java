@@ -2,10 +2,8 @@ package team.mephi.adminbot.model;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -35,22 +33,14 @@ import java.util.Set;
  * </ul>
  */
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "experts")
-public class Expert {
-    /**
-     * Идентификатор пользователя (shared primary key).
-     * <p>
-     * Используется как первичный ключ и внешний ключ к users.id.
-     * Значение берется из связанного объекта User через @MapsId.
-     */
-    @Id
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
-
+@PrimaryKeyJoinColumn(name = "user_id")
+public class Expert extends User {
     /**
      * Связанный пользователь (1-to-1 с shared primary key).
      * <p>
