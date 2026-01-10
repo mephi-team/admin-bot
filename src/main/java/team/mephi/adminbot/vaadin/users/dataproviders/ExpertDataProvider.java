@@ -54,6 +54,11 @@ public class ExpertDataProvider extends BaseUserDataProvider {
     }
 
     @Override
+    public SimpleUser save(SimpleUser dto) {
+        return expertService.save(dto);
+    }
+
+    @Override
     public void deleteAllById(Iterable<Long> ids) {
         expertService.deleteAllById(ids);
     }

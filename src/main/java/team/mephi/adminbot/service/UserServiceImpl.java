@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserService {
         user.setDirection(Direction.builder().id(dto.getDirection().getId()).name(dto.getDirection().getName()).build());
         user.setCohort(dto.getCohort());
         var currentAssignment = user.getTutorAssignments();
-        if (Objects.nonNull(dto.getTutor().getId()) && currentAssignment.stream().noneMatch(a -> a.getIsActive() && a.getTutor().getId().equals(dto.getTutor().getId()))) {
+        if (Objects.nonNull(dto.getTutor()) && Objects.nonNull(dto.getTutor().getId()) && currentAssignment.stream().noneMatch(a -> a.getIsActive() && a.getTutor().getId().equals(dto.getTutor().getId()))) {
             user.getTutorAssignments().forEach(ta -> ta.setIsActive(false));
             user.getTutorAssignments().add(StudentTutor.builder()
                     .student(user)

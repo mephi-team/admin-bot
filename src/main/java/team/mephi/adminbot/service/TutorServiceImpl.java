@@ -29,15 +29,15 @@ public class TutorServiceImpl implements TutorService {
     @Override
     @Transactional
     public SimpleTutor save(SimpleTutor dto) {
-        Tutor user = dto.getId() != null
+        Tutor tutor = dto.getId() != null
                 ? tutorRepository.findById(dto.getId()).orElse(new Tutor())
                 : new Tutor();
-        user.setUserName(dto.getLastName() + " " + dto.getFirstName());
-        user.setFirstName(dto.getFirstName());
-        user.setLastName(dto.getLastName());
-        user.setEmail(dto.getEmail());
-        user.setTgId(dto.getTgId());
-        var prevActiveAssignment = user.getStudentAssignments().stream().filter(StudentTutor::getIsActive).map(st -> st.getStudent().getId()).toList();
+        tutor.setUserName(dto.getLastName() + " " + dto.getFirstName());
+        tutor.setFirstName(dto.getFirstName());
+        tutor.setLastName(dto.getLastName());
+        tutor.setEmail(dto.getEmail());
+        tutor.setTgId(dto.getTgId());
+        var prevActiveAssignment = tutor.getStudentAssignments().stream().filter(StudentTutor::getIsActive).map(st -> st.getStudent().getId()).toList();
         var currentAssignment = dto.getStudents().stream().map(SimpleUser::getId).collect(Collectors.toSet());
         var sa = dto.getStudents().stream().filter(s -> !prevActiveAssignment.contains(s.getId())).map(
                 u -> StudentTutor.builder()
@@ -46,9 +46,9 @@ public class TutorServiceImpl implements TutorService {
                         .student(User.builder().id(u.getId()).build())
                         .build()
         ).collect(Collectors.toSet());
-        user.getStudentAssignments().forEach(s -> {if (!currentAssignment.contains(s.getStudent().getId())) s.setIsActive(false);});
-        user.getStudentAssignments().addAll(sa);
-        var prevDirection = user.getDirections().stream().map(TutorDirection::getDirectionId).toList();
+        tutor.getStudentAssignments().forEach(s -> {if (!currentAssignment.contains(s.getStudent().getId())) s.setIsActive(false);});
+        tutor.getStudentAssignments().addAll(sa);
+        var prevDirection = tutor.getDirections().stream().map(TutorDirection::getDirectionId).toList();
         var currentDirection = dto.getDirections().stream().map(SimpleDirection::getId).collect(Collectors.toSet());
         var td = dto.getDirections().stream().filter(s -> !prevDirection.contains(s.getId())).map(
                 t -> TutorDirection.builder()
@@ -57,10 +57,10 @@ public class TutorServiceImpl implements TutorService {
                         .direction(Direction.builder().id(t.getId()).build())
                         .build()
         ).collect(Collectors.toSet());
-        user.getDirections().retainAll(user.getDirections().stream().filter(s -> currentDirection.contains(s.getDirectionId())).toList());
-        user.getDirections().addAll(td);
-        user = tutorRepository.save(user);
-        return mapToSimpleUser(user);
+        tutor.getDirections().retainAll(tutor.getDirections().stream().filter(s -> currentDirection.contains(s.getDirectionId())).toList());
+        tutor.getDirections().addAll(td);
+        tutor = tutorRepository.save(tutor);
+        return mapToSimpleUser(tutor);
     }
 
     @Override
