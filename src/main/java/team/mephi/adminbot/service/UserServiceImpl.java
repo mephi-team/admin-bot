@@ -80,7 +80,8 @@ public class UserServiceImpl implements UserService {
         user.setTgId(dto.getTgId());
         user.setPhoneNumber(dto.getPhoneNumber());
         user.setCity(dto.getCity());
-        user.setDirection(Direction.builder().id(dto.getDirection().getId()).name(dto.getDirection().getName()).build());
+        var directions = dto.getDirection().stream().findFirst().orElse(SimpleDirection.builder().build());
+        user.setDirection(Direction.builder().id(directions.getId()).name(directions.getName()).build());
         user.setCohort(dto.getCohort());
         var currentAssignment = user.getTutorAssignments();
         if (Objects.nonNull(dto.getTutor()) && Objects.nonNull(dto.getTutor().getId()) && currentAssignment.stream().noneMatch(a -> a.getIsActive() && a.getTutor().getId().equals(dto.getTutor().getId()))) {
@@ -193,7 +194,7 @@ public class UserServiceImpl implements UserService {
                 .pdConsentLog(user.getPdConsentLogs().stream().map(pd -> SimplePd.builder().id(pd.getId()).source(pd.getSource()).status(pd.getStatus().name()).build()).toList())
                 .status(user.getStatus().name())
                 .city(user.getCity())
-                .direction(Objects.nonNull(user.getDirection()) ? SimpleDirection.builder().id(user.getDirection().getId()).name(user.getDirection().getName()).build() : null)
+                .direction(Objects.nonNull(user.getDirection()) ? Set.of(SimpleDirection.builder().id(user.getDirection().getId()).name(user.getDirection().getName()).build()) : null)
                 .cohort(user.getCohort())
                 .tutor(Objects.isNull(tutor) ? SimpleTutor.builder().build() : SimpleTutor.builder().id(tutor.getId()).fullName(tutor.getLastName() + " " + tutor.getFirstName()).build())
                 .build();

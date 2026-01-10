@@ -14,6 +14,7 @@ import team.mephi.adminbot.repository.ExpertRepository;
 
 import java.time.Instant;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -40,7 +41,13 @@ public class ExpertServiceImpl implements ExpertService {
         expert.setTgId(dto.getTgId());
         expert.setPhoneNumber(dto.getPhoneNumber());
         expert.setCity(dto.getCity());
-        expert.setDirection(Direction.builder().id(dto.getDirection().getId()).name(dto.getDirection().getName()).build());
+        var prevActiveDirections = expert.getDirections().stream().map(Direction::getId).toList();
+        var currentDirections = dto.getDirection().stream().map(SimpleDirection::getId).collect(Collectors.toSet());
+        var directions = dto.getDirection().stream().filter(s -> !prevActiveDirections.contains(s.getId())).map(
+                d -> Direction.builder().id(d.getId()).name(d.getName()).build()
+        ).collect(Collectors.toSet());
+        expert.getDirections().retainAll(expert.getDirections().stream().filter(s -> currentDirections.contains(s.getId())).toList());
+        expert.getDirections().addAll(directions);
         expert.setCohort(dto.getCohort());
         var currentAssignment = expert.getTutorAssignments();
         if (Objects.nonNull(dto.getTutor()) && Objects.nonNull(dto.getTutor().getId()) && currentAssignment.stream().noneMatch(a -> a.getIsActive() && a.getTutor().getId().equals(dto.getTutor().getId()))) {
@@ -80,7 +87,7 @@ public class ExpertServiceImpl implements ExpertService {
         expertRepository.deleteAllById(ids);
     }
 
-    private SimpleUser mapToSimple(User user) {
+    private SimpleUser mapToSimple(Expert user) {
         var tutor = user.getTutorAssignments().stream().filter(StudentTutor::getIsActive).findAny().orElseGet(() -> StudentTutor.builder().tutor(Tutor.builder().userName("").firstName("").lastName("").build()).build()).getTutor();
         return SimpleUser.builder()
                 .id(user.getId())
@@ -97,7 +104,7 @@ public class ExpertServiceImpl implements ExpertService {
                 .pdConsentLog(user.getPdConsentLogs().stream().map(pd -> SimplePd.builder().id(pd.getId()).source(pd.getSource()).status(pd.getStatus().name()).build()).toList())
                 .status(user.getStatus().name())
                 .city(user.getCity())
-                .direction(Objects.nonNull(user.getDirection()) ? SimpleDirection.builder().id(user.getDirection().getId()).name(user.getDirection().getName()).build() : null)
+                .direction(Objects.nonNull(user.getDirections()) ? user.getDirections().stream().map(d -> SimpleDirection.builder().id(d.getId()).name(d.getName()).build()).collect(Collectors.toSet()) : null)
                 .cohort(user.getCohort())
                 .tutor(Objects.isNull(tutor) ? SimpleTutor.builder().build() : SimpleTutor.builder().id(tutor.getId()).fullName(tutor.getLastName() + " " + tutor.getFirstName()).build())
                 .build();

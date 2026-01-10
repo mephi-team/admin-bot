@@ -1,6 +1,7 @@
 package team.mephi.adminbot.vaadin.users.components;
 
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.combobox.MultiSelectComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.TextField;
@@ -19,7 +20,7 @@ public class UserForm extends FormLayout {
     @Getter private final TextField tgId = new TextField();
     @Getter private final TextField phoneNumber = new TextField();
     @Getter private final ComboBox<CohortDto> cohorts = new ComboBox<>();
-    @Getter private final ComboBox<SimpleDirection> directions = new ComboBox<>();
+    @Getter private final MultiSelectComboBox<SimpleDirection> directions = new MultiSelectComboBox<>();
     @Getter private final ComboBox<CityDto> cities = new ComboBox<>();
     @Getter private final ComboBox<SimpleTutor> tutor = new ComboBox<>();
 
@@ -45,6 +46,11 @@ public class UserForm extends FormLayout {
 
         directions.setItemsPageable(directionService::getAllDirections);
         directions.setItemLabelGenerator(SimpleDirection::getName);
+        directions.addValueChangeListener(event -> {
+            if (!"LC_EXPERT".equals(roles.getValue().getCode()) && event.getValue().size() > 1) {
+                directions.setValue(event.getOldValue());
+            }
+        });
 
         cities.setItemsPageable(cityService::getAllCities);
         cities.setItemLabelGenerator(CityDto::getName);
