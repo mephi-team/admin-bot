@@ -60,7 +60,7 @@ public class MyRenderers {
                     var fullName = new Span(student.getFullName());
                     fullName.addClassNames(LumoUtility.TextColor.PRIMARY);
                     fullName.getElement().getStyle().set("text-decoration", "underline");
-                    content.add(new Div(fullName, new Span(", @"), new Span(student.getTgId())));
+                    content.add(new Div(fullName, new Span(", "), new Span(student.getTgId())));
                 }
                 PdPopover popover = new PdPopover(content);
                 popover.setTarget(span);

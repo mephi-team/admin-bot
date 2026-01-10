@@ -192,7 +192,7 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
                 Span user = new Span(dialog.getUser().getUserName());
                 user.addClassNames(LumoUtility.FontWeight.BOLD);
                 Span login = new Span(dialog.getUser().getTgId());
-                header.add(new Div(user, new Span(", @"), login));
+                header.add(new Div(user, new Span(", "), login));
                 Span role = new Span(dialog.getUser().getRole().getDescription());
                 Span direction = new Span(dialog.getDirection().getName());
                 Span cohort = new Span(dialog.getUser().getCohort());

@@ -102,7 +102,7 @@ public class MailingForm extends FormLayout {
         listBox.setWidthFull();
         listBox.addClassNames(LumoUtility.FontSize.SMALL);
         listBox.setDataProvider(provider);
-        listBox.setItemLabelGenerator(u -> u.getFullName() + ", @" + u.getTgId());
+        listBox.setItemLabelGenerator(u -> u.getFullName() + ", " + u.getTgId());
         listBox.addSelectionListener(e -> {
             counter.setText("(" +  e.getAllSelectedItems().size() + ")");
         });
