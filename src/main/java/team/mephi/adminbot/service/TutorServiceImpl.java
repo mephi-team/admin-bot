@@ -68,12 +68,12 @@ public class TutorServiceImpl implements TutorService {
         }
     }
 
-    private Set<StudentTutor> prepareStudentTutor(List<SimpleUser> students, Long id) {
+    private Set<StudentTutor> prepareStudentTutor(List<SimpleUser> students, Long tutorId) {
         return students.stream().map(
                 u -> StudentTutor.builder()
                         .mode(userRepository.countByIdWithTutorAssignment(u.getId()) > 0 ? StudentTutorMode.REASSIGN : StudentTutorMode.INITIAL)
-                        .tutor(Tutor.builder().id(id).build())
-                        .student(User.builder().id(id).build())
+                        .tutor(Tutor.builder().id(tutorId).build())
+                        .student(User.builder().id(u.getId()).build())
                         .build()
         ).collect(Collectors.toSet());
     }

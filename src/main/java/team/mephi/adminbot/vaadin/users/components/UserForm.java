@@ -13,6 +13,8 @@ import team.mephi.adminbot.dto.*;
 import team.mephi.adminbot.service.*;
 import team.mephi.adminbot.vaadin.components.FullNameField;
 
+import java.util.stream.Collectors;
+
 public class UserForm extends FormLayout {
     @Getter private final ComboBox<RoleDto> roles = new ComboBox<>();
     @Getter private final FullNameField fullNameField = new FullNameField();
@@ -49,7 +51,7 @@ public class UserForm extends FormLayout {
         directions.setAutoExpand(MultiSelectComboBox.AutoExpandMode.VERTICAL);
         directions.addValueChangeListener(event -> {
             if (!"LC_EXPERT".equals(roles.getValue().getCode()) && event.getValue().size() > 1) {
-                directions.setValue(event.getOldValue());
+                directions.setValue(event.getValue().stream().filter(f -> !event.getOldValue().contains(f)).collect(Collectors.toSet()));
             }
         });
 
