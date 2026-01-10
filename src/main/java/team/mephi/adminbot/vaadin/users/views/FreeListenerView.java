@@ -9,6 +9,7 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.QueryParameters;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+import team.mephi.adminbot.dto.SimpleDirection;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.model.enums.UserStatus;
 import team.mephi.adminbot.vaadin.components.*;
@@ -20,6 +21,7 @@ import team.mephi.adminbot.vaadin.views.Dialogs;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class FreeListenerView extends VerticalLayout {
     private List<Long> selectedIds;
@@ -40,10 +42,10 @@ public class FreeListenerView extends VerticalLayout {
         grid.addColumn(SimpleUser::getFullName).setHeader(getTranslation("grid_free_listener_header_name_label")).setSortable(true).setResizable(true).setFrozen(true)
                 .setAutoWidth(true).setFlexGrow(0).setKey("lastName");
         grid.addColumn(SimpleUser::getEmail).setHeader(getTranslation("grid_free_listener_header_email_label")).setSortable(true).setResizable(true).setKey("email");
-        grid.addColumn(SimpleUser::getTgName).setHeader(getTranslation("grid_free_listener_header_telegram_label")).setSortable(true).setResizable(true).setKey("tgName");
+        grid.addColumn(SimpleUser::getTgId).setHeader(getTranslation("grid_free_listener_header_telegram_label")).setSortable(true).setResizable(true).setKey("tgId");
         grid.addColumn(SimpleUser::getPhoneNumber).setHeader(getTranslation("grid_free_listener_header_phone_label")).setSortable(true).setResizable(true).setKey("phoneNumber");
         grid.addColumn(SimpleUser::getCohort).setHeader(getTranslation("grid_free_listener_header_cohort_label")).setSortable(true).setResizable(true).setKey("cohort");
-        grid.addColumn(u -> Objects.nonNull(u.getDirection()) ? u.getDirection().getName() : "").setHeader(getTranslation("grid_free_listener_header_direction_label")).setSortable(true).setResizable(true).setKey("direction");
+        grid.addColumn(u -> Objects.nonNull(u.getDirection()) ? u.getDirection().stream().map(SimpleDirection::getName).collect(Collectors.joining(",")) : "").setHeader(getTranslation("grid_free_listener_header_direction_label")).setSortable(true).setResizable(true).setKey("direction");
         grid.addColumn(SimpleUser::getCity).setHeader(getTranslation("grid_free_listener_header_city_label")).setSortable(true).setResizable(true).setKey("city");
 
         grid.addComponentColumn(item -> {

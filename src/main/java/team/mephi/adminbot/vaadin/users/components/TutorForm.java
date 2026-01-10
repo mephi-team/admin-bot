@@ -16,15 +16,10 @@ import team.mephi.adminbot.vaadin.components.FullNameField;
 import java.util.Objects;
 
 public class TutorForm extends FormLayout {
-    @Getter
-    private FullNameField fullNameField = new FullNameField();
-//    private TextField firstName = new TextField();
-//    private TextField lastName = new TextField();
-    private TextField tgId = new TextField();
-    @Getter
-    private final MultiSelectComboBox<SimpleDirection> directions = new MultiSelectComboBox<>();
-    @Getter
-    private final MultiSelectComboBox<SimpleUser> students = new MultiSelectComboBox<>();
+    @Getter private final FullNameField fullNameField = new FullNameField();
+    @Getter final private TextField tgId = new TextField();
+    @Getter private final MultiSelectComboBox<SimpleDirection> directions = new MultiSelectComboBox<>();
+    @Getter private final MultiSelectComboBox<SimpleUser> students = new MultiSelectComboBox<>();
 
     public TutorForm(UserService userService, DirectionService directionService) {
         var directionsProvider = new CallbackDataProvider<SimpleDirection, String>(
@@ -49,8 +44,6 @@ public class TutorForm extends FormLayout {
         setExpandColumns(true);
 
         fullNameField.setReadOnly(true);
-//        firstName.setReadOnly(true);
-//        lastName.setReadOnly(true);
         tgId.setReadOnly(true);
 
         directions.setReadOnly(true);
@@ -70,8 +63,6 @@ public class TutorForm extends FormLayout {
         });
 
         addFormItem(fullNameField, getTranslation("form_tutor_curatorship_full_name_label"));
-//        addFormItem(firstName, getTranslation("form_tutor_curatorship_first_name_label"));
-//        addFormItem(lastName, getTranslation("form_tutor_curatorship_last_name_label"));
         addFormItem(tgId, getTranslation("form_tutor_curatorship_telegram_label"));
         addFormItem(directions, getTranslation("form_tutor_curatorship_direction_label"));
         addFormItem(students, getTranslation("form_tutor_curatorship_students_label"));

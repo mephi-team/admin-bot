@@ -34,6 +34,11 @@ public class GuestsView extends VerticalLayout {
         var grid = new Grid<>(SimpleUser.class, false);
         grid.addColumn(SimpleUser::getTgName).setHeader(getTranslation("grid_guests_header_name_label")).setSortable(true).setResizable(true).setKey("tgName");
         grid.addColumn(SimpleUser::getTgId).setHeader(getTranslation("grid_guests_header_telegram_label")).setSortable(true).setResizable(true).setKey("tgId");
+        grid.addColumn(SimpleUser::getFullName).setHeader(getTranslation("grid_candidate_header_name_label")).setSortable(true).setResizable(true).setFrozen(true)
+                .setAutoWidth(true).setFlexGrow(0).setKey("lastName");
+        grid.addColumn(SimpleUser::getEmail).setHeader(getTranslation("grid_candidate_header_email_label")).setSortable(true).setResizable(true).setKey("email");
+        grid.addColumn(SimpleUser::getPhoneNumber).setHeader(getTranslation("grid_candidate_header_phone_label")).setSortable(true).setResizable(true).setKey("phoneNumber");
+        grid.addColumn(SimpleUser::getCity).setHeader(getTranslation("grid_candidate_header_city_label")).setSortable(true).setResizable(true).setKey("city");
         grid.addColumn(MyRenderers.createPdRenderer()).setHeader(getTranslation("grid_guests_header_pd_consent_label")).setSortable(true).setResizable(true).setKey("pdConsent");
 
         grid.addComponentColumn(item -> {
@@ -59,7 +64,7 @@ public class GuestsView extends VerticalLayout {
         searchField.addValueChangeListener(e -> provider.getFilterableProvider().setFilter(e.getValue()));
 
         var settingsBtn = new GridSettingsButton();
-        var settingsPopover = new GridSettingsPopover(grid, Set.of(), Set.of("actions"));
+        var settingsPopover = new GridSettingsPopover(grid, Set.of("lastName", "email", "phoneNumber", "city"), Set.of("actions"));
         settingsPopover.setTarget(settingsBtn);
 
         var downloadBtn = new Button(VaadinIcon.DOWNLOAD_ALT.create());

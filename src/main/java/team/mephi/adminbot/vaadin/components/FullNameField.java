@@ -5,6 +5,8 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
+import java.util.Objects;
+
 
 public class FullNameField extends CustomField<FullNameField.FullName> {
     private final TextField firstName = new TextField();
@@ -13,6 +15,9 @@ public class FullNameField extends CustomField<FullNameField.FullName> {
     public FullNameField() {
         firstName.setMaxWidth("50%");
         lastName.setMaxWidth("50%");
+
+        lastName.addClassName("first");
+        firstName.addClassName("last");
 
         firstName.setManualValidation(true);
         lastName.setManualValidation(true);
@@ -37,8 +42,8 @@ public class FullNameField extends CustomField<FullNameField.FullName> {
 
     @Override
     protected void setPresentationValue(FullName fullName) {
-        this.firstName.setValue(fullName.firstName());
-        this.lastName.setValue(fullName.lastName());
+        this.firstName.setValue(Objects.isNull(fullName.firstName()) ? "" : fullName.firstName());
+        this.lastName.setValue(Objects.isNull(fullName.lastName()) ? "" : fullName.lastName());
     }
 
     @Override

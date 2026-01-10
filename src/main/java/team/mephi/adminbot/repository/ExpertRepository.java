@@ -13,7 +13,7 @@ import java.util.List;
 
 @Repository
 public interface ExpertRepository extends JpaRepository<Expert, Long> {
-    @Query("SELECT e FROM Expert e JOIN fetch e.role LEFT JOIN FETCH e.direction LEFT JOIN FETCH e.tutorAssignments ta LEFT JOIN FETCH ta.tutor LEFT JOIN FETCH e.pdConsentLogs WHERE e.isActive AND e.role.code = :role AND (" +
+    @Query("SELECT e FROM Expert e JOIN fetch e.role LEFT JOIN FETCH e.directions LEFT JOIN FETCH e.tutorAssignments ta LEFT JOIN FETCH ta.tutor LEFT JOIN FETCH e.pdConsentLogs WHERE e.isActive AND e.role.code = :role AND (" +
             "LOWER(COALESCE(e.userName, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
             "LOWER(COALESCE(e.name, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
             "LOWER(COALESCE(e.firstName, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +

@@ -95,9 +95,14 @@ public class Tutor {
      * <p>
      * Связь многие-ко-многим через таблицу tutor_directions.
      */
-    @OneToMany(mappedBy = "tutor", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "tutor_directions",
+            joinColumns = @JoinColumn(name = "tutor_id"),
+            inverseJoinColumns = @JoinColumn(name = "direction_id")
+    )
     @Builder.Default
-    private Set<TutorDirection> directions = new HashSet<>();
+    private Set<Direction> directions = new HashSet<>();
 
     @PrePersist
     protected void onCreate() {

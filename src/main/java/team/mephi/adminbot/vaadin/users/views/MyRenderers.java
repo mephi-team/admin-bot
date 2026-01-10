@@ -65,7 +65,7 @@ public class MyRenderers {
                 PdPopover popover = new PdPopover(content);
                 popover.setTarget(span);
             }
-            span.setText(String.format("%d", studentCount));
+            span.setText(studentCount > 0 ? String.format("%d", studentCount) : "-");
             span.addClassNames(LumoUtility.TextColor.PRIMARY);
             return span;
         });

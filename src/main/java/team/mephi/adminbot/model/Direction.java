@@ -122,9 +122,14 @@ public class Direction {
      * <p>
      * Связь многие-ко-многим через таблицу tutor_directions.
      */
-    @OneToMany(mappedBy = "direction", fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "tutor_directions",
+            joinColumns = @JoinColumn(name = "direction_id"),
+            inverseJoinColumns = @JoinColumn(name = "tutor_id")
+    )
     @Builder.Default
-    private List<TutorDirection> tutors = new ArrayList<>();
+    private List<Tutor> tutors = new ArrayList<>();
 
     // ===== equals() и hashCode() =====
 

@@ -15,14 +15,10 @@ import java.util.List;
 public class SimpleTutor {
     private Long id;
     private String role;
-    @NotEmpty
     private String firstName;
-    @NotEmpty
     private String lastName;
     private String competenceCenter;
-    @NotEmpty
     private String email;
-    @NotEmpty
     private String phoneNumber;
     private String tgId;
     private String status;

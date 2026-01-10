@@ -59,9 +59,6 @@ public class DataInitializer {
     private TutorRepository tutorRepository;
 
     @Autowired
-    private TutorDirectionRepository tutorDirectionRepository;
-
-    @Autowired
     private CityService cityService;
 
     @Autowired
@@ -87,7 +84,6 @@ public class DataInitializer {
             boolean hasBroadcasts = mailingRepository.count() > 0;
             boolean hasTemplates = mailTemplateRepository.count() > 0;
             boolean hasTutors = tutorRepository.count() > 0;
-            boolean hasTutorDirections = tutorDirectionRepository.count() > 0;
 
             if (!hasUsers || !hasDialogs || !hasQuestions || !hasBroadcasts) {
                 System.out.println("🔁 Предзаполнение БД тестовыми данными...");
@@ -98,7 +94,6 @@ public class DataInitializer {
                 if (!hasExperts) initExperts();
                 if (!hasPdConsentLog) initPdConsentLog();
                 if (!hasTutors) initTutors();
-                if (!hasTutorDirections) initTutorDirections();
                 if (!hasQuestions) initQuestions();
                 if (!hasAnswers) initAnswers();
                 if (!hasBroadcasts) initBroadcasts();
@@ -108,25 +103,6 @@ public class DataInitializer {
                 System.out.println("✅ Тестовые данные успешно созданы.");
             }
         };
-    }
-
-    private void initTutorDirections() {
-        var tutors = tutorRepository.findAll();
-        var directions = directionRepository.findAll();
-        for (var tutor : tutors) {
-            // Каждый тьютор работает с 1-3 направлениями
-            Collections.shuffle(directions);
-            int count = 1 + new Random().nextInt(3);
-            for (int i = 0; i < count; i++) {
-                TutorDirection td = TutorDirection.builder()
-                        .tutor(tutor)
-                        .tutorId(tutor.getId())
-                        .direction(directions.get(i))
-                        .directionId(directions.get(i).getId())
-                        .build();
-                tutorDirectionRepository.save(td);
-            }
-        }
     }
 
     private void initRoles() {
@@ -173,17 +149,17 @@ public class DataInitializer {
         Direction python = directionRepository.findById(3L).orElseThrow();
 
         List<User> users = Arrays.asList(
-                User.builder().tgId("tg_1001").tgName("tg_name_1001").email("test1@example.com").userName("Анна Смирнова").firstName("Анна").lastName("Смирнова").role(studentRole).cohort("Весна 2026").direction(java).status(UserStatus.ACTIVE).build(),
-                User.builder().tgId("tg_1002").tgName("tg_name_1002").email("test2@example.com").userName("Иван Петров").firstName("Иван").lastName("Петров").role(candidateRole).cohort("Зима 2025").direction(analytics).status(UserStatus.ACTIVE).build(),
-                User.builder().tgId("tg_1003").tgName("tg_name_1003").email("test3@example.com").userName("Мария Козлова").firstName("Мария").lastName("Козлова").role(candidateRole).cohort("Зима 2025").direction(python).status(UserStatus.BLOCKED).build(),
-                User.builder().tgId("tg_1004").tgName("tg_name_1004").email("test4@example.com").userName("Алексей Иванов").firstName("Алексей").lastName("Иванов").role(middleCandidateRole).cohort("Осень 2025").direction(java).status(UserStatus.ACTIVE).build(),
-                User.builder().tgId("tg_1005").tgName("tg_name_1005").email("test5@example.com").userName("Алексей Иванов").firstName("Алексей").lastName("Иванов").role(middleCandidateRole).cohort("Осень 2025").direction(java).status(UserStatus.BLOCKED).build(),
-                User.builder().tgId("tg_1006").tgName("tg_name_1006").email("test6@example.com").userName("Алексей Иванов").firstName("Алексей").lastName("Иванов").role(middleCandidateRole).cohort("Осень 2025").direction(java).status(UserStatus.PENDING).build(),
-                User.builder().tgId("tg_1007").tgName("tg_name_1007").email("test7@example.com").userName("Алексей Иванов").firstName("Алексей").lastName("Иванов").role(middleCandidateRole).cohort("Осень 2025").direction(java).status(UserStatus.EXPELLED).build(),
-                User.builder().tgId("tg_1008").tgName("tg_name_1008").email("test8@example.com").userName("Алексей Иванов").firstName("Алексей").lastName("Иванов").role(middleCandidateRole).cohort("Осень 2025").direction(java).status(UserStatus.INACTIVE).build(),
-                User.builder().tgId("tg_1009").tgName("tg_name_1009").email("test9@example.com").userName("Екатерина Волкова").firstName("Екатерина").lastName("Волкова").role(studentRole).cohort("Весна 2026").direction(analytics).status(UserStatus.ACTIVE).build(),
-                User.builder().tgId("tg_1010").tgName("tg_name_1010").email("test10@example.com").userName("Анна Козлова").firstName("Анна").lastName("Козлова").role(visitorRole).status(UserStatus.ACTIVE).build(),
-                User.builder().tgId("tg_1011").tgName("tg_name_1011").email("test11@example.com").userName("Петр Иванов").firstName("Петр").lastName("Иванов").role(freeListenerRole).direction(python).status(UserStatus.ACTIVE).build()
+                User.builder().tgId("@tg_1001").tgName("tg_name_1001").email("test1@example.com").userName("Анна Смирнова").firstName("Анна").lastName("Смирнова").role(studentRole).cohort("Весна 2026").direction(java).status(UserStatus.ACTIVE).build(),
+                User.builder().tgId("@tg_1002").tgName("tg_name_1002").email("test2@example.com").userName("Иван Петров").firstName("Иван").lastName("Петров").role(candidateRole).cohort("Зима 2025").direction(analytics).status(UserStatus.ACTIVE).build(),
+                User.builder().tgId("@tg_1003").tgName("tg_name_1003").email("test3@example.com").userName("Мария Козлова").firstName("Мария").lastName("Козлова").role(candidateRole).cohort("Зима 2025").direction(python).status(UserStatus.BLOCKED).build(),
+                User.builder().tgId("@tg_1004").tgName("tg_name_1004").email("test4@example.com").userName("Алексей Иванов").firstName("Алексей").lastName("Иванов").role(middleCandidateRole).cohort("Осень 2025").direction(java).status(UserStatus.ACTIVE).build(),
+                User.builder().tgId("@tg_1005").tgName("tg_name_1005").email("test5@example.com").userName("Алексей Иванов").firstName("Алексей").lastName("Иванов").role(middleCandidateRole).cohort("Осень 2025").direction(java).status(UserStatus.BLOCKED).build(),
+                User.builder().tgId("@tg_1006").tgName("tg_name_1006").email("test6@example.com").userName("Алексей Иванов").firstName("Алексей").lastName("Иванов").role(middleCandidateRole).cohort("Осень 2025").direction(java).status(UserStatus.PENDING).build(),
+                User.builder().tgId("@tg_1007").tgName("tg_name_1007").email("test7@example.com").userName("Алексей Иванов").firstName("Алексей").lastName("Иванов").role(middleCandidateRole).cohort("Осень 2025").direction(java).status(UserStatus.EXPELLED).build(),
+                User.builder().tgId("@tg_1008").tgName("tg_name_1008").email("test8@example.com").userName("Алексей Иванов").firstName("Алексей").lastName("Иванов").role(middleCandidateRole).cohort("Осень 2025").direction(java).status(UserStatus.INACTIVE).build(),
+                User.builder().tgId("@tg_1009").tgName("tg_name_1009").email("test9@example.com").userName("Екатерина Волкова").firstName("Екатерина").lastName("Волкова").role(studentRole).cohort("Весна 2026").direction(analytics).status(UserStatus.ACTIVE).build(),
+                User.builder().tgId("@tg_1010").tgName("tg_name_1010").email("test10@example.com").userName("Анна Козлова").firstName("Анна").lastName("Козлова").role(visitorRole).status(UserStatus.ACTIVE).build(),
+                User.builder().tgId("@tg_1011").tgName("tg_name_1011").email("test11@example.com").userName("Петр Иванов").firstName("Петр").lastName("Иванов").role(freeListenerRole).direction(python).status(UserStatus.ACTIVE).build()
         );
         userRepository.saveAll(users);
         System.out.printf("  → Создано %d пользователей%n", users.size());
@@ -194,8 +170,8 @@ public class DataInitializer {
                 .orElseThrow(() -> new RuntimeException("Роль 'LC_EXPERT' не найдена"));
 
         List<Expert> experts = Arrays.asList(
-                Expert.builder().tgId("tg_1012").tgName("tg_name_1012").email("test12@example.com").userName("Сергей Смирнов").firstName("Сергей").lastName("Смирнов").role(lcExpertRole).status(UserStatus.ACTIVE).isActive(true).build(),
-                Expert.builder().tgId("tg_1013").tgName("tg_name_1013").email("admin1@example.com").userName("Admin").firstName("Admin").lastName("Admin").role(lcExpertRole).status(UserStatus.ACTIVE).isActive(true).build()
+                Expert.builder().tgId("@tg_1012").tgName("tg_name_1012").email("test12@example.com").userName("Сергей Смирнов").firstName("Сергей").lastName("Смирнов").role(lcExpertRole).status(UserStatus.ACTIVE).isActive(true).build(),
+                Expert.builder().tgId("@tg_1013").tgName("tg_name_1013").email("admin1@example.com").userName("Admin").firstName("Admin").lastName("Admin").role(lcExpertRole).status(UserStatus.ACTIVE).isActive(true).build()
         );
         expertRepository.saveAll(experts);
         System.out.printf("  → Создано %d экспертов'%n", experts.size());
@@ -225,12 +201,21 @@ public class DataInitializer {
 
     private void initTutors() {
         List<Tutor> tutors = Arrays.asList(
-                Tutor.builder().userName("Сергей Иванов").firstName("Сергей").lastName("Иванов").phone("+79991234567").email("test1@example.org").tgId("tg_name_1020").build(),
-                Tutor.builder().userName("Николай Александров").firstName("Николай").lastName("Александров").phone("+79997654321").email("test2@example.org").tgId("tg_name_1021").build(),
-                Tutor.builder().userName("Екатерина Козлова").firstName("Екатерина").lastName("Козлова").phone("+79991111111").email("test3@example.org").tgId("tg_name_1022").build(),
-                Tutor.builder().userName("Петр Петров").firstName("Петр").lastName("Петров").phone("+79992222222").email("test4@example.org").tgId("tg_name_1023").build(),
-                Tutor.builder().userName("Иван Иванов").firstName("Иван").lastName("Иванов").phone("+79993333333").email("test5@example.org").tgId("tg_name_1024").build()
+                Tutor.builder().userName("Сергей Иванов").firstName("Сергей").lastName("Иванов").phone("+79991234567").email("test1@example.org").tgId("@tg_id_1020").build(),
+                Tutor.builder().userName("Николай Александров").firstName("Николай").lastName("Александров").phone("+79997654321").email("test2@example.org").tgId("@tg_id_1021").build(),
+                Tutor.builder().userName("Екатерина Козлова").firstName("Екатерина").lastName("Козлова").phone("+79991111111").email("test3@example.org").tgId("@tg_id_1022").build(),
+                Tutor.builder().userName("Петр Петров").firstName("Петр").lastName("Петров").phone("+79992222222").email("test4@example.org").tgId("@tg_id_1023").build(),
+                Tutor.builder().userName("Иван Иванов").firstName("Иван").lastName("Иванов").phone("+79993333333").email("test5@example.org").tgId("@tg_id_1024").build()
         );
+        var directions = directionRepository.findAll();
+        for (var tutor : tutors) {
+            // Каждый тьютор работает с 1-3 направлениями
+            Collections.shuffle(directions);
+            int count = 1 + new Random().nextInt(3);
+            for (int i = 0; i < count; i++) {
+                tutor.getDirections().add(Direction.builder().id(directions.get(i).getId()).build());
+            }
+        }
         tutorRepository.saveAll(tutors);
         System.out.printf("  → Создано %d кураторов%n", tutors.size());
     }

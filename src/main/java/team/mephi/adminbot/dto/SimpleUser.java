@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -23,7 +24,7 @@ public class SimpleUser {
     private String fullName;
     private String tgName;
     private String cohort;
-    private SimpleDirection direction;
+    private Set<SimpleDirection> direction;
     private String city;
     private Boolean pdConsent;
     private List<SimplePd> pdConsentLog;
