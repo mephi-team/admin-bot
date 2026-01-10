@@ -153,7 +153,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT count(u) FROM User u WHERE u.role.code = :role")
     Integer countByRole(String role);
 
-    @Query("SELECT u.role.code, count(u) FROM User u GROUP BY u.role.code UNION ALL SELECT 'TUTOR', count(t) FROM Tutor t")
+    @Query("SELECT u.role.code, count(u) FROM User u WHERE u.role.code != 'LC_EXPERT' GROUP BY u.role.code UNION ALL SELECT 'LC_EXPERT', count(e) FROM Expert e WHERE e.isActive UNION ALL SELECT 'TUTOR', count(t) FROM Tutor t")
     List<Tuple> countsByRoleTuples();
 
     default Map<String, Long> countsByRole() {
