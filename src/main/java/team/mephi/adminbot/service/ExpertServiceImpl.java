@@ -49,18 +49,6 @@ public class ExpertServiceImpl implements ExpertService {
         expert.getDirections().retainAll(expert.getDirections().stream().filter(s -> currentDirections.contains(s.getId())).toList());
         expert.getDirections().addAll(directions);
         expert.setCohort(dto.getCohort());
-        var currentAssignment = expert.getTutorAssignments();
-        if (Objects.nonNull(dto.getTutor()) && Objects.nonNull(dto.getTutor().getId()) && currentAssignment.stream().noneMatch(a -> a.getIsActive() && a.getTutor().getId().equals(dto.getTutor().getId()))) {
-            expert.getTutorAssignments().forEach(ta -> ta.setIsActive(false));
-            expert.getTutorAssignments().add(StudentTutor.builder()
-                    .student(expert)
-                    .mode(currentAssignment.isEmpty() ? StudentTutorMode.INITIAL : StudentTutorMode.REASSIGN)
-                    .isActive(true)
-                    .tutor(Tutor.builder().id(dto.getTutor().getId()).build())
-                    .assignedAt(Instant.now())
-                    .build());
-        }
-
         if (Objects.isNull(expert.getStatus())){
             expert.setStatus(UserStatus.ACTIVE);
         }

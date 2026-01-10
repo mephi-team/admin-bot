@@ -59,9 +59,6 @@ public class DataInitializer {
     private TutorRepository tutorRepository;
 
     @Autowired
-    private TutorDirectionRepository tutorDirectionRepository;
-
-    @Autowired
     private CityService cityService;
 
     @Autowired
@@ -87,7 +84,6 @@ public class DataInitializer {
             boolean hasBroadcasts = mailingRepository.count() > 0;
             boolean hasTemplates = mailTemplateRepository.count() > 0;
             boolean hasTutors = tutorRepository.count() > 0;
-            boolean hasTutorDirections = tutorDirectionRepository.count() > 0;
 
             if (!hasUsers || !hasDialogs || !hasQuestions || !hasBroadcasts) {
                 System.out.println("🔁 Предзаполнение БД тестовыми данными...");
@@ -98,7 +94,6 @@ public class DataInitializer {
                 if (!hasExperts) initExperts();
                 if (!hasPdConsentLog) initPdConsentLog();
                 if (!hasTutors) initTutors();
-                if (!hasTutorDirections) initTutorDirections();
                 if (!hasQuestions) initQuestions();
                 if (!hasAnswers) initAnswers();
                 if (!hasBroadcasts) initBroadcasts();
@@ -108,25 +103,6 @@ public class DataInitializer {
                 System.out.println("✅ Тестовые данные успешно созданы.");
             }
         };
-    }
-
-    private void initTutorDirections() {
-        var tutors = tutorRepository.findAll();
-        var directions = directionRepository.findAll();
-        for (var tutor : tutors) {
-            // Каждый тьютор работает с 1-3 направлениями
-            Collections.shuffle(directions);
-            int count = 1 + new Random().nextInt(3);
-            for (int i = 0; i < count; i++) {
-                TutorDirection td = TutorDirection.builder()
-                        .tutor(tutor)
-                        .tutorId(tutor.getId())
-                        .direction(directions.get(i))
-                        .directionId(directions.get(i).getId())
-                        .build();
-                tutorDirectionRepository.save(td);
-            }
-        }
     }
 
     private void initRoles() {
@@ -231,6 +207,15 @@ public class DataInitializer {
                 Tutor.builder().userName("Петр Петров").firstName("Петр").lastName("Петров").phone("+79992222222").email("test4@example.org").tgId("tg_name_1023").build(),
                 Tutor.builder().userName("Иван Иванов").firstName("Иван").lastName("Иванов").phone("+79993333333").email("test5@example.org").tgId("tg_name_1024").build()
         );
+        var directions = directionRepository.findAll();
+        for (var tutor : tutors) {
+            // Каждый тьютор работает с 1-3 направлениями
+            Collections.shuffle(directions);
+            int count = 1 + new Random().nextInt(3);
+            for (int i = 0; i < count; i++) {
+                tutor.getDirections().add(Direction.builder().id(directions.get(i).getId()).build());
+            }
+        }
         tutorRepository.saveAll(tutors);
         System.out.printf("  → Создано %d кураторов%n", tutors.size());
     }
