@@ -21,7 +21,6 @@ import team.mephi.adminbot.vaadin.service.DialogType;
 
 import java.util.*;
 
-
 @Route(value = "/mailings", layout = DialogsLayout.class)
 @RolesAllowed("ADMIN")
 public class Mailings extends VerticalLayout {

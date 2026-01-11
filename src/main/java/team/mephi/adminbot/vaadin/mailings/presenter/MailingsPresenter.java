@@ -10,7 +10,6 @@ import team.mephi.adminbot.vaadin.service.DialogType;
 import team.mephi.adminbot.vaadin.service.NotificationService;
 import team.mephi.adminbot.vaadin.service.NotificationType;
 
-
 public class MailingsPresenter extends CRUDPresenter<SimpleMailing> implements MailingActions {
     private final CRUDDataProvider<SimpleMailing> dataProvider;
     private final DialogService<SimpleMailing> dialogService;
