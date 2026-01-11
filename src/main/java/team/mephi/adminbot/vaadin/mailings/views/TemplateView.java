@@ -24,7 +24,7 @@ public class TemplateView extends VerticalLayout {
     public TemplateView(CRUDPresenter<SimpleTemplate> actions) {
         TemplateDataProvider provider = (TemplateDataProvider) actions.getDataProvider();
         var gsa = new GridSelectActions(getTranslation("grid_template_actions_label"),
-                new Button(getTranslation("grid_template_actions_delete_label"), VaadinIcon.TRASH.create(), e -> {
+                new SecondaryButton(getTranslation("grid_template_actions_delete_label"), VaadinIcon.TRASH.create(), e -> {
                     if (!selectedIds.isEmpty()) {
                         actions.onDelete(selectedIds, selectedIds.size() > 1 ? DialogType.DELETE_TEMPLATE_ALL : DialogType.DELETE_TEMPLATE, "" + selectedIds.size());
                     }
@@ -58,6 +58,7 @@ public class TemplateView extends VerticalLayout {
         });
         grid.setEmptyStateText(getTranslation("grid_template_empty_label"));
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
+        grid.addThemeName("neo");
 
         provider.getFilterableProvider().addDataProviderListener(e -> {
             grid.deselectAll();

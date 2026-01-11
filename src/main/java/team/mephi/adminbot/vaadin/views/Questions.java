@@ -45,7 +45,7 @@ public class Questions extends VerticalLayout {
         add(new H1(getTranslation("page_question_title")));
 
         var gsa = new GridSelectActions(getTranslation("grid_question_actions_label"),
-                new Button(getTranslation("grid_question_actions_delete_label"), VaadinIcon.TRASH.create(), e -> {
+                new SecondaryButton(getTranslation("grid_question_actions_delete_label"), VaadinIcon.TRASH.create(), e -> {
                     if (!selectedIds.isEmpty()) {
                         onDelete(selectedIds);
                     }
@@ -84,6 +84,7 @@ public class Questions extends VerticalLayout {
         });
         grid.setEmptyStateText(getTranslation("grid_question_empty_label"));
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
+        grid.addThemeName("neo");
 
         provider.getFilterableProvider().addDataProviderListener(e -> {
             grid.deselectAll();

@@ -125,3 +125,11 @@ vaadin-text-field[theme~="neo"]::part(input-field) {
     border-radius: 12px;
     margin: 3px;
 }
+
+vaadin-grid[theme~="neo"] vaadin-checkbox {
+    --vaadin-input-field-border-width: 1px;
+    --vaadin-checkbox-background: transparent;
+    --vaadin-checkbox-background-hover: var(--lumo-primary-color-10pct);
+    --vaadin-input-field-border-color: var(--lumo-primary-color);
+    /*outline: 1px solid var(--lumo-contrast-20pct);*/
+}

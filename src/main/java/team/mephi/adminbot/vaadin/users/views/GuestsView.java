@@ -23,7 +23,7 @@ public class GuestsView extends VerticalLayout {
     public GuestsView(BlockingPresenter actions) {
         GuestsDataProvider provider = (GuestsDataProvider) actions.getDataProvider();
         var gsa = new GridSelectActions(getTranslation("grid_users_actions_label"),
-                new Button(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), e -> {
+                new SecondaryButton(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), e -> {
                     if (!selectedIds.isEmpty())
                         actions.onDelete(selectedIds, DialogType.DELETE_USERS);
                 })
@@ -62,6 +62,7 @@ public class GuestsView extends VerticalLayout {
         });
         grid.setEmptyStateText(getTranslation("grid_guests_empty_label"));
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
+        grid.addThemeName("neo");
 
         var searchField = new SearchField(getTranslation("grid_guests_search_placeholder"));
         searchField.addValueChangeListener(e -> provider.getFilterableProvider().setFilter(e.getValue()));

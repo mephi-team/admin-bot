@@ -27,7 +27,7 @@ public class ExpertView extends VerticalLayout {
     public ExpertView(UsersPresenter actions) {
         ExpertDataProvider provider = (ExpertDataProvider) actions.getDataProvider();
         var gsa = new GridSelectActions(getTranslation("grid_users_actions_label"),
-                new Button(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), e -> {
+                new SecondaryButton(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), e -> {
                     if (!selectedIds.isEmpty())
                         actions.onDelete(selectedIds, DialogType.DELETE_USERS);
                 })
@@ -68,6 +68,7 @@ public class ExpertView extends VerticalLayout {
         });
         grid.setEmptyStateText(getTranslation("grid_expert_empty_label"));
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
+        grid.addThemeName("neo");
 
         var searchField = new SearchField(getTranslation("grid_expert_search_placeholder"));
         searchField.addValueChangeListener(e -> provider.getFilterableProvider().setFilter(e.getValue()));

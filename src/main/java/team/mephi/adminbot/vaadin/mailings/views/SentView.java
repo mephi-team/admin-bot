@@ -39,7 +39,7 @@ public class SentView extends VerticalLayout {
     public SentView(MailingsPresenter actions) {
         SentDataProvider provider = (SentDataProvider) actions.getDataProvider();
         var gsa = new GridSelectActions(getTranslation("grid_mailing_actions_label"),
-                new Button(getTranslation("grid_mailing_actions_delete_label"), VaadinIcon.TRASH.create(), e -> {
+                new SecondaryButton(getTranslation("grid_mailing_actions_delete_label"), VaadinIcon.TRASH.create(), e -> {
                     if (!selectedIds.isEmpty()) {
                         actions.onDelete(selectedIds, selectedIds.size() > 1 ? DialogType.DELETE_MAILING_ALL : DialogType.DELETE_MAILING, String.valueOf(selectedIds.size()));
                     }
@@ -83,6 +83,7 @@ public class SentView extends VerticalLayout {
         });
         grid.setEmptyStateText(getTranslation("grid_mailing_empty_label"));
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
+        grid.addThemeName("neo");
 
         provider.getFilterableProvider().addDataProviderListener(e -> {
             grid.deselectAll();

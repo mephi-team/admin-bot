@@ -69,6 +69,7 @@ public class TutorView extends VerticalLayout {
         });
         grid.setEmptyStateText(getTranslation("grid_tutor_empty_label"));
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
+        grid.addThemeName("neo");
 
         var searchField = new SearchField(getTranslation("grid_tutor_search_placeholder"));
         searchField.addValueChangeListener(e -> provider.getFilterableProvider().setFilter(e.getValue()));

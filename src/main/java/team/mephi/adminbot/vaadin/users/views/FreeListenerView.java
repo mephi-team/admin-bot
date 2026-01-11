@@ -27,7 +27,7 @@ public class FreeListenerView extends VerticalLayout {
     public FreeListenerView(StudentPresenter actions) {
         FreeListenerDataProvider provider = (FreeListenerDataProvider) actions.getDataProvider();
         var gsa = new GridSelectActions(getTranslation("grid_users_actions_label"),
-                new Button(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), e -> {
+                new SecondaryButton(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), e -> {
                     if (!selectedIds.isEmpty())
                         actions.onDelete(selectedIds, DialogType.DELETE_USERS);
                 })
@@ -70,6 +70,7 @@ public class FreeListenerView extends VerticalLayout {
         });
         grid.setEmptyStateText(getTranslation("grid_free_listener_empty_label"));
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
+        grid.addThemeName("neo");
 
         var searchField = new SearchField(getTranslation("grid_free_listener_search_placeholder"));
         searchField.addValueChangeListener(e -> provider.getFilterableProvider().setFilter(e.getValue()));
