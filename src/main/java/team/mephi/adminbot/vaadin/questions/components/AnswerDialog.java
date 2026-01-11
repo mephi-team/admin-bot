@@ -7,10 +7,11 @@ import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.function.SerializableConsumer;
 import team.mephi.adminbot.dto.SimpleQuestion;
 import team.mephi.adminbot.vaadin.SimpleDialog;
+import team.mephi.adminbot.vaadin.components.PrimaryButton;
 
 public class AnswerDialog extends Dialog implements SimpleDialog {
     private final BeanValidationBinder<SimpleQuestion> binder = new BeanValidationBinder<>(SimpleQuestion.class);
-    private final Button answerButton = new Button(getTranslation("dialog_answer_button"), VaadinIcon.PAPERPLANE_O.create(), e -> onAnswer());
+    private final Button answerButton = new PrimaryButton( getTranslation("dialog_answer_button"), VaadinIcon.PAPERPLANE_O.create(), e -> onAnswer());
 
     private SerializableConsumer<SimpleQuestion> onSaveCallback;
     private SimpleQuestion question;

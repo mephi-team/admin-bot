@@ -7,6 +7,7 @@ import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.function.SerializableConsumer;
 import team.mephi.adminbot.vaadin.SimpleDialog;
+import team.mephi.adminbot.vaadin.components.SecondaryButton;
 
 public class BlockDialog<T> extends Dialog implements SimpleDialog {
     private final BeanValidationBinder<T> binder;
@@ -45,7 +46,7 @@ public class BlockDialog<T> extends Dialog implements SimpleDialog {
         add(tabs, form, form1, form2, form3);
         setWidth("100%");
         setMaxWidth("500px");
-        getFooter().add(new Button(getTranslation("cancel_button"), e -> close()), saveButton);
+        getFooter().add(new SecondaryButton(getTranslation("cancel_button"), e -> close()), saveButton);
     }
 
     @Override

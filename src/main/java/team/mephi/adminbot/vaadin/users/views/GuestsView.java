@@ -42,15 +42,15 @@ public class GuestsView extends VerticalLayout {
         grid.addColumn(MyRenderers.createPdRenderer()).setHeader(getTranslation("grid_guests_header_pd_consent_label")).setSortable(true).setResizable(true).setKey("pdConsent");
 
         grid.addComponentColumn(item -> {
-            Button viewButton = new Button(VaadinIcon.EYE.create(), e -> actions.onView(item, DialogType.USERS_VIEW));
-            Button blockButton = new Button(VaadinIcon.BAN.create(), e -> actions.onBlock(item, DialogType.USERS_BLOCKED));
+            Button viewButton = new IconButton(VaadinIcon.EYE.create(), e -> actions.onView(item, DialogType.USERS_VIEW));
+            Button blockButton = new IconButton(VaadinIcon.BAN.create(), e -> actions.onBlock(item, DialogType.USERS_BLOCKED));
             if (UserStatus.BLOCKED.name().equals(item.getStatus())) {
                 blockButton.addClassNames(LumoUtility.TextColor.ERROR);
             } else {
                 blockButton.addClassNames(LumoUtility.TextColor.BODY);
             }
             return new Span(viewButton, blockButton);
-        }).setHeader(getTranslation("grid_header_actions_label")).setWidth("120px").setFlexGrow(0).setKey("actions");
+        }).setHeader(getTranslation("grid_header_actions_label")).setWidth("112px").setFlexGrow(0).setKey("actions");
 
         grid.setDataProvider(provider.getDataProvider());
         grid.setSelectionMode(Grid.SelectionMode.MULTI);
@@ -63,11 +63,11 @@ public class GuestsView extends VerticalLayout {
         var searchField = new SearchField(getTranslation("grid_guests_search_placeholder"));
         searchField.addValueChangeListener(e -> provider.getFilterableProvider().setFilter(e.getValue()));
 
-        var settingsBtn = new GridSettingsButton();
+        var settingsBtn = new IconButton(VaadinIcon.COG.create());
         var settingsPopover = new GridSettingsPopover(grid, Set.of("lastName", "email", "phoneNumber", "city"), Set.of("actions"));
         settingsPopover.setTarget(settingsBtn);
 
-        var downloadBtn = new Button(VaadinIcon.DOWNLOAD_ALT.create());
+        var downloadBtn = new IconButton(VaadinIcon.DOWNLOAD_ALT.create(), e -> {});
 
         add(new SearchFragment(searchField, new Span(settingsBtn, downloadBtn)), gsa, grid);
     }

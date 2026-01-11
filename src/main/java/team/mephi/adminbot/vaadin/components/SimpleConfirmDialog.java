@@ -40,11 +40,15 @@ public class SimpleConfirmDialog extends ConfirmDialog {
         setHeader(header);
         setText(getTranslation(text));
         var confirmButton = new Button(getTranslation(action), actionIcon);
-        confirmButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        confirmButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_SMALL);
+        confirmButton.addClassNames(LumoUtility.BorderRadius.FULL);
         setConfirmButton(confirmButton);
 
         setCancelable(true);
-        setCancelText(getTranslation("cancel_button"));
+        var cancelButton = new Button(getTranslation("cancel_button"));
+        cancelButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY, ButtonVariant.LUMO_SMALL);
+        cancelButton.addClassNames(LumoUtility.BorderRadius.FULL, LumoUtility.Border.ALL, LumoUtility.BorderColor.PRIMARY);
+        setCancelButton(cancelButton);
         addCancelListener(event -> {
             close();
         });

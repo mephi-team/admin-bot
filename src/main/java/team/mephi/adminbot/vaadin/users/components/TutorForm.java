@@ -52,7 +52,7 @@ public class TutorForm extends FormLayout {
         directions.setAutoExpand(MultiSelectComboBox.AutoExpandMode.VERTICAL);
 
         students.setItems(studentsProvider);
-        students.setItemLabelGenerator(u -> u.getFullName() + (Objects.nonNull(u.getTgId()) ? " @" + u.getTgId() : ""));
+        students.setItemLabelGenerator(u -> u.getFullName() + (Objects.nonNull(u.getTgId()) ? " " + u.getTgId() : ""));
         students.setAutoExpand(MultiSelectComboBox.AutoExpandMode.VERTICAL);
         students.addSelectionListener(e -> {
             var selectedItems = e.getAddedSelection();

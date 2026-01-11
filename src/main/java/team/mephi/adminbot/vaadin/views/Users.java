@@ -1,8 +1,6 @@
 package team.mephi.adminbot.vaadin.views;
 
 import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Span;
@@ -16,6 +14,8 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.security.RolesAllowed;
 import team.mephi.adminbot.service.UserService;
 import team.mephi.adminbot.vaadin.CRUDActions;
+import team.mephi.adminbot.vaadin.components.PrimaryButton;
+import team.mephi.adminbot.vaadin.components.SecondaryButton;
 import team.mephi.adminbot.vaadin.components.UserCountBadge;
 import team.mephi.adminbot.vaadin.service.DialogType;
 import team.mephi.adminbot.vaadin.users.components.*;
@@ -77,13 +77,12 @@ public class Users extends VerticalLayout implements BeforeEnterObserver {
         top.setWidthFull();
         top.addToStart(new H1(getTranslation("page_users_title")));
 
-        var secondaryButton = new Button(getTranslation("page_users_create_from_file_button"), VaadinIcon.FILE_ADD.create(), e -> {
+        var secondaryButton = new SecondaryButton(getTranslation("page_users_create_from_file_button"), VaadinIcon.FILE_ADD.create(), e -> {
             fileUploadDialog.open();
         });
-        var primaryButton = new Button(getTranslation("page_users_create_user_button"), VaadinIcon.PLUS.create(), e -> {
+        var primaryButton = new PrimaryButton(getTranslation("page_users_create_user_button"), VaadinIcon.PLUS.create(), e -> {
             getCurrentAction().onCreate(getCurrentRole().name(), getCreateDialogType());
         });
-        primaryButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         Div buttons = new Div(secondaryButton, primaryButton);
         buttons.addClassNames(LumoUtility.Display.FLEX, LumoUtility.Gap.MEDIUM);
         top.addToEnd(buttons);

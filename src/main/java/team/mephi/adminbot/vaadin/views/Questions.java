@@ -68,9 +68,9 @@ public class Questions extends VerticalLayout {
 
         grid.addComponentColumn(item -> {
             Span group = new Span();
-            Button responseButton = new Button(getTranslation("grid_question_action_answer_label"), e -> onAnswer(item));
-            Button chatButton = new Button(VaadinIcon.CHAT.create(),e -> UI.getCurrent().navigate(Dialogs.class, QueryParameters.of("userId", "" + item.getAuthorId())));
-            Button deleteButton = new Button(VaadinIcon.TRASH.create(), e -> onDelete(List.of(item.getId())));
+            Button responseButton = new TextButton(getTranslation("grid_question_action_answer_label"), e -> onAnswer(item));
+            Button chatButton = new IconButton(VaadinIcon.CHAT.create(),e -> UI.getCurrent().navigate(Dialogs.class, QueryParameters.of("userId", "" + item.getAuthorId())));
+            Button deleteButton = new IconButton(VaadinIcon.TRASH.create(), e -> onDelete(List.of(item.getId())));
             group.add(responseButton, chatButton, deleteButton);
             return group;
         }).setHeader(getTranslation("grid_header_actions_label")).setWidth("220px").setFlexGrow(0).setKey("actions");
@@ -90,11 +90,11 @@ public class Questions extends VerticalLayout {
         var searchField = new SearchField(getTranslation("grid_question_search_placeholder"));
         searchField.addValueChangeListener(e -> provider.getFilterableProvider().setFilter(e.getValue()));
 
-        var settingsBtn = new GridSettingsButton();
+        var settingsBtn = new IconButton(VaadinIcon.COG.create());
         var settingsPopover = new GridSettingsPopover(grid, Set.of(), Set.of("actions"));
         settingsPopover.setTarget(settingsBtn);
 
-        var downloadBtn = new Button(VaadinIcon.DOWNLOAD_ALT.create());
+        var downloadBtn = new IconButton(VaadinIcon.DOWNLOAD_ALT.create(), e -> {});
 
         add(new SearchFragment(searchField, new Span(settingsBtn, downloadBtn)), gsa, grid);
     }

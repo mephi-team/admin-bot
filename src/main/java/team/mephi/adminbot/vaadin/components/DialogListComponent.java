@@ -86,7 +86,7 @@ public class DialogListComponent extends VerticalLayout implements AfterNavigati
         roleInfo.addClassNames(LumoUtility.Whitespace.NOWRAP, LumoUtility.FontSize.XSMALL, LumoUtility.TextColor.SECONDARY);
         roleInfo.setText(
                 item.getUserRoleDescription().toLowerCase() +
-                        " | @" + item.getUserExternalId()
+                        " | " + item.getUserExternalId()
         );
         mainContent.add(roleInfo);
 
