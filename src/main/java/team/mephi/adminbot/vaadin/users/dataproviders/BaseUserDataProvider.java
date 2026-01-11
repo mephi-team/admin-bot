@@ -37,7 +37,7 @@ public abstract class BaseUserDataProvider implements UserDataProvider {
                                 sort.isUnsorted() ? Sort.by("createdAt").descending() : sort
                         );
                         return userService.findAllByRoleAndName(getRole(), query.getFilter().orElse(""), pageable);
-                        },
+                    },
                     query -> userService.countByRoleAndName(getRole(), query.getFilter().orElse("")),
                     SimpleUser::getId
             );

@@ -16,7 +16,6 @@ import team.mephi.adminbot.model.objects.ReasonCode;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Сущность рассылки (mailing).

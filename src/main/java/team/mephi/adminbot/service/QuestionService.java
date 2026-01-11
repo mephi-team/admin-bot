@@ -8,8 +8,12 @@ import java.util.stream.Stream;
 
 public interface QuestionService {
     SimpleQuestion saveAnswer(SimpleQuestion question);
+
     Stream<SimpleQuestion> findAllByText(String name, Pageable pageable);
+
     Integer countByText(String name);
+
     Optional<SimpleQuestion> findByIdWithDeps(Long id);
+
     void deleteAllById(Iterable<Long> ids);
 }

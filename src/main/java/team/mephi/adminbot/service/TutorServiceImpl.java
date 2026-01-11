@@ -6,7 +6,10 @@ import org.springframework.stereotype.Service;
 import team.mephi.adminbot.dto.SimpleDirection;
 import team.mephi.adminbot.dto.SimpleTutor;
 import team.mephi.adminbot.dto.SimpleUser;
-import team.mephi.adminbot.model.*;
+import team.mephi.adminbot.model.Direction;
+import team.mephi.adminbot.model.StudentTutor;
+import team.mephi.adminbot.model.Tutor;
+import team.mephi.adminbot.model.User;
 import team.mephi.adminbot.model.enums.StudentTutorMode;
 import team.mephi.adminbot.repository.StudentTutorRepository;
 import team.mephi.adminbot.repository.TutorRepository;
@@ -53,7 +56,9 @@ public class TutorServiceImpl implements TutorService {
 
         var prevActiveAssignment = tutor.getStudentAssignments().stream().filter(StudentTutor::getIsActive).map(st -> st.getStudent().getId()).toList();
         var currentAssignment = dto.getStudents().stream().map(SimpleUser::getId).collect(Collectors.toSet());
-        tutor.getStudentAssignments().forEach(s -> {if (!currentAssignment.contains(s.getStudent().getId())) s.setIsActive(false);});
+        tutor.getStudentAssignments().forEach(s -> {
+            if (!currentAssignment.contains(s.getStudent().getId())) s.setIsActive(false);
+        });
 
         if (Objects.nonNull(dto.getId())) {
             var st = prepareStudentTutor(dto.getStudents().stream().filter(s -> !prevActiveAssignment.contains(s.getId())).toList(), dto.getId());

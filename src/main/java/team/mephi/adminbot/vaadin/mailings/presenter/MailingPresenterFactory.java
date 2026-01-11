@@ -3,11 +3,11 @@ package team.mephi.adminbot.vaadin.mailings.presenter;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import team.mephi.adminbot.dto.SimpleMailing;
 import team.mephi.adminbot.dto.SimpleTemplate;
+import team.mephi.adminbot.service.MailingService;
+import team.mephi.adminbot.service.TemplateService;
 import team.mephi.adminbot.vaadin.CRUDDataProvider;
 import team.mephi.adminbot.vaadin.CRUDPresenter;
-import team.mephi.adminbot.service.TemplateService;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.DraftDataProvider;
-import team.mephi.adminbot.service.MailingService;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.SentDataProvider;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.TemplateDataProvider;
 import team.mephi.adminbot.vaadin.mailings.tabs.MailingTabType;
@@ -44,8 +44,10 @@ public class MailingPresenterFactory {
         CRUDDataProvider<?> dataProvider = createDataProvider(role);
 
         return switch (role) {
-            case TEMPLATES -> new CRUDPresenter<SimpleTemplate>((CRUDDataProvider<SimpleTemplate>) dataProvider, dialogService, notificationService);
-            default -> new MailingsPresenter((CRUDDataProvider<SimpleMailing>) dataProvider, dialogService, notificationService);
+            case TEMPLATES ->
+                    new CRUDPresenter<SimpleTemplate>((CRUDDataProvider<SimpleTemplate>) dataProvider, dialogService, notificationService);
+            default ->
+                    new MailingsPresenter((CRUDDataProvider<SimpleMailing>) dataProvider, dialogService, notificationService);
         };
     }
 }

@@ -27,7 +27,7 @@ public class SimpleConfirmDialog extends ConfirmDialog {
         this.text = text;
         this.onConfirm = onConfirm;
 
-        var closeButton = new Button(VaadinIcon.CLOSE_BIG.create() , e -> close());
+        var closeButton = new Button(VaadinIcon.CLOSE_BIG.create(), e -> close());
         closeButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
         closeButton.addClassNames(LumoUtility.AlignSelf.END, LumoUtility.Background.TINT, LumoUtility.TextColor.BODY);
         headerText.addClassNames(LumoUtility.FontWeight.BOLD);

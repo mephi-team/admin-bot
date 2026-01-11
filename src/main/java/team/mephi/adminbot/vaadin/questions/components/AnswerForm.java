@@ -11,6 +11,7 @@ public class AnswerForm extends FormLayout {
     private final TextField direction = new TextField();
     private final TextField text = new TextField();
     private final TextArea answer = new TextArea();
+
     public AnswerForm() {
         setAutoResponsive(true);
         setLabelsAside(true);

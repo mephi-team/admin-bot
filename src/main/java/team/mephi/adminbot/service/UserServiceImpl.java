@@ -95,7 +95,7 @@ public class UserServiceImpl implements UserService {
                     .build());
         }
 
-        if (Objects.isNull(user.getStatus())){
+        if (Objects.isNull(user.getStatus())) {
             user.setStatus(UserStatus.ACTIVE);
         }
 

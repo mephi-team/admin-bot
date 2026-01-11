@@ -22,8 +22,6 @@ import java.util.List;
 import java.util.Set;
 
 public class DraftView extends VerticalLayout {
-    private List<Long> selectedIds;
-
     private static final SerializableBiConsumer<Span, SimpleMailing> statusComponentUpdater = (
             span, person) -> {
         String theme = switch (person.getStatus()) {
@@ -36,6 +34,7 @@ public class DraftView extends VerticalLayout {
         span.getElement().setAttribute("theme", theme);
         span.setText(span.getTranslation("mailing_status_" + person.getStatus().toLowerCase() + "_label"));
     };
+    private List<Long> selectedIds;
 
     public DraftView(MailingsPresenter actions) {
         DraftDataProvider provider = (DraftDataProvider) actions.getDataProvider();
@@ -96,7 +95,8 @@ public class DraftView extends VerticalLayout {
         var settingsPopover = new GridSettingsPopover(grid, Set.of(), Set.of("actions"));
         settingsPopover.setTarget(settingsBtn);
 
-        var downloadBtn = new IconButton(VaadinIcon.DOWNLOAD_ALT.create(), e -> {});
+        var downloadBtn = new IconButton(VaadinIcon.DOWNLOAD_ALT.create(), e -> {
+        });
 
         add(new SearchFragment(searchField, new Span(settingsBtn, downloadBtn)), gsa, grid);
     }

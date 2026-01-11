@@ -69,7 +69,7 @@ public class Questions extends VerticalLayout {
 
         grid.addComponentColumn(item -> {
             Button responseButton = new TextButton(getTranslation("grid_question_action_answer_label"), e -> onAnswer(item));
-            Button chatButton = new IconButton(VaadinIcon.CHAT.create(),e -> UI.getCurrent().navigate(Dialogs.class, QueryParameters.of("userId", "" + item.getAuthorId())));
+            Button chatButton = new IconButton(VaadinIcon.CHAT.create(), e -> UI.getCurrent().navigate(Dialogs.class, QueryParameters.of("userId", "" + item.getAuthorId())));
             Button deleteButton = new IconButton(VaadinIcon.TRASH.create(), e -> onDelete(List.of(item.getId())));
             return new ButtonGroup(responseButton, chatButton, deleteButton);
         }).setHeader(getTranslation("grid_header_actions_label")).setWidth("210px").setFlexGrow(0).setKey("actions");
@@ -97,7 +97,8 @@ public class Questions extends VerticalLayout {
         var settingsPopover = new GridSettingsPopover(grid, Set.of(), Set.of("actions"));
         settingsPopover.setTarget(settingsBtn);
 
-        var downloadBtn = new IconButton(VaadinIcon.DOWNLOAD_ALT.create(), e -> {});
+        var downloadBtn = new IconButton(VaadinIcon.DOWNLOAD_ALT.create(), e -> {
+        });
 
         add(new SearchFragment(searchField, new Span(settingsBtn, downloadBtn)), gsa, grid);
     }
@@ -116,7 +117,7 @@ public class Questions extends VerticalLayout {
         dialogService.showConfirmDialog(selectedIds.size(), selectedIds.size() > 1 ? DialogType.DELETE_QUESTION_ALL : DialogType.DELETE_QUESTION, VaadinIcon.TRASH.create(), (ignore) -> {
             provider.deleteAllById(selectedIds);
             provider.getDataProvider().refreshAll();
-            notificationService.showNotification(NotificationType.DELETE, selectedIds.size() > 1 ? DialogType.DELETE_QUESTION_ALL .getNotificationKey() : DialogType.DELETE_QUESTION.getNotificationKey(), selectedIds.size());
+            notificationService.showNotification(NotificationType.DELETE, selectedIds.size() > 1 ? DialogType.DELETE_QUESTION_ALL.getNotificationKey() : DialogType.DELETE_QUESTION.getNotificationKey(), selectedIds.size());
         });
     }
 }

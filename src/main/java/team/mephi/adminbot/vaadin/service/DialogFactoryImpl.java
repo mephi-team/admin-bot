@@ -60,6 +60,6 @@ public class DialogFactoryImpl implements DialogFactory {
     @Override
     public SimpleConfirmDialog getConfirmDialog(DialogType type, Icon icon) {
         var name = type.name().toLowerCase();
-        return new SimpleConfirmDialog("dialog_" + name + "_title","dialog_" + name + "_text","dialog_" + name + "_action", icon, null);
+        return new SimpleConfirmDialog("dialog_" + name + "_title", "dialog_" + name + "_text", "dialog_" + name + "_action", icon, null);
     }
 }

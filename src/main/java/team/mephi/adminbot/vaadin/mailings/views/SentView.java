@@ -7,7 +7,8 @@ import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.data.renderer.*;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
+import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
 import com.vaadin.flow.function.SerializableBiConsumer;
 import team.mephi.adminbot.dto.SimpleMailing;
 import team.mephi.adminbot.vaadin.components.*;
@@ -21,8 +22,6 @@ import java.util.List;
 import java.util.Set;
 
 public class SentView extends VerticalLayout {
-    private List<Long> selectedIds;
-
     private static final SerializableBiConsumer<Span, SimpleMailing> statusComponentUpdater = (
             span, person) -> {
         String theme = switch (person.getStatus()) {
@@ -35,6 +34,7 @@ public class SentView extends VerticalLayout {
         span.getElement().setAttribute("theme", theme);
         span.setText(span.getTranslation("mailing_status_" + person.getStatus().toLowerCase() + "_label"));
     };
+    private List<Long> selectedIds;
 
     public SentView(MailingsPresenter actions) {
         SentDataProvider provider = (SentDataProvider) actions.getDataProvider();
@@ -98,7 +98,8 @@ public class SentView extends VerticalLayout {
         var settingsPopover = new GridSettingsPopover(grid, Set.of(), Set.of("actions"));
         settingsPopover.setTarget(settingsBtn);
 
-        var downloadBtn = new IconButton(VaadinIcon.DOWNLOAD_ALT.create(), e -> {});
+        var downloadBtn = new IconButton(VaadinIcon.DOWNLOAD_ALT.create(), e -> {
+        });
 
         add(new SearchFragment(searchField, new Span(settingsBtn, downloadBtn)), gsa, grid);
     }

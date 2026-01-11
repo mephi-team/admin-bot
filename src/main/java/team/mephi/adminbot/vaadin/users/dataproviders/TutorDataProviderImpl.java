@@ -38,7 +38,7 @@ public class TutorDataProviderImpl implements TutorDataProvider {
                                 sort.isUnsorted() ? Sort.by("id").descending() : sort
                         );
                         return tutorService.findAllByName(query.getFilter().orElse(""), pageable);
-                        },
+                    },
                     query -> tutorService.countByName(query.getFilter().orElse("")),
                     SimpleTutor::getId
             );

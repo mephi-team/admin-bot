@@ -5,7 +5,10 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.ValidationResult;
 import com.vaadin.flow.function.SerializableConsumer;
-import team.mephi.adminbot.dto.*;
+import team.mephi.adminbot.dto.CityDto;
+import team.mephi.adminbot.dto.CohortDto;
+import team.mephi.adminbot.dto.RoleDto;
+import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.service.*;
 import team.mephi.adminbot.vaadin.SimpleDialog;
 import team.mephi.adminbot.vaadin.components.FullNameField;
@@ -16,10 +19,9 @@ import java.util.Objects;
 
 public class UserEditorDialog extends Dialog implements SimpleDialog {
     private final BeanValidationBinder<SimpleUser> binder = new BeanValidationBinder<>(SimpleUser.class);
-    private final Button saveButton = new PrimaryButton(getTranslation("save_button"), e -> onSave());
-
     private SerializableConsumer<SimpleUser> onSaveCallback;
     private SimpleUser user;
+    private final Button saveButton = new PrimaryButton(getTranslation("save_button"), e -> onSave());
 
     public UserEditorDialog(RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService, TutorService tutorService) {
         var form = new UserForm(roleService, cohortService, directionService, cityService, tutorService);
@@ -30,11 +32,11 @@ public class UserEditorDialog extends Dialog implements SimpleDialog {
         binder.forField(form.getFullNameField())
                 .asRequired()
                 .bind(
-                    s -> new FullNameField.FullName(s.getFirstName(), s.getLastName()),
-                    (s, t) -> {
-                        s.setFirstName(t.firstName());
-                        s.setLastName(t.lastName());
-                    }
+                        s -> new FullNameField.FullName(s.getFirstName(), s.getLastName()),
+                        (s, t) -> {
+                            s.setFirstName(t.firstName());
+                            s.setLastName(t.lastName());
+                        }
                 );
         binder.forField(form.getEmail()).asRequired().bind(SimpleUser::getEmail, SimpleUser::setEmail);
         binder.forField(form.getTgId()).asRequired().bind(SimpleUser::getTgId, SimpleUser::setTgId);
@@ -97,7 +99,7 @@ public class UserEditorDialog extends Dialog implements SimpleDialog {
     }
 
     private void onSave() {
-        if(binder.validate().isOk()) {
+        if (binder.validate().isOk()) {
             if (onSaveCallback != null) {
                 binder.writeBeanIfValid(user);
                 onSaveCallback.accept(user);

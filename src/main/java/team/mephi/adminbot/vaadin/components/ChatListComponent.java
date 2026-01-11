@@ -22,7 +22,10 @@ import team.mephi.adminbot.repository.DialogRepository;
 import team.mephi.adminbot.repository.MessageRepository;
 import team.mephi.adminbot.repository.UserRepository;
 
-import java.time.*;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -35,7 +38,34 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
     VirtualList<ChatListItem> chatList;
     Div emptyMessage = new Div(getTranslation("page_dialogs_chat_not_selected"));
     VerticalLayout header = new VerticalLayout();
-
+    ComponentRenderer<Div, ChatListItem> cardRenderer = new ComponentRenderer<>(item -> {
+        if (item.isHeader) {
+            // Заголовок даты
+            Div header = new Div(item.dateLabel);
+            header.addClassNames(LumoUtility.TextAlignment.CENTER, LumoUtility.FontSize.XXSMALL, LumoUtility.FontWeight.SEMIBOLD);
+            header.addClassNames(LumoUtility.TextColor.SECONDARY, LumoUtility.Margin.Vertical.SMALL);
+            return header;
+        } else {
+            Div message = new Div(item.message.getText());
+            String date = item.message.getDate().toString(); // Z означает UTC
+            Div time = new Div();
+            time.getElement().executeJs("const f=new Intl.DateTimeFormat(navigator.language, {hour: 'numeric', minute: 'numeric'});this.innerHTML=f.format(new Date($0));", date);
+            message.addClassNames(LumoUtility.Display.GRID, LumoUtility.Margin.Vertical.XSMALL, LumoUtility.Overflow.HIDDEN);
+            message.getStyle().set("padding", "12px").set("border-radius", "12px").set("max-width", "70%");
+            if (item.message.getSenderType().equals("USER")) {
+                message.addClassNames(LumoUtility.Background.PRIMARY_10);
+                message.getStyle().set("border-end-end-radius", "0").set("justify-self", "end");
+                time.addClassNames(LumoUtility.TextAlignment.RIGHT);
+            } else {
+                message.addClassNames(LumoUtility.Background.CONTRAST_10);
+                message.getStyle().set("border-end-start-radius", "0").set("justify-self", "start");
+                time.addClassNames(LumoUtility.TextAlignment.LEFT);
+            }
+            message.add(time);
+            time.addClassNames(LumoUtility.FontSize.XXSMALL, LumoUtility.TextColor.SECONDARY);
+            return message;
+        }
+    });
     private Long dialogId;
 
     public ChatListComponent(AuthenticationContext authContext, DialogRepository dialogRepository, MessageRepository messageRepository, UserRepository userRepository) {
@@ -86,35 +116,6 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
         setHeightFull();
         addClassNames(LumoUtility.Padding.Top.NONE);
     }
-
-    ComponentRenderer<Div, ChatListItem> cardRenderer = new ComponentRenderer<>(item -> {
-        if (item.isHeader) {
-            // Заголовок даты
-            Div header = new Div(item.dateLabel);
-            header.addClassNames(LumoUtility.TextAlignment.CENTER, LumoUtility.FontSize.XXSMALL, LumoUtility.FontWeight.SEMIBOLD);
-            header.addClassNames(LumoUtility.TextColor.SECONDARY, LumoUtility.Margin.Vertical.SMALL);
-            return header;
-        } else {
-            Div message = new Div(item.message.getText());
-            String date = item.message.getDate().toString(); // Z означает UTC
-            Div time = new Div();
-            time.getElement().executeJs("const f=new Intl.DateTimeFormat(navigator.language, {hour: 'numeric', minute: 'numeric'});this.innerHTML=f.format(new Date($0));", date);
-            message.addClassNames(LumoUtility.Display.GRID, LumoUtility.Margin.Vertical.XSMALL, LumoUtility.Overflow.HIDDEN);
-            message.getStyle().set("padding", "12px").set("border-radius", "12px").set("max-width", "70%");
-            if (item.message.getSenderType().equals("USER")) {
-                message.addClassNames(LumoUtility.Background.PRIMARY_10);
-                message.getStyle().set("border-end-end-radius", "0").set("justify-self", "end");
-                time.addClassNames(LumoUtility.TextAlignment.RIGHT);
-            } else {
-                message.addClassNames(LumoUtility.Background.CONTRAST_10);
-                message.getStyle().set("border-end-start-radius", "0").set("justify-self", "start");
-                time.addClassNames(LumoUtility.TextAlignment.LEFT);
-            }
-            message.add(time);
-            time.addClassNames(LumoUtility.FontSize.XXSMALL, LumoUtility.TextColor.SECONDARY);
-            return message;
-        }
-    });
 
     private CallbackDataProvider<ChatListItem, Long> getProvider(MessageRepository messageRepository) {
         return new CallbackDataProvider<>(

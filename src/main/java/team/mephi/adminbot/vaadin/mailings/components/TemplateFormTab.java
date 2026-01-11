@@ -88,6 +88,7 @@ public class TemplateFormTab extends FormLayout {
     private static class TemplateMessage {
         private final String name;
         private final String value;
+
         public TemplateMessage(String name, String value) {
             this.name = name;
             this.value = value;

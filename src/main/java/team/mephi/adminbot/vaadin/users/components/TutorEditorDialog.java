@@ -5,7 +5,10 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.function.SerializableConsumer;
 import team.mephi.adminbot.dto.*;
-import team.mephi.adminbot.service.*;
+import team.mephi.adminbot.service.CohortService;
+import team.mephi.adminbot.service.DirectionService;
+import team.mephi.adminbot.service.RoleService;
+import team.mephi.adminbot.service.UserService;
 import team.mephi.adminbot.vaadin.SimpleDialog;
 import team.mephi.adminbot.vaadin.components.FullNameField;
 import team.mephi.adminbot.vaadin.components.PrimaryButton;
@@ -18,10 +21,9 @@ import java.util.Objects;
 
 public class TutorEditorDialog extends Dialog implements SimpleDialog {
     private final BeanValidationBinder<SimpleTutor> binder = new BeanValidationBinder<>(SimpleTutor.class);
-    private final Button saveButton = new PrimaryButton(getTranslation("save_button"), e -> onSave());
-
     private SerializableConsumer<SimpleTutor> onSaveCallback;
     private SimpleTutor user;
+    private final Button saveButton = new PrimaryButton(getTranslation("save_button"), e -> onSave());
 
     public TutorEditorDialog(RoleService roleService, CohortService cohortService, DirectionService directionService, UserService userService) {
         var form = new TutorEditForm(roleService, cohortService, directionService, userService);
@@ -31,8 +33,11 @@ public class TutorEditorDialog extends Dialog implements SimpleDialog {
                 .bind(SimpleTutor::getRole, SimpleTutor::setRole);
         binder.forField(form.getFullNameField())
                 .asRequired()
-                .bind(s -> new FullNameField.FullName(s.getFirstName(),s.getLastName()),
-                        (s, t) -> {s.setFirstName(t.firstName());s.setLastName(t.lastName());});
+                .bind(s -> new FullNameField.FullName(s.getFirstName(), s.getLastName()),
+                        (s, t) -> {
+                            s.setFirstName(t.firstName());
+                            s.setLastName(t.lastName());
+                        });
         binder.forField(form.getEmail())
                 .asRequired()
                 .bind(SimpleTutor::getEmail, SimpleTutor::setEmail);
@@ -89,7 +94,7 @@ public class TutorEditorDialog extends Dialog implements SimpleDialog {
     }
 
     private void onSave() {
-        if(binder.validate().isOk()) {
+        if (binder.validate().isOk()) {
             if (onSaveCallback != null) {
                 binder.writeBeanIfValid(user);
                 onSaveCallback.accept(user);

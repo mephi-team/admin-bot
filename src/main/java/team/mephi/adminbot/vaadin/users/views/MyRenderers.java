@@ -83,7 +83,7 @@ public class MyRenderers {
     }
 
     private static Div renderList(Collection<SimpleDirection> directions) {
-        var res =  new Div();
+        var res = new Div();
         res.addClassNames(LumoUtility.Display.FLEX, LumoUtility.FlexDirection.COLUMN, LumoUtility.Gap.XSMALL);
         directions.forEach(s -> {
             Span span = new Span(s.getName());

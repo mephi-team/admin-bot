@@ -14,7 +14,7 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 
 public class RightDrawer extends Section {
 
-    private final SerializableSupplier<Boolean>  onSaveCallback;
+    private final SerializableSupplier<Boolean> onSaveCallback;
     private final SerializableRunnable onCloseCallback;
     private final Button saveBtn;
 

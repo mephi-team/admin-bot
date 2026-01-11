@@ -23,7 +23,7 @@ public class MailingsPresenter extends CRUDPresenter<SimpleMailing> implements M
     }
 
     @Override
-    public void onCancel(SimpleMailing item, DialogType type, Object ... params) {
+    public void onCancel(SimpleMailing item, DialogType type, Object... params) {
         dialogService.showConfirmDialog(item, type, VaadinIcon.CLOSE_CIRCLE_O.create(), (edit) -> {
             edit.setStatus("CANCELED");
             dataProvider.save(edit);
@@ -33,7 +33,7 @@ public class MailingsPresenter extends CRUDPresenter<SimpleMailing> implements M
     }
 
     @Override
-    public void onRetry(SimpleMailing item, DialogType type, Object ... params) {
+    public void onRetry(SimpleMailing item, DialogType type, Object... params) {
         dialogService.showConfirmDialog(item, type, VaadinIcon.ROTATE_RIGHT.create(), (edit) -> {
             edit.setStatus("ACTIVE");
             dataProvider.save(edit);

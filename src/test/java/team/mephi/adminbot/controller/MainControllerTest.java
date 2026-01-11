@@ -5,7 +5,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import team.mephi.adminbot.repository.DialogRepository;
-//import team.mephi.adminbot.repository.QuestionRepository;
 import team.mephi.adminbot.repository.UserRepository;
 
 /**

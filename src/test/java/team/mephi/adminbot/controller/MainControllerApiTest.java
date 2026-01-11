@@ -10,7 +10,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import team.mephi.adminbot.repository.DialogRepository;
-//import team.mephi.adminbot.repository.QuestionRepository;
 import team.mephi.adminbot.repository.UserRepository;
 
 /**

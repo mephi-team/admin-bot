@@ -71,7 +71,8 @@ public class GuestsView extends VerticalLayout {
         var settingsPopover = new GridSettingsPopover(grid, Set.of("lastName", "email", "phoneNumber", "city"), Set.of("actions"));
         settingsPopover.setTarget(settingsBtn);
 
-        var downloadBtn = new IconButton(VaadinIcon.DOWNLOAD_ALT.create(), e -> {});
+        var downloadBtn = new IconButton(VaadinIcon.DOWNLOAD_ALT.create(), e -> {
+        });
 
         add(new SearchFragment(searchField, new Span(settingsBtn, downloadBtn)), gsa, grid);
     }

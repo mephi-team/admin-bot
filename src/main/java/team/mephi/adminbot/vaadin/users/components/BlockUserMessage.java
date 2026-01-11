@@ -6,6 +6,7 @@ import com.vaadin.flow.component.textfield.TextArea;
 
 public class BlockUserMessage extends FormLayout {
     private final TextArea message = new TextArea();
+
     public BlockUserMessage() {
         setAutoResponsive(true);
         setLabelsAside(true);

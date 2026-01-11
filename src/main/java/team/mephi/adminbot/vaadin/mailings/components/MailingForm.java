@@ -14,11 +14,7 @@ import lombok.Getter;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import team.mephi.adminbot.dto.*;
-import team.mephi.adminbot.service.UserService;
-import team.mephi.adminbot.service.CityService;
-import team.mephi.adminbot.service.DirectionService;
-import team.mephi.adminbot.service.CohortService;
-import team.mephi.adminbot.service.RoleService;
+import team.mephi.adminbot.service.*;
 
 import java.util.Objects;
 
@@ -103,7 +99,7 @@ public class MailingForm extends FormLayout {
         listBox.setDataProvider(provider);
         listBox.setItemLabelGenerator(u -> u.getFullName() + ", " + u.getTgId());
         listBox.addSelectionListener(e -> {
-            counter.setText("(" +  e.getAllSelectedItems().size() + ")");
+            counter.setText("(" + e.getAllSelectedItems().size() + ")");
         });
         FormItem box = addFormItem(listBox, getTranslation("form_mailing_first_name_last_name_label"));
         box.addClassNames(LumoUtility.Width.FULL);

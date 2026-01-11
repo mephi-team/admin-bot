@@ -23,15 +23,14 @@ import java.util.stream.Collectors;
 
 public class MailingEditorDialog extends Dialog implements SimpleDialog {
     private final BeanValidationBinder<SimpleMailing> binder = new BeanValidationBinder<>(SimpleMailing.class);
-    private final Button saveButton = new PrimaryButton(getTranslation("save_button"), e -> onSave());
     private final TabSheet tabSheet = new TabSheet();
     private final Tab tab1;
     private final Tab tab2;
     private final Button next = new PrimaryButton(getTranslation("next_button"), VaadinIcon.ARROW_RIGHT.create());
     private final Button prev = new SecondaryButton(getTranslation("prev_button"), VaadinIcon.ARROW_LEFT.create());
-
     private SerializableConsumer<SimpleMailing> onSaveCallback;
     private SimpleMailing mailing;
+    private final Button saveButton = new PrimaryButton(getTranslation("save_button"), e -> onSave());
     private Binder.Binding<SimpleMailing, String> binding1;
 
     public MailingEditorDialog(UserService userService, RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService, TemplateService templateService) {
@@ -61,7 +60,7 @@ public class MailingEditorDialog extends Dialog implements SimpleDialog {
         binder.forField(form1.getListBox())
                 .withValidator(s -> !s.isEmpty(), getTranslation("form_mailing_first_name_last_name_validation_message"))
                 .withConverter(
-                        s->s.stream().map(SimpleUser::getTgId).toList(),
+                        s -> s.stream().map(SimpleUser::getTgId).toList(),
                         users -> userService.getAllUsers()
                                 .stream()
                                 .filter(u -> users.contains(u.getTgName()))
@@ -77,7 +76,7 @@ public class MailingEditorDialog extends Dialog implements SimpleDialog {
         binder.forField(form2.getName1())
                 .bind(SimpleMailing::getName, SimpleMailing::setName);
         binding1 = binder.forField(form2.getText1())
-                .withValidator(e-> !e.isBlank(), getTranslation("form_template_text_validation_message"))
+                .withValidator(e -> !e.isBlank(), getTranslation("form_template_text_validation_message"))
                 .bind(SimpleMailing::getText, SimpleMailing::setText);
         binding1.setValidatorsDisabled(true);
         binder.bindInstanceFields(form1);
@@ -125,7 +124,7 @@ public class MailingEditorDialog extends Dialog implements SimpleDialog {
                 prev.setVisible(true);
                 next.setVisible(false);
                 binding1.setValidatorsDisabled(false);
-           }
+            }
         });
     }
 
@@ -133,9 +132,9 @@ public class MailingEditorDialog extends Dialog implements SimpleDialog {
     public void showDialog(Object mailing, SerializableConsumer<?> callback) {
         this.mailing = Objects.isNull(mailing)
                 ? SimpleMailing.builder()
-                    .channels(Set.of("Email", "Telegram"))
-                    .recipients(List.of())
-                    .build()
+                .channels(Set.of("Email", "Telegram"))
+                .recipients(List.of())
+                .build()
                 : (SimpleMailing) mailing;
         this.onSaveCallback = (SerializableConsumer<SimpleMailing>) callback;
         binder.readBean(this.mailing);
@@ -145,7 +144,7 @@ public class MailingEditorDialog extends Dialog implements SimpleDialog {
     }
 
     private void onSave() {
-        if(binder.validate().isOk()) {
+        if (binder.validate().isOk()) {
             if (onSaveCallback != null) {
                 binder.writeBeanIfValid(mailing);
                 onSaveCallback.accept(mailing);
