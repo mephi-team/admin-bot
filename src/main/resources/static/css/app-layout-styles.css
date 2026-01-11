@@ -107,6 +107,7 @@ vaadin-tab[theme~="neo"] {
     max-height: 28px;
     transition: background-color 0.2s;
     cursor: pointer;
+    font-size: var(--lumo-font-size-s);
 }
 
 vaadin-tab[theme~="neo"][selected] {
