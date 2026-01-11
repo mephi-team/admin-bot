@@ -13,6 +13,7 @@ import team.mephi.adminbot.dto.*;
 import team.mephi.adminbot.service.*;
 import team.mephi.adminbot.vaadin.components.FullNameField;
 
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class UserForm extends FormLayout {
@@ -81,10 +82,10 @@ public class UserForm extends FormLayout {
         FormItem tutorForm = addFormItem(tutor, getTranslation("form_users_tutor_label"));
 
         roles.addValueChangeListener(e -> {
-            phoneForm.setVisible(!"LC_EXPERT".equals(e.getValue().getCode()));
-            cityForm.setVisible(!"LC_EXPERT".equals(e.getValue().getCode()));
-            tutorForm.setVisible("STUDENT".equals(e.getValue().getCode()));
-            phoneNumber.setRequiredIndicatorVisible(!"LC_EXPERT".equals(e.getValue().getCode()));
+            phoneForm.setVisible(Objects.nonNull(e.getValue()) && !"LC_EXPERT".equals(e.getValue().getCode()));
+            cityForm.setVisible(Objects.nonNull(e.getValue()) && !"LC_EXPERT".equals(e.getValue().getCode()));
+            tutorForm.setVisible(Objects.nonNull(e.getValue()) && "STUDENT".equals(e.getValue().getCode()));
+            phoneNumber.setRequiredIndicatorVisible(Objects.nonNull(e.getValue()) && !"LC_EXPERT".equals(e.getValue().getCode()));
         });
     }
 }

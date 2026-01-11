@@ -137,6 +137,7 @@ vaadin-combo-box[theme~="neo"]::part(input-field),
 vaadin-multi-select-combo-box[theme~="neo"]::part(input-field) {
     --_background: transparent;
     outline: 1px solid var(--lumo-contrast-20pct);
+    outline-offset: -1px;
     border-radius: 12px;
     min-height: 40px;
     /*margin: 3px;*/
