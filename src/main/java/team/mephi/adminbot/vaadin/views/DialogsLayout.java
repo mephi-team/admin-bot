@@ -9,12 +9,12 @@ import team.mephi.adminbot.vaadin.components.*;
 @PermitAll
 @StyleSheet(value = "/css/app-layout-styles.css")
 public class DialogsLayout extends AppLayout {
-    private boolean minimized = false;
+    private boolean minimized = true;
 
     public DialogsLayout(AuthenticationContext authenticationContext) {
         addToNavbar(new Logo("Neoflex"), new TopMenu(authenticationContext), new UserMenu(authenticationContext));
         addToDrawer(new MenuButton(event -> toggleDrawerMode()), new LeftMenu());
-        setDrawerMinimized(false);
+        setDrawerMinimized(true);
     }
 
     private void toggleDrawerMode() {
