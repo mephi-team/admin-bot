@@ -37,26 +37,28 @@ public class MailingEditorDialog extends Dialog implements SimpleDialog {
         var form1 = new MailingForm(userService, roleService, cohortService, directionService, cityService);
         var form2 = new TemplateFormTab(templateService);
 
-        binder.forField(form1.getCurator())
-//                .withValidator(Objects::nonNull, getTranslation("form_mailing_curator_validation_message"))
-                .withConverter(UserDto::getUserName, user -> userService.findCuratorByUserName(user).orElse(UserDto.builder().userName("").build()))
-                .bind(SimpleMailing::getCurator, SimpleMailing::setCurator);
+        binder.forField(form1.getChannels())
+                .asRequired()
+                .bind(SimpleMailing::getChannels, SimpleMailing::setChannels);
         binder.forField(form1.getUsers())
-                .withValidator(Objects::nonNull, getTranslation("form_mailing_users_validation_message"))
+                .asRequired()
                 .withConverter(RoleDto::getName, role -> roleService.getByName(role).orElse(null))
                 .bind(SimpleMailing::getUsers, SimpleMailing::setUsers);
         binder.forField(form1.getCohort())
-                .withValidator(Objects::nonNull, getTranslation("form_mailing_direction_validation_message"))
+                .asRequired()
                 .withConverter(CohortDto::getName, cohort -> cohortService.getByName(cohort).orElse(cohortService.getAllCohorts().getFirst()))
                 .bind(SimpleMailing::getCohort, SimpleMailing::setCohort);
         binder.forField(form1.getDirection())
-                .withValidator(Objects::nonNull, getTranslation("form_mailing_direction_validation_message"))
+                .asRequired()
                 .withConverter(SimpleDirection::getName, direction -> directionService.getByName(direction).orElse(null))
                 .bind(SimpleMailing::getDirection, SimpleMailing::setDirection);
         binder.forField(form1.getCity())
-                .withValidator(Objects::nonNull, getTranslation("form_mailing_city_validation_message"))
+                .asRequired()
                 .withConverter(CityDto::getName, user -> cityService.getByName(user).orElse(null))
                 .bind(SimpleMailing::getCity, SimpleMailing::setCity);
+        binder.forField(form1.getCurator())
+                .withConverter(UserDto::getUserName, user -> userService.findCuratorByUserName(user).orElse(UserDto.builder().userName("").build()))
+                .bind(SimpleMailing::getCurator, SimpleMailing::setCurator);
         binder.forField(form1.getListBox())
                 .withValidator(s -> !s.isEmpty(), getTranslation("form_mailing_first_name_last_name_validation_message"))
                 .withConverter(
