@@ -31,5 +31,6 @@ public class PrimaryButton extends Button {
     private void init() {
         addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         addClassNames("border-12");
+        setMinHeight("40px");
     }
 }

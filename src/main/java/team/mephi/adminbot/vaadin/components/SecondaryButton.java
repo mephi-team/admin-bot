@@ -29,6 +29,7 @@ public class SecondaryButton extends Button {
 
     private void init() {
         addClassNames("border-12", LumoUtility.Background.TRANSPARENT, LumoUtility.Border.ALL, LumoUtility.BorderColor.PRIMARY);
+        setMinHeight("40px");
     }
 
 }

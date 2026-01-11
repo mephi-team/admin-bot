@@ -1,6 +1,7 @@
 :root{
     --lumo-primary-color: #2653ae;
     --lumo-primary-text-color: #2653ae;
+    --lumo-required-field-indicator: '\002A';
 }
 html, body, #outlet {
     overflow: hidden;
@@ -85,11 +86,21 @@ vaadin-virtual-list > div[role='listitem'] {
 vaadin-text-field.first::part(input-field) {
     border-end-end-radius: 0;
     border-start-end-radius: 0;
+    --_background: transparent;
+    outline: 1px solid var(--lumo-contrast-20pct);
+    border-end-start-radius: 12px;
+    border-start-start-radius: 12px;
+    min-height: 40px
 }
 
 vaadin-text-field.last::part(input-field) {
     border-end-start-radius: 0;
     border-start-start-radius: 0;
+    --_background: transparent;
+    outline: 1px solid var(--lumo-contrast-20pct);
+    border-end-end-radius: 12px;
+    border-start-end-radius: 12px;
+    min-height: 40px
 }
 
 vaadin-dialog-overlay::part(footer) {
@@ -107,6 +118,7 @@ vaadin-tab[theme~="neo"] {
     max-height: 28px;
     transition: background-color 0.2s;
     cursor: pointer;
+    font-size: var(--lumo-font-size-s);
 }
 
 vaadin-tab[theme~="neo"][selected] {
@@ -119,11 +131,16 @@ vaadin-tabsheet[theme~="neo"]::part(tabs-container) {
     box-shadow: none;
 }
 
-vaadin-text-field[theme~="neo"]::part(input-field) {
-    background: transparent;
+vaadin-text-field[theme~="neo"]::part(input-field),
+vaadin-email-field[theme~="neo"]::part(input-field),
+vaadin-combo-box[theme~="neo"]::part(input-field),
+vaadin-multi-select-combo-box[theme~="neo"]::part(input-field) {
+    --_background: transparent;
     outline: 1px solid var(--lumo-contrast-20pct);
+    outline-offset: -1px;
     border-radius: 12px;
-    margin: 3px;
+    min-height: 40px;
+    /*margin: 3px;*/
 }
 
 vaadin-grid[theme~="neo"] vaadin-checkbox {
