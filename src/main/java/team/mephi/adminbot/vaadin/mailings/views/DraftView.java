@@ -80,6 +80,8 @@ public class DraftView extends VerticalLayout {
             selectedIds = selection.getAllSelectedItems().stream().map(SimpleMailing::getId).toList();
             gsa.setCount(selectedIds.size());
         });
+        grid.setEmptyStateText(getTranslation("grid_mailing_empty_label"));
+
         provider.getFilterableProvider().addDataProviderListener(e -> {
             grid.deselectAll();
         });

@@ -57,6 +57,8 @@ public class TemplateView extends VerticalLayout {
             selectedIds = selection.getAllSelectedItems().stream().map(SimpleTemplate::getId).toList();
             gsa.setCount(selectedIds.size());
         });
+        grid.setEmptyStateText(getTranslation("grid_template_empty_label"));
+
         provider.getFilterableProvider().addDataProviderListener(e -> {
             grid.deselectAll();
         });
