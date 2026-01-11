@@ -13,6 +13,7 @@ import java.util.Collection;
 
 public class TopMenu extends HorizontalLayout {
     public TopMenu(AuthenticationContext authContext) {
+        getElement().getStyle().set("gap", "64px");
         Collection<String> userRoles = authContext.getGrantedRoles();
 
         addClassNames(LumoUtility.JustifyContent.CENTER,
@@ -20,16 +21,21 @@ public class TopMenu extends HorizontalLayout {
                 LumoUtility.Width.FULL);
 
         add(
-                new RouterLink(getTranslation("top_menu_communication_link"), Dialogs.class),
-                new RouterLink(getTranslation("top_menu_users_link"), Users.class)
+                createLink(getTranslation("top_menu_communication_link"), Dialogs.class),
+                createLink(getTranslation("top_menu_users_link"), Users.class)
         );
 
         if (userRoles.contains("ADMIN"))
-            add(new RouterLink(getTranslation("top_menu_analytics_link"), Analytics.class));
+            add(createLink(getTranslation("top_menu_analytics_link"), Analytics.class));
 
         setSizeFull();
 
         setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
     }
 
+    private RouterLink createLink( String text, Class<? extends com.vaadin.flow.component.Component> navigationTarget) {
+        var link = new RouterLink(text, navigationTarget);
+        link.addClassNames(LumoUtility.TextColor.BODY);
+        return link;
+    }
 }
