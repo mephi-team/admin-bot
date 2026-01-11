@@ -133,3 +133,12 @@ vaadin-grid[theme~="neo"] vaadin-checkbox {
     --vaadin-input-field-border-color: var(--lumo-primary-color);
     /*outline: 1px solid var(--lumo-contrast-20pct);*/
 }
+
+vaadin-app-layout::part(navbar) {
+    background-image: none;
+    box-shadow: 0 1px 6px 2px var(--lumo-contrast-20pct);
+}
+
+vaadin-app-layout::part(drawer) {
+    z-index: 1;
+}
