@@ -42,7 +42,7 @@ public class Users extends VerticalLayout implements BeforeEnterObserver {
             UserService userService
     ) {
         this.fileUploadDialog = uploaderFactory.create();
-
+        getElement().getStyle().set("padding-inline", "120px");
         setSizeFull();
         tabSheet.setSizeFull();
         tabSheet.addThemeVariants(TabSheetVariant.LUMO_TABS_MINIMAL);

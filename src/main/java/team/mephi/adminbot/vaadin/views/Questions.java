@@ -53,7 +53,7 @@ public class Questions extends VerticalLayout {
         );
 
         setSizeFull();
-
+        getElement().getStyle().set("padding-inline", "53px 120px");
         LocalDateTimeRenderer<SimpleQuestion> dateRenderer = new LocalDateTimeRenderer<>(
                 d -> Objects.isNull(d.getDate()) ? null : d.getDate().atZone(ZoneOffset.of("+03:00")).toLocalDateTime(),
                 () -> DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));

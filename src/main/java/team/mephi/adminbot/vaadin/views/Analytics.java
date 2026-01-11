@@ -10,7 +10,7 @@ import jakarta.annotation.security.RolesAllowed;
 public class Analytics extends VerticalLayout {
     public Analytics() {
         setSizeFull();
-
+        getElement().getStyle().set("padding-inline", "120px");
         add(new H1(getTranslation("page_analytics_title")));
     }
 }

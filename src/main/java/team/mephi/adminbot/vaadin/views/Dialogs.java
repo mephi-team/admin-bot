@@ -18,7 +18,7 @@ public class Dialogs extends VerticalLayout {
 
     public Dialogs(AuthenticationContext authContext, DialogRepository dialogRepository, MessageRepository messageRepository, UserRepository userRepository) {
         setSizeFull();
-
+        getElement().getStyle().set("padding-inline", "53px 120px");
         VerticalLayout leftColumn = new VerticalLayout();
         leftColumn.setPadding(false);
         leftColumn.setWidth("30%");

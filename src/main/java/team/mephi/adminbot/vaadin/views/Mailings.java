@@ -37,6 +37,7 @@ public class Mailings extends VerticalLayout {
             MailingCountService mailingCountService
     ) {
         setHeightFull();
+        getElement().getStyle().set("padding-inline", "53px 120px");
         tabSheet.setSizeFull();
         tabSheet.addThemeVariants(TabSheetVariant.LUMO_TABS_MINIMAL);
         tabSheet.addThemeName("neo");
