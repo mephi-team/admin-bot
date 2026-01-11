@@ -3,14 +3,13 @@ package team.mephi.adminbot.vaadin.mailings.views;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridMultiSelectionModel;
-import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
 import com.vaadin.flow.function.SerializableBiConsumer;
-import com.vaadin.flow.theme.lumo.LumoUtility;
 import team.mephi.adminbot.dto.SimpleMailing;
 import team.mephi.adminbot.vaadin.components.*;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.DraftDataProvider;
@@ -81,6 +80,7 @@ public class DraftView extends VerticalLayout {
             gsa.setCount(selectedIds.size());
         });
         grid.setEmptyStateText(getTranslation("grid_mailing_empty_label"));
+        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
 
         provider.getFilterableProvider().addDataProviderListener(e -> {
             grid.deselectAll();

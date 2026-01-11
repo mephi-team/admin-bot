@@ -4,6 +4,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridMultiSelectionModel;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -66,6 +67,7 @@ public class ExpertView extends VerticalLayout {
             gsa.setCount(selectedIds.size());
         });
         grid.setEmptyStateText(getTranslation("grid_expert_empty_label"));
+        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
 
         var searchField = new SearchField(getTranslation("grid_expert_search_placeholder"));
         searchField.addValueChangeListener(e -> provider.getFilterableProvider().setFilter(e.getValue()));

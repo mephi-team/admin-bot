@@ -4,6 +4,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridMultiSelectionModel;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -81,6 +82,9 @@ public class Questions extends VerticalLayout {
             selectedIds = selection.getAllSelectedItems().stream().map(SimpleQuestion::getId).toList();
             gsa.setCount(selectedIds.size());
         });
+        grid.setEmptyStateText(getTranslation("grid_question_empty_label"));
+        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
+
         provider.getFilterableProvider().addDataProviderListener(e -> {
             grid.deselectAll();
         });

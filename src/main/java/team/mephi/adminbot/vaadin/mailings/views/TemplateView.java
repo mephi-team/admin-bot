@@ -2,12 +2,11 @@ package team.mephi.adminbot.vaadin.mailings.views;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
-import com.vaadin.flow.theme.lumo.LumoUtility;
 import team.mephi.adminbot.dto.SimpleTemplate;
 import team.mephi.adminbot.vaadin.CRUDPresenter;
 import team.mephi.adminbot.vaadin.components.*;
@@ -58,6 +57,7 @@ public class TemplateView extends VerticalLayout {
             gsa.setCount(selectedIds.size());
         });
         grid.setEmptyStateText(getTranslation("grid_template_empty_label"));
+        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
 
         provider.getFilterableProvider().addDataProviderListener(e -> {
             grid.deselectAll();

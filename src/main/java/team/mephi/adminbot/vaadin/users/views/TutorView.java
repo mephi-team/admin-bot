@@ -4,6 +4,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridMultiSelectionModel;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -26,7 +27,7 @@ public class TutorView extends VerticalLayout {
     public TutorView(TutorPresenter actions) {
         TutorDataProviderImpl provider = (TutorDataProviderImpl) actions.getDataProvider();
         var gsa = new GridSelectActions(getTranslation("grid_users_actions_label"),
-                new Button(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), e -> {
+                new SecondaryButton(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), e -> {
                     if (!selectedIds.isEmpty())
                         actions.onDelete(selectedIds, DialogType.DELETE_USERS);
                 })
@@ -67,6 +68,7 @@ public class TutorView extends VerticalLayout {
             gsa.setCount(selectedIds.size());
         });
         grid.setEmptyStateText(getTranslation("grid_tutor_empty_label"));
+        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
 
         var searchField = new SearchField(getTranslation("grid_tutor_search_placeholder"));
         searchField.addValueChangeListener(e -> provider.getFilterableProvider().setFilter(e.getValue()));

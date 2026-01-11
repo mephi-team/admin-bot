@@ -2,6 +2,7 @@ package team.mephi.adminbot.vaadin.users.views;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -60,6 +61,7 @@ public class GuestsView extends VerticalLayout {
             gsa.setCount(selectedIds.size());
         });
         grid.setEmptyStateText(getTranslation("grid_guests_empty_label"));
+        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
 
         var searchField = new SearchField(getTranslation("grid_guests_search_placeholder"));
         searchField.addValueChangeListener(e -> provider.getFilterableProvider().setFilter(e.getValue()));
