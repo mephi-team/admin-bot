@@ -103,7 +103,8 @@ vaadin-text-field.last::part(input-field) {
     min-height: 40px
 }
 
-vaadin-dialog-overlay::part(footer) {
+vaadin-dialog-overlay::part(footer),
+vaadin-confirm-dialog-overlay::part(footer) {
     background: transparent;
 }
 
@@ -162,4 +163,11 @@ vaadin-app-layout::part(navbar) {
 
 vaadin-app-layout::part(drawer) {
     z-index: 1;
+}
+
+vaadin-tooltip-overlay::part(overlay) {
+    background-color: #162143;
+    color: #fff;
+    border-radius: 12px;
+    padding: 8px 12px;
 }

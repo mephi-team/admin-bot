@@ -65,7 +65,7 @@ public class Questions extends VerticalLayout {
         grid.addColumn(SimpleQuestion::getAuthor).setHeader(getTranslation("grid_question_header_author_label")).setSortable(true).setResizable(true).setKey("user");
         grid.addColumn(SimpleQuestion::getRole).setHeader(getTranslation("grid_question_header_role_label")).setSortable(true).setResizable(true).setKey("role");
         grid.addColumn(SimpleQuestion::getDirection).setHeader(getTranslation("grid_question_header_direction_label")).setSortable(true).setResizable(true).setKey("direction");
-        grid.addColumn(SimpleQuestion::getAnswer).setHeader(getTranslation("grid_question_header_answer_label")).setResizable(true).setKey("answers");
+        grid.addColumn(SimpleQuestion::getAnswer).setHeader(getTranslation("grid_question_header_answer_label")).setTooltipGenerator(SimpleQuestion::getAnswer).setResizable(true).setKey("answers");
 
         grid.addComponentColumn(item -> {
             Button responseButton = new TextButton(getTranslation("grid_question_action_answer_label"), e -> onAnswer(item));

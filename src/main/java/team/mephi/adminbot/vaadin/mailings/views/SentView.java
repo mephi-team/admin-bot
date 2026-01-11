@@ -61,7 +61,7 @@ public class SentView extends VerticalLayout {
         grid.addColumn(SimpleMailing::getDirection).setHeader(getTranslation("grid_mailing_header_direction_label")).setSortable(true).setResizable(true).setKey("filters->>'direction'");
         grid.addColumn(SimpleMailing::getCurator).setHeader(getTranslation("grid_mailing_header_curator_label")).setSortable(true).setResizable(true).setKey("filters->>'curator'");
         grid.addColumn(SimpleMailing::getCity).setHeader(getTranslation("grid_mailing_header_city_label")).setSortable(true).setResizable(true).setKey("filters->>'city'");
-        grid.addColumn(SimpleMailing::getText).setHeader(getTranslation("grid_mailing_header_text_label")).setSortable(true).setResizable(true).setKey("description");
+        grid.addColumn(SimpleMailing::getText).setHeader(getTranslation("grid_mailing_header_text_label")).setTooltipGenerator(SimpleMailing::getText).setSortable(true).setResizable(true).setKey("description");
         grid.addColumn(createStatusComponentRenderer()).setHeader(getTranslation("grid_mailing_header_status_label")).setSortable(true).setResizable(true).setWidth("110px").setKey("status");
 
         grid.addComponentColumn(item -> {

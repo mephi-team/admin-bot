@@ -40,7 +40,7 @@ public class TemplateView extends VerticalLayout {
 
         Grid<SimpleTemplate> grid = new Grid<>(SimpleTemplate.class, false);
         grid.addColumn(SimpleTemplate::getName).setHeader(getTranslation("grid_template_header_name_label")).setWidth("300px").setFlexGrow(0).setSortable(true).setResizable(true).setKey("name");
-        grid.addColumn(SimpleTemplate::getText).setHeader(getTranslation("grid_template_header_text_label")).setSortable(true).setResizable(true).setKey("bodyText");
+        grid.addColumn(SimpleTemplate::getText).setHeader(getTranslation("grid_template_header_text_label")).setTooltipGenerator(SimpleTemplate::getText).setSortable(true).setResizable(true).setKey("bodyText");
         grid.addColumn(dateRenderer).setHeader(getTranslation("grid_template_header_date_label")).setSortable(true).setResizable(true).setKey("createdAt");
 
         grid.addComponentColumn(item -> {

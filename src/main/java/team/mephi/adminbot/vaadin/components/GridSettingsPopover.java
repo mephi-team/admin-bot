@@ -32,6 +32,7 @@ public class GridSettingsPopover extends Popover {
 
         CheckboxGroup<String> group = new CheckboxGroup<>();
         group.addThemeVariants(CheckboxGroupVariant.LUMO_VERTICAL);
+        group.addThemeName("neo");
         group.setItems(columns);
         group.setItemLabelGenerator((item) -> {
             var label = Arrays.stream(item.replaceAll("[^a-zA-Z\\s]", " ").replaceAll("(?<=\\p{Lower})(?=\\p{Upper})", " ").toLowerCase().split("\\s+")).filter(s -> !s.isEmpty()).collect(Collectors.joining("_"));

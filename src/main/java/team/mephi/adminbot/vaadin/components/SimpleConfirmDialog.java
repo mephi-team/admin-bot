@@ -18,10 +18,6 @@ public class SimpleConfirmDialog extends ConfirmDialog {
     @Setter
     private Runnable onConfirm;
 
-    public SimpleConfirmDialog(String title, String text, String action) {
-        this(title, text, action, VaadinIcon.TRASH.create(), null);
-    }
-
     public SimpleConfirmDialog(String title, String text, String action, Icon actionIcon, Runnable onConfirm) {
         this.header = title;
         this.text = text;
