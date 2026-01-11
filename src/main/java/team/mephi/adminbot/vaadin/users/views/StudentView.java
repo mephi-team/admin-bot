@@ -48,7 +48,6 @@ public class StudentView extends VerticalLayout {
         grid.addColumn(t -> t.getTutor().getFullName()).setHeader(getTranslation("grid_student_header_tutor_label")).setResizable(true).setKey("tutor");
 
         grid.addComponentColumn(item -> {
-            Span group = new Span();
             Button dropButton = new TextButton(getTranslation("grid_student_action_drop_label"), VaadinIcon.CLOSE.create(), e -> actions.onExpel(List.of(item.getId()), DialogType.EXPEL_USERS));
             Button viewButton = new IconButton(VaadinIcon.EYE.create(), e -> actions.onView(item, DialogType.USERS_VIEW));
             Button chatButton = new IconButton(VaadinIcon.CHAT.create(), e -> UI.getCurrent().navigate(Dialogs.class, QueryParameters.of("userId", item.getId().toString())));
@@ -59,8 +58,7 @@ public class StudentView extends VerticalLayout {
             } else {
                 blockButton.addClassNames(LumoUtility.TextColor.BODY);
             }
-            group.add(dropButton, viewButton, chatButton, editButton, blockButton);
-            return group;
+            return new ButtonGroup(dropButton, viewButton, chatButton, editButton, blockButton);
         }).setHeader(getTranslation("grid_header_actions_label")).setWidth("320px").setFlexGrow(0).setKey("actions");
 
         grid.setDataProvider(provider.getDataProvider());

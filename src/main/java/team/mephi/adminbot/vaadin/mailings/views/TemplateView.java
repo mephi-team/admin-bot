@@ -45,12 +45,9 @@ public class TemplateView extends VerticalLayout {
         grid.addColumn(dateRenderer).setHeader(getTranslation("grid_template_header_date_label")).setSortable(true).setResizable(true).setKey("createdAt");
 
         grid.addComponentColumn(item -> {
-            Div group = new Div();
-            group.addClassNames(LumoUtility.TextAlignment.RIGHT);
             Button editButton = new IconButton(VaadinIcon.EDIT.create(), e -> actions.onEdit(item, DialogType.TEMPLATE_SAVED));
             Button deleteButton = new IconButton(VaadinIcon.TRASH.create(), e -> actions.onDelete(List.of(item.getId()), DialogType.DELETE_TEMPLATE));
-            group.add(editButton, deleteButton);
-            return group;
+            return new ButtonGroup(editButton, deleteButton);
         }).setHeader(getTranslation("grid_header_actions_label")).setWidth("120px").setFlexGrow(0).setKey("actions");
 
         grid.setDataProvider(provider.getDataProvider());

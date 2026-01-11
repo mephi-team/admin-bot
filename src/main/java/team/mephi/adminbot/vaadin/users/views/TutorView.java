@@ -55,7 +55,7 @@ public class TutorView extends VerticalLayout {
             } else {
                 blockButton.addClassNames(LumoUtility.TextColor.BODY);
             }
-            return new Span(dropButton, viewButton, chatButton, editButton, blockButton);
+            return new ButtonGroup(dropButton, viewButton, chatButton, editButton, blockButton);
         }).setHeader(getTranslation("grid_header_actions_label")).setWidth("314px").setFlexGrow(0).setKey("actions");
 
         grid.setDataProvider(provider.getDataProvider());

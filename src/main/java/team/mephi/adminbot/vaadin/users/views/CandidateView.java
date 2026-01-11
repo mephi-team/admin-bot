@@ -66,7 +66,7 @@ public class CandidateView extends VerticalLayout {
             } else {
                 blockButton.addClassNames(LumoUtility.TextColor.BODY);
             }
-            return new Span(rejectButton, confirmButton, viewButton, chatButton, editButton, blockButton);
+            return new ButtonGroup(rejectButton, confirmButton, viewButton, chatButton, editButton, blockButton);
         }).setHeader(getTranslation("grid_header_actions_label")).setWidth("280px").setFlexGrow(0).setKey("actions");
 
         grid.setDataProvider(provider.getDataProvider());

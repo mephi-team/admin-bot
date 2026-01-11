@@ -67,13 +67,11 @@ public class Questions extends VerticalLayout {
         grid.addColumn(SimpleQuestion::getAnswer).setHeader(getTranslation("grid_question_header_answer_label")).setResizable(true).setKey("answers");
 
         grid.addComponentColumn(item -> {
-            Span group = new Span();
             Button responseButton = new TextButton(getTranslation("grid_question_action_answer_label"), e -> onAnswer(item));
             Button chatButton = new IconButton(VaadinIcon.CHAT.create(),e -> UI.getCurrent().navigate(Dialogs.class, QueryParameters.of("userId", "" + item.getAuthorId())));
             Button deleteButton = new IconButton(VaadinIcon.TRASH.create(), e -> onDelete(List.of(item.getId())));
-            group.add(responseButton, chatButton, deleteButton);
-            return group;
-        }).setHeader(getTranslation("grid_header_actions_label")).setWidth("220px").setFlexGrow(0).setKey("actions");
+            return new ButtonGroup(responseButton, chatButton, deleteButton);
+        }).setHeader(getTranslation("grid_header_actions_label")).setWidth("210px").setFlexGrow(0).setKey("actions");
 
         grid.setDataProvider(provider.getDataProvider());
         GridMultiSelectionModel<?> selectionModel = (GridMultiSelectionModel<?>) grid.setSelectionMode(Grid.SelectionMode.MULTI);

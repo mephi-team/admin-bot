@@ -49,7 +49,7 @@ public class GuestsView extends VerticalLayout {
             } else {
                 blockButton.addClassNames(LumoUtility.TextColor.BODY);
             }
-            return new Span(viewButton, blockButton);
+            return new ButtonGroup(viewButton, blockButton);
         }).setHeader(getTranslation("grid_header_actions_label")).setWidth("112px").setFlexGrow(0).setKey("actions");
 
         grid.setDataProvider(provider.getDataProvider());

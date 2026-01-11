@@ -66,15 +66,12 @@ public class SentView extends VerticalLayout {
         grid.addColumn(createStatusComponentRenderer()).setHeader(getTranslation("grid_mailing_header_status_label")).setSortable(true).setResizable(true).setWidth("110px").setKey("status");
 
         grid.addComponentColumn(item -> {
-            Div group = new Div();
-            group.addClassNames(LumoUtility.TextAlignment.RIGHT);
             Button retryButton = new IconButton(VaadinIcon.ROTATE_RIGHT.create(), e -> actions.onRetry(item, DialogType.RETRY_MAILING));
             retryButton.setVisible(item.getStatus().equals("PAUSED") || item.getStatus().equals("ERROR"));
             Button cancelButton = new IconButton(VaadinIcon.CLOSE_CIRCLE_O.create(), e -> actions.onCancel(item, DialogType.CANCEL_MAILING));
             cancelButton.setVisible(item.getStatus().equals("ACTIVE"));
             Button deleteButton = new IconButton(VaadinIcon.TRASH.create(), e -> actions.onDelete(List.of(item.getId()), DialogType.DELETE_MAILING));
-            group.add(retryButton, cancelButton, deleteButton);
-            return group;
+            return new ButtonGroup(retryButton, cancelButton, deleteButton);
         }).setHeader(getTranslation("grid_header_actions_label")).setWidth("120px").setFlexGrow(0).setKey("actions");
 
         grid.setDataProvider(provider.getDataProvider());
