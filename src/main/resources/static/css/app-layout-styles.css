@@ -99,3 +99,22 @@ vaadin-dialog-overlay::part(footer) {
 .border-12 {
     border-radius: 12px;
 }
+
+vaadin-tab[theme~="neo"] {
+    border-radius: 16px;
+    margin: 4px 8px;
+    padding: 0 12px;
+    max-height: 28px;
+    transition: background-color 0.2s;
+    cursor: pointer;
+}
+
+vaadin-tab[theme~="neo"][selected] {
+    background-color: var(--lumo-primary-color);
+    color: var(--lumo-primary-contrast-color);
+}
+
+vaadin-tabsheet[theme~="neo"]::part(tabs-container) {
+    border-bottom: none;
+    box-shadow: none;
+}
