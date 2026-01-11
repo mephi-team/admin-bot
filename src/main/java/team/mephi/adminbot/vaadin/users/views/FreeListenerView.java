@@ -4,6 +4,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridMultiSelectionModel;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -26,7 +27,7 @@ public class FreeListenerView extends VerticalLayout {
     public FreeListenerView(StudentPresenter actions) {
         FreeListenerDataProvider provider = (FreeListenerDataProvider) actions.getDataProvider();
         var gsa = new GridSelectActions(getTranslation("grid_users_actions_label"),
-                new Button(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), e -> {
+                new SecondaryButton(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), e -> {
                     if (!selectedIds.isEmpty())
                         actions.onDelete(selectedIds, DialogType.DELETE_USERS);
                 })
@@ -56,8 +57,8 @@ public class FreeListenerView extends VerticalLayout {
             } else {
                 blockButton.addClassNames(LumoUtility.TextColor.BODY);
             }
-            return new Span(dropButton, viewButton, chatButton, editButton, blockButton);
-        }).setHeader(getTranslation("grid_header_actions_label")).setWidth("329px").setFlexGrow(0).setKey("actions");
+            return new ButtonGroup(dropButton, viewButton, chatButton, editButton, blockButton);
+        }).setHeader(getTranslation("grid_header_actions_label")).setWidth("320px").setFlexGrow(0).setKey("actions");
 
         grid.setDataProvider(provider.getDataProvider());
         GridMultiSelectionModel<SimpleUser> selectionModel = (GridMultiSelectionModel<SimpleUser>) grid.setSelectionMode(Grid.SelectionMode.MULTI);
@@ -67,6 +68,9 @@ public class FreeListenerView extends VerticalLayout {
             selectedIds = sel.getAllSelectedItems().stream().map(SimpleUser::getId).toList();
             gsa.setCount(selectedIds.size());
         });
+        grid.setEmptyStateText(getTranslation("grid_free_listener_empty_label"));
+        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
+        grid.addThemeName("neo");
 
         var searchField = new SearchField(getTranslation("grid_free_listener_search_placeholder"));
         searchField.addValueChangeListener(e -> provider.getFilterableProvider().setFilter(e.getValue()));

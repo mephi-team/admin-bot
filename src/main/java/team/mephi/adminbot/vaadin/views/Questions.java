@@ -4,6 +4,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridMultiSelectionModel;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -44,7 +45,7 @@ public class Questions extends VerticalLayout {
         add(new H1(getTranslation("page_question_title")));
 
         var gsa = new GridSelectActions(getTranslation("grid_question_actions_label"),
-                new Button(getTranslation("grid_question_actions_delete_label"), VaadinIcon.TRASH.create(), e -> {
+                new SecondaryButton(getTranslation("grid_question_actions_delete_label"), VaadinIcon.TRASH.create(), e -> {
                     if (!selectedIds.isEmpty()) {
                         onDelete(selectedIds);
                     }
@@ -67,13 +68,11 @@ public class Questions extends VerticalLayout {
         grid.addColumn(SimpleQuestion::getAnswer).setHeader(getTranslation("grid_question_header_answer_label")).setResizable(true).setKey("answers");
 
         grid.addComponentColumn(item -> {
-            Span group = new Span();
             Button responseButton = new TextButton(getTranslation("grid_question_action_answer_label"), e -> onAnswer(item));
             Button chatButton = new IconButton(VaadinIcon.CHAT.create(),e -> UI.getCurrent().navigate(Dialogs.class, QueryParameters.of("userId", "" + item.getAuthorId())));
             Button deleteButton = new IconButton(VaadinIcon.TRASH.create(), e -> onDelete(List.of(item.getId())));
-            group.add(responseButton, chatButton, deleteButton);
-            return group;
-        }).setHeader(getTranslation("grid_header_actions_label")).setWidth("220px").setFlexGrow(0).setKey("actions");
+            return new ButtonGroup(responseButton, chatButton, deleteButton);
+        }).setHeader(getTranslation("grid_header_actions_label")).setWidth("210px").setFlexGrow(0).setKey("actions");
 
         grid.setDataProvider(provider.getDataProvider());
         GridMultiSelectionModel<?> selectionModel = (GridMultiSelectionModel<?>) grid.setSelectionMode(Grid.SelectionMode.MULTI);
@@ -83,6 +82,10 @@ public class Questions extends VerticalLayout {
             selectedIds = selection.getAllSelectedItems().stream().map(SimpleQuestion::getId).toList();
             gsa.setCount(selectedIds.size());
         });
+        grid.setEmptyStateText(getTranslation("grid_question_empty_label"));
+        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
+        grid.addThemeName("neo");
+
         provider.getFilterableProvider().addDataProviderListener(e -> {
             grid.deselectAll();
         });

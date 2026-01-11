@@ -92,6 +92,44 @@ vaadin-text-field.last::part(input-field) {
     border-start-start-radius: 0;
 }
 
+vaadin-dialog-overlay::part(footer) {
+    background: transparent;
+}
+
 .border-12 {
     border-radius: 12px;
+}
+
+vaadin-tab[theme~="neo"] {
+    border-radius: 16px;
+    margin: 4px 8px;
+    padding: 0 12px;
+    max-height: 28px;
+    transition: background-color 0.2s;
+    cursor: pointer;
+}
+
+vaadin-tab[theme~="neo"][selected] {
+    background-color: var(--lumo-primary-color);
+    color: var(--lumo-primary-contrast-color);
+}
+
+vaadin-tabsheet[theme~="neo"]::part(tabs-container) {
+    border-bottom: none;
+    box-shadow: none;
+}
+
+vaadin-text-field[theme~="neo"]::part(input-field) {
+    background: transparent;
+    outline: 1px solid var(--lumo-contrast-20pct);
+    border-radius: 12px;
+    margin: 3px;
+}
+
+vaadin-grid[theme~="neo"] vaadin-checkbox {
+    --vaadin-input-field-border-width: 1px;
+    --vaadin-checkbox-background: transparent;
+    --vaadin-checkbox-background-hover: var(--lumo-primary-color-10pct);
+    --vaadin-input-field-border-color: var(--lumo-primary-color);
+    /*outline: 1px solid var(--lumo-contrast-20pct);*/
 }

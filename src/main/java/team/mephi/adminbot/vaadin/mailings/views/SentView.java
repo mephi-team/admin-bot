@@ -3,13 +3,12 @@ package team.mephi.adminbot.vaadin.mailings.views;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridMultiSelectionModel;
-import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.renderer.*;
 import com.vaadin.flow.function.SerializableBiConsumer;
-import com.vaadin.flow.theme.lumo.LumoUtility;
 import team.mephi.adminbot.dto.SimpleMailing;
 import team.mephi.adminbot.vaadin.components.*;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.SentDataProvider;
@@ -40,7 +39,7 @@ public class SentView extends VerticalLayout {
     public SentView(MailingsPresenter actions) {
         SentDataProvider provider = (SentDataProvider) actions.getDataProvider();
         var gsa = new GridSelectActions(getTranslation("grid_mailing_actions_label"),
-                new Button(getTranslation("grid_mailing_actions_delete_label"), VaadinIcon.TRASH.create(), e -> {
+                new SecondaryButton(getTranslation("grid_mailing_actions_delete_label"), VaadinIcon.TRASH.create(), e -> {
                     if (!selectedIds.isEmpty()) {
                         actions.onDelete(selectedIds, selectedIds.size() > 1 ? DialogType.DELETE_MAILING_ALL : DialogType.DELETE_MAILING, String.valueOf(selectedIds.size()));
                     }
@@ -66,15 +65,12 @@ public class SentView extends VerticalLayout {
         grid.addColumn(createStatusComponentRenderer()).setHeader(getTranslation("grid_mailing_header_status_label")).setSortable(true).setResizable(true).setWidth("110px").setKey("status");
 
         grid.addComponentColumn(item -> {
-            Div group = new Div();
-            group.addClassNames(LumoUtility.TextAlignment.RIGHT);
             Button retryButton = new IconButton(VaadinIcon.ROTATE_RIGHT.create(), e -> actions.onRetry(item, DialogType.RETRY_MAILING));
             retryButton.setVisible(item.getStatus().equals("PAUSED") || item.getStatus().equals("ERROR"));
             Button cancelButton = new IconButton(VaadinIcon.CLOSE_CIRCLE_O.create(), e -> actions.onCancel(item, DialogType.CANCEL_MAILING));
             cancelButton.setVisible(item.getStatus().equals("ACTIVE"));
             Button deleteButton = new IconButton(VaadinIcon.TRASH.create(), e -> actions.onDelete(List.of(item.getId()), DialogType.DELETE_MAILING));
-            group.add(retryButton, cancelButton, deleteButton);
-            return group;
+            return new ButtonGroup(retryButton, cancelButton, deleteButton);
         }).setHeader(getTranslation("grid_header_actions_label")).setWidth("120px").setFlexGrow(0).setKey("actions");
 
         grid.setDataProvider(provider.getDataProvider());
@@ -85,6 +81,10 @@ public class SentView extends VerticalLayout {
             selectedIds = selection.getAllSelectedItems().stream().map(SimpleMailing::getId).toList();
             gsa.setCount(selectedIds.size());
         });
+        grid.setEmptyStateText(getTranslation("grid_mailing_empty_label"));
+        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
+        grid.addThemeName("neo");
+
         provider.getFilterableProvider().addDataProviderListener(e -> {
             grid.deselectAll();
         });

@@ -1,7 +1,6 @@
 package team.mephi.adminbot.vaadin.views;
 
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -9,6 +8,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.TabSheet;
+import com.vaadin.flow.component.tabs.TabSheetVariant;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
 import team.mephi.adminbot.vaadin.*;
@@ -38,6 +38,8 @@ public class Mailings extends VerticalLayout {
     ) {
         setHeightFull();
         tabSheet.setSizeFull();
+        tabSheet.addThemeVariants(TabSheetVariant.LUMO_TABS_MINIMAL);
+        tabSheet.addThemeName("neo");
         add(createHeader(), tabSheet);
 
         tabProviders.sort(Comparator.comparingInt(MailingTabProvider::getPosition));
@@ -52,7 +54,9 @@ public class Mailings extends VerticalLayout {
 
             var userCount = mailingCountService.getAllCounts().getOrDefault(provider.getTabId().name(), 0L);
             Span tabContent = new Span(new Span(getTranslation(provider.getTabLabel())), new UserCountBadge(userCount));
-            tabSheet.add(new Tab(tabContent), content, provider.getPosition());
+            var tab = new Tab(tabContent);
+            tab.addThemeName("neo");
+            tabSheet.add(tab, content, provider.getPosition());
         }
         tabSheet.addSelectedChangeListener(a -> {
            if (tabSheet.getSelectedIndex() == 1) {

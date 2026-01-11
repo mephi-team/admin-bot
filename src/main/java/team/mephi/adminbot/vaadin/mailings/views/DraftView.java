@@ -3,14 +3,13 @@ package team.mephi.adminbot.vaadin.mailings.views;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridMultiSelectionModel;
-import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
 import com.vaadin.flow.function.SerializableBiConsumer;
-import com.vaadin.flow.theme.lumo.LumoUtility;
 import team.mephi.adminbot.dto.SimpleMailing;
 import team.mephi.adminbot.vaadin.components.*;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.DraftDataProvider;
@@ -41,7 +40,7 @@ public class DraftView extends VerticalLayout {
     public DraftView(MailingsPresenter actions) {
         DraftDataProvider provider = (DraftDataProvider) actions.getDataProvider();
         var gsa = new GridSelectActions(getTranslation("grid_mailing_actions_label"),
-                new Button(getTranslation("grid_mailing_actions_delete_label"), VaadinIcon.TRASH.create(), e -> {
+                new SecondaryButton(getTranslation("grid_mailing_actions_delete_label"), VaadinIcon.TRASH.create(), e -> {
                     if (!selectedIds.isEmpty()) {
                         actions.onDelete(selectedIds, selectedIds.size() > 1 ? DialogType.DELETE_MAILING_ALL : DialogType.DELETE_MAILING, selectedIds.size());
                     }
@@ -67,12 +66,9 @@ public class DraftView extends VerticalLayout {
         grid.addColumn(createStatusComponentRenderer()).setHeader(getTranslation("grid_mailing_header_status_label")).setSortable(true).setResizable(true).setKey("status");
 
         grid.addComponentColumn(item -> {
-            Div group = new Div();
-            group.addClassNames(LumoUtility.TextAlignment.RIGHT);
             Button editButton = new IconButton(VaadinIcon.EDIT.create(), e -> actions.onEdit(item, DialogType.MAILING_SAVED));
             Button deleteButton = new IconButton(VaadinIcon.TRASH.create(), e -> actions.onDelete(List.of(item.getId()), DialogType.DELETE_MAILING));
-            group.add(editButton, deleteButton);
-            return group;
+            return new ButtonGroup(editButton, deleteButton);
         }).setHeader(getTranslation("grid_header_actions_label")).setWidth("120px").setFlexGrow(0).setKey("actions");
 
         grid.setDataProvider(provider.getDataProvider());
@@ -83,6 +79,10 @@ public class DraftView extends VerticalLayout {
             selectedIds = selection.getAllSelectedItems().stream().map(SimpleMailing::getId).toList();
             gsa.setCount(selectedIds.size());
         });
+        grid.setEmptyStateText(getTranslation("grid_mailing_empty_label"));
+        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
+        grid.addThemeName("neo");
+
         provider.getFilterableProvider().addDataProviderListener(e -> {
             grid.deselectAll();
         });

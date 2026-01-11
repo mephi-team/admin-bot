@@ -7,8 +7,7 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.tabs.Tab;
-import com.vaadin.flow.component.tabs.TabSheet;
+import com.vaadin.flow.component.tabs.*;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.security.RolesAllowed;
@@ -46,6 +45,8 @@ public class Users extends VerticalLayout implements BeforeEnterObserver {
 
         setSizeFull();
         tabSheet.setSizeFull();
+        tabSheet.addThemeVariants(TabSheetVariant.LUMO_TABS_MINIMAL);
+        tabSheet.addThemeName("neo");
         add(createHeader(), tabSheet);
 
         tabProviders.sort(Comparator.comparingInt(UserTabProvider::getPosition));
@@ -61,7 +62,9 @@ public class Users extends VerticalLayout implements BeforeEnterObserver {
 
             var userCount = userService.getAllCounts().getOrDefault(provider.getTabId().name(), 0L);
             Span tabContent = new Span(new Span(getTranslation(provider.getTabLabel())), new UserCountBadge(userCount));
-            tabSheet.add(new Tab(tabContent), content, provider.getPosition());
+            var tab = new Tab(tabContent);
+            tab.addThemeName("neo");
+            tabSheet.add(tab, content, provider.getPosition());
         }
         tabSheet.addSelectedChangeListener(e -> {
             var selectedTab = tabSheet.getSelectedIndex();

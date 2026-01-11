@@ -4,6 +4,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridMultiSelectionModel;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -26,15 +27,15 @@ public class CandidateView extends VerticalLayout {
     public CandidateView(UsersPresenter actions) {
         CandidateDataProvider provider = (CandidateDataProvider) actions.getDataProvider();
         var gsa = new GridSelectActions(getTranslation("grid_users_actions_label"),
-                new Button(getTranslation("grid_candidate_actions_accept_label"), VaadinIcon.CHECK.create(), e -> {
+                new SecondaryButton(getTranslation("grid_candidate_actions_accept_label"), VaadinIcon.CHECK.create(), e -> {
                     if (!selectedIds.isEmpty())
                         actions.onAccept(selectedIds, selectedIds.size() > 1 ? DialogType.ACCEPT_USERS_ALL : DialogType.ACCEPT_USERS, "" + selectedIds.size());
                 }),
-                new Button(getTranslation("grid_candidate_actions_reject_label"), VaadinIcon.CLOSE.create(), e -> {
+                new SecondaryButton(getTranslation("grid_candidate_actions_reject_label"), VaadinIcon.CLOSE.create(), e -> {
                     if (!selectedIds.isEmpty())
                         actions.onReject(selectedIds, selectedIds.size() > 1 ? DialogType.REJECT_USERS_ALL : DialogType.REJECT_USERS, "" + selectedIds.size());
                 }),
-                new Button(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), e -> {
+                new SecondaryButton(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), e -> {
                     if (!selectedIds.isEmpty())
                         actions.onDelete(selectedIds, DialogType.DELETE_USERS);
                 })
@@ -55,8 +56,8 @@ public class CandidateView extends VerticalLayout {
         grid.addColumn(SimpleUser::getCity).setHeader(getTranslation("grid_candidate_header_city_label")).setSortable(true).setResizable(true).setKey("city");
 
         grid.addComponentColumn(item -> {
-            Button confirmButton = new IconButton(VaadinIcon.CHECK.create(), e -> actions.onAccept(List.of(item.getId()), DialogType.ACCEPT_USERS));
-            Button rejectButton = new IconButton(VaadinIcon.CLOSE.create(), e -> actions.onReject(List.of(item.getId()), DialogType.REJECT_USERS));
+            Button rejectButton = new SecondaryIconButton(VaadinIcon.CLOSE.create(), e -> actions.onReject(List.of(item.getId()), DialogType.REJECT_USERS));
+            Button confirmButton = new PrimaryIconButton(VaadinIcon.CHECK.create(), e -> actions.onAccept(List.of(item.getId()), DialogType.ACCEPT_USERS));
             Button viewButton = new IconButton(VaadinIcon.EYE.create(), e -> actions.onView(item, DialogType.USERS_VIEW));
             Button chatButton = new IconButton(VaadinIcon.CHAT.create(), e -> UI.getCurrent().navigate(Dialogs.class, QueryParameters.of("userId", item.getId().toString())));
             Button editButton = new IconButton(VaadinIcon.PENCIL.create(), e -> actions.onEdit(item, DialogType.USERS_EDIT));
@@ -66,8 +67,8 @@ public class CandidateView extends VerticalLayout {
             } else {
                 blockButton.addClassNames(LumoUtility.TextColor.BODY);
             }
-            return new Span(rejectButton, confirmButton, viewButton, chatButton, editButton, blockButton);
-        }).setHeader(getTranslation("grid_header_actions_label")).setWidth("272px").setFlexGrow(0).setKey("actions");
+            return new ButtonGroup(rejectButton, confirmButton, viewButton, chatButton, editButton, blockButton);
+        }).setHeader(getTranslation("grid_header_actions_label")).setWidth("280px").setFlexGrow(0).setKey("actions");
 
         grid.setDataProvider(provider.getDataProvider());
         GridMultiSelectionModel<SimpleUser> selectionModel = (GridMultiSelectionModel<SimpleUser>) grid.setSelectionMode(Grid.SelectionMode.MULTI);
@@ -77,6 +78,9 @@ public class CandidateView extends VerticalLayout {
             selectedIds = sel.getAllSelectedItems().stream().map(SimpleUser::getId).toList();
             gsa.setCount(selectedIds.size());
         });
+        grid.setEmptyStateText(getTranslation("grid_candidate_empty_label"));
+        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
+        grid.addThemeName("neo");
 
         var searchField = new SearchField(getTranslation("grid_candidate_search_placeholder"));
         searchField.addValueChangeListener(e -> provider.getFilterableProvider().setFilter(e.getValue()));

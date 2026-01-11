@@ -2,12 +2,11 @@ package team.mephi.adminbot.vaadin.mailings.views;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
-import com.vaadin.flow.theme.lumo.LumoUtility;
 import team.mephi.adminbot.dto.SimpleTemplate;
 import team.mephi.adminbot.vaadin.CRUDPresenter;
 import team.mephi.adminbot.vaadin.components.*;
@@ -25,7 +24,7 @@ public class TemplateView extends VerticalLayout {
     public TemplateView(CRUDPresenter<SimpleTemplate> actions) {
         TemplateDataProvider provider = (TemplateDataProvider) actions.getDataProvider();
         var gsa = new GridSelectActions(getTranslation("grid_template_actions_label"),
-                new Button(getTranslation("grid_template_actions_delete_label"), VaadinIcon.TRASH.create(), e -> {
+                new SecondaryButton(getTranslation("grid_template_actions_delete_label"), VaadinIcon.TRASH.create(), e -> {
                     if (!selectedIds.isEmpty()) {
                         actions.onDelete(selectedIds, selectedIds.size() > 1 ? DialogType.DELETE_TEMPLATE_ALL : DialogType.DELETE_TEMPLATE, "" + selectedIds.size());
                     }
@@ -45,12 +44,9 @@ public class TemplateView extends VerticalLayout {
         grid.addColumn(dateRenderer).setHeader(getTranslation("grid_template_header_date_label")).setSortable(true).setResizable(true).setKey("createdAt");
 
         grid.addComponentColumn(item -> {
-            Div group = new Div();
-            group.addClassNames(LumoUtility.TextAlignment.RIGHT);
             Button editButton = new IconButton(VaadinIcon.EDIT.create(), e -> actions.onEdit(item, DialogType.TEMPLATE_SAVED));
             Button deleteButton = new IconButton(VaadinIcon.TRASH.create(), e -> actions.onDelete(List.of(item.getId()), DialogType.DELETE_TEMPLATE));
-            group.add(editButton, deleteButton);
-            return group;
+            return new ButtonGroup(editButton, deleteButton);
         }).setHeader(getTranslation("grid_header_actions_label")).setWidth("120px").setFlexGrow(0).setKey("actions");
 
         grid.setDataProvider(provider.getDataProvider());
@@ -60,6 +56,10 @@ public class TemplateView extends VerticalLayout {
             selectedIds = selection.getAllSelectedItems().stream().map(SimpleTemplate::getId).toList();
             gsa.setCount(selectedIds.size());
         });
+        grid.setEmptyStateText(getTranslation("grid_template_empty_label"));
+        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
+        grid.addThemeName("neo");
+
         provider.getFilterableProvider().addDataProviderListener(e -> {
             grid.deselectAll();
         });

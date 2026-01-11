@@ -2,6 +2,7 @@ package team.mephi.adminbot.vaadin.users.views;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -22,7 +23,7 @@ public class GuestsView extends VerticalLayout {
     public GuestsView(BlockingPresenter actions) {
         GuestsDataProvider provider = (GuestsDataProvider) actions.getDataProvider();
         var gsa = new GridSelectActions(getTranslation("grid_users_actions_label"),
-                new Button(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), e -> {
+                new SecondaryButton(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), e -> {
                     if (!selectedIds.isEmpty())
                         actions.onDelete(selectedIds, DialogType.DELETE_USERS);
                 })
@@ -49,7 +50,7 @@ public class GuestsView extends VerticalLayout {
             } else {
                 blockButton.addClassNames(LumoUtility.TextColor.BODY);
             }
-            return new Span(viewButton, blockButton);
+            return new ButtonGroup(viewButton, blockButton);
         }).setHeader(getTranslation("grid_header_actions_label")).setWidth("112px").setFlexGrow(0).setKey("actions");
 
         grid.setDataProvider(provider.getDataProvider());
@@ -59,6 +60,9 @@ public class GuestsView extends VerticalLayout {
             selectedIds = sel.getAllSelectedItems().stream().map(SimpleUser::getId).toList();
             gsa.setCount(selectedIds.size());
         });
+        grid.setEmptyStateText(getTranslation("grid_guests_empty_label"));
+        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
+        grid.addThemeName("neo");
 
         var searchField = new SearchField(getTranslation("grid_guests_search_placeholder"));
         searchField.addValueChangeListener(e -> provider.getFilterableProvider().setFilter(e.getValue()));

@@ -4,6 +4,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridMultiSelectionModel;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -26,7 +27,7 @@ public class StudentView extends VerticalLayout {
     public StudentView(StudentPresenter actions) {
         StudentDataProvider provider = (StudentDataProvider) actions.getDataProvider();
         var gsa = new GridSelectActions(getTranslation("grid_users_actions_label"),
-                new Button(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), e -> {
+                new SecondaryButton(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), e -> {
                     if (!selectedIds.isEmpty())
                         actions.onDelete(selectedIds, DialogType.DELETE_USERS);
                 })
@@ -48,7 +49,6 @@ public class StudentView extends VerticalLayout {
         grid.addColumn(t -> t.getTutor().getFullName()).setHeader(getTranslation("grid_student_header_tutor_label")).setResizable(true).setKey("tutor");
 
         grid.addComponentColumn(item -> {
-            Span group = new Span();
             Button dropButton = new TextButton(getTranslation("grid_student_action_drop_label"), VaadinIcon.CLOSE.create(), e -> actions.onExpel(List.of(item.getId()), DialogType.EXPEL_USERS));
             Button viewButton = new IconButton(VaadinIcon.EYE.create(), e -> actions.onView(item, DialogType.USERS_VIEW));
             Button chatButton = new IconButton(VaadinIcon.CHAT.create(), e -> UI.getCurrent().navigate(Dialogs.class, QueryParameters.of("userId", item.getId().toString())));
@@ -59,9 +59,8 @@ public class StudentView extends VerticalLayout {
             } else {
                 blockButton.addClassNames(LumoUtility.TextColor.BODY);
             }
-            group.add(dropButton, viewButton, chatButton, editButton, blockButton);
-            return group;
-        }).setHeader(getTranslation("grid_header_actions_label")).setWidth("329px").setFlexGrow(0).setKey("actions");
+            return new ButtonGroup(dropButton, viewButton, chatButton, editButton, blockButton);
+        }).setHeader(getTranslation("grid_header_actions_label")).setWidth("320px").setFlexGrow(0).setKey("actions");
 
         grid.setDataProvider(provider.getDataProvider());
         GridMultiSelectionModel<SimpleUser> selectionModel = (GridMultiSelectionModel<SimpleUser>) grid.setSelectionMode(Grid.SelectionMode.MULTI);
@@ -71,6 +70,9 @@ public class StudentView extends VerticalLayout {
             selectedIds = sel.getAllSelectedItems().stream().map(SimpleUser::getId).toList();
             gsa.setCount(selectedIds.size());
         });
+        grid.setEmptyStateText(getTranslation("grid_student_empty_label"));
+        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
+        grid.addThemeName("neo");
 
         var searchField = new SearchField(getTranslation("grid_student_search_placeholder"));
         searchField.addValueChangeListener(e -> provider.getFilterableProvider().setFilter(e.getValue()));
