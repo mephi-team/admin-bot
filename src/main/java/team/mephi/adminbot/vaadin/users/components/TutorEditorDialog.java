@@ -8,6 +8,8 @@ import team.mephi.adminbot.dto.*;
 import team.mephi.adminbot.service.*;
 import team.mephi.adminbot.vaadin.SimpleDialog;
 import team.mephi.adminbot.vaadin.components.FullNameField;
+import team.mephi.adminbot.vaadin.components.PrimaryButton;
+import team.mephi.adminbot.vaadin.components.SecondaryButton;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -16,7 +18,7 @@ import java.util.Objects;
 
 public class TutorEditorDialog extends Dialog implements SimpleDialog {
     private final BeanValidationBinder<SimpleTutor> binder = new BeanValidationBinder<>(SimpleTutor.class);
-    private final Button saveButton = new Button(getTranslation("save_button"), e -> onSave());
+    private final Button saveButton = new PrimaryButton(getTranslation("save_button"), e -> onSave());
 
     private SerializableConsumer<SimpleTutor> onSaveCallback;
     private SimpleTutor user;
@@ -66,7 +68,7 @@ public class TutorEditorDialog extends Dialog implements SimpleDialog {
         add(form);
         setWidth("100%");
         setMaxWidth("500px");
-        getFooter().add(new Button(getTranslation("cancel_button"), e -> close()), saveButton);
+        getFooter().add(new SecondaryButton(getTranslation("cancel_button"), e -> close()), saveButton);
 
         binder.addStatusChangeListener(e ->
                 saveButton.setEnabled(e.getBinder().isValid()));

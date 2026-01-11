@@ -68,11 +68,11 @@ public class SentView extends VerticalLayout {
         grid.addComponentColumn(item -> {
             Div group = new Div();
             group.addClassNames(LumoUtility.TextAlignment.RIGHT);
-            Button retryButton = new Button(VaadinIcon.ROTATE_RIGHT.create(), e -> actions.onRetry(item, DialogType.RETRY_MAILING));
+            Button retryButton = new IconButton(VaadinIcon.ROTATE_RIGHT.create(), e -> actions.onRetry(item, DialogType.RETRY_MAILING));
             retryButton.setVisible(item.getStatus().equals("PAUSED") || item.getStatus().equals("ERROR"));
-            Button cancelButton = new Button(VaadinIcon.CLOSE_CIRCLE_O.create(), e -> actions.onCancel(item, DialogType.CANCEL_MAILING));
+            Button cancelButton = new IconButton(VaadinIcon.CLOSE_CIRCLE_O.create(), e -> actions.onCancel(item, DialogType.CANCEL_MAILING));
             cancelButton.setVisible(item.getStatus().equals("ACTIVE"));
-            Button deleteButton = new Button(VaadinIcon.TRASH.create(), e -> actions.onDelete(List.of(item.getId()), DialogType.DELETE_MAILING));
+            Button deleteButton = new IconButton(VaadinIcon.TRASH.create(), e -> actions.onDelete(List.of(item.getId()), DialogType.DELETE_MAILING));
             group.add(retryButton, cancelButton, deleteButton);
             return group;
         }).setHeader(getTranslation("grid_header_actions_label")).setWidth("120px").setFlexGrow(0).setKey("actions");
@@ -94,11 +94,11 @@ public class SentView extends VerticalLayout {
             provider.getFilterableProvider().setFilter(e.getValue());
         });
 
-        var settingsBtn = new GridSettingsButton();
+        var settingsBtn = new IconButton(VaadinIcon.COG.create());
         var settingsPopover = new GridSettingsPopover(grid, Set.of(), Set.of("actions"));
         settingsPopover.setTarget(settingsBtn);
 
-        var downloadBtn = new Button(VaadinIcon.DOWNLOAD_ALT.create());
+        var downloadBtn = new IconButton(VaadinIcon.DOWNLOAD_ALT.create(), e -> {});
 
         add(new SearchFragment(searchField, new Span(settingsBtn, downloadBtn)), gsa, grid);
     }

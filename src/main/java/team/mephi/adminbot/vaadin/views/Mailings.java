@@ -26,7 +26,7 @@ import java.util.*;
 @RolesAllowed("ADMIN")
 public class Mailings extends VerticalLayout {
     private final TabSheet tabSheet = new TabSheet();
-    private final Button primaryButton = new Button(getTranslation("page_mailing_create_mailing_button"), VaadinIcon.PLUS.create());
+    private final Button primaryButton = new PrimaryButton(getTranslation("page_mailing_create_mailing_button"), VaadinIcon.PLUS.create());
 
     private final List<MailingTabType> rolesInOrder = new ArrayList<>();
     private final Map<MailingTabType, CRUDActions<?>> actions = new HashMap<>();
@@ -71,7 +71,6 @@ public class Mailings extends VerticalLayout {
         primaryButton.addClickListener(e -> {
             getCurrentAction().onCreate(null, getCreateDialogType());
         });
-        primaryButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         top.addToEnd(primaryButton);
         return top;
     }

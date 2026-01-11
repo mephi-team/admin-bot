@@ -11,6 +11,8 @@ import org.jspecify.annotations.NonNull;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import team.mephi.adminbot.dto.SimpleFile;
 import team.mephi.adminbot.service.FileService;
+import team.mephi.adminbot.vaadin.components.PrimaryButton;
+import team.mephi.adminbot.vaadin.components.SecondaryButton;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -18,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FileUploadDialog extends Dialog {
-    private final Button addButton = new Button(getTranslation("dialog_users_file_upload_action"));
+    private final Button addButton = new PrimaryButton(getTranslation("dialog_users_file_upload_action"));
     private final Map<String, SimpleFile> fileList = new HashMap<>();
 
     public FileUploadDialog(AuthenticationContext authContext, FileService fileService) {
@@ -45,6 +47,8 @@ public class FileUploadDialog extends Dialog {
 
     private @NonNull Upload getUpload() {
         Upload dropEnabledUpload = new Upload();
+
+        dropEnabledUpload.setUploadButton(new SecondaryButton(getTranslation("dialog_users_file_upload_add_many")));
 
         var i18n = new UploadI18N();
         i18n.setDropFiles(new UploadI18N.DropFiles()

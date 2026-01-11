@@ -9,7 +9,6 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.QueryParameters;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import team.mephi.adminbot.dto.SimpleDirection;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.model.enums.UserStatus;
 import team.mephi.adminbot.vaadin.components.*;
@@ -19,9 +18,7 @@ import team.mephi.adminbot.vaadin.users.presenter.UsersPresenter;
 import team.mephi.adminbot.vaadin.views.Dialogs;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class MiddleCandidateView extends VerticalLayout {
     private List<Long> selectedIds;
@@ -54,24 +51,24 @@ public class MiddleCandidateView extends VerticalLayout {
         grid.addColumn(SimpleUser::getPhoneNumber).setHeader(getTranslation("grid_middle_candidate_header_phone_label")).setSortable(true).setResizable(true).setKey("phoneNumber");
         grid.addColumn(MyRenderers.createPdRenderer()).setHeader(getTranslation("grid_middle_candidate_header_pd_consent_label")).setSortable(true).setResizable(true).setKey("pdConsent");
         grid.addColumn(SimpleUser::getCohort).setHeader(getTranslation("grid_middle_candidate_header_cohort_label")).setSortable(true).setResizable(true).setKey("cohort");
-        grid.addColumn(u -> Objects.nonNull(u.getDirection()) ? u.getDirection().stream().map(SimpleDirection::getName).collect(Collectors.joining(",")) : "").setHeader(getTranslation("grid_middle_candidate_header_direction_label")).setSortable(true).setResizable(true).setKey("direction");
+        grid.addColumn(MyRenderers.createUserDirections()).setHeader(getTranslation("grid_middle_candidate_header_direction_label")).setSortable(true).setResizable(true).setKey("direction");
         grid.addColumn(SimpleUser::getCity).setHeader(getTranslation("grid_middle_candidate_header_city_label")).setSortable(true).setResizable(true).setKey("city");
         grid.addColumn(MyRenderers.createStatusRenderer()).setHeader(getTranslation("grid_middle_candidate_header_status_label")).setSortable(true).setResizable(true).setKey("status");
 
         grid.addComponentColumn(item -> {
-            Button confirmButton = new Button(VaadinIcon.CHECK.create(), e -> actions.onAccept(List.of(item.getId()), DialogType.ACCEPT_USERS));
-            Button rejectButton = new Button(VaadinIcon.CLOSE.create(), e -> actions.onReject(List.of(item.getId()), DialogType.REJECT_USERS));
-            Button viewButton = new Button(VaadinIcon.EYE.create(), e -> actions.onView(item, DialogType.USERS_VIEW));
-            Button chatButton = new Button(VaadinIcon.CHAT.create(), e -> UI.getCurrent().navigate(Dialogs.class, QueryParameters.of("userId", item.getId().toString())));
-            Button editButton = new Button(VaadinIcon.PENCIL.create(), e -> actions.onEdit(item, DialogType.USERS_EDIT));
-            Button blockButton = new Button(VaadinIcon.BAN.create(), e -> actions.onBlock(item, DialogType.USERS_BLOCKED));
+            Button confirmButton = new IconButton(VaadinIcon.CHECK.create(), e -> actions.onAccept(List.of(item.getId()), DialogType.ACCEPT_USERS));
+            Button rejectButton = new IconButton(VaadinIcon.CLOSE.create(), e -> actions.onReject(List.of(item.getId()), DialogType.REJECT_USERS));
+            Button viewButton = new IconButton(VaadinIcon.EYE.create(), e -> actions.onView(item, DialogType.USERS_VIEW));
+            Button chatButton = new IconButton(VaadinIcon.CHAT.create(), e -> UI.getCurrent().navigate(Dialogs.class, QueryParameters.of("userId", item.getId().toString())));
+            Button editButton = new IconButton(VaadinIcon.PENCIL.create(), e -> actions.onEdit(item, DialogType.USERS_EDIT));
+            Button blockButton = new IconButton(VaadinIcon.BAN.create(), e -> actions.onBlock(item, DialogType.USERS_BLOCKED));
             if (UserStatus.BLOCKED.name().equals(item.getStatus())) {
                 blockButton.addClassNames(LumoUtility.TextColor.ERROR);
             } else {
                 blockButton.addClassNames(LumoUtility.TextColor.BODY);
             }
             return new Span(rejectButton, confirmButton, viewButton, chatButton, editButton, blockButton);
-        }).setHeader(getTranslation("grid_header_actions_label")).setWidth("290px").setFlexGrow(0).setKey("actions");
+        }).setHeader(getTranslation("grid_header_actions_label")).setWidth("272px").setFlexGrow(0).setKey("actions");
 
         grid.setDataProvider(provider.getDataProvider());
         GridMultiSelectionModel<SimpleUser> selectionModel = (GridMultiSelectionModel<SimpleUser>) grid.setSelectionMode(Grid.SelectionMode.MULTI);
@@ -85,11 +82,11 @@ public class MiddleCandidateView extends VerticalLayout {
         var searchField = new SearchField(getTranslation("grid_middle_candidate_search_placeholder"));
         searchField.addValueChangeListener(e -> provider.getFilterableProvider().setFilter(e.getValue()));
 
-        var settingsBtn = new GridSettingsButton();
+        var settingsBtn = new IconButton(VaadinIcon.COG.create());
         var settingsPopover = new GridSettingsPopover(grid, Set.of(), Set.of("actions"));
         settingsPopover.setTarget(settingsBtn);
 
-        var downloadBtn = new Button(VaadinIcon.DOWNLOAD_ALT.create());
+        var downloadBtn = new IconButton(VaadinIcon.DOWNLOAD_ALT.create(), e -> {});
 
         add(new SearchFragment(searchField, new Span(settingsBtn, downloadBtn)), gsa, grid);
     }

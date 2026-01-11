@@ -11,12 +11,14 @@ import team.mephi.adminbot.service.DirectionService;
 import team.mephi.adminbot.service.UserService;
 import team.mephi.adminbot.vaadin.SimpleDialog;
 import team.mephi.adminbot.vaadin.components.FullNameField;
+import team.mephi.adminbot.vaadin.components.PrimaryButton;
+import team.mephi.adminbot.vaadin.components.SecondaryButton;
 
 import java.util.*;
 
 public class TutoringDialog  extends Dialog implements SimpleDialog {
     private final BeanValidationBinder<SimpleTutor> binder = new BeanValidationBinder<>(SimpleTutor.class);
-    private final Button saveButton = new Button(getTranslation("save_button"), e -> onSave());
+    private final Button saveButton = new PrimaryButton(getTranslation("save_button"), e -> onSave());
 
     private SerializableConsumer<SimpleTutor> onSaveCallback;
     private SimpleTutor user;
@@ -27,7 +29,7 @@ public class TutoringDialog  extends Dialog implements SimpleDialog {
         add(form);
         setWidth("100%");
         setMaxWidth("500px");
-        getFooter().add(new Button(getTranslation("cancel_button"), e -> close()), saveButton);
+        getFooter().add(new SecondaryButton(getTranslation("cancel_button"), e -> close()), saveButton);
         binder.forField(form.getFullNameField())
                 .bind(s -> new FullNameField.FullName(s.getFirstName(),s.getLastName()),
                         (s, t) -> {s.setFirstName(t.firstName());s.setLastName(t.lastName());});

@@ -6,12 +6,13 @@ import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.function.SerializableConsumer;
 import team.mephi.adminbot.dto.SimpleTemplate;
 import team.mephi.adminbot.vaadin.SimpleDialog;
+import team.mephi.adminbot.vaadin.components.PrimaryButton;
 
 import java.util.Objects;
 
 public class TemplateEditorDialog extends Dialog implements SimpleDialog {
     private final BeanValidationBinder<SimpleTemplate> binder = new BeanValidationBinder<>(SimpleTemplate.class);
-    private final Button saveButton = new Button(getTranslation("save_button"), e -> onSave());
+    private final Button saveButton = new PrimaryButton(getTranslation("save_button"), e -> onSave());
 
     private SerializableConsumer<SimpleTemplate> onSaveCallback;
 

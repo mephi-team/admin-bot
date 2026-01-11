@@ -13,6 +13,8 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 import team.mephi.adminbot.dto.*;
 import team.mephi.adminbot.service.*;
 import team.mephi.adminbot.vaadin.SimpleDialog;
+import team.mephi.adminbot.vaadin.components.PrimaryButton;
+import team.mephi.adminbot.vaadin.components.SecondaryButton;
 
 import java.util.List;
 import java.util.Objects;
@@ -21,12 +23,12 @@ import java.util.stream.Collectors;
 
 public class MailingEditorDialog extends Dialog implements SimpleDialog {
     private final BeanValidationBinder<SimpleMailing> binder = new BeanValidationBinder<>(SimpleMailing.class);
-    private final Button saveButton = new Button(getTranslation("save_button"), e -> onSave());
+    private final Button saveButton = new PrimaryButton(getTranslation("save_button"), e -> onSave());
     private final TabSheet tabSheet = new TabSheet();
     private final Tab tab1;
     private final Tab tab2;
-    private final Button next = new Button(getTranslation("next_button"), VaadinIcon.ARROW_RIGHT.create());
-    private final Button prev = new Button(getTranslation("prev_button"), VaadinIcon.ARROW_LEFT.create());
+    private final Button next = new PrimaryButton(getTranslation("next_button"), VaadinIcon.ARROW_RIGHT.create());
+    private final Button prev = new SecondaryButton(getTranslation("prev_button"), VaadinIcon.ARROW_LEFT.create());
 
     private SerializableConsumer<SimpleMailing> onSaveCallback;
     private SimpleMailing mailing;

@@ -5,9 +5,12 @@ import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.theme.lumo.LumoUtility;
+import team.mephi.adminbot.dto.SimpleDirection;
 import team.mephi.adminbot.dto.SimpleTutor;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.vaadin.users.components.PdPopover;
+
+import java.util.Collection;
 
 public class MyRenderers {
     public static ComponentRenderer<Span, SimpleUser> createPdRenderer() {
@@ -69,5 +72,24 @@ public class MyRenderers {
             span.addClassNames(LumoUtility.TextColor.PRIMARY);
             return span;
         });
+    }
+
+    public static ComponentRenderer<Div, SimpleUser> createUserDirections() {
+        return new ComponentRenderer<>(user -> renderList(user.getDirection()));
+    }
+
+    public static ComponentRenderer<Div, SimpleTutor> createTutorDirections() {
+        return new ComponentRenderer<>(user -> renderList(user.getDirections()));
+    }
+
+    private static Div renderList(Collection<SimpleDirection> directions) {
+        var res =  new Div();
+        res.addClassNames(LumoUtility.Display.FLEX, LumoUtility.FlexDirection.COLUMN, LumoUtility.Gap.XSMALL);
+        directions.forEach(s -> {
+            Span span = new Span(s.getName());
+            span.addClassNames(LumoUtility.Overflow.HIDDEN, LumoUtility.TextOverflow.ELLIPSIS, LumoUtility.FontSize.SMALL);
+            res.add(span);
+        });
+        return res;
     }
 }
