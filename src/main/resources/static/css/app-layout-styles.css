@@ -92,6 +92,10 @@ vaadin-text-field.last::part(input-field) {
     border-start-start-radius: 0;
 }
 
+vaadin-dialog-overlay::part(footer) {
+    background: transparent;
+}
+
 .border-12 {
     border-radius: 12px;
 }

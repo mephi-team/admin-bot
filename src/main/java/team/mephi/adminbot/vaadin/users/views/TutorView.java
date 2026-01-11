@@ -66,6 +66,7 @@ public class TutorView extends VerticalLayout {
             selectedIds = sel.getAllSelectedItems().stream().map(SimpleTutor::getId).toList();
             gsa.setCount(selectedIds.size());
         });
+        grid.setEmptyStateText(getTranslation("grid_tutor_empty_label"));
 
         var searchField = new SearchField(getTranslation("grid_tutor_search_placeholder"));
         searchField.addValueChangeListener(e -> provider.getFilterableProvider().setFilter(e.getValue()));

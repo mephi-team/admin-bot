@@ -67,6 +67,7 @@ public class FreeListenerView extends VerticalLayout {
             selectedIds = sel.getAllSelectedItems().stream().map(SimpleUser::getId).toList();
             gsa.setCount(selectedIds.size());
         });
+        grid.setEmptyStateText(getTranslation("grid_free_listener_empty_label"));
 
         var searchField = new SearchField(getTranslation("grid_free_listener_search_placeholder"));
         searchField.addValueChangeListener(e -> provider.getFilterableProvider().setFilter(e.getValue()));
