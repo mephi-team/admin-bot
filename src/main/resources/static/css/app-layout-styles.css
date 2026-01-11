@@ -118,3 +118,10 @@ vaadin-tabsheet[theme~="neo"]::part(tabs-container) {
     border-bottom: none;
     box-shadow: none;
 }
+
+vaadin-text-field[theme~="neo"]::part(input-field) {
+    background: transparent;
+    outline: 1px solid var(--lumo-contrast-20pct);
+    border-radius: 12px;
+    margin: 3px;
+}
