@@ -9,11 +9,6 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 
 public class SecondaryIconButton extends Button {
 
-    public SecondaryIconButton(Component icon) {
-        super(icon);
-        init();
-    }
-
     public SecondaryIconButton(Component icon, ComponentEventListener<ClickEvent<Button>> clickListener) {
         super(icon, clickListener);
         init();

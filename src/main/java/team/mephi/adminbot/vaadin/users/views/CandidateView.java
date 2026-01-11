@@ -67,7 +67,7 @@ public class CandidateView extends VerticalLayout {
                 blockButton.addClassNames(LumoUtility.TextColor.BODY);
             }
             return new Span(rejectButton, confirmButton, viewButton, chatButton, editButton, blockButton);
-        }).setHeader(getTranslation("grid_header_actions_label")).setWidth("292px").setFlexGrow(0).setKey("actions");
+        }).setHeader(getTranslation("grid_header_actions_label")).setWidth("280px").setFlexGrow(0).setKey("actions");
 
         grid.setDataProvider(provider.getDataProvider());
         GridMultiSelectionModel<SimpleUser> selectionModel = (GridMultiSelectionModel<SimpleUser>) grid.setSelectionMode(Grid.SelectionMode.MULTI);

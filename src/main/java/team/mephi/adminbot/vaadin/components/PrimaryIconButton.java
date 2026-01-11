@@ -9,11 +9,6 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 
 public class PrimaryIconButton extends Button {
 
-    public PrimaryIconButton(Component icon) {
-        super(icon);
-        init();
-    }
-
     public PrimaryIconButton(Component icon, ComponentEventListener<ClickEvent<Button>> clickListener) {
         super(icon, clickListener);
         init();

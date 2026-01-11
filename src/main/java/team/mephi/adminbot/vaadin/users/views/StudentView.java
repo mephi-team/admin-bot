@@ -61,7 +61,7 @@ public class StudentView extends VerticalLayout {
             }
             group.add(dropButton, viewButton, chatButton, editButton, blockButton);
             return group;
-        }).setHeader(getTranslation("grid_header_actions_label")).setWidth("329px").setFlexGrow(0).setKey("actions");
+        }).setHeader(getTranslation("grid_header_actions_label")).setWidth("320px").setFlexGrow(0).setKey("actions");
 
         grid.setDataProvider(provider.getDataProvider());
         GridMultiSelectionModel<SimpleUser> selectionModel = (GridMultiSelectionModel<SimpleUser>) grid.setSelectionMode(Grid.SelectionMode.MULTI);
