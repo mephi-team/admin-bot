@@ -1,5 +1,6 @@
 package team.mephi.adminbot.vaadin.views;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
@@ -14,6 +15,7 @@ import com.vaadin.flow.router.QueryParameters;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
 import team.mephi.adminbot.dto.SimpleQuestion;
+import team.mephi.adminbot.service.AuthService;
 import team.mephi.adminbot.vaadin.components.*;
 import team.mephi.adminbot.vaadin.components.buttons.IconButton;
 import team.mephi.adminbot.vaadin.components.buttons.SecondaryButton;
@@ -42,7 +44,7 @@ public class Questions extends VerticalLayout {
     private final QuestionDataProvider provider;
     private List<Long> selectedIds;
 
-    public Questions(QuestionDataProviderFactory providerFactory, DialogService<?> dialogService, NotificationService notificationService) {
+    public Questions(QuestionDataProviderFactory providerFactory, DialogService<?> dialogService, NotificationService notificationService, AuthService authService) {
         this.provider = providerFactory.createDataProvider();
         this.dialogService = dialogService;
         this.notificationService = notificationService;
@@ -73,10 +75,12 @@ public class Questions extends VerticalLayout {
         grid.addColumn(SimpleQuestion::getAnswer).setHeader(getTranslation("grid_question_header_answer_label")).setTooltipGenerator(SimpleQuestion::getAnswer).setResizable(true).setKey("answers");
 
         grid.addComponentColumn(item -> {
-            Button responseButton = new TextButton(getTranslation("grid_question_action_answer_label"), e -> onAnswer(item));
+            Component responseButton = item.getAnswer().isEmpty() ? new TextButton(getTranslation("grid_question_action_answer_label"), e -> onAnswer(item)) : new Span();
             Button chatButton = new IconButton(VaadinIcon.CHAT.create(), e -> UI.getCurrent().navigate(Dialogs.class, QueryParameters.of("userId", "" + item.getAuthorId())));
             Button deleteButton = new IconButton(VaadinIcon.TRASH.create(), e -> onDelete(List.of(item.getId())));
-            return new ButtonGroup(responseButton, chatButton, deleteButton);
+            if (authService.isAdmin())
+                return new ButtonGroup(responseButton, chatButton, deleteButton);
+            return new ButtonGroup(responseButton);
         }).setHeader(getTranslation("grid_header_actions_label")).setWidth("210px").setFlexGrow(0).setKey("actions");
 
         grid.setDataProvider(provider.getDataProvider());
