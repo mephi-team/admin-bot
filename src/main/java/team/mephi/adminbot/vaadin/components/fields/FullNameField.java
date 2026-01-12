@@ -1,4 +1,4 @@
-package team.mephi.adminbot.vaadin.components;
+package team.mephi.adminbot.vaadin.components.fields;
 
 import com.vaadin.flow.component.customfield.CustomField;
 import com.vaadin.flow.component.html.Div;
@@ -6,7 +6,6 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
 import java.util.Objects;
-
 
 public class FullNameField extends CustomField<FullNameField.FullName> {
     private final TextField firstName = new TextField();

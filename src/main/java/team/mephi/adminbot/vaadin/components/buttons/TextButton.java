@@ -1,4 +1,4 @@
-package team.mephi.adminbot.vaadin.components;
+package team.mephi.adminbot.vaadin.components.buttons;
 
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;

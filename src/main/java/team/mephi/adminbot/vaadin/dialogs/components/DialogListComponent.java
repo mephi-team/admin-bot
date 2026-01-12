@@ -13,7 +13,7 @@ import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import team.mephi.adminbot.dto.DialogWithLastMessageDto;
-import team.mephi.adminbot.vaadin.components.SearchField;
+import team.mephi.adminbot.vaadin.components.fields.SearchField;
 import team.mephi.adminbot.vaadin.dialogs.dataproviders.DialogListDataProvider;
 import team.mephi.adminbot.vaadin.dialogs.dataproviders.DialogListDataProviderFactory;
 import team.mephi.adminbot.vaadin.views.Dialogs;

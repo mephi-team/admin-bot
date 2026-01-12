@@ -11,8 +11,8 @@ import org.jspecify.annotations.NonNull;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import team.mephi.adminbot.dto.SimpleFile;
 import team.mephi.adminbot.service.FileService;
-import team.mephi.adminbot.vaadin.components.PrimaryButton;
-import team.mephi.adminbot.vaadin.components.SecondaryButton;
+import team.mephi.adminbot.vaadin.components.buttons.PrimaryButton;
+import team.mephi.adminbot.vaadin.components.buttons.SecondaryButton;
 
 import java.io.IOException;
 import java.util.Arrays;

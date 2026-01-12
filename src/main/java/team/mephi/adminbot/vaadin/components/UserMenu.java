@@ -7,6 +7,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.spring.security.AuthenticationContext;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
+import team.mephi.adminbot.vaadin.components.buttons.IconButton;
 
 import java.util.Objects;
 

@@ -11,7 +11,7 @@ import team.mephi.adminbot.dto.SimpleDirection;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.service.DirectionService;
 import team.mephi.adminbot.service.UserService;
-import team.mephi.adminbot.vaadin.components.FullNameField;
+import team.mephi.adminbot.vaadin.components.fields.FullNameField;
 
 import java.util.Objects;
 

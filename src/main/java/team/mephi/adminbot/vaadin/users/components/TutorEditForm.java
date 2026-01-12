@@ -17,7 +17,7 @@ import team.mephi.adminbot.service.CohortService;
 import team.mephi.adminbot.service.DirectionService;
 import team.mephi.adminbot.service.RoleService;
 import team.mephi.adminbot.service.UserService;
-import team.mephi.adminbot.vaadin.components.FullNameField;
+import team.mephi.adminbot.vaadin.components.fields.FullNameField;
 
 import java.util.Objects;
 

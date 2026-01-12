@@ -11,9 +11,9 @@ import team.mephi.adminbot.dto.RoleDto;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.service.*;
 import team.mephi.adminbot.vaadin.DialogWithTitle;
-import team.mephi.adminbot.vaadin.components.FullNameField;
-import team.mephi.adminbot.vaadin.components.PrimaryButton;
-import team.mephi.adminbot.vaadin.components.SecondaryButton;
+import team.mephi.adminbot.vaadin.components.fields.FullNameField;
+import team.mephi.adminbot.vaadin.components.buttons.PrimaryButton;
+import team.mephi.adminbot.vaadin.components.buttons.SecondaryButton;
 
 import java.util.Objects;
 

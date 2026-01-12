@@ -1,4 +1,4 @@
-package team.mephi.adminbot.vaadin.views;
+package team.mephi.adminbot.vaadin.components.layout;
 
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.dependency.StyleSheet;

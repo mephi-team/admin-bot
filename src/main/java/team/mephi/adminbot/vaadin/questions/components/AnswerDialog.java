@@ -7,7 +7,7 @@ import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.function.SerializableConsumer;
 import team.mephi.adminbot.dto.SimpleQuestion;
 import team.mephi.adminbot.vaadin.DialogWithTitle;
-import team.mephi.adminbot.vaadin.components.PrimaryButton;
+import team.mephi.adminbot.vaadin.components.buttons.PrimaryButton;
 
 public class AnswerDialog extends Dialog implements DialogWithTitle {
     private final BeanValidationBinder<SimpleQuestion> binder = new BeanValidationBinder<>(SimpleQuestion.class);
