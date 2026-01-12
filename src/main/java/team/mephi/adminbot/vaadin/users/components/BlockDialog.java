@@ -6,10 +6,10 @@ import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.function.SerializableConsumer;
-import team.mephi.adminbot.vaadin.SimpleDialog;
+import team.mephi.adminbot.vaadin.DialogWithTitle;
 import team.mephi.adminbot.vaadin.components.SecondaryButton;
 
-public class BlockDialog<T> extends Dialog implements SimpleDialog {
+public class BlockDialog<T> extends Dialog implements DialogWithTitle {
     private final BeanValidationBinder<T> binder;
     private final Tabs tabs = new Tabs();
     private final Tab tab1 = new Tab(getTranslation("dialog_user_block_tab_warning_label"));

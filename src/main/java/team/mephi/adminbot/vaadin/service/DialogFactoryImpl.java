@@ -4,7 +4,7 @@ import com.vaadin.flow.component.icon.Icon;
 import org.springframework.stereotype.Service;
 import team.mephi.adminbot.dto.SimpleTutor;
 import team.mephi.adminbot.dto.SimpleUser;
-import team.mephi.adminbot.vaadin.SimpleDialog;
+import team.mephi.adminbot.vaadin.DialogWithTitle;
 import team.mephi.adminbot.vaadin.components.SimpleConfirmDialog;
 import team.mephi.adminbot.vaadin.mailings.components.MailingEditorDialogFactory;
 import team.mephi.adminbot.vaadin.mailings.components.TemplateEditorDialogFactory;
@@ -20,7 +20,7 @@ import java.util.function.Supplier;
 
 @Service
 public class DialogFactoryImpl implements DialogFactory {
-    private final Map<DialogType, Supplier<SimpleDialog>> registry = new HashMap<>();
+    private final Map<DialogType, Supplier<DialogWithTitle>> registry = new HashMap<>();
 
     public DialogFactoryImpl(
             UserEditorDialogFactory userEditorDialogFactory,
@@ -49,7 +49,7 @@ public class DialogFactoryImpl implements DialogFactory {
     }
 
     @Override
-    public SimpleDialog getDialog(DialogType type) {
+    public DialogWithTitle getDialog(DialogType type) {
         var supplier = registry.get(type);
         if (supplier == null) throw new IllegalArgumentException("Dialog not registered: " + type);
         var dialog = supplier.get();

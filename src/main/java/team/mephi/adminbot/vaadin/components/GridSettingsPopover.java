@@ -1,13 +1,9 @@
 package team.mephi.adminbot.vaadin.components;
 
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.popover.Popover;
 import com.vaadin.flow.component.popover.PopoverPosition;
 import com.vaadin.flow.theme.lumo.LumoUtility;
@@ -26,8 +22,6 @@ public class GridSettingsPopover extends Popover {
         Div heading = new Div(getTranslation("grid_settings_popover_header"));
         heading.addClassNames(LumoUtility.FontWeight.BOLD, LumoUtility.Padding.XSMALL);
 
-//        List<String> columns = List.of("firstName", "lastName", "email",
-//                "phone", "birthday", "profession");
         var columns = grid.getColumns().stream().map(Grid.Column::getKey).filter(c -> !exclude.contains(c)).toList();
 
         CheckboxGroup<String> group = new CheckboxGroup<>();
@@ -48,20 +42,6 @@ public class GridSettingsPopover extends Popover {
         defaultColumns.removeAll(disabled);
         group.setValue(defaultColumns);
 
-//        Button showAll = new Button(getTranslation("grid_settings_popover_action_show_all"), (e) -> {
-//            group.setValue(new HashSet<>(columns));
-//        });
-//        showAll.addThemeVariants(ButtonVariant.LUMO_SMALL);
-//
-//        Button reset = new Button(getTranslation("grid_settings_popover_action_reset"), (e) -> {
-//            group.setValue(defaultColumns);
-//        });
-//        reset.addThemeVariants(ButtonVariant.LUMO_SMALL);
-//
-//        HorizontalLayout footer = new HorizontalLayout(showAll, reset);
-//        footer.setSpacing(false);
-//        footer.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
-//
-        add(heading, group);//, footer);
+        add(heading, group);
     }
 }
