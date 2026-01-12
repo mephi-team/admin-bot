@@ -8,7 +8,7 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
 public class TextButton extends Button {
-    public TextButton(String text, ComponentEventListener<ClickEvent<Button>> clickListener){
+    public TextButton(String text, ComponentEventListener<ClickEvent<Button>> clickListener) {
         super(text, clickListener);
         init();
     }

@@ -8,11 +8,9 @@ import team.mephi.adminbot.dto.SimplePd;
 import team.mephi.adminbot.dto.SimpleTutor;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.model.*;
-import team.mephi.adminbot.model.enums.StudentTutorMode;
 import team.mephi.adminbot.model.enums.UserStatus;
 import team.mephi.adminbot.repository.ExpertRepository;
 
-import java.time.Instant;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -49,7 +47,7 @@ public class ExpertServiceImpl implements ExpertService {
         expert.getDirections().retainAll(expert.getDirections().stream().filter(s -> currentDirections.contains(s.getId())).toList());
         expert.getDirections().addAll(directions);
         expert.setCohort(dto.getCohort());
-        if (Objects.isNull(expert.getStatus())){
+        if (Objects.isNull(expert.getStatus())) {
             expert.setStatus(UserStatus.ACTIVE);
         }
 

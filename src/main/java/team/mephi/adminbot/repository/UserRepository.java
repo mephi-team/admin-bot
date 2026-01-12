@@ -168,6 +168,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByIdWithRoleAndDirection(@NonNull Long id);
 
     List<User> findAllByRoleCode(String role);
+
     Optional<User> findByRoleCodeAndUserName(String role, String name);
 
     @Query("SELECT u FROM User u WHERE LOWER(u.lastName) LIKE LOWER(CONCAT('%', :query, '%')) AND (u.tutorAssignments IS EMPTY OR NOT EXISTS (SELECT 1 FROM StudentTutor st WHERE st.student = u AND st.isActive = true)) AND u.role.code = :role")

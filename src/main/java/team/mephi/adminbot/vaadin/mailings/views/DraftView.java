@@ -22,8 +22,6 @@ import java.util.List;
 import java.util.Set;
 
 public class DraftView extends VerticalLayout {
-    private List<Long> selectedIds;
-
     private static final SerializableBiConsumer<Span, SimpleMailing> statusComponentUpdater = (
             span, person) -> {
         String theme = switch (person.getStatus()) {
@@ -36,6 +34,7 @@ public class DraftView extends VerticalLayout {
         span.getElement().setAttribute("theme", theme);
         span.setText(span.getTranslation("mailing_status_" + person.getStatus().toLowerCase() + "_label"));
     };
+    private List<Long> selectedIds;
 
     public DraftView(MailingsPresenter actions) {
         DraftDataProvider provider = (DraftDataProvider) actions.getDataProvider();
@@ -62,7 +61,7 @@ public class DraftView extends VerticalLayout {
         grid.addColumn(SimpleMailing::getDirection).setHeader(getTranslation("grid_mailing_header_direction_label")).setSortable(true).setResizable(true).setKey("filters->>'direction'");
         grid.addColumn(SimpleMailing::getCurator).setHeader(getTranslation("grid_mailing_header_curator_label")).setSortable(true).setResizable(true).setKey("filters->>'curator'");
         grid.addColumn(SimpleMailing::getCity).setHeader(getTranslation("grid_mailing_header_city_label")).setSortable(true).setResizable(true).setKey("filters->>'city'");
-        grid.addColumn(SimpleMailing::getText).setHeader(getTranslation("grid_mailing_header_text_label")).setSortable(true).setResizable(true).setKey("description");
+        grid.addColumn(SimpleMailing::getText).setHeader(getTranslation("grid_mailing_header_text_label")).setTooltipGenerator(SimpleMailing::getText).setSortable(true).setResizable(true).setKey("description");
         grid.addColumn(createStatusComponentRenderer()).setHeader(getTranslation("grid_mailing_header_status_label")).setSortable(true).setResizable(true).setKey("status");
 
         grid.addComponentColumn(item -> {
@@ -96,7 +95,8 @@ public class DraftView extends VerticalLayout {
         var settingsPopover = new GridSettingsPopover(grid, Set.of(), Set.of("actions"));
         settingsPopover.setTarget(settingsBtn);
 
-        var downloadBtn = new IconButton(VaadinIcon.DOWNLOAD_ALT.create(), e -> {});
+        var downloadBtn = new IconButton(VaadinIcon.DOWNLOAD_ALT.create(), e -> {
+        });
 
         add(new SearchFragment(searchField, new Span(settingsBtn, downloadBtn)), gsa, grid);
     }

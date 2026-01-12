@@ -20,7 +20,7 @@ public class CRUDPresenter<T> implements CRUDActions<T>, DataProvider<T> {
     }
 
     @Override
-    public void onCreate(Object item, DialogType type, Object ... params) {
+    public void onCreate(Object item, DialogType type, Object... params) {
         dialogService.showDialog(item, type, (newMailing) -> {
             if (newMailing != null) {
                 dataProvider.save(newMailing);
@@ -36,7 +36,7 @@ public class CRUDPresenter<T> implements CRUDActions<T>, DataProvider<T> {
     }
 
     @Override
-    public void onEdit(T item, DialogType type, Object ... params) {
+    public void onEdit(T item, DialogType type, Object... params) {
         dialogService.showDialog(item, type, (editedItem) -> {
             if (editedItem != null) {
                 editedItem = dataProvider.save(editedItem);
@@ -47,7 +47,7 @@ public class CRUDPresenter<T> implements CRUDActions<T>, DataProvider<T> {
     }
 
     @Override
-    public void onDelete(List<Long> ids, DialogType type, Object ... param) {
+    public void onDelete(List<Long> ids, DialogType type, Object... param) {
         dialogService.showConfirmDialog(ids.size(), type, VaadinIcon.TRASH.create(), (ignore) -> {
             dataProvider.deleteAllById(ids);
             dataProvider.getDataProvider().refreshAll();

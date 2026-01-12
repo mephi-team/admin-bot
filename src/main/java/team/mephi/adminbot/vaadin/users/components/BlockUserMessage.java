@@ -6,11 +6,14 @@ import com.vaadin.flow.component.textfield.TextArea;
 
 public class BlockUserMessage extends FormLayout {
     private final TextArea message = new TextArea();
+
     public BlockUserMessage() {
         setAutoResponsive(true);
         setLabelsAside(true);
         setExpandFields(true);
         setExpandColumns(true);
+
+        message.addThemeName("neo");
 
         add(new H4(getTranslation("form_user_block_last_message_label")), message);
     }

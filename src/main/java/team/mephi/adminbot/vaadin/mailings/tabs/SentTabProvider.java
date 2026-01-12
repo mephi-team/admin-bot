@@ -9,7 +9,7 @@ import team.mephi.adminbot.vaadin.mailings.views.SentView;
 import static team.mephi.adminbot.vaadin.mailings.tabs.MailingTabType.SENT;
 
 @SpringComponent
-public class SentTabProvider implements  MailingTabProvider {
+public class SentTabProvider implements MailingTabProvider {
     @Override
     public MailingTabType getTabId() {
         return SENT;

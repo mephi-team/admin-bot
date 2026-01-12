@@ -5,9 +5,9 @@ import team.mephi.adminbot.dto.SimpleTutor;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.service.ExpertService;
 import team.mephi.adminbot.service.TutorService;
+import team.mephi.adminbot.service.UserService;
 import team.mephi.adminbot.vaadin.CRUDDataProvider;
 import team.mephi.adminbot.vaadin.CRUDPresenter;
-import team.mephi.adminbot.service.UserService;
 import team.mephi.adminbot.vaadin.service.DialogService;
 import team.mephi.adminbot.vaadin.service.NotificationService;
 import team.mephi.adminbot.vaadin.users.dataproviders.*;
@@ -45,11 +45,15 @@ public class UsersPresenterFactory {
         CRUDDataProvider<?> dataProvider = createDataProvider(role);
 
         return switch (role) {
-            case TUTOR -> new TutorPresenter((TutorDataProvider) dataProvider, (DialogService< SimpleTutor>) dialogService, notificationService);
-            case VISITOR -> new BlockingPresenter((UserDataProvider) dataProvider, (DialogService<SimpleUser>) dialogService, notificationService);
-            case STUDENT, FREE_LISTENER -> new StudentPresenter((UserDataProvider) dataProvider, (DialogService<SimpleUser>) dialogService, notificationService);
+            case TUTOR ->
+                    new TutorPresenter((TutorDataProvider) dataProvider, (DialogService<SimpleTutor>) dialogService, notificationService);
+            case VISITOR ->
+                    new BlockingPresenter((UserDataProvider) dataProvider, (DialogService<SimpleUser>) dialogService, notificationService);
+            case STUDENT, FREE_LISTENER ->
+                    new StudentPresenter((UserDataProvider) dataProvider, (DialogService<SimpleUser>) dialogService, notificationService);
             // candidate, middle_candidate, lc_expert
-            default -> new UsersPresenter((UserDataProvider) dataProvider, (DialogService<SimpleUser>) dialogService, notificationService);
+            default ->
+                    new UsersPresenter((UserDataProvider) dataProvider, (DialogService<SimpleUser>) dialogService, notificationService);
         };
     }
 }

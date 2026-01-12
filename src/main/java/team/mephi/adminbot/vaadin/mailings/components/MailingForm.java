@@ -1,5 +1,6 @@
 package team.mephi.adminbot.vaadin.mailings.components;
 
+import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.accordion.AccordionPanel;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
@@ -8,22 +9,19 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.listbox.MultiSelectListBox;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.CallbackDataProvider;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import lombok.Getter;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import team.mephi.adminbot.dto.*;
-import team.mephi.adminbot.service.UserService;
-import team.mephi.adminbot.service.CityService;
-import team.mephi.adminbot.service.DirectionService;
-import team.mephi.adminbot.service.CohortService;
-import team.mephi.adminbot.service.RoleService;
+import team.mephi.adminbot.service.*;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public class MailingForm extends FormLayout {
+    @Getter
     private final CheckboxGroup<String> channels = new CheckboxGroup<>();
     @Getter
     private final ComboBox<RoleDto> users = new ComboBox<>();
@@ -44,11 +42,11 @@ public class MailingForm extends FormLayout {
                 query -> {
                     Pageable pageable = PageRequest.of(query.getOffset() / query.getLimit(), query.getLimit());
                     return userService.findAllByRoleCodeLikeAndCohortLikeAndDirectionCodeLikeAndCityLike(
-                            Objects.isNull(users.getValue()) ? null : users.getValue().getCode(),
-                            Objects.isNull(cohort.getValue()) ? null : cohort.getValue().getName(),
-                            Objects.isNull(direction.getValue()) ? null : direction.getValue().getId(),
-                            Objects.isNull(city.getValue()) || Objects.isNull(city.getValue().getId()) ? null : city.getValue().getName(),
-                            (Objects.isNull(curator.getValue()) ? null : curator.getValue().getId()),
+                            Optional.of(users).map(AbstractField::getValue).map(RoleDto::getCode).orElse(null),
+                            Optional.of(cohort).map(AbstractField::getValue).map(CohortDto::getName).orElse(null),
+                            Optional.of(direction).map(AbstractField::getValue).map(SimpleDirection::getId).orElse(null),
+                            Optional.of(city).map(AbstractField::getValue).filter(c -> c.getId() != null).map(CityDto::getName).orElse(null),
+                            Optional.of(curator).map(AbstractField::getValue).map(UserDto::getId).orElse(null),
                             pageable
                     );
                 },
@@ -61,31 +59,32 @@ public class MailingForm extends FormLayout {
         setExpandColumns(true);
 
         channels.setItems("Email", "Telegram");
+        channels.addThemeName("neo");
 
         users.setItemsPageable(roleService::getAllRoles);
         users.setItemLabelGenerator(RoleDto::getName);
-        users.setRequiredIndicatorVisible(true);
+        users.addThemeName("neo");
         users.addValueChangeListener(e -> provider.refreshAll());
 
         cohort.setItemsPageable(cohortService::getAllCohorts);
         cohort.setItemLabelGenerator(c -> c.getName() + (c.getCurrent() ? " (текущий)" : ""));
-        cohort.setRequiredIndicatorVisible(true);
+        cohort.addThemeName("neo");
         cohort.addValueChangeListener(e -> provider.refreshAll());
 
         direction.setItemsPageable(directionService::getAllDirections);
         direction.setItemLabelGenerator(SimpleDirection::getName);
-        direction.setRequiredIndicatorVisible(true);
+        direction.addThemeName("neo");
         direction.addValueChangeListener(e -> provider.refreshAll());
 
         city.setItemsPageable(cityService::getAllCities);
         city.setItemLabelGenerator(CityDto::getName);
-        city.setRequiredIndicatorVisible(true);
+        city.addThemeName("neo");
         city.addValueChangeListener(e -> provider.refreshAll());
 
         curator.setItemsPageable(userService::findAllCurators);
         curator.setItemLabelGenerator(UserDto::getUserName);
+        curator.addThemeName("neo");
         curator.addValueChangeListener(e -> provider.refreshAll());
-//        curator.setRequiredIndicatorVisible(true);
 
         addFormItem(channels, getTranslation("form_mailing_channels_label"));
         addFormItem(users, getTranslation("form_mailing_users_label"));
@@ -104,7 +103,7 @@ public class MailingForm extends FormLayout {
         listBox.setDataProvider(provider);
         listBox.setItemLabelGenerator(u -> u.getFullName() + ", " + u.getTgId());
         listBox.addSelectionListener(e -> {
-            counter.setText("(" +  e.getAllSelectedItems().size() + ")");
+            counter.setText("(" + e.getAllSelectedItems().size() + ")");
         });
         FormItem box = addFormItem(listBox, getTranslation("form_mailing_first_name_last_name_label"));
         box.addClassNames(LumoUtility.Width.FULL);

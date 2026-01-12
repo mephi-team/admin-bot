@@ -16,10 +16,14 @@ import team.mephi.adminbot.vaadin.components.FullNameField;
 import java.util.Objects;
 
 public class TutorForm extends FormLayout {
-    @Getter private final FullNameField fullNameField = new FullNameField();
-    @Getter final private TextField tgId = new TextField();
-    @Getter private final MultiSelectComboBox<SimpleDirection> directions = new MultiSelectComboBox<>();
-    @Getter private final MultiSelectComboBox<SimpleUser> students = new MultiSelectComboBox<>();
+    @Getter
+    private final FullNameField fullNameField = new FullNameField();
+    @Getter
+    final private TextField tgId = new TextField();
+    @Getter
+    private final MultiSelectComboBox<SimpleDirection> directions = new MultiSelectComboBox<>();
+    @Getter
+    private final MultiSelectComboBox<SimpleUser> students = new MultiSelectComboBox<>();
 
     public TutorForm(UserService userService, DirectionService directionService) {
         var directionsProvider = new CallbackDataProvider<SimpleDirection, String>(
@@ -45,15 +49,18 @@ public class TutorForm extends FormLayout {
 
         fullNameField.setReadOnly(true);
         tgId.setReadOnly(true);
+        tgId.addThemeName("neo");
 
         directions.setReadOnly(true);
         directions.setItems(directionsProvider);
         directions.setItemLabelGenerator(SimpleDirection::getName);
         directions.setAutoExpand(MultiSelectComboBox.AutoExpandMode.VERTICAL);
+        directions.addThemeName("neo");
 
         students.setItems(studentsProvider);
         students.setItemLabelGenerator(u -> u.getFullName() + (Objects.nonNull(u.getTgId()) ? " " + u.getTgId() : ""));
         students.setAutoExpand(MultiSelectComboBox.AutoExpandMode.VERTICAL);
+        students.addThemeName("neo");
         students.addSelectionListener(e -> {
             var selectedItems = e.getAddedSelection();
             boolean hasInvalid = selectedItems.removeIf(item -> Objects.isNull(item.getId()));

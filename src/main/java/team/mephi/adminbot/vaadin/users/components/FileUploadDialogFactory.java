@@ -14,6 +14,7 @@ public class FileUploadDialogFactory {
         this.authContext = authContext;
         this.fileService = fileService;
     }
+
     public FileUploadDialog create() {
         return new FileUploadDialog(authContext, fileService);
     }

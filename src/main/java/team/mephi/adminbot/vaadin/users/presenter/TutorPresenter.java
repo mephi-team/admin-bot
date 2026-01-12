@@ -24,7 +24,7 @@ public class TutorPresenter extends CRUDPresenter<SimpleTutor> implements TutorA
     }
 
     @Override
-    public void onTutoring(SimpleTutor item, DialogType type, Object ... params) {
+    public void onTutoring(SimpleTutor item, DialogType type, Object... params) {
         dialogService.showDialog(item, type, editedItem -> {
             if (Objects.nonNull(editedItem)) {
                 editedItem = dataProvider.save(editedItem);

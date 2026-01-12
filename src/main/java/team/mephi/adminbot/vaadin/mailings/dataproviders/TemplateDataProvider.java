@@ -5,8 +5,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import team.mephi.adminbot.dto.SimpleTemplate;
-import team.mephi.adminbot.vaadin.CRUDDataProvider;
 import team.mephi.adminbot.service.TemplateService;
+import team.mephi.adminbot.vaadin.CRUDDataProvider;
 
 import java.util.List;
 import java.util.Optional;

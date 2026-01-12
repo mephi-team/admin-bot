@@ -8,9 +8,14 @@ import java.util.stream.Stream;
 
 public interface TutorService {
     SimpleTutor save(SimpleTutor dto);
+
     Optional<SimpleTutor> findById(Long id);
+
     void deleteAllById(Iterable<Long> ids);
+
     void blockAllById(Iterable<Long> ids);
+
     Stream<SimpleTutor> findAllByName(String name, Pageable pageable);
+
     Integer countByName(String name);
 }

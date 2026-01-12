@@ -14,14 +14,15 @@ import team.mephi.adminbot.vaadin.components.FullNameField;
 import team.mephi.adminbot.vaadin.components.PrimaryButton;
 import team.mephi.adminbot.vaadin.components.SecondaryButton;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Objects;
 
-public class TutoringDialog  extends Dialog implements SimpleDialog {
+public class TutoringDialog extends Dialog implements SimpleDialog {
     private final BeanValidationBinder<SimpleTutor> binder = new BeanValidationBinder<>(SimpleTutor.class);
-    private final Button saveButton = new PrimaryButton(getTranslation("save_button"), e -> onSave());
-
     private SerializableConsumer<SimpleTutor> onSaveCallback;
     private SimpleTutor user;
+    private final Button saveButton = new PrimaryButton(getTranslation("save_button"), e -> onSave());
 
     public TutoringDialog(UserService userService, DirectionService directionService) {
         var form = new TutorForm(userService, directionService);
@@ -31,26 +32,29 @@ public class TutoringDialog  extends Dialog implements SimpleDialog {
         setMaxWidth("500px");
         getFooter().add(new SecondaryButton(getTranslation("cancel_button"), e -> close()), saveButton);
         binder.forField(form.getFullNameField())
-                .bind(s -> new FullNameField.FullName(s.getFirstName(),s.getLastName()),
-                        (s, t) -> {s.setFirstName(t.firstName());s.setLastName(t.lastName());});
+                .bind(s -> new FullNameField.FullName(s.getFirstName(), s.getLastName()),
+                        (s, t) -> {
+                            s.setFirstName(t.firstName());
+                            s.setLastName(t.lastName());
+                        });
         binder.forField(form.getDirections())
-              .withConverter(s -> {
-                  if (Objects.isNull(s)) return new ArrayList<SimpleDirection>();
-                  return s.stream().toList();
-              }, e -> {
-                  if (Objects.isNull(e)) return new HashSet<>();
-                  return new HashSet<>(e);
-              })
-              .bind(SimpleTutor::getDirections, SimpleTutor::setDirections);
+                .withConverter(s -> {
+                    if (Objects.isNull(s)) return new ArrayList<SimpleDirection>();
+                    return s.stream().toList();
+                }, e -> {
+                    if (Objects.isNull(e)) return new HashSet<>();
+                    return new HashSet<>(e);
+                })
+                .bind(SimpleTutor::getDirections, SimpleTutor::setDirections);
         binder.forField(form.getStudents())
-              .withConverter(s -> {
-                  if (Objects.isNull(s)) return new ArrayList<SimpleUser>();
-                  return s.stream().toList();
-              }, e -> {
-                  if (Objects.isNull(e)) return new HashSet<>();
-                  return new HashSet<>(e);
-              })
-              .bind(SimpleTutor::getStudents, SimpleTutor::setStudents);
+                .withConverter(s -> {
+                    if (Objects.isNull(s)) return new ArrayList<SimpleUser>();
+                    return s.stream().toList();
+                }, e -> {
+                    if (Objects.isNull(e)) return new HashSet<>();
+                    return new HashSet<>(e);
+                })
+                .bind(SimpleTutor::getStudents, SimpleTutor::setStudents);
         binder.bindInstanceFields(form);
     }
 
@@ -65,7 +69,7 @@ public class TutoringDialog  extends Dialog implements SimpleDialog {
     }
 
     private void onSave() {
-        if(binder.validate().isOk()) {
+        if (binder.validate().isOk()) {
             if (onSaveCallback != null) {
                 binder.writeBeanIfValid(user);
                 onSaveCallback.accept(user);

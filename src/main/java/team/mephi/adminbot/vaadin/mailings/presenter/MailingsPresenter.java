@@ -10,7 +10,6 @@ import team.mephi.adminbot.vaadin.service.DialogType;
 import team.mephi.adminbot.vaadin.service.NotificationService;
 import team.mephi.adminbot.vaadin.service.NotificationType;
 
-
 public class MailingsPresenter extends CRUDPresenter<SimpleMailing> implements MailingActions {
     private final CRUDDataProvider<SimpleMailing> dataProvider;
     private final DialogService<SimpleMailing> dialogService;
@@ -24,7 +23,7 @@ public class MailingsPresenter extends CRUDPresenter<SimpleMailing> implements M
     }
 
     @Override
-    public void onCancel(SimpleMailing item, DialogType type, Object ... params) {
+    public void onCancel(SimpleMailing item, DialogType type, Object... params) {
         dialogService.showConfirmDialog(item, type, VaadinIcon.CLOSE_CIRCLE_O.create(), (edit) -> {
             edit.setStatus("CANCELED");
             dataProvider.save(edit);
@@ -34,7 +33,7 @@ public class MailingsPresenter extends CRUDPresenter<SimpleMailing> implements M
     }
 
     @Override
-    public void onRetry(SimpleMailing item, DialogType type, Object ... params) {
+    public void onRetry(SimpleMailing item, DialogType type, Object... params) {
         dialogService.showConfirmDialog(item, type, VaadinIcon.ROTATE_RIGHT.create(), (edit) -> {
             edit.setStatus("ACTIVE");
             dataProvider.save(edit);

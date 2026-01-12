@@ -17,15 +17,24 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class UserForm extends FormLayout {
-    @Getter private final ComboBox<RoleDto> roles = new ComboBox<>();
-    @Getter private final FullNameField fullNameField = new FullNameField();
-    @Getter private final EmailField email = new EmailField();
-    @Getter private final TextField tgId = new TextField();
-    @Getter private final TextField phoneNumber = new TextField();
-    @Getter private final ComboBox<CohortDto> cohorts = new ComboBox<>();
-    @Getter private final MultiSelectComboBox<SimpleDirection> directions = new MultiSelectComboBox<>();
-    @Getter private final ComboBox<CityDto> cities = new ComboBox<>();
-    @Getter private final ComboBox<SimpleTutor> tutor = new ComboBox<>();
+    @Getter
+    private final ComboBox<RoleDto> roles = new ComboBox<>();
+    @Getter
+    private final FullNameField fullNameField = new FullNameField();
+    @Getter
+    private final EmailField email = new EmailField();
+    @Getter
+    private final TextField tgId = new TextField();
+    @Getter
+    private final TextField phoneNumber = new TextField();
+    @Getter
+    private final ComboBox<CohortDto> cohorts = new ComboBox<>();
+    @Getter
+    private final MultiSelectComboBox<SimpleDirection> directions = new MultiSelectComboBox<>();
+    @Getter
+    private final ComboBox<CityDto> cities = new ComboBox<>();
+    @Getter
+    private final ComboBox<SimpleTutor> tutor = new ComboBox<>();
 
     public UserForm(RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService, TutorService tutorService) {
         var tutorProvider = new CallbackDataProvider<SimpleTutor, String>(

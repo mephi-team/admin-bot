@@ -35,7 +35,7 @@ public class QuestionDataProvider {
                                 sort.isUnsorted() ? Sort.by("createdAt").descending() : sort
                         );
                         return questionService.findAllByText(query.getFilter().orElse(""), pageable);
-                        },
+                    },
                     query -> questionService.countByText(query.getFilter().orElse("")),
                     SimpleQuestion::getId
             ).withConfigurableFilter();

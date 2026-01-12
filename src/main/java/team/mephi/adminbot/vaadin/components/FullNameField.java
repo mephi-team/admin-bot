@@ -10,7 +10,7 @@ import java.util.Objects;
 
 public class FullNameField extends CustomField<FullNameField.FullName> {
     private final TextField firstName = new TextField();
-    private final TextField lastName =  new TextField();
+    private final TextField lastName = new TextField();
 
     public FullNameField() {
         firstName.setMaxWidth("50%");

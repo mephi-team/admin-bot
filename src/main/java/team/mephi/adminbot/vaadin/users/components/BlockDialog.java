@@ -11,13 +11,12 @@ import team.mephi.adminbot.vaadin.components.SecondaryButton;
 
 public class BlockDialog<T> extends Dialog implements SimpleDialog {
     private final BeanValidationBinder<T> binder;
-    private final Button saveButton = new Button(getTranslation("save_button"), e -> onSave());
     private final Tabs tabs = new Tabs();
     private final Tab tab1 = new Tab(getTranslation("dialog_user_block_tab_warning_label"));
     private final Tab tab2 = new Tab(getTranslation("dialog_user_block_tab_block_label"));
-
-    private SerializableConsumer<T> onSaveCallback;
     private final Class<T> beanType;
+    private SerializableConsumer<T> onSaveCallback;
+    private final Button saveButton = new Button(getTranslation("save_button"), e -> onSave());
 
     public BlockDialog(Class<T> beanType) {
         this.beanType = beanType;
@@ -30,13 +29,13 @@ public class BlockDialog<T> extends Dialog implements SimpleDialog {
         form2.setVisible(false);
         tabs.add(tab1, tab2);
         tabs.addSelectedChangeListener(e -> {
-           if (e.getSelectedTab().equals(tab1)){
-               form1.setVisible(true);
-               form2.setVisible(false);
-           } else {
-               form1.setVisible(false);
-               form2.setVisible(true);
-           }
+            if (e.getSelectedTab().equals(tab1)) {
+                form1.setVisible(true);
+                form2.setVisible(false);
+            } else {
+                form1.setVisible(false);
+                form2.setVisible(true);
+            }
         });
         binder.bindInstanceFields(form);
         binder.bindInstanceFields(form1);
@@ -61,7 +60,7 @@ public class BlockDialog<T> extends Dialog implements SimpleDialog {
     }
 
     private void onSave() {
-        if(binder.validate().isOk()) {
+        if (binder.validate().isOk()) {
             if (onSaveCallback != null) {
                 try {
                     T user = beanType.getDeclaredConstructor().newInstance();

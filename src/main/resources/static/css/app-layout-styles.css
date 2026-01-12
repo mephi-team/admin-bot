@@ -87,6 +87,8 @@ vaadin-text-field.first::part(input-field) {
     border-end-end-radius: 0;
     border-start-end-radius: 0;
     --_background: transparent;
+    --_hover-highlight: var(--lumo-primary-color-10pct);
+    --vaadin-input-field-hover-highlight-opacity: 1;
     outline: 1px solid var(--lumo-contrast-20pct);
     border-end-start-radius: 12px;
     border-start-start-radius: 12px;
@@ -97,13 +99,16 @@ vaadin-text-field.last::part(input-field) {
     border-end-start-radius: 0;
     border-start-start-radius: 0;
     --_background: transparent;
+    --_hover-highlight: var(--lumo-primary-color-10pct);
+    --vaadin-input-field-hover-highlight-opacity: 1;
     outline: 1px solid var(--lumo-contrast-20pct);
     border-end-end-radius: 12px;
     border-start-end-radius: 12px;
     min-height: 40px
 }
 
-vaadin-dialog-overlay::part(footer) {
+vaadin-dialog-overlay::part(footer),
+vaadin-confirm-dialog-overlay::part(footer) {
     background: transparent;
 }
 
@@ -131,11 +136,14 @@ vaadin-tabsheet[theme~="neo"]::part(tabs-container) {
     box-shadow: none;
 }
 
+vaadin-text-area[theme~="neo"]::part(input-field),
 vaadin-text-field[theme~="neo"]::part(input-field),
 vaadin-email-field[theme~="neo"]::part(input-field),
 vaadin-combo-box[theme~="neo"]::part(input-field),
 vaadin-multi-select-combo-box[theme~="neo"]::part(input-field) {
     --_background: transparent;
+    --_hover-highlight: var(--lumo-primary-color-10pct);
+    --vaadin-input-field-hover-highlight-opacity: 1;
     outline: 1px solid var(--lumo-contrast-20pct);
     outline-offset: -1px;
     border-radius: 12px;
@@ -143,12 +151,41 @@ vaadin-multi-select-combo-box[theme~="neo"]::part(input-field) {
     /*margin: 3px;*/
 }
 
-vaadin-grid[theme~="neo"] vaadin-checkbox {
+vaadin-multi-select-combo-box[theme~="neo"] vaadin-multi-select-combo-box-chip {
+    background: #fff;
+    border: 1px solid var(--lumo-contrast-20pct);
+    border-radius: 12px;
+    /*height: 32px;*/
+}
+
+vaadin-multi-select-combo-box[theme~="neo"] vaadin-multi-select-combo-box-chip[focused] {
+    background: var(--lumo-primary-color);
+    color: var(--lumo-primary-contrast-color);
+}
+
+
+vaadin-text-area[theme~="neo"]::part(input-field):hover {
+    background: var(--lumo-primary-color-10pct);
+}
+
+vaadin-checkbox.neo,
+vaadin-grid[theme~="neo"] vaadin-checkbox,
+vaadin-checkbox-group[theme~="neo"] vaadin-checkbox {
     --vaadin-input-field-border-width: 1px;
     --vaadin-checkbox-background: transparent;
     --vaadin-checkbox-background-hover: var(--lumo-primary-color-10pct);
     --vaadin-input-field-border-color: var(--lumo-primary-color);
-    /*outline: 1px solid var(--lumo-contrast-20pct);*/
+}
+
+vaadin-radio-group[theme~="neo"] vaadin-radio-button {
+    --vaadin-input-field-border-width: 1px;
+    --vaadin-input-field-border-color: var(--lumo-primary-color);
+    --vaadin-radio-button-background: transparent;
+    --vaadin-radio-button-background-hover: var(--lumo-primary-color-10pct);
+}
+
+vaadin-checkbox-group[theme~="error"] vaadin-checkbox {
+    --vaadin-input-field-border-color: var(--lumo-error-color);
 }
 
 vaadin-app-layout::part(navbar) {
@@ -158,4 +195,11 @@ vaadin-app-layout::part(navbar) {
 
 vaadin-app-layout::part(drawer) {
     z-index: 1;
+}
+
+vaadin-tooltip-overlay::part(overlay) {
+    background-color: #162143;
+    color: #fff;
+    border-radius: 12px;
+    padding: 8px 12px;
 }

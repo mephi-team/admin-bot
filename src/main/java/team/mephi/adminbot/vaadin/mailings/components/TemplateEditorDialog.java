@@ -12,9 +12,8 @@ import java.util.Objects;
 
 public class TemplateEditorDialog extends Dialog implements SimpleDialog {
     private final BeanValidationBinder<SimpleTemplate> binder = new BeanValidationBinder<>(SimpleTemplate.class);
-    private final Button saveButton = new PrimaryButton(getTranslation("save_button"), e -> onSave());
-
     private SerializableConsumer<SimpleTemplate> onSaveCallback;
+    private final Button saveButton = new PrimaryButton(getTranslation("save_button"), e -> onSave());
 
     public TemplateEditorDialog() {
         var form = new TemplateForm();
@@ -36,7 +35,7 @@ public class TemplateEditorDialog extends Dialog implements SimpleDialog {
     }
 
     private void onSave() {
-        if(binder.validate().isOk()) {
+        if (binder.validate().isOk()) {
             if (onSaveCallback != null) {
                 SimpleTemplate template = new SimpleTemplate();
                 binder.writeBeanIfValid(template);

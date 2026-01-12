@@ -28,19 +28,27 @@ public class TemplateFormTab extends FormLayout {
         radioGroup.setItems(newMessage, fromTemplate);
         radioGroup.setValue(newMessage);
         radioGroup.setItemLabelGenerator(TemplateMessage::getName);
+        radioGroup.addThemeName("neo");
 
         ComboBox<SimpleTemplate> templates = new ComboBox<>();
         templates.setItemsPageable(templateService::findAll);
         templates.setItemLabelGenerator(SimpleTemplate::getName);
+        templates.addThemeName("neo");
 
         Checkbox createLink = new Checkbox();
         Checkbox saveTemplate = new Checkbox();
+        createLink.addClassName("neo");
+        saveTemplate.addClassName("neo");
 
         TextField link = new TextField();
         link.setValue("https://telemost.360.yandex.ru/j/000000000");
+        link.addThemeName("neo");
 
         text1.setMinRows(10);
         text1.setRequiredIndicatorVisible(true);
+        text1.addThemeName("neo");
+
+        name1.addThemeName("neo");
 
         addFormItem(radioGroup, getTranslation("form_mailing_message_label"));
         FormItem templateItem = addFormItem(templates, getTranslation("form_mailing_template_label"));
@@ -88,6 +96,7 @@ public class TemplateFormTab extends FormLayout {
     private static class TemplateMessage {
         private final String name;
         private final String value;
+
         public TemplateMessage(String name, String value) {
             this.name = name;
             this.value = value;

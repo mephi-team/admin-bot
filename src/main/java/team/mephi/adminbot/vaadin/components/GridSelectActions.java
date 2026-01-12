@@ -11,7 +11,7 @@ public class GridSelectActions extends HorizontalLayout {
 
     public GridSelectActions(String text, Component... components) {
         countControl = new Span(String.valueOf(selectedCount));
-        Span prefix = new Span(new Span(text), new Span(" "),countControl);
+        Span prefix = new Span(new Span(text), new Span(" "), countControl);
         prefix.addClassNames(LumoUtility.FontWeight.BOLD);
         setAlignItems(Alignment.CENTER);
 

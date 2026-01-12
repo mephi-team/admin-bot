@@ -11,10 +11,9 @@ import team.mephi.adminbot.vaadin.components.PrimaryButton;
 
 public class AnswerDialog extends Dialog implements SimpleDialog {
     private final BeanValidationBinder<SimpleQuestion> binder = new BeanValidationBinder<>(SimpleQuestion.class);
-    private final Button answerButton = new PrimaryButton( getTranslation("dialog_answer_button"), VaadinIcon.PAPERPLANE_O.create(), e -> onAnswer());
-
     private SerializableConsumer<SimpleQuestion> onSaveCallback;
     private SimpleQuestion question;
+    private final Button answerButton = new PrimaryButton(getTranslation("dialog_answer_button"), VaadinIcon.PAPERPLANE_O.create(), e -> onAnswer());
 
     public AnswerDialog() {
         var form = new AnswerForm();
@@ -33,7 +32,7 @@ public class AnswerDialog extends Dialog implements SimpleDialog {
     }
 
     private void onAnswer() {
-        if(binder.validate().isOk()) {
+        if (binder.validate().isOk()) {
             if (onSaveCallback != null) {
                 binder.writeBeanIfValid(question);
                 onSaveCallback.accept(question);

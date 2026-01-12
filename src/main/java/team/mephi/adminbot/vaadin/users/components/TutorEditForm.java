@@ -9,21 +9,35 @@ import com.vaadin.flow.data.provider.CallbackDataProvider;
 import lombok.Getter;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import team.mephi.adminbot.dto.*;
-import team.mephi.adminbot.service.*;
+import team.mephi.adminbot.dto.CohortDto;
+import team.mephi.adminbot.dto.RoleDto;
+import team.mephi.adminbot.dto.SimpleDirection;
+import team.mephi.adminbot.dto.SimpleUser;
+import team.mephi.adminbot.service.CohortService;
+import team.mephi.adminbot.service.DirectionService;
+import team.mephi.adminbot.service.RoleService;
+import team.mephi.adminbot.service.UserService;
 import team.mephi.adminbot.vaadin.components.FullNameField;
 
 import java.util.Objects;
 
 public class TutorEditForm extends FormLayout {
-    @Getter private final ComboBox<RoleDto> roles = new ComboBox<>();
-    @Getter private final FullNameField fullNameField = new FullNameField();
-    @Getter private final TextField centerOfCompetence = new TextField();
-    @Getter private final EmailField email = new EmailField();
-    @Getter private final TextField tgId = new TextField();
-    @Getter private final ComboBox<CohortDto> cohorts = new ComboBox<>();
-    @Getter private final MultiSelectComboBox<SimpleDirection> directions = new MultiSelectComboBox<>();
-    @Getter private final MultiSelectComboBox<SimpleUser> students = new MultiSelectComboBox<>();
+    @Getter
+    private final ComboBox<RoleDto> roles = new ComboBox<>();
+    @Getter
+    private final FullNameField fullNameField = new FullNameField();
+    @Getter
+    private final TextField centerOfCompetence = new TextField();
+    @Getter
+    private final EmailField email = new EmailField();
+    @Getter
+    private final TextField tgId = new TextField();
+    @Getter
+    private final ComboBox<CohortDto> cohorts = new ComboBox<>();
+    @Getter
+    private final MultiSelectComboBox<SimpleDirection> directions = new MultiSelectComboBox<>();
+    @Getter
+    private final MultiSelectComboBox<SimpleUser> students = new MultiSelectComboBox<>();
 
     public TutorEditForm(RoleService roleService, CohortService cohortService, DirectionService directionService, UserService userService) {
         var studentsProvider = new CallbackDataProvider<SimpleUser, String>(
@@ -42,17 +56,25 @@ public class TutorEditForm extends FormLayout {
 
         roles.setItemsPageable(roleService::getAllRoles);
         roles.setItemLabelGenerator(RoleDto::getName);
+        roles.addThemeName("neo");
+
+        centerOfCompetence.addThemeName("neo");
+        email.addThemeName("neo");
+        tgId.addThemeName("neo");
 
         cohorts.setItemsPageable(cohortService::getAllCohorts);
         cohorts.setItemLabelGenerator(CohortDto::getName);
+        cohorts.addThemeName("neo");
 
         directions.setItemsPageable(directionService::getAllDirections);
         directions.setItemLabelGenerator(SimpleDirection::getName);
         directions.setAutoExpand(MultiSelectComboBox.AutoExpandMode.VERTICAL);
+        directions.addThemeName("neo");
 
         students.setItems(studentsProvider);
         students.setItemLabelGenerator(u -> u.getFullName() + (Objects.nonNull(u.getTgId()) ? " " + u.getTgId() : ""));
         students.setAutoExpand(MultiSelectComboBox.AutoExpandMode.VERTICAL);
+        students.addThemeName("neo");
 
         addFormItem(roles, getTranslation("form_users_roles_label"));
         addFormItem(fullNameField, getTranslation("form_users_full_name_label"));

@@ -11,16 +11,16 @@ import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.component.tabs.TabSheetVariant;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
-import team.mephi.adminbot.vaadin.*;
-import team.mephi.adminbot.vaadin.components.*;
-import team.mephi.adminbot.vaadin.mailings.service.MailingCountService;
+import team.mephi.adminbot.vaadin.CRUDActions;
+import team.mephi.adminbot.vaadin.components.PrimaryButton;
+import team.mephi.adminbot.vaadin.components.UserCountBadge;
 import team.mephi.adminbot.vaadin.mailings.presenter.MailingPresenterFactory;
+import team.mephi.adminbot.vaadin.mailings.service.MailingCountService;
 import team.mephi.adminbot.vaadin.mailings.tabs.MailingTabProvider;
 import team.mephi.adminbot.vaadin.mailings.tabs.MailingTabType;
 import team.mephi.adminbot.vaadin.service.DialogType;
 
 import java.util.*;
-
 
 @Route(value = "/mailings", layout = DialogsLayout.class)
 @RolesAllowed("ADMIN")
@@ -60,11 +60,11 @@ public class Mailings extends VerticalLayout {
             tabSheet.add(tab, content, provider.getPosition());
         }
         tabSheet.addSelectedChangeListener(a -> {
-           if (tabSheet.getSelectedIndex() == 1) {
-               primaryButton.setText(getTranslation("page_mailing_create_template_button"));
-           } else {
-               primaryButton.setText(getTranslation("page_mailing_create_mailing_button"));
-           }
+            if (tabSheet.getSelectedIndex() == 1) {
+                primaryButton.setText(getTranslation("page_mailing_create_template_button"));
+            } else {
+                primaryButton.setText(getTranslation("page_mailing_create_mailing_button"));
+            }
         });
     }
 

@@ -32,6 +32,7 @@ public class GridSettingsPopover extends Popover {
 
         CheckboxGroup<String> group = new CheckboxGroup<>();
         group.addThemeVariants(CheckboxGroupVariant.LUMO_VERTICAL);
+        group.addThemeName("neo");
         group.setItems(columns);
         group.setItemLabelGenerator((item) -> {
             var label = Arrays.stream(item.replaceAll("[^a-zA-Z\\s]", " ").replaceAll("(?<=\\p{Lower})(?=\\p{Upper})", " ").toLowerCase().split("\\s+")).filter(s -> !s.isEmpty()).collect(Collectors.joining("_"));
@@ -47,20 +48,20 @@ public class GridSettingsPopover extends Popover {
         defaultColumns.removeAll(disabled);
         group.setValue(defaultColumns);
 
-        Button showAll = new Button(getTranslation("grid_settings_popover_action_show_all"), (e) -> {
-            group.setValue(new HashSet<>(columns));
-        });
-        showAll.addThemeVariants(ButtonVariant.LUMO_SMALL);
-
-        Button reset = new Button(getTranslation("grid_settings_popover_action_reset"), (e) -> {
-            group.setValue(defaultColumns);
-        });
-        reset.addThemeVariants(ButtonVariant.LUMO_SMALL);
-
-        HorizontalLayout footer = new HorizontalLayout(showAll, reset);
-        footer.setSpacing(false);
-        footer.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
-
-        add(heading, group, footer);
+//        Button showAll = new Button(getTranslation("grid_settings_popover_action_show_all"), (e) -> {
+//            group.setValue(new HashSet<>(columns));
+//        });
+//        showAll.addThemeVariants(ButtonVariant.LUMO_SMALL);
+//
+//        Button reset = new Button(getTranslation("grid_settings_popover_action_reset"), (e) -> {
+//            group.setValue(defaultColumns);
+//        });
+//        reset.addThemeVariants(ButtonVariant.LUMO_SMALL);
+//
+//        HorizontalLayout footer = new HorizontalLayout(showAll, reset);
+//        footer.setSpacing(false);
+//        footer.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
+//
+        add(heading, group);//, footer);
     }
 }

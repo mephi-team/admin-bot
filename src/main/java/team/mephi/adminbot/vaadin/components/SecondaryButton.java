@@ -22,6 +22,7 @@ public class SecondaryButton extends Button {
         super(text, clickListener);
         init();
     }
+
     public SecondaryButton(String text, Component icon, ComponentEventListener<ClickEvent<Button>> clickListener) {
         super(text, icon, clickListener);
         init();

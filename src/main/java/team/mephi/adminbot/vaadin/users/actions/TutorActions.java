@@ -5,5 +5,5 @@ import team.mephi.adminbot.vaadin.CRUDActions;
 import team.mephi.adminbot.vaadin.service.DialogType;
 
 public interface TutorActions extends CRUDActions<SimpleTutor>, BlockingActions<SimpleTutor> {
-    void onTutoring(SimpleTutor item, DialogType type, Object ... params);
+    void onTutoring(SimpleTutor item, DialogType type, Object... params);
 }
