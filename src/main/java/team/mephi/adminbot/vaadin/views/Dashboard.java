@@ -37,7 +37,8 @@ public class Dashboard extends VerticalLayout {
 
         if (authService.isAdmin())
             add(buildCardArea(card1, card2, card3, card4, card5));
-        add(buildCardArea(card3));
+        else
+            add(buildCardArea(card3));
     }
 
     private HorizontalLayout buildCardArea(Component... components) {

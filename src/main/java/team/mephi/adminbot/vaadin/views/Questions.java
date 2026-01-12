@@ -52,11 +52,11 @@ public class Questions extends VerticalLayout {
         add(new H1(getTranslation("page_question_title")));
 
         var gsa = new GridSelectActions(getTranslation("grid_question_actions_label"),
-                new SecondaryButton(getTranslation("grid_question_actions_delete_label"), VaadinIcon.TRASH.create(), e -> {
+                authService.isAdmin() ? new SecondaryButton(getTranslation("grid_question_actions_delete_label"), VaadinIcon.TRASH.create(), e -> {
                     if (!selectedIds.isEmpty()) {
                         onDelete(selectedIds);
                     }
-                })
+                }) : new Span()
         );
 
         setSizeFull();
