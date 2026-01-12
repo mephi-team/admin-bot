@@ -1,7 +1,7 @@
 FROM eclipse-temurin:25-alpine-3.21 AS runtime
 RUN jlink \
     --output /mini-runtime \
-    --add-modules java.base,java.desktop,java.instrument,java.management,java.logging,java.naming,java.security.jgss,jdk.management,java.sql,jdk.unsupported \
+    --add-modules java.base,java.desktop,java.instrument,java.management,java.logging,java.naming,java.security.jgss,jdk.management,java.sql,jdk.unsupported,jdk.zipfs \
     --strip-debug \
     --compress=2 \
     --no-header-files \
@@ -9,10 +9,15 @@ RUN jlink \
 
 FROM maven:3.9.11-eclipse-temurin-25-alpine AS builder
 WORKDIR /build
+
+RUN apk update
+RUN apk add nodejs npm
+
 COPY pom.xml .
 RUN mvn dependency:go-offline
 COPY src ./src
-RUN mvn -DskipTests clean package
+ENV VAADIN_PRODUCTIONMODE=true
+RUN mvn clean package -DskipTests
 
 FROM alpine:3.21
 WORKDIR /opt/app

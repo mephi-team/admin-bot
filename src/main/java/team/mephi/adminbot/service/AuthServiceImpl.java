@@ -17,9 +17,8 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public StandardClaimAccessor getUserInfo() {
-        DefaultOidcUser user = authContext.getAuthenticatedUser(DefaultOidcUser.class).orElseThrow();
-        return user.getUserInfo();
+    public DefaultOidcUser getUserInfo() {
+        return authContext.getAuthenticatedUser(DefaultOidcUser.class).orElseThrow();
     }
 
     @Override
