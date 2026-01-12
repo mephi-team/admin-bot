@@ -23,6 +23,6 @@ public class UserMenu extends HorizontalLayout {
 
         Button logout = new IconButton(VaadinIcon.SIGN_OUT.create(), event -> authenticationContext.logout());
 
-        add(userName, logout);
+        add(new IconButton(VaadinIcon.COG.create()), new Span("|"), userName, logout);
     }
 }
