@@ -1,5 +1,6 @@
 package team.mephi.adminbot.vaadin.dialogs.components;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
@@ -12,6 +13,7 @@ import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.AfterNavigationObserver;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import team.mephi.adminbot.dto.ChatListItem;
+import team.mephi.adminbot.dto.SimpleDialog;
 import team.mephi.adminbot.vaadin.dialogs.dataproviders.ChatListDataProvider;
 import team.mephi.adminbot.vaadin.dialogs.dataproviders.ChatListDataProviderFactory;
 
@@ -23,6 +25,7 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
     VirtualList<ChatListItem> chatList;
     Div emptyMessage = new Div(getTranslation("page_dialogs_chat_not_selected"));
     VerticalLayout header = new VerticalLayout();
+
     ComponentRenderer<Div, ChatListItem> cardRenderer = new ComponentRenderer<>(item -> {
         if (item.isHeader()) {
             // Заголовок даты
@@ -51,10 +54,13 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
             return message;
         }
     });
+
     private Long dialogId;
 
     public ChatListComponent(ChatListDataProviderFactory dataProviderFactory) {
         this.provider = dataProviderFactory.createDataProvider();
+        setHeightFull();
+        addClassNames(LumoUtility.Padding.Top.NONE);
 
         chatList = new VirtualList<>();
         chatList.setDataProvider(provider.getFilterableProvider());
@@ -62,29 +68,33 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
 
         emptyMessage.setVisible(false);
 
-        VerticalLayout bordered = new VerticalLayout();
-        bordered.setHeightFull();
-        bordered.setSpacing(0, Unit.PIXELS);
-        bordered.addClassNames(LumoUtility.Border.ALL, LumoUtility.BorderColor.CONTRAST_10);
-        bordered.getElement().getStyle().set("border-radius", "12px");
-        bordered.add(header, chatList, emptyMessage);
+        chatInput = createChatInput();
 
-        chatInput = new MessageInput();
+        header.setPadding(false);
+        header.setSpacing(0, Unit.PIXELS);
+        add(createChatContainer(header, chatList, emptyMessage), chatInput);
+    }
+
+    private VerticalLayout createChatContainer(Component... components) {
+        var container = new VerticalLayout();
+        container.setHeightFull();
+        container.setSpacing(0, Unit.PIXELS);
+        container.addClassNames(LumoUtility.Border.ALL, LumoUtility.BorderColor.CONTRAST_10);
+        container.getElement().getStyle().set("border-radius", "12px");
+        container.add(components);
+        return container;
+    }
+
+    private MessageInput createChatInput() {
+        var input = new MessageInput();
         var i18n = new MessageInputI18n();
         i18n.setSend(getTranslation("chat.send"));
         i18n.setMessage(getTranslation("chat.placeholder"));
-        chatInput.setI18n(i18n);
-        chatInput.setWidthFull();
-        chatInput.addClassName("neo");
-        chatInput.addSubmitListener(submitEvent -> {
-            provider.save(dialogId, submitEvent.getValue());
-            provider.getFilterableProvider().refreshAll();
-            chatList.scrollToEnd();
-        });
-        add(bordered, chatInput);
-
-        setHeightFull();
-        addClassNames(LumoUtility.Padding.Top.NONE);
+        input.setI18n(i18n);
+        input.setWidthFull();
+        input.addClassName("neo");
+        input.addSubmitListener(submitEvent -> onMessage(submitEvent.getValue()));
+        return input;
     }
 
     @Override
@@ -103,27 +113,28 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
             chatList.setVisible(false);
             emptyMessage.setVisible(true);
         }
-        getHeader();
+        Optional.ofNullable(dialogId).ifPresent(id -> {
+            header.removeAll();
+            provider.findById(id).ifPresent(this::renderHeader);
+        });
         provider.getFilterableProvider().refreshAll();
     }
+    private void onMessage(String message) {
+        provider.save(dialogId, message);
+        provider.getFilterableProvider().refreshAll();
+        chatList.scrollToEnd();
+    }
 
-    private void getHeader() {
-        header.removeAll();
-        header.setPadding(false);
-        header.setSpacing(0, Unit.PIXELS);
-        if (Objects.nonNull(dialogId)) {
-            provider.findById(dialogId).ifPresent(dialog -> {
-                Span user = new Span(dialog.getUserName());
-                user.addClassNames(LumoUtility.FontWeight.BOLD);
-                Span login = new Span(dialog.getTgId());
-                header.add(new Div(user, new Span(", "), login));
-                Span role = new Span(dialog.getRole());
-                Span direction = new Span(dialog.getDirection());
-                Span cohort = new Span(dialog.getCohort());
-                var secondLine = new Div(role, new Span(" | "), direction, new Span(" , "), cohort);
-                secondLine.addClassNames(LumoUtility.TextColor.SECONDARY, LumoUtility.FontSize.SMALL);
-                header.add(secondLine);
-            });
-        }
+    private void renderHeader(SimpleDialog dialog) {
+        Span user = new Span(dialog.getUserName());
+        user.addClassNames(LumoUtility.FontWeight.BOLD);
+        Span login = new Span(dialog.getTgId());
+        header.add(new Div(user, new Span(", "), login));
+        Span role = new Span(dialog.getRole());
+        Span direction = new Span(dialog.getDirection());
+        Span cohort = new Span(dialog.getCohort());
+        var secondLine = new Div(role, new Span(" | "), direction, new Span(" , "), cohort);
+        secondLine.addClassNames(LumoUtility.TextColor.SECONDARY, LumoUtility.FontSize.SMALL);
+        header.add(secondLine);
     }
 }
