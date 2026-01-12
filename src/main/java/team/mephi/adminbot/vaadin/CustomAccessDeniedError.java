@@ -6,8 +6,8 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.ErrorParameter;
 import com.vaadin.flow.router.HasErrorParameter;
 import com.vaadin.flow.server.HttpStatusCode;
-import com.vaadin.flow.spring.security.AuthenticationContext;
 import jakarta.annotation.security.PermitAll;
+import team.mephi.adminbot.service.AuthService;
 import team.mephi.adminbot.vaadin.components.Logo;
 import team.mephi.adminbot.vaadin.components.TopMenu;
 import team.mephi.adminbot.vaadin.components.UserMenu;
@@ -16,8 +16,8 @@ import team.mephi.adminbot.vaadin.components.UserMenu;
 public class CustomAccessDeniedError extends AppLayout
         implements HasErrorParameter<AccessDeniedException> {
 
-    public CustomAccessDeniedError(AuthenticationContext authenticationContext) {
-        addToNavbar(new Logo("Neoflex"), new TopMenu(authenticationContext), new UserMenu(authenticationContext));
+    public CustomAccessDeniedError(AuthService authService) {
+        addToNavbar(new Logo("Neoflex"), new TopMenu(authService), new UserMenu(authService));
     }
 
     @Override
