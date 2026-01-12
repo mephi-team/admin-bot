@@ -4,7 +4,10 @@ import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.dependency.StyleSheet;
 import jakarta.annotation.security.PermitAll;
 import team.mephi.adminbot.service.AuthService;
-import team.mephi.adminbot.vaadin.components.*;
+import team.mephi.adminbot.vaadin.components.LeftMenu;
+import team.mephi.adminbot.vaadin.components.Logo;
+import team.mephi.adminbot.vaadin.components.TopMenu;
+import team.mephi.adminbot.vaadin.components.UserMenu;
 import team.mephi.adminbot.vaadin.components.buttons.MenuButton;
 
 @PermitAll

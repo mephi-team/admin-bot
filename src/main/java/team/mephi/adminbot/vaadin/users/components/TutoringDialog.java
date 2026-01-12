@@ -10,9 +10,9 @@ import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.service.DirectionService;
 import team.mephi.adminbot.service.UserService;
 import team.mephi.adminbot.vaadin.DialogWithTitle;
-import team.mephi.adminbot.vaadin.components.fields.FullNameField;
 import team.mephi.adminbot.vaadin.components.buttons.PrimaryButton;
 import team.mephi.adminbot.vaadin.components.buttons.SecondaryButton;
+import team.mephi.adminbot.vaadin.components.fields.FullNameField;
 
 import java.util.ArrayList;
 import java.util.HashSet;
