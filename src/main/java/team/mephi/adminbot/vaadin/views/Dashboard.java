@@ -13,12 +13,13 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 import jakarta.annotation.security.PermitAll;
+import team.mephi.adminbot.service.AuthService;
 import team.mephi.adminbot.vaadin.dashboard.dataproviders.DashboardDataProviderFactory;
 
 @Route("/")
 @PermitAll
 public class Dashboard extends VerticalLayout {
-    public Dashboard(DashboardDataProviderFactory factory) {
+    public Dashboard(DashboardDataProviderFactory factory, AuthService authService) {
         var provider = factory.create();
         setAlignItems(Alignment.CENTER);
         add(new H1(getTranslation("page_dashboard_title")));
@@ -34,7 +35,9 @@ public class Dashboard extends VerticalLayout {
         Card card4 = createCard("page_dashboard_users_card_title", VaadinIcon.USERS.create(), Users.class);
         Card card5 = createCard("page_dashboard_analytics_card_title", VaadinIcon.BAR_CHART.create(), Analytics.class);
 
-        add(buildCardArea(card1, card2, card3, card4, card5));
+        if (authService.isAdmin())
+            add(buildCardArea(card1, card2, card3, card4, card5));
+        add(buildCardArea(card3));
     }
 
     private HorizontalLayout buildCardArea(Component... components) {
