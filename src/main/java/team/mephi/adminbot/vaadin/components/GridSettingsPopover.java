@@ -48,20 +48,20 @@ public class GridSettingsPopover extends Popover {
         defaultColumns.removeAll(disabled);
         group.setValue(defaultColumns);
 
-        Button showAll = new Button(getTranslation("grid_settings_popover_action_show_all"), (e) -> {
-            group.setValue(new HashSet<>(columns));
-        });
-        showAll.addThemeVariants(ButtonVariant.LUMO_SMALL);
-
-        Button reset = new Button(getTranslation("grid_settings_popover_action_reset"), (e) -> {
-            group.setValue(defaultColumns);
-        });
-        reset.addThemeVariants(ButtonVariant.LUMO_SMALL);
-
-        HorizontalLayout footer = new HorizontalLayout(showAll, reset);
-        footer.setSpacing(false);
-        footer.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
-
-        add(heading, group, footer);
+//        Button showAll = new Button(getTranslation("grid_settings_popover_action_show_all"), (e) -> {
+//            group.setValue(new HashSet<>(columns));
+//        });
+//        showAll.addThemeVariants(ButtonVariant.LUMO_SMALL);
+//
+//        Button reset = new Button(getTranslation("grid_settings_popover_action_reset"), (e) -> {
+//            group.setValue(defaultColumns);
+//        });
+//        reset.addThemeVariants(ButtonVariant.LUMO_SMALL);
+//
+//        HorizontalLayout footer = new HorizontalLayout(showAll, reset);
+//        footer.setSpacing(false);
+//        footer.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
+//
+        add(heading, group);//, footer);
     }
 }

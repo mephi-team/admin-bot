@@ -49,15 +49,18 @@ public class TutorForm extends FormLayout {
 
         fullNameField.setReadOnly(true);
         tgId.setReadOnly(true);
+        tgId.addThemeName("neo");
 
         directions.setReadOnly(true);
         directions.setItems(directionsProvider);
         directions.setItemLabelGenerator(SimpleDirection::getName);
         directions.setAutoExpand(MultiSelectComboBox.AutoExpandMode.VERTICAL);
+        directions.addThemeName("neo");
 
         students.setItems(studentsProvider);
         students.setItemLabelGenerator(u -> u.getFullName() + (Objects.nonNull(u.getTgId()) ? " " + u.getTgId() : ""));
         students.setAutoExpand(MultiSelectComboBox.AutoExpandMode.VERTICAL);
+        students.addThemeName("neo");
         students.addSelectionListener(e -> {
             var selectedItems = e.getAddedSelection();
             boolean hasInvalid = selectedItems.removeIf(item -> Objects.isNull(item.getId()));
