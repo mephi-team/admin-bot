@@ -11,7 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import team.mephi.adminbot.dto.*;
 import team.mephi.adminbot.service.*;
-import team.mephi.adminbot.vaadin.components.FullNameField;
+import team.mephi.adminbot.vaadin.components.fields.FullNameField;
 
 import java.util.Objects;
 import java.util.stream.Collectors;

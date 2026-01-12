@@ -12,7 +12,14 @@ import com.vaadin.flow.router.QueryParameters;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import team.mephi.adminbot.dto.SimpleTutor;
 import team.mephi.adminbot.model.enums.UserStatus;
-import team.mephi.adminbot.vaadin.components.*;
+import team.mephi.adminbot.vaadin.components.ButtonGroup;
+import team.mephi.adminbot.vaadin.components.GridSelectActions;
+import team.mephi.adminbot.vaadin.components.GridSettingsPopover;
+import team.mephi.adminbot.vaadin.components.SearchFragment;
+import team.mephi.adminbot.vaadin.components.buttons.IconButton;
+import team.mephi.adminbot.vaadin.components.buttons.SecondaryButton;
+import team.mephi.adminbot.vaadin.components.buttons.TextButton;
+import team.mephi.adminbot.vaadin.components.fields.SearchField;
 import team.mephi.adminbot.vaadin.service.DialogType;
 import team.mephi.adminbot.vaadin.users.dataproviders.TutorDataProviderImpl;
 import team.mephi.adminbot.vaadin.users.presenter.TutorPresenter;
@@ -74,7 +81,7 @@ public class TutorView extends VerticalLayout {
         var searchField = new SearchField(getTranslation("grid_tutor_search_placeholder"));
         searchField.addValueChangeListener(e -> provider.getFilterableProvider().setFilter(e.getValue()));
 
-        var settingsBtn = new IconButton(VaadinIcon.COG.create());
+        var settingsBtn = new IconButton(VaadinIcon.COG_O.create());
         var settingsPopover = new GridSettingsPopover(grid, Set.of(), Set.of("actions"));
         settingsPopover.setTarget(settingsBtn);
 

@@ -1,4 +1,4 @@
-package team.mephi.adminbot.vaadin.components;
+package team.mephi.adminbot.vaadin.components.fields;
 
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.textfield.TextField;

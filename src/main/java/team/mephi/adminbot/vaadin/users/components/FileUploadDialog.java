@@ -6,13 +6,12 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.UploadI18N;
 import com.vaadin.flow.server.streams.UploadHandler;
-import com.vaadin.flow.spring.security.AuthenticationContext;
 import org.jspecify.annotations.NonNull;
-import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import team.mephi.adminbot.dto.SimpleFile;
+import team.mephi.adminbot.service.AuthService;
 import team.mephi.adminbot.service.FileService;
-import team.mephi.adminbot.vaadin.components.PrimaryButton;
-import team.mephi.adminbot.vaadin.components.SecondaryButton;
+import team.mephi.adminbot.vaadin.components.buttons.PrimaryButton;
+import team.mephi.adminbot.vaadin.components.buttons.SecondaryButton;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -23,8 +22,7 @@ public class FileUploadDialog extends Dialog {
     private final Button addButton = new PrimaryButton(getTranslation("dialog_users_file_upload_action"));
     private final Map<String, SimpleFile> fileList = new HashMap<>();
 
-    public FileUploadDialog(AuthenticationContext authContext, FileService fileService) {
-        var user = authContext.getAuthenticatedUser(DefaultOidcUser.class).orElseThrow();
+    public FileUploadDialog(AuthService authService, FileService fileService) {
         setHeaderTitle(getTranslation("dialog_users_file_upload_title"));
 
         add(getUpload());
@@ -32,7 +30,7 @@ public class FileUploadDialog extends Dialog {
         addButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         addButton.addClickListener(e -> {
             try {
-                fileService.uploadAll(fileList.values().stream().toList(), user.getUserInfo().getEmail());
+                fileService.uploadAll(fileList.values().stream().toList(), authService.getUserInfo().getEmail());
                 fileList.clear();
                 close();
                 addButton.setEnabled(!fileList.isEmpty());

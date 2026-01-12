@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import team.mephi.adminbot.dto.SimpleTutor;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.vaadin.DialogWithTitle;
-import team.mephi.adminbot.vaadin.components.SimpleConfirmDialog;
+import team.mephi.adminbot.vaadin.components.dialogs.SimpleConfirmDialog;
 import team.mephi.adminbot.vaadin.mailings.components.MailingEditorDialogFactory;
 import team.mephi.adminbot.vaadin.mailings.components.TemplateEditorDialogFactory;
 import team.mephi.adminbot.vaadin.questions.components.AnswerDialogFactory;

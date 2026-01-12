@@ -1,7 +1,5 @@
 package team.mephi.adminbot.service;
 
-import com.vaadin.flow.spring.security.AuthenticationContext;
-import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.stereotype.Service;
 import team.mephi.adminbot.dto.ChatListItem;
 import team.mephi.adminbot.dto.MessagesForListDto;
@@ -25,13 +23,13 @@ import java.util.stream.Collectors;
 public class MessageServiceImpl implements MessageService {
     private static final LocalDateTime today = LocalDateTime.now();
 
-    private final AuthenticationContext authContext;
+    private final AuthService authService;
     private final MessageRepository messageRepository;
     private final DialogRepository dialogRepository;
     private final UserRepository userRepository;
 
-    public MessageServiceImpl(AuthenticationContext authContext, MessageRepository messageRepository, DialogRepository dialogRepository, UserRepository userRepository) {
-        this.authContext = authContext;
+    public MessageServiceImpl(AuthService authService, MessageRepository messageRepository, DialogRepository dialogRepository, UserRepository userRepository) {
+        this.authService = authService;
         this.messageRepository = messageRepository;
         this.dialogRepository = dialogRepository;
         this.userRepository = userRepository;
@@ -90,8 +88,7 @@ public class MessageServiceImpl implements MessageService {
         message.setCreatedAt(createdAt);
         message.setUpdatedAt(createdAt);
         message.setSenderType(MessageSenderType.EXPERT);
-        var user = authContext.getAuthenticatedUser(DefaultOidcUser.class).orElseThrow();
-        var email = user.getUserInfo().getEmail();
+        var email = authService.getUserInfo().getEmail();
         message.setSender(userRepository.findByEmail(email).orElseThrow());
         message.setStatus(MessageStatus.SENT);
         message.setText(messageText);
@@ -99,6 +96,11 @@ public class MessageServiceImpl implements MessageService {
         dialog.setLastMessageAt(createdAt);
         dialog.setUnreadCount(0);
         dialogRepository.save(dialog);
+    }
+
+    @Override
+    public Integer unreadCount() {
+        return dialogRepository.unreadCount();
     }
 
     private String formatDate(LocalDate date) {

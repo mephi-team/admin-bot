@@ -17,7 +17,7 @@ import team.mephi.adminbot.dto.SimpleDialog;
 import team.mephi.adminbot.vaadin.dialogs.dataproviders.ChatListDataProvider;
 import team.mephi.adminbot.vaadin.dialogs.dataproviders.ChatListDataProviderFactory;
 
-import java.util.*;
+import java.util.Optional;
 
 public class ChatListComponent extends VerticalLayout implements AfterNavigationObserver {
     private final ChatListDataProvider provider;

@@ -1,9 +1,7 @@
 package team.mephi.adminbot.service;
 
-import com.vaadin.flow.spring.security.AuthenticationContext;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.stereotype.Service;
 import team.mephi.adminbot.dto.SimpleQuestion;
 import team.mephi.adminbot.model.UserAnswer;
@@ -20,13 +18,13 @@ import java.util.stream.Stream;
 
 @Service
 public class QuestionServiceImpl implements QuestionService {
-    private final AuthenticationContext authContext;
+    private final AuthService authService;
     private final UserRepository userRepository;
     private final UserQuestionRepository questionRepository;
     private final UserAnswerRepository answerRepository;
 
-    public QuestionServiceImpl(AuthenticationContext authContext, UserRepository userRepository, UserQuestionRepository questionRepository, UserAnswerRepository answerRepository) {
-        this.authContext = authContext;
+    public QuestionServiceImpl(AuthService authService, UserRepository userRepository, UserQuestionRepository questionRepository, UserAnswerRepository answerRepository) {
+        this.authService = authService;
         this.userRepository = userRepository;
         this.questionRepository = questionRepository;
         this.answerRepository = answerRepository;
@@ -35,12 +33,10 @@ public class QuestionServiceImpl implements QuestionService {
     @Transactional
     @Override
     public SimpleQuestion saveAnswer(SimpleQuestion question) {
-        var user = authContext.getAuthenticatedUser(DefaultOidcUser.class).orElseThrow();
-
         var answer = UserAnswer.builder()
                 .status(AnswerStatus.SENT)
                 .answeredAt(Instant.now())
-                .answeredBy(userRepository.findByEmail(user.getUserInfo().getEmail()).orElseThrow())
+                .answeredBy(userRepository.findByEmail(authService.getUserInfo().getEmail()).orElseThrow())
                 .question(UserQuestion.builder().id(question.getId()).build())
                 .answerText(question.getAnswer())
                 .build();
@@ -71,6 +67,11 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public void deleteAllById(Iterable<Long> ids) {
         questionRepository.deleteAllById(ids);
+    }
+
+    @Override
+    public Integer countNewQuestion() {
+        return questionRepository.countNewQuestion();
     }
 
     private SimpleQuestion mapToSimple(UserQuestion userQuestion) {

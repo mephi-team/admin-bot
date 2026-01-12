@@ -5,6 +5,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.splitlayout.SplitLayout;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
+import team.mephi.adminbot.vaadin.components.layout.DialogsLayout;
 import team.mephi.adminbot.vaadin.dialogs.components.ChatListComponent;
 import team.mephi.adminbot.vaadin.dialogs.components.DialogListComponent;
 import team.mephi.adminbot.vaadin.dialogs.dataproviders.ChatListDataProviderFactory;

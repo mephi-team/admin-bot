@@ -7,7 +7,7 @@ import team.mephi.adminbot.dto.SimpleDialog;
 import team.mephi.adminbot.service.MessageService;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Optional;
 
 public class ChatListDataProvider {
     private static final LocalDateTime today = LocalDateTime.now();

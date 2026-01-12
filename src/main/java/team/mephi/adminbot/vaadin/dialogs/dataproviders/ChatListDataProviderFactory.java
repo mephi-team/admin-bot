@@ -8,7 +8,7 @@ public class ChatListDataProviderFactory {
 
     private final MessageService messageService;
 
-    public ChatListDataProviderFactory( MessageService messageService) {
+    public ChatListDataProviderFactory(MessageService messageService) {
         this.messageService = messageService;
     }
 

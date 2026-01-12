@@ -7,7 +7,7 @@ import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.function.SerializableConsumer;
 import team.mephi.adminbot.vaadin.DialogWithTitle;
-import team.mephi.adminbot.vaadin.components.SecondaryButton;
+import team.mephi.adminbot.vaadin.components.buttons.SecondaryButton;
 
 public class BlockDialog<T> extends Dialog implements DialogWithTitle {
     private final BeanValidationBinder<T> binder;

@@ -11,7 +11,13 @@ import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
 import com.vaadin.flow.function.SerializableBiConsumer;
 import team.mephi.adminbot.dto.SimpleMailing;
-import team.mephi.adminbot.vaadin.components.*;
+import team.mephi.adminbot.vaadin.components.ButtonGroup;
+import team.mephi.adminbot.vaadin.components.GridSelectActions;
+import team.mephi.adminbot.vaadin.components.GridSettingsPopover;
+import team.mephi.adminbot.vaadin.components.SearchFragment;
+import team.mephi.adminbot.vaadin.components.buttons.IconButton;
+import team.mephi.adminbot.vaadin.components.buttons.SecondaryButton;
+import team.mephi.adminbot.vaadin.components.fields.SearchField;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.SentDataProvider;
 import team.mephi.adminbot.vaadin.mailings.presenter.MailingsPresenter;
 import team.mephi.adminbot.vaadin.service.DialogType;
@@ -94,7 +100,7 @@ public class SentView extends VerticalLayout {
             provider.getFilterableProvider().setFilter(e.getValue());
         });
 
-        var settingsBtn = new IconButton(VaadinIcon.COG.create());
+        var settingsBtn = new IconButton(VaadinIcon.COG_O.create());
         var settingsPopover = new GridSettingsPopover(grid, Set.of(), Set.of("actions"));
         settingsPopover.setTarget(settingsBtn);
 
