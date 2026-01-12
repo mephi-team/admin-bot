@@ -215,7 +215,7 @@ vaadin-message-input.neo > vaadin-button {
 }
 
 vaadin-message-input.neo > vaadin-text-area {
-    margin-inline: 2px;
+    margin-inline: 0;
     height: 80px;
 }
 
@@ -225,4 +225,8 @@ vaadin-message-input.neo > vaadin-text-area::part(input-field) {
     outline: 1px solid var(--lumo-contrast-20pct);
     outline-offset: -1px;
     height: 30px;
+}
+
+vaadin-message-input.neo > vaadin-text-area::part(input-field):hover {
+    background-color: var(--lumo-primary-color-10pct);
 }
