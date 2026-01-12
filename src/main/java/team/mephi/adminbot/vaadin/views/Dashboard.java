@@ -23,13 +23,13 @@ public class Dashboard extends VerticalLayout {
         setAlignItems(Alignment.CENTER);
         add(new H1(getTranslation("page_dashboard_title")));
 
-        Card card1 = createCard("page_dashboard_dialogs_card_title", VaadinIcon.ENVELOPE_O.create(), Mailings.class);
+        Card card1 = createCard("page_dashboard_mailing_card_title", VaadinIcon.ENVELOPE_O.create(), Mailings.class);
 
         Card card2 = createCard("page_dashboard_dialogs_card_title", VaadinIcon.CHAT.create(), Dialogs.class);
-        card2.add(createBadge(provider.unreadCount(), "page_dashboard_dialogs_card_new_messages"));
+        card2.add(createBadge(provider.unreadCount(), "page_dashboard_dialogs_card_new_messages", "page_dashboard_dialogs_card_empty_messages"));
 
         Card card3 = createCard("page_dashboard_questions_card_title", VaadinIcon.QUESTION.create(), Questions.class);
-        card3.add(createBadge(provider.countNewQuestion(), "page_dashboard_questions_card_new_questions"));
+        card3.add(createBadge(provider.countNewQuestion(), "page_dashboard_questions_card_new_questions", "page_dashboard_questions_card_empty_questions"));
 
         Card card4 = createCard("page_dashboard_users_card_title", VaadinIcon.USERS.create(), Users.class);
         Card card5 = createCard("page_dashboard_analytics_card_title", VaadinIcon.BAR_CHART.create(), Analytics.class);
@@ -48,10 +48,13 @@ public class Dashboard extends VerticalLayout {
         return layout;
     }
 
-    private Span createBadge(Integer count, String key) {
+    private Span createBadge(Integer count, String key, String empty) {
         Span newDialogs = new Span(count.toString());
         newDialogs.getElement().getThemeList().add("badge success");
-        return new Span(newDialogs, new Span(" "), new Span(getTranslation(key)));
+        if (count > 0)
+            return new Span(newDialogs, new Span(" "), new Span(getTranslation(key)));
+        else
+            return new Span(getTranslation(empty));
     }
 
     private Card createCard(String key, Icon icon, Class<? extends com.vaadin.flow.component.Component> navigationTarget) {
