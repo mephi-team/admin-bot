@@ -75,6 +75,7 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
         i18n.setMessage(getTranslation("chat.placeholder"));
         chatInput.setI18n(i18n);
         chatInput.setWidthFull();
+        chatInput.addClassName("neo");
         chatInput.addSubmitListener(submitEvent -> {
             provider.save(dialogId, submitEvent.getValue());
             provider.getFilterableProvider().refreshAll();
