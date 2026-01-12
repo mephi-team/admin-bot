@@ -19,10 +19,15 @@ public class AnswerForm extends FormLayout {
         setExpandColumns(true);
 
         author.setReadOnly(true);
+        author.addThemeName("neo");
         role.setReadOnly(true);
+        role.addThemeName("neo");
         direction.setReadOnly(true);
+        direction.addThemeName("neo");
         text.setReadOnly(true);
+        text.addThemeName("neo");
         answer.setMinRows(4);
+        answer.addThemeName("neo");
 
         addFormItem(author, getTranslation("dialog_answer_author_label"));
         addFormItem(role, getTranslation("dialog_answer_role_label"));
