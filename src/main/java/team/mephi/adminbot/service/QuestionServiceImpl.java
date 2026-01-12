@@ -73,6 +73,11 @@ public class QuestionServiceImpl implements QuestionService {
         questionRepository.deleteAllById(ids);
     }
 
+    @Override
+    public Integer countNewQuestion() {
+        return questionRepository.countNewQuestion();
+    }
+
     private SimpleQuestion mapToSimple(UserQuestion userQuestion) {
         return SimpleQuestion.builder()
                 .id(userQuestion.getId())

@@ -13,23 +13,23 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 import jakarta.annotation.security.PermitAll;
-import team.mephi.adminbot.repository.DialogRepository;
-import team.mephi.adminbot.repository.UserQuestionRepository;
+import team.mephi.adminbot.vaadin.dashboard.dataproviders.DashboardDataProviderFactory;
 
 @Route("/")
 @PermitAll
 public class Dashboard extends VerticalLayout {
-    public Dashboard(DialogRepository dialogRepository, UserQuestionRepository userQuestionRepository) {
+    public Dashboard(DashboardDataProviderFactory factory) {
+        var provider = factory.create();
         setAlignItems(Alignment.CENTER);
         add(new H1(getTranslation("page_dashboard_title")));
 
         Card card1 = createCard("page_dashboard_dialogs_card_title", VaadinIcon.ENVELOPE_O.create(), Mailings.class);
 
         Card card2 = createCard("page_dashboard_dialogs_card_title", VaadinIcon.CHAT.create(), Dialogs.class);
-        card2.add(createBadge(dialogRepository.unreadCount(), "page_dashboard_dialogs_card_new_messages"));
+        card2.add(createBadge(provider.unreadCount(), "page_dashboard_dialogs_card_new_messages"));
 
         Card card3 = createCard("page_dashboard_questions_card_title", VaadinIcon.QUESTION.create(), Questions.class);
-        card3.add(createBadge(userQuestionRepository.countNewQuestion(), "page_dashboard_questions_card_new_questions"));
+        card3.add(createBadge(provider.countNewQuestion(), "page_dashboard_questions_card_new_questions"));
 
         Card card4 = createCard("page_dashboard_users_card_title", VaadinIcon.USERS.create(), Users.class);
         Card card5 = createCard("page_dashboard_analytics_card_title", VaadinIcon.BAR_CHART.create(), Analytics.class);

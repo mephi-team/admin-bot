@@ -16,4 +16,6 @@ public interface QuestionService {
     Optional<SimpleQuestion> findByIdWithDeps(Long id);
 
     void deleteAllById(Iterable<Long> ids);
+
+    Integer countNewQuestion();
 }

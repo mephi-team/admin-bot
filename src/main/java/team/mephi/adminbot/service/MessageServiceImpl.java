@@ -101,6 +101,11 @@ public class MessageServiceImpl implements MessageService {
         dialogRepository.save(dialog);
     }
 
+    @Override
+    public Integer unreadCount() {
+        return dialogRepository.unreadCount();
+    }
+
     private String formatDate(LocalDate date) {
         if (date == null) return "";
 

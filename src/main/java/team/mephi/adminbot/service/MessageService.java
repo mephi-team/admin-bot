@@ -8,7 +8,12 @@ import java.util.Optional;
 
 public interface MessageService {
     List<ChatListItem> findAllByDialogId(Long dialogId);
+
     Optional<SimpleDialog> findById(Long dialogId);
+
     Integer countByDialogId(Long dialogId);
+
     void send(Long dialogId, String messageText);
+
+    Integer unreadCount();
 }
