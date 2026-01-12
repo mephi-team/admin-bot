@@ -10,14 +10,14 @@ import team.mephi.adminbot.dto.CohortDto;
 import team.mephi.adminbot.dto.RoleDto;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.service.*;
-import team.mephi.adminbot.vaadin.SimpleDialog;
+import team.mephi.adminbot.vaadin.DialogWithTitle;
 import team.mephi.adminbot.vaadin.components.FullNameField;
 import team.mephi.adminbot.vaadin.components.PrimaryButton;
 import team.mephi.adminbot.vaadin.components.SecondaryButton;
 
 import java.util.Objects;
 
-public class UserEditorDialog extends Dialog implements SimpleDialog {
+public class UserEditorDialog extends Dialog implements DialogWithTitle {
     private final BeanValidationBinder<SimpleUser> binder = new BeanValidationBinder<>(SimpleUser.class);
     private SerializableConsumer<SimpleUser> onSaveCallback;
     private SimpleUser user;

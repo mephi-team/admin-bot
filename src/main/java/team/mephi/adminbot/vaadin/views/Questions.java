@@ -37,8 +37,8 @@ public class Questions extends VerticalLayout {
     private final QuestionDataProvider provider;
     private List<Long> selectedIds;
 
-    public Questions(QuestionDataProviderFactory factory, DialogService<?> dialogService, NotificationService notificationService) {
-        this.provider = factory.createDataProvider();
+    public Questions(QuestionDataProviderFactory providerFactory, DialogService<?> dialogService, NotificationService notificationService) {
+        this.provider = providerFactory.createDataProvider();
         this.dialogService = dialogService;
         this.notificationService = notificationService;
 

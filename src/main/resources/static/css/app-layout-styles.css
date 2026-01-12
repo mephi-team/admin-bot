@@ -203,3 +203,30 @@ vaadin-tooltip-overlay::part(overlay) {
     border-radius: 12px;
     padding: 8px 12px;
 }
+
+vaadin-message-input.neo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+vaadin-message-input.neo > vaadin-button {
+    border-radius: 12px;
+}
+
+vaadin-message-input.neo > vaadin-text-area {
+    margin-inline: 0;
+    height: 80px;
+}
+
+vaadin-message-input.neo > vaadin-text-area::part(input-field) {
+    --vaadin-input-field-border-radius: 12px;
+    --vaadin-input-field-background: transparent;
+    outline: 1px solid var(--lumo-contrast-20pct);
+    outline-offset: -1px;
+    height: 30px;
+}
+
+vaadin-message-input.neo > vaadin-text-area::part(input-field):hover {
+    background-color: var(--lumo-primary-color-10pct);
+}

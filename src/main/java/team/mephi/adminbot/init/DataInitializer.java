@@ -380,20 +380,20 @@ public class DataInitializer {
                 UserQuestion q = allQuestions.get(random.nextInt(allQuestions.size()));
                 Message userMsg = createMessage(dialog, user, q.getText(), "user", currentTimestamp);
                 messages.add(userMsg);
-                currentTimestamp = currentTimestamp.plusSeconds(3 + random.nextInt(5));
+                currentTimestamp = currentTimestamp.minusSeconds(3 + random.nextInt(5));
 
                 // Иногда бот не отвечает (последнее сообщение от пользователя)
                 if (r < todayRounds - 1 || random.nextBoolean()) {
                     Message botMsg = createMessage(dialog, null, q.getAnswers().get(random.nextInt(q.getAnswers().size())).getAnswerText(), "bot", currentTimestamp);
                     messages.add(botMsg);
-                    currentTimestamp = currentTimestamp.plusSeconds(4 + random.nextInt(6));
+                    currentTimestamp = currentTimestamp.minusSeconds(4 + random.nextInt(6));
                 }
             }
         } else {
             // === ОБЫЧНЫЙ ДИАЛОГ: ВСЁ ЗА ОДИН ДЕНЬ ===
             currentTimestamp = Instant.now()
                     .minusSeconds(random.nextInt(10) * DAY_SECONDS)
-                    .plusSeconds(9 + random.nextInt(10) * HOUR_SECONDS)
+                    .minusSeconds(9 + random.nextInt(10) * HOUR_SECONDS)
                     .truncatedTo(ChronoUnit.MINUTES);
 
             int rounds = 1 + random.nextInt(3);
@@ -403,12 +403,12 @@ public class DataInitializer {
                 UserQuestion q = allQuestions.get(random.nextInt(allQuestions.size()));
                 Message userMsg = createMessage(dialog, user, q.getText(), "user", currentTimestamp);
                 messages.add(userMsg);
-                currentTimestamp = currentTimestamp.plusSeconds(2 + random.nextInt(3));
+                currentTimestamp = currentTimestamp.minusSeconds(2 + random.nextInt(3));
 
                 if (!(r == rounds - 1 && endsWithUserMessage)) {
                     Message botMsg = createMessage(dialog, null, q.getAnswers().get(random.nextInt(0, q.getAnswers().size())).getAnswerText(), "bot", currentTimestamp);
                     messages.add(botMsg);
-                    currentTimestamp = currentTimestamp.plusSeconds(3 + random.nextInt(4));
+                    currentTimestamp = currentTimestamp.minusSeconds(3 + random.nextInt(4));
                 }
             }
         }

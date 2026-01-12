@@ -12,7 +12,7 @@ import com.vaadin.flow.function.SerializableConsumer;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import team.mephi.adminbot.dto.*;
 import team.mephi.adminbot.service.*;
-import team.mephi.adminbot.vaadin.SimpleDialog;
+import team.mephi.adminbot.vaadin.DialogWithTitle;
 import team.mephi.adminbot.vaadin.components.PrimaryButton;
 import team.mephi.adminbot.vaadin.components.SecondaryButton;
 
@@ -21,7 +21,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class MailingEditorDialog extends Dialog implements SimpleDialog {
+public class MailingEditorDialog extends Dialog implements DialogWithTitle {
     private final BeanValidationBinder<SimpleMailing> binder = new BeanValidationBinder<>(SimpleMailing.class);
     private final TabSheet tabSheet = new TabSheet();
     private final Tab tab1;

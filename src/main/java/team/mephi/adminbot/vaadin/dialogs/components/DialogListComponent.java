@@ -1,4 +1,4 @@
-package team.mephi.adminbot.vaadin.components;
+package team.mephi.adminbot.vaadin.dialogs.components;
 
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.html.Div;
@@ -8,15 +8,14 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.virtuallist.VirtualList;
-import com.vaadin.flow.data.provider.CallbackDataProvider;
-import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.flow.theme.lumo.LumoUtility;
-import lombok.Getter;
 import team.mephi.adminbot.dto.DialogWithLastMessageDto;
-import team.mephi.adminbot.repository.DialogRepository;
+import team.mephi.adminbot.vaadin.components.SearchField;
+import team.mephi.adminbot.vaadin.dialogs.dataproviders.DialogListDataProvider;
+import team.mephi.adminbot.vaadin.dialogs.dataproviders.DialogListDataProviderFactory;
 import team.mephi.adminbot.vaadin.views.Dialogs;
 
 import java.time.Instant;
@@ -29,10 +28,8 @@ import java.util.Optional;
 @AnonymousAllowed
 public class DialogListComponent extends VerticalLayout implements AfterNavigationObserver, BeforeEnterObserver {
     private final Instant today;
-    protected ConfigurableFilterDataProvider<DialogWithLastMessageDto, Void, String> provider;
+    protected DialogListDataProvider provider;
     private Long activeDialogId;
-    @Getter
-    private Long currentUserId;
 
     ComponentRenderer<RouterLink, DialogWithLastMessageDto> cardRenderer = new ComponentRenderer<>(item -> {
         RouterLink link = new RouterLink();
@@ -41,8 +38,8 @@ public class DialogListComponent extends VerticalLayout implements AfterNavigati
         link.getElement().getStyle().set("text-decoration", "none");
 
         link.setRoute(Dialogs.class, new RouteParameters("dialogId", item.getDialogId().toString()));
-        if (currentUserId != null) {
-            link.setQueryParameters(new QueryParameters(Map.of("userId", List.of("" + currentUserId))));
+        if (provider.getCurrentUserId() != null) {
+            link.setQueryParameters(new QueryParameters(Map.of("userId", List.of("" + provider.getCurrentUserId()))));
         }
 
         Div content = new Div();
@@ -108,7 +105,7 @@ public class DialogListComponent extends VerticalLayout implements AfterNavigati
         return link;
     });
 
-    public DialogListComponent(DialogRepository dialogRepository) {
+    public DialogListComponent(DialogListDataProviderFactory dataProviderFactory) {
         this.today = Instant.now();
 
         setHeightFull();
@@ -117,32 +114,17 @@ public class DialogListComponent extends VerticalLayout implements AfterNavigati
         final TextField searchField = new SearchField(getTranslation("page_dialogs_search_label"));
         searchField.setWidth("100%");
 
-        provider = getProvider(dialogRepository, searchField);
+        provider = dataProviderFactory.createDataProvider();
 
         VirtualList<DialogWithLastMessageDto> list = new VirtualList<>();
-        list.setDataProvider(provider);
+        list.setDataProvider(provider.getFilterableProvider());
         list.setRenderer(cardRenderer);
 
         searchField.addValueChangeListener(e -> {
-            provider.setFilter(e.getValue());
+            provider.getFilterableProvider().setFilter(e.getValue());
         });
 
         add(searchField, list);
-    }
-
-    private ConfigurableFilterDataProvider<DialogWithLastMessageDto, Void, String> getProvider(DialogRepository dialogRepository, TextField searchField) {
-        CallbackDataProvider<DialogWithLastMessageDto, String> dataProvider = new CallbackDataProvider<>(
-                query -> {
-                    return dialogRepository.findDialogsWithLastMessageNative(searchField.getValue(), Optional.ofNullable(getCurrentUserId()))
-                            .stream()
-                            .skip(query.getOffset())
-                            .limit(query.getLimit());
-                },
-                query -> dialogRepository.countDialogsWithLastMessageNative(searchField.getValue(), Optional.ofNullable(getCurrentUserId())),
-                DialogWithLastMessageDto::getDialogId
-        );
-
-        return dataProvider.withConfigurableFilter();
     }
 
     private Span formatDate(Instant dateTime) {
@@ -169,18 +151,18 @@ public class DialogListComponent extends VerticalLayout implements AfterNavigati
             try {
                 this.activeDialogId = Long.parseLong(dialogId.get());
                 // После получения ID, перерендериваем список, чтобы применились стили
-                provider.refreshAll();
+                provider.getFilterableProvider().refreshAll();
             } catch (NumberFormatException e) {
                 // Обработка ошибки, если ID не число
             }
         } else {
             this.activeDialogId = null;
-            provider.refreshAll();
+            provider.getFilterableProvider().refreshAll();
         }
     }
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
-        currentUserId = event.getLocation().getQueryParameters().getSingleParameter("userId").map(Long::parseLong).orElse(null);
+        provider.setCurrentUserId(event.getLocation().getQueryParameters().getSingleParameter("userId").map(Long::parseLong).orElse(null));
     }
 }

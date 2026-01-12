@@ -5,12 +5,12 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.function.SerializableConsumer;
 import team.mephi.adminbot.dto.SimpleTemplate;
-import team.mephi.adminbot.vaadin.SimpleDialog;
+import team.mephi.adminbot.vaadin.DialogWithTitle;
 import team.mephi.adminbot.vaadin.components.PrimaryButton;
 
 import java.util.Objects;
 
-public class TemplateEditorDialog extends Dialog implements SimpleDialog {
+public class TemplateEditorDialog extends Dialog implements DialogWithTitle {
     private final BeanValidationBinder<SimpleTemplate> binder = new BeanValidationBinder<>(SimpleTemplate.class);
     private SerializableConsumer<SimpleTemplate> onSaveCallback;
     private final Button saveButton = new PrimaryButton(getTranslation("save_button"), e -> onSave());

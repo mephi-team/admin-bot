@@ -9,7 +9,7 @@ import team.mephi.adminbot.dto.SimpleTutor;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.service.DirectionService;
 import team.mephi.adminbot.service.UserService;
-import team.mephi.adminbot.vaadin.SimpleDialog;
+import team.mephi.adminbot.vaadin.DialogWithTitle;
 import team.mephi.adminbot.vaadin.components.FullNameField;
 import team.mephi.adminbot.vaadin.components.PrimaryButton;
 import team.mephi.adminbot.vaadin.components.SecondaryButton;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Objects;
 
-public class TutoringDialog extends Dialog implements SimpleDialog {
+public class TutoringDialog extends Dialog implements DialogWithTitle {
     private final BeanValidationBinder<SimpleTutor> binder = new BeanValidationBinder<>(SimpleTutor.class);
     private SerializableConsumer<SimpleTutor> onSaveCallback;
     private SimpleTutor user;
