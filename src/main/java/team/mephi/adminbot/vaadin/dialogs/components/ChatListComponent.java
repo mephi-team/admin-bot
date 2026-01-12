@@ -21,39 +21,10 @@ import java.util.*;
 
 public class ChatListComponent extends VerticalLayout implements AfterNavigationObserver {
     private final ChatListDataProvider provider;
-    MessageInput chatInput;
-    VirtualList<ChatListItem> chatList;
-    Div emptyMessage = new Div(getTranslation("page_dialogs_chat_not_selected"));
-    VerticalLayout header = new VerticalLayout();
-
-    ComponentRenderer<Div, ChatListItem> cardRenderer = new ComponentRenderer<>(item -> {
-        if (item.isHeader()) {
-            // Заголовок даты
-            Div header = new Div(item.getDateLabel());
-            header.addClassNames(LumoUtility.TextAlignment.CENTER, LumoUtility.FontSize.XXSMALL, LumoUtility.FontWeight.SEMIBOLD);
-            header.addClassNames(LumoUtility.TextColor.SECONDARY, LumoUtility.Margin.Vertical.SMALL);
-            return header;
-        } else {
-            Div message = new Div(item.getMessage().getText());
-            String date = item.getMessage().getDate().toString(); // Z означает UTC
-            Div time = new Div();
-            time.getElement().executeJs("const f=new Intl.DateTimeFormat(navigator.language, {hour: 'numeric', minute: 'numeric'});this.innerHTML=f.format(new Date($0));", date);
-            message.addClassNames(LumoUtility.Display.GRID, LumoUtility.Margin.Vertical.XSMALL, LumoUtility.Overflow.HIDDEN);
-            message.getStyle().set("padding", "12px").set("border-radius", "12px").set("max-width", "70%");
-            if (item.getMessage().getSenderType().equals("USER")) {
-                message.addClassNames(LumoUtility.Background.PRIMARY_10);
-                message.getStyle().set("border-end-end-radius", "0").set("justify-self", "end");
-                time.addClassNames(LumoUtility.TextAlignment.RIGHT);
-            } else {
-                message.addClassNames(LumoUtility.Background.CONTRAST_10);
-                message.getStyle().set("border-end-start-radius", "0").set("justify-self", "start");
-                time.addClassNames(LumoUtility.TextAlignment.LEFT);
-            }
-            message.add(time);
-            time.addClassNames(LumoUtility.FontSize.XXSMALL, LumoUtility.TextColor.SECONDARY);
-            return message;
-        }
-    });
+    private final MessageInput chatInput;
+    private final VirtualList<ChatListItem> chatList;
+    private final Div emptyMessage;
+    private final VerticalLayout header;
 
     private Long dialogId;
 
@@ -62,26 +33,67 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
         setHeightFull();
         addClassNames(LumoUtility.Padding.Top.NONE);
 
+        emptyMessage = new Div(getTranslation("page_dialogs_chat_not_selected"));
+        emptyMessage.setVisible(false);
+
+        header = new VerticalLayout();
+        header.setPadding(false);
+        header.setSpacing(0, Unit.PIXELS);
+
         chatList = new VirtualList<>();
         chatList.setDataProvider(provider.getFilterableProvider());
-        chatList.setRenderer(cardRenderer);
-
-        emptyMessage.setVisible(false);
+        chatList.setRenderer(createMessageRenderer());
 
         chatInput = createChatInput();
 
-        header.setPadding(false);
-        header.setSpacing(0, Unit.PIXELS);
-        add(createChatContainer(header, chatList, emptyMessage), chatInput);
+        add(buildChatArea(header, chatList, emptyMessage), chatInput);
     }
 
-    private VerticalLayout createChatContainer(Component... components) {
-        var container = new VerticalLayout();
+    private ComponentRenderer<Div, ChatListItem> createMessageRenderer() {
+        return new ComponentRenderer<>(this::renderChatItem);
+    }
+
+    private Div renderChatItem(ChatListItem item) {
+        if (item.isHeader()) {
+            return renderDateHeader(item.getDateLabel());
+        }
+        return renderMessage(item);
+    }
+
+    private Div renderMessage(ChatListItem item) {
+        Div message = new Div(item.getMessage().getText());
+        String date = item.getMessage().getDate().toString(); // Z означает UTC
+        Div time = new Div();
+        time.getElement().executeJs("const f=new Intl.DateTimeFormat(navigator.language, {hour: 'numeric', minute: 'numeric'});this.innerHTML=f.format(new Date($0));", date);
+        message.addClassNames(LumoUtility.Display.GRID, LumoUtility.Margin.Vertical.XSMALL, LumoUtility.Overflow.HIDDEN);
+        message.getStyle().set("padding", "12px").set("border-radius", "12px").set("max-width", "70%");
+        if (item.getMessage().getSenderType().equals("USER")) {
+            message.addClassNames(LumoUtility.Background.PRIMARY_10);
+            message.getStyle().set("border-end-end-radius", "0").set("justify-self", "end");
+            time.addClassNames(LumoUtility.TextAlignment.RIGHT);
+        } else {
+            message.addClassNames(LumoUtility.Background.CONTRAST_10);
+            message.getStyle().set("border-end-start-radius", "0").set("justify-self", "start");
+            time.addClassNames(LumoUtility.TextAlignment.LEFT);
+        }
+        message.add(time);
+        time.addClassNames(LumoUtility.FontSize.XXSMALL, LumoUtility.TextColor.SECONDARY);
+        return message;
+    }
+
+    private Div renderDateHeader(String label) {
+        Div header = new Div(label);
+        header.addClassNames(LumoUtility.TextAlignment.CENTER, LumoUtility.FontSize.XXSMALL, LumoUtility.FontWeight.SEMIBOLD);
+        header.addClassNames(LumoUtility.TextColor.SECONDARY, LumoUtility.Margin.Vertical.SMALL);
+        return header;
+    }
+
+    private VerticalLayout buildChatArea(Component... components) {
+        var container = new VerticalLayout(components);
         container.setHeightFull();
         container.setSpacing(0, Unit.PIXELS);
         container.addClassNames(LumoUtility.Border.ALL, LumoUtility.BorderColor.CONTRAST_10);
         container.getElement().getStyle().set("border-radius", "12px");
-        container.add(components);
         return container;
     }
 
@@ -97,44 +109,55 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
         return input;
     }
 
-    @Override
-    public void afterNavigation(AfterNavigationEvent event) {
-        Optional<String> optionalId = event.getRouteParameters().get("dialogId");
-        if (optionalId.isPresent()) {
-            dialogId = Long.parseLong(optionalId.get());
-            provider.getFilterableProvider().setFilter(dialogId);
-            chatInput.setVisible(true);
-            chatList.setVisible(true);
-            header.setVisible(true);
-            emptyMessage.setVisible(false);
-        } else {
-            header.setVisible(false);
-            chatInput.setVisible(false);
-            chatList.setVisible(false);
-            emptyMessage.setVisible(true);
-        }
-        Optional.ofNullable(dialogId).ifPresent(id -> {
-            header.removeAll();
-            provider.findById(id).ifPresent(this::renderHeader);
-        });
-        provider.getFilterableProvider().refreshAll();
-    }
     private void onMessage(String message) {
+        if (dialogId == null) return;
         provider.save(dialogId, message);
         provider.getFilterableProvider().refreshAll();
         chatList.scrollToEnd();
+    }
+
+    private void updateVisibility(boolean hasDialog) {
+        header.setVisible(hasDialog);
+        chatInput.setVisible(hasDialog);
+        chatList.setVisible(hasDialog);
+        emptyMessage.setVisible(!hasDialog);
     }
 
     private void renderHeader(SimpleDialog dialog) {
         Span user = new Span(dialog.getUserName());
         user.addClassNames(LumoUtility.FontWeight.BOLD);
         Span login = new Span(dialog.getTgId());
+
         header.add(new Div(user, new Span(", "), login));
+
         Span role = new Span(dialog.getRole());
         Span direction = new Span(dialog.getDirection());
         Span cohort = new Span(dialog.getCohort());
         var secondLine = new Div(role, new Span(" | "), direction, new Span(" , "), cohort);
         secondLine.addClassNames(LumoUtility.TextColor.SECONDARY, LumoUtility.FontSize.SMALL);
+
         header.add(secondLine);
+    }
+
+    @Override
+    public void afterNavigation(AfterNavigationEvent event) {
+        Optional<String> optionalId = event.getRouteParameters().get("dialogId");
+        boolean hasDialog = optionalId.isPresent();
+
+        if (hasDialog) {
+            dialogId = Long.parseLong(optionalId.get());
+            provider.getFilterableProvider().setFilter(dialogId);
+        } else {
+            dialogId = null;
+        }
+
+        updateVisibility(hasDialog);
+
+        if (dialogId != null) {
+            header.removeAll();
+            provider.findById(dialogId).ifPresent(this::renderHeader);
+        }
+
+        provider.getFilterableProvider().refreshAll();
     }
 }
