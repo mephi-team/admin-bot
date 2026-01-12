@@ -98,7 +98,7 @@ public class Questions extends VerticalLayout {
         var searchField = new SearchField(getTranslation("grid_question_search_placeholder"));
         searchField.addValueChangeListener(e -> provider.getFilterableProvider().setFilter(e.getValue()));
 
-        var settingsBtn = new IconButton(VaadinIcon.COG.create());
+        var settingsBtn = new IconButton(VaadinIcon.COG_O.create());
         var settingsPopover = new GridSettingsPopover(grid, Set.of(), Set.of("actions"));
         settingsPopover.setTarget(settingsBtn);
 

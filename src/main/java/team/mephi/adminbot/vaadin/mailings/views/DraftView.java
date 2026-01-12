@@ -94,7 +94,7 @@ public class DraftView extends VerticalLayout {
             provider.getFilterableProvider().setFilter(e.getValue());
         });
 
-        var settingsBtn = new IconButton(VaadinIcon.COG.create());
+        var settingsBtn = new IconButton(VaadinIcon.COG_O.create());
         var settingsPopover = new GridSettingsPopover(grid, Set.of(), Set.of("actions"));
         settingsPopover.setTarget(settingsBtn);
 
