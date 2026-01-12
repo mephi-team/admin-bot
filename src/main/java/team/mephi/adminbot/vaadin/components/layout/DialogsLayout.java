@@ -14,7 +14,7 @@ public class DialogsLayout extends AppLayout {
 
     public DialogsLayout(AuthenticationContext authenticationContext) {
         addToNavbar(new Logo("Neoflex"), new TopMenu(authenticationContext), new UserMenu(authenticationContext));
-        addToDrawer(new MenuButton(event -> toggleDrawerMode()), new LeftMenu());
+        addToDrawer(new MenuButton(event -> toggleDrawerMode()), new LeftMenu(authenticationContext));
         setDrawerMinimized(true);
     }
 

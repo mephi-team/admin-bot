@@ -20,13 +20,13 @@ public class TopMenu extends HorizontalLayout {
                 LumoUtility.Gap.SMALL, LumoUtility.Height.MEDIUM,
                 LumoUtility.Width.FULL);
 
-        add(
-                createLink(getTranslation("top_menu_communication_link"), Dialogs.class),
-                createLink(getTranslation("top_menu_users_link"), Users.class)
-        );
-
-        if (userRoles.contains("ADMIN"))
-            add(createLink(getTranslation("top_menu_analytics_link"), Analytics.class));
+        if (userRoles.contains("ADMIN")) {
+            add(
+                    createLink(getTranslation("top_menu_communication_link"), Dialogs.class),
+                    createLink(getTranslation("top_menu_users_link"), Users.class),
+                    createLink(getTranslation("top_menu_analytics_link"), Analytics.class)
+            );
+        }
 
         setSizeFull();
 
