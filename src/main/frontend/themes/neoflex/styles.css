@@ -126,6 +126,7 @@ vaadin-tabsheet::part(tabs-container) {
     box-shadow: none;
 }
 
+vaadin-date-picker::part(input-field),
 vaadin-text-area::part(input-field),
 vaadin-text-field::part(input-field),
 vaadin-email-field::part(input-field),
