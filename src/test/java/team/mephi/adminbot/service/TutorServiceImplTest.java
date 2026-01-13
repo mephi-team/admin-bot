@@ -20,9 +20,6 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-/**
- * Тесты для {@link TutorServiceImpl}.
- */
 @ExtendWith(MockitoExtension.class)
 class TutorServiceImplTest {
     @Mock
@@ -41,12 +38,8 @@ class TutorServiceImplTest {
         service = new TutorServiceImpl(tutorRepository, studentTutorRepository, userRepository);
     }
 
-    /**
-     * Проверяет маппинг данных тьютора при поиске по идентификатору.
-     */
     @Test
-    void givenTutor_WhenFindByIdCalled_ThenMapsToSimpleTutor() {
-        // Arrange
+    void findByIdMapsTutorDetails() {
         Tutor tutor = Tutor.builder()
                 .id(11L)
                 .firstName("Ivan")
@@ -64,10 +57,8 @@ class TutorServiceImplTest {
 
         when(tutorRepository.findByIdWithStudent(11L)).thenReturn(Optional.of(tutor));
 
-        // Act
         Optional<SimpleTutor> result = service.findById(11L);
 
-        // Assert
         assertThat(result)
                 .isPresent()
                 .get()

@@ -28,9 +28,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * Тесты для {@link MailingServiceImpl}.
- */
 @ExtendWith(MockitoExtension.class)
 class MailingServiceImplTest {
     @Mock
@@ -49,12 +46,8 @@ class MailingServiceImplTest {
         service = new MailingServiceImpl(authService, mailingRepository, userRepository);
     }
 
-    /**
-     * Проверяет установку автора и статуса по умолчанию при сохранении.
-     */
     @Test
-    void givenNewMailing_WhenSaveCalled_ThenCreatedByAndStatusSet() {
-        // Arrange
+    void saveAssignsCreatedByAndDefaultsStatus() {
         DefaultOidcUser userInfo = new DefaultOidcUser(
                 List.of(new SimpleGrantedAuthority("ROLE_USER")),
                 new OidcIdToken("token", Instant.now(), Instant.now().plusSeconds(60), Map.of("email", "author@example.com")),
@@ -72,10 +65,8 @@ class MailingServiceImplTest {
         when(userRepository.findByEmail("author@example.com")).thenReturn(Optional.of(author));
         when(mailingRepository.save(any(Mailing.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        // Act
         SimpleMailing result = service.save(input);
 
-        // Assert
         ArgumentCaptor<Mailing> captor = ArgumentCaptor.forClass(Mailing.class);
         verify(mailingRepository).save(captor.capture());
         Mailing saved = captor.getValue();

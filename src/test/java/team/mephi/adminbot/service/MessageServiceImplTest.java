@@ -29,9 +29,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * Тесты для {@link MessageServiceImpl}.
- */
 @ExtendWith(MockitoExtension.class)
 class MessageServiceImplTest {
     @Mock
@@ -53,12 +50,8 @@ class MessageServiceImplTest {
         service = new MessageServiceImpl(authService, messageRepository, dialogRepository, userRepository);
     }
 
-    /**
-     * Проверяет создание сообщения и обновление диалога.
-     */
     @Test
-    void givenDialogAndSender_WhenSendCalled_ThenMessageSavedAndDialogUpdated() {
-        // Arrange
+    void sendCreatesMessageAndUpdatesDialog() {
         DefaultOidcUser userInfo = new DefaultOidcUser(
                 List.of(new SimpleGrantedAuthority("ROLE_USER")),
                 new OidcIdToken("token", Instant.now(), Instant.now().plusSeconds(60), Map.of("email", "expert@example.com")),
@@ -74,10 +67,8 @@ class MessageServiceImplTest {
         when(authService.getUserInfo()).thenReturn(userInfo);
         when(userRepository.findByEmail("expert@example.com")).thenReturn(Optional.of(sender));
 
-        // Act
         service.send(12L, "Hello");
 
-        // Assert
         ArgumentCaptor<Message> messageCaptor = ArgumentCaptor.forClass(Message.class);
         verify(messageRepository).save(messageCaptor.capture());
         Message savedMessage = messageCaptor.getValue();

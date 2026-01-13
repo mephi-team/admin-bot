@@ -14,9 +14,6 @@ import team.mephi.adminbot.vaadin.components.dialogs.SimpleConfirmDialog;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * Тесты для {@link DialogServiceImpl}.
- */
 @ExtendWith(MockitoExtension.class)
 class DialogServiceImplTest {
     @Mock
@@ -31,36 +28,24 @@ class DialogServiceImplTest {
     @Mock
     private SerializableConsumer<String> callback;
 
-    /**
-     * Проверяет делегирование показа диалога фабрике.
-     */
     @Test
-    void givenDialogType_WhenShowDialogCalled_ThenDelegatesToFactory() {
-        // Arrange
+    void showDialogDelegatesToFactoryDialog() {
         when(dialogFactory.getDialog(DialogType.NEW)).thenReturn(dialogWithTitle);
         DialogServiceImpl<String> service = new DialogServiceImpl<>(dialogFactory);
 
-        // Act
         service.showDialog("item", DialogType.NEW, callback);
 
-        // Assert
         verify(dialogWithTitle).showDialog("item", callback);
     }
 
-    /**
-     * Проверяет вызов callback после подтверждения.
-     */
     @Test
-    void givenConfirmDialog_WhenConfirmed_ThenCallbackInvoked() {
-        // Arrange
+    void showConfirmDialogRunsCallbackOnConfirm() {
         Icon icon = VaadinIcon.CHECK.create();
         when(dialogFactory.getConfirmDialog(DialogType.DELETE, icon)).thenReturn(confirmDialog);
         DialogServiceImpl<String> service = new DialogServiceImpl<>(dialogFactory);
 
-        // Act
         service.showConfirmDialog("item", DialogType.DELETE, icon, callback);
 
-        // Assert
         ArgumentCaptor<Runnable> runnableCaptor = ArgumentCaptor.forClass(Runnable.class);
         verify(confirmDialog).showForConfirm("item", runnableCaptor.capture());
 

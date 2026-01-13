@@ -19,9 +19,6 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-/**
- * Тесты для {@link ExpertServiceImpl}.
- */
 @ExtendWith(MockitoExtension.class)
 class ExpertServiceImplTest {
     @Mock
@@ -34,12 +31,8 @@ class ExpertServiceImplTest {
         service = new ExpertServiceImpl(expertRepository);
     }
 
-    /**
-     * Проверяет маппинг экспертов в DTO при поиске.
-     */
     @Test
-    void givenExperts_WhenFindAllByRoleAndNameCalled_ThenMapsToSimpleUser() {
-        // Arrange
+    void findAllByRoleAndNameMapsToSimpleUser() {
         Expert expert = Expert.builder()
                 .id(22L)
                 .firstName("Elena")
@@ -53,11 +46,9 @@ class ExpertServiceImplTest {
         when(expertRepository.findAllByRoleAndName("EXPERT", "Elena", null))
                 .thenReturn(List.of(expert));
 
-        // Act
         List<SimpleUser> result = service.findAllByRoleAndName("EXPERT", "Elena", null)
                 .collect(Collectors.toList());
 
-        // Assert
         assertThat(result)
                 .hasSize(1)
                 .first()

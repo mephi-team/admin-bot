@@ -16,9 +16,6 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-/**
- * Тесты для {@link UserServiceImpl}.
- */
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
     @Mock
@@ -34,12 +31,8 @@ class UserServiceImplTest {
         service = new UserServiceImpl(userRepository, tutorRepository);
     }
 
-    /**
-     * Проверяет маппинг пользователей в DTO.
-     */
     @Test
-    void givenUsers_WhenGetAllUsersCalled_ThenMappedToDtos() {
-        // Arrange
+    void getAllUsersMapsUserDtos() {
         User user = User.builder()
                 .id(7L)
                 .userName("Test User")
@@ -48,10 +41,8 @@ class UserServiceImplTest {
 
         when(userRepository.findAll()).thenReturn(List.of(user));
 
-        // Act
         List<UserDto> result = service.getAllUsers();
 
-        // Assert
         assertThat(result)
                 .hasSize(1)
                 .first()
@@ -59,22 +50,16 @@ class UserServiceImplTest {
                 .containsExactly(7L, "Test User", "@tg");
     }
 
-    /**
-     * Проверяет получение пользователя по идентификатору.
-     */
     @Test
-    void givenUserId_WhenGetByIdCalled_ThenOptionalReturned() {
-        // Arrange
+    void getByIdReturnsOptional() {
         User user = User.builder()
                 .id(42L)
                 .userName("Alice")
                 .build();
         when(userRepository.findById(42L)).thenReturn(Optional.of(user));
 
-        // Act
         Optional<UserDto> result = service.getById(42L);
 
-        // Assert
         assertThat(result)
                 .isPresent()
                 .get()

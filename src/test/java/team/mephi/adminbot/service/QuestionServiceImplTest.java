@@ -29,9 +29,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * Тесты для {@link QuestionServiceImpl}.
- */
 @ExtendWith(MockitoExtension.class)
 class QuestionServiceImplTest {
     @Mock
@@ -53,12 +50,8 @@ class QuestionServiceImplTest {
         service = new QuestionServiceImpl(authService, userRepository, questionRepository, answerRepository);
     }
 
-    /**
-     * Проверяет сохранение ответа на вопрос.
-     */
     @Test
-    void givenQuestionAnswer_WhenSaveAnswerCalled_ThenAnswerPersisted() {
-        // Arrange
+    void saveAnswerPersistsAnswer() {
         DefaultOidcUser userInfo = new DefaultOidcUser(
                 List.of(new SimpleGrantedAuthority("ROLE_USER")),
                 new OidcIdToken("token", Instant.now(), Instant.now().plusSeconds(60), Map.of("email", "expert@example.com")),
@@ -70,10 +63,8 @@ class QuestionServiceImplTest {
 
         SimpleQuestion input = SimpleQuestion.builder().id(101L).answer("Answer text").build();
 
-        // Act
         service.saveAnswer(input);
 
-        // Assert
         ArgumentCaptor<UserAnswer> captor = ArgumentCaptor.forClass(UserAnswer.class);
         verify(answerRepository).save(captor.capture());
         UserAnswer saved = captor.getValue();
@@ -82,12 +73,8 @@ class QuestionServiceImplTest {
         assertThat(saved.getQuestion().getId()).isEqualTo(101L);
     }
 
-    /**
-     * Проверяет маппинг вопроса с последним ответом.
-     */
     @Test
-    void givenQuestionWithAnswers_WhenFindByIdWithDepsCalled_ThenLatestAnswerMapped() {
-        // Arrange
+    void findByIdWithDepsMapsLatestAnswer() {
         UserQuestion question = UserQuestion.builder()
                 .id(9L)
                 .text("Question?")
@@ -101,10 +88,8 @@ class QuestionServiceImplTest {
 
         when(questionRepository.findByIdWithDeps(9L)).thenReturn(Optional.of(question));
 
-        // Act
         Optional<SimpleQuestion> result = service.findByIdWithDeps(9L);
 
-        // Assert
         assertThat(result)
                 .isPresent()
                 .get()

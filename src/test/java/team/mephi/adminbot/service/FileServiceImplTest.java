@@ -24,9 +24,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * Тесты для {@link FileServiceImpl}.
- */
 @ExtendWith(MockitoExtension.class)
 class FileServiceImplTest {
     @Mock
@@ -59,12 +56,8 @@ class FileServiceImplTest {
         }
     }
 
-    /**
-     * Проверяет сохранение метаданных и перенос файла в хранилище.
-     */
     @Test
-    void givenFileUpload_WhenUploadAllCalled_ThenMetadataSaved() throws IOException {
-        // Arrange
+    void uploadAllMovesFileAndPersistsMetadata() throws IOException {
         Path tempFile = Files.createTempFile("upload", ".txt");
         Files.writeString(tempFile, "payload");
         SimpleFile input = SimpleFile.builder()
@@ -77,10 +70,8 @@ class FileServiceImplTest {
 
         when(userRepository.findByEmail("user@example.com")).thenReturn(Optional.of(uploader));
 
-        // Act
         service.uploadAll(List.of(input), "user@example.com");
 
-        // Assert
         ArgumentCaptor<List<StoredFile>> captor = ArgumentCaptor.forClass(List.class);
         verify(fileRepository).saveAll(captor.capture());
 

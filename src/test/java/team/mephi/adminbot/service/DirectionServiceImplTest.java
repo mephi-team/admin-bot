@@ -15,9 +15,6 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-/**
- * Тесты для {@link DirectionServiceImpl}.
- */
 @ExtendWith(MockitoExtension.class)
 class DirectionServiceImplTest {
     @Mock
@@ -30,36 +27,24 @@ class DirectionServiceImplTest {
         service = new DirectionServiceImpl(directionRepository);
     }
 
-    /**
-     * Проверяет инициализацию списка направлений при первом запросе.
-     */
     @Test
-    void givenRepositoryData_WhenGetAllDirectionsCalled_ThenIncludesDefaults() {
-        // Arrange
+    void getAllDirectionsInitializesOnce() {
         when(directionRepository.findAll()).thenReturn(List.of(Direction.builder().id(1L).name("Analytics").build()));
 
-        // Act
         List<SimpleDirection> result = service.getAllDirections();
 
-        // Assert
         assertThat(result)
                 .extracting(SimpleDirection::getName)
                 .contains("Все", "Analytics");
     }
 
-    /**
-     * Проверяет маппинг направления по идентификатору.
-     */
     @Test
-    void givenDirectionId_WhenGetByIdCalled_ThenDirectionMapped() {
-        // Arrange
+    void getByIdMapsDirection() {
         Direction direction = Direction.builder().id(5L).name("DevOps").build();
         when(directionRepository.findById(5L)).thenReturn(Optional.of(direction));
 
-        // Act
         Optional<SimpleDirection> result = service.getById(5L);
 
-        // Assert
         assertThat(result)
                 .isPresent()
                 .get()
