@@ -13,6 +13,7 @@ import java.util.Objects;
 public class TemplateEditorDialog extends Dialog implements DialogWithTitle {
     private final BeanValidationBinder<SimpleTemplate> binder = new BeanValidationBinder<>(SimpleTemplate.class);
     private SerializableConsumer<SimpleTemplate> onSaveCallback;
+    private SimpleTemplate template;
     private final Button saveButton = new PrimaryButton(getTranslation("save_button"), e -> onSave());
 
     public TemplateEditorDialog() {
@@ -26,7 +27,7 @@ public class TemplateEditorDialog extends Dialog implements DialogWithTitle {
     }
 
     public void showDialog(Object template, SerializableConsumer<?> callback) {
-        if (Objects.isNull(template)) template = new SimpleTemplate();
+        this.template = Objects.isNull(template) ?  new SimpleTemplate() : (SimpleTemplate)template;
         this.onSaveCallback = (SerializableConsumer<SimpleTemplate>) callback;
         binder.readBean((SimpleTemplate) template);
         binder.setReadOnly(false);
@@ -37,8 +38,7 @@ public class TemplateEditorDialog extends Dialog implements DialogWithTitle {
     private void onSave() {
         if (binder.validate().isOk()) {
             if (onSaveCallback != null) {
-                SimpleTemplate template = new SimpleTemplate();
-                binder.writeBeanIfValid(template);
+                binder.writeBeanIfValid(this.template );
                 onSaveCallback.accept(template);
             }
             close();
