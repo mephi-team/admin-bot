@@ -64,7 +64,6 @@ public class TemplateView extends VerticalLayout {
         });
         grid.setEmptyStateText(getTranslation("grid_template_empty_label"));
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
-        grid.addThemeName("neo");
 
         provider.getFilterableProvider().addDataProviderListener(e -> {
             grid.deselectAll();

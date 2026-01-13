@@ -16,12 +16,13 @@ RUN apk add nodejs npm
 COPY pom.xml .
 RUN mvn dependency:go-offline
 COPY src ./src
-ENV VAADIN_PRODUCTIONMODE=true
-RUN mvn clean package -DskipTests
+RUN mvn clean package -Pproduction -DskipTests
 
 FROM alpine:3.21
 WORKDIR /opt/app
 COPY --from=runtime /mini-runtime /mini-runtime
 COPY --from=builder /build/target/admin-bot-1.0-SNAPSHOT.jar app.jar
 EXPOSE 8080
+ENV LANG ru_RU.UTF-8
+ENV LC_ALL ru_RU.UTF-8
 CMD ["/mini-runtime/bin/java", "-jar", "app.jar"]

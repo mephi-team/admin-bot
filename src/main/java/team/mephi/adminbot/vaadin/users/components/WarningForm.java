@@ -13,8 +13,6 @@ public class WarningForm extends FormLayout {
         setExpandFields(true);
         setExpandColumns(true);
 
-        warningReason.addThemeName("neo");
-
         addFormItem(warningReason, getTranslation("form_user_block_warning_reason_label"));
     }
 }

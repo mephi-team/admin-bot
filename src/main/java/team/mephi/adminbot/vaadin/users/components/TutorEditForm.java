@@ -56,25 +56,17 @@ public class TutorEditForm extends FormLayout {
 
         roles.setItemsPageable(roleService::getAllRoles);
         roles.setItemLabelGenerator(RoleDto::getName);
-        roles.addThemeName("neo");
-
-        centerOfCompetence.addThemeName("neo");
-        email.addThemeName("neo");
-        tgId.addThemeName("neo");
 
         cohorts.setItemsPageable(cohortService::getAllCohorts);
         cohorts.setItemLabelGenerator(CohortDto::getName);
-        cohorts.addThemeName("neo");
 
         directions.setItemsPageable(directionService::getAllDirections);
         directions.setItemLabelGenerator(SimpleDirection::getName);
         directions.setAutoExpand(MultiSelectComboBox.AutoExpandMode.VERTICAL);
-        directions.addThemeName("neo");
 
         students.setItems(studentsProvider);
         students.setItemLabelGenerator(u -> u.getFullName() + (Objects.nonNull(u.getTgId()) ? " " + u.getTgId() : ""));
         students.setAutoExpand(MultiSelectComboBox.AutoExpandMode.VERTICAL);
-        students.addThemeName("neo");
 
         addFormItem(roles, getTranslation("form_users_roles_label"));
         addFormItem(fullNameField, getTranslation("form_users_full_name_label"));

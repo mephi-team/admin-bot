@@ -6,6 +6,7 @@
 html, body, #outlet {
     overflow: hidden;
 }
+
 /* Отключаем прокрутку для основной области контента AppLayout */
 vaadin-app-layout::part(content) {
     overflow: hidden !important;
@@ -59,28 +60,26 @@ vaadin-side-nav-item[current] > vaadin-icon {
     color: #fff;
 }
 
-vaadin-button:hover {
-    /*background-color: red;*/
-}
-
-vaadin-button:hover > vaadin-icon {
-    /*color: white;*/
-}
-
 a[router-link][highlight] {
     font-weight: bold;
-}
-
-vaadin-tabsheet::part(content) {
-    padding-inline: 0;
 }
 
 vaadin-message-input {
     padding: 0;
 }
+
 /* фикс для FF */
 vaadin-virtual-list > div[role='listitem'] {
     display: grid;
+}
+
+vaadin-dialog-overlay::part(footer),
+vaadin-confirm-dialog-overlay::part(footer) {
+    background: transparent;
+}
+
+vaadin-tabsheet::part(content) {
+    padding-inline: 0;
 }
 
 vaadin-text-field.first::part(input-field) {
@@ -107,16 +106,7 @@ vaadin-text-field.last::part(input-field) {
     min-height: 40px
 }
 
-vaadin-dialog-overlay::part(footer),
-vaadin-confirm-dialog-overlay::part(footer) {
-    background: transparent;
-}
-
-.border-12 {
-    border-radius: 12px;
-}
-
-vaadin-tab[theme~="neo"] {
+vaadin-tab {
     border-radius: 16px;
     margin: 4px 8px;
     padding: 0 12px;
@@ -126,21 +116,21 @@ vaadin-tab[theme~="neo"] {
     font-size: var(--lumo-font-size-s);
 }
 
-vaadin-tab[theme~="neo"][selected] {
+vaadin-tab[selected] {
     background-color: var(--lumo-primary-color);
     color: var(--lumo-primary-contrast-color);
 }
 
-vaadin-tabsheet[theme~="neo"]::part(tabs-container) {
+vaadin-tabsheet::part(tabs-container) {
     border-bottom: none;
     box-shadow: none;
 }
 
-vaadin-text-area[theme~="neo"]::part(input-field),
-vaadin-text-field[theme~="neo"]::part(input-field),
-vaadin-email-field[theme~="neo"]::part(input-field),
-vaadin-combo-box[theme~="neo"]::part(input-field),
-vaadin-multi-select-combo-box[theme~="neo"]::part(input-field) {
+vaadin-text-area::part(input-field),
+vaadin-text-field::part(input-field),
+vaadin-email-field::part(input-field),
+vaadin-combo-box::part(input-field),
+vaadin-multi-select-combo-box::part(input-field) {
     --_background: transparent;
     --_hover-highlight: var(--lumo-primary-color-10pct);
     --vaadin-input-field-hover-highlight-opacity: 1;
@@ -151,33 +141,33 @@ vaadin-multi-select-combo-box[theme~="neo"]::part(input-field) {
     /*margin: 3px;*/
 }
 
-vaadin-multi-select-combo-box[theme~="neo"] vaadin-multi-select-combo-box-chip {
+vaadin-multi-select-combo-box vaadin-multi-select-combo-box-chip {
     background: #fff;
     border: 1px solid var(--lumo-contrast-20pct);
     border-radius: 12px;
     /*height: 32px;*/
 }
 
-vaadin-multi-select-combo-box[theme~="neo"] vaadin-multi-select-combo-box-chip[focused] {
+vaadin-multi-select-combo-box vaadin-multi-select-combo-box-chip[focused] {
     background: var(--lumo-primary-color);
     color: var(--lumo-primary-contrast-color);
 }
 
 
-vaadin-text-area[theme~="neo"]::part(input-field):hover {
+vaadin-text-area::part(input-field):hover {
     background: var(--lumo-primary-color-10pct);
 }
 
 vaadin-checkbox.neo,
-vaadin-grid[theme~="neo"] vaadin-checkbox,
-vaadin-checkbox-group[theme~="neo"] vaadin-checkbox {
+vaadin-grid vaadin-checkbox,
+vaadin-checkbox-group vaadin-checkbox {
     --vaadin-input-field-border-width: 1px;
     --vaadin-checkbox-background: transparent;
     --vaadin-checkbox-background-hover: var(--lumo-primary-color-10pct);
     --vaadin-input-field-border-color: var(--lumo-primary-color);
 }
 
-vaadin-radio-group[theme~="neo"] vaadin-radio-button {
+vaadin-radio-group vaadin-radio-button {
     --vaadin-input-field-border-width: 1px;
     --vaadin-input-field-border-color: var(--lumo-primary-color);
     --vaadin-radio-button-background: transparent;
@@ -186,6 +176,10 @@ vaadin-radio-group[theme~="neo"] vaadin-radio-button {
 
 vaadin-checkbox-group[theme~="error"] vaadin-checkbox {
     --vaadin-input-field-border-color: var(--lumo-error-color);
+}
+
+.border-12 {
+    border-radius: 12px;
 }
 
 vaadin-app-layout::part(navbar) {

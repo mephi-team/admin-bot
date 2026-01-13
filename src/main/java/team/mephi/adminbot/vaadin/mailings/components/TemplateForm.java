@@ -15,9 +15,6 @@ public class TemplateForm extends FormLayout {
         setAutoResponsive(true);
         setLabelsAside(true);
 
-        name.addThemeName("neo");
-        text.addThemeName("neo");
-
         addFormItem(name, getTranslation("form_template_name_label"));
         addFormItem(text, getTranslation("form_template_text_label"));
     }

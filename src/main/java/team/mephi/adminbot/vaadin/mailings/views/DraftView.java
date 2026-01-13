@@ -86,7 +86,6 @@ public class DraftView extends VerticalLayout {
         });
         grid.setEmptyStateText(getTranslation("grid_mailing_empty_label"));
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
-        grid.addThemeName("neo");
 
         provider.getFilterableProvider().addDataProviderListener(e -> {
             grid.deselectAll();

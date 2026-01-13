@@ -14,10 +14,6 @@ public class BlockUserInfo extends FormLayout {
         setExpandFields(true);
         setExpandColumns(true);
 
-        firstName.addThemeName("neo");
-        lastName.addThemeName("neo");
-        tgId.addThemeName("neo");
-
         addFormItem(firstName, getTranslation("form_user_block_first_name_label"));
         addFormItem(lastName, getTranslation("form_user_block_last_name_label"));
         addFormItem(tgId, getTranslation("form_user_block_telegram_label"));

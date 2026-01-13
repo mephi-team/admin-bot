@@ -41,7 +41,6 @@ public class Mailings extends VerticalLayout {
         getElement().getStyle().set("padding-inline", "53px 120px");
         tabSheet.setSizeFull();
         tabSheet.addThemeVariants(TabSheetVariant.LUMO_TABS_MINIMAL);
-        tabSheet.addThemeName("neo");
         add(createHeader(), tabSheet);
 
         tabProviders.sort(Comparator.comparingInt(MailingTabProvider::getPosition));
@@ -57,7 +56,6 @@ public class Mailings extends VerticalLayout {
             var userCount = mailingCountService.getAllCounts().getOrDefault(provider.getTabId().name(), 0L);
             Span tabContent = new Span(new Span(getTranslation(provider.getTabLabel())), new UserCountBadge(userCount));
             var tab = new Tab(tabContent);
-            tab.addThemeName("neo");
             tabSheet.add(tab, content, provider.getPosition());
         }
         tabSheet.addSelectedChangeListener(a -> {
