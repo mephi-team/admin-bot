@@ -1,7 +1,6 @@
 package team.mephi.adminbot.vaadin.components.layout;
 
 import com.vaadin.flow.component.applayout.AppLayout;
-import com.vaadin.flow.component.dependency.StyleSheet;
 import jakarta.annotation.security.PermitAll;
 import team.mephi.adminbot.service.AuthService;
 import team.mephi.adminbot.vaadin.components.LeftMenu;
@@ -11,7 +10,6 @@ import team.mephi.adminbot.vaadin.components.UserMenu;
 import team.mephi.adminbot.vaadin.components.buttons.MenuButton;
 
 @PermitAll
-@StyleSheet(value = "/css/app-layout-styles.css")
 public class DialogsLayout extends AppLayout {
     private boolean minimized = true;
 

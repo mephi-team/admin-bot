@@ -2,7 +2,13 @@ services:
   admin:
     build: .
     environment:
+      SPRING_ACTIVE_PROFILE: prod
       SPRING_DATASOURCE_URL: "jdbc:postgresql://postgres:5432/flexiq_db"
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_REDIRECT_URI: "{baseUrl}/login/oauth2/code/keycloak"
+      SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_AUTHORIZATION_URI: "http://localhost:8081/realms/mephi-realm/protocol/openid-connect/auth"
+      SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_TOKEN_URI: "http://keycloak:8080/realms/mephi-realm/protocol/openid-connect/token"
+      SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_JWK_SET_URI: "http://keycloak:8080/realms/mephi-realm/protocol/openid-connect/certs"
+#      SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUER_URI: "http://localhost:8081/realms/mephi-realm"
     ports:
       - "8080:8080"
   postgres:
@@ -17,25 +23,12 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
-  keycloak_db:
-    image: postgres:14
-    environment:
-      POSTGRES_DB: keycloak_db
-      POSTGRES_USER: keycloak_user
-      POSTGRES_PASSWORD: keycloak_password
-    volumes:
-      - ./keycloak-data:/var/lib/postgresql/data
-    ports:
-      - "5433:5432"
   keycloak:
-    image: quay.io/keycloak/keycloak:21.1
+    image: quay.io/keycloak/keycloak:latest
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
-      KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://keycloak_db:5432/keycloak_db
-      KC_DB_USERNAME: keycloak_user
-      KC_DB_PASSWORD: keycloak_password
+      KC_HOSTNAME_STRICT: false
     command:
       - start-dev
       - --import-realm
@@ -43,8 +36,6 @@ services:
       - ./keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json
     ports:
       - "8081:8080"
-    depends_on:
-      - keycloak_db
 
 volumes:
   postgres_data:

@@ -1,6 +1,7 @@
 {
   "realm": "mephi-realm",
   "enabled": true,
+  "sslRequired": "none",
   "roles": {
     "realm": [
       {

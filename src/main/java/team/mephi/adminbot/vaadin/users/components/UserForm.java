@@ -50,15 +50,12 @@ public class UserForm extends FormLayout {
         setExpandFields(true);
         setExpandColumns(true);
 
-        roles.addThemeName("neo");
         roles.setItemsPageable(roleService::getAllRoles);
         roles.setItemLabelGenerator(RoleDto::getName);
 
-        cohorts.addThemeName("neo");
         cohorts.setItemsPageable(cohortService::getAllCohorts);
         cohorts.setItemLabelGenerator(CohortDto::getName);
 
-        directions.addThemeName("neo");
         directions.setItemsPageable(directionService::getAllDirections);
         directions.setItemLabelGenerator(SimpleDirection::getName);
         directions.setAutoExpand(MultiSelectComboBox.AutoExpandMode.VERTICAL);
@@ -68,17 +65,11 @@ public class UserForm extends FormLayout {
             }
         });
 
-        cities.addThemeName("neo");
         cities.setItemsPageable(cityService::getAllCities);
         cities.setItemLabelGenerator(CityDto::getName);
 
         tutor.setItems(tutorProvider);
         tutor.setItemLabelGenerator(SimpleTutor::getFullName);
-
-        email.addThemeName("neo");
-        tgId.addThemeName("neo");
-        phoneNumber.addThemeName("neo");
-        tutor.addThemeName("neo");
 
         addFormItem(roles, getTranslation("form_users_roles_label"));
         addFormItem(fullNameField, getTranslation("form_users_full_name_label"));

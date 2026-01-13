@@ -1,9 +1,9 @@
 package team.mephi.adminbot.service;
 
-import org.springframework.security.oauth2.core.oidc.StandardClaimAccessor;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 
 public interface AuthService {
-    StandardClaimAccessor getUserInfo();
+    DefaultOidcUser getUserInfo();
 
     boolean isAdmin();
 

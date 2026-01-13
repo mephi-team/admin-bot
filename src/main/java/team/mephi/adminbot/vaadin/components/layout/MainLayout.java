@@ -1,7 +1,6 @@
 package team.mephi.adminbot.vaadin.components.layout;
 
 import com.vaadin.flow.component.applayout.AppLayout;
-import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.router.Layout;
 import jakarta.annotation.security.PermitAll;
 import team.mephi.adminbot.service.AuthService;
@@ -11,7 +10,6 @@ import team.mephi.adminbot.vaadin.components.UserMenu;
 
 @Layout
 @PermitAll
-@StyleSheet(value = "/css/app-layout-styles.css")
 public class MainLayout extends AppLayout {
     public MainLayout(AuthService authService) {
         addToNavbar(new Logo("Neoflex"), new TopMenu(authService), new UserMenu(authService));

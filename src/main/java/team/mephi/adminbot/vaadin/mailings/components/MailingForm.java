@@ -59,31 +59,25 @@ public class MailingForm extends FormLayout {
         setExpandColumns(true);
 
         channels.setItems("Email", "Telegram");
-        channels.addThemeName("neo");
 
         users.setItemsPageable(roleService::getAllRoles);
         users.setItemLabelGenerator(RoleDto::getName);
-        users.addThemeName("neo");
         users.addValueChangeListener(e -> provider.refreshAll());
 
         cohort.setItemsPageable(cohortService::getAllCohorts);
         cohort.setItemLabelGenerator(c -> c.getName() + (c.getCurrent() ? " (текущий)" : ""));
-        cohort.addThemeName("neo");
         cohort.addValueChangeListener(e -> provider.refreshAll());
 
         direction.setItemsPageable(directionService::getAllDirections);
         direction.setItemLabelGenerator(SimpleDirection::getName);
-        direction.addThemeName("neo");
         direction.addValueChangeListener(e -> provider.refreshAll());
 
         city.setItemsPageable(cityService::getAllCities);
         city.setItemLabelGenerator(CityDto::getName);
-        city.addThemeName("neo");
         city.addValueChangeListener(e -> provider.refreshAll());
 
         curator.setItemsPageable(userService::findAllCurators);
         curator.setItemLabelGenerator(UserDto::getUserName);
-        curator.addThemeName("neo");
         curator.addValueChangeListener(e -> provider.refreshAll());
 
         addFormItem(channels, getTranslation("form_mailing_channels_label"));

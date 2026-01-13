@@ -54,13 +54,35 @@ public class VaadinSecurityConfig {
         return http.build();
     }
 
+//    private LogoutSuccessHandler oidcLogoutSuccessHandler() {
+//        OidcClientInitiatedLogoutSuccessHandler oidcLogoutSuccessHandler =
+//                new OidcClientInitiatedLogoutSuccessHandler(this.clientRegistrationRepository);
+//
+//        oidcLogoutSuccessHandler.setPostLogoutRedirectUri("http://localhost:8080"); // Замените на ваш URL
+//
+//        return oidcLogoutSuccessHandler;
+//    }
+
     private LogoutSuccessHandler oidcLogoutSuccessHandler() {
-        OidcClientInitiatedLogoutSuccessHandler oidcLogoutSuccessHandler =
-                new OidcClientInitiatedLogoutSuccessHandler(this.clientRegistrationRepository);
+        return (request, response, authentication) -> {
+            // 1. Базовый URL логаута в Keycloak (внешний адрес для браузера)
+            String keycloakLogoutUrl = "http://localhost:8081/realms/mephi-realm/protocol/openid-connect/logout";
 
-        oidcLogoutSuccessHandler.setPostLogoutRedirectUri("http://localhost:8080/v2"); // Замените на ваш URL
+            // 2. Куда вернуть пользователя после выхода из Keycloak
+            String postLogoutRedirectUri = "http://localhost:8080";
 
-        return oidcLogoutSuccessHandler;
+            // 3. Формируем URL с параметрами (для Keycloak 18+ это обязательно)
+            // Если у вас есть доступ к id_token, лучше добавить id_token_hint
+            String redirectUrl = keycloakLogoutUrl + "?post_logout_redirect_uri=" + postLogoutRedirectUri;
+
+            // Если пользователь аутентифицирован, можно добавить id_token_hint для авто-выхода без подтверждения
+            if (authentication != null && authentication.getPrincipal() instanceof DefaultOidcUser oidcUser) {
+                String idToken = oidcUser.getIdToken().getTokenValue();
+                redirectUrl += "&id_token_hint=" + idToken;
+            }
+
+            response.sendRedirect(redirectUrl);
+        };
     }
 
     private OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService() {

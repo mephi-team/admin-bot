@@ -96,7 +96,6 @@ public class Questions extends VerticalLayout {
         });
         grid.setEmptyStateText(getTranslation("grid_question_empty_label"));
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
-        grid.addThemeName("neo");
 
         provider.getFilterableProvider().addDataProviderListener(e -> {
             grid.deselectAll();

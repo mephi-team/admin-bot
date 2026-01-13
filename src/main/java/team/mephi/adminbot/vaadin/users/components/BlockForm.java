@@ -13,8 +13,6 @@ public class BlockForm extends FormLayout {
         setExpandFields(true);
         setExpandColumns(true);
 
-        blockReason.addThemeName("neo");
-
         addFormItem(blockReason, getTranslation("form_user_block_block_reason_label"));
     }
 }
