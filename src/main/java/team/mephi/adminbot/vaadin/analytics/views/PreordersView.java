@@ -25,7 +25,7 @@ public class PreordersView extends VerticalLayout {
         barData.addDataset(new BarDataset().setLabel("Test3").addData(13).addData(14).addData(15));
 
         BarOptions options = new BarOptions();
-        options.getPlugins().setLegend(new LegendOptions().setPosition("bottom"));
+        options.getPlugins().setLegend(new LegendOptions().setAlign("start").setPosition("bottom"));
 
         ChartContainer chart = new ChartContainer();
         chart.showChart(new BarChart(barData, options).toJson());

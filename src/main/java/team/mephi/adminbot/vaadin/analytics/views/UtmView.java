@@ -25,7 +25,7 @@ public class UtmView extends VerticalLayout {
         barData.addDataset(new BarDataset().setLabel("Test1").setBackgroundColor("#2168df").addData(5).addData(10).addData(8));
 
         BarOptions options = new BarOptions();
-        options.getPlugins().setLegend(new LegendOptions().setPosition("bottom"));
+        options.getPlugins().setLegend(new LegendOptions().setAlign("start").setPosition("bottom"));
 
         ChartContainer chart = new ChartContainer();
         chart.showChart(new BarChart(barData, options).toJson());

@@ -25,7 +25,7 @@ public class ActivityView extends VerticalLayout {
                 .addData(5).addData(10).addData(8).addData(5).addData(10).addData(8).addData(5).addData(10).addData(8).addData(5).addData(10).addData(8));
 
         BarOptions options = new BarOptions();
-        options.getPlugins().setLegend(new LegendOptions().setPosition("bottom"));
+        options.getPlugins().setLegend(new LegendOptions().setAlign("start").setPosition("bottom"));
 
         chart.showChart(new BarChart(barData, options).toJson());
 
