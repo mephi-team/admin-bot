@@ -4,6 +4,7 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
+import com.vaadin.flow.data.provider.DataChangeEvent;
 import lombok.Data;
 import software.xdev.chartjs.model.charts.BarChart;
 import software.xdev.chartjs.model.data.BarData;
@@ -13,6 +14,7 @@ import software.xdev.chartjs.model.options.LegendOptions;
 import software.xdev.vaadin.chartjs.ChartContainer;
 import team.mephi.adminbot.vaadin.analytics.components.ActivityForm;
 import team.mephi.adminbot.vaadin.analytics.components.ActivityIntervals;
+import team.mephi.adminbot.vaadin.analytics.presenter.ChartPresenter;
 import team.mephi.adminbot.vaadin.components.buttons.SecondaryButton;
 import team.mephi.adminbot.vaadin.components.fields.DateRangePicker;
 
@@ -25,15 +27,9 @@ public class ActivityView extends VerticalLayout {
     private final BeanValidationBinder<SimpleData> binder = new BeanValidationBinder<>(SimpleData.class);
 
     private final ChartContainer chart = new ChartContainer();
-    private List<String> labels = List.of("Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь");
 
-    Random random = new Random();
-
-    public ActivityView() {
+    public ActivityView(ChartPresenter presenter) {
         setPadding(false);
-
-        // начальная заглушка (пустой график)
-        updateChart(labels.stream().map(s1 -> random.nextInt(0, 100)).toList());
 
         ActivityForm form = new ActivityForm();
         binder.forField(form.getType()).bind(SimpleData::getType, SimpleData::setType);
@@ -49,15 +45,14 @@ public class ActivityView extends VerticalLayout {
         binder.addValueChangeListener(e -> {
             var s = new SimpleData();
             binder.writeBeanIfValid(s);
-            System.out.println("Form changed: " + s);
-            if (ActivityIntervals.MONTH.name().equals(s.interval)) {
-                labels = List.of("Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь");
-            } else if (ActivityIntervals.DAY.name().equals(s.interval)) {
-                labels = List.of("12.01.2026", "13.01.2026", "14.01.2026", "15.01.2026", "16.01.2026", "17.01.2026", "18.01.2026", "19.01.2026", "20.01.2026", "21.01.2026", "22.01.2026", "23.01.2026");
-            } else if (ActivityIntervals.HOUR.name().equals(s.interval)) {
-                labels = List.of("00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00");
+            presenter.onUpdateFilter(s);
+        });
+
+        presenter.getDataProvider().addDataProviderListener(event -> {
+            if (event instanceof DataChangeEvent.DataRefreshEvent) {
+                var data = ((DataChangeEvent.DataRefreshEvent<BarData>) event).getItem();
+                updateChart(data);
             }
-            updateChart(labels.stream().map(s1 -> random.nextInt(0, 100)).toList());
         });
 
         VerticalLayout column = new VerticalLayout();
@@ -71,26 +66,17 @@ public class ActivityView extends VerticalLayout {
 
         add(content);
 
-        var buttonGroup = new HorizontalLayout(new SecondaryButton("Скачать PNG", VaadinIcon.DOWNLOAD_ALT.create()), new SecondaryButton("Скачать Excel", VaadinIcon.DOWNLOAD_ALT.create()));
+        var buttonGroup = new HorizontalLayout(new SecondaryButton(getTranslation("page_analytics_form_activity_download_png_action"), VaadinIcon.DOWNLOAD_ALT.create()), new SecondaryButton(getTranslation("page_analytics_form_activity_download_excel_action"), VaadinIcon.DOWNLOAD_ALT.create()));
         add(buttonGroup);
+
+        presenter.onUpdateFilter(new SimpleData());
     }
 
-    private void updateChart(List<Integer> values) {
-        // ожидается 12 значений; при необходимости нормализовать/заполнить
-        if (values == null || values.size() < labels.size()) {
-            values = labels.stream().map(s -> 0).toList();
-        }
-
-        BarData barData = new BarData()
-                .addLabels(labels.toArray(new String[0]));
-        BarDataset dataset = new BarDataset().setLabel("Активность").setBackgroundColor("#2168df");
-        values.forEach(dataset::addData);
-        barData.addDataset(dataset);
-
+    private void updateChart(BarData data) {
         BarOptions options = new BarOptions();
         options.getPlugins().setLegend(new LegendOptions().setAlign("start").setPosition("bottom"));
 
-        chart.showChart(new BarChart(barData, options).toJson());
+        chart.showChart(new BarChart(data, options).toJson());
     }
 
     @Data

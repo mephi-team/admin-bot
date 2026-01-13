@@ -6,6 +6,8 @@ import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import lombok.Getter;
 import team.mephi.adminbot.vaadin.components.fields.DateRangePicker;
 
+import java.time.LocalDate;
+
 public class ActivityForm extends FormLayout {
     @Getter
     private final ComboBox<String> type;
@@ -21,10 +23,15 @@ public class ActivityForm extends FormLayout {
 
         type = new ComboBox<>();
         type.setItems("Посещения", "Популярные кнопки");
-        addFormItem(type, getTranslation("page_analytics_form1_type_label"));
+        type.setValue("Посещения");
+        addFormItem(type, getTranslation("page_analytics_form_activity_type_label"));
 
         period = new DateRangePicker();
-        addFormItem(period, getTranslation("page_analytics_form1_period_label"));
+        period.setValue(new DateRangePicker.LocalDateRange(
+                LocalDate.now(),
+                LocalDate.now().plusWeeks(1)
+        ));
+        addFormItem(period, getTranslation("page_analytics_form_activity_period_label"));
 
         interval = new RadioButtonGroup<>();
         interval.setItems(ActivityIntervals.values());
@@ -33,8 +40,9 @@ public class ActivityForm extends FormLayout {
         interval.addValueChangeListener(e -> {
             changeDatePicker(e.getValue());
         });
-        addFormItem(interval, getTranslation("page_analytics_form1_interval_label"));
+        addFormItem(interval, getTranslation("page_analytics_form_activity_interval_label"));
     }
+
     private void changeDatePicker(ActivityIntervals interval) {
         period.changeMode(interval == ActivityIntervals.HOUR ? DateRangePicker.Mode.DAY : DateRangePicker.Mode.INTERVAL);
     }

@@ -8,5 +8,5 @@ public enum ActivityIntervals {
     HOUR;
 
     @Getter
-    private final String tabLabelKey = "page_analytics_form1_interval_" + name().toLowerCase() + "_label";
+    private final String tabLabelKey = "page_analytics_form_activity_interval_" + name().toLowerCase() + "_label";
 }
