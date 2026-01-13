@@ -2,39 +2,53 @@ package team.mephi.adminbot.model;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- * Юнит-тесты для сущности ExpertDirection (проверка композитного ключа и Lombok-методов).
+ * Тесты для сущности {@link ExpertDirection}.
  */
 class ExpertDirectionTest {
 
+    /**
+     * Проверяет корректность equals/hashCode у составного ключа.
+     */
     @Test
-    void expertDirectionId_shouldSupportEqualsAndHashCode() {
-        // given
+    void givenCompositeId_WhenCompared_ThenEqualsAndHashCodeWork() {
+        // Arrange
         ExpertDirection.ExpertDirectionId id1 = new ExpertDirection.ExpertDirectionId(1L, 2L);
         ExpertDirection.ExpertDirectionId id2 = new ExpertDirection.ExpertDirectionId(1L, 2L);
         ExpertDirection.ExpertDirectionId id3 = new ExpertDirection.ExpertDirectionId(1L, 3L);
 
-        // when / then
-        assertEquals(id1, id2);
+        // Act
+        boolean equalSame = id1.equals(id2);
+        boolean equalDifferent = id1.equals(id3);
+
+        // Assert
+        assertEquals(true, equalSame);
         assertEquals(id1.hashCode(), id2.hashCode());
-        assertNotEquals(id1, id3);
+        assertNotEquals(true, equalDifferent);
         assertNotNull(id1.toString());
     }
 
+    /**
+     * Проверяет заполнение идентификатора через билдер.
+     */
     @Test
-    void builder_shouldSetIds() {
-        // given / when
+    void givenBuilder_WhenBuild_ThenCompositeIdIsSet() {
+        // Arrange
         ExpertDirection.ExpertDirectionId id = new ExpertDirection.ExpertDirectionId(10L, 20L);
-        ExpertDirection ed = ExpertDirection.builder()
+
+        // Act
+        ExpertDirection expertDirection = ExpertDirection.builder()
                 .id(id)
                 .build();
 
-        // then
-        assertNotNull(ed.getId());
-        assertEquals(10L, ed.getId().getExpertId());
-        assertEquals(20L, ed.getId().getDirectionId());
-        assertNotNull(ed.toString());
+        // Assert
+        assertNotNull(expertDirection.getId());
+        assertEquals(10L, expertDirection.getId().getExpertId());
+        assertEquals(20L, expertDirection.getId().getDirectionId());
+        assertNotNull(expertDirection.toString());
     }
 }

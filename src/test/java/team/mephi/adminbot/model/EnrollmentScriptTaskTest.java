@@ -6,38 +6,26 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- * Юнит-тесты для сущности EnrollmentScriptTask (проверка дефолтов и Lombok-методов).
+ * Тесты для сущности {@link EnrollmentScriptTask}.
  */
 class EnrollmentScriptTaskTest {
 
+    /**
+     * Проверяет значения счётчиков по умолчанию.
+     */
     @Test
-    void newTask_shouldHaveDefaultCounters() {
-        // given / when
+    void givenNewTask_WhenCreated_ThenCountersDefaultToZero() {
+        // Arrange
         EnrollmentScriptTask task = new EnrollmentScriptTask();
 
-        // then
-        assertNotNull(task.getSuccessCount(), "successCount не должен быть null");
-        assertNotNull(task.getErrorCount(), "errorCount не должен быть null");
-        assertEquals(0, task.getSuccessCount(), "successCount по умолчанию должен быть 0");
-        assertEquals(0, task.getErrorCount(), "errorCount по умолчанию должен быть 0");
-    }
+        // Act
+        Integer successCount = task.getSuccessCount();
+        Integer errorCount = task.getErrorCount();
 
-//    @Test
-//    void builder_shouldSetFields() {
-//        // given / when
-//        EnrollmentScriptTask task = EnrollmentScriptTask.builder()
-//                .id(1L)
-//                .status(ScriptTaskStatus.PENDING)
-//                .log(Map.of("k", "v"))
-//                .successCount(5)
-//                .errorCount(2)
-//                .build();
-//
-//        // then
-//        assertEquals(1L, task.getId());
-//        assertEquals(ScriptTaskStatus.PENDING, task.getStatus());
-//        assertEquals(5, task.getSuccessCount());
-//        assertEquals(2, task.getErrorCount());
-//        assertNotNull(task.toString());
-//    }
+        // Assert
+        assertNotNull(successCount, "successCount не должен быть null");
+        assertNotNull(errorCount, "errorCount не должен быть null");
+        assertEquals(0, successCount, "successCount по умолчанию должен быть 0");
+        assertEquals(0, errorCount, "errorCount по умолчанию должен быть 0");
+    }
 }

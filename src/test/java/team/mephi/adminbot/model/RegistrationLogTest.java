@@ -4,20 +4,27 @@ import org.junit.jupiter.api.Test;
 import team.mephi.adminbot.model.enums.RegistrationAction;
 import team.mephi.adminbot.model.enums.RegistrationStatus;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 /**
- * Юнит-тесты для сущности RegistrationLog (проверка Lombok-методов и полей).
+ * Тесты для сущности {@link RegistrationLog}.
  */
 class RegistrationLogTest {
 
+    /**
+     * Проверяет заполнение полей через билдер.
+     */
     @Test
-    void builder_shouldSetFields() {
-        // given
+    void givenBuilder_WhenBuild_ThenFieldsAreSet() {
+        // Arrange
         User user = new User();
         user.setId(1L);
 
-        // when
+        // Act
         RegistrationLog log = RegistrationLog.builder()
                 .id(10L)
                 .user(user)
@@ -26,7 +33,7 @@ class RegistrationLogTest {
                 .payload("{\"key\": \"value\"}")
                 .build();
 
-        // then
+        // Assert
         assertEquals(10L, log.getId());
         assertSame(user, log.getUser());
         assertEquals(RegistrationAction.REGISTER, log.getAction());
@@ -35,47 +42,62 @@ class RegistrationLogTest {
         assertNotNull(log.toString());
     }
 
+    /**
+     * Проверяет equals/hashCode на основе идентификатора.
+     */
     @Test
-    void equalsHashCode_shouldWorkBasedOnId() {
-        // given
-        RegistrationLog a = RegistrationLog.builder().id(1L).build();
-        RegistrationLog b = RegistrationLog.builder().id(1L).build();
-        RegistrationLog c = RegistrationLog.builder().id(2L).build();
+    void givenSameIds_WhenCompared_ThenEqualsAndHashCodeMatch() {
+        // Arrange
+        RegistrationLog first = RegistrationLog.builder().id(1L).build();
+        RegistrationLog second = RegistrationLog.builder().id(1L).build();
+        RegistrationLog third = RegistrationLog.builder().id(2L).build();
 
-        // when / then
-        assertEquals(a, b, "Объекты с одинаковым id должны быть равны");
-        assertEquals(a.hashCode(), b.hashCode(), "Хеш-коды объектов с одинаковым id должны совпадать");
-        assertNotEquals(a, c, "Объекты с разными id не должны быть равны");
+        // Act
+        boolean equalsSame = first.equals(second);
+        boolean equalsDifferent = first.equals(third);
+
+        // Assert
+        assertEquals(true, equalsSame, "Объекты с одинаковым id должны быть равны");
+        assertEquals(first.hashCode(), second.hashCode(), "Хеш-коды объектов с одинаковым id должны совпадать");
+        assertNotEquals(true, equalsDifferent, "Объекты с разными id не должны быть равны");
     }
 
+    /**
+     * Проверяет поддержку всех действий регистрации в билдере.
+     */
     @Test
-    void builder_shouldSupportAllRegistrationActions() {
-        // given / when / then
-        assertDoesNotThrow(() -> RegistrationLog.builder()
-                .action(RegistrationAction.REGISTER)
-                .build());
-        assertDoesNotThrow(() -> RegistrationLog.builder()
-                .action(RegistrationAction.IDP_PENDING)
-                .build());
-        assertDoesNotThrow(() -> RegistrationLog.builder()
-                .action(RegistrationAction.SCRIPT_STARTED)
-                .build());
-        assertDoesNotThrow(() -> RegistrationLog.builder()
-                .action(RegistrationAction.SCRIPT_FINISHED)
-                .build());
+    void givenActions_WhenBuilding_ThenNoExceptions() {
+        // Arrange
+        RegistrationAction[] actions = {
+                RegistrationAction.REGISTER,
+                RegistrationAction.IDP_PENDING,
+                RegistrationAction.SCRIPT_STARTED,
+                RegistrationAction.SCRIPT_FINISHED
+        };
+
+        // Act
+        for (RegistrationAction action : actions) {
+            // Assert
+            assertDoesNotThrow(() -> RegistrationLog.builder().action(action).build());
+        }
     }
 
+    /**
+     * Проверяет поддержку всех статусов регистрации в билдере.
+     */
     @Test
-    void builder_shouldSupportAllRegistrationStatuses() {
-        // given / when / then
-        assertDoesNotThrow(() -> RegistrationLog.builder()
-                .status(RegistrationStatus.SUCCESS)
-                .build());
-        assertDoesNotThrow(() -> RegistrationLog.builder()
-                .status(RegistrationStatus.FAILED)
-                .build());
-        assertDoesNotThrow(() -> RegistrationLog.builder()
-                .status(RegistrationStatus.IN_PROGRESS)
-                .build());
+    void givenStatuses_WhenBuilding_ThenNoExceptions() {
+        // Arrange
+        RegistrationStatus[] statuses = {
+                RegistrationStatus.SUCCESS,
+                RegistrationStatus.FAILED,
+                RegistrationStatus.IN_PROGRESS
+        };
+
+        // Act
+        for (RegistrationStatus status : statuses) {
+            // Assert
+            assertDoesNotThrow(() -> RegistrationLog.builder().status(status).build());
+        }
     }
 }

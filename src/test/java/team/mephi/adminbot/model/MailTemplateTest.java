@@ -6,17 +6,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 /**
- * Юнит-тесты для сущности MailTemplate.
- * <p>
- * Проверяет корректность работы equals()/hashCode() и базовую функциональность сущности.
- * Примечание: тестирование @CreationTimestamp и @UpdateTimestamp требует интеграционных тестов
- * с реальной базой данных, так как эти аннотации обрабатываются Hibernate при сохранении.
+ * Тесты для сущности {@link MailTemplate}.
  */
 class MailTemplateTest {
 
+    /**
+     * Проверяет, что одинаковые идентификаторы дают равенство.
+     */
     @Test
-    void equals_shouldReturnTrueForSameId() {
-        // given
+    void givenSameIds_WhenCompared_ThenEqualsReturnsTrue() {
+        // Arrange
         MailTemplate template1 = MailTemplate.builder()
                 .id(1L)
                 .name("Template 1")
@@ -29,14 +28,20 @@ class MailTemplateTest {
                 .subject("Subject 2")
                 .build();
 
-        // then
-        assertEquals(template1, template2, "Шаблоны с одинаковым ID должны быть равны");
+        // Act
+        boolean equalsResult = template1.equals(template2);
+
+        // Assert
+        assertEquals(true, equalsResult, "Шаблоны с одинаковым ID должны быть равны");
         assertEquals(template1.hashCode(), template2.hashCode(), "HashCode должен совпадать для одинаковых ID");
     }
 
+    /**
+     * Проверяет, что разные идентификаторы не равны.
+     */
     @Test
-    void equals_shouldReturnFalseForDifferentIds() {
-        // given
+    void givenDifferentIds_WhenCompared_ThenEqualsReturnsFalse() {
+        // Arrange
         MailTemplate template1 = MailTemplate.builder()
                 .id(1L)
                 .name("Template")
@@ -49,13 +54,19 @@ class MailTemplateTest {
                 .subject("Subject")
                 .build();
 
-        // then
-        assertNotEquals(template1, template2, "Шаблоны с разными ID не должны быть равны");
+        // Act
+        boolean equalsResult = template1.equals(template2);
+
+        // Assert
+        assertNotEquals(true, equalsResult, "Шаблоны с разными ID не должны быть равны");
     }
 
+    /**
+     * Проверяет, что null-идентификаторы не считаются равными.
+     */
     @Test
-    void equals_shouldReturnFalseForNullId() {
-        // given
+    void givenNullIds_WhenCompared_ThenEqualsReturnsFalse() {
+        // Arrange
         MailTemplate template1 = MailTemplate.builder()
                 .id(null)
                 .name("Template")
@@ -68,35 +79,49 @@ class MailTemplateTest {
                 .subject("Subject")
                 .build();
 
-        // then
-        assertNotEquals(template1, template2, "Шаблоны с null ID не должны быть равны");
+        // Act
+        boolean equalsResult = template1.equals(template2);
+
+        // Assert
+        assertNotEquals(true, equalsResult, "Шаблоны с null ID не должны быть равны");
     }
 
+    /**
+     * Проверяет, что объект равен самому себе.
+     */
     @Test
-    void equals_shouldReturnTrueForSameInstance() {
-        // given
+    void givenSameInstance_WhenCompared_ThenEqualsReturnsTrue() {
+        // Arrange
         MailTemplate template = MailTemplate.builder()
                 .id(1L)
                 .name("Template")
                 .subject("Subject")
                 .build();
 
-        // then
-        assertEquals(template, template, "Объект должен быть равен самому себе");
+        // Act
+        boolean equalsResult = template.equals(template);
+
+        // Assert
+        assertEquals(true, equalsResult, "Объект должен быть равен самому себе");
     }
 
+    /**
+     * Проверяет, что объект не равен объекту другого класса.
+     */
     @Test
-    void equals_shouldReturnFalseForDifferentClass() {
-        // given
+    void givenDifferentClass_WhenCompared_ThenEqualsReturnsFalse() {
+        // Arrange
         MailTemplate template = MailTemplate.builder()
                 .id(1L)
                 .name("Template")
                 .subject("Subject")
                 .build();
-
         Object other = new Object();
 
-        // then
-        assertNotEquals(template, other, "Шаблон не должен быть равен объекту другого класса");
+        // Act
+        boolean equalsResult = template.equals(other);
+
+        // Assert
+        assertNotEquals(true, equalsResult, "Шаблон не должен быть равен объекту другого класса");
     }
 }

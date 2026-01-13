@@ -5,65 +5,87 @@ import team.mephi.adminbot.model.enums.DialogStatus;
 
 import java.time.Instant;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- * Юнит-тесты для сущности Dialog (проверка дефолтных значений и полей).
+ * Тесты для сущности {@link Dialog}.
  */
 class DialogTest {
 
+    /**
+     * Проверяет значения по умолчанию у нового диалога.
+     */
     @Test
-    void newDialog_shouldHaveDefaultLastMessageAtAndUnreadCount() {
-        // given / when
+    void givenNewDialog_WhenCreated_ThenDefaultsApplied() {
+        // Arrange
         Dialog dialog = new Dialog();
 
-        // then
-        assertNotNull(dialog.getLastMessageAt(), "lastMessageAt должен иметь дефолтное значение");
-        assertNotNull(dialog.getUnreadCount(), "unreadCount должен иметь дефолтное значение");
-        assertEquals(0, dialog.getUnreadCount(), "unreadCount по умолчанию должен быть 0");
-        assertEquals(DialogStatus.ACTIVE, dialog.getStatus(), "status по умолчанию должен быть ACTIVE");
+        // Act
+        Instant lastMessageAt = dialog.getLastMessageAt();
+        Integer unreadCount = dialog.getUnreadCount();
+        DialogStatus status = dialog.getStatus();
+
+        // Assert
+        assertNotNull(lastMessageAt, "lastMessageAt должен иметь дефолтное значение");
+        assertNotNull(unreadCount, "unreadCount должен иметь дефолтное значение");
+        assertEquals(0, unreadCount, "unreadCount по умолчанию должен быть 0");
+        assertEquals(DialogStatus.ACTIVE, status, "status по умолчанию должен быть ACTIVE");
     }
 
+    /**
+     * Проверяет обновление времени последнего сообщения.
+     */
     @Test
-    void setLastMessageAt_shouldOverrideDefaultValue() {
-        // given
+    void givenDialog_WhenLastMessageAtUpdated_ThenValueChanges() {
+        // Arrange
         Dialog dialog = new Dialog();
         Instant newTime = Instant.now().minusSeconds(2 * 3600);
 
-        // when
+        // Act
         dialog.setLastMessageAt(newTime);
 
-        // then
+        // Assert
         assertEquals(newTime, dialog.getLastMessageAt(), "lastMessageAt должен обновляться сеттером");
     }
 
+    /**
+     * Проверяет обновление статуса диалога.
+     */
     @Test
-    void setStatus_shouldUpdateStatus() {
-        // given
+    void givenDialog_WhenStatusUpdated_ThenValueChanges() {
+        // Arrange
         Dialog dialog = new Dialog();
 
-        // when
+        // Act
         dialog.setStatus(DialogStatus.CLOSED);
 
-        // then
+        // Assert
         assertEquals(DialogStatus.CLOSED, dialog.getStatus(), "status должен обновляться сеттером");
     }
 
+    /**
+     * Проверяет обновление количества непрочитанных сообщений.
+     */
     @Test
-    void setUnreadCount_shouldUpdateUnreadCount() {
-        // given
+    void givenDialog_WhenUnreadCountUpdated_ThenValueChanges() {
+        // Arrange
         Dialog dialog = new Dialog();
 
-        // when
+        // Act
         dialog.setUnreadCount(5);
 
-        // then
+        // Assert
         assertEquals(5, dialog.getUnreadCount(), "unreadCount должен обновляться сеттером");
     }
 
+    /**
+     * Проверяет сравнение диалогов по идентификатору.
+     */
     @Test
-    void equals_shouldCompareById() {
-        // given
+    void givenDialogsWithIds_WhenCompared_ThenEqualityUsesId() {
+        // Arrange
         Dialog dialog1 = new Dialog();
         dialog1.setId(1L);
 
@@ -73,21 +95,29 @@ class DialogTest {
         Dialog dialog3 = new Dialog();
         dialog3.setId(2L);
 
-        // then
-        assertEquals(dialog1, dialog2, "Диалоги с одинаковым ID должны быть равны");
-        assertNotEquals(dialog1, dialog3, "Диалоги с разным ID должны быть не равны");
+        // Act
+        boolean sameIdEquals = dialog1.equals(dialog2);
+        boolean differentIdEquals = dialog1.equals(dialog3);
+
+        // Assert
+        assertEquals(true, sameIdEquals, "Диалоги с одинаковым ID должны быть равны");
+        assertNotEquals(true, differentIdEquals, "Диалоги с разным ID должны быть не равны");
     }
 
+    /**
+     * Проверяет консистентность hashCode для одной и той же сущности.
+     */
     @Test
-    void hashCode_shouldBeConsistent() {
-        // given
+    void givenDialog_WhenHashCodeCalled_ThenConsistent() {
+        // Arrange
         Dialog dialog = new Dialog();
         dialog.setId(1L);
 
-        // when / then
+        // Act
         int hashCode1 = dialog.hashCode();
         int hashCode2 = dialog.hashCode();
 
+        // Assert
         assertEquals(hashCode1, hashCode2, "hashCode должен быть консистентным");
     }
 }

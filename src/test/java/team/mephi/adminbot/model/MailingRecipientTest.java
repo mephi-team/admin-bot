@@ -4,24 +4,29 @@ import org.junit.jupiter.api.Test;
 import team.mephi.adminbot.model.enums.MailingChannel;
 import team.mephi.adminbot.model.enums.MailingRecipientStatus;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 /**
- * Юнит-тесты для сущности MailingRecipient (проверка Lombok-методов и полей).
+ * Тесты для сущности {@link MailingRecipient}.
  */
 class MailingRecipientTest {
 
+    /**
+     * Проверяет заполнение полей через билдер.
+     */
     @Test
-    void builder_shouldSetFields() {
-        // given
+    void givenBuilder_WhenBuild_ThenFieldsAreSet() {
+        // Arrange
         User user = new User();
         user.setId(1L);
 
         Mailing mailing = new Mailing();
         mailing.setId(2L);
 
-        // when
-        MailingRecipient mr = MailingRecipient.builder()
+        // Act
+        MailingRecipient recipient = MailingRecipient.builder()
                 .id(3L)
                 .user(user)
                 .mailing(mailing)
@@ -31,25 +36,33 @@ class MailingRecipientTest {
                 .messageId("mid")
                 .build();
 
-        // then
-        assertEquals(3L, mr.getId());
-        assertSame(user, mr.getUser());
-        assertSame(mailing, mr.getMailing());
-        assertEquals(MailingChannel.TELEGRAM, mr.getChannel());
-        assertEquals(MailingRecipientStatus.SENT, mr.getStatus());
-        assertEquals("ok", mr.getStatusReason());
-        assertEquals("mid", mr.getMessageId());
-        assertNotNull(mr.toString());
+        // Assert
+        assertEquals(3L, recipient.getId());
+        assertSame(user, recipient.getUser());
+        assertSame(mailing, recipient.getMailing());
+        assertEquals(MailingChannel.TELEGRAM, recipient.getChannel());
+        assertEquals(MailingRecipientStatus.SENT, recipient.getStatus());
+        assertEquals("ok", recipient.getStatusReason());
+        assertEquals("mid", recipient.getMessageId());
+        assertNotNull(recipient.toString());
     }
 
+    /**
+     * Проверяет корректность equals и hashCode.
+     */
     @Test
-    void equalsHashCode_shouldWork() {
-        // given
-        MailingRecipient a = MailingRecipient.builder().id(1L).build();
-        MailingRecipient b = MailingRecipient.builder().id(1L).build();
+    void givenSameIds_WhenCompared_ThenEqualsAndHashCodeMatch() {
+        // Arrange
+        MailingRecipient first = MailingRecipient.builder().id(1L).build();
+        MailingRecipient second = MailingRecipient.builder().id(1L).build();
 
-        // when / then
-        assertEquals(a, b);
-        assertEquals(a.hashCode(), b.hashCode());
+        // Act
+        boolean equalsResult = first.equals(second);
+        int hash1 = first.hashCode();
+        int hash2 = second.hashCode();
+
+        // Assert
+        assertEquals(true, equalsResult);
+        assertEquals(hash1, hash2);
     }
 }

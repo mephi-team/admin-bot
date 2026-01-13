@@ -5,36 +5,47 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Юнит-тесты для сущности Direction (проверка геттеров/сеттеров/билдера).
+ * Тесты для сущности {@link Direction}.
  */
 class DirectionTest {
 
+    /**
+     * Проверяет заполнение полей через билдер.
+     */
     @Test
-    void builder_shouldCreateDirectionWithAllFields() {
-        // given / when
+    void givenDirectionBuilder_WhenBuild_ThenFieldsAreSet() {
+        // Arrange
         Direction direction = Direction.builder()
                 .id(10L)
                 .code("IT")
                 .name("Информационные технологии")
                 .build();
 
-        // then
-        assertEquals(10L, direction.getId());
-        assertEquals("IT", direction.getCode());
-        assertEquals("Информационные технологии", direction.getName());
+        // Act
+        Long id = direction.getId();
+        String code = direction.getCode();
+        String name = direction.getName();
+
+        // Assert
+        assertEquals(10L, id);
+        assertEquals("IT", code);
+        assertEquals("Информационные технологии", name);
     }
 
+    /**
+     * Проверяет работу сеттеров и геттеров.
+     */
     @Test
-    void settersAndGetters_shouldWorkCorrectly() {
-        // given
+    void givenDirection_WhenSettersCalled_ThenGettersReturnValues() {
+        // Arrange
         Direction direction = new Direction();
 
-        // when
+        // Act
         direction.setId(20L);
         direction.setCode("HR");
         direction.setName("Кадры");
 
-        // then
+        // Assert
         assertEquals(20L, direction.getId());
         assertEquals("HR", direction.getCode());
         assertEquals("Кадры", direction.getName());

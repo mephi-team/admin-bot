@@ -6,48 +6,26 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Юнит-тесты для сущности User.
+ * Тесты для сущности {@link User}.
  */
 class UserTest {
 
+    /**
+     * Проверяет, что у нового пользователя пустые коллекции сообщений и диалогов.
+     */
     @Test
-    void newUser_shouldHaveEmptyCollections() {
+    void givenNewUser_WhenCreated_ThenCollectionsEmpty() {
+        // Arrange
         User user = new User();
 
-        assertNotNull(user.getDialogs());
-        assertNotNull(user.getMessages());
-        assertTrue(user.getDialogs().isEmpty());
-        assertTrue(user.getMessages().isEmpty());
+        // Act
+        var dialogs = user.getDialogs();
+        var messages = user.getMessages();
+
+        // Assert
+        assertNotNull(dialogs);
+        assertNotNull(messages);
+        assertTrue(dialogs.isEmpty());
+        assertTrue(messages.isEmpty());
     }
-
-//    @Test
-//    void onCreate_shouldSetCreatedAtAndUpdatedAt() {
-//        User user = new User();
-//
-//        user.onCreate();
-//
-//        assertNotNull(user.getCreatedAt());
-//        assertNotNull(user.getUpdatedAt());
-//        assertEquals(user.getCreatedAt(), user.getUpdatedAt());
-//
-//        assertTrue(
-//                Duration.between(user.getCreatedAt(), LocalDateTime.now()).getSeconds() < 5
-//        );
-//    }
-
-//    @Test
-//    void onUpdate_shouldChangeOnlyUpdatedAt() throws InterruptedException {
-//        User user = new User();
-//        user.onCreate();
-//
-//        LocalDateTime createdAt = user.getCreatedAt();
-//        LocalDateTime updatedAtBefore = user.getUpdatedAt();
-//
-//        Thread.sleep(50);
-//
-//        user.onUpdate();
-//
-//        assertEquals(createdAt, user.getCreatedAt());
-//        assertTrue(user.getUpdatedAt().isAfter(updatedAtBefore));
-//    }
 }

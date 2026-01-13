@@ -1,54 +1,36 @@
 package team.mephi.adminbot.model;
 
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
 /**
- * Юнит-тесты для сущности Message (проверка дефолтных временных полей и @PreUpdate).
+ * Тесты для сущности {@link Message}.
  */
 class MessageTest {
 
-//    @Test
-//    void newMessage_shouldHaveDefaultTimestamps() {
-//        // given / when
-//        Message message = new Message();
-//
-//        // then
-//        assertNotNull(message.getCreatedAt(), "createdAt должен быть инициализирован по умолчанию");
-//        assertNotNull(message.getUpdatedAt(), "updatedAt должен быть инициализирован по умолчанию");
-//
-//        assertTrue(
-//                Duration.between(message.getCreatedAt(), LocalDateTime.now()).getSeconds() < 5,
-//                "createdAt должен быть примерно текущим временем"
-//        );
-//        assertTrue(
-//                Duration.between(message.getUpdatedAt(), LocalDateTime.now()).getSeconds() < 5,
-//                "updatedAt должен быть примерно текущим временем"
-//        );
-//    }
+    /**
+     * Проверяет сравнение сообщений по идентификатору.
+     */
+    @Test
+    void givenMessagesWithIds_WhenCompared_ThenEqualityUsesId() {
+        // Arrange
+        Message first = new Message();
+        first.setId(1L);
 
-//    @Test
-//    void setUpdatedAt_shouldOverrideDefaultValue() {
-//        // given
-//        Message message = new Message();
-//        LocalDateTime newUpdatedAt = LocalDateTime.now().minusMinutes(10);
-//
-//        // when
-//        message.setUpdatedAt(newUpdatedAt);
-//
-//        // then
-//        assertEquals(newUpdatedAt, message.getUpdatedAt(), "updatedAt должен обновляться сеттером");
-//    }
+        Message second = new Message();
+        second.setId(1L);
 
-//    @Test
-//    void onUpdate_shouldRefreshUpdatedAt() throws InterruptedException {
-//        // given
-//        Message message = new Message();
-//        LocalDateTime before = message.getUpdatedAt();
-//
-//        Thread.sleep(50);
-//
-//        // when
-//        message.onUpdate();
-//
-//        // then
-//        assertTrue(message.getUpdatedAt().isAfter(before), "updatedAt должен обновиться при onUpdate");
-//    }
+        Message third = new Message();
+        third.setId(2L);
+
+        // Act
+        boolean equalSame = first.equals(second);
+        boolean equalDifferent = first.equals(third);
+
+        // Assert
+        assertEquals(true, equalSame);
+        assertNotEquals(true, equalDifferent);
+    }
 }

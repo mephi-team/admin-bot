@@ -5,22 +5,26 @@ import team.mephi.adminbot.model.enums.MailingTaskStatus;
 
 import java.time.Instant;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 /**
- * Юнит-тесты для сущности MailingTask (проверка Lombok-методов и полей).
+ * Тесты для сущности {@link MailingTask}.
  */
 class MailingTaskTest {
 
+    /**
+     * Проверяет заполнение полей через билдер.
+     */
     @Test
-    void builder_shouldSetFields() {
-        // given
+    void givenBuilder_WhenBuild_ThenFieldsAreSet() {
+        // Arrange
         Mailing mailing = new Mailing();
         mailing.setId(1L);
+        Instant sendAt = Instant.now().plusSeconds(86400);
 
-        Instant sendAt = Instant.now().plusSeconds(86400); // +1 day
-
-        // when
+        // Act
         MailingTask task = MailingTask.builder()
                 .id(2L)
                 .mailing(mailing)
@@ -29,7 +33,7 @@ class MailingTaskTest {
                 .status(MailingTaskStatus.SCHEDULED)
                 .build();
 
-        // then
+        // Assert
         assertEquals(2L, task.getId());
         assertSame(mailing, task.getMailing());
         assertEquals(sendAt, task.getSendAt());

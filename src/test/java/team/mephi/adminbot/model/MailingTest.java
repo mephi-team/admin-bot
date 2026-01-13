@@ -5,39 +5,27 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Юнит-тесты для сущности Mailing.
+ * Тесты для сущности {@link Mailing}.
  */
 class MailingTest {
 
-//    @Test
-//    void onCreate_shouldSetCreatedAtToNow() {
-//        // given
-//        Mailing mailing = Mailing.builder()
-//                .name("Тестовая рассылка")
-//                .build();
-//
-//        assertNull(mailing.getCreatedAt());
-//
-//        // when
-//        mailing.onCreate();
-//
-//        // then
-//        assertNotNull(mailing.getCreatedAt());
-//        assertTrue(
-//                Duration.between(mailing.getCreatedAt(), LocalDateTime.now()).getSeconds() < 5
-//        );
-//    }
-
+    /**
+     * Проверяет заполнение идентификатора и названия через билдер.
+     */
     @Test
-    void builder_shouldSetIdAndName() {
-        // given / when
+    void givenBuilder_WhenBuild_ThenIdAndNameAreSet() {
+        // Arrange
         Mailing mailing = Mailing.builder()
                 .id(100L)
                 .name("Mailing name")
                 .build();
 
-        // then
-        assertEquals(100L, mailing.getId());
-        assertEquals("Mailing name", mailing.getName());
+        // Act
+        Long id = mailing.getId();
+        String name = mailing.getName();
+
+        // Assert
+        assertEquals(100L, id);
+        assertEquals("Mailing name", name);
     }
 }

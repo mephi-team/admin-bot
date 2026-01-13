@@ -19,32 +19,55 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Тесты для маппера {@link NeoStudyMapper}.
+ */
 class NeoStudyMapperTest {
 
     private final NeoStudyMapper mapper = new NeoStudyMapper();
 
+    /**
+     * Проверяет обработку null пользователя при построении запроса.
+     */
     @Test
-    void toNeoStudyUserRequest_returnsNullWhenUserNull() {
-        assertNull(mapper.toNeoStudyUserRequest(null));
+    void givenNullUser_WhenMappingToRequest_ThenResultIsNull() {
+        // Arrange
+        User user = null;
+
+        // Act
+        NeoStudyUserRequest request = mapper.toNeoStudyUserRequest(user);
+
+        // Assert
+        assertNull(request);
     }
 
+    /**
+     * Проверяет маппинг полей пользователя в запрос NeoStudy.
+     */
     @Test
-    void toNeoStudyUserRequest_mapsFields() {
+    void givenUser_WhenMappingToRequest_ThenFieldsMapped() {
+        // Arrange
         User user = new User();
         user.setTgId("tg-123");
         user.setUserName("Alex");
         user.setStatus(UserStatus.ACTIVE);
 
+        // Act
         NeoStudyUserRequest request = mapper.toNeoStudyUserRequest(user);
 
+        // Assert
         assertNotNull(request);
         assertEquals("tg-123", request.getExternalId());
         assertEquals("Alex", request.getName());
         assertEquals("ACTIVE", request.getStatus());
     }
 
+    /**
+     * Проверяет маппинг ответа NeoStudy в доменную модель пользователя.
+     */
     @Test
-    void toUser_mapsResponseFieldsAndTimes() {
+    void givenUserResponse_WhenMappingToUser_ThenFieldsMapped() {
+        // Arrange
         LocalDateTime createdAt = LocalDateTime.of(2024, 2, 10, 12, 30);
         LocalDateTime updatedAt = LocalDateTime.of(2024, 2, 11, 8, 5);
         NeoStudyUserResponse response = NeoStudyUserResponse.builder()
@@ -55,8 +78,10 @@ class NeoStudyMapperTest {
                 .updatedAt(updatedAt)
                 .build();
 
+        // Act
         User user = mapper.toUser(response);
 
+        // Assert
         assertNotNull(user);
         assertEquals("ext-9", user.getTgId());
         assertEquals("Ivan", user.getUserName());
@@ -65,8 +90,12 @@ class NeoStudyMapperTest {
         assertEquals(updatedAt.toInstant(ZoneOffset.UTC), user.getUpdatedAt());
     }
 
+    /**
+     * Проверяет обновление пользователя только ненулевыми значениями.
+     */
     @Test
-    void updateUserFromNeoStudy_updatesOnlyNonNullFields() {
+    void givenResponseWithNulls_WhenUpdatingUser_ThenOnlyNonNullFieldsApplied() {
+        // Arrange
         User user = new User();
         user.setUserName("Old Name");
         user.setStatus(UserStatus.ACTIVE);
@@ -79,33 +108,46 @@ class NeoStudyMapperTest {
                 .updatedAt(responseUpdatedAt)
                 .build();
 
+        // Act
         mapper.updateUserFromNeoStudy(user, response);
 
+        // Assert
         assertEquals("Old Name", user.getUserName());
         assertEquals(UserStatus.INACTIVE, user.getStatus());
         assertEquals(responseUpdatedAt.toInstant(ZoneOffset.UTC), user.getUpdatedAt());
     }
 
+    /**
+     * Проверяет двусторонний маппинг направления в курс и обратно.
+     */
     @Test
-    void courseMapping_roundTripsDirectionFields() {
+    void givenDirection_WhenMappedToCourse_ThenFieldsRoundTrip() {
+        // Arrange
         Direction direction = Direction.builder()
                 .code("JAVA")
                 .name("Java Backend")
                 .build();
 
+        // Act
         NeoStudyCourseResponse response = mapper.toNeoStudyCourse(direction);
+        Direction mapped = mapper.toDirection(response);
+
+        // Assert
         assertNotNull(response);
         assertEquals("JAVA", response.getCode());
         assertEquals("Java Backend", response.getName());
-
-        Direction mapped = mapper.toDirection(response);
         assertNotNull(mapped);
         assertEquals("JAVA", mapped.getCode());
         assertEquals("Java Backend", mapped.getName());
     }
 
+    /**
+     * Проверяет установку значений по умолчанию в запросе зачисления.
+     */
     @Test
-    void enrollmentRequest_includesDefaults() {
+    void givenEnrollmentRequest_WhenMetadataNull_ThenDefaultsApplied() {
+        // Arrange
+        // Act
         NeoStudyEnrollmentRequest request = mapper.toNeoStudyEnrollmentRequest(
                 "user-1",
                 "course-2",
@@ -113,6 +155,14 @@ class NeoStudyMapperTest {
                 null
         );
 
+        NeoStudyEnrollmentRequest requestWithMetadata = mapper.toNeoStudyEnrollmentRequest(
+                "user-3",
+                "course-4",
+                "pending",
+                Map.of("source", "batch")
+        );
+
+        // Assert
         assertNotNull(request);
         assertEquals("user-1", request.getUserId());
         assertEquals("course-2", request.getCourseId());
@@ -120,13 +170,6 @@ class NeoStudyMapperTest {
         assertNotNull(request.getEnrollmentDate());
         assertNotNull(request.getMetadata());
         assertTrue(request.getMetadata().isEmpty());
-
-        NeoStudyEnrollmentRequest requestWithMetadata = mapper.toNeoStudyEnrollmentRequest(
-                "user-3",
-                "course-4",
-                "pending",
-                Map.of("source", "batch")
-        );
         assertEquals("batch", requestWithMetadata.getMetadata().get("source"));
     }
 }
