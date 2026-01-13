@@ -1,6 +1,7 @@
 services:
   admin:
     build: .
+    container_name: flexiq-admin
     environment:
       SPRING_ACTIVE_PROFILE: prod
       SPRING_DATASOURCE_URL: "jdbc:postgresql://postgres:5432/flexiq_db"
@@ -11,6 +12,8 @@ services:
 #      SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUER_URI: "http://localhost:8081/realms/mephi-realm"
     ports:
       - "8080:8080"
+    depends_on:
+      - postgres
   postgres:
     image: postgres:18.1-alpine
     container_name: flexiq-postgres
