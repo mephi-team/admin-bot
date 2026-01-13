@@ -86,7 +86,7 @@ public class DateRangePicker extends CustomField<DateRangePicker.LocalDateRange>
         @Getter
         @Setter
         private LocalDate endDate;
-        LocalDateRange(LocalDate startDate, LocalDate endDate) {
+        public LocalDateRange(LocalDate startDate, LocalDate endDate) {
             this.startDate = startDate;
             this.endDate = endDate;
         }

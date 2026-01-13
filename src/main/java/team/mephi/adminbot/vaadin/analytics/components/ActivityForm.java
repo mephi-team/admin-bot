@@ -1,41 +1,41 @@
 package team.mephi.adminbot.vaadin.analytics.components;
 
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import lombok.Getter;
 import team.mephi.adminbot.vaadin.components.fields.DateRangePicker;
 
-public class Form1 extends FormLayout {
+public class ActivityForm extends FormLayout {
     @Getter
     private final ComboBox<String> type;
     @Getter
-    private final RadioButtonGroup<Form1Intervals> interval;
+    private final RadioButtonGroup<ActivityIntervals> interval;
     @Getter
     private final DateRangePicker period;
 
-    public Form1() {
+    public ActivityForm() {
         setAutoResponsive(true);
         setExpandColumns(true);
         setExpandFields(true);
 
         type = new ComboBox<>();
         type.setItems("Посещения", "Популярные кнопки");
-        addFormItem(type, "Тип активности");
+        addFormItem(type, getTranslation("page_analytics_form1_type_label"));
 
         period = new DateRangePicker();
-        addFormItem(period, "Период активности");
+        addFormItem(period, getTranslation("page_analytics_form1_period_label"));
 
         interval = new RadioButtonGroup<>();
-        interval.setItems(Form1Intervals.values());
-        interval.setValue(Form1Intervals.MONTH);
+        interval.setItems(ActivityIntervals.values());
+        interval.setValue(ActivityIntervals.MONTH);
+        interval.setItemLabelGenerator(l -> getTranslation(l.getTabLabelKey()));
         interval.addValueChangeListener(e -> {
             changeDatePicker(e.getValue());
         });
-        addFormItem(interval, "Интервал времени");
+        addFormItem(interval, getTranslation("page_analytics_form1_interval_label"));
     }
-    private void changeDatePicker(Form1Intervals interval) {
-        period.changeMode(interval == Form1Intervals.HOUR ? DateRangePicker.Mode.DAY : DateRangePicker.Mode.INTERVAL);
+    private void changeDatePicker(ActivityIntervals interval) {
+        period.changeMode(interval == ActivityIntervals.HOUR ? DateRangePicker.Mode.DAY : DateRangePicker.Mode.INTERVAL);
     }
 }
