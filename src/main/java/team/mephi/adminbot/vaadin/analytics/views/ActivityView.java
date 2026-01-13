@@ -7,6 +7,11 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
+import software.xdev.chartjs.model.charts.BarChart;
+import software.xdev.chartjs.model.data.BarData;
+import software.xdev.chartjs.model.dataset.BarDataset;
+import software.xdev.chartjs.model.options.BarOptions;
+import software.xdev.chartjs.model.options.LegendOptions;
 import software.xdev.vaadin.chartjs.ChartContainer;
 import team.mephi.adminbot.vaadin.components.buttons.SecondaryButton;
 
@@ -14,8 +19,15 @@ public class ActivityView extends VerticalLayout {
     public ActivityView() {
         setPadding(false);
         ChartContainer chart = new ChartContainer();
-        chart.showChart(
-                "{\"data\":{\"labels\":[\"A\",\"B\"],\"datasets\":[{\"data\":[1,2],\"label\":\"X\"}]},\"type\":\"bar\"}");
+
+        BarData barData = new BarData().addLabels("Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь");
+        barData.addDataset(new BarDataset().setLabel("Test1").setBackgroundColor("#2168df")
+                .addData(5).addData(10).addData(8).addData(5).addData(10).addData(8).addData(5).addData(10).addData(8).addData(5).addData(10).addData(8));
+
+        BarOptions options = new BarOptions();
+        options.getPlugins().setLegend(new LegendOptions().setPosition("bottom"));
+
+        chart.showChart(new BarChart(barData, options).toJson());
 
         FormLayout form = new FormLayout();
         form.setAutoResponsive(true);

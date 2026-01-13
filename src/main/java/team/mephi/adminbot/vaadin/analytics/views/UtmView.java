@@ -8,6 +8,11 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.component.tabs.TabSheetVariant;
+import software.xdev.chartjs.model.charts.BarChart;
+import software.xdev.chartjs.model.data.BarData;
+import software.xdev.chartjs.model.dataset.BarDataset;
+import software.xdev.chartjs.model.options.BarOptions;
+import software.xdev.chartjs.model.options.LegendOptions;
 import software.xdev.vaadin.chartjs.ChartContainer;
 import team.mephi.adminbot.vaadin.components.buttons.SecondaryButton;
 import team.mephi.adminbot.vaadin.components.fields.DateRangePicker;
@@ -15,9 +20,15 @@ import team.mephi.adminbot.vaadin.components.fields.DateRangePicker;
 public class UtmView extends VerticalLayout {
     public UtmView() {
         setPadding(false);
+
+        BarData barData = new BarData().addLabels("Январь", "Февраль", "Март");
+        barData.addDataset(new BarDataset().setLabel("Test1").setBackgroundColor("#2168df").addData(5).addData(10).addData(8));
+
+        BarOptions options = new BarOptions();
+        options.getPlugins().setLegend(new LegendOptions().setPosition("bottom"));
+
         ChartContainer chart = new ChartContainer();
-        chart.showChart(
-                "{\"data\":{\"labels\":[\"A\",\"B\"],\"datasets\":[{\"data\":[1,2],\"label\":\"X\"}]},\"type\":\"bar\"}");
+        chart.showChart(new BarChart(barData, options).toJson());
 
         FormLayout form = new FormLayout();
         form.setAutoResponsive(true);
