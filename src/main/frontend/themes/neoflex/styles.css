@@ -158,7 +158,7 @@ vaadin-text-area::part(input-field):hover {
     background: var(--lumo-primary-color-10pct);
 }
 
-vaadin-checkbox.neo,
+vaadin-checkbox,
 vaadin-grid vaadin-checkbox,
 vaadin-checkbox-group vaadin-checkbox {
     --vaadin-input-field-border-width: 1px;
@@ -198,22 +198,22 @@ vaadin-tooltip-overlay::part(overlay) {
     padding: 8px 12px;
 }
 
-vaadin-message-input.neo {
+vaadin-message-input{
     display: flex;
     flex-direction: column;
     align-items: flex-end;
 }
 
-vaadin-message-input.neo > vaadin-button {
+vaadin-message-input > vaadin-button {
     border-radius: 12px;
 }
 
-vaadin-message-input.neo > vaadin-text-area {
+vaadin-message-input > vaadin-text-area {
     margin-inline: 0;
     height: 80px;
 }
 
-vaadin-message-input.neo > vaadin-text-area::part(input-field) {
+vaadin-message-input > vaadin-text-area::part(input-field) {
     --vaadin-input-field-border-radius: 12px;
     --vaadin-input-field-background: transparent;
     outline: 1px solid var(--lumo-contrast-20pct);
@@ -221,6 +221,6 @@ vaadin-message-input.neo > vaadin-text-area::part(input-field) {
     height: 30px;
 }
 
-vaadin-message-input.neo > vaadin-text-area::part(input-field):hover {
+vaadin-message-input > vaadin-text-area::part(input-field):hover {
     background-color: var(--lumo-primary-color-10pct);
 }
