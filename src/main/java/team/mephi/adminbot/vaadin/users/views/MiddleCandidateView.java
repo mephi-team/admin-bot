@@ -1,0 +1,105 @@
+package team.mephi.adminbot.vaadin.users.views;
+
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridMultiSelectionModel;
+import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.router.QueryParameters;
+import com.vaadin.flow.theme.lumo.LumoUtility;
+import team.mephi.adminbot.dto.SimpleUser;
+import team.mephi.adminbot.model.enums.UserStatus;
+import team.mephi.adminbot.vaadin.components.ButtonGroup;
+import team.mephi.adminbot.vaadin.components.GridSelectActions;
+import team.mephi.adminbot.vaadin.components.GridSettingsPopover;
+import team.mephi.adminbot.vaadin.components.SearchFragment;
+import team.mephi.adminbot.vaadin.components.buttons.IconButton;
+import team.mephi.adminbot.vaadin.components.buttons.PrimaryIconButton;
+import team.mephi.adminbot.vaadin.components.buttons.SecondaryButton;
+import team.mephi.adminbot.vaadin.components.buttons.SecondaryIconButton;
+import team.mephi.adminbot.vaadin.components.fields.SearchField;
+import team.mephi.adminbot.vaadin.service.DialogType;
+import team.mephi.adminbot.vaadin.users.dataproviders.MiddleCandidateDataProvider;
+import team.mephi.adminbot.vaadin.users.presenter.UsersPresenter;
+import team.mephi.adminbot.vaadin.views.Dialogs;
+
+import java.util.List;
+import java.util.Set;
+
+public class MiddleCandidateView extends VerticalLayout {
+    private List<Long> selectedIds;
+
+    public MiddleCandidateView(UsersPresenter actions) {
+        MiddleCandidateDataProvider provider = (MiddleCandidateDataProvider) actions.getDataProvider();
+        var gsa = new GridSelectActions(getTranslation("grid_users_actions_label"),
+                new SecondaryButton(getTranslation("grid_middle_candidate_actions_accept_label"), VaadinIcon.CHECK.create(), e -> {
+                    if (!selectedIds.isEmpty())
+                        actions.onAccept(selectedIds, selectedIds.size() > 1 ? DialogType.ACCEPT_USERS_ALL : DialogType.ACCEPT_USERS, "" + selectedIds.size());
+                }),
+                new SecondaryButton(getTranslation("grid_middle_candidate_actions_reject_label"), VaadinIcon.CLOSE.create(), e -> {
+                    if (!selectedIds.isEmpty())
+                        actions.onReject(selectedIds, selectedIds.size() > 1 ? DialogType.REJECT_USERS_ALL : DialogType.REJECT_USERS, "" + selectedIds.size());
+                }),
+                new SecondaryButton(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), e -> {
+                    if (!selectedIds.isEmpty())
+                        actions.onDelete(selectedIds, DialogType.DELETE_USERS);
+                })
+        );
+
+        setSizeFull();
+        setPadding(false);
+
+        var grid = new Grid<>(SimpleUser.class, false);
+        grid.addColumn(SimpleUser::getFullName).setHeader(getTranslation("grid_middle_candidate_header_name_label")).setSortable(true).setResizable(true).setFrozen(true)
+                .setAutoWidth(true).setFlexGrow(0).setKey("lastName");
+        grid.addColumn(SimpleUser::getEmail).setHeader(getTranslation("grid_middle_candidate_header_email_label")).setSortable(true).setResizable(true).setKey("email");
+        grid.addColumn(SimpleUser::getTgId).setHeader(getTranslation("grid_middle_candidate_header_telegram_label")).setSortable(true).setResizable(true).setKey("tgId");
+        grid.addColumn(SimpleUser::getPhoneNumber).setHeader(getTranslation("grid_middle_candidate_header_phone_label")).setSortable(true).setResizable(true).setKey("phoneNumber");
+        grid.addColumn(MyRenderers.createPdRenderer()).setHeader(getTranslation("grid_middle_candidate_header_pd_consent_label")).setSortable(true).setResizable(true).setKey("pdConsent");
+        grid.addColumn(SimpleUser::getCohort).setHeader(getTranslation("grid_middle_candidate_header_cohort_label")).setSortable(true).setResizable(true).setKey("cohort");
+        grid.addColumn(MyRenderers.createUserDirections()).setHeader(getTranslation("grid_middle_candidate_header_direction_label")).setSortable(true).setResizable(true).setKey("direction");
+        grid.addColumn(SimpleUser::getCity).setHeader(getTranslation("grid_middle_candidate_header_city_label")).setSortable(true).setResizable(true).setKey("city");
+        grid.addColumn(MyRenderers.createStatusRenderer()).setHeader(getTranslation("grid_middle_candidate_header_status_label")).setSortable(true).setResizable(true).setKey("status");
+
+        grid.addComponentColumn(item -> {
+            Button rejectButton = new SecondaryIconButton(VaadinIcon.CLOSE.create(), e -> actions.onReject(List.of(item.getId()), DialogType.REJECT_USERS));
+            Button confirmButton = new PrimaryIconButton(VaadinIcon.CHECK.create(), e -> actions.onAccept(List.of(item.getId()), DialogType.ACCEPT_USERS));
+            Button viewButton = new IconButton(VaadinIcon.EYE.create(), e -> actions.onView(item, DialogType.USERS_VIEW));
+            Button chatButton = new IconButton(VaadinIcon.CHAT.create(), e -> UI.getCurrent().navigate(Dialogs.class, QueryParameters.of("userId", item.getId().toString())));
+            Button editButton = new IconButton(VaadinIcon.PENCIL.create(), e -> actions.onEdit(item, DialogType.USERS_EDIT));
+            Button blockButton = new IconButton(VaadinIcon.BAN.create(), e -> actions.onBlock(item, DialogType.USERS_BLOCKED));
+            if (UserStatus.BLOCKED.name().equals(item.getStatus())) {
+                blockButton.addClassNames(LumoUtility.TextColor.ERROR);
+            } else {
+                blockButton.addClassNames(LumoUtility.TextColor.BODY);
+            }
+            return new ButtonGroup(rejectButton, confirmButton, viewButton, chatButton, editButton, blockButton);
+        }).setHeader(getTranslation("grid_header_actions_label")).setWidth("280px").setFlexGrow(0).setKey("actions");
+
+        grid.setDataProvider(provider.getDataProvider());
+        GridMultiSelectionModel<SimpleUser> selectionModel = (GridMultiSelectionModel<SimpleUser>) grid.setSelectionMode(Grid.SelectionMode.MULTI);
+        selectionModel.setSelectionColumnFrozen(true);
+        grid.setSizeFull();
+        grid.addSelectionListener(sel -> {
+            selectedIds = sel.getAllSelectedItems().stream().map(SimpleUser::getId).toList();
+            gsa.setCount(selectedIds.size());
+        });
+        grid.setEmptyStateText(getTranslation("grid_middle_candidate_empty_label"));
+        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
+
+        var searchField = new SearchField(getTranslation("grid_middle_candidate_search_placeholder"));
+        searchField.addValueChangeListener(e -> provider.getFilterableProvider().setFilter(e.getValue()));
+
+        var settingsBtn = new IconButton(VaadinIcon.COG_O.create());
+        var settingsPopover = new GridSettingsPopover(grid, Set.of(), Set.of("actions"));
+        settingsPopover.setTarget(settingsBtn);
+
+        var downloadBtn = new IconButton(VaadinIcon.DOWNLOAD_ALT.create(), e -> {
+        });
+
+        add(new SearchFragment(searchField, new Span(settingsBtn, downloadBtn)), gsa, grid);
+    }
+}

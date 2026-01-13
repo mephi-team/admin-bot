@@ -1,47 +1,68 @@
 package team.mephi.adminbot.model;
 
 import org.junit.jupiter.api.Test;
+import team.mephi.adminbot.model.enums.AnswerStatus;
 
-import java.time.LocalDateTime;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 /**
- * Юнит-тесты для сущности UserAnswer (проверка @PrePersist onCreate).
+ * Юнит-тесты для сущности UserAnswer.
  */
 class UserAnswerTest {
 
     @Test
-    void onCreate_shouldSetAnsweredAtIfNull() {
+    void equals_shouldReturnTrueForSameId() {
         // given
-        UserAnswer answer = UserAnswer.builder()
-                .answerText("A")
-                .status("ok")
+        UserAnswer answer1 = UserAnswer.builder()
+                .id(1L)
+                .answerText("Answer 1")
+                .status(AnswerStatus.DRAFT)
                 .build();
 
-        assertNull(answer.getAnsweredAt(), "До onCreate answeredAt должен быть null");
-
-        // when
-        answer.onCreate();
+        UserAnswer answer2 = UserAnswer.builder()
+                .id(1L)
+                .answerText("Answer 2")
+                .status(AnswerStatus.SENT)
+                .build();
 
         // then
-        assertNotNull(answer.getAnsweredAt(), "После onCreate answeredAt должен быть установлен");
+        assertEquals(answer1, answer2, "Ответы с одинаковым ID должны быть равны");
     }
 
     @Test
-    void onCreate_shouldNotOverrideAnsweredAtIfAlreadySet() {
+    void equals_shouldReturnFalseForDifferentIds() {
         // given
-        LocalDateTime oldTime = LocalDateTime.now().minusDays(3);
+        UserAnswer answer1 = UserAnswer.builder()
+                .id(1L)
+                .answerText("Answer")
+                .status(AnswerStatus.DRAFT)
+                .build();
+
+        UserAnswer answer2 = UserAnswer.builder()
+                .id(2L)
+                .answerText("Answer")
+                .status(AnswerStatus.DRAFT)
+                .build();
+
+        // then
+        assertNotEquals(answer1, answer2, "Ответы с разными ID не должны быть равны");
+    }
+
+    @Test
+    void hashCode_shouldBeConsistent() {
+        // given
         UserAnswer answer = UserAnswer.builder()
-                .answerText("A")
-                .status("ok")
-                .answeredAt(oldTime)
+                .id(1L)
+                .answerText("Answer")
+                .status(AnswerStatus.DRAFT)
                 .build();
 
         // when
-        answer.onCreate();
+        int hashCode1 = answer.hashCode();
+        int hashCode2 = answer.hashCode();
 
         // then
-        assertEquals(oldTime, answer.getAnsweredAt(), "onCreate не должен перезаписывать answeredAt, если он уже задан");
+        assertEquals(hashCode1, hashCode2, "hashCode должен быть консистентным");
     }
 }

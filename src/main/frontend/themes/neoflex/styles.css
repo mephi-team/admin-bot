@@ -1,0 +1,227 @@
+:root{
+    --lumo-primary-color: #2653ae;
+    --lumo-primary-text-color: #2653ae;
+    --lumo-required-field-indicator: '\002A';
+}
+html, body, #outlet {
+    overflow: hidden;
+}
+
+/* Отключаем прокрутку для основной области контента AppLayout */
+vaadin-app-layout::part(content) {
+    overflow: hidden !important;
+}
+
+/* Стандартная ширина панели (полный текст) */
+vaadin-app-layout::part(drawer) {
+    --vaadin-app-layout-drawer-width: 220px; /* Ширина с текстом */
+    width: var(--vaadin-app-layout-drawer-width);
+    --lumo-base-color: #d3e1f9;
+    border-end-end-radius: 12px;
+    border-start-end-radius: 12px;
+}
+
+/* Стили для режима "только иконки", когда присутствует атрибут "mini-variant" */
+vaadin-app-layout[mini-variant]::part(drawer) {
+    --vaadin-app-layout-drawer-width: 68px; /* Ширина только для иконок */
+    width: var(--vaadin-app-layout-drawer-width) !important;
+    border-end-end-radius: 0;
+    border-start-end-radius: 0;
+}
+
+vaadin-side-nav-item::part(link) {
+    --lumo-space-xs: 12px;
+    --lumo-space-s: 12px;
+    --_child-indent: 10px;
+}
+vaadin-side-nav-item::part(content) {
+    --lumo-border-radius-m: 16px;
+}
+
+vaadin-side-nav-item[current] {
+    --lumo-primary-color-10pct: #2653ae;
+    --vaadin-selection-color-text: #fff;
+}
+
+
+vaadin-side-nav-item > vaadin-icon {
+    color: #162143;
+}
+
+vaadin-side-nav-item:hover > vaadin-icon {
+    color: #fff;
+}
+
+vaadin-side-nav-item::part(link):hover {
+    --lumo-header-text-color: #fff;
+}
+
+vaadin-side-nav-item[current] > vaadin-icon {
+    color: #fff;
+}
+
+a[router-link][highlight] {
+    font-weight: bold;
+}
+
+vaadin-message-input {
+    padding: 0;
+}
+
+/* фикс для FF */
+vaadin-virtual-list > div[role='listitem'] {
+    display: grid;
+}
+
+vaadin-dialog-overlay::part(footer),
+vaadin-confirm-dialog-overlay::part(footer) {
+    background: transparent;
+}
+
+vaadin-tabsheet::part(content) {
+    padding-inline: 0;
+}
+
+vaadin-text-field.first::part(input-field) {
+    border-end-end-radius: 0;
+    border-start-end-radius: 0;
+    --_background: transparent;
+    --_hover-highlight: var(--lumo-primary-color-10pct);
+    --vaadin-input-field-hover-highlight-opacity: 1;
+    outline: 1px solid var(--lumo-contrast-20pct);
+    border-end-start-radius: 12px;
+    border-start-start-radius: 12px;
+    min-height: 40px
+}
+
+vaadin-text-field.last::part(input-field) {
+    border-end-start-radius: 0;
+    border-start-start-radius: 0;
+    --_background: transparent;
+    --_hover-highlight: var(--lumo-primary-color-10pct);
+    --vaadin-input-field-hover-highlight-opacity: 1;
+    outline: 1px solid var(--lumo-contrast-20pct);
+    border-end-end-radius: 12px;
+    border-start-end-radius: 12px;
+    min-height: 40px
+}
+
+vaadin-tab {
+    border-radius: 16px;
+    margin: 4px 8px;
+    padding: 0 12px;
+    max-height: 28px;
+    transition: background-color 0.2s;
+    cursor: pointer;
+    font-size: var(--lumo-font-size-s);
+}
+
+vaadin-tab[selected] {
+    background-color: var(--lumo-primary-color);
+    color: var(--lumo-primary-contrast-color);
+}
+
+vaadin-tabsheet::part(tabs-container) {
+    border-bottom: none;
+    box-shadow: none;
+}
+
+vaadin-date-picker::part(input-field),
+vaadin-text-area::part(input-field),
+vaadin-text-field::part(input-field),
+vaadin-email-field::part(input-field),
+vaadin-combo-box::part(input-field),
+vaadin-multi-select-combo-box::part(input-field) {
+    --_background: transparent;
+    --_hover-highlight: var(--lumo-primary-color-10pct);
+    --vaadin-input-field-hover-highlight-opacity: 1;
+    outline: 1px solid var(--lumo-contrast-20pct);
+    outline-offset: -1px;
+    border-radius: 12px;
+    min-height: 40px;
+    /*margin: 3px;*/
+}
+
+vaadin-multi-select-combo-box vaadin-multi-select-combo-box-chip {
+    background: #fff;
+    border: 1px solid var(--lumo-contrast-20pct);
+    border-radius: 12px;
+    /*height: 32px;*/
+}
+
+vaadin-multi-select-combo-box vaadin-multi-select-combo-box-chip[focused] {
+    background: var(--lumo-primary-color);
+    color: var(--lumo-primary-contrast-color);
+}
+
+
+vaadin-text-area::part(input-field):hover {
+    background: var(--lumo-primary-color-10pct);
+}
+
+vaadin-checkbox,
+vaadin-grid vaadin-checkbox,
+vaadin-checkbox-group vaadin-checkbox {
+    --vaadin-input-field-border-width: 1px;
+    --vaadin-checkbox-background: transparent;
+    --vaadin-checkbox-background-hover: var(--lumo-primary-color-10pct);
+    --vaadin-input-field-border-color: var(--lumo-primary-color);
+}
+
+vaadin-radio-group vaadin-radio-button {
+    --vaadin-input-field-border-width: 1px;
+    --vaadin-input-field-border-color: var(--lumo-primary-color);
+    --vaadin-radio-button-background: transparent;
+    --vaadin-radio-button-background-hover: var(--lumo-primary-color-10pct);
+}
+
+vaadin-checkbox-group[theme~="error"] vaadin-checkbox {
+    --vaadin-input-field-border-color: var(--lumo-error-color);
+}
+
+.border-12 {
+    border-radius: 12px;
+}
+
+vaadin-app-layout::part(navbar) {
+    background-image: none;
+    box-shadow: 0 1px 6px 2px var(--lumo-contrast-20pct);
+}
+
+vaadin-app-layout::part(drawer) {
+    z-index: 1;
+}
+
+vaadin-tooltip-overlay::part(overlay) {
+    background-color: #162143;
+    color: #fff;
+    border-radius: 12px;
+    padding: 8px 12px;
+}
+
+vaadin-message-input{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+vaadin-message-input > vaadin-button {
+    border-radius: 12px;
+}
+
+vaadin-message-input > vaadin-text-area {
+    margin-inline: 0;
+    height: 80px;
+}
+
+vaadin-message-input > vaadin-text-area::part(input-field) {
+    --vaadin-input-field-border-radius: 12px;
+    --vaadin-input-field-background: transparent;
+    outline: 1px solid var(--lumo-contrast-20pct);
+    outline-offset: -1px;
+    height: 30px;
+}
+
+vaadin-message-input > vaadin-text-area::part(input-field):hover {
+    background-color: var(--lumo-primary-color-10pct);
+}

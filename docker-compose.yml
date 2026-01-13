@@ -1,10 +1,19 @@
 services:
   admin:
     build: .
+    container_name: flexiq-admin
     environment:
+      SPRING_ACTIVE_PROFILE: prod
       SPRING_DATASOURCE_URL: "jdbc:postgresql://postgres:5432/flexiq_db"
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_REDIRECT_URI: "{baseUrl}/login/oauth2/code/keycloak"
+      SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_AUTHORIZATION_URI: "http://localhost:8081/realms/mephi-realm/protocol/openid-connect/auth"
+      SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_TOKEN_URI: "http://keycloak:8080/realms/mephi-realm/protocol/openid-connect/token"
+      SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_JWK_SET_URI: "http://keycloak:8080/realms/mephi-realm/protocol/openid-connect/certs"
+#      SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUER_URI: "http://localhost:8081/realms/mephi-realm"
     ports:
       - "8080:8080"
+    depends_on:
+      - postgres
   postgres:
     image: postgres:18.1-alpine
     container_name: flexiq-postgres
@@ -17,6 +26,19 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HOSTNAME_STRICT: false
+    command:
+      - start-dev
+      - --import-realm
+    volumes:
+      - ./keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json
+    ports:
+      - "8081:8080"
 
 volumes:
   postgres_data:

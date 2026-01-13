@@ -5,8 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Data
 @Builder
@@ -35,12 +36,8 @@ public class File {
     @JoinColumn(name = "uploaded_by")
     private User uploadedBy;
 
-    @Column(name = "uploaded_at", nullable = false)
-    private LocalDateTime uploadedAt;
-
-    @PrePersist
-    protected void onCreate() {
-        this.uploadedAt = LocalDateTime.now();
-    }
+    @Column(name = "uploaded_at", nullable = false, updatable = false)
+    @CreationTimestamp
+    private Instant uploadedAt;
 }
 

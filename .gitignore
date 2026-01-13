@@ -37,5 +37,14 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### idea maven project
 .idea
 .mvn
+
+# Vaadin generated directories
+src/main/frontend/generated/
+
+storage
+
+bundles

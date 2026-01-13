@@ -2,34 +2,31 @@ package team.mephi.adminbot.model;
 
 import org.junit.jupiter.api.Test;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Юнит-тесты для сущности Mailing.
  */
 class MailingTest {
 
-    @Test
-    void onCreate_shouldSetCreatedAtToNow() {
-        // given
-        Mailing mailing = Mailing.builder()
-                .name("Тестовая рассылка")
-                .build();
-
-        assertNull(mailing.getCreatedAt());
-
-        // when
-        mailing.onCreate();
-
-        // then
-        assertNotNull(mailing.getCreatedAt());
-        assertTrue(
-                Duration.between(mailing.getCreatedAt(), LocalDateTime.now()).getSeconds() < 5
-        );
-    }
+//    @Test
+//    void onCreate_shouldSetCreatedAtToNow() {
+//        // given
+//        Mailing mailing = Mailing.builder()
+//                .name("Тестовая рассылка")
+//                .build();
+//
+//        assertNull(mailing.getCreatedAt());
+//
+//        // when
+//        mailing.onCreate();
+//
+//        // then
+//        assertNotNull(mailing.getCreatedAt());
+//        assertTrue(
+//                Duration.between(mailing.getCreatedAt(), LocalDateTime.now()).getSeconds() < 5
+//        );
+//    }
 
     @Test
     void builder_shouldSetIdAndName() {

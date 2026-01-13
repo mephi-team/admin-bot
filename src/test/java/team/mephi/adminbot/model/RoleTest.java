@@ -2,7 +2,8 @@ package team.mephi.adminbot.model;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 /**
  * Юнит-тесты для сущности Role (проверка геттеров/сеттеров/билдера).
@@ -13,30 +14,41 @@ class RoleTest {
     void builder_shouldCreateRoleWithAllFields() {
         // given / when
         Role role = Role.builder()
-                .code(1L)
+                .code("admin")
                 .name("ADMIN")
                 .description("Администратор системы")
                 .build();
 
         // then
-        assertEquals(1L, role.getCode());
+        assertEquals("admin", role.getCode());
         assertEquals("ADMIN", role.getName());
         assertEquals("Администратор системы", role.getDescription());
     }
 
     @Test
-    void settersAndGetters_shouldWorkCorrectly() {
+    void equals_shouldBeBasedOnCode() {
         // given
-        Role role = new Role();
+        Role role1 = Role.builder()
+                .code("student")
+                .name("Student")
+                .description("Студент")
+                .build();
 
-        // when
-        role.setCode(2L);
-        role.setName("USER");
-        role.setDescription("Обычный пользователь");
+        Role role2 = Role.builder()
+                .code("student")
+                .name("Student Role")
+                .description("Другое описание")
+                .build();
+
+        Role role3 = Role.builder()
+                .code("admin")
+                .name("Admin")
+                .description("Администратор")
+                .build();
 
         // then
-        assertEquals(2L, role.getCode());
-        assertEquals("USER", role.getName());
-        assertEquals("Обычный пользователь", role.getDescription());
+        assertEquals(role1, role2); // одинаковый code
+        assertNotEquals(role1, role3); // разный code
+        assertEquals(role1.hashCode(), role2.hashCode());
     }
 }

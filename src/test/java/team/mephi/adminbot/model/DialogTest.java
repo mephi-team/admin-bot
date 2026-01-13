@@ -1,14 +1,14 @@
 package team.mephi.adminbot.model;
 
 import org.junit.jupiter.api.Test;
+import team.mephi.adminbot.model.enums.DialogStatus;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Юнит-тесты для сущности Dialog (проверка дефолтных значений и @PrePersist/@PreUpdate).
+ * Юнит-тесты для сущности Dialog (проверка дефолтных значений и полей).
  */
 class DialogTest {
 
@@ -21,13 +21,14 @@ class DialogTest {
         assertNotNull(dialog.getLastMessageAt(), "lastMessageAt должен иметь дефолтное значение");
         assertNotNull(dialog.getUnreadCount(), "unreadCount должен иметь дефолтное значение");
         assertEquals(0, dialog.getUnreadCount(), "unreadCount по умолчанию должен быть 0");
+        assertEquals(DialogStatus.ACTIVE, dialog.getStatus(), "status по умолчанию должен быть ACTIVE");
     }
 
     @Test
     void setLastMessageAt_shouldOverrideDefaultValue() {
         // given
         Dialog dialog = new Dialog();
-        LocalDateTime newTime = LocalDateTime.now().minusHours(2);
+        Instant newTime = Instant.now().minusSeconds(2 * 3600);
 
         // when
         dialog.setLastMessageAt(newTime);
@@ -37,43 +38,56 @@ class DialogTest {
     }
 
     @Test
-    void onCreate_shouldSetCreatedAtAndUpdatedAtToNow() {
+    void setStatus_shouldUpdateStatus() {
         // given
         Dialog dialog = new Dialog();
 
-        assertNull(dialog.getCreatedAt(), "До onCreate createdAt должен быть null");
-        assertNull(dialog.getUpdatedAt(), "До onCreate updatedAt должен быть null");
-
         // when
-        dialog.onCreate();
+        dialog.setStatus(DialogStatus.CLOSED);
 
         // then
-        assertNotNull(dialog.getCreatedAt(), "После onCreate createdAt должен быть установлен");
-        assertNotNull(dialog.getUpdatedAt(), "После onCreate updatedAt должен быть установлен");
-        assertEquals(dialog.getCreatedAt(), dialog.getUpdatedAt(), "createdAt и updatedAt при создании должны совпадать");
-
-        assertTrue(
-                Duration.between(dialog.getCreatedAt(), LocalDateTime.now()).getSeconds() < 5,
-                "createdAt должен быть примерно текущим временем"
-        );
+        assertEquals(DialogStatus.CLOSED, dialog.getStatus(), "status должен обновляться сеттером");
     }
 
     @Test
-    void onUpdate_shouldUpdateOnlyUpdatedAt() throws InterruptedException {
+    void setUnreadCount_shouldUpdateUnreadCount() {
         // given
         Dialog dialog = new Dialog();
-        dialog.onCreate();
-
-        LocalDateTime createdAtBefore = dialog.getCreatedAt();
-        LocalDateTime updatedAtBefore = dialog.getUpdatedAt();
-
-        Thread.sleep(50);
 
         // when
-        dialog.onUpdate();
+        dialog.setUnreadCount(5);
 
         // then
-        assertEquals(createdAtBefore, dialog.getCreatedAt(), "createdAt не должен меняться при onUpdate");
-        assertTrue(dialog.getUpdatedAt().isAfter(updatedAtBefore), "updatedAt должен обновиться");
+        assertEquals(5, dialog.getUnreadCount(), "unreadCount должен обновляться сеттером");
+    }
+
+    @Test
+    void equals_shouldCompareById() {
+        // given
+        Dialog dialog1 = new Dialog();
+        dialog1.setId(1L);
+
+        Dialog dialog2 = new Dialog();
+        dialog2.setId(1L);
+
+        Dialog dialog3 = new Dialog();
+        dialog3.setId(2L);
+
+        // then
+        assertEquals(dialog1, dialog2, "Диалоги с одинаковым ID должны быть равны");
+        assertNotEquals(dialog1, dialog3, "Диалоги с разным ID должны быть не равны");
+    }
+
+    @Test
+    void hashCode_shouldBeConsistent() {
+        // given
+        Dialog dialog = new Dialog();
+        dialog.setId(1L);
+
+        // when / then
+        int hashCode1 = dialog.hashCode();
+        int hashCode2 = dialog.hashCode();
+
+        assertEquals(hashCode1, hashCode2, "hashCode должен быть консистентным");
     }
 }
