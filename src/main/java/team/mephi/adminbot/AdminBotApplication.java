@@ -15,13 +15,16 @@ import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.component.popover.Popover;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.TextField;
+//import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import software.xdev.vaadin.chartjs.ChartContainer;
 import team.mephi.adminbot.vaadin.components.fields.FullNameField;
 
 @SpringBootApplication
+//@PWA(name = "Project Base for Vaadin with Spring", shortName = "Project Base")
 @Theme(value = "neoflex", variant = Lumo.LIGHT)
 @Uses(ComboBox.class)
 @Uses(FullNameField.class)
@@ -37,6 +40,7 @@ import team.mephi.adminbot.vaadin.components.fields.FullNameField;
 @Uses(Notification.class)
 @Uses(Popover.class)
 @Uses(CheckboxGroup.class)
+@Uses(ChartContainer.class)
 public class AdminBotApplication implements AppShellConfigurator {
     public static void main(String[] args) {
         SpringApplication.run(AdminBotApplication.class, args);

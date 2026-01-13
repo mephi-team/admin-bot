@@ -104,7 +104,6 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
         i18n.setMessage(getTranslation("chat.placeholder"));
         input.setI18n(i18n);
         input.setWidthFull();
-        input.addClassName("neo");
         input.addSubmitListener(submitEvent -> onMessage(submitEvent.getValue()));
         return input;
     }
