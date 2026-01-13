@@ -45,7 +45,4 @@ build/
 # Vaadin generated directories
 src/main/frontend/generated/
 
-# keycloak
-keycloak-data
-
 storage
