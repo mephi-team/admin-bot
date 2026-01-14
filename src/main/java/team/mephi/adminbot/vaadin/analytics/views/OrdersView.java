@@ -67,7 +67,7 @@ public class OrdersView extends VerticalLayout {
 
         add(content);
 
-        var buttonGroup = new HorizontalLayout(new SecondaryButton("Скачать PNG", VaadinIcon.DOWNLOAD_ALT.create()), new SecondaryButton("Скачать Excel", VaadinIcon.DOWNLOAD_ALT.create()));
+        var buttonGroup = new HorizontalLayout(new SecondaryButton(getTranslation("page_analytics_form_activity_download_png_action"), VaadinIcon.DOWNLOAD_ALT.create()), new SecondaryButton(getTranslation("page_analytics_form_activity_download_excel_action"), VaadinIcon.DOWNLOAD_ALT.create()));
         add(buttonGroup);
 
         presenter.onUpdateFilter(new OrderFilterData());

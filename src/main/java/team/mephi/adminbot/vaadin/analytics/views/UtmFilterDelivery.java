@@ -5,8 +5,8 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
-public class UtmFilter2 extends HorizontalLayout {
-    public UtmFilter2() {
+public class UtmFilterDelivery extends HorizontalLayout {
+    public UtmFilterDelivery() {
         setWidthFull();
 
         var form = new FormLayout();

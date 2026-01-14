@@ -3,8 +3,6 @@ package team.mephi.adminbot.vaadin.analytics.views;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.tabs.TabSheet;
-import com.vaadin.flow.component.tabs.TabSheetVariant;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.provider.DataChangeEvent;
 import lombok.Data;
@@ -63,19 +61,13 @@ public class UtmView extends VerticalLayout {
         column.setWidth("640px");
         column.add(form);
 
-        TabSheet tabSheet = new TabSheet();
-        tabSheet.addThemeVariants(TabSheetVariant.LUMO_TABS_MINIMAL);
-        tabSheet.add("По источнику",new UtmFilter1());
-        tabSheet.add("По способу доставки", new UtmFilter2());
-        form.add(tabSheet);
-
         HorizontalLayout content = new HorizontalLayout();
         content.setWidthFull();
         content.add(chart, column);
 
         add(content);
 
-        var buttonGroup = new HorizontalLayout(new SecondaryButton("Скачать PNG", VaadinIcon.DOWNLOAD_ALT.create()), new SecondaryButton("Скачать Excel", VaadinIcon.DOWNLOAD_ALT.create()));
+        var buttonGroup = new HorizontalLayout(new SecondaryButton(getTranslation("page_analytics_form_activity_download_png_action"), VaadinIcon.DOWNLOAD_ALT.create()), new SecondaryButton(getTranslation("page_analytics_form_activity_download_excel_action"), VaadinIcon.DOWNLOAD_ALT.create()));
         add(buttonGroup);
 
         presenter.onUpdateFilter(new UtmFilterData());

@@ -3,9 +3,13 @@ package team.mephi.adminbot.vaadin.analytics.components;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
+import com.vaadin.flow.component.tabs.TabSheet;
+import com.vaadin.flow.component.tabs.TabSheetVariant;
 import lombok.Getter;
 import team.mephi.adminbot.dto.CohortDto;
 import team.mephi.adminbot.service.CohortService;
+import team.mephi.adminbot.vaadin.analytics.views.UtmFilterSource;
+import team.mephi.adminbot.vaadin.analytics.views.UtmFilterDelivery;
 import team.mephi.adminbot.vaadin.components.fields.DateRangePicker;
 
 import java.time.LocalDate;
@@ -43,6 +47,12 @@ public class UtmForm extends FormLayout  {
             changeDatePicker(e.getValue());
         });
         addFormItem(interval, getTranslation("page_analytics_form_activity_interval_label"));
+
+        TabSheet tabSheet = new TabSheet();
+        tabSheet.addThemeVariants(TabSheetVariant.LUMO_TABS_MINIMAL);
+        tabSheet.add(getTranslation("page_analytics_form_activity_tabs_source_label"),new UtmFilterSource());
+        tabSheet.add(getTranslation("page_analytics_form_activity_tabs_delivery_label"), new UtmFilterDelivery());
+        add(tabSheet);
     }
 
     private void changeDatePicker(ActivityIntervals interval) {
