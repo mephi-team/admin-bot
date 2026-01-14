@@ -8,8 +8,6 @@ import com.vaadin.flow.component.tabs.TabSheetVariant;
 import lombok.Getter;
 import team.mephi.adminbot.dto.CohortDto;
 import team.mephi.adminbot.service.CohortService;
-import team.mephi.adminbot.vaadin.analytics.views.UtmFilterSource;
-import team.mephi.adminbot.vaadin.analytics.views.UtmFilterDelivery;
 import team.mephi.adminbot.vaadin.components.fields.DateRangePicker;
 
 import java.time.LocalDate;
