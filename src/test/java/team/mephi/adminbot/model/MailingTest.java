@@ -2,42 +2,48 @@ package team.mephi.adminbot.model;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Юнит-тесты для сущности Mailing.
+ * Юнит-тесты для Mailing.
+ * Покрывают: сравнение рассылок по идентификатору.
  */
 class MailingTest {
 
-//    @Test
-//    void onCreate_shouldSetCreatedAtToNow() {
-//        // given
-//        Mailing mailing = Mailing.builder()
-//                .name("Тестовая рассылка")
-//                .build();
-//
-//        assertNull(mailing.getCreatedAt());
-//
-//        // when
-//        mailing.onCreate();
-//
-//        // then
-//        assertNotNull(mailing.getCreatedAt());
-//        assertTrue(
-//                Duration.between(mailing.getCreatedAt(), LocalDateTime.now()).getSeconds() < 5
-//        );
-//    }
-
+    /**
+     * Проверяет равенство при совпадении идентификаторов.
+     */
     @Test
-    void builder_shouldSetIdAndName() {
-        // given / when
-        Mailing mailing = Mailing.builder()
-                .id(100L)
-                .name("Mailing name")
-                .build();
+    void Given_sameId_When_equals_Then_returnsTrue() {
+        // Arrange
+        Mailing first = new Mailing();
+        first.setId(1L);
+        Mailing second = new Mailing();
+        second.setId(1L);
 
-        // then
-        assertEquals(100L, mailing.getId());
-        assertEquals("Mailing name", mailing.getName());
+        // Act
+        boolean result = first.equals(second);
+
+        // Assert
+        assertTrue(result);
+    }
+
+    /**
+     * Проверяет неравенство при разных идентификаторах.
+     */
+    @Test
+    void Given_differentId_When_equals_Then_returnsFalse() {
+        // Arrange
+        Mailing first = new Mailing();
+        first.setId(1L);
+        Mailing second = new Mailing();
+        second.setId(2L);
+
+        // Act
+        boolean result = first.equals(second);
+
+        // Assert
+        assertFalse(result);
     }
 }

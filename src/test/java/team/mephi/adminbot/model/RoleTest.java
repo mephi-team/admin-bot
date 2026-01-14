@@ -6,28 +6,39 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 /**
- * Юнит-тесты для сущности Role (проверка геттеров/сеттеров/билдера).
+ * Тесты для сущности {@link Role}.
  */
 class RoleTest {
 
+    /**
+     * Проверяет, что билдер корректно заполняет поля роли.
+     */
     @Test
-    void builder_shouldCreateRoleWithAllFields() {
-        // given / when
+    void givenRoleBuilder_WhenBuild_ThenFieldsAreSet() {
+        // Arrange
         Role role = Role.builder()
                 .code("admin")
                 .name("ADMIN")
                 .description("Администратор системы")
                 .build();
 
-        // then
-        assertEquals("admin", role.getCode());
-        assertEquals("ADMIN", role.getName());
-        assertEquals("Администратор системы", role.getDescription());
+        // Act
+        String code = role.getCode();
+        String name = role.getName();
+        String description = role.getDescription();
+
+        // Assert
+        assertEquals("admin", code);
+        assertEquals("ADMIN", name);
+        assertEquals("Администратор системы", description);
     }
 
+    /**
+     * Проверяет, что сравнение ролей основано на коде роли.
+     */
     @Test
-    void equals_shouldBeBasedOnCode() {
-        // given
+    void givenRolesWithSameCode_WhenCompared_ThenEqualsUsesCode() {
+        // Arrange
         Role role1 = Role.builder()
                 .code("student")
                 .name("Student")
@@ -46,9 +57,13 @@ class RoleTest {
                 .description("Администратор")
                 .build();
 
-        // then
-        assertEquals(role1, role2); // одинаковый code
-        assertNotEquals(role1, role3); // разный code
+        // Act
+        boolean sameCodeEquals = role1.equals(role2);
+        boolean differentCodeEquals = role1.equals(role3);
+
+        // Assert
+        assertEquals(true, sameCodeEquals);
+        assertNotEquals(true, differentCodeEquals);
         assertEquals(role1.hashCode(), role2.hashCode());
     }
 }

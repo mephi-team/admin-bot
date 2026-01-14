@@ -1,54 +1,49 @@
 package team.mephi.adminbot.model;
 
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 /**
- * Юнит-тесты для сущности Message (проверка дефолтных временных полей и @PreUpdate).
+ * Юнит-тесты для Message.
+ * Покрывают: сравнение сообщений по идентификатору.
  */
 class MessageTest {
 
-//    @Test
-//    void newMessage_shouldHaveDefaultTimestamps() {
-//        // given / when
-//        Message message = new Message();
-//
-//        // then
-//        assertNotNull(message.getCreatedAt(), "createdAt должен быть инициализирован по умолчанию");
-//        assertNotNull(message.getUpdatedAt(), "updatedAt должен быть инициализирован по умолчанию");
-//
-//        assertTrue(
-//                Duration.between(message.getCreatedAt(), LocalDateTime.now()).getSeconds() < 5,
-//                "createdAt должен быть примерно текущим временем"
-//        );
-//        assertTrue(
-//                Duration.between(message.getUpdatedAt(), LocalDateTime.now()).getSeconds() < 5,
-//                "updatedAt должен быть примерно текущим временем"
-//        );
-//    }
+    /**
+     * Проверяет равенство сообщений при одинаковом идентификаторе.
+     */
+    @Test
+    void Given_sameId_When_equals_Then_returnsTrue() {
+        // Arrange
+        Message first = new Message();
+        first.setId(1L);
+        Message second = new Message();
+        second.setId(1L);
 
-//    @Test
-//    void setUpdatedAt_shouldOverrideDefaultValue() {
-//        // given
-//        Message message = new Message();
-//        LocalDateTime newUpdatedAt = LocalDateTime.now().minusMinutes(10);
-//
-//        // when
-//        message.setUpdatedAt(newUpdatedAt);
-//
-//        // then
-//        assertEquals(newUpdatedAt, message.getUpdatedAt(), "updatedAt должен обновляться сеттером");
-//    }
+        // Act
+        boolean result = first.equals(second);
 
-//    @Test
-//    void onUpdate_shouldRefreshUpdatedAt() throws InterruptedException {
-//        // given
-//        Message message = new Message();
-//        LocalDateTime before = message.getUpdatedAt();
-//
-//        Thread.sleep(50);
-//
-//        // when
-//        message.onUpdate();
-//
-//        // then
-//        assertTrue(message.getUpdatedAt().isAfter(before), "updatedAt должен обновиться при onUpdate");
-//    }
+        // Assert
+        assertTrue(result);
+    }
+
+    /**
+     * Проверяет неравенство сообщений при разных идентификаторах.
+     */
+    @Test
+    void Given_differentId_When_equals_Then_returnsFalse() {
+        // Arrange
+        Message first = new Message();
+        first.setId(1L);
+        Message second = new Message();
+        second.setId(2L);
+
+        // Act
+        boolean result = first.equals(second);
+
+        // Assert
+        assertFalse(result);
+    }
 }

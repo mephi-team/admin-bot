@@ -1,36 +1,36 @@
 package team.mephi.adminbot.model;
 
+import org.junit.jupiter.api.Test;
+import team.mephi.adminbot.model.enums.ConsentStatus;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /**
- * Юнит-тесты для сущности PdConsentLog (проверка @PrePersist onCreate).
+ * Тесты для сущности {@link PdConsentLog}.
  */
 class PdConsentLogTest {
 
-//    @Test
-//    void onCreate_shouldSetConsentedAtIfNull() {
-//        // given
-//        PdConsentLog log = PdConsentLog.builder().build();
-//
-//        assertNull(log.getConsentedAt(), "До onCreate consentedAt должен быть null");
-//
-//        // when
-//        log.onCreate();
-//
-//        // then
-//        assertNotNull(log.getConsentedAt(), "После onCreate consentedAt должен быть установлен");
-//    }
+    /**
+     * Проверяет заполнение полей через билдер.
+     */
+    @Test
+    void givenBuilder_WhenBuild_ThenFieldsAreSet() {
+        // Arrange
+        User user = new User();
+        user.setId(5L);
 
-//    @Test
-//    void onCreate_shouldNotOverrideConsentedAtIfAlreadySet() {
-//        // given
-//        LocalDateTime oldTime = LocalDateTime.now().minusHours(6);
-//        PdConsentLog log = PdConsentLog.builder()
-//                .consentedAt(oldTime)
-//                .build();
-//
-//        // when
-//        log.onCreate();
-//
-//        // then
-//        assertEquals(oldTime, log.getConsentedAt(), "onCreate не должен перезаписывать consentedAt, если он уже задан");
-//    }
+        // Act
+        PdConsentLog log = PdConsentLog.builder()
+                .id(10L)
+                .user(user)
+                .source("web_form")
+                .status(ConsentStatus.GRANTED)
+                .build();
+
+        // Assert
+        assertEquals(10L, log.getId());
+        assertEquals(user, log.getUser());
+        assertEquals("web_form", log.getSource());
+        assertEquals(ConsentStatus.GRANTED, log.getStatus());
+    }
 }

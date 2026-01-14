@@ -1,36 +1,56 @@
 package team.mephi.adminbot.model;
 
+import org.junit.jupiter.api.Test;
+import team.mephi.adminbot.model.enums.EnrollmentStatus;
+
+import java.time.Instant;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 /**
- * Юнит-тесты для сущности EnrollmentLink (проверка @PrePersist onCreate).
+ * Юнит-тесты для EnrollmentLink.
+ * Покрывают: инициализацию статуса и валидацию даты истечения.
  */
 class EnrollmentLinkTest {
 
-//    @Test
-//    void onCreate_shouldSetCreatedAtIfNull() {
-//        // given
-//        EnrollmentLink link = EnrollmentLink.builder().build();
-//
-//        assertNull(link.getCreatedAt(), "До onCreate createdAt должен быть null");
-//
-//        // when
-//        link.onCreate();
-//
-//        // then
-//        assertNotNull(link.getCreatedAt(), "После onCreate createdAt должен быть установлен");
-//    }
+    /**
+     * Проверяет установку статуса и флага отправки при создании.
+     */
+    @Test
+    void Given_newLink_When_onCreate_Then_setsDefaults() {
+        // Arrange
+        EnrollmentLink link = EnrollmentLink.builder()
+                .link("link")
+                .createdAt(Instant.parse("2024-01-01T10:00:00Z"))
+                .build();
 
-//    @Test
-//    void onCreate_shouldNotOverrideCreatedAtIfAlreadySet() {
-//        // given
-//        LocalDateTime oldTime = LocalDateTime.now().minusDays(2);
-//        EnrollmentLink link = EnrollmentLink.builder()
-//                .createdAt(oldTime)
-//                .build();
-//
-//        // when
-//        link.onCreate();
-//
-//        // then
-//        assertEquals(oldTime, link.getCreatedAt(), "onCreate не должен перезаписывать createdAt, если он уже задан");
-//    }
+        // Act
+        link.onCreate();
+
+        // Assert
+        assertFalse(link.isSent());
+        assertEquals(EnrollmentStatus.PENDING, link.getStatus());
+    }
+
+    /**
+     * Проверяет выброс исключения при некорректной дате истечения.
+     */
+    @Test
+    void Given_invalidExpiresAt_When_onUpdate_Then_throwsException() {
+        // Arrange
+        EnrollmentLink link = EnrollmentLink.builder()
+                .link("link")
+                .createdAt(Instant.parse("2024-01-02T10:00:00Z"))
+                .expiresAt(Instant.parse("2024-01-01T10:00:00Z"))
+                .build();
+
+        // Act
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, link::onUpdate);
+
+        // Assert
+        assertTrue(exception.getMessage().contains("expires_at"));
+    }
 }
