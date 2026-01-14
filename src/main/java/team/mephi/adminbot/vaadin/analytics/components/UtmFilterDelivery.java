@@ -1,12 +1,12 @@
-package team.mephi.adminbot.vaadin.analytics.views;
+package team.mephi.adminbot.vaadin.analytics.components;
 
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
-public class UtmFilter1 extends HorizontalLayout {
-    public UtmFilter1() {
+public class UtmFilterDelivery extends HorizontalLayout {
+    public UtmFilterDelivery() {
         setWidthFull();
 
         var form = new FormLayout();
@@ -15,10 +15,10 @@ public class UtmFilter1 extends HorizontalLayout {
         form.setExpandColumns(true);
         form.setExpandFields(true);
 
-        form.addFormItem(new ComboBox<String>(), "Источник");
+        form.addFormItem(new ComboBox<String>(), getTranslation("page_analytics_form_activity_delivery_label"));
 
         Checkbox checkbox = new Checkbox();
-        checkbox.setLabel("Детализировать по источникам");
+        checkbox.setLabel(getTranslation("page_analytics_form_activity_delivery_details_label"));
         form.add(checkbox);
 
         add(form);

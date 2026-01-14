@@ -2,13 +2,22 @@ package team.mephi.adminbot.vaadin.analytics.tabs;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import team.mephi.adminbot.vaadin.CRUDActions;
+import team.mephi.adminbot.service.CohortService;
+import team.mephi.adminbot.vaadin.analytics.presenter.ChartActions;
+import team.mephi.adminbot.vaadin.analytics.presenter.ChartPresenter;
 import team.mephi.adminbot.vaadin.analytics.views.OrdersView;
 
 import static team.mephi.adminbot.vaadin.analytics.tabs.AnalyticsTabType.ORDERS;
 
 @SpringComponent
 public class OrdersTabProvider implements AnalyticsTabProvider {
+
+    private final CohortService cohortService;
+
+    public OrdersTabProvider(CohortService cohortService) {
+        this.cohortService = cohortService;
+    }
+
     @Override
     public AnalyticsTabType getTabId() {
         return ORDERS;
@@ -20,8 +29,8 @@ public class OrdersTabProvider implements AnalyticsTabProvider {
     }
 
     @Override
-    public Component createTabContent(CRUDActions<?> actions) {
-        return new OrdersView();
+    public Component createTabContent(ChartActions<?> actions) {
+        return new OrdersView((ChartPresenter) actions, cohortService);
     }
 
     @Override

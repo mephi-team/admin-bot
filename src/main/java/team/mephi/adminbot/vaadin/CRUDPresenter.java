@@ -8,7 +8,7 @@ import team.mephi.adminbot.vaadin.service.NotificationType;
 
 import java.util.List;
 
-public class CRUDPresenter<T> implements CRUDActions<T>, DataProvider<T> {
+public class CRUDPresenter<T> implements CRUDActions<T>, HasDataProvider<CRUDDataProvider<T>> {
     private final CRUDDataProvider<T> dataProvider;
     private final DialogService<T> dialogService;
     private final NotificationService notificationService;

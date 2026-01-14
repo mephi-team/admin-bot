@@ -1,47 +1,56 @@
 package team.mephi.adminbot.vaadin.analytics.views;
 
-import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.datepicker.DatePicker;
-import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
+import com.vaadin.flow.data.binder.BeanValidationBinder;
+import com.vaadin.flow.data.provider.DataChangeEvent;
+import lombok.Data;
 import software.xdev.chartjs.model.charts.BarChart;
 import software.xdev.chartjs.model.data.BarData;
-import software.xdev.chartjs.model.dataset.BarDataset;
 import software.xdev.chartjs.model.options.BarOptions;
 import software.xdev.chartjs.model.options.LegendOptions;
 import software.xdev.vaadin.chartjs.ChartContainer;
+import team.mephi.adminbot.vaadin.analytics.components.ActivityForm;
+import team.mephi.adminbot.vaadin.analytics.components.ActivityIntervals;
+import team.mephi.adminbot.vaadin.analytics.presenter.ChartPresenter;
 import team.mephi.adminbot.vaadin.components.buttons.SecondaryButton;
+import team.mephi.adminbot.vaadin.components.fields.DateRangePicker;
+
+import java.time.LocalDate;
+import java.util.Objects;
 
 public class ActivityView extends VerticalLayout {
-    public ActivityView() {
+    private final BeanValidationBinder<ActivityFilterData> binder = new BeanValidationBinder<>(ActivityFilterData.class);
+
+    private final ChartContainer chart = new ChartContainer();
+
+    public ActivityView(ChartPresenter<ActivityFilterData> presenter) {
         setPadding(false);
-        ChartContainer chart = new ChartContainer();
 
-        BarData barData = new BarData().addLabels("Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь");
-        barData.addDataset(new BarDataset().setLabel("Test1").setBackgroundColor("#2168df")
-                .addData(5).addData(10).addData(8).addData(5).addData(10).addData(8).addData(5).addData(10).addData(8).addData(5).addData(10).addData(8));
+        ActivityForm form = new ActivityForm();
+        binder.forField(form.getType()).bind(ActivityFilterData::getType, ActivityFilterData::setType);
+        binder.forField(form.getInterval()).bind(s -> Objects.isNull(s.interval) ? null : ActivityIntervals.valueOf(s.interval), (s, v) -> s.setInterval(v.toString()));
+        binder.forField(form.getPeriod()).bind(
+                p -> new DateRangePicker.LocalDateRange(p.start, p.end),
+                (p, v) -> {
+                    if (Objects.nonNull(v)) {
+                        p.setStart(v.getStartDate());
+                        p.setEnd(v.getEndDate());
+                    }
+                });
+        binder.addValueChangeListener(e -> {
+            var s = new ActivityFilterData();
+            binder.writeBeanIfValid(s);
+            presenter.onUpdateFilter(s);
+        });
 
-        BarOptions options = new BarOptions();
-        options.getPlugins().setLegend(new LegendOptions().setAlign("start").setPosition("bottom"));
-
-        chart.showChart(new BarChart(barData, options).toJson());
-
-        FormLayout form = new FormLayout();
-        form.setAutoResponsive(true);
-        form.setExpandColumns(true);
-        form.setExpandFields(true);
-
-        var list = new ComboBox<String>();
-        list.setItems("Test");
-        form.addFormItem(list, "Тип активности");
-        form.addFormItem(new DatePicker(), "Период активности");
-        var group = new RadioButtonGroup<String>();
-        group.setItems("1 месяц", "1 день", "1 час");
-        group.setValue("1 месяц");
-        form.addFormItem(group, "Интервал времени");
+        presenter.getDataProvider().addDataProviderListener(event -> {
+            if (event instanceof DataChangeEvent.DataRefreshEvent) {
+                var data = ((DataChangeEvent.DataRefreshEvent<BarData>) event).getItem();
+                updateChart(data);
+            }
+        });
 
         VerticalLayout column = new VerticalLayout();
         column.setPadding(false);
@@ -54,7 +63,24 @@ public class ActivityView extends VerticalLayout {
 
         add(content);
 
-        var buttonGroup = new HorizontalLayout(new SecondaryButton("Скачать PNG", VaadinIcon.DOWNLOAD_ALT.create()), new SecondaryButton("Скачать Excel", VaadinIcon.DOWNLOAD_ALT.create()));
+        var buttonGroup = new HorizontalLayout(new SecondaryButton(getTranslation("page_analytics_form_activity_download_png_action"), VaadinIcon.DOWNLOAD_ALT.create()), new SecondaryButton(getTranslation("page_analytics_form_activity_download_excel_action"), VaadinIcon.DOWNLOAD_ALT.create()));
         add(buttonGroup);
+
+        presenter.onUpdateFilter(new ActivityFilterData());
+    }
+
+    private void updateChart(BarData data) {
+        BarOptions options = new BarOptions();
+        options.getPlugins().setLegend(new LegendOptions().setAlign("start").setPosition("bottom"));
+
+        chart.showChart(new BarChart(data, options).toJson());
+    }
+
+    @Data
+    public static class ActivityFilterData {
+        private String type;
+        private LocalDate start;
+        private LocalDate end;
+        private String interval;
     }
 }
