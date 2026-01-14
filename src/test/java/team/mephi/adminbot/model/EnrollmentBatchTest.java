@@ -1,36 +1,27 @@
 package team.mephi.adminbot.model;
 
+import org.junit.jupiter.api.Test;
+import team.mephi.adminbot.model.enums.MailingStatus;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /**
- * Юнит-тесты для сущности EnrollmentBatch (проверка @PrePersist onCreate).
+ * Тесты для сущности {@link EnrollmentBatch}.
  */
 class EnrollmentBatchTest {
 
-//    @Test
-//    void onCreate_shouldSetCreatedAtIfNull() {
-//        // given
-//        EnrollmentBatch batch = EnrollmentBatch.builder().build();
-//
-//        assertNull(batch.getCreatedAt(), "До onCreate createdAt должен быть null");
-//
-//        // when
-//        batch.onCreate();
-//
-//        // then
-//        assertNotNull(batch.getCreatedAt(), "После onCreate createdAt должен быть установлен");
-//    }
+    /**
+     * Проверяет, что при создании батча устанавливается статус по умолчанию.
+     */
+    @Test
+    void givenBatchWithoutStatus_WhenOnCreateCalled_ThenStatusSetToDraft() {
+        // Arrange
+        EnrollmentBatch batch = EnrollmentBatch.builder().build();
 
-//    @Test
-//    void onCreate_shouldNotOverrideExistingCreatedAt() {
-//        // given
-//        LocalDateTime oldTime = LocalDateTime.now().minusDays(2);
-//        EnrollmentBatch batch = EnrollmentBatch.builder()
-//                .createdAt(oldTime)
-//                .build();
-//
-//        // when
-//        batch.onCreate();
-//
-//        // then
-//        assertEquals(oldTime, batch.getCreatedAt(), "onCreate не должен перезаписывать createdAt, если он уже задан");
-//    }
+        // Act
+        batch.onCreate();
+
+        // Assert
+        assertEquals(MailingStatus.DRAFT, batch.getStatus());
+    }
 }

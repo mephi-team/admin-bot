@@ -5,28 +5,34 @@ import org.junit.jupiter.api.Test;
 import java.time.Duration;
 import java.time.Instant;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Юнит-тесты для сущности StoredFile (проверка @CreationTimestamp и Lombok-методов).
+ * Тесты для сущности {@link StoredFile}.
  */
 class FileTest {
 
+    /**
+     * Проверяет возможность установки времени загрузки файла.
+     */
     @Test
-    void creationTimestamp_shouldSetUploadedAt() {
-        // given
+    void givenStoredFile_WhenUploadedAtSet_ThenTimestampIsStored() {
+        // Arrange
         StoredFile file = StoredFile.builder()
                 .filename("a.txt")
                 .mimeType("text/plain")
                 .storagePath("/tmp/a.txt")
                 .size(10L)
                 .build();
+        Instant now = Instant.now();
 
-        // when - uploadedAt устанавливается автоматически через @CreationTimestamp при сохранении
-        // Для теста проверим, что поле может быть установлено
-        file.setUploadedAt(Instant.now());
+        // Act
+        file.setUploadedAt(now);
 
-        // then
+        // Assert
         assertNotNull(file.getUploadedAt(), "uploadedAt должен быть установлен");
         assertTrue(
                 Duration.between(file.getUploadedAt(), Instant.now()).getSeconds() < 5,
@@ -34,19 +40,25 @@ class FileTest {
         );
     }
 
+    /**
+     * Проверяет заполнение основных полей через билдер.
+     */
     @Test
-    void builder_shouldSetMainFields() {
-        // given / when
+    void givenBuilder_WhenBuild_ThenMainFieldsAreSet() {
+        // Arrange
+        Instant uploadedAt = Instant.now();
+
+        // Act
         StoredFile file = StoredFile.builder()
                 .id(1L)
                 .filename("b.pdf")
                 .mimeType("application/pdf")
                 .storagePath("/files/b.pdf")
                 .size(123L)
-                .uploadedAt(Instant.now())
+                .uploadedAt(uploadedAt)
                 .build();
 
-        // then
+        // Assert
         assertEquals(1L, file.getId());
         assertEquals("b.pdf", file.getFilename());
         assertEquals("application/pdf", file.getMimeType());
@@ -55,9 +67,12 @@ class FileTest {
         assertNotNull(file.toString());
     }
 
+    /**
+     * Проверяет сравнение файлов по идентификатору.
+     */
     @Test
-    void equalsAndHashCode_shouldBeBasedOnId() {
-        // given
+    void givenFilesWithSameId_WhenCompared_ThenEqualityUsesId() {
+        // Arrange
         StoredFile file1 = StoredFile.builder()
                 .id(1L)
                 .filename("test.txt")
@@ -82,9 +97,13 @@ class FileTest {
                 .size(100L)
                 .build();
 
-        // then
-        assertEquals(file1, file2, "Файлы с одинаковым id должны быть равны");
+        // Act
+        boolean equalsSameId = file1.equals(file2);
+        boolean equalsDifferentId = file1.equals(file3);
+
+        // Assert
+        assertEquals(true, equalsSameId, "Файлы с одинаковым id должны быть равны");
         assertEquals(file1.hashCode(), file2.hashCode(), "Хеш-коды файлов с одинаковым id должны совпадать");
-        assertNotEquals(file1, file3, "Файлы с разным id не должны быть равны");
+        assertNotEquals(true, equalsDifferentId, "Файлы с разным id не должны быть равны");
     }
 }

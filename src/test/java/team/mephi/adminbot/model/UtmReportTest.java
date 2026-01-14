@@ -5,31 +5,48 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- * Юнит-тесты для сущности UtmReport (проверка дефолтных значений и Lombok-методов).
+ * Тесты для сущности {@link UtmReport}.
  */
 class UtmReportTest {
 
+    /**
+     * Проверяет значения метрик по умолчанию.
+     */
     @Test
-    void newUtmReport_shouldHaveDefaultMetrics() {
-        // given / when
+    void givenNewReport_WhenCreated_ThenDefaultMetricsAreZero() {
+        // Arrange
         UtmReport report = new UtmReport();
 
-        // then
-        assertEquals(0, report.getClicks());
-        assertEquals(0, report.getUniqueUsers());
-        assertEquals(0, report.getRegistrations());
-        assertEquals(BigDecimal.ZERO, report.getCtr());
-        assertEquals(BigDecimal.ZERO, report.getConversion());
+        // Act
+        int clicks = report.getClicks();
+        int uniqueUsers = report.getUniqueUsers();
+        int registrations = report.getRegistrations();
+        BigDecimal ctr = report.getCtr();
+        BigDecimal conversion = report.getConversion();
+
+        // Assert
+        assertEquals(0, clicks);
+        assertEquals(0, uniqueUsers);
+        assertEquals(0, registrations);
+        assertEquals(BigDecimal.ZERO, ctr);
+        assertEquals(BigDecimal.ZERO, conversion);
     }
 
+    /**
+     * Проверяет заполнение полей через билдер.
+     */
     @Test
-    void builder_shouldSetFields() {
-        // given / when
+    void givenBuilder_WhenBuild_ThenFieldsAreSet() {
+        // Arrange
         LocalDate startDate = LocalDate.of(2024, 1, 1);
         LocalDate endDate = LocalDate.of(2024, 1, 31);
+
+        // Act
         UtmReport report = UtmReport.builder()
                 .id(1L)
                 .periodStart(startDate)
@@ -46,7 +63,7 @@ class UtmReportTest {
                 .conversion(new BigDecimal("0.2000"))
                 .build();
 
-        // then
+        // Assert
         assertEquals(1L, report.getId());
         assertEquals(startDate, report.getPeriodStart());
         assertEquals(endDate, report.getPeriodEnd());
@@ -56,9 +73,12 @@ class UtmReportTest {
         assertNotNull(report.toString());
     }
 
+    /**
+     * Проверяет сравнение отчётов по бизнес-ключу.
+     */
     @Test
-    void equals_shouldUseBusinessKey() {
-        // given
+    void givenReportsWithSameBusinessKey_WhenCompared_ThenEqualsUsesBusinessKey() {
+        // Arrange
         LocalDate startDate = LocalDate.of(2024, 1, 1);
         LocalDate endDate = LocalDate.of(2024, 1, 31);
 
@@ -75,7 +95,7 @@ class UtmReportTest {
                 .build();
 
         UtmReport report2 = UtmReport.builder()
-                .id(2L) // Different ID
+                .id(2L)
                 .periodStart(startDate)
                 .periodEnd(endDate)
                 .utmSource("google")
@@ -83,14 +103,14 @@ class UtmReportTest {
                 .utmCampaign("spring_sale")
                 .utmTerm("keyword")
                 .utmContent("ad1")
-                .clicks(200) // Different clicks
+                .clicks(200)
                 .build();
 
         UtmReport report3 = UtmReport.builder()
                 .id(3L)
                 .periodStart(startDate)
                 .periodEnd(endDate)
-                .utmSource("facebook") // Different source
+                .utmSource("facebook")
                 .utmMedium("cpc")
                 .utmCampaign("spring_sale")
                 .utmTerm("keyword")
@@ -98,9 +118,13 @@ class UtmReportTest {
                 .clicks(100)
                 .build();
 
-        // then
-        assertEquals(report1, report2); // Same business key, different ID and metrics
-        assertNotEquals(report1, report3); // Different business key
+        // Act
+        boolean equalsSameKey = report1.equals(report2);
+        boolean equalsDifferentKey = report1.equals(report3);
+
+        // Assert
+        assertEquals(true, equalsSameKey);
+        assertNotEquals(true, equalsDifferentKey);
         assertEquals(report1.hashCode(), report2.hashCode());
         assertNotEquals(report1.hashCode(), report3.hashCode());
     }

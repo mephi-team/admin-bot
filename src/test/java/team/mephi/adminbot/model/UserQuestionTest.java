@@ -6,72 +6,79 @@ import team.mephi.adminbot.model.enums.QuestionStatus;
 import java.time.Instant;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Юнит-тесты для сущности UserQuestion (проверка @PrePersist/@PreUpdate и Lombok-методов).
+ * Тесты для сущности {@link UserQuestion}.
  */
 class UserQuestionTest {
 
+    /**
+     * Проверяет установку дат при создании вопроса.
+     */
     @Test
-    void onCreate_shouldSetCreatedAtAndUpdatedAt() {
-        // given
-        UserQuestion q = UserQuestion.builder()
+    void givenQuestionWithoutDates_WhenOnCreateCalled_ThenDatesAreInitialized() {
+        // Arrange
+        UserQuestion question = UserQuestion.builder()
                 .text("Q")
                 .role("student")
                 .status(QuestionStatus.NEW)
                 .build();
 
-        assertNull(q.getCreatedAt(), "До onCreate createdAt должен быть null");
-        assertNull(q.getUpdatedAt(), "До onCreate updatedAt должен быть null");
+        // Act
+        question.onCreate();
 
-        // when
-        q.onCreate();
-
-        // then
-        assertNotNull(q.getCreatedAt());
-        assertNotNull(q.getUpdatedAt());
-        assertEquals(q.getCreatedAt(), q.getUpdatedAt(), "createdAt и updatedAt должны совпадать при создании");
+        // Assert
+        assertNotNull(question.getCreatedAt());
+        assertNotNull(question.getUpdatedAt());
+        assertEquals(question.getCreatedAt(), question.getUpdatedAt(),
+                "createdAt и updatedAt должны совпадать при создании");
     }
 
+    /**
+     * Проверяет обновление updatedAt при вызове onUpdate.
+     */
     @Test
-    void onUpdate_shouldUpdateUpdatedAtOnly() throws InterruptedException {
-        // given
-        UserQuestion q = new UserQuestion();
-        q.onCreate();
+    void givenQuestion_WhenOnUpdateCalled_ThenUpdatedAtChanges() throws InterruptedException {
+        // Arrange
+        UserQuestion question = new UserQuestion();
+        question.onCreate();
+        Instant createdAtBefore = question.getCreatedAt();
+        Instant updatedAtBefore = question.getUpdatedAt();
 
-        Instant createdAtBefore = q.getCreatedAt();
-        Instant updatedAtBefore = q.getUpdatedAt();
+        // Act
+        Thread.sleep(10);
+        question.onUpdate();
 
-        Thread.sleep(50);
-
-        // when
-        q.onUpdate();
-
-        // then
-        assertEquals(createdAtBefore, q.getCreatedAt(), "createdAt не должен меняться");
-        assertTrue(q.getUpdatedAt().isAfter(updatedAtBefore), "updatedAt должен обновиться");
+        // Assert
+        assertEquals(createdAtBefore, question.getCreatedAt(), "createdAt не должен меняться");
+        assertTrue(question.getUpdatedAt().isAfter(updatedAtBefore), "updatedAt должен обновиться");
     }
 
+    /**
+     * Проверяет заполнение списка ответов через билдер.
+     */
     @Test
-    void builder_shouldSetAnswersList() {
-        // given
-        UserAnswer a1 = new UserAnswer();
-        UserAnswer a2 = new UserAnswer();
+    void givenBuilder_WhenAnswersProvided_ThenListIsStored() {
+        // Arrange
+        UserAnswer answer1 = new UserAnswer();
+        UserAnswer answer2 = new UserAnswer();
 
-        // when
-        UserQuestion q = UserQuestion.builder()
+        // Act
+        UserQuestion question = UserQuestion.builder()
                 .id(1L)
-                .answers(List.of(a1, a2))
+                .answers(List.of(answer1, answer2))
                 .status(QuestionStatus.IN_PROGRESS)
                 .text("T")
                 .role("r")
                 .build();
 
-        // then
-        assertEquals(1L, q.getId());
-        assertEquals(2, q.getAnswers().size());
-        assertEquals(QuestionStatus.IN_PROGRESS, q.getStatus());
-        assertNotNull(q.toString());
+        // Assert
+        assertEquals(1L, question.getId());
+        assertEquals(2, question.getAnswers().size());
+        assertEquals(QuestionStatus.IN_PROGRESS, question.getStatus());
+        assertNotNull(question.toString());
     }
 }

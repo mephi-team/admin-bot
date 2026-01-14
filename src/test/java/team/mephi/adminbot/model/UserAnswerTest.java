@@ -7,13 +7,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 /**
- * Юнит-тесты для сущности UserAnswer.
+ * Тесты для сущности {@link UserAnswer}.
  */
 class UserAnswerTest {
 
+    /**
+     * Проверяет равенство ответов с одинаковым идентификатором.
+     */
     @Test
-    void equals_shouldReturnTrueForSameId() {
-        // given
+    void givenSameIds_WhenCompared_ThenEqualsReturnsTrue() {
+        // Arrange
         UserAnswer answer1 = UserAnswer.builder()
                 .id(1L)
                 .answerText("Answer 1")
@@ -26,13 +29,19 @@ class UserAnswerTest {
                 .status(AnswerStatus.SENT)
                 .build();
 
-        // then
-        assertEquals(answer1, answer2, "Ответы с одинаковым ID должны быть равны");
+        // Act
+        boolean equalsResult = answer1.equals(answer2);
+
+        // Assert
+        assertEquals(true, equalsResult, "Ответы с одинаковым ID должны быть равны");
     }
 
+    /**
+     * Проверяет, что ответы с разными идентификаторами не равны.
+     */
     @Test
-    void equals_shouldReturnFalseForDifferentIds() {
-        // given
+    void givenDifferentIds_WhenCompared_ThenEqualsReturnsFalse() {
+        // Arrange
         UserAnswer answer1 = UserAnswer.builder()
                 .id(1L)
                 .answerText("Answer")
@@ -45,24 +54,30 @@ class UserAnswerTest {
                 .status(AnswerStatus.DRAFT)
                 .build();
 
-        // then
-        assertNotEquals(answer1, answer2, "Ответы с разными ID не должны быть равны");
+        // Act
+        boolean equalsResult = answer1.equals(answer2);
+
+        // Assert
+        assertNotEquals(true, equalsResult, "Ответы с разными ID не должны быть равны");
     }
 
+    /**
+     * Проверяет консистентность hashCode.
+     */
     @Test
-    void hashCode_shouldBeConsistent() {
-        // given
+    void givenAnswer_WhenHashCodeCalled_ThenConsistent() {
+        // Arrange
         UserAnswer answer = UserAnswer.builder()
                 .id(1L)
                 .answerText("Answer")
                 .status(AnswerStatus.DRAFT)
                 .build();
 
-        // when
+        // Act
         int hashCode1 = answer.hashCode();
         int hashCode2 = answer.hashCode();
 
-        // then
+        // Assert
         assertEquals(hashCode1, hashCode2, "hashCode должен быть консистентным");
     }
 }

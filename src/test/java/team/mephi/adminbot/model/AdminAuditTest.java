@@ -1,27 +1,34 @@
 package team.mephi.adminbot.model;
 
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /**
- * Юнит-тесты для сущности AdminAudit (проверка @PrePersist onCreate).
+ * Тесты для сущности {@link AdminAudit}.
  */
 class AdminAuditTest {
 
-//    @Test
-//    void onCreate_shouldSetCreatedAt() {
-//        // given
-//        AdminAudit audit = AdminAudit.builder()
-//                .entityType("User")
-//                .build();
-//
-//        assertNull(audit.getCreatedAt(), "До onCreate createdAt должен быть null");
-//
-//        // when
-//        audit.onCreate();
-//
-//        // then
-//        assertNotNull(audit.getCreatedAt(), "После onCreate createdAt должен быть установлен");
-//        assertTrue(
-//                Duration.between(audit.getCreatedAt(), LocalDateTime.now()).getSeconds() < 5,
-//                "createdAt должен быть примерно текущим временем"
-//        );
-//    }
+    /**
+     * Проверяет, что билдер корректно заполняет основные поля.
+     */
+    @Test
+    void givenBuilder_WhenBuild_ThenFieldsAreSet() {
+        // Arrange
+        AdminAudit audit = AdminAudit.builder()
+                .entityType("USER")
+                .entityId(15L)
+                .action("CREATE")
+                .build();
+
+        // Act
+        String entityType = audit.getEntityType();
+        Long entityId = audit.getEntityId();
+        String action = audit.getAction();
+
+        // Assert
+        assertEquals("USER", entityType);
+        assertEquals(15L, entityId);
+        assertEquals("CREATE", action);
+    }
 }
