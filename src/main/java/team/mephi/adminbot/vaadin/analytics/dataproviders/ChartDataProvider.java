@@ -61,13 +61,13 @@ public class ChartDataProvider<T> extends AbstractDataProvider<BarData, T> {
             }
 
             BarData barData = new BarData().addLabels(labels.toArray(new String[0]));
-            BarDataset dataset1 = new BarDataset().setLabel("Test1").setBackgroundColor("#2168df");
+            BarDataset dataset1 = new BarDataset().setLabel("Подано всего заявок").setBackgroundColor("#2168df");
             labels.stream().map(s1 -> random.nextInt(0, 100)).forEach(dataset1::addData);
             barData.addDataset(dataset1);
-            BarDataset dataset2 = new BarDataset().setLabel("Test2").setBackgroundColor("#d3e1f9");
+            BarDataset dataset2 = new BarDataset().setLabel("Актуальные заявки").setBackgroundColor("#d3e1f9");
             labels.stream().map(s1 -> random.nextInt(0, 100)).forEach(dataset2::addData);
             barData.addDataset(dataset2);
-            BarDataset dataset3 = new BarDataset().setLabel("Test3");
+            BarDataset dataset3 = new BarDataset().setLabel("Отозванные заявки");
             labels.stream().map(s1 -> random.nextInt(0, 100)).forEach(dataset3::addData);
             barData.addDataset(dataset3);
 
@@ -85,13 +85,13 @@ public class ChartDataProvider<T> extends AbstractDataProvider<BarData, T> {
             }
 
             BarData barData = new BarData().addLabels(labels.toArray(new String[0]));
-            BarDataset dataset1 = new BarDataset().setLabel("Test1").setBackgroundColor("#2168df");
+            BarDataset dataset1 = new BarDataset().setLabel("Подано всего заявок").setBackgroundColor("#2168df");
             labels.stream().map(s1 -> random.nextInt(0, 100)).forEach(dataset1::addData);
             barData.addDataset(dataset1);
-            BarDataset dataset2 = new BarDataset().setLabel("Test2").setBackgroundColor("#d3e1f9");
+            BarDataset dataset2 = new BarDataset().setLabel("Актуальные заявки").setBackgroundColor("#d3e1f9");
             labels.stream().map(s1 -> random.nextInt(0, 100)).forEach(dataset2::addData);
             barData.addDataset(dataset2);
-            BarDataset dataset3 = new BarDataset().setLabel("Test3");
+            BarDataset dataset3 = new BarDataset().setLabel("Отозванные заявки");
             labels.stream().map(s1 -> random.nextInt(0, 100)).forEach(dataset3::addData);
             barData.addDataset(dataset3);
 
