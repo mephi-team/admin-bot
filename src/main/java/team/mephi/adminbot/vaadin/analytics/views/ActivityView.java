@@ -3,6 +3,7 @@ package team.mephi.adminbot.vaadin.analytics.views;
 import lombok.Data;
 import team.mephi.adminbot.vaadin.analytics.components.ActivityForm;
 import team.mephi.adminbot.vaadin.analytics.components.ActivityIntervals;
+import team.mephi.adminbot.vaadin.analytics.components.ActivityType;
 import team.mephi.adminbot.vaadin.analytics.presenter.ChartPresenter;
 import team.mephi.adminbot.vaadin.components.fields.DateRangePicker;
 
@@ -44,7 +45,7 @@ public class ActivityView extends AbstractChartView<ActivityView.ActivityFilterD
 
     @Data
     public static class ActivityFilterData {
-        private String type;
+        private ActivityType type;
         private LocalDate start;
         private LocalDate end;
         private String interval;

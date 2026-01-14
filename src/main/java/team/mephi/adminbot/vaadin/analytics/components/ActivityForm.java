@@ -10,7 +10,7 @@ import java.time.LocalDate;
 
 public class ActivityForm extends FormLayout {
     @Getter
-    private final ComboBox<String> type;
+    private final ComboBox<ActivityType> type;
     @Getter
     private final RadioButtonGroup<ActivityIntervals> interval;
     @Getter
@@ -22,8 +22,9 @@ public class ActivityForm extends FormLayout {
         setExpandFields(true);
 
         type = new ComboBox<>();
-        type.setItems("Посещения", "Популярные кнопки");
-        type.setValue("Посещения");
+        type.setItems(ActivityType.values());
+        type.setItemLabelGenerator(t -> getTranslation(t.getLabelKey()));
+        type.setValue(ActivityType.VISITS);
         addFormItem(type, getTranslation("page_analytics_form_activity_type_label"));
 
         period = new DateRangePicker();
