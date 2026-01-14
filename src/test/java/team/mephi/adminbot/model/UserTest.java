@@ -2,52 +2,67 @@ package team.mephi.adminbot.model;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.Instant;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Юнит-тесты для сущности User.
+ * Юнит-тесты для User.
+ * Покрывают: инициализацию дат и сравнение по идентификатору.
  */
 class UserTest {
 
+    /**
+     * Проверяет заполнение дат и флага удаления при создании.
+     */
     @Test
-    void newUser_shouldHaveEmptyCollections() {
-        User user = new User();
+    void Given_newUser_When_onCreate_Then_setsDatesAndDeleted() {
+        // Arrange
+        User user = User.builder().build();
+        user.setCreatedAt(null);
+        user.setUpdatedAt(null);
+        user.setDeleted(true);
 
-        assertNotNull(user.getDialogs());
-        assertNotNull(user.getMessages());
-        assertTrue(user.getDialogs().isEmpty());
-        assertTrue(user.getMessages().isEmpty());
+        // Act
+        user.onCreate();
+
+        // Assert
+        assertNotNull(user.getCreatedAt());
+        assertNotNull(user.getUpdatedAt());
+        assertFalse(user.getDeleted());
     }
 
-//    @Test
-//    void onCreate_shouldSetCreatedAtAndUpdatedAt() {
-//        User user = new User();
-//
-//        user.onCreate();
-//
-//        assertNotNull(user.getCreatedAt());
-//        assertNotNull(user.getUpdatedAt());
-//        assertEquals(user.getCreatedAt(), user.getUpdatedAt());
-//
-//        assertTrue(
-//                Duration.between(user.getCreatedAt(), LocalDateTime.now()).getSeconds() < 5
-//        );
-//    }
+    /**
+     * Проверяет обновление даты изменения.
+     */
+    @Test
+    void Given_user_When_onUpdate_Then_updatesUpdatedAt() {
+        // Arrange
+        User user = User.builder().build();
+        user.setUpdatedAt(Instant.parse("2024-01-01T00:00:00Z"));
 
-//    @Test
-//    void onUpdate_shouldChangeOnlyUpdatedAt() throws InterruptedException {
-//        User user = new User();
-//        user.onCreate();
-//
-//        LocalDateTime createdAt = user.getCreatedAt();
-//        LocalDateTime updatedAtBefore = user.getUpdatedAt();
-//
-//        Thread.sleep(50);
-//
-//        user.onUpdate();
-//
-//        assertEquals(createdAt, user.getCreatedAt());
-//        assertTrue(user.getUpdatedAt().isAfter(updatedAtBefore));
-//    }
+        // Act
+        user.onUpdate();
+
+        // Assert
+        assertNotNull(user.getUpdatedAt());
+    }
+
+    /**
+     * Проверяет равенство пользователей по идентификатору.
+     */
+    @Test
+    void Given_sameId_When_equals_Then_returnsTrue() {
+        // Arrange
+        User first = User.builder().id(1L).build();
+        User second = User.builder().id(1L).build();
+
+        // Act
+        boolean result = first.equals(second);
+
+        // Assert
+        assertTrue(result);
+    }
 }

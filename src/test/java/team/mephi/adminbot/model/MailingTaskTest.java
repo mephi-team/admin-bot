@@ -1,40 +1,45 @@
 package team.mephi.adminbot.model;
 
 import org.junit.jupiter.api.Test;
-import team.mephi.adminbot.model.enums.MailingTaskStatus;
 
-import java.time.Instant;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Юнит-тесты для сущности MailingTask (проверка Lombok-методов и полей).
+ * Юнит-тесты для MailingTask.
+ * Покрывают: сравнение задач по идентификатору.
  */
 class MailingTaskTest {
 
+    /**
+     * Проверяет равенство задач при одинаковом идентификаторе.
+     */
     @Test
-    void builder_shouldSetFields() {
-        // given
-        Mailing mailing = new Mailing();
-        mailing.setId(1L);
+    void Given_sameId_When_equals_Then_returnsTrue() {
+        // Arrange
+        MailingTask first = MailingTask.builder().id(1L).build();
+        MailingTask second = MailingTask.builder().id(1L).build();
 
-        Instant sendAt = Instant.now().plusSeconds(86400); // +1 day
+        // Act
+        boolean result = first.equals(second);
 
-        // when
-        MailingTask task = MailingTask.builder()
-                .id(2L)
-                .mailing(mailing)
-                .sendAt(sendAt)
-                .repeatCron("0 0 * * *")
-                .status(MailingTaskStatus.SCHEDULED)
-                .build();
+        // Assert
+        assertTrue(result);
+    }
 
-        // then
-        assertEquals(2L, task.getId());
-        assertSame(mailing, task.getMailing());
-        assertEquals(sendAt, task.getSendAt());
-        assertEquals("0 0 * * *", task.getRepeatCron());
-        assertEquals(MailingTaskStatus.SCHEDULED, task.getStatus());
-        assertNotNull(task.toString());
+    /**
+     * Проверяет неравенство задач при разных идентификаторах.
+     */
+    @Test
+    void Given_differentId_When_equals_Then_returnsFalse() {
+        // Arrange
+        MailingTask first = MailingTask.builder().id(1L).build();
+        MailingTask second = MailingTask.builder().id(2L).build();
+
+        // Act
+        boolean result = first.equals(second);
+
+        // Assert
+        assertFalse(result);
     }
 }

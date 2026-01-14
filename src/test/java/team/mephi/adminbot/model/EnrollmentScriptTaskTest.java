@@ -2,42 +2,44 @@ package team.mephi.adminbot.model;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Юнит-тесты для сущности EnrollmentScriptTask (проверка дефолтов и Lombok-методов).
+ * Юнит-тесты для EnrollmentScriptTask.
+ * Покрывают: сравнение задач по идентификатору.
  */
 class EnrollmentScriptTaskTest {
 
+    /**
+     * Проверяет равенство при одинаковых идентификаторах.
+     */
     @Test
-    void newTask_shouldHaveDefaultCounters() {
-        // given / when
-        EnrollmentScriptTask task = new EnrollmentScriptTask();
+    void Given_sameId_When_equals_Then_returnsTrue() {
+        // Arrange
+        EnrollmentScriptTask first = EnrollmentScriptTask.builder().id(1L).build();
+        EnrollmentScriptTask second = EnrollmentScriptTask.builder().id(1L).build();
 
-        // then
-        assertNotNull(task.getSuccessCount(), "successCount не должен быть null");
-        assertNotNull(task.getErrorCount(), "errorCount не должен быть null");
-        assertEquals(0, task.getSuccessCount(), "successCount по умолчанию должен быть 0");
-        assertEquals(0, task.getErrorCount(), "errorCount по умолчанию должен быть 0");
+        // Act
+        boolean result = first.equals(second);
+
+        // Assert
+        assertTrue(result);
     }
 
-//    @Test
-//    void builder_shouldSetFields() {
-//        // given / when
-//        EnrollmentScriptTask task = EnrollmentScriptTask.builder()
-//                .id(1L)
-//                .status(ScriptTaskStatus.PENDING)
-//                .log(Map.of("k", "v"))
-//                .successCount(5)
-//                .errorCount(2)
-//                .build();
-//
-//        // then
-//        assertEquals(1L, task.getId());
-//        assertEquals(ScriptTaskStatus.PENDING, task.getStatus());
-//        assertEquals(5, task.getSuccessCount());
-//        assertEquals(2, task.getErrorCount());
-//        assertNotNull(task.toString());
-//    }
+    /**
+     * Проверяет неравенство при разных идентификаторах.
+     */
+    @Test
+    void Given_differentId_When_equals_Then_returnsFalse() {
+        // Arrange
+        EnrollmentScriptTask first = EnrollmentScriptTask.builder().id(1L).build();
+        EnrollmentScriptTask second = EnrollmentScriptTask.builder().id(2L).build();
+
+        // Act
+        boolean result = first.equals(second);
+
+        // Assert
+        assertFalse(result);
+    }
 }

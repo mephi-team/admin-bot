@@ -6,10 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Юнит-тесты для MailingRecipient.
- * Покрывают: сравнение сущностей по идентификатору.
+ * Юнит-тесты для ApplicationDuplicate.
+ * Покрывают: сравнение записей по идентификатору.
  */
-class MailingRecipientTest {
+class ApplicationDuplicateTest {
 
     /**
      * Проверяет равенство при одинаковых идентификаторах.
@@ -17,8 +17,8 @@ class MailingRecipientTest {
     @Test
     void Given_sameId_When_equals_Then_returnsTrue() {
         // Arrange
-        MailingRecipient first = MailingRecipient.builder().id(1L).build();
-        MailingRecipient second = MailingRecipient.builder().id(1L).build();
+        ApplicationDuplicate first = ApplicationDuplicate.builder().id(1L).build();
+        ApplicationDuplicate second = ApplicationDuplicate.builder().id(1L).build();
 
         // Act
         boolean result = first.equals(second);
@@ -33,8 +33,8 @@ class MailingRecipientTest {
     @Test
     void Given_differentId_When_equals_Then_returnsFalse() {
         // Arrange
-        MailingRecipient first = MailingRecipient.builder().id(1L).build();
-        MailingRecipient second = MailingRecipient.builder().id(2L).build();
+        ApplicationDuplicate first = ApplicationDuplicate.builder().id(1L).build();
+        ApplicationDuplicate second = ApplicationDuplicate.builder().id(2L).build();
 
         // Act
         boolean result = first.equals(second);

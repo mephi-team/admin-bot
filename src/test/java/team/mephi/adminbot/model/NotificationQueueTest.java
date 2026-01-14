@@ -1,40 +1,28 @@
 package team.mephi.adminbot.model;
 
+import org.junit.jupiter.api.Test;
+import team.mephi.adminbot.model.enums.NotificationStatus;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /**
- * Юнит-тесты для сущности NotificationQueue (проверка @PrePersist onCreate).
+ * Юнит-тесты для NotificationQueue.
+ * Покрывают: установку статуса по умолчанию.
  */
 class NotificationQueueTest {
 
-//    @Test
-//    void onCreate_shouldSetCreatedAtIfNull() {
-//        // given
-//        NotificationQueue queue = NotificationQueue.builder().build();
-//
-//        assertNull(queue.getCreatedAt(), "До onCreate createdAt должен быть null");
-//
-//        // when
-//        queue.onCreate();
-//
-//        // then
-//        assertNotNull(queue.getCreatedAt(), "После onCreate createdAt должен быть установлен");
-//    }
+    /**
+     * Проверяет установку статуса PENDING при создании.
+     */
+    @Test
+    void Given_nullStatus_When_onCreate_Then_setsPending() {
+        // Arrange
+        NotificationQueue queue = NotificationQueue.builder().build();
 
-//    @Test
-//    void onCreate_shouldNotOverrideExistingCreatedAt() {
-//        // given
-//        LocalDateTime time = LocalDateTime.now().minusDays(1);
-//        NotificationQueue queue = NotificationQueue.builder()
-//                .createdAt(time)
-//                .build();
-//
-//        // when
-//        queue.onCreate();
-//
-//        // then
-//        assertEquals(
-//                time,
-//                queue.getCreatedAt(),
-//                "onCreate не должен перезаписывать существующий createdAt"
-//        );
-//    }
+        // Act
+        queue.onCreate();
+
+        // Assert
+        assertEquals(NotificationStatus.PENDING, queue.getStatus());
+    }
 }

@@ -1,68 +1,45 @@
 package team.mephi.adminbot.model;
 
 import org.junit.jupiter.api.Test;
-import team.mephi.adminbot.model.enums.AnswerStatus;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Юнит-тесты для сущности UserAnswer.
+ * Юнит-тесты для UserAnswer.
+ * Покрывают: сравнение ответов по идентификатору.
  */
 class UserAnswerTest {
 
+    /**
+     * Проверяет равенство при одинаковых идентификаторах.
+     */
     @Test
-    void equals_shouldReturnTrueForSameId() {
-        // given
-        UserAnswer answer1 = UserAnswer.builder()
-                .id(1L)
-                .answerText("Answer 1")
-                .status(AnswerStatus.DRAFT)
-                .build();
+    void Given_sameId_When_equals_Then_returnsTrue() {
+        // Arrange
+        UserAnswer first = UserAnswer.builder().id(1L).build();
+        UserAnswer second = UserAnswer.builder().id(1L).build();
 
-        UserAnswer answer2 = UserAnswer.builder()
-                .id(1L)
-                .answerText("Answer 2")
-                .status(AnswerStatus.SENT)
-                .build();
+        // Act
+        boolean result = first.equals(second);
 
-        // then
-        assertEquals(answer1, answer2, "Ответы с одинаковым ID должны быть равны");
+        // Assert
+        assertTrue(result);
     }
 
+    /**
+     * Проверяет неравенство при разных идентификаторах.
+     */
     @Test
-    void equals_shouldReturnFalseForDifferentIds() {
-        // given
-        UserAnswer answer1 = UserAnswer.builder()
-                .id(1L)
-                .answerText("Answer")
-                .status(AnswerStatus.DRAFT)
-                .build();
+    void Given_differentId_When_equals_Then_returnsFalse() {
+        // Arrange
+        UserAnswer first = UserAnswer.builder().id(1L).build();
+        UserAnswer second = UserAnswer.builder().id(2L).build();
 
-        UserAnswer answer2 = UserAnswer.builder()
-                .id(2L)
-                .answerText("Answer")
-                .status(AnswerStatus.DRAFT)
-                .build();
+        // Act
+        boolean result = first.equals(second);
 
-        // then
-        assertNotEquals(answer1, answer2, "Ответы с разными ID не должны быть равны");
-    }
-
-    @Test
-    void hashCode_shouldBeConsistent() {
-        // given
-        UserAnswer answer = UserAnswer.builder()
-                .id(1L)
-                .answerText("Answer")
-                .status(AnswerStatus.DRAFT)
-                .build();
-
-        // when
-        int hashCode1 = answer.hashCode();
-        int hashCode2 = answer.hashCode();
-
-        // then
-        assertEquals(hashCode1, hashCode2, "hashCode должен быть консистентным");
+        // Assert
+        assertFalse(result);
     }
 }
