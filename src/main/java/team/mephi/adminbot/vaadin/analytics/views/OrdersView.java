@@ -5,11 +5,13 @@ import team.mephi.adminbot.dto.CohortDto;
 import team.mephi.adminbot.service.CohortService;
 import team.mephi.adminbot.vaadin.analytics.components.ActivityIntervals;
 import team.mephi.adminbot.vaadin.analytics.components.OrderFrom;
+import team.mephi.adminbot.vaadin.analytics.components.OrderStatus;
 import team.mephi.adminbot.vaadin.analytics.presenter.ChartPresenter;
 import team.mephi.adminbot.vaadin.components.fields.DateRangePicker;
 
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.Set;
 
 public class OrdersView extends AbstractChartView<OrdersView.OrderFilterData> {
 
@@ -31,6 +33,10 @@ public class OrdersView extends AbstractChartView<OrdersView.OrderFilterData> {
                         p.setEnd(v.getEndDate());
                     }
                 });
+        binder.forField(form.getDetailed())
+                .bind(OrderFilterData::getDetailed, OrderFilterData::setDetailed);
+        binder.forField(form.getStatuses())
+                .bind(OrderFilterData::getStatuses, OrderFilterData::setStatuses);
         binder.addValueChangeListener(e -> {
             var s = new OrderFilterData();
             binder.writeBeanIfValid(s);
@@ -46,5 +52,7 @@ public class OrdersView extends AbstractChartView<OrdersView.OrderFilterData> {
         private LocalDate start;
         private LocalDate end;
         private String interval;
+        private Boolean detailed;
+        private Set<OrderStatus> statuses;
     }
 }
