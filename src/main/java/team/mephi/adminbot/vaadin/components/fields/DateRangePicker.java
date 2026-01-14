@@ -79,6 +79,11 @@ public class DateRangePicker extends CustomField<DateRangePicker.LocalDateRange>
         end.setInvalid(invalid);
     }
 
+    public enum Mode {
+        DAY,
+        INTERVAL
+    }
+
     public static class LocalDateRange {
         @Getter
         @Setter
@@ -86,14 +91,10 @@ public class DateRangePicker extends CustomField<DateRangePicker.LocalDateRange>
         @Getter
         @Setter
         private LocalDate endDate;
+
         public LocalDateRange(LocalDate startDate, LocalDate endDate) {
             this.startDate = startDate;
             this.endDate = endDate;
         }
-    }
-
-    public enum Mode {
-        DAY,
-        INTERVAL
     }
 }

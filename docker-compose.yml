@@ -9,7 +9,7 @@ services:
       SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_AUTHORIZATION_URI: "http://localhost:8081/realms/mephi-realm/protocol/openid-connect/auth"
       SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_TOKEN_URI: "http://keycloak:8080/realms/mephi-realm/protocol/openid-connect/token"
       SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_JWK_SET_URI: "http://keycloak:8080/realms/mephi-realm/protocol/openid-connect/certs"
-#      SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUER_URI: "http://localhost:8081/realms/mephi-realm"
+    #      SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUER_URI: "http://localhost:8081/realms/mephi-realm"
     ports:
       - "8080:8080"
     depends_on:

@@ -1,7 +1,6 @@
 package team.mephi.adminbot.service;
 
 import com.vaadin.flow.spring.security.AuthenticationContext;
-import org.springframework.security.oauth2.core.oidc.StandardClaimAccessor;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.stereotype.Service;
 

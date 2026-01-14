@@ -28,7 +28,9 @@
           "temporary": false
         }
       ],
-      "realmRoles": ["lc_expert"]
+      "realmRoles": [
+        "lc_expert"
+      ]
     },
     {
       "username": "expert2",
@@ -43,7 +45,9 @@
           "temporary": false
         }
       ],
-      "realmRoles": ["lc_expert"]
+      "realmRoles": [
+        "lc_expert"
+      ]
     },
     {
       "username": "admin1",
@@ -58,7 +62,9 @@
           "temporary": false
         }
       ],
-      "realmRoles": ["admin"]
+      "realmRoles": [
+        "admin"
+      ]
     }
   ],
   "clients": [

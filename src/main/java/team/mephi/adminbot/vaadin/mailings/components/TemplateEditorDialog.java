@@ -27,7 +27,7 @@ public class TemplateEditorDialog extends Dialog implements DialogWithTitle {
     }
 
     public void showDialog(Object template, SerializableConsumer<?> callback) {
-        this.template = Objects.isNull(template) ?  new SimpleTemplate() : (SimpleTemplate)template;
+        this.template = Objects.isNull(template) ? new SimpleTemplate() : (SimpleTemplate) template;
         this.onSaveCallback = (SerializableConsumer<SimpleTemplate>) callback;
         binder.readBean((SimpleTemplate) template);
         binder.setReadOnly(false);
@@ -38,7 +38,7 @@ public class TemplateEditorDialog extends Dialog implements DialogWithTitle {
     private void onSave() {
         if (binder.validate().isOk()) {
             if (onSaveCallback != null) {
-                binder.writeBeanIfValid(this.template );
+                binder.writeBeanIfValid(this.template);
                 onSaveCallback.accept(template);
             }
             close();
