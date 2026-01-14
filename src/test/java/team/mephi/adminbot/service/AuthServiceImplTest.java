@@ -7,10 +7,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
@@ -18,20 +22,22 @@ import static org.mockito.Mockito.when;
 
 /**
  * Юнит-тесты для AuthServiceImpl.
- * Покрывают: получение пользователя, роль и выход.
+ * Проверяют доступ к пользователю, ролям и выходу.
  */
 @ExtendWith(MockitoExtension.class)
 class AuthServiceImplTest {
+
     @Mock
     private AuthenticationContext authContext;
+
     @Mock
     private DefaultOidcUser oidcUser;
 
     /**
-     * Проверяет получение данных пользователя из контекста.
+     * Проверяет возврат найденного OIDC-пользователя.
      */
     @Test
-    void Given_authenticatedUser_When_getUserInfo_Then_returnsUser() {
+    void Given_authenticatedOidcUserPresent_When_getUserInfo_Then_returnsUser() {
         // Arrange
         when(authContext.getAuthenticatedUser(eq(DefaultOidcUser.class))).thenReturn(Optional.of(oidcUser));
         AuthServiceImpl service = new AuthServiceImpl(authContext);
@@ -40,16 +46,33 @@ class AuthServiceImplTest {
         DefaultOidcUser result = service.getUserInfo();
 
         // Assert
-        assertEquals(oidcUser, result);
+        assertSame(oidcUser, result);
     }
 
     /**
-     * Проверяет проверку роли администратора.
+     * Проверяет выброс исключения при отсутствии OIDC-пользователя.
      */
     @Test
-    void Given_adminRole_When_isAdmin_Then_returnsTrue() {
+    void Given_authenticatedOidcUserMissing_When_getUserInfo_Then_throwsException() {
         // Arrange
-        when(authContext.getGrantedRoles()).thenReturn(List.of("ADMIN"));
+        when(authContext.getAuthenticatedUser(eq(DefaultOidcUser.class))).thenReturn(Optional.empty());
+        AuthServiceImpl service = new AuthServiceImpl(authContext);
+
+        // Act
+        Runnable call = service::getUserInfo;
+
+        // Assert
+        assertThrows(NoSuchElementException.class, call::run);
+    }
+
+    /**
+     * Проверяет возврат true при наличии роли ADMIN.
+     */
+    @Test
+    void Given_grantedRolesContainAdmin_When_isAdmin_Then_returnsTrue() {
+        // Arrange
+        Collection<String> roles = List.of("ADMIN");
+        when(authContext.getGrantedRoles()).thenReturn(roles);
         AuthServiceImpl service = new AuthServiceImpl(authContext);
 
         // Act
@@ -60,10 +83,27 @@ class AuthServiceImplTest {
     }
 
     /**
-     * Проверяет вызов выхода из системы.
+     * Проверяет возврат false при отсутствии роли ADMIN.
      */
     @Test
-    void Given_service_When_logout_Then_callsContext() {
+    void Given_grantedRolesDoNotContainAdmin_When_isAdmin_Then_returnsFalse() {
+        // Arrange
+        Collection<String> roles = List.of("ROLE_ADMIN", "admin");
+        when(authContext.getGrantedRoles()).thenReturn(roles);
+        AuthServiceImpl service = new AuthServiceImpl(authContext);
+
+        // Act
+        boolean result = service.isAdmin();
+
+        // Assert
+        assertFalse(result);
+    }
+
+    /**
+     * Проверяет делегирование выхода в контекст аутентификации.
+     */
+    @Test
+    void Given_anyContext_When_logout_Then_delegatesToAuthContextLogout() {
         // Arrange
         AuthServiceImpl service = new AuthServiceImpl(authContext);
 
