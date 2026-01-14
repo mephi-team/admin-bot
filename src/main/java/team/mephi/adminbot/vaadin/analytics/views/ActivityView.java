@@ -8,7 +8,6 @@ import com.vaadin.flow.data.provider.DataChangeEvent;
 import lombok.Data;
 import software.xdev.chartjs.model.charts.BarChart;
 import software.xdev.chartjs.model.data.BarData;
-import software.xdev.chartjs.model.dataset.BarDataset;
 import software.xdev.chartjs.model.options.BarOptions;
 import software.xdev.chartjs.model.options.LegendOptions;
 import software.xdev.vaadin.chartjs.ChartContainer;
@@ -19,20 +18,18 @@ import team.mephi.adminbot.vaadin.components.buttons.SecondaryButton;
 import team.mephi.adminbot.vaadin.components.fields.DateRangePicker;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Objects;
-import java.util.Random;
 
 public class ActivityView extends VerticalLayout {
-    private final BeanValidationBinder<SimpleData> binder = new BeanValidationBinder<>(SimpleData.class);
+    private final BeanValidationBinder<ActivityFilterData> binder = new BeanValidationBinder<>(ActivityFilterData.class);
 
     private final ChartContainer chart = new ChartContainer();
 
-    public ActivityView(ChartPresenter presenter) {
+    public ActivityView(ChartPresenter<ActivityFilterData> presenter) {
         setPadding(false);
 
         ActivityForm form = new ActivityForm();
-        binder.forField(form.getType()).bind(SimpleData::getType, SimpleData::setType);
+        binder.forField(form.getType()).bind(ActivityFilterData::getType, ActivityFilterData::setType);
         binder.forField(form.getInterval()).bind(s -> Objects.isNull(s.interval) ? null : ActivityIntervals.valueOf(s.interval), (s, v) -> s.setInterval(v.toString()));
         binder.forField(form.getPeriod()).bind(
                 p -> new DateRangePicker.LocalDateRange(p.start, p.end),
@@ -43,7 +40,7 @@ public class ActivityView extends VerticalLayout {
                     }
                 });
         binder.addValueChangeListener(e -> {
-            var s = new SimpleData();
+            var s = new ActivityFilterData();
             binder.writeBeanIfValid(s);
             presenter.onUpdateFilter(s);
         });
@@ -69,7 +66,7 @@ public class ActivityView extends VerticalLayout {
         var buttonGroup = new HorizontalLayout(new SecondaryButton(getTranslation("page_analytics_form_activity_download_png_action"), VaadinIcon.DOWNLOAD_ALT.create()), new SecondaryButton(getTranslation("page_analytics_form_activity_download_excel_action"), VaadinIcon.DOWNLOAD_ALT.create()));
         add(buttonGroup);
 
-        presenter.onUpdateFilter(new SimpleData());
+        presenter.onUpdateFilter(new ActivityFilterData());
     }
 
     private void updateChart(BarData data) {
@@ -80,7 +77,7 @@ public class ActivityView extends VerticalLayout {
     }
 
     @Data
-    public static class SimpleData {
+    public static class ActivityFilterData {
         private String type;
         private LocalDate start;
         private LocalDate end;

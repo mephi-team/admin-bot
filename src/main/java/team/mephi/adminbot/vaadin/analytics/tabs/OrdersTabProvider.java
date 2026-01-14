@@ -3,6 +3,7 @@ package team.mephi.adminbot.vaadin.analytics.tabs;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import team.mephi.adminbot.vaadin.analytics.presenter.ChartActions;
+import team.mephi.adminbot.vaadin.analytics.presenter.ChartPresenter;
 import team.mephi.adminbot.vaadin.analytics.views.OrdersView;
 
 import static team.mephi.adminbot.vaadin.analytics.tabs.AnalyticsTabType.ORDERS;
@@ -21,7 +22,7 @@ public class OrdersTabProvider implements AnalyticsTabProvider {
 
     @Override
     public Component createTabContent(ChartActions<?> actions) {
-        return new OrdersView();
+        return new OrdersView((ChartPresenter) actions);
     }
 
     @Override
