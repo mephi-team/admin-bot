@@ -109,7 +109,7 @@ public class ChartDataProvider<T> extends AbstractDataProvider<BarData, T> {
             var values = labels.stream().map(s1 -> random.nextInt(0, 100)).toList();
 
             BarData barData = new BarData().addLabels(labels.toArray(new String[0]));
-            BarDataset dataset = new BarDataset().setLabel("Активность").setBackgroundColor("#2168df");
+            BarDataset dataset = new BarDataset().setLabel("UTM").setBackgroundColor("#2168df");
             values.forEach(dataset::addData);
             barData.addDataset(dataset);
 

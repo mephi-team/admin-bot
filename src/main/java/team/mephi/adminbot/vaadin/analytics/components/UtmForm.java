@@ -24,19 +24,19 @@ public class UtmForm extends FormLayout  {
         cohort = new ComboBox<>();
         cohort.setItems("Весенний набор 2025");
         cohort.setValue("Весенний набор 2025");
-        addFormItem(cohort, "Набор");
+        addFormItem(cohort, getTranslation("page_analytics_form_activity_cohort_label"));
 
         period = new DateRangePicker();
         period.setValue(new DateRangePicker.LocalDateRange(
                 LocalDate.now(),
                 LocalDate.now().plusWeeks(1)
         ));
-        addFormItem(period, "Период активности");
+        addFormItem(period, getTranslation("page_analytics_form_activity_period_label"));
 
         interval = new RadioButtonGroup<>();
         interval.setItems(ActivityIntervals.values());
         interval.setValue(ActivityIntervals.MONTH);
         interval.setItemLabelGenerator(l -> getTranslation(l.getTabLabelKey()));
-        addFormItem(interval, "Интервал времени");
+        addFormItem(interval, getTranslation("page_analytics_form_activity_interval_label"));
     }
 }
