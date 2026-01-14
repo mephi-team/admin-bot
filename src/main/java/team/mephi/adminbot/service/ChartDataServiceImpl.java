@@ -1,5 +1,6 @@
 package team.mephi.adminbot.service;
 
+import com.vaadin.flow.i18n.I18NProvider;
 import org.springframework.stereotype.Service;
 import software.xdev.chartjs.model.data.BarData;
 import software.xdev.chartjs.model.dataset.BarDataset;
@@ -9,12 +10,17 @@ import team.mephi.adminbot.vaadin.analytics.views.OrdersView;
 import team.mephi.adminbot.vaadin.analytics.views.PreordersView;
 import team.mephi.adminbot.vaadin.analytics.views.UtmView;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.time.temporal.ChronoUnit;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 @Service
 public class ChartDataServiceImpl implements ChartDataService {
@@ -198,11 +204,16 @@ public class ChartDataServiceImpl implements ChartDataService {
 
     @Override
     public BarData forOrders(OrdersView.OrderFilterData data) {
+        List<String> list = List.of(DEFAULT_BLUE, "#d3e1f9", "#f29191", "#f2d391", "#91f2b1", "#9199f2", "#f291f2");
+        Iterator<String> it = Stream.generate(() -> list).flatMap(List::stream).iterator();
+
         String[] labels = labelsForInterval(data.getInterval(), data);
-        return createBarData(labels,
-                new DatasetSpec("Подано всего заявок", DEFAULT_BLUE),
-                new DatasetSpec("Актуальные заявки", "#d3e1f9"),
-                new DatasetSpec("Отозванные заявки", null));
+        if (Objects.nonNull(data.getDetailed()) && data.getDetailed()) {
+            return createBarData(labels, data.getStatuses().stream().map(
+                    s->new DatasetSpec(I18NProvider.translate(s.getTranslationKey()), it.next())).toArray(DatasetSpec[]::new));
+        } else {
+            return createBarData(labels, new DatasetSpec("Заказы", DEFAULT_BLUE));
+        }
     }
 
     @Override
