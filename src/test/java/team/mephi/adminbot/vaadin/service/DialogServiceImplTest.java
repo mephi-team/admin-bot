@@ -39,7 +39,7 @@ class DialogServiceImplTest {
         SerializableConsumer<String> callback = item -> {
         };
         Object item = "item";
-        DialogType type = DialogType.CREATE;
+        DialogType type = DialogType.USERS_CREATED;
         when(dialogFactory.getDialog(eq(type))).thenReturn(dialogWithTitle);
 
         // Act
@@ -58,7 +58,7 @@ class DialogServiceImplTest {
         DialogServiceImpl<String> service = new DialogServiceImpl<>(dialogFactory);
         SerializableConsumer<String> callback = org.mockito.Mockito.mock(SerializableConsumer.class);
         Object item = "payload";
-        DialogType type = DialogType.DELETE;
+        DialogType type = DialogType.DELETE_USERS;
         when(dialogFactory.getConfirmDialog(eq(type), eq(icon))).thenReturn(confirmDialog);
         ArgumentCaptor<Runnable> runnableCaptor = ArgumentCaptor.forClass(Runnable.class);
 

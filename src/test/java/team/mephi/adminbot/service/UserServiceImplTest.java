@@ -17,10 +17,7 @@ import team.mephi.adminbot.model.enums.UserStatus;
 import team.mephi.adminbot.repository.TutorRepository;
 import team.mephi.adminbot.repository.UserRepository;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -140,7 +137,7 @@ class UserServiceImplTest {
                 .status(UserStatus.ACTIVE)
                 .direction(Direction.builder().id(4L).name("Math").build())
                 .pdConsentLogs(List.of(PdConsentLog.builder().id(1L).source("FORM").status(ConsentStatus.GRANTED).build()))
-                .tutorAssignments(Set.of(assignment))
+                .tutorAssignments(new HashSet<>(Set.of(assignment)))
                 .build();
         when(userRepository.findByIdWithRoleAndDirection(eq(10L))).thenReturn(Optional.of(user));
         UserServiceImpl service = new UserServiceImpl(userRepository, tutorRepository);
@@ -165,7 +162,7 @@ class UserServiceImplTest {
                 .firstName("Ivan")
                 .lastName("Ivanov")
                 .role("STUDENT")
-                .direction(Set.of(SimpleDirection.builder().id(1L).name("Math").build()))
+                .direction(new HashSet<>(Set.of(SimpleDirection.builder().id(1L).name("Math").build())))
                 .build();
         when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0, User.class));
         UserServiceImpl service = new UserServiceImpl(userRepository, tutorRepository);
@@ -196,7 +193,7 @@ class UserServiceImplTest {
                 .lastName("Ivanova")
                 .role(Role.builder().code("STUDENT").build())
                 .status(UserStatus.ACTIVE)
-                .tutorAssignments(Set.of(existingAssignment))
+                .tutorAssignments(new HashSet<>(Set.of(existingAssignment)))
                 .build();
         when(userRepository.findById(eq(7L))).thenReturn(Optional.of(storedUser));
         when(userRepository.save(eq(storedUser))).thenReturn(storedUser);
@@ -205,7 +202,7 @@ class UserServiceImplTest {
                 .firstName("Anna")
                 .lastName("Ivanova")
                 .role("STUDENT")
-                .direction(Set.of(SimpleDirection.builder().id(1L).name("Math").build()))
+                .direction(new HashSet<>(Set.of(SimpleDirection.builder().id(1L).name("Math").build())))
                 .tutor(SimpleTutor.builder().id(2L).build())
                 .build();
         UserServiceImpl service = new UserServiceImpl(userRepository, tutorRepository);

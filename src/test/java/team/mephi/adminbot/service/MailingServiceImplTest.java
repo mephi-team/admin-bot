@@ -55,7 +55,7 @@ class MailingServiceImplTest {
         SimpleMailing dto = SimpleMailing.builder()
                 .name("Mailing")
                 .text("Text")
-                .channels(Set.of("EMAIL"))
+                .channels(Set.of("Email"))
                 .recipients(List.of("user1"))
                 .build();
         MailingServiceImpl service = new MailingServiceImpl(authService, mailingRepository, userRepository);
@@ -78,7 +78,7 @@ class MailingServiceImplTest {
         mailing.setId(4L);
         mailing.setName("Mail");
         mailing.setStatus(MailingStatus.DRAFT);
-        mailing.setChannels(List.of(Channels.EMAIL));
+        mailing.setChannels(List.of(Channels.Email));
         when(mailingRepository.findById(eq(4L))).thenReturn(Optional.of(mailing));
         MailingServiceImpl service = new MailingServiceImpl(authService, mailingRepository, userRepository);
 
@@ -100,7 +100,7 @@ class MailingServiceImplTest {
         mailing.setId(5L);
         mailing.setName("Alpha");
         mailing.setStatus(MailingStatus.DRAFT);
-        mailing.setChannels(List.of(Channels.EMAIL));
+        mailing.setChannels(List.of(Channels.Email));
         when(mailingRepository.findMailingByName(eq("Al"), eq(List.of("DRAFT")), eq(PageRequest.of(0, 1))))
                 .thenReturn(List.of(mailing));
         MailingServiceImpl service = new MailingServiceImpl(authService, mailingRepository, userRepository);

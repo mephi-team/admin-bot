@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.stubbing.OngoingStubbing;
 import org.springframework.data.domain.PageRequest;
 import team.mephi.adminbot.dto.RoleDto;
 import team.mephi.adminbot.model.Role;
@@ -11,6 +12,7 @@ import team.mephi.adminbot.repository.RoleRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -31,7 +33,7 @@ class RoleServiceImplTest {
     @Test
     void Given_repositoryRoles_When_getAllRoles_Then_returnsListWithAll() {
         // Arrange
-        when(roleRepository.findAll()).thenReturn(List.of(new Role("ADMIN", "Администратор", "Admin")));
+        when(roleRepository.findAll()).thenReturn(List.of(new Role("ADMIN", "Администратор", "Admin", Set.of())));
         RoleServiceImpl service = new RoleServiceImpl(roleRepository);
 
         // Act
@@ -48,7 +50,7 @@ class RoleServiceImplTest {
     @Test
     void Given_pageable_When_getAllRolesPaged_Then_returnsList() {
         // Arrange
-        when(roleRepository.findAll()).thenReturn(List.of(new Role("ADMIN", "Администратор", "Admin")));
+        when(roleRepository.findAll()).thenReturn(List.of(new Role("ADMIN", "Администратор", "Admin", Set.of())));
         RoleServiceImpl service = new RoleServiceImpl(roleRepository);
 
         // Act
@@ -64,7 +66,7 @@ class RoleServiceImplTest {
     @Test
     void Given_code_When_getByCode_Then_returnsRole() {
         // Arrange
-        when(roleRepository.findAll()).thenReturn(List.of(new Role("ADMIN", "Администратор", "Admin")));
+        when(roleRepository.findAll()).thenReturn(List.of(new Role("ADMIN", "Администратор", "Admin", Set.of())));
         RoleServiceImpl service = new RoleServiceImpl(roleRepository);
 
         // Act
@@ -81,7 +83,7 @@ class RoleServiceImplTest {
     @Test
     void Given_name_When_getByName_Then_returnsRole() {
         // Arrange
-        when(roleRepository.findAll()).thenReturn(List.of(new Role("ADMIN", "Администратор", "Admin")));
+        when(roleRepository.findAll()).thenReturn(List.of(new Role("ADMIN", "Администратор", "Admin", Set.of())));
         RoleServiceImpl service = new RoleServiceImpl(roleRepository);
 
         // Act

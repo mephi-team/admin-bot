@@ -13,13 +13,13 @@ import team.mephi.adminbot.model.Role;
 import team.mephi.adminbot.model.enums.UserStatus;
 import team.mephi.adminbot.repository.ExpertRepository;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
@@ -43,10 +43,10 @@ class ExpertServiceImplTest {
         Expert expert = Expert.builder()
                 .id(2L)
                 .role(Role.builder().code("EXPERT").build())
-                .directions(Set.of(
+                .directions(new HashSet<>(Set.of(
                         Direction.builder().id(1L).name("Math").build(),
                         Direction.builder().id(2L).name("Physics").build()
-                ))
+                )))
                 .build();
         when(expertRepository.findById(eq(2L))).thenReturn(Optional.of(expert));
         when(expertRepository.save(any(Expert.class))).thenAnswer(invocation -> invocation.getArgument(0, Expert.class));
@@ -55,10 +55,10 @@ class ExpertServiceImplTest {
                 .firstName("Eva")
                 .lastName("Stone")
                 .role("EXPERT")
-                .direction(Set.of(
+                .direction(new HashSet<>(Set.of(
                         SimpleDirection.builder().id(2L).name("Physics").build(),
                         SimpleDirection.builder().id(3L).name("Chemistry").build()
-                ))
+                )))
                 .build();
         ExpertServiceImpl service = new ExpertServiceImpl(expertRepository);
 
@@ -84,7 +84,7 @@ class ExpertServiceImplTest {
                 .lastName("One")
                 .role(Role.builder().code("EXPERT").build())
                 .status(UserStatus.ACTIVE)
-                .directions(Set.of(Direction.builder().id(1L).name("Math").build()))
+                .directions(new HashSet<>(Set.of(Direction.builder().id(1L).name("Math").build())))
                 .build();
         when(expertRepository.findAllByRoleAndName(eq("EXPERT"), eq("Ex"), eq(PageRequest.of(0, 1))))
                 .thenReturn(List.of(expert));

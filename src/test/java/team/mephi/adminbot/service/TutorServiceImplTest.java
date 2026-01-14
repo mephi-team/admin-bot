@@ -16,6 +16,7 @@ import team.mephi.adminbot.repository.StudentTutorRepository;
 import team.mephi.adminbot.repository.TutorRepository;
 import team.mephi.adminbot.repository.UserRepository;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -78,8 +79,8 @@ class TutorServiceImplTest {
                 .id(2L)
                 .firstName("John")
                 .lastName("Doe")
-                .directions(Set.of(Direction.builder().id(1L).build()))
-                .studentAssignments(Set.of())
+                .directions(new HashSet<>(Set.of(Direction.builder().id(1L).build())))
+                .studentAssignments(new HashSet<>(Set.of()))
                 .build();
         when(tutorRepository.findById(eq(2L))).thenReturn(Optional.of(tutor));
         when(tutorRepository.save(eq(tutor))).thenReturn(tutor);
