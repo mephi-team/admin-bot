@@ -15,6 +15,28 @@ import java.util.Random;
 import java.util.stream.Stream;
 
 public class ChartDataProvider<T> extends AbstractDataProvider<BarData, T> {
+    private static final List<String> MONTH_LABELS = List.of("Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь");
+    private static final List<String> DAY_LABELS = List.of("12.01.2026", "13.01.2026", "14.01.2026", "15.01.2026", "16.01.2026", "17.01.2026", "18.01.2026", "19.01.2026", "20.01.2026", "21.01.2026", "22.01.2026", "23.01.2026");
+    private static final List<String> HOUR_LABELS = List.of("00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00");
+
+    private List<String> labelsForInterval(String interval) {
+        if (ActivityIntervals.HOUR.name().equals(interval)) {
+            return HOUR_LABELS;
+        } else if (ActivityIntervals.DAY.name().equals(interval)) {
+            return DAY_LABELS;
+        }
+        return MONTH_LABELS;
+    }
+
+    private BarDataset createDataset(String label, String backgroundColor, List<String> labels, Random random) {
+        BarDataset dataset = new BarDataset().setLabel(label);
+        if (backgroundColor != null) {
+            dataset.setBackgroundColor(backgroundColor);
+        }
+        labels.stream().map(s -> random.nextInt(0, 100)).forEach(dataset::addData);
+        return dataset;
+    }
+
     @Override
     public boolean isInMemory() {
         return false;
@@ -32,86 +54,39 @@ public class ChartDataProvider<T> extends AbstractDataProvider<BarData, T> {
         var filter = query.getFilter().orElse(null);
         if (filter instanceof ActivityView.ActivityFilterData) {
             var data = (ActivityView.ActivityFilterData) filter;
-            var labels = List.of("Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь");
-            if (ActivityIntervals.MONTH.name().equals(data.getInterval())) {
-                labels = List.of("Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь");
-            } else if (ActivityIntervals.DAY.name().equals(data.getInterval())) {
-                labels = List.of("12.01.2026", "13.01.2026", "14.01.2026", "15.01.2026", "16.01.2026", "17.01.2026", "18.01.2026", "19.01.2026", "20.01.2026", "21.01.2026", "22.01.2026", "23.01.2026");
-            } else if (ActivityIntervals.HOUR.name().equals(data.getInterval())) {
-                labels = List.of("00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00");
-            }
-            var values = labels.stream().map(s1 -> random.nextInt(0, 100)).toList();
+            var labels = labelsForInterval(data.getInterval());
 
             BarData barData = new BarData().addLabels(labels.toArray(new String[0]));
-            BarDataset dataset = new BarDataset().setLabel("Активность").setBackgroundColor("#2168df");
-            values.forEach(dataset::addData);
+            BarDataset dataset = createDataset("Активность", "#2168df", labels, random);
             barData.addDataset(dataset);
 
             return Stream.of(barData);
         } else if (filter instanceof PreordersView.PreorderFilterData) {
             var data = (PreordersView.PreorderFilterData) filter;
-
-            var labels = List.of("Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь");
-            if (ActivityIntervals.MONTH.name().equals(data.getInterval())) {
-                labels = List.of("Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь");
-            } else if (ActivityIntervals.DAY.name().equals(data.getInterval())) {
-                labels = List.of("12.01.2026", "13.01.2026", "14.01.2026", "15.01.2026", "16.01.2026", "17.01.2026", "18.01.2026", "19.01.2026", "20.01.2026", "21.01.2026", "22.01.2026", "23.01.2026");
-            } else if (ActivityIntervals.HOUR.name().equals(data.getInterval())) {
-                labels = List.of("00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00");
-            }
+            var labels = labelsForInterval(data.getInterval());
 
             BarData barData = new BarData().addLabels(labels.toArray(new String[0]));
-            BarDataset dataset1 = new BarDataset().setLabel("Подано всего заявок").setBackgroundColor("#2168df");
-            labels.stream().map(s1 -> random.nextInt(0, 100)).forEach(dataset1::addData);
-            barData.addDataset(dataset1);
-            BarDataset dataset2 = new BarDataset().setLabel("Актуальные заявки").setBackgroundColor("#d3e1f9");
-            labels.stream().map(s1 -> random.nextInt(0, 100)).forEach(dataset2::addData);
-            barData.addDataset(dataset2);
-            BarDataset dataset3 = new BarDataset().setLabel("Отозванные заявки");
-            labels.stream().map(s1 -> random.nextInt(0, 100)).forEach(dataset3::addData);
-            barData.addDataset(dataset3);
+            barData.addDataset(createDataset("Подано всего заявок", "#2168df", labels, random));
+            barData.addDataset(createDataset("Актуальные заявки", "#d3e1f9", labels, random));
+            barData.addDataset(createDataset("Отозванные заявки", null, labels, random));
 
             return Stream.of(barData);
         } else if (filter instanceof OrdersView.OrderFilterData) {
             var data = (OrdersView.OrderFilterData) filter;
-
-            var labels = List.of("Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь");
-            if (ActivityIntervals.MONTH.name().equals(data.getInterval())) {
-                labels = List.of("Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь");
-            } else if (ActivityIntervals.DAY.name().equals(data.getInterval())) {
-                labels = List.of("12.01.2026", "13.01.2026", "14.01.2026", "15.01.2026", "16.01.2026", "17.01.2026", "18.01.2026", "19.01.2026", "20.01.2026", "21.01.2026", "22.01.2026", "23.01.2026");
-            } else if (ActivityIntervals.HOUR.name().equals(data.getInterval())) {
-                labels = List.of("00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00");
-            }
+            var labels = labelsForInterval(data.getInterval());
 
             BarData barData = new BarData().addLabels(labels.toArray(new String[0]));
-            BarDataset dataset1 = new BarDataset().setLabel("Подано всего заявок").setBackgroundColor("#2168df");
-            labels.stream().map(s1 -> random.nextInt(0, 100)).forEach(dataset1::addData);
-            barData.addDataset(dataset1);
-            BarDataset dataset2 = new BarDataset().setLabel("Актуальные заявки").setBackgroundColor("#d3e1f9");
-            labels.stream().map(s1 -> random.nextInt(0, 100)).forEach(dataset2::addData);
-            barData.addDataset(dataset2);
-            BarDataset dataset3 = new BarDataset().setLabel("Отозванные заявки");
-            labels.stream().map(s1 -> random.nextInt(0, 100)).forEach(dataset3::addData);
-            barData.addDataset(dataset3);
+            barData.addDataset(createDataset("Подано всего заявок", "#2168df", labels, random));
+            barData.addDataset(createDataset("Актуальные заявки", "#d3e1f9", labels, random));
+            barData.addDataset(createDataset("Отозванные заявки", null, labels, random));
 
             return Stream.of(barData);
         } else if (filter instanceof UtmView.UtmFilterData) {
             var data = (UtmView.UtmFilterData) filter;
-            var labels = List.of("Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь");
-            if (ActivityIntervals.MONTH.name().equals(data.getInterval())) {
-                labels = List.of("Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь");
-            } else if (ActivityIntervals.DAY.name().equals(data.getInterval())) {
-                labels = List.of("12.01.2026", "13.01.2026", "14.01.2026", "15.01.2026", "16.01.2026", "17.01.2026", "18.01.2026", "19.01.2026", "20.01.2026", "21.01.2026", "22.01.2026", "23.01.2026");
-            } else if (ActivityIntervals.HOUR.name().equals(data.getInterval())) {
-                labels = List.of("00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00");
-            }
-            var values = labels.stream().map(s1 -> random.nextInt(0, 100)).toList();
+            var labels = labelsForInterval(data.getInterval());
 
             BarData barData = new BarData().addLabels(labels.toArray(new String[0]));
-            BarDataset dataset = new BarDataset().setLabel("UTM").setBackgroundColor("#2168df");
-            values.forEach(dataset::addData);
-            barData.addDataset(dataset);
+            barData.addDataset(createDataset("UTM", "#2168df", labels, random));
 
             return Stream.of(barData);
         }
