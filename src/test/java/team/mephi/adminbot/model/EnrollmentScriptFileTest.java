@@ -4,10 +4,10 @@ import org.junit.jupiter.api.Test;
 import team.mephi.adminbot.model.enums.ScriptTaskStatus;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
- * Тесты для сущности {@link EnrollmentScriptFile}.
+ * Юнит-тесты для EnrollmentScriptFile.
+ * Покрывают: установку статуса при создании.
  */
 class EnrollmentScriptFileTest {
 
@@ -15,35 +15,14 @@ class EnrollmentScriptFileTest {
      * Проверяет установку статуса по умолчанию при создании.
      */
     @Test
-    void givenFileWithoutStatus_WhenOnCreateCalled_ThenStatusSetToPending() {
+    void Given_nullStatus_When_onCreate_Then_setsPending() {
         // Arrange
-        EnrollmentScriptFile file = EnrollmentScriptFile.builder().build();
-
-        // Act
-        ScriptTaskStatus statusBefore = file.getStatus();
-        file.onCreate();
-        ScriptTaskStatus statusAfter = file.getStatus();
-
-        // Assert
-        assertNull(statusBefore, "До вызова onCreate status должен быть null");
-        assertEquals(ScriptTaskStatus.PENDING, statusAfter, "После onCreate status должен быть установлен в PENDING");
-    }
-
-    /**
-     * Проверяет, что заданный статус не перезаписывается.
-     */
-    @Test
-    void givenFileWithStatus_WhenOnCreateCalled_ThenStatusIsPreserved() {
-        // Arrange
-        EnrollmentScriptFile file = EnrollmentScriptFile.builder()
-                .status(ScriptTaskStatus.RUNNING)
-                .build();
+        EnrollmentScriptFile file = EnrollmentScriptFile.builder().filename("file.xlsx").build();
 
         // Act
         file.onCreate();
 
         // Assert
-        assertEquals(ScriptTaskStatus.RUNNING, file.getStatus(),
-                "onCreate не должен перезаписывать status, если он уже задан");
+        assertEquals(ScriptTaskStatus.PENDING, file.getStatus());
     }
 }

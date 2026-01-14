@@ -6,15 +6,16 @@ import team.mephi.adminbot.model.enums.NotificationStatus;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Тесты для сущности {@link NotificationQueue}.
+ * Юнит-тесты для NotificationQueue.
+ * Покрывают: установку статуса по умолчанию.
  */
 class NotificationQueueTest {
 
     /**
-     * Проверяет установку статуса по умолчанию при создании.
+     * Проверяет установку статуса PENDING при создании.
      */
     @Test
-    void givenQueueWithoutStatus_WhenOnCreateCalled_ThenStatusSetToPending() {
+    void Given_nullStatus_When_onCreate_Then_setsPending() {
         // Arrange
         NotificationQueue queue = NotificationQueue.builder().build();
 

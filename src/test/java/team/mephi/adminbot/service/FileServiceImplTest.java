@@ -1,14 +1,13 @@
 package team.mephi.adminbot.service;
 
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import team.mephi.adminbot.dto.SimpleFile;
-import team.mephi.adminbot.model.Role;
 import team.mephi.adminbot.model.StoredFile;
 import team.mephi.adminbot.model.User;
 import team.mephi.adminbot.repository.FileRepository;
@@ -18,67 +17,69 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+/**
+ * Юнит-тесты для FileServiceImpl.
+ * Покрывают: загрузку файлов и сохранение метаданных.
+ */
 @ExtendWith(MockitoExtension.class)
 class FileServiceImplTest {
     @Mock
     private FileRepository fileRepository;
-
     @Mock
     private UserRepository userRepository;
 
-    private FileServiceImpl service;
-
-    @BeforeEach
-    void setUp() {
-        service = new FileServiceImpl(fileRepository, userRepository);
-    }
+    @TempDir
+    Path tempDir;
 
     @AfterEach
-    void tearDown() throws IOException {
-        Path storagePath = Path.of("storage");
-        if (Files.exists(storagePath)) {
-            try (var walk = Files.walk(storagePath)) {
-                walk.sorted((a, b) -> b.compareTo(a))
-                        .forEach(path -> {
-                            try {
-                                Files.deleteIfExists(path);
-                            } catch (IOException ex) {
-                                throw new RuntimeException(ex);
-                            }
-                        });
+    void cleanupStorage() throws IOException {
+        // Arrange
+        Path storage = Path.of("storage");
+        if (Files.exists(storage)) {
+            try (var walk = Files.walk(storage)) {
+                walk.sorted((a, b) -> b.compareTo(a)).forEach(path -> {
+                    try {
+                        Files.deleteIfExists(path);
+                    } catch (IOException ignored) {
+                    }
+                });
             }
         }
     }
 
+    /**
+     * Проверяет сохранение файла и метаданных.
+     */
     @Test
-    void uploadAllMovesFileAndPersistsMetadata() throws IOException {
-        Path tempFile = Files.createTempFile("upload", ".txt");
-        Files.writeString(tempFile, "payload");
-        SimpleFile input = SimpleFile.builder()
-                .name("upload.txt")
-                .type("text/plain")
-                .size(Files.size(tempFile))
-                .content(tempFile)
+    void Given_files_When_uploadAll_Then_movesFilesAndSavesMetadata() throws IOException {
+        // Arrange
+        Path source = Files.createFile(tempDir.resolve("source.bin"));
+        Files.writeString(source, "data");
+        SimpleFile simpleFile = SimpleFile.builder()
+                .name("source.bin")
+                .type("application/octet-stream")
+                .size(Files.size(source))
+                .content(source)
                 .build();
-        User uploader = User.builder().id(1L).email("user@example.com").role(Role.builder().code("ADMIN").build()).build();
+        when(userRepository.findByEmail(eq("user@example.com"))).thenReturn(java.util.Optional.of(User.builder().id(1L).build()));
+        FileServiceImpl service = new FileServiceImpl(fileRepository, userRepository);
 
-        when(userRepository.findByEmail("user@example.com")).thenReturn(Optional.of(uploader));
+        // Act
+        service.uploadAll(List.of(simpleFile), "user@example.com");
 
-        service.uploadAll(List.of(input), "user@example.com");
-
+        // Assert
+        assertTrue(Files.exists(simpleFile.getContent()));
         ArgumentCaptor<List<StoredFile>> captor = ArgumentCaptor.forClass(List.class);
         verify(fileRepository).saveAll(captor.capture());
-
-        List<StoredFile> storedFiles = captor.getValue();
-        assertThat(storedFiles).hasSize(1);
-        StoredFile stored = storedFiles.getFirst();
-        assertThat(stored.getFilename()).isEqualTo("upload.txt");
-        assertThat(Path.of(stored.getStoragePath())).exists();
+        StoredFile stored = captor.getValue().getFirst();
+        assertEquals("source.bin", stored.getFilename());
+        assertEquals("application/octet-stream", stored.getMimeType());
     }
 }

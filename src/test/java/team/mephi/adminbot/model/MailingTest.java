@@ -2,30 +2,48 @@ package team.mephi.adminbot.model;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Тесты для сущности {@link Mailing}.
+ * Юнит-тесты для Mailing.
+ * Покрывают: сравнение рассылок по идентификатору.
  */
 class MailingTest {
 
     /**
-     * Проверяет заполнение идентификатора и названия через builder.
+     * Проверяет равенство при совпадении идентификаторов.
      */
     @Test
-    void givenBuilder_WhenBuild_ThenIdAndNameAreSet() {
+    void Given_sameId_When_equals_Then_returnsTrue() {
         // Arrange
-        Mailing mailing = Mailing.builder()
-                .id(100L)
-                .name("Mailing name")
-                .build();
+        Mailing first = new Mailing();
+        first.setId(1L);
+        Mailing second = new Mailing();
+        second.setId(1L);
 
         // Act
-        Long id = mailing.getId();
-        String name = mailing.getName();
+        boolean result = first.equals(second);
 
         // Assert
-        assertEquals(100L, id);
-        assertEquals("Mailing name", name);
+        assertTrue(result);
+    }
+
+    /**
+     * Проверяет неравенство при разных идентификаторах.
+     */
+    @Test
+    void Given_differentId_When_equals_Then_returnsFalse() {
+        // Arrange
+        Mailing first = new Mailing();
+        first.setId(1L);
+        Mailing second = new Mailing();
+        second.setId(2L);
+
+        // Act
+        boolean result = first.equals(second);
+
+        // Assert
+        assertFalse(result);
     }
 }
