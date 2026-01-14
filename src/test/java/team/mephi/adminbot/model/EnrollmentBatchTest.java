@@ -6,15 +6,16 @@ import team.mephi.adminbot.model.enums.MailingStatus;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Тесты для сущности {@link EnrollmentBatch}.
+ * Юнит-тесты для EnrollmentBatch.
+ * Покрывают: установку статуса при создании.
  */
 class EnrollmentBatchTest {
 
     /**
-     * Проверяет, что при создании батча устанавливается статус по умолчанию.
+     * Проверяет установку статуса по умолчанию при создании.
      */
     @Test
-    void givenBatchWithoutStatus_WhenOnCreateCalled_ThenStatusSetToDraft() {
+    void Given_nullStatus_When_onCreate_Then_setsDraft() {
         // Arrange
         EnrollmentBatch batch = EnrollmentBatch.builder().build();
 

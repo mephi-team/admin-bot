@@ -2,25 +2,29 @@ package team.mephi.adminbot.model;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.Instant;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- * Тесты для сущности {@link StatsCache}.
+ * Юнит-тесты для StatsCache.
+ * Покрывают: обновление времени при сохранении.
  */
 class StatsCacheTest {
 
     /**
-     * Проверяет, что onUpdate устанавливает метку времени обновления.
+     * Проверяет установку времени обновления при хуке.
      */
     @Test
-    void givenCache_WhenOnUpdateCalled_ThenUpdatedAtIsSet() {
+    void Given_entity_When_onUpdate_Then_setsUpdatedAt() {
         // Arrange
-        StatsCache cache = StatsCache.builder().build();
+        StatsCache cache = StatsCache.builder().metricName("m").period("p").payload("{}").build();
+        cache.setUpdatedAt(null);
 
         // Act
         cache.onUpdate();
 
         // Assert
-        assertNotNull(cache.getUpdatedAt(), "updatedAt должен быть установлен");
+        assertNotNull(cache.getUpdatedAt());
     }
 }

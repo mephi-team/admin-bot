@@ -2,52 +2,44 @@ package team.mephi.adminbot.model;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Тесты для сущности {@link Direction}.
+ * Юнит-тесты для Direction.
+ * Покрывают: сравнение направлений по идентификатору.
  */
 class DirectionTest {
 
     /**
-     * Проверяет заполнение полей через билдер.
+     * Проверяет равенство направлений при одинаковом идентификаторе.
      */
     @Test
-    void givenDirectionBuilder_WhenBuild_ThenFieldsAreSet() {
+    void Given_sameId_When_equals_Then_returnsTrue() {
         // Arrange
-        Direction direction = Direction.builder()
-                .id(10L)
-                .code("IT")
-                .name("Информационные технологии")
-                .build();
+        Direction first = Direction.builder().id(1L).build();
+        Direction second = Direction.builder().id(1L).build();
 
         // Act
-        Long id = direction.getId();
-        String code = direction.getCode();
-        String name = direction.getName();
+        boolean result = first.equals(second);
 
         // Assert
-        assertEquals(10L, id);
-        assertEquals("IT", code);
-        assertEquals("Информационные технологии", name);
+        assertTrue(result);
     }
 
     /**
-     * Проверяет работу сеттеров и геттеров.
+     * Проверяет неравенство направлений при разных идентификаторах.
      */
     @Test
-    void givenDirection_WhenSettersCalled_ThenGettersReturnValues() {
+    void Given_differentId_When_equals_Then_returnsFalse() {
         // Arrange
-        Direction direction = new Direction();
+        Direction first = Direction.builder().id(1L).build();
+        Direction second = Direction.builder().id(2L).build();
 
         // Act
-        direction.setId(20L);
-        direction.setCode("HR");
-        direction.setName("Кадры");
+        boolean result = first.equals(second);
 
         // Assert
-        assertEquals(20L, direction.getId());
-        assertEquals("HR", direction.getCode());
-        assertEquals("Кадры", direction.getName());
+        assertFalse(result);
     }
 }

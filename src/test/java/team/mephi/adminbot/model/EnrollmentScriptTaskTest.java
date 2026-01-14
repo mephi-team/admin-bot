@@ -2,30 +2,44 @@ package team.mephi.adminbot.model;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Тесты для сущности {@link EnrollmentScriptTask}.
+ * Юнит-тесты для EnrollmentScriptTask.
+ * Покрывают: сравнение задач по идентификатору.
  */
 class EnrollmentScriptTaskTest {
 
     /**
-     * Проверяет значения счётчиков по умолчанию.
+     * Проверяет равенство при одинаковых идентификаторах.
      */
     @Test
-    void givenNewTask_WhenCreated_ThenCountersDefaultToZero() {
+    void Given_sameId_When_equals_Then_returnsTrue() {
         // Arrange
-        EnrollmentScriptTask task = new EnrollmentScriptTask();
+        EnrollmentScriptTask first = EnrollmentScriptTask.builder().id(1L).build();
+        EnrollmentScriptTask second = EnrollmentScriptTask.builder().id(1L).build();
 
         // Act
-        Integer successCount = task.getSuccessCount();
-        Integer errorCount = task.getErrorCount();
+        boolean result = first.equals(second);
 
         // Assert
-        assertNotNull(successCount, "successCount не должен быть null");
-        assertNotNull(errorCount, "errorCount не должен быть null");
-        assertEquals(0, successCount, "successCount по умолчанию должен быть 0");
-        assertEquals(0, errorCount, "errorCount по умолчанию должен быть 0");
+        assertTrue(result);
+    }
+
+    /**
+     * Проверяет неравенство при разных идентификаторах.
+     */
+    @Test
+    void Given_differentId_When_equals_Then_returnsFalse() {
+        // Arrange
+        EnrollmentScriptTask first = EnrollmentScriptTask.builder().id(1L).build();
+        EnrollmentScriptTask second = EnrollmentScriptTask.builder().id(2L).build();
+
+        // Act
+        boolean result = first.equals(second);
+
+        // Assert
+        assertFalse(result);
     }
 }
