@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class MailingTest {
 
     /**
-     * Проверяет заполнение идентификатора и названия через билдер.
+     * Проверяет заполнение идентификатора и названия через builder.
      */
     @Test
     void givenBuilder_WhenBuild_ThenIdAndNameAreSet() {

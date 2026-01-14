@@ -63,6 +63,6 @@ class TutorServiceImplTest {
                 .isPresent()
                 .get()
                 .extracting(SimpleTutor::getId, SimpleTutor::getFullName, SimpleTutor::getStudentCount)
-                .containsExactly(11L, "Petrov Ivan", 1);
+                .containsExactly(11L, "Petrov Ivan", 1L);
     }
 }

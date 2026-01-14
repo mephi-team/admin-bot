@@ -57,7 +57,7 @@ class MailingServiceImplTest {
         SimpleMailing input = SimpleMailing.builder()
                 .name("Weekly")
                 .text("Hello")
-                .channels(Set.of("EMAIL"))
+                .channels(Set.of("Email"))
                 .recipients(List.of("u1"))
                 .build();
 

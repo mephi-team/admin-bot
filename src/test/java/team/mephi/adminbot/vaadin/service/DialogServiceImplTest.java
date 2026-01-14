@@ -11,6 +11,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import team.mephi.adminbot.vaadin.DialogWithTitle;
 import team.mephi.adminbot.vaadin.components.dialogs.SimpleConfirmDialog;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -30,10 +32,10 @@ class DialogServiceImplTest {
 
     @Test
     void showDialogDelegatesToFactoryDialog() {
-        when(dialogFactory.getDialog(DialogType.NEW)).thenReturn(dialogWithTitle);
+        when(dialogFactory.getDialog(eq(DialogType.USERS_CREATED))).thenReturn(dialogWithTitle);
         DialogServiceImpl<String> service = new DialogServiceImpl<>(dialogFactory);
 
-        service.showDialog("item", DialogType.NEW, callback);
+        service.showDialog("item", DialogType.USERS_CREATED, callback);
 
         verify(dialogWithTitle).showDialog("item", callback);
     }
@@ -41,13 +43,13 @@ class DialogServiceImplTest {
     @Test
     void showConfirmDialogRunsCallbackOnConfirm() {
         Icon icon = VaadinIcon.CHECK.create();
-        when(dialogFactory.getConfirmDialog(DialogType.DELETE, icon)).thenReturn(confirmDialog);
+        when(dialogFactory.getConfirmDialog(eq(DialogType.DELETE_USERS), eq(icon))).thenReturn(confirmDialog);
         DialogServiceImpl<String> service = new DialogServiceImpl<>(dialogFactory);
 
-        service.showConfirmDialog("item", DialogType.DELETE, icon, callback);
+        service.showConfirmDialog("item", DialogType.DELETE_USERS, icon, callback);
 
         ArgumentCaptor<Runnable> runnableCaptor = ArgumentCaptor.forClass(Runnable.class);
-        verify(confirmDialog).showForConfirm("item", runnableCaptor.capture());
+        verify(confirmDialog).showForConfirm(eq("item"), runnableCaptor.capture());
 
         runnableCaptor.getValue().run();
         verify(callback).accept("item");
