@@ -27,7 +27,8 @@ public class UtmForm extends FormLayout {
 
         cohort = new ComboBox<>();
         cohort.setItemsPageable(cohortService::getAllCohorts);
-        cohort.setItemLabelGenerator(CohortDto::getName);
+        cohort.setItemLabelGenerator(CohortDto::getDisplayName);
+        cohort.setValue(cohortService.getDefaultCohort());
         addFormItem(cohort, getTranslation("page_analytics_form_activity_cohort_label"));
 
         period = new DateRangePicker();

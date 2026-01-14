@@ -14,4 +14,6 @@ public interface CohortService {
     Optional<CohortDto> getById(String id);
 
     Optional<CohortDto> getByName(String name);
+
+    CohortDto getDefaultCohort();
 }

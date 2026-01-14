@@ -28,7 +28,8 @@ public class OrderFrom extends FormLayout {
 
         cohort = new ComboBox<>();
         cohort.setItemsPageable(cohortService::getAllCohorts);
-        cohort.setItemLabelGenerator(CohortDto::getName);
+        cohort.setItemLabelGenerator(CohortDto::getDisplayName);
+        cohort.setValue(cohortService.getDefaultCohort());
         addFormItem(cohort, getTranslation("page_analytics_form_activity_cohort_label"));
 
         period = new DateRangePicker();
@@ -51,9 +52,10 @@ public class OrderFrom extends FormLayout {
         checkbox.setLabel(getTranslation("page_analytics_form_activity_direction_label"));
         add(checkbox);
 
-        CheckboxGroup<String> checkboxGroup = new CheckboxGroup<>();
-        checkboxGroup.setItems("Все заявки", "Актуальные заявки", "Отозванные заявки");
-        checkboxGroup.select("Все заявки", "Актуальные заявки", "Отозванные заявки");
+        CheckboxGroup<OrderStatus> checkboxGroup = new CheckboxGroup<>();
+        checkboxGroup.setItems(OrderStatus.values());
+        checkboxGroup.setItemLabelGenerator(s -> getTranslation(s.getTranslationKey()));
+        checkboxGroup.select(OrderStatus.values()); // отмечаем все по умолчанию
         checkboxGroup.addThemeVariants(CheckboxGroupVariant.LUMO_VERTICAL);
         addFormItem(checkboxGroup, getTranslation("page_analytics_form_activity_status_label"));
     }

@@ -37,4 +37,9 @@ public class CohortServiceImpl implements CohortService {
     public Optional<CohortDto> getByName(String name) {
         return cohorts.stream().filter(c -> c.getName().equals(name)).findAny();
     }
+
+    @Override
+    public CohortDto getDefaultCohort() {
+        return cohorts.stream().filter(CohortDto::getCurrent).findAny().orElse(cohorts.getFirst());
+    }
 }
