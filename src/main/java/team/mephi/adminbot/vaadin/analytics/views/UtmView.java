@@ -13,6 +13,8 @@ import software.xdev.chartjs.model.data.BarData;
 import software.xdev.chartjs.model.options.BarOptions;
 import software.xdev.chartjs.model.options.LegendOptions;
 import software.xdev.vaadin.chartjs.ChartContainer;
+import team.mephi.adminbot.dto.CohortDto;
+import team.mephi.adminbot.service.CohortService;
 import team.mephi.adminbot.vaadin.analytics.components.ActivityIntervals;
 import team.mephi.adminbot.vaadin.analytics.components.UtmForm;
 import team.mephi.adminbot.vaadin.analytics.presenter.ChartPresenter;
@@ -27,11 +29,13 @@ public class UtmView extends VerticalLayout {
 
     private final ChartContainer chart = new ChartContainer();
 
-    public UtmView(ChartPresenter<UtmFilterData> presenter) {
+    public UtmView(ChartPresenter<UtmFilterData> presenter, CohortService cohortService) {
         setPadding(false);
 
-        UtmForm form = new UtmForm();
-        binder.forField(form.getCohort()).bind(UtmFilterData::getCohort, UtmFilterData::setCohort);
+        UtmForm form = new UtmForm(cohortService);
+        binder.forField(form.getCohort())
+                .withConverter(CohortDto::getName, cohort -> cohortService.getByName(cohort).orElse(cohortService.getAllCohorts().getFirst()))
+                .bind(UtmFilterData::getCohort, UtmFilterData::setCohort);
         binder.forField(form.getInterval()).bind(s -> Objects.isNull(s.interval) ? null : ActivityIntervals.valueOf(s.interval), (s, v) -> s.setInterval(v.toString()));
         binder.forField(form.getPeriod()).bind(
                 p -> new DateRangePicker.LocalDateRange(p.start, p.end),
