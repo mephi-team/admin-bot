@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+@SuppressWarnings("unused")
 public interface DialogRepository extends JpaRepository<Dialog, Long> {
     long countByLastMessageAtAfter(Instant dateTime);
 

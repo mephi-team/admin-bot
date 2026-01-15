@@ -7,11 +7,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 import team.mephi.adminbot.model.Tutor;
 
 import java.util.List;
 import java.util.Optional;
 
+@Repository
+@SuppressWarnings("unused")
 public interface TutorRepository extends JpaRepository<Tutor, Long> {
 
     @Query("SELECT t FROM Tutor t LEFT JOIN FETCH t.studentAssignments sa LEFT JOIN FETCH t.directions LEFT JOIN FETCH sa.student WHERE LOWER(t.lastName) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(t.firstName) LIKE LOWER(CONCAT('%', :query, '%'))")
@@ -28,7 +31,7 @@ public interface TutorRepository extends JpaRepository<Tutor, Long> {
     @Query("update Tutor t set t.deleted = FUNCTION('NOT', t.deleted) WHERE t.id IN :ids")
     @Transactional
     @Modifying
-    void deleteAllById(@Param("ids") Iterable<? extends Long> ids);
+    void deleteAllById(@Param("ids") @NonNull Iterable<? extends Long> ids);
 
     @Query("update Tutor t set t.deleted = FUNCTION('NOT', t.deleted) WHERE t.id IN :ids")
     @Transactional

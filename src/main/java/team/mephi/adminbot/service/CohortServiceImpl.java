@@ -24,6 +24,7 @@ public class CohortServiceImpl implements CohortService {
     }
 
     @Override
+    @SuppressWarnings("unused")
     public List<CohortDto> getAllCohorts(Pageable pageable, String query) {
         return cohorts;
     }

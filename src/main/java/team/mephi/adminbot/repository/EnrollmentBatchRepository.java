@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import team.mephi.adminbot.model.EnrollmentBatch;
 
 @Repository
+@SuppressWarnings("unused")
 public interface EnrollmentBatchRepository extends JpaRepository<EnrollmentBatch, Long> {
 }
 

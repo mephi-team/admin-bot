@@ -7,6 +7,7 @@ import java.time.Instant;
 
 @Data
 @Builder
+@SuppressWarnings("unused")
 public class UserQuestionDto {
     Long id;
     String question;

@@ -27,12 +27,14 @@ public class DirectionServiceImpl implements DirectionService {
     }
 
     @Override
+    @SuppressWarnings("unused")
     public List<SimpleDirection> getAllDirections(Pageable pageable, String query) {
         if (directions.size() < 2) initDirections();
         return directions;
     }
 
     @Override
+    @SuppressWarnings("unused")
     public Integer countAllDirections(String query) {
         if (directions.size() < 2) initDirections();
         return directions.size();

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 import team.mephi.adminbot.model.User;
 import team.mephi.adminbot.model.enums.UserStatus;
 
@@ -16,6 +17,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Repository
+@SuppressWarnings("unused")
 public interface UserRepository extends JpaRepository<User, Long> {
 
     /**
@@ -95,8 +98,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
             @Param("q") String query
     );
 
-    List<User> findByStatus(String status);
-
     @Query("SELECT u FROM User u JOIN fetch u.role")
     List<User> findAllWithRoles();
 
@@ -143,7 +144,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("update User u set u.deleted = FUNCTION('NOT', u.deleted) WHERE u.id IN :ids")
     @Transactional
     @Modifying
-    void deleteAllById(@Param("ids") Iterable<? extends Long> ids);
+    void deleteAllById(@Param("ids") @NonNull Iterable<? extends Long> ids);
 
     @Query("update User u set u.status = team.mephi.adminbot.model.enums.UserStatus.BLOCKED WHERE u.id IN :ids")
     @Transactional

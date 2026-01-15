@@ -3,6 +3,7 @@ package team.mephi.adminbot.controller.api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,12 +46,9 @@ public class UserApiController {
 
         // Если пользователь не аутентифицирован
         // или principal не является JWT — возвращаем 401
-        if (authentication == null || !(authentication.getPrincipal() instanceof Jwt)) {
+        if (authentication == null || !(authentication.getPrincipal() instanceof Jwt jwt)) {
             return ResponseEntity.status(401).build();
         }
-
-        // Достаём JWT-токен из контекста безопасности
-        Jwt jwt = (Jwt) authentication.getPrincipal();
 
         // subject — это ID пользователя в Keycloak
         String subject = jwt.getSubject();
@@ -96,12 +94,9 @@ public class UserApiController {
     public ResponseEntity<Map<String, Object>> getCurrentUser(Authentication authentication) {
 
         // Проверяем, что пользователь действительно аутентифицирован
-        if (authentication == null || !(authentication.getPrincipal() instanceof Jwt)) {
+        if (authentication == null || !(authentication.getPrincipal() instanceof Jwt jwt)) {
             return ResponseEntity.status(401).build();
         }
-
-        // Получаем JWT-токен
-        Jwt jwt = (Jwt) authentication.getPrincipal();
 
         // Формируем простой объект с данными пользователя
         Map<String, Object> userInfo = new HashMap<>();
@@ -112,7 +107,7 @@ public class UserApiController {
 
         // Список ролей и прав пользователя
         userInfo.put("authorities", authentication.getAuthorities().stream()
-                .map(auth -> auth.getAuthority())
+                .map(GrantedAuthority::getAuthority)
                 .toList());
 
         return ResponseEntity.ok(userInfo);

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import team.mephi.adminbot.model.MailingTask;
 
 @Repository
+@SuppressWarnings("unused")
 public interface MailingTaskRepository extends JpaRepository<MailingTask, Long> {
 }
 

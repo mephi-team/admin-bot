@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import team.mephi.adminbot.model.StatsCache;
 
 @Repository
+@SuppressWarnings("unused")
 public interface StatsCacheRepository extends JpaRepository<StatsCache, StatsCache.StatsCacheId> {
 }
 

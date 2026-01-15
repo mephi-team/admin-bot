@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import team.mephi.adminbot.model.StoredFile;
 
 @Repository
+@SuppressWarnings("unused")
 public interface FileRepository extends JpaRepository<StoredFile, Long> {
 }
 

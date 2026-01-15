@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import team.mephi.adminbot.model.PdConsentLog;
 
 @Repository
+@SuppressWarnings("unused")
 public interface PdConsentLogRepository extends JpaRepository<PdConsentLog, Long> {
 }
 

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import team.mephi.adminbot.model.NotificationQueue;
 
 @Repository
+@SuppressWarnings("unused")
 public interface NotificationQueueRepository extends JpaRepository<NotificationQueue, Long> {
 }
 

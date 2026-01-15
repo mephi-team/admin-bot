@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
+@SuppressWarnings("unused")
 public class TutorWithCounts {
     private Long id;
     private String fullName;

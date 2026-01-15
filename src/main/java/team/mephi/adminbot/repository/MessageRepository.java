@@ -2,10 +2,13 @@ package team.mephi.adminbot.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 import team.mephi.adminbot.model.Message;
 
 import java.util.List;
 
+@Repository
+@SuppressWarnings("unused")
 public interface MessageRepository extends JpaRepository<Message, Long> {
     List<Message> findAllByDialogId(Long dialogId);
 

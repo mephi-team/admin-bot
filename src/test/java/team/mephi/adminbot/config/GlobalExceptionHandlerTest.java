@@ -27,7 +27,7 @@ class GlobalExceptionHandlerTest {
                 new AuthenticationCredentialsNotFoundException("no token");
 
         // Act
-        ResponseEntity<Map<String, Object>> response = handler.handleAuthenticationException(exception);
+        ResponseEntity<Map<String, Object>> response = handler.handleAuthenticationException();
 
         // Assert
         assertEquals(401, response.getStatusCode().value());
@@ -48,7 +48,7 @@ class GlobalExceptionHandlerTest {
         AccessDeniedException exception = new AccessDeniedException("denied");
 
         // Act
-        ResponseEntity<Map<String, Object>> response = handler.handleAccessDeniedException(exception);
+        ResponseEntity<Map<String, Object>> response = handler.handleAccessDeniedException();
 
         // Assert
         assertEquals(403, response.getStatusCode().value());

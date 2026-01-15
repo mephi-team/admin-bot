@@ -1,6 +1,6 @@
 package team.mephi.adminbot.init;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,59 +20,31 @@ import java.util.*;
 import static team.mephi.adminbot.vaadin.users.tabs.UserTabType.*;
 
 @Configuration
+@AllArgsConstructor
 public class DataInitializer {
-    private final Long DAY_SECONDS = 86400L;
-    private final Long HOUR_SECONDS = 3600L;
-    private final Long MINUTE_SECONDS = 3600L;
+    public final Long DAY_SECONDS = 86400L;
+    public final Long HOUR_SECONDS = 3600L;
+    public final Long MINUTE_SECONDS = 3600L;
 
-    @Autowired
     private RoleRepository roleRepository;
-
-    @Autowired
     private DirectionRepository directionRepository;
-
-    @Autowired
     private UserRepository userRepository;
-
-    @Autowired
     private ExpertRepository expertRepository;
-
-    @Autowired
     private PdConsentLogRepository pdConsentLogRepository;
-
-    @Autowired
     private DialogRepository dialogRepository;
-
-    @Autowired
     private UserQuestionRepository questionRepository;
-
-    @Autowired
     private UserAnswerRepository answerRepository;
-
-    @Autowired
     private MailingRepository mailingRepository;
-
-    @Autowired
     private MailTemplateRepository mailTemplateRepository;
-
-    @Autowired
     private TutorRepository tutorRepository;
-
-    @Autowired
     private CityService cityService;
-
-    @Autowired
     private CohortService cohortService;
-
-    @Autowired
     private RoleService roleService;
-
-    @Autowired
     private DirectionService directionService;
 
     @Bean
     public ApplicationRunner initTestData() {
-        return args -> {
+        return ignoredArgs -> {
             boolean hasDirections = directionRepository.count() > 0;
             boolean hasRoles = roleRepository.count() > 0;
             boolean hasUsers = userRepository.count() > 0;
@@ -223,7 +195,7 @@ public class DataInitializer {
     private void initQuestions() {
         Random random = new Random();
 
-        Role student = roleRepository.findByCode(STUDENT.name()).get();
+        Role student = roleRepository.findByCode(STUDENT.name()).orElseThrow();
         List<User> students = userRepository.findAllByRole(student.getCode());
 
         List<UserQuestion> questions = Arrays.asList(
@@ -252,7 +224,7 @@ public class DataInitializer {
     private void initAnswers() {
         Random random = new Random();
 
-        String expert = roleRepository.findByCode(LC_EXPERT.name()).get().getCode();
+        String expert = roleRepository.findByCode(LC_EXPERT.name()).orElseThrow().getCode();
         List<User> experts = userRepository.findAllByRole(expert);
 
         List<UserAnswer> answers = Arrays.asList(
@@ -414,7 +386,7 @@ public class DataInitializer {
         }
 
         if (!messages.isEmpty()) {
-            dialog.setLastMessageAt(messages.get(messages.size() - 1).getCreatedAt());
+            dialog.setLastMessageAt(messages.getLast().getCreatedAt());
         } else {
             dialog.setLastMessageAt(Instant.now());
         }

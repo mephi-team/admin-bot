@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Repository
+@SuppressWarnings("unused")
 public interface MailingRepository extends JpaRepository<Mailing, Long> {
     List<Mailing> findAllByOrderByCreatedAtDesc();
 

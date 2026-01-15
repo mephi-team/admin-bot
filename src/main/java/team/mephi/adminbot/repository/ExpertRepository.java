@@ -1,6 +1,7 @@
 package team.mephi.adminbot.repository;
 
 import jakarta.transaction.Transactional;
+import org.jspecify.annotations.NonNull;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -12,6 +13,7 @@ import team.mephi.adminbot.model.Expert;
 import java.util.List;
 
 @Repository
+@SuppressWarnings("unused")
 public interface ExpertRepository extends JpaRepository<Expert, Long> {
     @Query("SELECT e FROM Expert e JOIN fetch e.role LEFT JOIN FETCH e.directions LEFT JOIN FETCH e.tutorAssignments ta LEFT JOIN FETCH ta.tutor LEFT JOIN FETCH e.pdConsentLogs WHERE e.isActive AND e.role.code = :role AND (" +
             "LOWER(COALESCE(e.userName, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
@@ -40,6 +42,6 @@ public interface ExpertRepository extends JpaRepository<Expert, Long> {
     @Query("update Expert e set e.isActive = FUNCTION('NOT', e.isActive) WHERE e.id IN :ids")
     @Transactional
     @Modifying
-    void deleteAllById(@Param("ids") Iterable<? extends Long> ids);
+    void deleteAllById(@Param("ids") @NonNull Iterable<? extends Long> ids);
 }
 

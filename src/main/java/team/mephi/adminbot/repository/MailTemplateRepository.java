@@ -9,6 +9,7 @@ import team.mephi.adminbot.model.MailTemplate;
 import java.util.List;
 
 @Repository
+@SuppressWarnings("unused")
 public interface MailTemplateRepository extends JpaRepository<MailTemplate, Long> {
     @Query("SELECT t FROM MailTemplate t WHERE LOWER(COALESCE(t.name, '')) LIKE LOWER(CONCAT('%', :query, '%'))")
     List<MailTemplate> findAllByName(String query, Pageable pageable);

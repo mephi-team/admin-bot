@@ -32,7 +32,7 @@ public class ChartDataServiceImpl implements ChartDataService {
             switch (interval) {
                 case HOUR:
                     // всегда 24 метки от 00:00 до 23:00
-                    return generateHourLabels(24);
+                    return generateHourLabels();
                 case DAY: {
                     DateRange dr = extractDateRange(filterData);
                     if (dr != null) {
@@ -60,12 +60,12 @@ public class ChartDataServiceImpl implements ChartDataService {
     }
 
     // Генерация часов: последние `hours` часов до текущего часа (включительно)
-    private String[] generateHourLabels(int hours) {
+    private String[] generateHourLabels() {
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("HH:00");
         LocalDateTime now = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
-        String[] labels = new String[hours];
-        for (int i = 0; i < hours; i++) {
-            labels[i] = now.minusHours(hours - i).format(fmt);
+        String[] labels = new String[24];
+        for (int i = 0; i < 24; i++) {
+            labels[i] = now.minusHours(24 - i).format(fmt);
         }
         return labels;
     }
@@ -130,7 +130,6 @@ public class ChartDataServiceImpl implements ChartDataService {
             Method m = obj.getClass().getMethod(methodName);
             Object val = m.invoke(obj);
             return toLocalDate(val);
-        } catch (NoSuchMethodException ignored) {
         } catch (Exception ignored) {
         }
         return null;

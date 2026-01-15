@@ -7,6 +7,7 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
+@SuppressWarnings("unused")
 public class TemplateListDto {
     private Long id;
     private String name;

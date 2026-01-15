@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import team.mephi.adminbot.model.QuestionReassignLog;
 
 @Repository
+@SuppressWarnings("unused")
 public interface QuestionReassignLogRepository extends JpaRepository<QuestionReassignLog, Long> {
 }
 

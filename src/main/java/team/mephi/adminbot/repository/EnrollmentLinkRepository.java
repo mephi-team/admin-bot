@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import team.mephi.adminbot.model.EnrollmentLink;
 
 @Repository
+@SuppressWarnings("unused")
 public interface EnrollmentLinkRepository extends JpaRepository<EnrollmentLink, Long> {
 }
 

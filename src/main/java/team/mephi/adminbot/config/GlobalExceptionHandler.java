@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
             AuthenticationException.class,
             AuthenticationCredentialsNotFoundException.class
     })
-    public ResponseEntity<Map<String, Object>> handleAuthenticationException(Exception ex) {
+    public ResponseEntity<Map<String, Object>> handleAuthenticationException() {
 
         // Формируем тело ответа с описанием ошибки
         Map<String, Object> body = new HashMap<>();
@@ -62,7 +62,7 @@ public class GlobalExceptionHandler {
      * на который у него нет прав
      */
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<Map<String, Object>> handleAccessDeniedException(AccessDeniedException ex) {
+    public ResponseEntity<Map<String, Object>> handleAccessDeniedException() {
 
         // Формируем тело ответа с описанием ошибки
         Map<String, Object> body = new HashMap<>();

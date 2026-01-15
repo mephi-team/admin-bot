@@ -17,9 +17,7 @@ import java.util.Map;
  * Все методы этого контроллера доступны только пользователям
  * с ролью ROLE_LC_EXPERT.
  * <p>
- * Доступ ограничен с помощью аннотации:
- *
- * @PreAuthorize("hasRole('LC_EXPERT')")
+ * Доступ ограничен с помощью аннотации
  */
 @RestController
 @RequestMapping("/api/expert")

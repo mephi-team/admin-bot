@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+@SuppressWarnings("unused")
 public interface UserQuestionRepository extends JpaRepository<UserQuestion, Long> {
     @Query("SELECT q FROM UserQuestion q JOIN FETCH q.user LEFT JOIN FETCH q.direction LEFT JOIN FETCH q.answers WHERE LOWER(q.text) LIKE LOWER(CONCAT('%', :query, '%'))")
     List<UserQuestion> findAllByText(String query, Pageable pageable);

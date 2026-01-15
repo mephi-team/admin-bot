@@ -34,6 +34,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    @SuppressWarnings("unused")
     public List<RoleDto> getAllRoles(Pageable pageable, String query) {
         if (roles.size() < 2) init();
         return roles;

@@ -42,14 +42,11 @@ public class DialogWithLastMessageDto {
         this.lastMessageSenderType = lastMessageSenderType;
         this.lastMessageSenderName = lastMessageSenderName;
 
-        if (lastMessageAtRaw instanceof Timestamp) {
-            this.lastMessageAt = ((Timestamp) lastMessageAtRaw).toInstant();
-        } else if (lastMessageAtRaw instanceof LocalDateTime) {
-            this.lastMessageAt = ((LocalDateTime) lastMessageAtRaw).toInstant(ZoneOffset.UTC);
-        } else if (lastMessageAtRaw instanceof Instant) {
-            this.lastMessageAt = (Instant) lastMessageAtRaw;
-        } else {
-            this.lastMessageAt = null;
+        switch (lastMessageAtRaw) {
+            case Timestamp timestamp -> this.lastMessageAt = timestamp.toInstant();
+            case LocalDateTime localDateTime -> this.lastMessageAt = localDateTime.toInstant(ZoneOffset.UTC);
+            case Instant instant -> this.lastMessageAt = instant;
+            case null, default -> this.lastMessageAt = null;
         }
     }
 }

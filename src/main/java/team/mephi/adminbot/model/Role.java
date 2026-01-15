@@ -62,7 +62,7 @@ public class Role {
      * Загружается лениво (LAZY) по умолчанию.
      * Каскадное удаление отключено, так как роли являются справочными данными.
      */
-    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY, cascade = {})
+    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
     @Builder.Default
     @ToString.Exclude
     private Set<User> users = new HashSet<>();

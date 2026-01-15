@@ -23,13 +23,14 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
+    @SuppressWarnings("unused")
     public List<CityDto> getAllCities(Pageable pageable, String query) {
         return cities;
     }
 
     @Override
     public Optional<CityDto> getById(String id) {
-        return cities.stream().filter(c -> c.getId().equals(id)).findAny();
+        return cities.stream().filter(c -> id.equals(c.getId())).findAny();
     }
 
     @Override
