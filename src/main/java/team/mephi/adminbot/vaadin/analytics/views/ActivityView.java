@@ -15,11 +15,18 @@ import java.util.Objects;
  */
 public class ActivityView extends AbstractChartView<ActivityView.ActivityFilterData> {
 
+    /**
+     * Конструктор представления активности.
+     *
+     * @param presenter объект ChartPresenter, отвечающий за обработку данных фильтра и обновление графика.
+     */
     public ActivityView(ChartPresenter<ActivityFilterData> presenter) {
         super(ActivityFilterData.class);
 
+        // Создание формы для фильтрации активности.
         ActivityForm form = new ActivityForm();
 
+        // Привязка полей формы к данным фильтра.
         binder.forField(form.getType()).bind(ActivityFilterData::getType, ActivityFilterData::setType);
         binder.forField(form.getInterval()).bind(ActivityFilterData::getInterval, ActivityFilterData::setInterval);
         binder.forField(form.getPeriod()).bind(
@@ -31,15 +38,21 @@ public class ActivityView extends AbstractChartView<ActivityView.ActivityFilterD
                     }
                 }
         );
+
+        // Добавление слушателя изменений значений в форме.
         binder.addValueChangeListener(ignoredEvent -> {
             var s = new ActivityFilterData();
             binder.writeBeanIfValid(s);
             presenter.onUpdateFilter(s);
         });
 
+        // Инициализация представления с формой, презентером и начальными данными фильтра.
         initView(form, presenter, new ActivityFilterData());
     }
 
+    /**
+     * Вложенный класс, представляющий данные фильтра для активности.
+     */
     @Data
     public static class ActivityFilterData {
         private ActivityType type;

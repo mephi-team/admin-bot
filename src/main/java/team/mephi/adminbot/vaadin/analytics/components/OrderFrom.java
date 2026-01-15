@@ -65,6 +65,7 @@ public class OrderFrom extends FormLayout {
         addFormItem(statuses, getTranslation("page_analytics_form_activity_status_label"));
     }
 
+    // Изменяет режим выбора даты в зависимости от выбранного интервала.
     private void changeDatePicker(ActivityIntervals interval) {
         period.changeMode(interval == ActivityIntervals.HOUR ? DateRangePicker.Mode.DAY : DateRangePicker.Mode.INTERVAL);
     }

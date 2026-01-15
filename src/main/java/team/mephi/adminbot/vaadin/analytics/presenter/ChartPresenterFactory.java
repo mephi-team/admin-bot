@@ -16,6 +16,11 @@ public class ChartPresenterFactory {
         this.chartDataService = chartDataService;
     }
 
+    /**
+     * Создает новый презентер для графиков.
+     *
+     * @return новый экземпляр ChartActions
+     */
     public ChartActions<?> createPresenter() {
         return new ChartPresenter<>(new ChartDataProvider<ChartDataService>(chartDataService));
     }

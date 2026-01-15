@@ -16,11 +16,19 @@ import java.util.Objects;
  */
 public class PreordersView extends AbstractChartView<PreordersView.PreorderFilterData> {
 
+    /**
+     * Конструктор представления предзаказов.
+     *
+     * @param presenter     объект ChartPresenter, отвечающий за обработку данных фильтра и обновление графика.
+     * @param cohortService сервис для работы с когортами.
+     */
     public PreordersView(ChartPresenter<PreorderFilterData> presenter, CohortService cohortService) {
         super(PreorderFilterData.class);
 
+        // Создание формы для фильтрации предзаказов.
         PreorderForm form = new PreorderForm(cohortService);
 
+        // Привязка полей формы к данным фильтра.
         binder.forField(form.getCohort())
                 .withConverter(CohortDto::getId, cohort -> cohortService.getById(cohort).orElse(cohortService.getAllCohorts().getFirst()))
                 .bind(PreorderFilterData::getCohort, PreorderFilterData::setCohort);
@@ -33,15 +41,21 @@ public class PreordersView extends AbstractChartView<PreordersView.PreorderFilte
                         p.setEnd(v.getEndDate());
                     }
                 });
+
+        // Добавление слушателя изменений значений в форме.
         binder.addValueChangeListener(ignoredEvent -> {
             var s = new PreorderFilterData();
             binder.writeBeanIfValid(s);
             presenter.onUpdateFilter(s);
         });
 
+        // Инициализация представления с формой, презентером и начальными данными фильтра.
         initView(form, presenter, new PreorderFilterData());
     }
 
+    /**
+     * Вложенный класс, представляющий данные фильтра для предзаказов.
+     */
     @Data
     public static class PreorderFilterData {
         private String cohort;

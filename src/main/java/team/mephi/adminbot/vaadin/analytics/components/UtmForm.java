@@ -55,6 +55,7 @@ public class UtmForm extends FormLayout {
         add(tabSheet);
     }
 
+    // Изменяет режим выбора даты в зависимости от выбранного интервала.
     private void changeDatePicker(ActivityIntervals interval) {
         period.changeMode(interval == ActivityIntervals.HOUR ? DateRangePicker.Mode.DAY : DateRangePicker.Mode.INTERVAL);
     }

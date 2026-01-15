@@ -18,11 +18,19 @@ import java.util.Set;
  */
 public class OrdersView extends AbstractChartView<OrdersView.OrderFilterData> {
 
+    /**
+     * Конструктор представления заказов.
+     *
+     * @param presenter     объект ChartPresenter, отвечающий за обработку данных фильтра и обновление графика.
+     * @param cohortService сервис для работы с когортами.
+     */
     public OrdersView(ChartPresenter<OrderFilterData> presenter, CohortService cohortService) {
         super(OrderFilterData.class);
 
+        // Создание формы для фильтрации заказов.
         OrderFrom form = new OrderFrom(cohortService);
 
+        // Привязка полей формы к данным фильтра.
         binder.forField(form.getCohort())
                 .withConverter(CohortDto::getId, cohort -> cohortService.getById(cohort).orElse(cohortService.getAllCohorts().getFirst()))
                 .bind(OrderFilterData::getCohort, OrderFilterData::setCohort);
@@ -39,15 +47,21 @@ public class OrdersView extends AbstractChartView<OrdersView.OrderFilterData> {
                 .bind(OrderFilterData::getDetailed, OrderFilterData::setDetailed);
         binder.forField(form.getStatuses())
                 .bind(OrderFilterData::getStatuses, OrderFilterData::setStatuses);
+
+        // Добавление слушателя изменений значений в форме.
         binder.addValueChangeListener(ignoredEvent -> {
             var s = new OrderFilterData();
             binder.writeBeanIfValid(s);
             presenter.onUpdateFilter(s);
         });
 
+        // Инициализация представления с формой, презентером и начальными данными фильтра.
         initView(form, presenter, new OrderFilterData());
     }
 
+    /**
+     * Вложенный класс, представляющий данные фильтра для заказов.
+     */
     @Data
     public static class OrderFilterData {
         private String cohort;

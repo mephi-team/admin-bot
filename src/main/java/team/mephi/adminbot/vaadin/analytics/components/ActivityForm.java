@@ -45,6 +45,7 @@ public class ActivityForm extends FormLayout {
         addFormItem(interval, getTranslation("page_analytics_form_activity_interval_label"));
     }
 
+    // Изменяет режим выбора даты в зависимости от выбранного интервала.
     private void changeDatePicker(ActivityIntervals interval) {
         period.changeMode(interval == ActivityIntervals.HOUR ? DateRangePicker.Mode.DAY : DateRangePicker.Mode.INTERVAL);
     }

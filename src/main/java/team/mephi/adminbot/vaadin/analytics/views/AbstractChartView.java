@@ -61,12 +61,18 @@ public abstract class AbstractChartView<F> extends VerticalLayout {
         presenter.onUpdateFilter(initialFilter);
     }
 
+    /**
+     * Обновление данных графика.
+     */
     protected void updateChart(BarData data) {
         BarOptions options = new BarOptions();
         options.getPlugins().setLegend(new LegendOptions().setAlign("start").setPosition("bottom"));
         chart.showChart(new BarChart(data, options).toJson());
     }
 
+    /**
+     * @return биндер формы фильтра
+     */
     protected BeanValidationBinder<F> getBinder() {
         return binder;
     }

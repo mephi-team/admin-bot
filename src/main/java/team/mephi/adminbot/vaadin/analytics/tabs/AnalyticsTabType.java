@@ -11,6 +11,10 @@ public enum AnalyticsTabType {
     ORDERS,
     UTM;
 
+    /**
+     * Ключ для локализации метки вкладки.
+     * Формируется на основе имени вкладки в нижнем регистре.
+     */
     @Getter
     private final String tabLabelKey = "page_analytics_tab_" + name().toLowerCase() + "_label";
 }

@@ -47,6 +47,7 @@ public class PreorderForm extends FormLayout {
         addFormItem(cohort, getTranslation("page_analytics_form_activity_cohort_label"));
     }
 
+    // Изменяет режим выбора даты в зависимости от выбранного интервала.
     private void changeDatePicker(ActivityIntervals interval) {
         period.changeMode(interval == ActivityIntervals.HOUR ? DateRangePicker.Mode.DAY : DateRangePicker.Mode.INTERVAL);
     }
