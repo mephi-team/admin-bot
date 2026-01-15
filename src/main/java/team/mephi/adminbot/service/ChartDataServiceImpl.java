@@ -5,12 +5,12 @@ import org.springframework.stereotype.Service;
 import software.xdev.chartjs.model.data.BarData;
 import software.xdev.chartjs.model.dataset.BarDataset;
 import team.mephi.adminbot.vaadin.analytics.components.ActivityIntervals;
+import team.mephi.adminbot.vaadin.analytics.components.OrderStatus;
 import team.mephi.adminbot.vaadin.analytics.views.ActivityView;
 import team.mephi.adminbot.vaadin.analytics.views.OrdersView;
 import team.mephi.adminbot.vaadin.analytics.views.PreordersView;
 import team.mephi.adminbot.vaadin.analytics.views.UtmView;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -19,7 +19,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 @Service
@@ -28,10 +27,9 @@ public class ChartDataServiceImpl implements ChartDataService {
     private final java.util.Random random = new java.util.Random();
     private static final Locale RU = new Locale("ru");
 
-    private String[] labelsForInterval(String interval, Object filterData) {
+    private String[] labelsForInterval(ActivityIntervals interval, Object filterData) {
         try {
-            ActivityIntervals ai = ActivityIntervals.valueOf(interval);
-            switch (ai) {
+            switch (interval) {
                 case HOUR:
                     // всегда 24 метки от 00:00 до 23:00
                     return generateHourLabels(24);
@@ -195,25 +193,27 @@ public class ChartDataServiceImpl implements ChartDataService {
 
     @Override
     public BarData forPreorders(PreordersView.PreorderFilterData data) {
+        List<String> list = List.of(DEFAULT_BLUE, "#d3e1f9", "#ccc", "#f2d391", "#91f2b1", "#9199f2", "#f291f2");
+        Iterator<String> it = Stream.generate(() -> list).flatMap(List::stream).iterator();
+
         String[] labels = labelsForInterval(data.getInterval(), data);
         return createBarData(labels,
-                new DatasetSpec("Подано всего заявок", DEFAULT_BLUE),
-                new DatasetSpec("Актуальные заявки", "#d3e1f9"),
-                new DatasetSpec("Отозванные заявки", null));
+                new DatasetSpec(I18NProvider.translate(OrderStatus.ALL.getTranslationKey()), it.next()),
+                new DatasetSpec(I18NProvider.translate(OrderStatus.ACTIVE.getTranslationKey()), it.next()),
+                new DatasetSpec(I18NProvider.translate(OrderStatus.REVOKED.getTranslationKey()), it.next()));
     }
 
     @Override
     public BarData forOrders(OrdersView.OrderFilterData data) {
-        List<String> list = List.of(DEFAULT_BLUE, "#d3e1f9", "#f29191", "#f2d391", "#91f2b1", "#9199f2", "#f291f2");
+        List<String> list = List.of(DEFAULT_BLUE, "#d3e1f9", "#ccc", "#f2d391", "#91f2b1", "#9199f2", "#f291f2");
         Iterator<String> it = Stream.generate(() -> list).flatMap(List::stream).iterator();
 
         String[] labels = labelsForInterval(data.getInterval(), data);
-        if (Objects.nonNull(data.getDetailed()) && data.getDetailed()) {
-            return createBarData(labels, data.getStatuses().stream().map(
-                    s->new DatasetSpec(I18NProvider.translate(s.getTranslationKey()), it.next())).toArray(DatasetSpec[]::new));
-        } else {
-            return createBarData(labels, new DatasetSpec("Заказы", DEFAULT_BLUE));
-        }
+
+        return createBarData(labels, data.getStatuses()
+                .stream()
+                .map(s->new DatasetSpec(I18NProvider.translate(s.getTranslationKey()), it.next()))
+                .toArray(DatasetSpec[]::new));
     }
 
     @Override

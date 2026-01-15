@@ -20,9 +20,9 @@ public class UtmView extends AbstractChartView<UtmView.UtmFilterData> {
 
         // Биндинг полей — остаётся в дочернем классе, т.к. формы разные
         binder.forField(form.getCohort())
-                .withConverter(CohortDto::getName, cohort -> cohortService.getByName(cohort).orElse(cohortService.getAllCohorts().getFirst()))
+                .withConverter(CohortDto::getId, cohort -> cohortService.getById(cohort).orElse(cohortService.getAllCohorts().getFirst()))
                 .bind(UtmFilterData::getCohort, UtmFilterData::setCohort);
-        binder.forField(form.getInterval()).bind(s -> Objects.isNull(s.interval) ? null : ActivityIntervals.valueOf(s.interval), (s, v) -> s.setInterval(v.toString()));
+        binder.forField(form.getInterval()).bind(UtmFilterData::getInterval, UtmFilterData::setInterval);
         binder.forField(form.getPeriod()).bind(
                 p -> new DateRangePicker.LocalDateRange(p.start, p.end),
                 (p, v) -> {
@@ -45,6 +45,6 @@ public class UtmView extends AbstractChartView<UtmView.UtmFilterData> {
         private String cohort;
         private LocalDate start;
         private LocalDate end;
-        private String interval;
+        private ActivityIntervals interval;
     }
 }

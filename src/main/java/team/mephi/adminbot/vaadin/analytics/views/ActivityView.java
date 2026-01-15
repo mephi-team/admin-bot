@@ -19,10 +19,7 @@ public class ActivityView extends AbstractChartView<ActivityView.ActivityFilterD
 
         // Биндинг полей — остаётся в дочернем классе, т.к. формы разные
         binder.forField(form.getType()).bind(ActivityFilterData::getType, ActivityFilterData::setType);
-        binder.forField(form.getInterval()).bind(
-                s -> Objects.isNull(s.interval) ? null : ActivityIntervals.valueOf(s.interval),
-                (s, v) -> s.setInterval(v.toString())
-        );
+        binder.forField(form.getInterval()).bind(ActivityFilterData::getInterval, ActivityFilterData::setInterval);
         binder.forField(form.getPeriod()).bind(
                 p -> new DateRangePicker.LocalDateRange(p.start, p.end),
                 (p, v) -> {
@@ -46,8 +43,8 @@ public class ActivityView extends AbstractChartView<ActivityView.ActivityFilterD
     @Data
     public static class ActivityFilterData {
         private ActivityType type;
-        private LocalDate start;
-        private LocalDate end;
-        private String interval;
+        private LocalDate start = LocalDate.now();
+        private LocalDate end = LocalDate.now().plusWeeks(1);
+        private ActivityIntervals interval;
     }
 }

@@ -20,9 +20,9 @@ public class PreordersView extends AbstractChartView<PreordersView.PreorderFilte
 
         // Биндинг полей — остаётся в дочернем классе, т.к. формы разные
         binder.forField(form.getCohort())
-                .withConverter(CohortDto::getName, cohort -> cohortService.getByName(cohort).orElse(cohortService.getAllCohorts().getFirst()))
+                .withConverter(CohortDto::getId, cohort -> cohortService.getById(cohort).orElse(cohortService.getAllCohorts().getFirst()))
                 .bind(PreorderFilterData::getCohort, PreorderFilterData::setCohort);
-        binder.forField(form.getInterval()).bind(s -> Objects.isNull(s.interval) ? null : ActivityIntervals.valueOf(s.interval), (s, v) -> s.setInterval(v.toString()));
+        binder.forField(form.getInterval()).bind(PreorderFilterData::getInterval, PreorderFilterData::setInterval);
         binder.forField(form.getPeriod()).bind(
                 p -> new DateRangePicker.LocalDateRange(p.start, p.end),
                 (p, v) -> {
@@ -43,8 +43,8 @@ public class PreordersView extends AbstractChartView<PreordersView.PreorderFilte
     @Data
     public static class PreorderFilterData {
         private String cohort;
-        private LocalDate start;
-        private LocalDate end;
-        private String interval;
+        private LocalDate start = LocalDate.now();
+        private LocalDate end = LocalDate.now().plusWeeks(1);
+        private ActivityIntervals interval;
     }
 }
