@@ -23,6 +23,6 @@ WORKDIR /opt/app
 COPY --from=runtime /mini-runtime /mini-runtime
 COPY --from=builder /build/target/admin-bot-1.0-SNAPSHOT.jar app.jar
 EXPOSE 8080
-ENV LANG ru_RU.UTF-8
-ENV LC_ALL ru_RU.UTF-8
+ENV LANG=ru_RU.UTF-8
+ENV LC_ALL=ru_RU.UTF-8
 CMD ["/mini-runtime/bin/java", "-jar", "app.jar"]
