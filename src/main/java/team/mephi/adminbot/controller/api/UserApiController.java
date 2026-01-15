@@ -1,6 +1,6 @@
 package team.mephi.adminbot.controller.api;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,10 +24,10 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api/user")
+@AllArgsConstructor
 public class UserApiController {
 
     // Репозиторий для работы с пользователями в базе данных
-    @Autowired
     private UserRepository userRepository;
 
     /**

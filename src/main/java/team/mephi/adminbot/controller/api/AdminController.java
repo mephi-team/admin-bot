@@ -1,6 +1,6 @@
 package team.mephi.adminbot.controller.api;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -22,10 +22,10 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/admin")
 @PreAuthorize("hasRole('ADMIN')")
+@AllArgsConstructor
 public class AdminController {
 
     // Репозиторий для работы с пользователями в базе данных
-    @Autowired
     private UserRepository userRepository;
 
     /**
