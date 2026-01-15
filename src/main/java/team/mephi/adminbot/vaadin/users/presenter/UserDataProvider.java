@@ -1,7 +1,7 @@
 package team.mephi.adminbot.vaadin.users.presenter;
 
 import team.mephi.adminbot.dto.SimpleUser;
-import team.mephi.adminbot.vaadin.CRUDDataProvider;
+import team.mephi.adminbot.vaadin.core.CRUDDataProvider;
 
 /**
  * Провайдер данных для работы с репозиторием пользователей.

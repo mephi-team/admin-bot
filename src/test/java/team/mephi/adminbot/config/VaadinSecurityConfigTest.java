@@ -1,4 +1,4 @@
-package team.mephi.adminbot.vaadin;
+package team.mephi.adminbot.config;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

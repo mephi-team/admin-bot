@@ -1,7 +1,7 @@
 package team.mephi.adminbot.vaadin.users.presenter;
 
 import team.mephi.adminbot.dto.SimpleTutor;
-import team.mephi.adminbot.vaadin.CRUDPresenter;
+import team.mephi.adminbot.vaadin.core.CRUDPresenter;
 import team.mephi.adminbot.vaadin.service.DialogService;
 import team.mephi.adminbot.vaadin.service.DialogType;
 import team.mephi.adminbot.vaadin.service.NotificationService;

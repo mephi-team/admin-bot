@@ -1,4 +1,4 @@
-package team.mephi.adminbot.vaadin;
+package team.mephi.adminbot.vaadin.core;
 
 /**
  * Интерфейс для компонентов, которые предоставляют провайдер данных типа T.

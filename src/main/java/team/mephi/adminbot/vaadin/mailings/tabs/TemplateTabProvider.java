@@ -4,8 +4,8 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import team.mephi.adminbot.dto.SimpleTemplate;
-import team.mephi.adminbot.vaadin.CRUDActions;
-import team.mephi.adminbot.vaadin.CRUDPresenter;
+import team.mephi.adminbot.vaadin.core.CRUDActions;
+import team.mephi.adminbot.vaadin.core.CRUDPresenter;
 import team.mephi.adminbot.vaadin.mailings.views.TemplateView;
 
 import static team.mephi.adminbot.vaadin.mailings.tabs.MailingTabType.TEMPLATES;

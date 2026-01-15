@@ -1,7 +1,7 @@
 package team.mephi.adminbot.vaadin.mailings.actions;
 
 import team.mephi.adminbot.dto.SimpleMailing;
-import team.mephi.adminbot.vaadin.CRUDActions;
+import team.mephi.adminbot.vaadin.core.CRUDActions;
 import team.mephi.adminbot.vaadin.service.DialogType;
 
 /**

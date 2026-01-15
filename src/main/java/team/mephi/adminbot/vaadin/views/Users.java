@@ -17,7 +17,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import jakarta.annotation.security.RolesAllowed;
 import team.mephi.adminbot.service.UserService;
-import team.mephi.adminbot.vaadin.CRUDActions;
+import team.mephi.adminbot.vaadin.core.CRUDActions;
 import team.mephi.adminbot.vaadin.components.UserCountBadge;
 import team.mephi.adminbot.vaadin.components.buttons.PrimaryButton;
 import team.mephi.adminbot.vaadin.components.buttons.SecondaryButton;

@@ -1,7 +1,7 @@
 package team.mephi.adminbot.vaadin.users.tabs;
 
-import team.mephi.adminbot.vaadin.CRUDActions;
-import team.mephi.adminbot.vaadin.TabProvider;
+import team.mephi.adminbot.vaadin.core.CRUDActions;
+import team.mephi.adminbot.vaadin.core.TabProvider;
 
 /**
  * Провайдер вкладки для пользователей.

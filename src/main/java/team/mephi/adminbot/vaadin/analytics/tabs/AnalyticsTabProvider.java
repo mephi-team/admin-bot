@@ -1,6 +1,6 @@
 package team.mephi.adminbot.vaadin.analytics.tabs;
 
-import team.mephi.adminbot.vaadin.TabProvider;
+import team.mephi.adminbot.vaadin.core.TabProvider;
 import team.mephi.adminbot.vaadin.analytics.presenter.ChartActions;
 
 /**

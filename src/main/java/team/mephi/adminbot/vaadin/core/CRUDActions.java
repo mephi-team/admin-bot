@@ -1,4 +1,4 @@
-package team.mephi.adminbot.vaadin;
+package team.mephi.adminbot.vaadin.core;
 
 import team.mephi.adminbot.vaadin.service.DialogType;
 

@@ -1,4 +1,4 @@
-package team.mephi.adminbot.vaadin;
+package team.mephi.adminbot.vaadin.core;
 
 import com.vaadin.flow.component.icon.VaadinIcon;
 import team.mephi.adminbot.vaadin.service.DialogService;

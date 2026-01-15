@@ -8,7 +8,7 @@ import org.springframework.data.jpa.domain.JpaSort;
 import team.mephi.adminbot.dto.SimpleMailing;
 import team.mephi.adminbot.model.enums.MailingStatus;
 import team.mephi.adminbot.service.MailingService;
-import team.mephi.adminbot.vaadin.CRUDDataProvider;
+import team.mephi.adminbot.vaadin.core.CRUDDataProvider;
 
 import java.util.List;
 import java.util.Optional;

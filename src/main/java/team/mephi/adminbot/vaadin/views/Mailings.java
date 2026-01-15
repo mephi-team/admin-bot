@@ -11,7 +11,7 @@ import com.vaadin.flow.component.tabs.TabSheet;
 import com.vaadin.flow.component.tabs.TabSheetVariant;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
-import team.mephi.adminbot.vaadin.CRUDActions;
+import team.mephi.adminbot.vaadin.core.CRUDActions;
 import team.mephi.adminbot.vaadin.components.UserCountBadge;
 import team.mephi.adminbot.vaadin.components.buttons.PrimaryButton;
 import team.mephi.adminbot.vaadin.components.layout.DialogsLayout;

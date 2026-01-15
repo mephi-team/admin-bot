@@ -1,4 +1,4 @@
-package team.mephi.adminbot.vaadin;
+package team.mephi.adminbot.config;
 
 import com.vaadin.flow.spring.security.VaadinAwareSecurityContextHolderStrategyConfiguration;
 import com.vaadin.flow.spring.security.VaadinSecurityConfigurer;

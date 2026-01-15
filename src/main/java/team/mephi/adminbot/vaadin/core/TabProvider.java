@@ -1,4 +1,4 @@
-package team.mephi.adminbot.vaadin;
+package team.mephi.adminbot.vaadin.core;
 
 import com.vaadin.flow.component.Component;
 

@@ -2,8 +2,8 @@ package team.mephi.adminbot.vaadin.mailings.presenter;
 
 import com.vaadin.flow.component.icon.VaadinIcon;
 import team.mephi.adminbot.dto.SimpleMailing;
-import team.mephi.adminbot.vaadin.CRUDDataProvider;
-import team.mephi.adminbot.vaadin.CRUDPresenter;
+import team.mephi.adminbot.vaadin.core.CRUDDataProvider;
+import team.mephi.adminbot.vaadin.core.CRUDPresenter;
 import team.mephi.adminbot.vaadin.mailings.actions.MailingActions;
 import team.mephi.adminbot.vaadin.service.DialogService;
 import team.mephi.adminbot.vaadin.service.DialogType;
