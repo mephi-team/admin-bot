@@ -1,7 +1,7 @@
 FROM eclipse-temurin:25-alpine-3.21 AS runtime
 RUN jlink \
     --output /mini-runtime \
-    --add-modules java.base,java.desktop,java.instrument,java.management,java.logging,java.naming,java.security.jgss,jdk.management,java.sql,jdk.unsupported,jdk.zipfs \
+    --add-modules java.base,java.desktop,java.instrument,java.management,java.logging,java.naming,java.security.jgss,jdk.management,java.sql,jdk.unsupported,jdk.zipfs,jdk.localedata \
     --strip-debug \
     --compress=2 \
     --no-header-files \
