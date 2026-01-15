@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 @Service
 public class ChartDataServiceImpl implements ChartDataService {
     private static final String DEFAULT_BLUE = "#2168df";
-    private static final Locale RU = new Locale("ru");
+    private static final Locale RU = Locale.of("ru");
     private final java.util.Random random = new java.util.Random();
 
     private String[] labelsForInterval(ActivityIntervals interval, Object filterData) {
@@ -188,7 +188,7 @@ public class ChartDataServiceImpl implements ChartDataService {
     @Override
     public BarData forActivity(ActivityView.ActivityFilterData data) {
         String[] labels = labelsForInterval(data.getInterval(), data);
-        return createBarData(labels, new DatasetSpec("Активность", DEFAULT_BLUE));
+        return createBarData(labels, new DatasetSpec(I18NProvider.translate("page_analytics_form_activity_activity_label"), DEFAULT_BLUE));
     }
 
     @Override
