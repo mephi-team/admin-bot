@@ -20,6 +20,10 @@ public class OrderFrom extends FormLayout {
     private final DateRangePicker period;
     @Getter
     private final RadioButtonGroup<ActivityIntervals> interval;
+    @Getter
+    private final Checkbox detailed;
+    @Getter
+    private final CheckboxGroup<OrderStatus> statuses;
 
     public OrderFrom(CohortService cohortService) {
         setAutoResponsive(true);
@@ -28,7 +32,8 @@ public class OrderFrom extends FormLayout {
 
         cohort = new ComboBox<>();
         cohort.setItemsPageable(cohortService::getAllCohorts);
-        cohort.setItemLabelGenerator(CohortDto::getName);
+        cohort.setItemLabelGenerator(CohortDto::getDisplayName);
+        cohort.setValue(cohortService.getDefaultCohort());
         addFormItem(cohort, getTranslation("page_analytics_form_activity_cohort_label"));
 
         period = new DateRangePicker();
@@ -47,15 +52,16 @@ public class OrderFrom extends FormLayout {
         });
         addFormItem(interval, getTranslation("page_analytics_form_activity_interval_label"));
 
-        Checkbox checkbox = new Checkbox();
-        checkbox.setLabel(getTranslation("page_analytics_form_activity_direction_label"));
-        add(checkbox);
+        detailed = new Checkbox();
+        detailed.setLabel(getTranslation("page_analytics_form_activity_direction_label"));
+        add(detailed);
 
-        CheckboxGroup<String> checkboxGroup = new CheckboxGroup<>();
-        checkboxGroup.setItems("Все заявки", "Актуальные заявки", "Отозванные заявки");
-        checkboxGroup.select("Все заявки", "Актуальные заявки", "Отозванные заявки");
-        checkboxGroup.addThemeVariants(CheckboxGroupVariant.LUMO_VERTICAL);
-        addFormItem(checkboxGroup, getTranslation("page_analytics_form_activity_status_label"));
+        statuses = new CheckboxGroup<>();
+        statuses.setItems(OrderStatus.values());
+        statuses.setItemLabelGenerator(s -> getTranslation(s.getTranslationKey()));
+        statuses.select(OrderStatus.values()); // отмечаем все по умолчанию
+        statuses.addThemeVariants(CheckboxGroupVariant.LUMO_VERTICAL);
+        addFormItem(statuses, getTranslation("page_analytics_form_activity_status_label"));
     }
 
     private void changeDatePicker(ActivityIntervals interval) {

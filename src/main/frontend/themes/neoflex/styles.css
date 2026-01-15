@@ -1,8 +1,9 @@
-:root{
+:root {
     --lumo-primary-color: #2653ae;
     --lumo-primary-text-color: #2653ae;
     --lumo-required-field-indicator: '\002A';
 }
+
 html, body, #outlet {
     overflow: hidden;
 }
@@ -34,6 +35,7 @@ vaadin-side-nav-item::part(link) {
     --lumo-space-s: 12px;
     --_child-indent: 10px;
 }
+
 vaadin-side-nav-item::part(content) {
     --lumo-border-radius-m: 16px;
 }
@@ -199,7 +201,7 @@ vaadin-tooltip-overlay::part(overlay) {
     padding: 8px 12px;
 }
 
-vaadin-message-input{
+vaadin-message-input {
     display: flex;
     flex-direction: column;
     align-items: flex-end;

@@ -1,40 +1,30 @@
 package team.mephi.adminbot.vaadin.analytics.views;
 
-import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.data.binder.BeanValidationBinder;
-import com.vaadin.flow.data.provider.DataChangeEvent;
 import lombok.Data;
-import software.xdev.chartjs.model.charts.BarChart;
-import software.xdev.chartjs.model.data.BarData;
-import software.xdev.chartjs.model.options.BarOptions;
-import software.xdev.chartjs.model.options.LegendOptions;
-import software.xdev.vaadin.chartjs.ChartContainer;
 import team.mephi.adminbot.dto.CohortDto;
 import team.mephi.adminbot.service.CohortService;
 import team.mephi.adminbot.vaadin.analytics.components.ActivityIntervals;
 import team.mephi.adminbot.vaadin.analytics.components.OrderFrom;
+import team.mephi.adminbot.vaadin.analytics.components.OrderStatus;
 import team.mephi.adminbot.vaadin.analytics.presenter.ChartPresenter;
-import team.mephi.adminbot.vaadin.components.buttons.SecondaryButton;
 import team.mephi.adminbot.vaadin.components.fields.DateRangePicker;
 
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.Set;
 
-public class OrdersView extends VerticalLayout {
-    private final BeanValidationBinder<OrderFilterData> binder = new BeanValidationBinder<>(OrderFilterData.class);
-
-    private final ChartContainer chart = new ChartContainer();
+public class OrdersView extends AbstractChartView<OrdersView.OrderFilterData> {
 
     public OrdersView(ChartPresenter<OrderFilterData> presenter, CohortService cohortService) {
-        setPadding(false);
+        super(OrderFilterData.class);
 
         OrderFrom form = new OrderFrom(cohortService);
+
+        // Биндинг полей — остаётся в дочернем классе, т.к. формы разные
         binder.forField(form.getCohort())
-                .withConverter(CohortDto::getName, cohort -> cohortService.getByName(cohort).orElse(cohortService.getAllCohorts().getFirst()))
+                .withConverter(CohortDto::getId, cohort -> cohortService.getById(cohort).orElse(cohortService.getAllCohorts().getFirst()))
                 .bind(OrderFilterData::getCohort, OrderFilterData::setCohort);
-        binder.forField(form.getInterval()).bind(s -> Objects.isNull(s.interval) ? null : ActivityIntervals.valueOf(s.interval), (s, v) -> s.setInterval(v.toString()));
+        binder.forField(form.getInterval()).bind(OrderFilterData::getInterval, OrderFilterData::setInterval);
         binder.forField(form.getPeriod()).bind(
                 p -> new DateRangePicker.LocalDateRange(p.start, p.end),
                 (p, v) -> {
@@ -43,48 +33,26 @@ public class OrdersView extends VerticalLayout {
                         p.setEnd(v.getEndDate());
                     }
                 });
+        binder.forField(form.getDetailed())
+                .bind(OrderFilterData::getDetailed, OrderFilterData::setDetailed);
+        binder.forField(form.getStatuses())
+                .bind(OrderFilterData::getStatuses, OrderFilterData::setStatuses);
         binder.addValueChangeListener(e -> {
             var s = new OrderFilterData();
             binder.writeBeanIfValid(s);
             presenter.onUpdateFilter(s);
         });
 
-        presenter.getDataProvider().addDataProviderListener(event -> {
-            if (event instanceof DataChangeEvent.DataRefreshEvent) {
-                var data = ((DataChangeEvent.DataRefreshEvent<BarData>) event).getItem();
-                updateChart(data);
-            }
-        });
-
-        VerticalLayout column = new VerticalLayout();
-        column.setPadding(false);
-        column.setWidth("640px");
-        column.add(form);
-
-        HorizontalLayout content = new HorizontalLayout();
-        content.setWidthFull();
-        content.add(chart, column);
-
-        add(content);
-
-        var buttonGroup = new HorizontalLayout(new SecondaryButton(getTranslation("page_analytics_form_activity_download_png_action"), VaadinIcon.DOWNLOAD_ALT.create()), new SecondaryButton(getTranslation("page_analytics_form_activity_download_excel_action"), VaadinIcon.DOWNLOAD_ALT.create()));
-        add(buttonGroup);
-
-        presenter.onUpdateFilter(new OrderFilterData());
-    }
-
-    private void updateChart(BarData data) {
-        BarOptions options = new BarOptions();
-        options.getPlugins().setLegend(new LegendOptions().setAlign("start").setPosition("bottom"));
-
-        chart.showChart(new BarChart(data, options).toJson());
+        initView(form, presenter, new OrderFilterData());
     }
 
     @Data
     public static class OrderFilterData {
         private String cohort;
-        private LocalDate start;
-        private LocalDate end;
-        private String interval;
+        private LocalDate start = LocalDate.now();
+        private LocalDate end = LocalDate.now().plusWeeks(1);
+        private ActivityIntervals interval;
+        private Boolean detailed;
+        private Set<OrderStatus> statuses = Set.of(OrderStatus.values());
     }
 }

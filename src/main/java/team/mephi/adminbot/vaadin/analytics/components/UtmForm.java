@@ -12,7 +12,7 @@ import team.mephi.adminbot.vaadin.components.fields.DateRangePicker;
 
 import java.time.LocalDate;
 
-public class UtmForm extends FormLayout  {
+public class UtmForm extends FormLayout {
     @Getter
     private final ComboBox<CohortDto> cohort;
     @Getter
@@ -27,7 +27,8 @@ public class UtmForm extends FormLayout  {
 
         cohort = new ComboBox<>();
         cohort.setItemsPageable(cohortService::getAllCohorts);
-        cohort.setItemLabelGenerator(CohortDto::getName);
+        cohort.setItemLabelGenerator(CohortDto::getDisplayName);
+        cohort.setValue(cohortService.getDefaultCohort());
         addFormItem(cohort, getTranslation("page_analytics_form_activity_cohort_label"));
 
         period = new DateRangePicker();
@@ -48,7 +49,7 @@ public class UtmForm extends FormLayout  {
 
         TabSheet tabSheet = new TabSheet();
         tabSheet.addThemeVariants(TabSheetVariant.LUMO_TABS_MINIMAL);
-        tabSheet.add(getTranslation("page_analytics_form_activity_tabs_source_label"),new UtmFilterSource());
+        tabSheet.add(getTranslation("page_analytics_form_activity_tabs_source_label"), new UtmFilterSource());
         tabSheet.add(getTranslation("page_analytics_form_activity_tabs_delivery_label"), new UtmFilterDelivery());
         add(tabSheet);
     }
