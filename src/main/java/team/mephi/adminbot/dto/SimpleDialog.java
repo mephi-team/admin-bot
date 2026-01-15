@@ -3,6 +3,9 @@ package team.mephi.adminbot.dto;
 import lombok.Builder;
 import lombok.Data;
 
+/**
+ * Объект передачи данных для простого диалога.
+ */
 @Data
 @Builder
 public class SimpleDialog {

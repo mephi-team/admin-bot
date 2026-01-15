@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 
+/**
+ * Объект передачи данных для простого шаблона.
+ */
 @Data
 @Builder
 @NoArgsConstructor

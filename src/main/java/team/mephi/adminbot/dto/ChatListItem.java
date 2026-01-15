@@ -2,6 +2,9 @@ package team.mephi.adminbot.dto;
 
 import lombok.Getter;
 
+/**
+ * Элемент списка чата, который может быть либо заголовком (дата), либо сообщением.
+ */
 public class ChatListItem {
     @Getter
     private final boolean isHeader;

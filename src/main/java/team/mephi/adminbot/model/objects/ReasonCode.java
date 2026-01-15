@@ -5,6 +5,9 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * Класс ReasonCode представляет собой объект, содержащий список пользователей.
+ */
 @Data
 @Builder
 public class ReasonCode {

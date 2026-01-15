@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+/**
+ * Объект передачи данных для пользователя.
+ */
 @Data
 @Builder
 @AllArgsConstructor

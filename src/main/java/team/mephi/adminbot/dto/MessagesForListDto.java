@@ -5,6 +5,9 @@ import lombok.Data;
 
 import java.time.Instant;
 
+/**
+ * Объект передачи данных для сообщения в списке.
+ */
 @Data
 @AllArgsConstructor
 public class MessagesForListDto {

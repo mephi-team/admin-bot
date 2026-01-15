@@ -4,6 +4,9 @@ import com.vaadin.flow.i18n.I18NProvider;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+/**
+ * Объект передачи данных для когорты.
+ */
 @Data
 @AllArgsConstructor
 public class CohortDto {

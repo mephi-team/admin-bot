@@ -3,6 +3,9 @@ package team.mephi.adminbot.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+/**
+ * Объект передачи данных для репетитора с количеством студентов и направлений.
+ */
 @Data
 @AllArgsConstructor
 @SuppressWarnings("unused")

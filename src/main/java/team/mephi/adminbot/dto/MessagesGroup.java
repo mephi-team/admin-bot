@@ -5,6 +5,9 @@ import team.mephi.adminbot.model.Message;
 
 import java.util.List;
 
+/**
+ * Объект передачи данных для группы сообщений по дате.
+ */
 @Data
 @SuppressWarnings("unused")
 public class MessagesGroup {

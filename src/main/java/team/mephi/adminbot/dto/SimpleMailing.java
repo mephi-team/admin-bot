@@ -9,6 +9,9 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Объект передачи данных для простой рассылки.
+ */
 @Data
 @Builder
 @NoArgsConstructor

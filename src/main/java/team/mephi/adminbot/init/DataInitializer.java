@@ -19,6 +19,11 @@ import java.util.*;
 
 import static team.mephi.adminbot.vaadin.users.tabs.UserTabType.*;
 
+/*
+  Класс для инициализации тестовых данных в базе данных при запуске приложения.
+  Создаёт роли, направления, пользователей, экспертов, логи согласий на ПД,
+  вопросы и ответы пользователей, рассылки, шаблоны писем и диалоги.
+*/
 @Configuration
 @AllArgsConstructor
 public class DataInitializer {

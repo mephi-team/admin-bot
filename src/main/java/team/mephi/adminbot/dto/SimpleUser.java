@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Объект передачи данных для простого пользователя.
+ */
 @Data
 @Builder
 @NoArgsConstructor

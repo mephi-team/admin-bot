@@ -5,6 +5,9 @@ import lombok.Data;
 
 import java.nio.file.Path;
 
+/**
+ * Объект передачи данных для простого файла.
+ */
 @Data
 @Builder
 public class SimpleFile {

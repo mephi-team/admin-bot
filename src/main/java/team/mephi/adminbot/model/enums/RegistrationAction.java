@@ -1,5 +1,8 @@
 package team.mephi.adminbot.model.enums;
 
+/**
+ * Действия, связанные с регистрацией.
+ */
 public enum RegistrationAction {
     REGISTER,
     UNREGISTER,

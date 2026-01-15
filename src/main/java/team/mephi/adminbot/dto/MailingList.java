@@ -5,6 +5,9 @@ import lombok.Data;
 
 import java.time.Instant;
 
+/**
+ * Объект передачи данных для рассылки.
+ */
 @Data
 @Builder
 @SuppressWarnings("unused")

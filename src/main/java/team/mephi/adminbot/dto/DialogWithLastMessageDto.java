@@ -7,6 +7,9 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
+/**
+ * Объект передачи данных для диалога с информацией о последнем сообщении.
+ */
 @Data
 public class DialogWithLastMessageDto {
     private Long dialogId;

@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * Объект передачи данных для простого куратора.
+ */
 @Data
 @Builder
 @NoArgsConstructor
