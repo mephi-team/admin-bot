@@ -81,6 +81,10 @@ public abstract class AbstractGridView<T> extends VerticalLayout {
         });
 
         add(new SearchFragment(searchField, new Span(settingsBtn, downloadBtn)), gsa, grid);
+
+        grid.getDataProvider().addDataProviderListener(e -> {
+            grid.deselectAll();
+        });
     }
 
     // подкласс указывает реальный класс элементов грида

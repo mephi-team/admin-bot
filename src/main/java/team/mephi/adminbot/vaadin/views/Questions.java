@@ -3,13 +3,9 @@ package team.mephi.adminbot.vaadin.views;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.grid.GridMultiSelectionModel;
-import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
 import com.vaadin.flow.router.QueryParameters;
 import com.vaadin.flow.router.Route;
@@ -18,12 +14,9 @@ import team.mephi.adminbot.dto.SimpleQuestion;
 import team.mephi.adminbot.service.AuthService;
 import team.mephi.adminbot.vaadin.components.ButtonGroup;
 import team.mephi.adminbot.vaadin.components.GridSelectActions;
-import team.mephi.adminbot.vaadin.components.GridSettingsPopover;
-import team.mephi.adminbot.vaadin.components.SearchFragment;
-import team.mephi.adminbot.vaadin.components.buttons.IconButton;
-import team.mephi.adminbot.vaadin.components.buttons.SecondaryButton;
-import team.mephi.adminbot.vaadin.components.buttons.TextButton;
-import team.mephi.adminbot.vaadin.components.fields.SearchField;
+import team.mephi.adminbot.vaadin.components.buttons.*;
+import team.mephi.adminbot.vaadin.components.grid.AbstractGridView;
+import team.mephi.adminbot.vaadin.components.grid.GridViewConfig;
 import team.mephi.adminbot.vaadin.components.layout.DialogsLayout;
 import team.mephi.adminbot.vaadin.questions.dataproviders.QuestionDataProvider;
 import team.mephi.adminbot.vaadin.questions.dataproviders.QuestionDataProviderFactory;
@@ -40,17 +33,18 @@ import java.util.Set;
 
 @Route(value = "/questions", layout = DialogsLayout.class)
 @PermitAll
-public class Questions extends VerticalLayout {
+public class Questions extends AbstractGridView<SimpleQuestion> {
     private final DialogService<?> dialogService;
     private final NotificationService notificationService;
+    private final AuthService authService;
 
     private final QuestionDataProvider provider;
-    private List<Long> selectedIds;
 
     public Questions(QuestionDataProviderFactory providerFactory, DialogService<?> dialogService, NotificationService notificationService, AuthService authService) {
         this.provider = providerFactory.createDataProvider();
         this.dialogService = dialogService;
         this.notificationService = notificationService;
+        this.authService = authService;
 
         add(new H1(getTranslation("page_question_title")));
 
@@ -62,56 +56,19 @@ public class Questions extends VerticalLayout {
                 }) : new Span()
         );
 
-        setSizeFull();
-        getElement().getStyle().set("padding-inline", "53px 120px");
-        LocalDateTimeRenderer<SimpleQuestion> dateRenderer = new LocalDateTimeRenderer<>(
-                d -> Objects.isNull(d.getDate()) ? null : d.getDate().atZone(ZoneOffset.of("+03:00")).toLocalDateTime(),
-                () -> DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
+        getElement().getStyle().set("padding", "16px 120px 16px 53px");
 
-        Grid<SimpleQuestion> grid = new Grid<>(SimpleQuestion.class, false);
-        grid.addColumn(SimpleQuestion::getText).setHeader(getTranslation("grid_question_header_question_label")).setSortable(true).setResizable(true).setFrozen(true)
-                .setAutoWidth(true).setFlexGrow(0).setKey("text");
-        grid.addColumn(dateRenderer).setHeader(getTranslation("grid_question_header_date_label")).setSortable(true).setResizable(true).setKey("createdAt");
-        grid.addColumn(SimpleQuestion::getAuthor).setHeader(getTranslation("grid_question_header_author_label")).setSortable(true).setResizable(true).setKey("user");
-        grid.addColumn(SimpleQuestion::getRole).setHeader(getTranslation("grid_question_header_role_label")).setSortable(true).setResizable(true).setKey("role");
-        grid.addColumn(SimpleQuestion::getDirection).setHeader(getTranslation("grid_question_header_direction_label")).setSortable(true).setResizable(true).setKey("direction");
-        grid.addColumn(SimpleQuestion::getAnswer).setHeader(getTranslation("grid_question_header_answer_label")).setTooltipGenerator(SimpleQuestion::getAnswer).setResizable(true).setKey("answers");
+        var config = GridViewConfig.<SimpleQuestion>builder()
+                .gsa(gsa)
+                .dataProvider(provider.getDataProvider())
+                .filterSetter(s -> provider.getFilterableProvider().setFilter(s))
+                .searchPlaceholder(getTranslation("grid_question_search_placeholder"))
+                .emptyLabel(getTranslation("grid_question_empty_label"))
+                .visibleColumns(Set.of())
+                .hiddenColumns(Set.of("actions"))
+                .build();
 
-        grid.addComponentColumn(item -> {
-            Component responseButton = item.getAnswer().isEmpty() ? new TextButton(getTranslation("grid_question_action_answer_label"), e -> onAnswer(item)) : new Span();
-            Button chatButton = new IconButton(VaadinIcon.CHAT.create(), e -> UI.getCurrent().navigate(Dialogs.class, QueryParameters.of("userId", "" + item.getAuthorId())));
-            Button deleteButton = new IconButton(VaadinIcon.TRASH.create(), e -> onDelete(List.of(item.getId())));
-            if (authService.isAdmin())
-                return new ButtonGroup(responseButton, chatButton, deleteButton);
-            return new ButtonGroup(responseButton);
-        }).setHeader(getTranslation("grid_header_actions_label")).setWidth("210px").setFlexGrow(0).setKey("actions");
-
-        grid.setDataProvider(provider.getDataProvider());
-        GridMultiSelectionModel<?> selectionModel = (GridMultiSelectionModel<?>) grid.setSelectionMode(Grid.SelectionMode.MULTI);
-        selectionModel.setSelectionColumnFrozen(true);
-//        grid.setMultiSort(true, Grid.MultiSortPriority.APPEND);
-        grid.addSelectionListener(selection -> {
-            selectedIds = selection.getAllSelectedItems().stream().map(SimpleQuestion::getId).toList();
-            gsa.setCount(selectedIds.size());
-        });
-        grid.setEmptyStateText(getTranslation("grid_question_empty_label"));
-        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
-
-        provider.getFilterableProvider().addDataProviderListener(e -> {
-            grid.deselectAll();
-        });
-
-        var searchField = new SearchField(getTranslation("grid_question_search_placeholder"));
-        searchField.addValueChangeListener(e -> provider.getFilterableProvider().setFilter(e.getValue()));
-
-        var settingsBtn = new IconButton(VaadinIcon.COG_O.create());
-        var settingsPopover = new GridSettingsPopover(grid, Set.of(), Set.of("actions"));
-        settingsPopover.setTarget(settingsBtn);
-
-        var downloadBtn = new IconButton(VaadinIcon.DOWNLOAD_ALT.create(), e -> {
-        });
-
-        add(new SearchFragment(searchField, new Span(settingsBtn, downloadBtn)), gsa, grid);
+        setup(config);
     }
 
     private void onAnswer(SimpleQuestion question) {
@@ -130,5 +87,42 @@ public class Questions extends VerticalLayout {
             provider.getDataProvider().refreshAll();
             notificationService.showNotification(NotificationType.DELETE, selectedIds.size() > 1 ? DialogType.DELETE_QUESTION_ALL.getNotificationKey() : DialogType.DELETE_QUESTION.getNotificationKey(), selectedIds.size());
         });
+    }
+
+    @Override
+    protected Class<SimpleQuestion> getItemClass() {
+        return SimpleQuestion.class;
+    }
+
+    @Override
+    protected void configureColumns(com.vaadin.flow.component.grid.Grid<SimpleQuestion> grid) {
+        LocalDateTimeRenderer<SimpleQuestion> dateRenderer = new LocalDateTimeRenderer<>(
+                d -> Objects.isNull(d.getDate()) ? null : d.getDate().atZone(ZoneOffset.of("+03:00")).toLocalDateTime(),
+                () -> DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
+
+        grid.addColumn(SimpleQuestion::getText).setHeader(getTranslation("grid_question_header_question_label")).setSortable(true).setResizable(true).setFrozen(true)
+                .setAutoWidth(true).setFlexGrow(0).setKey("text");
+        grid.addColumn(dateRenderer).setHeader(getTranslation("grid_question_header_date_label")).setSortable(true).setResizable(true).setKey("createdAt");
+        grid.addColumn(SimpleQuestion::getAuthor).setHeader(getTranslation("grid_question_header_author_label")).setSortable(true).setResizable(true).setKey("user");
+        grid.addColumn(SimpleQuestion::getRole).setHeader(getTranslation("grid_question_header_role_label")).setSortable(true).setResizable(true).setKey("role");
+        grid.addColumn(SimpleQuestion::getDirection).setHeader(getTranslation("grid_question_header_direction_label")).setSortable(true).setResizable(true).setKey("direction");
+        grid.addColumn(SimpleQuestion::getAnswer).setHeader(getTranslation("grid_question_header_answer_label")).setTooltipGenerator(SimpleQuestion::getAnswer).setResizable(true).setKey("answers");
+    }
+
+    @Override
+    protected void configureActionColumn(com.vaadin.flow.component.grid.Grid<SimpleQuestion> grid) {
+        grid.addComponentColumn(item -> {
+            Component responseButton = item.getAnswer().isEmpty() ? new TextButton(getTranslation("grid_question_action_answer_label"), e -> onAnswer(item)) : new Span();
+            Button chatButton = new IconButton(VaadinIcon.CHAT.create(), e -> UI.getCurrent().navigate(Dialogs.class, QueryParameters.of("userId", "" + item.getAuthorId())));
+            Button deleteButton = new IconButton(VaadinIcon.TRASH.create(), e -> onDelete(List.of(item.getId())));
+            if (authService.isAdmin())
+                return new ButtonGroup(responseButton, chatButton, deleteButton);
+            return new ButtonGroup(responseButton);
+        }).setHeader(getTranslation("grid_header_actions_label")).setWidth("210px").setFlexGrow(0).setKey("actions");
+    }
+
+    @Override
+    protected Long extractId(SimpleQuestion item) {
+        return item.getId();
     }
 }
