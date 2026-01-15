@@ -3,8 +3,7 @@ package team.mephi.adminbot.model;
 import org.junit.jupiter.api.Test;
 import team.mephi.adminbot.model.enums.MessageStatus;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Юнит-тесты для Message.

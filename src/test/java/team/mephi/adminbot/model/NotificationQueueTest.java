@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import team.mephi.adminbot.model.enums.NotificationStatus;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Юнит-тесты для NotificationQueue.
