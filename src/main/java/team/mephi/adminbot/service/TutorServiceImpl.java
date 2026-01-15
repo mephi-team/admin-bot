@@ -22,6 +22,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Сервис для управления репетиторами.
+ */
 @Service
 public class TutorServiceImpl implements TutorService {
 

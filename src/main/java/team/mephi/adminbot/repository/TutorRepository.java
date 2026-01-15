@@ -13,6 +13,9 @@ import team.mephi.adminbot.model.Tutor;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Репозиторий для управления сущностями Tutor.
+ */
 @Repository
 @SuppressWarnings("unused")
 public interface TutorRepository extends JpaRepository<Tutor, Long> {

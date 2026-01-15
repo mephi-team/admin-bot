@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * Реализация сервиса для управления ролями.
+ */
 @Service
 public class RoleServiceImpl implements RoleService {
 

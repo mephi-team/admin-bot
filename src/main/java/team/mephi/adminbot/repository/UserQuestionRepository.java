@@ -10,6 +10,9 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Репозиторий для управления сущностями UserQuestion.
+ */
 @Repository
 @SuppressWarnings("unused")
 public interface UserQuestionRepository extends JpaRepository<UserQuestion, Long> {

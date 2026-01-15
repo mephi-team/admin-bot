@@ -9,6 +9,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+/**
+ * Сервис для управления пользователями.
+ */
 public interface UserService {
     List<UserDto> getAllUsers();
 

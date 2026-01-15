@@ -7,6 +7,9 @@ import team.mephi.adminbot.dto.CohortDto;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Реализация сервиса для управления когорты.
+ */
 @Service
 public class CohortServiceImpl implements CohortService {
 

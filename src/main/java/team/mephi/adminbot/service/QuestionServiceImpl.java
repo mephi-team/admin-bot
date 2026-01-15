@@ -16,6 +16,9 @@ import java.util.Comparator;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+/**
+ * Реализация сервиса для управления вопросами.
+ */
 @Service
 public class QuestionServiceImpl implements QuestionService {
     private final AuthService authService;

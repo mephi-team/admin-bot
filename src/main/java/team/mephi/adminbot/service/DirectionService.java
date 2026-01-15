@@ -6,6 +6,9 @@ import team.mephi.adminbot.dto.SimpleDirection;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Сервис для управления направлениями.
+ */
 public interface DirectionService {
     List<SimpleDirection> getAllDirections();
 

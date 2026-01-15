@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * Реализация сервиса для управления направлениями.
+ */
 @Service
 public class DirectionServiceImpl implements DirectionService {
 

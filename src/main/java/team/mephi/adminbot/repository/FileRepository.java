@@ -4,6 +4,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import team.mephi.adminbot.model.StoredFile;
 
+/**
+ * Репозиторий для работы с сущностью StoredFile.
+ */
 @Repository
 @SuppressWarnings("unused")
 public interface FileRepository extends JpaRepository<StoredFile, Long> {

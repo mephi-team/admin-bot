@@ -15,6 +15,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Сервис для управления файлами.
+ */
 @Service
 public class FileServiceImpl implements FileService {
 

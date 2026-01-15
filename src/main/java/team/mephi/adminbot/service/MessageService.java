@@ -6,6 +6,9 @@ import team.mephi.adminbot.dto.SimpleDialog;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Сервис для управления сообщениями и диалогами.
+ */
 public interface MessageService {
     List<ChatListItem> findAllByDialogId(Long dialogId);
 

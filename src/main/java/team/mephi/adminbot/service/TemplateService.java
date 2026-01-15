@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+/**
+ * Сервис для управления шаблонами.
+ */
 public interface TemplateService {
     List<SimpleTemplate> findAll();
 

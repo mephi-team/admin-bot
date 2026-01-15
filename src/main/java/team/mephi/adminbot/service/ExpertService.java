@@ -5,6 +5,9 @@ import team.mephi.adminbot.dto.SimpleUser;
 
 import java.util.stream.Stream;
 
+/**
+ * Сервис для управления экспертами.
+ */
 public interface ExpertService {
     SimpleUser save(SimpleUser dto);
 

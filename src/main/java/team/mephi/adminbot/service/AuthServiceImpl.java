@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 
+/**
+ * Реализация сервиса получения информации о пользователе.
+ */
 @Service
 public class AuthServiceImpl implements AuthService {
 

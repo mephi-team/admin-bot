@@ -6,6 +6,9 @@ import team.mephi.adminbot.dto.CohortDto;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Сервис для управления когорты.
+ */
 public interface CohortService {
     List<CohortDto> getAllCohorts();
 

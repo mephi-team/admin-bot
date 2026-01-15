@@ -10,6 +10,9 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Репозиторий для работы с сущностью Dialog.
+ */
 @Repository
 @SuppressWarnings("unused")
 public interface DialogRepository extends JpaRepository<Dialog, Long> {

@@ -6,6 +6,9 @@ import team.mephi.adminbot.dto.RoleDto;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Сервис для управления ролями.
+ */
 public interface RoleService {
     List<RoleDto> getAllRoles();
 

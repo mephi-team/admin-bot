@@ -6,6 +6,9 @@ import team.mephi.adminbot.model.Direction;
 
 import java.util.Optional;
 
+/**
+ * Репозиторий для работы с сущностью Direction.
+ */
 @Repository
 @SuppressWarnings("unused")
 public interface DirectionRepository extends JpaRepository<Direction, Long> {

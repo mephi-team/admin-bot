@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+/**
+ * Сервис для управления шаблонами.
+ */
 @Service
 public class TemplateServiceImpl implements TemplateService {
 

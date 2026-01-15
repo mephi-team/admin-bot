@@ -7,6 +7,9 @@ import team.mephi.adminbot.dto.CityDto;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Реализация сервиса для управления городами.
+ */
 @Service
 public class CityServiceImpl implements CityService {
 

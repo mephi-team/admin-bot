@@ -18,6 +18,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Реализация сервиса для управления рассылками.
+ */
 @Service
 public class MailingServiceImpl implements MailingService {
     private final AuthService authService;

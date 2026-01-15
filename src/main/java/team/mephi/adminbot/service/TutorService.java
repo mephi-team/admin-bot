@@ -6,6 +6,9 @@ import team.mephi.adminbot.dto.SimpleTutor;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+/**
+ * Сервис для управления репетиторами.
+ */
 public interface TutorService {
     SimpleTutor save(SimpleTutor dto);
 

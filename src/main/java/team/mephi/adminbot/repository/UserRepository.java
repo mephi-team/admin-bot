@@ -17,6 +17,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Репозиторий для управления сущностями User.
+ */
 @Repository
 @SuppressWarnings("unused")
 public interface UserRepository extends JpaRepository<User, Long> {

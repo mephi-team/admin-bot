@@ -4,6 +4,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import team.mephi.adminbot.model.QuestionReassignLog;
 
+/**
+ * Репозиторий для управления сущностями QuestionReassignLog.
+ */
 @Repository
 @SuppressWarnings("unused")
 public interface QuestionReassignLogRepository extends JpaRepository<QuestionReassignLog, Long> {

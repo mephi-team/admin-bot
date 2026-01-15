@@ -12,6 +12,9 @@ import team.mephi.adminbot.model.Expert;
 
 import java.util.List;
 
+/**
+ * Репозиторий для работы с сущностью Expert.
+ */
 @Repository
 @SuppressWarnings("unused")
 public interface ExpertRepository extends JpaRepository<Expert, Long> {

@@ -6,6 +6,9 @@ import team.mephi.adminbot.dto.SimpleQuestion;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+/**
+ * Сервис для управления вопросами.
+ */
 public interface QuestionService {
     SimpleQuestion saveAnswer(SimpleQuestion question);
 

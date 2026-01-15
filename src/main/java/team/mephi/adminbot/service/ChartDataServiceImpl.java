@@ -21,6 +21,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Stream;
 
+/**
+ * Реализация сервиса для получения данных диаграмм по различным фильтрам.
+ */
 @Service
 public class ChartDataServiceImpl implements ChartDataService {
     private static final String DEFAULT_BLUE = "#2168df";

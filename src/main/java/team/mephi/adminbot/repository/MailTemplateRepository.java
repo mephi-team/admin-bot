@@ -8,6 +8,9 @@ import team.mephi.adminbot.model.MailTemplate;
 
 import java.util.List;
 
+/**
+ * Репозиторий для работы с сущностью MailTemplate.
+ */
 @Repository
 @SuppressWarnings("unused")
 public interface MailTemplateRepository extends JpaRepository<MailTemplate, Long> {

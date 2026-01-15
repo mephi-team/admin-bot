@@ -19,6 +19,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Сервис для управления сообщениями и диалогами.
+ */
 @Service
 public class MessageServiceImpl implements MessageService {
     private static final LocalDateTime today = LocalDateTime.now();

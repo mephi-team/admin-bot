@@ -5,6 +5,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import team.mephi.adminbot.model.UserAnswer;
 
+/**
+ * Репозиторий для управления сущностями UserAnswer.
+ */
 @Repository
 @SuppressWarnings("unused")
 public interface UserAnswerRepository extends JpaRepository<UserAnswer, Long> {

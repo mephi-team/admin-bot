@@ -14,6 +14,9 @@ import java.time.Instant;
 import java.util.*;
 import java.util.stream.Stream;
 
+/**
+ * Сервис для управления пользователями.
+ */
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;

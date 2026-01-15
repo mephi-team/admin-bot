@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Репозиторий для работы с сущностью Mailing.
+ */
 @Repository
 @SuppressWarnings("unused")
 public interface MailingRepository extends JpaRepository<Mailing, Long> {

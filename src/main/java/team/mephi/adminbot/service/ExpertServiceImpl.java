@@ -15,6 +15,9 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Реализация сервиса для управления экспертами.
+ */
 @Service
 public class ExpertServiceImpl implements ExpertService {
 

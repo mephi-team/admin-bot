@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+/**
+ * Сервис для управления рассылками.
+ */
 public interface MailingService {
     SimpleMailing save(SimpleMailing mailing);
 

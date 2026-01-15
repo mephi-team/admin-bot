@@ -7,6 +7,9 @@ import team.mephi.adminbot.model.Message;
 
 import java.util.List;
 
+/**
+ * Репозиторий для управления сущностями Message.
+ */
 @Repository
 @SuppressWarnings("unused")
 public interface MessageRepository extends JpaRepository<Message, Long> {
