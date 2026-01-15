@@ -31,11 +31,7 @@ public class GridSettingsPopover extends Popover {
             var label = Arrays.stream(item.replaceAll("[^a-zA-Z\\s]", " ").replaceAll("(?<=\\p{Lower})(?=\\p{Upper})", " ").toLowerCase().split("\\s+")).filter(s -> !s.isEmpty()).collect(Collectors.joining("_"));
             return getTranslation("grid_settings_" + label + "_label");
         });
-        group.addValueChangeListener((e) -> {
-            columns.forEach((key) -> {
-                grid.getColumnByKey(key).setVisible(e.getValue().contains(key));
-            });
-        });
+        group.addValueChangeListener((e) -> columns.forEach((key) -> grid.getColumnByKey(key).setVisible(e.getValue().contains(key))));
 
         Set<String> defaultColumns = new HashSet<>(columns);//Set.of("firstName", "lastName", "email", "profession");
         defaultColumns.removeAll(disabled);

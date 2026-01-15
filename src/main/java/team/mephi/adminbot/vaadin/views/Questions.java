@@ -14,7 +14,9 @@ import team.mephi.adminbot.dto.SimpleQuestion;
 import team.mephi.adminbot.service.AuthService;
 import team.mephi.adminbot.vaadin.components.ButtonGroup;
 import team.mephi.adminbot.vaadin.components.GridSelectActions;
-import team.mephi.adminbot.vaadin.components.buttons.*;
+import team.mephi.adminbot.vaadin.components.buttons.IconButton;
+import team.mephi.adminbot.vaadin.components.buttons.SecondaryButton;
+import team.mephi.adminbot.vaadin.components.buttons.TextButton;
 import team.mephi.adminbot.vaadin.components.grid.AbstractGridView;
 import team.mephi.adminbot.vaadin.components.grid.GridViewConfig;
 import team.mephi.adminbot.vaadin.components.layout.DialogsLayout;
@@ -49,7 +51,7 @@ public class Questions extends AbstractGridView<SimpleQuestion> {
         add(new H1(getTranslation("page_question_title")));
 
         var gsa = new GridSelectActions(getTranslation("grid_question_actions_label"),
-                authService.isAdmin() ? new SecondaryButton(getTranslation("grid_question_actions_delete_label"), VaadinIcon.TRASH.create(), e -> {
+                authService.isAdmin() ? new SecondaryButton(getTranslation("grid_question_actions_delete_label"), VaadinIcon.TRASH.create(), ignoredEvent -> {
                     if (!selectedIds.isEmpty()) {
                         onDelete(selectedIds);
                     }
@@ -112,9 +114,9 @@ public class Questions extends AbstractGridView<SimpleQuestion> {
     @Override
     protected void configureActionColumn(com.vaadin.flow.component.grid.Grid<SimpleQuestion> grid) {
         grid.addComponentColumn(item -> {
-            Component responseButton = item.getAnswer().isEmpty() ? new TextButton(getTranslation("grid_question_action_answer_label"), e -> onAnswer(item)) : new Span();
-            Button chatButton = new IconButton(VaadinIcon.CHAT.create(), e -> UI.getCurrent().navigate(Dialogs.class, QueryParameters.of("userId", "" + item.getAuthorId())));
-            Button deleteButton = new IconButton(VaadinIcon.TRASH.create(), e -> onDelete(List.of(item.getId())));
+            Component responseButton = item.getAnswer().isEmpty() ? new TextButton(getTranslation("grid_question_action_answer_label"), ignoredEvent -> onAnswer(item)) : new Span();
+            Button chatButton = new IconButton(VaadinIcon.CHAT.create(), ignoredEvent -> UI.getCurrent().navigate(Dialogs.class, QueryParameters.of("userId", "" + item.getAuthorId())));
+            Button deleteButton = new IconButton(VaadinIcon.TRASH.create(), ignoredEvent -> onDelete(List.of(item.getId())));
             if (authService.isAdmin())
                 return new ButtonGroup(responseButton, chatButton, deleteButton);
             return new ButtonGroup(responseButton);

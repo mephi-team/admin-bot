@@ -18,7 +18,6 @@ public class PreordersView extends AbstractChartView<PreordersView.PreorderFilte
 
         PreorderForm form = new PreorderForm(cohortService);
 
-        // Биндинг полей — остаётся в дочернем классе, т.к. формы разные
         binder.forField(form.getCohort())
                 .withConverter(CohortDto::getId, cohort -> cohortService.getById(cohort).orElse(cohortService.getAllCohorts().getFirst()))
                 .bind(PreorderFilterData::getCohort, PreorderFilterData::setCohort);
@@ -31,7 +30,7 @@ public class PreordersView extends AbstractChartView<PreordersView.PreorderFilte
                         p.setEnd(v.getEndDate());
                     }
                 });
-        binder.addValueChangeListener(e -> {
+        binder.addValueChangeListener(ignoredEvent -> {
             var s = new PreorderFilterData();
             binder.writeBeanIfValid(s);
             presenter.onUpdateFilter(s);

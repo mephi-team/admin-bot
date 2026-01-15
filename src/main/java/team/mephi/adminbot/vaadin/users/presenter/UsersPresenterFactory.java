@@ -41,6 +41,7 @@ public class UsersPresenterFactory {
         };
     }
 
+    @SuppressWarnings("unchecked")
     public CRUDPresenter<?> createPresenter(UserTabType role) {
         CRUDDataProvider<?> dataProvider = createDataProvider(role);
 

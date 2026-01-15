@@ -24,7 +24,7 @@ public class UserMenu extends HorizontalLayout {
         Span userName = new Span(Objects.isNull(fullName) ? email : fullName);
         userName.addClassNames(LumoUtility.Whitespace.NOWRAP);
 
-        Button logout = new IconButton(VaadinIcon.SIGN_OUT.create(), event -> authService.logout());
+        Button logout = new IconButton(VaadinIcon.SIGN_OUT.create(), ignoredEvent -> authService.logout());
 
         add(new IconButton(VaadinIcon.COG_O.create()), new Span("|"), userName, logout);
     }

@@ -10,6 +10,7 @@ import team.mephi.adminbot.vaadin.components.UserMenu;
 
 @Layout
 @PermitAll
+@SuppressWarnings("unused")
 public class MainLayout extends AppLayout {
     public MainLayout(AuthService authService) {
         addToNavbar(new Logo("Neoflex"), new TopMenu(authService), new UserMenu(authService));

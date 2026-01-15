@@ -24,6 +24,7 @@ public class TemplateTabProvider implements MailingTabProvider {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Component createTabContent(CRUDActions<?> actions) {
         return new TemplateView((CRUDPresenter<SimpleTemplate>) actions);
     }

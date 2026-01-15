@@ -28,10 +28,10 @@ public class MailingEditorDialog extends Dialog implements DialogWithTitle {
     private final Tab tab2;
     private final Button next = new PrimaryButton(getTranslation("next_button"), VaadinIcon.ARROW_RIGHT.create());
     private final Button prev = new SecondaryButton(getTranslation("prev_button"), VaadinIcon.ARROW_LEFT.create());
+    private final Binder.Binding<SimpleMailing, String> binding1;
     private SerializableConsumer<SimpleMailing> onSaveCallback;
     private SimpleMailing mailing;
-    private final Button saveButton = new PrimaryButton(getTranslation("save_button"), e -> onSave());
-    private Binder.Binding<SimpleMailing, String> binding1;
+    private final Button saveButton = new PrimaryButton(getTranslation("save_button"), ignoredEvent -> onSave());
 
     public MailingEditorDialog(UserService userService, RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService, TemplateService templateService) {
         var form1 = new MailingForm(userService, roleService, cohortService, directionService, cityService);
@@ -97,13 +97,9 @@ public class MailingEditorDialog extends Dialog implements DialogWithTitle {
         next.setIconAfterText(true);
         next.addClassNames(LumoUtility.Margin.Right.AUTO);
         next.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        next.addClickListener(s -> {
-            tabSheet.setSelectedTab(tab2);
-        });
+        next.addClickListener(ignoredEvent -> tabSheet.setSelectedTab(tab2));
         prev.addClassNames(LumoUtility.Margin.Right.AUTO);
-        prev.addClickListener(s -> {
-            tabSheet.setSelectedTab(tab1);
-        });
+        prev.addClickListener(ignoredEvent -> tabSheet.setSelectedTab(tab1));
         prev.setVisible(false);
         getFooter().add(
                 next,
@@ -115,7 +111,7 @@ public class MailingEditorDialog extends Dialog implements DialogWithTitle {
             saveButton.setEnabled(e.getBinder().isValid());
         });
 
-        tabSheet.addSelectedChangeListener(l -> {
+        tabSheet.addSelectedChangeListener(ignoredEvent -> {
             if (tab1.isSelected()) {
                 saveButton.setVisible(false);
                 prev.setVisible(false);
@@ -131,6 +127,7 @@ public class MailingEditorDialog extends Dialog implements DialogWithTitle {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void showDialog(Object mailing, SerializableConsumer<?> callback) {
         this.mailing = Objects.isNull(mailing)
                 ? SimpleMailing.builder()

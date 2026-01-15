@@ -33,7 +33,7 @@ public class DialogListComponent extends VerticalLayout implements AfterNavigati
 
     ComponentRenderer<RouterLink, DialogWithLastMessageDto> cardRenderer = new ComponentRenderer<>(item -> {
         RouterLink link = new RouterLink();
-        link.setHighlightCondition((a, e) -> false);
+        link.setHighlightCondition((ignoredLink, ignoredEvent) -> false);
         link.addClassNames(LumoUtility.TextColor.BODY, LumoUtility.Overflow.HIDDEN);
         link.getElement().getStyle().set("text-decoration", "none");
 
@@ -120,9 +120,7 @@ public class DialogListComponent extends VerticalLayout implements AfterNavigati
         list.setDataProvider(provider.getFilterableProvider());
         list.setRenderer(cardRenderer);
 
-        searchField.addValueChangeListener(e -> {
-            provider.getFilterableProvider().setFilter(e.getValue());
-        });
+        searchField.addValueChangeListener(e -> provider.getFilterableProvider().setFilter(e.getValue()));
 
         add(searchField, list);
     }

@@ -29,8 +29,9 @@ public class PreordersTabProvider implements AnalyticsTabProvider {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Component createTabContent(ChartActions<?> actions) {
-        return new PreordersView((ChartPresenter) actions, cohortService);
+        return new PreordersView((ChartPresenter<PreordersView.PreorderFilterData>) actions, cohortService);
     }
 
     @Override

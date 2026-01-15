@@ -21,7 +21,7 @@ public class UserEditorDialog extends Dialog implements DialogWithTitle {
     private final BeanValidationBinder<SimpleUser> binder = new BeanValidationBinder<>(SimpleUser.class);
     private SerializableConsumer<SimpleUser> onSaveCallback;
     private SimpleUser user;
-    private final Button saveButton = new PrimaryButton(getTranslation("save_button"), e -> onSave());
+    private final Button saveButton = new PrimaryButton(getTranslation("save_button"), ignoredEvent -> onSave());
 
     public UserEditorDialog(RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService, TutorService tutorService) {
         var form = new UserForm(roleService, cohortService, directionService, cityService, tutorService);
@@ -42,7 +42,7 @@ public class UserEditorDialog extends Dialog implements DialogWithTitle {
         binder.forField(form.getTgId()).asRequired().bind(SimpleUser::getTgId, SimpleUser::setTgId);
         binder.forField(form.getPhoneNumber())
                 .withConverter(s -> (s != null && !s.isEmpty()) ? s : null, s -> (s != null && !s.isEmpty()) ? s : "")
-                .withValidator((value, context) -> {
+                .withValidator((value, ignoredContext) -> {
                     if (form.getPhoneNumber().getParent().map(p -> !p.isVisible()).orElse(false)) {
                         return ValidationResult.ok();
                     }
@@ -59,7 +59,7 @@ public class UserEditorDialog extends Dialog implements DialogWithTitle {
                 .asRequired()
                 .bind(SimpleUser::getDirection, SimpleUser::setDirection);
         binder.forField(form.getCities())
-                .withValidator((value, context) -> {
+                .withValidator((value, ignoredContext) -> {
                     if (!form.getCities().getParent().orElseThrow().isVisible()) {
                         return ValidationResult.ok();
                     }
@@ -78,13 +78,14 @@ public class UserEditorDialog extends Dialog implements DialogWithTitle {
         add(form);
         setWidth("100%");
         setMaxWidth("500px");
-        getFooter().add(new SecondaryButton(getTranslation("cancel_button"), e -> close()), saveButton);
+        getFooter().add(new SecondaryButton(getTranslation("cancel_button"), ignoredEvent -> close()), saveButton);
 
         binder.addStatusChangeListener(e ->
                 saveButton.setEnabled(e.getBinder().isValid()));
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void showDialog(Object user, SerializableConsumer<?> callback) {
         if (user instanceof String) {
             this.user = SimpleUser.builder().role((String) user).build();

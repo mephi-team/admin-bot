@@ -13,6 +13,7 @@ import team.mephi.adminbot.vaadin.components.TopMenu;
 import team.mephi.adminbot.vaadin.components.UserMenu;
 
 @PermitAll
+@SuppressWarnings("unused")
 public class CustomAccessDeniedError extends AppLayout
         implements HasErrorParameter<AccessDeniedException> {
 

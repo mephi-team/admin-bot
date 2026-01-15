@@ -12,16 +12,11 @@ import java.util.Arrays;
 
 public class DateRangePicker extends CustomField<DateRangePicker.LocalDateRange> {
 
-    private DatePicker start;
-    private DatePicker end;
+    private final DatePicker start;
+    private final DatePicker end;
 
+    @Getter
     private Mode mode = Mode.INTERVAL;
-    private HorizontalLayout container;
-
-    public DateRangePicker(String label) {
-        this();
-        setLabel(label);
-    }
 
     public DateRangePicker() {
         start = new DatePicker();
@@ -32,14 +27,14 @@ public class DateRangePicker extends CustomField<DateRangePicker.LocalDateRange>
         start.setManualValidation(true);
         end.setManualValidation(true);
 
-        container = new HorizontalLayout();
+        HorizontalLayout container = new HorizontalLayout();
         container.setWidthFull();
         container.setAlignItems(FlexComponent.Alignment.CENTER);
 
-        start.setWidthFull();
         container.add(start, end);
 
         container.setFlexGrow(1.0, start);
+        container.setFlexGrow(1.0, end);
 
         add(container);
     }
@@ -90,17 +85,7 @@ public class DateRangePicker extends CustomField<DateRangePicker.LocalDateRange>
 
     public void changeMode(Mode mode) {
         this.mode = mode;
-        if (mode == Mode.DAY) {
-            end.setVisible(false);
-            // гарантировать, что start занимает всё пространство
-            start.setWidthFull();
-            container.setFlexGrow(1.0, start);
-        } else {
-            end.setVisible(true);
-            // вернуть стандартное поведение (start всё ещё может быть гибким)
-            start.setWidthFull();
-            container.setFlexGrow(1.0, start);
-        }
+        end.setVisible(mode != Mode.DAY);
     }
 
     @Override

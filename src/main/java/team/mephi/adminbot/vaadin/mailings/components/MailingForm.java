@@ -50,7 +50,7 @@ public class MailingForm extends FormLayout {
                             pageable
                     );
                 },
-                q -> userService.countByRoleAndName(Objects.isNull(users.getValue()) ? "" : users.getValue().getCode(), ""),
+                ignoredQuery -> userService.countByRoleAndName(Objects.isNull(users.getValue()) ? "" : users.getValue().getCode(), ""),
                 SimpleUser::getId
         );
         setAutoResponsive(true);
@@ -62,23 +62,23 @@ public class MailingForm extends FormLayout {
 
         users.setItemsPageable(roleService::getAllRoles);
         users.setItemLabelGenerator(RoleDto::getName);
-        users.addValueChangeListener(e -> provider.refreshAll());
+        users.addValueChangeListener(ignoredEvent -> provider.refreshAll());
 
         cohort.setItemsPageable(cohortService::getAllCohorts);
         cohort.setItemLabelGenerator(c -> c.getName() + (c.getCurrent() ? " (текущий)" : ""));
-        cohort.addValueChangeListener(e -> provider.refreshAll());
+        cohort.addValueChangeListener(ignoredEvent -> provider.refreshAll());
 
         direction.setItemsPageable(directionService::getAllDirections);
         direction.setItemLabelGenerator(SimpleDirection::getName);
-        direction.addValueChangeListener(e -> provider.refreshAll());
+        direction.addValueChangeListener(ignoredEvent -> provider.refreshAll());
 
         city.setItemsPageable(cityService::getAllCities);
         city.setItemLabelGenerator(CityDto::getName);
-        city.addValueChangeListener(e -> provider.refreshAll());
+        city.addValueChangeListener(ignoredEvent -> provider.refreshAll());
 
         curator.setItemsPageable(userService::findAllCurators);
         curator.setItemLabelGenerator(UserDto::getUserName);
-        curator.addValueChangeListener(e -> provider.refreshAll());
+        curator.addValueChangeListener(ignoredEvent -> provider.refreshAll());
 
         addFormItem(channels, getTranslation("form_mailing_channels_label"));
         addFormItem(users, getTranslation("form_mailing_users_label"));
@@ -96,9 +96,7 @@ public class MailingForm extends FormLayout {
         listBox.addClassNames(LumoUtility.FontSize.SMALL);
         listBox.setDataProvider(provider);
         listBox.setItemLabelGenerator(u -> u.getFullName() + ", " + u.getTgId());
-        listBox.addSelectionListener(e -> {
-            counter.setText("(" + e.getAllSelectedItems().size() + ")");
-        });
+        listBox.addSelectionListener(e -> counter.setText("(" + e.getAllSelectedItems().size() + ")"));
         FormItem box = addFormItem(listBox, getTranslation("form_mailing_first_name_last_name_label"));
         box.addClassNames(LumoUtility.Width.FULL);
 

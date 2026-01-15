@@ -22,7 +22,7 @@ public class TutoringDialog extends Dialog implements DialogWithTitle {
     private final BeanValidationBinder<SimpleTutor> binder = new BeanValidationBinder<>(SimpleTutor.class);
     private SerializableConsumer<SimpleTutor> onSaveCallback;
     private SimpleTutor user;
-    private final Button saveButton = new PrimaryButton(getTranslation("save_button"), e -> onSave());
+    private final Button saveButton = new PrimaryButton(getTranslation("save_button"), ignoredEvent -> onSave());
 
     public TutoringDialog(UserService userService, DirectionService directionService) {
         var form = new TutorForm(userService, directionService);
@@ -30,7 +30,7 @@ public class TutoringDialog extends Dialog implements DialogWithTitle {
         add(form);
         setWidth("100%");
         setMaxWidth("500px");
-        getFooter().add(new SecondaryButton(getTranslation("cancel_button"), e -> close()), saveButton);
+        getFooter().add(new SecondaryButton(getTranslation("cancel_button"), ignoredEvent -> close()), saveButton);
         binder.forField(form.getFullNameField())
                 .bind(s -> new FullNameField.FullName(s.getFirstName(), s.getLastName()),
                         (s, t) -> {
@@ -59,12 +59,11 @@ public class TutoringDialog extends Dialog implements DialogWithTitle {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void showDialog(Object user, SerializableConsumer<?> callback) {
         this.user = (SimpleTutor) user;
         this.onSaveCallback = (SerializableConsumer<SimpleTutor>) callback;
         binder.readBean((SimpleTutor) user);
-//        binder.setReadOnly(true);
-//        saveButton.setVisible(false);
         open();
     }
 

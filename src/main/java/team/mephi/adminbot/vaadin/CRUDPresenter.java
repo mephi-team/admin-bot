@@ -40,7 +40,7 @@ public class CRUDPresenter<T> implements CRUDActions<T>, HasDataProvider<CRUDDat
         dialogService.showDialog(item, type, (editedItem) -> {
             if (editedItem != null) {
                 editedItem = dataProvider.save(editedItem);
-                dataProvider.getDataProvider().refreshItem((T) editedItem);
+                dataProvider.getDataProvider().refreshItem(editedItem);
                 notificationService.showNotification(NotificationType.EDIT, type.getNotificationKey(), params);
             }
         });

@@ -22,15 +22,11 @@ public class UsersPresenter extends BlockingPresenter implements UserActions {
 
     @Override
     public void onAccept(List<Long> ids, DialogType type, Object... params) {
-        dialogService.showConfirmDialog(ids.size(), type, VaadinIcon.CHECK.create(), (ignore) -> {
-            notificationService.showNotification(NotificationType.EDIT, type.getNotificationKey(), params);
-        });
+        dialogService.showConfirmDialog(ids.size(), type, VaadinIcon.CHECK.create(), (ignore) -> notificationService.showNotification(NotificationType.EDIT, type.getNotificationKey(), params));
     }
 
     @Override
     public void onReject(List<Long> ids, DialogType type, Object... params) {
-        dialogService.showConfirmDialog(ids.size(), type, VaadinIcon.CLOSE.create(), (ignore) -> {
-            notificationService.showNotification(NotificationType.EDIT, type.getNotificationKey(), params);
-        });
+        dialogService.showConfirmDialog(ids.size(), type, VaadinIcon.CLOSE.create(), (ignore) -> notificationService.showNotification(NotificationType.EDIT, type.getNotificationKey(), params));
     }
 }

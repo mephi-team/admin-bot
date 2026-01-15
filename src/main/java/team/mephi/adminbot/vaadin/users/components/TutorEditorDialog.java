@@ -23,7 +23,7 @@ public class TutorEditorDialog extends Dialog implements DialogWithTitle {
     private final BeanValidationBinder<SimpleTutor> binder = new BeanValidationBinder<>(SimpleTutor.class);
     private SerializableConsumer<SimpleTutor> onSaveCallback;
     private SimpleTutor user;
-    private final Button saveButton = new PrimaryButton(getTranslation("save_button"), e -> onSave());
+    private final Button saveButton = new PrimaryButton(getTranslation("save_button"), ignoredEvent -> onSave());
 
     public TutorEditorDialog(RoleService roleService, CohortService cohortService, DirectionService directionService, UserService userService) {
         var form = new TutorEditForm(roleService, cohortService, directionService, userService);
@@ -73,13 +73,14 @@ public class TutorEditorDialog extends Dialog implements DialogWithTitle {
         add(form);
         setWidth("100%");
         setMaxWidth("500px");
-        getFooter().add(new SecondaryButton(getTranslation("cancel_button"), e -> close()), saveButton);
+        getFooter().add(new SecondaryButton(getTranslation("cancel_button"), ignoredEvent -> close()), saveButton);
 
         binder.addStatusChangeListener(e ->
                 saveButton.setEnabled(e.getBinder().isValid()));
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void showDialog(Object user, SerializableConsumer<?> callback) {
         if (user instanceof String) {
             this.user = SimpleTutor.builder().role((String) user).students(List.of()).build();

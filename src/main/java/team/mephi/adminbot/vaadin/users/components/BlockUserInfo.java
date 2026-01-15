@@ -2,11 +2,15 @@ package team.mephi.adminbot.vaadin.users.components;
 
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import lombok.Getter;
 
 public class BlockUserInfo extends FormLayout {
-    private TextField firstName = new TextField();
-    private TextField lastName = new TextField();
-    private TextField tgId = new TextField();
+    @Getter
+    private final TextField firstName = new TextField();
+    @Getter
+    private final TextField lastName = new TextField();
+    @Getter
+    private final TextField tgId = new TextField();
 
     public BlockUserInfo() {
         setAutoResponsive(true);

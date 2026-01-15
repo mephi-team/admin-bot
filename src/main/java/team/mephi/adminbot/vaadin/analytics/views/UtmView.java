@@ -18,7 +18,6 @@ public class UtmView extends AbstractChartView<UtmView.UtmFilterData> {
 
         UtmForm form = new UtmForm(cohortService);
 
-        // Биндинг полей — остаётся в дочернем классе, т.к. формы разные
         binder.forField(form.getCohort())
                 .withConverter(CohortDto::getId, cohort -> cohortService.getById(cohort).orElse(cohortService.getAllCohorts().getFirst()))
                 .bind(UtmFilterData::getCohort, UtmFilterData::setCohort);
@@ -31,7 +30,7 @@ public class UtmView extends AbstractChartView<UtmView.UtmFilterData> {
                         p.setEnd(v.getEndDate());
                     }
                 });
-        binder.addValueChangeListener(e -> {
+        binder.addValueChangeListener(ignoredEvent -> {
             var s = new UtmFilterData();
             binder.writeBeanIfValid(s);
             presenter.onUpdateFilter(s);

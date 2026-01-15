@@ -13,7 +13,7 @@ public class AnswerDialog extends Dialog implements DialogWithTitle {
     private final BeanValidationBinder<SimpleQuestion> binder = new BeanValidationBinder<>(SimpleQuestion.class);
     private SerializableConsumer<SimpleQuestion> onSaveCallback;
     private SimpleQuestion question;
-    private final Button answerButton = new PrimaryButton(getTranslation("dialog_answer_button"), VaadinIcon.PAPERPLANE_O.create(), e -> onAnswer());
+    private final Button answerButton = new PrimaryButton(getTranslation("dialog_answer_button"), VaadinIcon.PAPERPLANE_O.create(), ignoredEvent -> onAnswer());
 
     public AnswerDialog() {
         var form = new AnswerForm();
@@ -42,6 +42,7 @@ public class AnswerDialog extends Dialog implements DialogWithTitle {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void showDialog(Object question, SerializableConsumer<?> callback) {
         this.question = (SimpleQuestion) question;
         this.onSaveCallback = (SerializableConsumer<SimpleQuestion>) callback;

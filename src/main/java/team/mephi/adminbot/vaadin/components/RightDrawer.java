@@ -12,11 +12,11 @@ import com.vaadin.flow.function.SerializableRunnable;
 import com.vaadin.flow.function.SerializableSupplier;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
+@SuppressWarnings("unused")
 public class RightDrawer extends Section {
 
     private final SerializableSupplier<Boolean> onSaveCallback;
     private final SerializableRunnable onCloseCallback;
-    private final Button saveBtn;
 
     public RightDrawer(String title, FormLayout form, SerializableSupplier<Boolean> onSaveCallback, SerializableRunnable onCloseCallback) {
         this.onSaveCallback = onSaveCallback;
@@ -30,7 +30,7 @@ public class RightDrawer extends Section {
         var header = new HorizontalLayout();
         header.add(new H2(title), new Button(VaadinIcon.CLOSE.create(), this::close));
 
-        saveBtn = new Button("Сохранить", this::save);
+        Button saveBtn = new Button("Сохранить", this::save);
         saveBtn.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
         var buttons = new HorizontalLayout(saveBtn);

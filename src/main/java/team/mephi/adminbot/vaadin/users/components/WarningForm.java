@@ -2,9 +2,11 @@ package team.mephi.adminbot.vaadin.users.components;
 
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.textfield.TextArea;
+import lombok.Getter;
 
 public class WarningForm extends FormLayout {
-    private TextArea warningReason = new TextArea();
+    @Getter
+    private final TextArea warningReason = new TextArea();
 
     public WarningForm() {
         setAutoResponsive(true);

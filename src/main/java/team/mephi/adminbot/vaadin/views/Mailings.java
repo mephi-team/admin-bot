@@ -58,7 +58,7 @@ public class Mailings extends VerticalLayout {
             var tab = new Tab(tabContent);
             tabSheet.add(tab, content, provider.getPosition());
         }
-        tabSheet.addSelectedChangeListener(a -> {
+        tabSheet.addSelectedChangeListener(ignoredEvent -> {
             if (tabSheet.getSelectedIndex() == 1) {
                 primaryButton.setText(getTranslation("page_mailing_create_template_button"));
             } else {
@@ -72,9 +72,7 @@ public class Mailings extends VerticalLayout {
         top.setWidthFull();
         top.addToStart(new H1(getTranslation("page_mailing_title")));
 
-        primaryButton.addClickListener(e -> {
-            getCurrentAction().onCreate(null, getCreateDialogType());
-        });
+        primaryButton.addClickListener(ignoredEvent -> getCurrentAction().onCreate(null, getCreateDialogType()));
         top.addToEnd(primaryButton);
         return top;
     }

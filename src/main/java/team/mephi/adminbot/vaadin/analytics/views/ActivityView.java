@@ -17,7 +17,6 @@ public class ActivityView extends AbstractChartView<ActivityView.ActivityFilterD
 
         ActivityForm form = new ActivityForm();
 
-        // Биндинг полей — остаётся в дочернем классе, т.к. формы разные
         binder.forField(form.getType()).bind(ActivityFilterData::getType, ActivityFilterData::setType);
         binder.forField(form.getInterval()).bind(ActivityFilterData::getInterval, ActivityFilterData::setInterval);
         binder.forField(form.getPeriod()).bind(
@@ -29,9 +28,7 @@ public class ActivityView extends AbstractChartView<ActivityView.ActivityFilterD
                     }
                 }
         );
-
-        // Общая реакция на изменение формы
-        binder.addValueChangeListener(e -> {
+        binder.addValueChangeListener(ignoredEvent -> {
             var s = new ActivityFilterData();
             binder.writeBeanIfValid(s);
             presenter.onUpdateFilter(s);

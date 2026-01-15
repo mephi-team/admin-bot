@@ -2,7 +2,6 @@ package team.mephi.adminbot.vaadin;
 
 import com.vaadin.flow.spring.security.VaadinAwareSecurityContextHolderStrategyConfiguration;
 import com.vaadin.flow.spring.security.VaadinSecurityConfigurer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -12,7 +11,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
@@ -28,9 +26,6 @@ import java.util.*;
 @EnableWebSecurity
 @Import(VaadinAwareSecurityContextHolderStrategyConfiguration.class)
 public class VaadinSecurityConfig {
-    @Autowired
-    private ClientRegistrationRepository clientRegistrationRepository;
-
     @Bean
     SecurityFilterChain vaddinSecurityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -46,24 +41,15 @@ public class VaadinSecurityConfig {
                                 .invalidateHttpSession(true)
                 )
                 .with(
-                        VaadinSecurityConfigurer.vaadin(), configurer -> {
+                        VaadinSecurityConfigurer.vaadin(), ignoredConfigurer -> {
 //                            configurer.loginView(LoginView.class);
                         });
 
         return http.build();
     }
 
-//    private LogoutSuccessHandler oidcLogoutSuccessHandler() {
-//        OidcClientInitiatedLogoutSuccessHandler oidcLogoutSuccessHandler =
-//                new OidcClientInitiatedLogoutSuccessHandler(this.clientRegistrationRepository);
-//
-//        oidcLogoutSuccessHandler.setPostLogoutRedirectUri("http://localhost:8080"); // Замените на ваш URL
-//
-//        return oidcLogoutSuccessHandler;
-//    }
-
     private LogoutSuccessHandler oidcLogoutSuccessHandler() {
-        return (request, response, authentication) -> {
+        return (ignoredRequest, response, authentication) -> {
             // 1. Базовый URL логаута в Keycloak (внешний адрес для браузера)
             String keycloakLogoutUrl = "http://localhost:8081/realms/mephi-realm/protocol/openid-connect/logout";
 
@@ -84,6 +70,7 @@ public class VaadinSecurityConfig {
         };
     }
 
+    @SuppressWarnings("unchecked")
     private OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService() {
         final OidcUserService delegate = new OidcUserService();
 
