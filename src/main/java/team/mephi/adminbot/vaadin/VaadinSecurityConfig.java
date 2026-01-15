@@ -2,6 +2,7 @@ package team.mephi.adminbot.vaadin;
 
 import com.vaadin.flow.spring.security.VaadinAwareSecurityContextHolderStrategyConfiguration;
 import com.vaadin.flow.spring.security.VaadinSecurityConfigurer;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -29,6 +30,13 @@ import java.util.*;
 @EnableWebSecurity
 @Import(VaadinAwareSecurityContextHolderStrategyConfiguration.class)
 public class VaadinSecurityConfig {
+
+    @Value("${spring.security.oauth2.client.provider.keycloak.end-session-uri}")
+    String keycloakLogoutUrl;
+
+    @Value("${app.redirect-url}")
+    String postLogoutRedirectUri;
+
     /**
      * Настраивает цепочку фильтров безопасности для Vaadin с поддержкой OAuth2 и OIDC.
      *
@@ -66,14 +74,6 @@ public class VaadinSecurityConfig {
      */
     private LogoutSuccessHandler oidcLogoutSuccessHandler() {
         return (ignoredRequest, response, authentication) -> {
-            // 1. Базовый URL логаута в Keycloak (внешний адрес для браузера)
-            String keycloakLogoutUrl = "http://localhost:8081/realms/mephi-realm/protocol/openid-connect/logout";
-
-            // 2. Куда вернуть пользователя после выхода из Keycloak
-            String postLogoutRedirectUri = "http://localhost:8080";
-
-            // 3. Формируем URL с параметрами (для Keycloak 18+ это обязательно)
-            // Если у вас есть доступ к id_token, лучше добавить id_token_hint
             String redirectUrl = keycloakLogoutUrl + "?post_logout_redirect_uri=" + postLogoutRedirectUri;
 
             // Если пользователь аутентифицирован, можно добавить id_token_hint для авто-выхода без подтверждения
