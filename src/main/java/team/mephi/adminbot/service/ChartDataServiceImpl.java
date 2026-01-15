@@ -62,10 +62,10 @@ public class ChartDataServiceImpl implements ChartDataService {
     // Генерация часов: последние `hours` часов до текущего часа (включительно)
     private String[] generateHourLabels(int hours) {
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("HH:00");
-        LocalDateTime now = LocalDateTime.now().withMinute(0).withSecond(0).withNano(0);
+        LocalDateTime now = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
         String[] labels = new String[hours];
         for (int i = 0; i < hours; i++) {
-            labels[i] = now.minusHours(hours - 1 - i).format(fmt);
+            labels[i] = now.minusHours(hours - i).format(fmt);
         }
         return labels;
     }
@@ -85,7 +85,7 @@ public class ChartDataServiceImpl implements ChartDataService {
         String[] labels = new String[count];
         for (int i = 0; i < count; i++) {
             YearMonth m = startYm.plusMonths(i);
-            String monthName = m.getMonth().getDisplayName(TextStyle.FULL, RU);
+            String monthName = m.getMonth().getDisplayName(TextStyle.FULL_STANDALONE, RU);
             labels[i] = monthName.substring(0, 1).toUpperCase(RU) + monthName.substring(1);
         }
         return labels;
