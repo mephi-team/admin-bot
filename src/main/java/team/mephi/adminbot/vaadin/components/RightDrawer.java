@@ -21,6 +21,14 @@ public class RightDrawer extends Section {
     private final SerializableSupplier<Boolean> onSaveCallback;
     private final SerializableRunnable onCloseCallback;
 
+    /**
+     * Создает правый драйвер с заданным заголовком, формой и обратными вызовами для сохранения и закрытия.
+     *
+     * @param title          Заголовок драйвера.
+     * @param form           Форма, отображаемая в драйвере.
+     * @param onSaveCallback Обратный вызов, вызываемый при сохранении формы. Должен возвращать true, если сохранение прошло успешно.
+     * @param onCloseCallback Обратный вызов, вызываемый при закрытии драйвера.
+     */
     public RightDrawer(String title, FormLayout form, SerializableSupplier<Boolean> onSaveCallback, SerializableRunnable onCloseCallback) {
         this.onSaveCallback = onSaveCallback;
         this.onCloseCallback = onCloseCallback;

@@ -19,6 +19,11 @@ import java.util.stream.Stream;
 public class ChartDataProvider<T> extends AbstractDataProvider<BarData, T> {
     private final ChartDataService chartDataService;
 
+    /**
+     * Создает поставщика данных для диаграмм.
+     *
+     * @param chartDataService сервис для получения данных диаграмм
+     */
     public ChartDataProvider(ChartDataService chartDataService) {
         this.chartDataService = chartDataService;
     }

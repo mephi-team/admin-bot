@@ -12,6 +12,12 @@ public class GridSelectActions extends HorizontalLayout {
     Span countControl;
     private Integer selectedCount = 0;
 
+    /**
+     * Создает компонент действий с заданным текстом и дополнительными компонентами.
+     *
+     * @param text       текст, отображаемый перед количеством выбранных элементов
+     * @param components дополнительные компоненты действий
+     */
     public GridSelectActions(String text, Component... components) {
         countControl = new Span(String.valueOf(selectedCount));
         Span prefix = new Span(new Span(text), new Span(" "), countControl);

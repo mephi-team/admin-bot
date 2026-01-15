@@ -26,6 +26,9 @@ import java.util.Set;
  * Представление для рассылок
  */
 public class SentView extends AbstractGridView<SimpleMailing> {
+    /**
+     * Обновляет компонент статуса рассылки.
+     */
     private static final SerializableBiConsumer<Span, SimpleMailing> statusComponentUpdater = (
             span, person) -> {
         String theme = switch (person.getStatus()) {

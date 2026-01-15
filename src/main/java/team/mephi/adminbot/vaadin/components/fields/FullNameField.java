@@ -14,6 +14,9 @@ public class FullNameField extends CustomField<FullNameField.FullName> {
     private final TextField firstName = new TextField();
     private final TextField lastName = new TextField();
 
+    /**
+     * Конструктор для создания компонента FullNameField.
+     */
     public FullNameField() {
         firstName.setMaxWidth("50%");
         lastName.setMaxWidth("50%");

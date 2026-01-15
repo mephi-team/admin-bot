@@ -21,6 +21,9 @@ public class DateRangePicker extends CustomField<DateRangePicker.LocalDateRange>
     @Getter
     private Mode mode = Mode.INTERVAL;
 
+    /**
+     * Конструктор для создания компонента DateRangePicker.
+     */
     public DateRangePicker() {
         start = new DatePicker();
         end = new DatePicker();
@@ -143,6 +146,12 @@ public class DateRangePicker extends CustomField<DateRangePicker.LocalDateRange>
         @Setter
         private LocalDate endDate;
 
+        /**
+         * Конструктор для создания диапазона дат.
+         *
+         * @param startDate начальная дата.
+         * @param endDate   конечная дата.
+         */
         public LocalDateRange(LocalDate startDate, LocalDate endDate) {
             this.startDate = startDate;
             this.endDate = endDate;

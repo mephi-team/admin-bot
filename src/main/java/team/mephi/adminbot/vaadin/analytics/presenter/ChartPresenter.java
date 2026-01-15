@@ -13,6 +13,11 @@ public class ChartPresenter<T> implements ChartActions<T>, HasDataProvider<Chart
 
     private final ChartDataProvider<T> dataProvider;
 
+    /**
+     * Конструктор презентера.
+     *
+     * @param dataProvider провайдер данных для графиков
+     */
     public ChartPresenter(ChartDataProvider<T> dataProvider) {
         this.dataProvider = dataProvider;
     }

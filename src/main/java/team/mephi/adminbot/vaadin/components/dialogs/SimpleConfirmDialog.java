@@ -21,6 +21,15 @@ public class SimpleConfirmDialog extends ConfirmDialog {
     @Setter
     private Runnable onConfirm;
 
+    /**
+     * Конструктор для создания простого диалога подтверждения.
+     *
+     * @param title      заголовок диалога.
+     * @param text       текст диалога.
+     * @param action     текст кнопки подтверждения.
+     * @param actionIcon иконка кнопки подтверждения.
+     * @param onConfirm  действие, выполняемое при подтверждении.
+     */
     public SimpleConfirmDialog(String title, String text, String action, Icon actionIcon, Runnable onConfirm) {
         this.header = title;
         this.text = text;

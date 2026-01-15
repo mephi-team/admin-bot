@@ -13,6 +13,10 @@ public enum OrderStatus {
 
     private final String translationKey;
 
+    /**
+     * Конструктор для статуса заказа.
+     * @param translationKey Ключ для локализации метки статуса заказа.
+     */
     OrderStatus(String translationKey) {
         this.translationKey = translationKey;
     }

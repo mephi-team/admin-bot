@@ -8,6 +8,12 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
  * Фрагмент поиска с двумя компонентами, выровненными по горизонтали.
  */
 public class SearchFragment extends HorizontalLayout {
+    /**
+     * Создает фрагмент поиска с заданными левым и правым компонентами.
+     *
+     * @param left  Левый компонент.
+     * @param right Правый компонент.
+     */
     public SearchFragment(Component left, Component right) {
         add(left, right);
         setAlignItems(FlexComponent.Alignment.BASELINE);

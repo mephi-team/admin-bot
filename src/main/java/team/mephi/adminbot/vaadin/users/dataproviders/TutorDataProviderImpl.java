@@ -31,6 +31,11 @@ public class TutorDataProviderImpl implements TutorDataProvider {
         this.tutorService = tutorService;
     }
 
+    /**
+     * Получает провайдер данных с возможностью фильтрации по имени куратора.
+     *
+     * @return провайдер данных с фильтрацией.
+     */
     public ConfigurableFilterDataProvider<SimpleTutor, Void, String> getFilterableProvider() {
         if (provider == null) {
             CallbackDataProvider<SimpleTutor, String> base = new CallbackDataProvider<>(

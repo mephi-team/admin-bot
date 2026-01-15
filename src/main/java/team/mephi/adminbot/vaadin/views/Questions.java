@@ -85,7 +85,11 @@ public class Questions extends AbstractGridView<SimpleQuestion> {
         setup(config);
     }
 
-    // Обработка ответа на вопрос
+    /**
+     * Обработка ответа на вопрос.
+     *
+     * @param question вопрос, на который нужно ответить.
+     */
     private void onAnswer(SimpleQuestion question) {
         dialogService.showDialog(question, DialogType.ANSWER_SEND, (editedItem) -> {
             if (editedItem != null) {
@@ -96,7 +100,11 @@ public class Questions extends AbstractGridView<SimpleQuestion> {
         });
     }
 
-    // Обработка удаления вопросов
+    /**
+     * Обработка удаления вопросов.
+     *
+     * @param selectedIds список идентификаторов вопросов для удаления.
+     */
     private void onDelete(List<Long> selectedIds) {
         dialogService.showConfirmDialog(selectedIds.size(), selectedIds.size() > 1 ? DialogType.DELETE_QUESTION_ALL : DialogType.DELETE_QUESTION, VaadinIcon.TRASH.create(), (ignore) -> {
             provider.deleteAllById(selectedIds);

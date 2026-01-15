@@ -9,6 +9,9 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
  * Форма для выбора параметров доставки на странице аналитики.
  */
 public class UtmFilterDelivery extends HorizontalLayout {
+    /**
+     * Создает форму доставки с настройками по умолчанию.
+     */
     public UtmFilterDelivery() {
         setWidthFull();
 

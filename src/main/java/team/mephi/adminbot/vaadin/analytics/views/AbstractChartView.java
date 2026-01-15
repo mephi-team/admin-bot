@@ -24,6 +24,11 @@ public abstract class AbstractChartView<F> extends VerticalLayout {
     protected final BeanValidationBinder<F> binder;
     protected final ChartContainer chart = new ChartContainer();
 
+    /**
+     * Конструктор.
+     *
+     * @param filterClass класс фильтра
+     */
     protected AbstractChartView(Class<F> filterClass) {
         this.binder = new BeanValidationBinder<>(filterClass);
         setPadding(false);

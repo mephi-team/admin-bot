@@ -28,6 +28,10 @@ public class OrderFrom extends FormLayout {
     @Getter
     private final CheckboxGroup<OrderStatus> statuses;
 
+    /**
+     * Создает форму заказов с настройками по умолчанию.
+     * @param cohortService Сервис для получения информации о когортах.
+     */
     public OrderFrom(CohortService cohortService) {
         setAutoResponsive(true);
         setExpandColumns(true);
@@ -65,7 +69,10 @@ public class OrderFrom extends FormLayout {
         addFormItem(statuses, getTranslation("page_analytics_form_activity_status_label"));
     }
 
-    // Изменяет режим выбора даты в зависимости от выбранного интервала.
+    /**
+     * Изменяет режим выбора даты в зависимости от выбранного интервала.
+     * @param interval Выбранный интервал активности.
+     */
     private void changeDatePicker(ActivityIntervals interval) {
         period.changeMode(interval == ActivityIntervals.HOUR ? DateRangePicker.Mode.DAY : DateRangePicker.Mode.INTERVAL);
     }

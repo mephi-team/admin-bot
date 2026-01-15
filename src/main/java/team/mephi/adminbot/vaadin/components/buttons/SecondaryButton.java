@@ -11,21 +11,45 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
  */
 public class SecondaryButton extends Button {
 
+    /**
+     * Создает второстепенную кнопку с заданным текстом.
+     *
+     * @param text Текст кнопки.
+     */
     public SecondaryButton(String text) {
         super(text);
         init();
     }
 
+    /**
+     * Создает второстепенную кнопку с заданным текстом и иконкой.
+     *
+     * @param text Текст кнопки.
+     * @param icon Иконка кнопки.
+     */
     public SecondaryButton(String text, Component icon) {
         super(text, icon);
         init();
     }
 
+    /**
+     * Создает второстепенную кнопку с заданным текстом и слушателем кликов.
+     *
+     * @param text          Текст кнопки.
+     * @param clickListener Слушатель событий клика по кнопке.
+     */
     public SecondaryButton(String text, ComponentEventListener<ClickEvent<Button>> clickListener) {
         super(text, clickListener);
         init();
     }
 
+    /**
+     * Создает второстепенную кнопку с заданным текстом, иконкой и слушателем кликов.
+     *
+     * @param text          Текст кнопки.
+     * @param icon          Иконка кнопки.
+     * @param clickListener Слушатель событий клика по кнопке.
+     */
     public SecondaryButton(String text, Component icon, ComponentEventListener<ClickEvent<Button>> clickListener) {
         super(text, icon, clickListener);
         init();

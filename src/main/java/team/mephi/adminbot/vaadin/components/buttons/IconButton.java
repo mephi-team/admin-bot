@@ -11,11 +11,22 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
  */
 public class IconButton extends Button {
 
+    /**
+     * Создает кнопку с указанной иконкой.
+     *
+     * @param icon Компонент иконки для отображения на кнопке.
+     */
     public IconButton(Component icon) {
         super(icon);
         init();
     }
 
+    /**
+     * Создает кнопку с указанной иконкой и слушателем кликов.
+     *
+     * @param icon          Компонент иконки для отображения на кнопке.
+     * @param clickListener Слушатель событий клика по кнопке.
+     */
     public IconButton(Component icon, ComponentEventListener<ClickEvent<Button>> clickListener) {
         super(icon, clickListener);
         init();

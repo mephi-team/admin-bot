@@ -12,6 +12,11 @@ import team.mephi.adminbot.vaadin.views.Questions;
  * Левое меню навигации.
  */
 public class LeftMenu extends SideNav {
+    /**
+     * Создает левое меню с элементами навигации в зависимости от прав пользователя.
+     *
+     * @param authService Сервис аутентификации для проверки прав пользователя.
+     */
     public LeftMenu(AuthService authService) {
 
         if (authService.isAdmin()) {

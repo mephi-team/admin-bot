@@ -100,18 +100,38 @@ public abstract class AbstractGridView<T> extends VerticalLayout {
         grid.getDataProvider().addDataProviderListener(ignoredEvent -> grid.deselectAll());
     }
 
-    // подкласс указывает реальный класс элементов грида
+    /**
+     * Получение класса элемента грида.
+     *
+     * @return класс элемента грида
+     */
     protected abstract Class<T> getItemClass();
 
-    // добавление основных колонок (имя, email и пр.) — реализует подкласс
+    /**
+     * Настройка колонок грида — реализует подкласс
+     * @param grid грид для настройки колонок
+     */
     protected abstract void configureColumns(Grid<T> grid);
 
-    // добавление колонки с action-кнопками — реализует подкласс
+    /**
+     * Настройка колонки действий — реализует подкласс
+     * @param grid грид для настройки колонки действий
+     */
     protected abstract void configureActionColumn(Grid<T> grid);
 
-    // как извлекать id из элемента — реализует подкласс
+    /**
+     * Извлечение идентификатора элемента грида.
+     *
+     * @param item элемент грида
+     * @return идентификатор элемента
+     */
     protected abstract Long extractId(T item);
 
+    /**
+     * Установка провайдера данных для грида.
+     *
+     * @param dataProvider провайдер данных
+     */
     public void setProvider(DataProvider<T, ?> dataProvider) {
         grid.setDataProvider(dataProvider);
     }

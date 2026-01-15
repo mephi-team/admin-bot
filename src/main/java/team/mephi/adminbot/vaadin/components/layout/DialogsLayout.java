@@ -16,6 +16,11 @@ import team.mephi.adminbot.vaadin.components.buttons.MenuButton;
 public class DialogsLayout extends AppLayout {
     private boolean minimized = true;
 
+    /**
+     * Конструктор для создания макета DialogsLayout.
+     *
+     * @param authService сервис аутентификации для управления доступом пользователей.
+     */
     public DialogsLayout(AuthService authService) {
         addToNavbar(new Logo("Neoflex"), new TopMenu(authService), new UserMenu(authService));
         addToDrawer(new MenuButton(event -> toggleDrawerMode()), new LeftMenu(authService));

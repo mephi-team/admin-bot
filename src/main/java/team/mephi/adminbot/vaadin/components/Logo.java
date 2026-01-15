@@ -9,6 +9,11 @@ import team.mephi.adminbot.vaadin.views.Dashboard;
  * Логотип приложения с ссылкой на главную страницу.
  */
 public class Logo extends HorizontalLayout {
+    /**
+     * Создает логотип с заданным текстом альтернативного описания.
+     *
+     * @param text Текст альтернативного описания для логотипа.
+     */
     public Logo(String text) {
         setPadding(false);
         getElement().getStyle().set("margin-left", "40px");

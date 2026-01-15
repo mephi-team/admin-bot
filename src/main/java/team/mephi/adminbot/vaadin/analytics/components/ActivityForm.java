@@ -19,6 +19,9 @@ public class ActivityForm extends FormLayout {
     @Getter
     private final DateRangePicker period;
 
+    /**
+     * Создает форму активности с настройками по умолчанию.
+     */
     public ActivityForm() {
         setAutoResponsive(true);
         setExpandColumns(true);
@@ -45,7 +48,10 @@ public class ActivityForm extends FormLayout {
         addFormItem(interval, getTranslation("page_analytics_form_activity_interval_label"));
     }
 
-    // Изменяет режим выбора даты в зависимости от выбранного интервала.
+    /**
+     * Изменяет режим выбора даты в зависимости от выбранного интервала.
+     * @param interval
+     */
     private void changeDatePicker(ActivityIntervals interval) {
         period.changeMode(interval == ActivityIntervals.HOUR ? DateRangePicker.Mode.DAY : DateRangePicker.Mode.INTERVAL);
     }

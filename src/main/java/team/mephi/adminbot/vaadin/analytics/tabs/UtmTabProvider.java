@@ -17,6 +17,11 @@ public class UtmTabProvider implements AnalyticsTabProvider {
 
     private final CohortService cohortService;
 
+    /**
+     * Конструктор провайдера вкладки "UTM".
+     *
+     * @param cohortService сервис для работы с когортами пользователей
+     */
     public UtmTabProvider(CohortService cohortService) {
         this.cohortService = cohortService;
     }

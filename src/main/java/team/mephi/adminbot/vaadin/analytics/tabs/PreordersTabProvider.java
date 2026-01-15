@@ -17,6 +17,11 @@ public class PreordersTabProvider implements AnalyticsTabProvider {
 
     private final CohortService cohortService;
 
+    /**
+     * Конструктор провайдера вкладки "Предзаказы".
+     *
+     * @param cohortService сервис для работы с когортами пользователей
+     */
     public PreordersTabProvider(CohortService cohortService) {
         this.cohortService = cohortService;
     }

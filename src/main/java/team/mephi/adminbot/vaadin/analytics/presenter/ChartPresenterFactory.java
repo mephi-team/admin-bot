@@ -12,6 +12,11 @@ public class ChartPresenterFactory {
 
     private final ChartDataService chartDataService;
 
+    /**
+     * Конструктор фабрики презентеров.
+     *
+     * @param chartDataService сервис для получения данных графиков
+     */
     public ChartPresenterFactory(ChartDataService chartDataService) {
         this.chartDataService = chartDataService;
     }

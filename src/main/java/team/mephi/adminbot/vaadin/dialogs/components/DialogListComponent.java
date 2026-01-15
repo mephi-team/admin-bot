@@ -136,7 +136,12 @@ public class DialogListComponent extends VerticalLayout implements AfterNavigati
         add(searchField, list);
     }
 
-    // Форматирует дату в зависимости от того, является ли она сегодняшней.
+    /**
+     * Форматирует дату последнего сообщения в зависимости от того, является ли она сегодняшней.
+     *
+     * @param dateTime время последнего сообщения.
+     * @return отформатированная дата в виде компонента Span.
+     */
     private Span formatDate(Instant dateTime) {
         Span date = new Span();
         if (dateTime == null) return date;

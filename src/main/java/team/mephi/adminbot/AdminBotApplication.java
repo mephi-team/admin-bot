@@ -48,6 +48,11 @@ import team.mephi.adminbot.vaadin.components.fields.FullNameField;
 @Uses(RadioButtonGroup.class)
 @Uses(DatePicker.class)
 public class AdminBotApplication implements AppShellConfigurator {
+    /**
+     * Точка входа в приложение.
+     *
+     * @param args аргументы командной строки
+     */
     public static void main(String[] args) {
         SpringApplication.run(AdminBotApplication.class, args);
     }

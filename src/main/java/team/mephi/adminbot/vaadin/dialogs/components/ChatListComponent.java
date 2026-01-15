@@ -66,7 +66,11 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
         return new ComponentRenderer<>(this::renderChatItem);
     }
 
-    // Рендерит элемент чата в зависимости от его типа (заголовок даты или сообщение).
+    /**
+     * Рендерит элемент списка чата в зависимости от его типа (заголовок даты или сообщение).
+     * @param item элемент списка чата.
+     * @return отрендеренный компонент Div.
+     */
     private Div renderChatItem(ChatListItem item) {
         if (item.isHeader()) {
             return renderDateHeader(item.getDateLabel());
@@ -74,7 +78,11 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
         return renderMessage(item);
     }
 
-    // Рендерит сообщение в чате с соответствующим стилем.
+    /**
+     * Рендерит сообщение в чате с соответствующим стилем в зависимости от отправителя.
+     * @param item элемент списка чата, содержащий сообщение.
+     * @return отрендеренное сообщение в компоненте Div.
+     */
     private Div renderMessage(ChatListItem item) {
         Div message = new Div(item.getMessage().getText());
         String date = item.getMessage().getDate().toString(); // Z означает UTC
@@ -96,7 +104,11 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
         return message;
     }
 
-    // Рендерит заголовок даты для разделения сообщений по датам.
+    /**
+     * Рендерит заголовок даты для разделения сообщений по датам.
+     * @param label текст заголовка даты.
+     * @return отрендеренный заголовок в компоненте Div.
+     */
     private Div renderDateHeader(String label) {
         Div header = new Div(label);
         header.addClassNames(LumoUtility.TextAlignment.CENTER, LumoUtility.FontSize.XXSMALL, LumoUtility.FontWeight.SEMIBOLD);
@@ -104,7 +116,12 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
         return header;
     }
 
-    // Строит область чата с заданными компонентами.
+    /**
+     * Создает область чата, содержащую переданные компоненты.
+     *
+     * @param components компоненты для включения в область чата.
+     * @return созданный компонент VerticalLayout.
+     */
     private VerticalLayout buildChatArea(Component... components) {
         var container = new VerticalLayout(components);
         container.setHeightFull();
@@ -114,7 +131,11 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
         return container;
     }
 
-    // Создает компонент ввода сообщений для чата.
+    /**
+     * Создает компонент ввода сообщений для чата.
+     *
+     * @return созданный компонент MessageInput.
+     */
     private MessageInput createChatInput() {
         var input = new MessageInput();
         var i18n = new MessageInputI18n();
@@ -126,7 +147,11 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
         return input;
     }
 
-    // Обрабатывает отправку сообщения в чат.
+    /**
+     * Обрабатывает отправку сообщения.
+     *
+     * @param message текст отправленного сообщения.
+     */
     private void onMessage(String message) {
         if (dialogId == null) return;
         provider.save(dialogId, message);
@@ -134,7 +159,11 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
         chatList.scrollToEnd();
     }
 
-    // Обновляет видимость компонентов в зависимости от наличия выбранного диалога.
+    /**
+     * Обновляет видимость компонентов в зависимости от наличия выбранного диалога.
+     *
+     * @param hasDialog флаг, указывающий на наличие выбранного диалога.
+     */
     private void updateVisibility(boolean hasDialog) {
         header.setVisible(hasDialog);
         chatInput.setVisible(hasDialog);
@@ -142,7 +171,11 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
         emptyMessage.setVisible(!hasDialog);
     }
 
-    // Рендерит заголовок с информацией о пользователе и его роли.
+    /**
+     * Рендерит заголовок диалога с информацией о пользователе.
+     *
+     * @param dialog объект SimpleDialog, содержащий информацию о диалоге.
+     */
     private void renderHeader(SimpleDialog dialog) {
         Span user = new Span(dialog.getUserName());
         user.addClassNames(LumoUtility.FontWeight.BOLD);

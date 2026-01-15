@@ -52,7 +52,12 @@ public class Dashboard extends VerticalLayout {
             add(buildCardArea(card3));
     }
 
-    // Создает горизонтальный макет для размещения карточек на панели управления.
+    /**
+     * Создает горизонтальный макет для размещения карточек.
+     *
+     * @param components Компоненты для добавления в макет.
+     * @return Горизонтальный макет с заданными компонентами.
+     */
     private HorizontalLayout buildCardArea(Component... components) {
         HorizontalLayout layout = new HorizontalLayout(components);
         layout.setPadding(false);
@@ -64,7 +69,14 @@ public class Dashboard extends VerticalLayout {
         return layout;
     }
 
-    // Создает бейдж с количеством новых элементов и соответствующим текстом.
+    /**
+     * Создает бейдж с количеством новых элементов и соответствующим текстом.
+     *
+     * @param count Количество новых элементов.
+     * @param key   Ключ для перевода текста при наличии новых элементов.
+     * @param empty Ключ для перевода текста при отсутствии новых элементов.
+     * @return Компонент Span, представляющий бейдж.
+     */
     private Span createBadge(Integer count, String key, String empty) {
         Span newDialogs = new Span(count.toString());
         newDialogs.getElement().getThemeList().add("badge success");
@@ -74,7 +86,14 @@ public class Dashboard extends VerticalLayout {
             return new Span(getTranslation(empty));
     }
 
-    // Создает карточку с заданным заголовком, иконкой и целью навигации.
+    /**
+     * Создает карточку с заданными параметрами.
+     *
+     * @param key              Ключ для перевода заголовка карточки.
+     * @param icon             Иконка для отображения в карточке.
+     * @param navigationTarget Целевой класс для навигации при нажатии на кнопку.
+     * @return Созданная карточка.
+     */
     private Card createCard(String key, Icon icon, Class<? extends com.vaadin.flow.component.Component> navigationTarget) {
         Card card = new Card();
         card.setMinHeight("136px");

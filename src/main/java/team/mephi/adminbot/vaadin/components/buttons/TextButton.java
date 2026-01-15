@@ -11,11 +11,22 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
  * Текстовая кнопка с предустановленным стилем.
  */
 public class TextButton extends Button {
+    /**
+     * Создает текстовую кнопку с заданным текстом.
+     *
+     * @param text Текст кнопки.
+     */
     public TextButton(String text, ComponentEventListener<ClickEvent<Button>> clickListener) {
         super(text, clickListener);
         init();
     }
 
+    /**
+     * Создает текстовую кнопку с заданным текстом и иконкой.
+     *
+     * @param text Текст кнопки.
+     * @param icon Иконка кнопки.
+     */
     public TextButton(String text, Component icon, ComponentEventListener<ClickEvent<Button>> clickListener) {
         super(text, icon, clickListener);
         init();

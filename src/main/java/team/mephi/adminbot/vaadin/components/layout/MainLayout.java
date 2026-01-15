@@ -15,6 +15,11 @@ import team.mephi.adminbot.vaadin.components.UserMenu;
 @PermitAll
 @SuppressWarnings("unused")
 public class MainLayout extends AppLayout {
+    /**
+     * Конструктор для создания основного макета MainLayout.
+     *
+     * @param authService сервис аутентификации для управления доступом пользователей.
+     */
     public MainLayout(AuthService authService) {
         addToNavbar(new Logo("Neoflex"), new TopMenu(authService), new UserMenu(authService));
     }

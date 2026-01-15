@@ -16,10 +16,20 @@ public class ChatListDataProvider {
     private final MessageService messageService;
     private ConfigurableFilterDataProvider<ChatListItem, Void, Long> provider;
 
+    /**
+     * Конструктор класса ChatListDataProvider.
+     *
+     * @param messageService сервис для работы с сообщениями
+     */
     public ChatListDataProvider(MessageService messageService) {
         this.messageService = messageService;
     }
 
+    /**
+     * Возвращает провайдер данных с возможностью фильтрации по идентификатору диалога.
+     *
+     * @return провайдер данных с фильтром
+     */
     public ConfigurableFilterDataProvider<ChatListItem, Void, Long> getFilterableProvider() {
         if (provider == null) {
             provider = new CallbackDataProvider<ChatListItem, Long>(

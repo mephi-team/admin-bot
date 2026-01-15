@@ -17,6 +17,13 @@ import java.util.stream.Collectors;
  * Поповер для настройки видимости колонок в таблице.
  */
 public class GridSettingsPopover extends Popover {
+    /**
+     * Создает поповер для настройки колонок таблицы.
+     *
+     * @param grid     Таблица, для которой создается поповер.
+     * @param disabled Набор ключей колонок, которые не должны быть видимы по умолчанию.
+     * @param exclude  Набор ключей колонок, которые не должны отображаться в настройках.
+     */
     public GridSettingsPopover(Grid<?> grid, Set<String> disabled, Set<String> exclude) {
         setModal(true);
         setBackdropVisible(true);

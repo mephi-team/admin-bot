@@ -9,6 +9,9 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
  * Форма для выбора параметров источника на странице аналитики.
  */
 public class UtmFilterSource extends HorizontalLayout {
+    /**
+     * Создает форму источника с настройками по умолчанию.
+     */
     public UtmFilterSource() {
         setWidthFull();
 

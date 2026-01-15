@@ -91,7 +91,11 @@ public class Users extends VerticalLayout implements BeforeEnterObserver {
         });
     }
 
-    // Создание заголовка страницы с кнопкой создания пользователя
+    /**
+     * Создание заголовка страницы с кнопками создания пользователя и загрузки из файла.
+     *
+     * @return горизонтальный макет заголовка.
+     */
     private HorizontalLayout createHeader() {
         HorizontalLayout top = new HorizontalLayout();
         top.setWidthFull();
@@ -105,12 +109,20 @@ public class Users extends VerticalLayout implements BeforeEnterObserver {
         return top;
     }
 
-    // Получение текущей роли на основе выбранной вкладки
+    /**
+     * Получение текущей роли на основе выбранной вкладки.
+     *
+     * @return текущий тип вкладки пользователя.
+     */
     private UserTabType getCurrentRole() {
         return currentTab;
     }
 
-    // Получение типа диалога для создания пользователя на основе текущей роли
+    /**
+     * Получение типа диалога создания на основе текущей роли.
+     *
+     * @return тип диалога создания.
+     */
     private DialogType getCreateDialogType() {
         UserTabType role = getCurrentRole();
         // Простой маппинг ролей табов в DialogType; при необходимости расширить
@@ -120,7 +132,11 @@ public class Users extends VerticalLayout implements BeforeEnterObserver {
         };
     }
 
-    // Получение текущего действия CRUD на основе выбранной роли
+    /**
+     * Получение текущих действий CRUD на основе выбранной вкладки.
+     *
+     * @return текущие действия CRUD.
+     */
     private CRUDActions<?> getCurrentAction() {
         return actions.get(getCurrentRole());
     }

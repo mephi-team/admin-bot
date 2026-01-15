@@ -78,7 +78,11 @@ public class Mailings extends VerticalLayout {
         });
     }
 
-    // Создание заголовка страницы с кнопкой создания рассылки
+    /**
+     * Создание заголовка страницы с кнопкой создания рассылки.
+     *
+     * @return горизонтальный макет заголовка.
+     */
     private HorizontalLayout createHeader() {
         HorizontalLayout top = new HorizontalLayout();
         top.setWidthFull();
@@ -89,7 +93,11 @@ public class Mailings extends VerticalLayout {
         return top;
     }
 
-    // Получение текущей роли на основе выбранной вкладки
+    /**
+     * Получение текущей роли на основе выбранной вкладки.
+     *
+     * @return текущий тип вкладки рассылки.
+     */
     private MailingTabType getCurrentRole() {
         var selectedTab = tabSheet.getSelectedIndex();
         if (selectedTab > -1) {
@@ -98,7 +106,11 @@ public class Mailings extends VerticalLayout {
         return MailingTabType.SENT;
     }
 
-    // Определение типа диалога для создания рассылки на основе текущей роли
+    /**
+     * Получение типа диалога создания на основе текущей роли.
+     *
+     * @return тип диалога создания.
+     */
     private DialogType getCreateDialogType() {
         MailingTabType role = getCurrentRole();
         // Простой маппинг ролей табов в DialogType; при необходимости расширить
@@ -109,7 +121,11 @@ public class Mailings extends VerticalLayout {
         };
     }
 
-    // Получение текущего действия CRUD на основе выбранной роли
+    /**
+     * Получение текущего действия CRUD на основе выбранной вкладки.
+     *
+     * @return текущее действие CRUD.
+     */
     private CRUDActions<?> getCurrentAction() {
         return actions.get(getCurrentRole());
     }

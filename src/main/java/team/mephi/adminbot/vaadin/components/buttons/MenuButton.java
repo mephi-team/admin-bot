@@ -9,6 +9,11 @@ import com.vaadin.flow.component.icon.VaadinIcon;
  * Кнопка для открытия/закрытия бокового меню.
  */
 public class MenuButton extends Button {
+    /**
+     * Создает кнопку меню с заданным слушателем кликов.
+     *
+     * @param onClick Слушатель событий клика по кнопке.
+     */
     public MenuButton(ComponentEventListener<ClickEvent<Button>> onClick) {
         setIcon(VaadinIcon.MENU.create());
         addClickListener(onClick);

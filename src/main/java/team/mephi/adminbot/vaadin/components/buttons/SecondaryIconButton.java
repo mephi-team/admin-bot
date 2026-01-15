@@ -12,6 +12,11 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
  */
 public class SecondaryIconButton extends Button {
 
+    /**
+     * Создает второстепенную кнопку с указанной иконкой.
+     *
+     * @param icon Компонент иконки для отображения на кнопке.
+     */
     public SecondaryIconButton(Component icon, ComponentEventListener<ClickEvent<Button>> clickListener) {
         super(icon, clickListener);
         init();

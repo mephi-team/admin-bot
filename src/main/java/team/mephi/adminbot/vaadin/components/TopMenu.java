@@ -13,6 +13,11 @@ import team.mephi.adminbot.vaadin.views.Users;
  * Верхнее меню навигации.
  */
 public class TopMenu extends HorizontalLayout {
+    /**
+     * Создает верхнее меню с ссылками в зависимости от прав пользователя.
+     *
+     * @param authService Сервис аутентификации для проверки прав пользователя.
+     */
     public TopMenu(AuthService authService) {
         getElement().getStyle().set("gap", "64px");
 

@@ -17,6 +17,11 @@ public class OrdersTabProvider implements AnalyticsTabProvider {
 
     private final CohortService cohortService;
 
+    /**
+     * Конструктор провайдера вкладки "Заказы".
+     *
+     * @param cohortService сервис для работы с когортами пользователей
+     */
     public OrdersTabProvider(CohortService cohortService) {
         this.cohortService = cohortService;
     }

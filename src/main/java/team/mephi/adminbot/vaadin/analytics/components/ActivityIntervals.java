@@ -10,6 +10,9 @@ public enum ActivityIntervals {
     DAY,
     HOUR;
 
+    /**
+     * Ключ для локализации метки вкладки.
+     */
     @Getter
     private final String tabLabelKey = "page_analytics_form_activity_interval_" + name().toLowerCase() + "_label";
 }

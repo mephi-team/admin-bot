@@ -26,6 +26,9 @@ import java.util.Set;
  * Представление для рассылок в статусе "Черновик".
  */
 public class DraftView extends AbstractGridView<SimpleMailing> {
+    /**
+     * Обновляет компонент статуса рассылки.
+     */
     private static final SerializableBiConsumer<Span, SimpleMailing> statusComponentUpdater = (
             span, person) -> {
         String theme = switch (person.getStatus()) {

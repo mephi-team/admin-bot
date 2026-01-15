@@ -17,6 +17,11 @@ import java.util.Optional;
  * Меню пользователя с отображением имени и кнопкой выхода.
  */
 public class UserMenu extends HorizontalLayout {
+    /**
+     * Создает меню пользователя с информацией из AuthService.
+     *
+     * @param authService Сервис аутентификации для получения информации о пользователе и выхода.
+     */
     public UserMenu(AuthService authService) {
         addClassNames(LumoUtility.AlignItems.CENTER);
         setPadding(true);
