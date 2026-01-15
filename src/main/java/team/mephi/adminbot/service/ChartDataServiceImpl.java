@@ -30,7 +30,8 @@ public class ChartDataServiceImpl implements ChartDataService {
     private static final Locale RU = Locale.of("ru");
     private final java.util.Random random = new java.util.Random();
 
-    /** Генерация меток для указанного интервала и данных фильтра.
+    /**
+     * Генерация меток для указанного интервала и данных фильтра.
      *
      * @param interval   интервал активности (час, день, месяц).
      * @param filterData данные фильтра для извлечения диапазона дат.
@@ -68,7 +69,8 @@ public class ChartDataServiceImpl implements ChartDataService {
         }
     }
 
-    /** Генерация часовых меток за последние 24 часа
+    /**
+     * Генерация часовых меток за последние 24 часа
      *
      * @return массив строковых меток для каждого часа.
      */
@@ -82,7 +84,8 @@ public class ChartDataServiceImpl implements ChartDataService {
         return labels;
     }
 
-    /** Генерация дней: start + count-1 дней
+    /**
+     * Генерация дней: start + count-1 дней
      *
      * @param count количество дней.
      * @param start дата начала.
@@ -97,7 +100,8 @@ public class ChartDataServiceImpl implements ChartDataService {
         return labels;
     }
 
-    /** Генерация месяцев: startYm + count-1 месяцев
+    /**
+     * Генерация месяцев: startYm + count-1 месяцев
      *
      * @param count   количество месяцев.
      * @param startYm год-месяц начала.
@@ -113,7 +117,8 @@ public class ChartDataServiceImpl implements ChartDataService {
         return labels;
     }
 
-    /** Подсчет количества месяцев между двумя датами включительно
+    /**
+     * Подсчет количества месяцев между двумя датами включительно
      *
      * @param from дата начала.
      * @param to   дата окончания.
@@ -123,7 +128,8 @@ public class ChartDataServiceImpl implements ChartDataService {
         return (int) (ChronoUnit.MONTHS.between(from, to) + 1);
     }
 
-    /** Извлечение диапазона дат из объекта фильтра
+    /**
+     * Извлечение диапазона дат из объекта фильтра
      *
      * @param filter объект фильтра с методами получения дат.
      * @return диапазон дат или null, если не удалось извлечь.
@@ -155,7 +161,8 @@ public class ChartDataServiceImpl implements ChartDataService {
         return null;
     }
 
-    /** Попытка вызова метода объекта и преобразование результата в LocalDate
+    /**
+     * Попытка вызова метода объекта и преобразование результата в LocalDate
      *
      * @param obj        объект с методом.
      * @param methodName имя метода для вызова.
@@ -171,7 +178,8 @@ public class ChartDataServiceImpl implements ChartDataService {
         return null;
     }
 
-    /** Преобразование объекта в LocalDate
+    /**
+     * Преобразование объекта в LocalDate
      *
      * @param val объект для преобразования.
      * @return LocalDate или null, если преобразование невозможно.
@@ -205,7 +213,8 @@ public class ChartDataServiceImpl implements ChartDataService {
         return null;
     }
 
-    /** Создание набора данных для диаграммы
+    /**
+     * Создание набора данных для диаграммы
      *
      * @param label           метка набора данных.
      * @param backgroundColor цвет фона набора данных.
@@ -223,7 +232,8 @@ public class ChartDataServiceImpl implements ChartDataService {
         return dataset;
     }
 
-    /** Создание данных диаграммы с несколькими наборами данных
+    /**
+     * Создание данных диаграммы с несколькими наборами данных
      *
      * @param labels метки для диаграммы.
      * @param specs  спецификации наборов данных.
@@ -281,7 +291,8 @@ public class ChartDataServiceImpl implements ChartDataService {
         final LocalDate start;
         final LocalDate end;
 
-        /** Конструктор диапазона дат.
+        /**
+         * Конструктор диапазона дат.
          *
          * @param s дата начала.
          * @param e дата окончания.
@@ -294,6 +305,7 @@ public class ChartDataServiceImpl implements ChartDataService {
 
     /**
      * Спецификация набора данных для диаграммы.
+     *
      * @param label метка набора данных.
      * @param color цвет набора данных.
      */

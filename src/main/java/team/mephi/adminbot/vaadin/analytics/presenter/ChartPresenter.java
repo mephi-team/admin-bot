@@ -1,8 +1,8 @@
 package team.mephi.adminbot.vaadin.analytics.presenter;
 
 import com.vaadin.flow.data.provider.Query;
-import team.mephi.adminbot.vaadin.core.HasDataProvider;
 import team.mephi.adminbot.vaadin.analytics.dataproviders.ChartDataProvider;
+import team.mephi.adminbot.vaadin.core.HasDataProvider;
 
 /**
  * Презентер для обработки действий с графиками на странице аналитики.

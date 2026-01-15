@@ -17,7 +17,7 @@ class NotificationStatusTest {
 
         // then
         assertEquals(4, statuses.length, "NotificationStatus должен содержать 4 значения");
-        
+
         // Проверяем наличие каждого ожидаемого статуса
         assertTrue(contains(statuses, NotificationStatus.PENDING), "NotificationStatus должен содержать PENDING");
         assertTrue(contains(statuses, NotificationStatus.SENT), "NotificationStatus должен содержать SENT");
@@ -79,7 +79,7 @@ class NotificationStatusTest {
         assertThrows(IllegalArgumentException.class, () -> {
             NotificationStatus.valueOf("pending");
         }, "valueOf должен быть чувствителен к регистру");
-        
+
         assertThrows(IllegalArgumentException.class, () -> {
             NotificationStatus.valueOf("Pending");
         }, "valueOf должен быть чувствителен к регистру");
@@ -94,8 +94,8 @@ class NotificationStatusTest {
             NotificationStatus parsedStatus = NotificationStatus.valueOf(name);
 
             // then
-            assertEquals(originalStatus, parsedStatus, 
-                "Round-trip сериализация/десериализация должна работать для " + originalStatus);
+            assertEquals(originalStatus, parsedStatus,
+                    "Round-trip сериализация/десериализация должна работать для " + originalStatus);
         }
     }
 

@@ -1,8 +1,8 @@
 package team.mephi.adminbot.vaadin.service;
 
 import com.vaadin.flow.component.icon.Icon;
-import team.mephi.adminbot.vaadin.core.DialogWithTitle;
 import team.mephi.adminbot.vaadin.components.dialogs.SimpleConfirmDialog;
+import team.mephi.adminbot.vaadin.core.DialogWithTitle;
 
 /**
  * Фабрика для создания диалогов различных типов.

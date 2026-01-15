@@ -85,8 +85,9 @@ public class TutorServiceImpl implements TutorService {
 
     /**
      * Подготовка назначений студентов репетитору.
+     *
      * @param students список студентов.
-     * @param tutorId идентификатор репетитора.
+     * @param tutorId  идентификатор репетитора.
      * @return набор назначений студентов репетитору.
      */
     private Set<StudentTutor> prepareStudentTutor(List<SimpleUser> students, Long tutorId) {

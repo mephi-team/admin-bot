@@ -10,10 +10,10 @@ import team.mephi.adminbot.dto.CohortDto;
 import team.mephi.adminbot.dto.RoleDto;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.service.*;
-import team.mephi.adminbot.vaadin.core.DialogWithTitle;
 import team.mephi.adminbot.vaadin.components.buttons.PrimaryButton;
 import team.mephi.adminbot.vaadin.components.buttons.SecondaryButton;
 import team.mephi.adminbot.vaadin.components.fields.FullNameField;
+import team.mephi.adminbot.vaadin.core.DialogWithTitle;
 
 import java.util.Objects;
 

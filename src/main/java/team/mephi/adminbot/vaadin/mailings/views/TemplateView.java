@@ -4,13 +4,13 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
 import team.mephi.adminbot.dto.SimpleTemplate;
-import team.mephi.adminbot.vaadin.core.CRUDPresenter;
 import team.mephi.adminbot.vaadin.components.ButtonGroup;
 import team.mephi.adminbot.vaadin.components.GridSelectActions;
 import team.mephi.adminbot.vaadin.components.buttons.IconButton;
 import team.mephi.adminbot.vaadin.components.buttons.SecondaryButton;
 import team.mephi.adminbot.vaadin.components.grid.AbstractGridView;
 import team.mephi.adminbot.vaadin.components.grid.GridViewConfig;
+import team.mephi.adminbot.vaadin.core.CRUDPresenter;
 import team.mephi.adminbot.vaadin.mailings.dataproviders.TemplateDataProvider;
 import team.mephi.adminbot.vaadin.service.DialogType;
 

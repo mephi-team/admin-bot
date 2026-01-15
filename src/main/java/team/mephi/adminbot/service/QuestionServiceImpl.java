@@ -29,10 +29,10 @@ public class QuestionServiceImpl implements QuestionService {
     /**
      * Конструктор для внедрения зависимостей.
      *
-     * @param authService       сервис для аутентификации и авторизации пользователей.
-     * @param userRepository    репозиторий для управления пользователями.
+     * @param authService        сервис для аутентификации и авторизации пользователей.
+     * @param userRepository     репозиторий для управления пользователями.
      * @param questionRepository репозиторий для управления вопросами пользователей.
-     * @param answerRepository  репозиторий для управления ответами пользователей.
+     * @param answerRepository   репозиторий для управления ответами пользователей.
      */
     public QuestionServiceImpl(AuthService authService, UserRepository userRepository, UserQuestionRepository questionRepository, UserAnswerRepository answerRepository) {
         this.authService = authService;

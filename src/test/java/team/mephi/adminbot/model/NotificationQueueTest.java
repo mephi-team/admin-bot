@@ -38,8 +38,8 @@ class NotificationQueueTest {
         queue.onCreate();
 
         // then
-        assertEquals(NotificationStatus.PENDING, queue.getStatus(), 
-            "По умолчанию статус должен быть PENDING");
+        assertEquals(NotificationStatus.PENDING, queue.getStatus(),
+                "По умолчанию статус должен быть PENDING");
     }
 
     @Test
@@ -53,8 +53,8 @@ class NotificationQueueTest {
         queue.onCreate();
 
         // then
-        assertEquals(NotificationStatus.SENT, queue.getStatus(), 
-            "onCreate не должен перезаписывать существующий статус");
+        assertEquals(NotificationStatus.SENT, queue.getStatus(),
+                "onCreate не должен перезаписывать существующий статус");
     }
 
     @Test
@@ -65,8 +65,8 @@ class NotificationQueueTest {
                 .build();
 
         // then
-        assertEquals(NotificationStatus.PENDING, queue.getStatus(), 
-            "NotificationQueue должен принимать статус PENDING");
+        assertEquals(NotificationStatus.PENDING, queue.getStatus(),
+                "NotificationQueue должен принимать статус PENDING");
     }
 
     @Test
@@ -77,8 +77,8 @@ class NotificationQueueTest {
                 .build();
 
         // then
-        assertEquals(NotificationStatus.SENT, queue.getStatus(), 
-            "NotificationQueue должен принимать статус SENT");
+        assertEquals(NotificationStatus.SENT, queue.getStatus(),
+                "NotificationQueue должен принимать статус SENT");
     }
 
     @Test
@@ -89,8 +89,8 @@ class NotificationQueueTest {
                 .build();
 
         // then
-        assertEquals(NotificationStatus.FAILED, queue.getStatus(), 
-            "NotificationQueue должен принимать статус FAILED");
+        assertEquals(NotificationStatus.FAILED, queue.getStatus(),
+                "NotificationQueue должен принимать статус FAILED");
     }
 
     @Test
@@ -101,8 +101,8 @@ class NotificationQueueTest {
                 .build();
 
         // then
-        assertEquals(NotificationStatus.DELIVERED, queue.getStatus(), 
-            "NotificationQueue должен принимать статус DELIVERED");
+        assertEquals(NotificationStatus.DELIVERED, queue.getStatus(),
+                "NotificationQueue должен принимать статус DELIVERED");
     }
 
     @Test
@@ -115,8 +115,8 @@ class NotificationQueueTest {
 
         // then
         assertEquals(NotificationStatus.FAILED, queue.getStatus());
-        assertEquals("SMTP connection failed: timeout", queue.getError(), 
-            "При статусе FAILED должна заполняться причина ошибки");
+        assertEquals("SMTP connection failed: timeout", queue.getError(),
+                "При статусе FAILED должна заполняться причина ошибки");
     }
 
     @Test
@@ -129,8 +129,8 @@ class NotificationQueueTest {
 
         // then
         assertEquals(NotificationStatus.SENT, queue.getStatus());
-        assertNull(queue.getError(), 
-            "Для статуса SENT поле error может быть null");
+        assertNull(queue.getError(),
+                "Для статуса SENT поле error может быть null");
     }
 
     @Test
@@ -143,8 +143,8 @@ class NotificationQueueTest {
 
         // then
         assertEquals(NotificationStatus.PENDING, queue.getStatus());
-        assertNull(queue.getError(), 
-            "Для статуса PENDING поле error может быть null");
+        assertNull(queue.getError(),
+                "Для статуса PENDING поле error может быть null");
     }
 
     @Test
@@ -157,8 +157,8 @@ class NotificationQueueTest {
 
         // then
         assertEquals(NotificationStatus.DELIVERED, queue.getStatus());
-        assertNull(queue.getError(), 
-            "Для статуса DELIVERED поле error может быть null");
+        assertNull(queue.getError(),
+                "Для статуса DELIVERED поле error может быть null");
     }
 
     @Test

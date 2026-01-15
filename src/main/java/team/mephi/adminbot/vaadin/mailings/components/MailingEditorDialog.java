@@ -12,9 +12,9 @@ import com.vaadin.flow.function.SerializableConsumer;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import team.mephi.adminbot.dto.*;
 import team.mephi.adminbot.service.*;
-import team.mephi.adminbot.vaadin.core.DialogWithTitle;
 import team.mephi.adminbot.vaadin.components.buttons.PrimaryButton;
 import team.mephi.adminbot.vaadin.components.buttons.SecondaryButton;
+import team.mephi.adminbot.vaadin.core.DialogWithTitle;
 
 import java.util.List;
 import java.util.Objects;

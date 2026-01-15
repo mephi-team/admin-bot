@@ -6,8 +6,8 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.function.SerializableConsumer;
 import team.mephi.adminbot.dto.SimpleQuestion;
-import team.mephi.adminbot.vaadin.core.DialogWithTitle;
 import team.mephi.adminbot.vaadin.components.buttons.PrimaryButton;
+import team.mephi.adminbot.vaadin.core.DialogWithTitle;
 
 /**
  * Диалог для ответа на вопрос.

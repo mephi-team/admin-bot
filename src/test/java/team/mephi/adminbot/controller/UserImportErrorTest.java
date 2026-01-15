@@ -14,15 +14,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * Integration tests for user import error scenarios.
- * 
+ * <p>
  * These tests verify the behavior of the /users/import endpoint which is referenced
  * in the UI (users.html line 97) but may not be implemented.
- * 
+ * <p>
  * The tests document the expected error behavior:
  * - 404 Not Found if the endpoint doesn't exist
  * - 405 Method Not Allowed if only certain HTTP methods are supported
  * - 400 Bad Request if the endpoint exists but receives invalid data
- * 
+ * <p>
  * Purpose: Document missing or incomplete import functionality through tests.
  */
 @SpringBootTest
@@ -214,14 +214,14 @@ class UserImportErrorTest {
     /**
      * This test documents that the /users/import functionality is referenced in the UI
      * but is not currently implemented as a working endpoint.
-     * 
+     *
      * Expected behavior:
      * - The link exists in users.html (line 97): <a href="/users/import">
      * - Clicking the link should either:
      *   1. Return 404 Not Found if the endpoint is not implemented
      *   2. Return 405 Method Not Allowed if only POST is implemented but not GET
      *   3. Return a valid response if implemented
-     * 
+     *
      * Current state: This test verifies the error scenario exists.
      */
 //    @Test

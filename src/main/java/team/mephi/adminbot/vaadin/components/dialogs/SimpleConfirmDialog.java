@@ -67,6 +67,7 @@ public class SimpleConfirmDialog extends ConfirmDialog {
 
     /**
      * Построить заголовок диалога.
+     *
      * @return элемент заголовка.
      */
     private Div buildHeader() {
@@ -85,6 +86,7 @@ public class SimpleConfirmDialog extends ConfirmDialog {
 
     /**
      * Создать кнопку закрытия для заголовка.
+     *
      * @return кнопка закрытия.
      */
     private Button createCloseButton() {

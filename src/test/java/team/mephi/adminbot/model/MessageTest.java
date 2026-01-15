@@ -98,8 +98,8 @@ class MessageTest {
 
         // then
         assertEquals(MessageStatus.FAILED, message.getStatus());
-        assertEquals("Telegram API error: user blocked the bot", message.getStatusReason(), 
-            "При статусе FAILED должна заполняться причина ошибки");
+        assertEquals("Telegram API error: user blocked the bot", message.getStatusReason(),
+                "При статусе FAILED должна заполняться причина ошибки");
     }
 
     @Test
@@ -111,8 +111,8 @@ class MessageTest {
 
         // then
         assertEquals(MessageStatus.SENT, message.getStatus());
-        assertNull(message.getStatusReason(), 
-            "Для статуса SENT причина ошибки может быть null");
+        assertNull(message.getStatusReason(),
+                "Для статуса SENT причина ошибки может быть null");
     }
 
     @Test
@@ -124,8 +124,8 @@ class MessageTest {
 
         // then
         assertEquals(MessageStatus.DELIVERED, message.getStatus());
-        assertNull(message.getStatusReason(), 
-            "Для статуса DELIVERED причина ошибки может быть null");
+        assertNull(message.getStatusReason(),
+                "Для статуса DELIVERED причина ошибки может быть null");
     }
 
     @Test
@@ -137,8 +137,8 @@ class MessageTest {
 
         // then
         assertEquals(MessageStatus.READ, message.getStatus());
-        assertNull(message.getStatusReason(), 
-            "Для статуса READ причина ошибки может быть null");
+        assertNull(message.getStatusReason(),
+                "Для статуса READ причина ошибки может быть null");
     }
 
     @Test

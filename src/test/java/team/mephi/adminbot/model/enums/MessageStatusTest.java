@@ -17,7 +17,7 @@ class MessageStatusTest {
 
         // then
         assertEquals(4, statuses.length, "MessageStatus должен содержать 4 значения");
-        
+
         // Проверяем наличие каждого ожидаемого статуса
         assertTrue(contains(statuses, MessageStatus.SENT), "MessageStatus должен содержать SENT");
         assertTrue(contains(statuses, MessageStatus.DELIVERED), "MessageStatus должен содержать DELIVERED");
@@ -79,7 +79,7 @@ class MessageStatusTest {
         assertThrows(IllegalArgumentException.class, () -> {
             MessageStatus.valueOf("sent");
         }, "valueOf должен быть чувствителен к регистру");
-        
+
         assertThrows(IllegalArgumentException.class, () -> {
             MessageStatus.valueOf("Sent");
         }, "valueOf должен быть чувствителен к регистру");
@@ -94,8 +94,8 @@ class MessageStatusTest {
             MessageStatus parsedStatus = MessageStatus.valueOf(name);
 
             // then
-            assertEquals(originalStatus, parsedStatus, 
-                "Round-trip сериализация/десериализация должна работать для " + originalStatus);
+            assertEquals(originalStatus, parsedStatus,
+                    "Round-trip сериализация/десериализация должна работать для " + originalStatus);
         }
     }
 
