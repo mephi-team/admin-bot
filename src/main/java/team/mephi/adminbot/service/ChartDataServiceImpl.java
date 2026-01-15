@@ -24,8 +24,8 @@ import java.util.stream.Stream;
 @Service
 public class ChartDataServiceImpl implements ChartDataService {
     private static final String DEFAULT_BLUE = "#2168df";
-    private final java.util.Random random = new java.util.Random();
     private static final Locale RU = new Locale("ru");
+    private final java.util.Random random = new java.util.Random();
 
     private String[] labelsForInterval(ActivityIntervals interval, Object filterData) {
         try {
@@ -101,8 +101,8 @@ public class ChartDataServiceImpl implements ChartDataService {
         if (filter == null) return null;
         try {
             LocalDate start = null, end = null;
-            String[] startNames = new String[] {"getFrom", "getStart", "getDateFrom", "getFromDate"};
-            String[] endNames = new String[] {"getTo", "getEnd", "getDateTo", "getToDate"};
+            String[] startNames = new String[]{"getFrom", "getStart", "getDateFrom", "getFromDate"};
+            String[] endNames = new String[]{"getTo", "getEnd", "getDateTo", "getToDate"};
             for (String name : startNames) {
                 start = tryGetAsLocalDate(filter, name);
                 if (start != null) break;
@@ -112,10 +112,15 @@ public class ChartDataServiceImpl implements ChartDataService {
                 if (end != null) break;
             }
             if (start != null && end != null) {
-                if (end.isBefore(start)) { LocalDate tmp = start; start = end; end = tmp; }
+                if (end.isBefore(start)) {
+                    LocalDate tmp = start;
+                    start = end;
+                    end = tmp;
+                }
                 return new DateRange(start, end);
             }
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         return null;
     }
 
@@ -126,7 +131,8 @@ public class ChartDataServiceImpl implements ChartDataService {
             Object val = m.invoke(obj);
             return toLocalDate(val);
         } catch (NoSuchMethodException ignored) {
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         return null;
     }
 
@@ -136,10 +142,11 @@ public class ChartDataServiceImpl implements ChartDataService {
         if (val instanceof LocalDate) return (LocalDate) val;
         if (val instanceof LocalDateTime) return ((LocalDateTime) val).toLocalDate();
         if (val instanceof Instant) return LocalDateTime.ofInstant((Instant) val, ZoneId.systemDefault()).toLocalDate();
-        if (val instanceof java.util.Date) return Instant.ofEpochMilli(((java.util.Date) val).getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+        if (val instanceof java.util.Date)
+            return Instant.ofEpochMilli(((java.util.Date) val).getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
         if (val instanceof String) {
             String s = ((String) val).trim();
-            DateTimeFormatter[] fmts = new DateTimeFormatter[] {
+            DateTimeFormatter[] fmts = new DateTimeFormatter[]{
                     DateTimeFormatter.ofPattern("dd.MM.yyyy"),
                     DateTimeFormatter.ISO_LOCAL_DATE,
                     DateTimeFormatter.ofPattern("yyyy-MM-dd"),
@@ -152,16 +159,11 @@ public class ChartDataServiceImpl implements ChartDataService {
                     } else {
                         return LocalDate.parse(s, f);
                     }
-                } catch (Exception ignored) {}
+                } catch (Exception ignored) {
+                }
             }
         }
         return null;
-    }
-
-    private static final class DateRange {
-        final LocalDate start;
-        final LocalDate end;
-        DateRange(LocalDate s, LocalDate e) { this.start = s; this.end = e; }
     }
 
     private BarDataset createDataset(String label, String backgroundColor, String[] labels) {
@@ -174,8 +176,6 @@ public class ChartDataServiceImpl implements ChartDataService {
         }
         return dataset;
     }
-
-    private record DatasetSpec(String label, String color) {}
 
     private BarData createBarData(String[] labels, DatasetSpec... specs) {
         BarData barData = new BarData().addLabels(labels);
@@ -212,7 +212,7 @@ public class ChartDataServiceImpl implements ChartDataService {
 
         return createBarData(labels, data.getStatuses()
                 .stream()
-                .map(s->new DatasetSpec(I18NProvider.translate(s.getTranslationKey()), it.next()))
+                .map(s -> new DatasetSpec(I18NProvider.translate(s.getTranslationKey()), it.next()))
                 .toArray(DatasetSpec[]::new));
     }
 
@@ -220,5 +220,18 @@ public class ChartDataServiceImpl implements ChartDataService {
     public BarData forUtm(UtmView.UtmFilterData data) {
         String[] labels = labelsForInterval(data.getInterval(), data);
         return createBarData(labels, new DatasetSpec("UTM", DEFAULT_BLUE));
+    }
+
+    private static final class DateRange {
+        final LocalDate start;
+        final LocalDate end;
+
+        DateRange(LocalDate s, LocalDate e) {
+            this.start = s;
+            this.end = e;
+        }
+    }
+
+    private record DatasetSpec(String label, String color) {
     }
 }

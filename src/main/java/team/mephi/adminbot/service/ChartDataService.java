@@ -8,7 +8,10 @@ import team.mephi.adminbot.vaadin.analytics.views.UtmView;
 
 public interface ChartDataService {
     BarData forActivity(ActivityView.ActivityFilterData data);
+
     BarData forPreorders(PreordersView.PreorderFilterData data);
+
     BarData forOrders(OrdersView.OrderFilterData data);
+
     BarData forUtm(UtmView.UtmFilterData data);
 }
