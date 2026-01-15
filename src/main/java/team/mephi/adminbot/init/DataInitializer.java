@@ -47,6 +47,7 @@ public class DataInitializer {
     private RoleService roleService;
     private DirectionService directionService;
 
+    /* Предзаполнение БД тестовыми данными при старте приложения */
     @Bean
     public ApplicationRunner initTestData() {
         return ignoredArgs -> {
@@ -82,6 +83,7 @@ public class DataInitializer {
         };
     }
 
+    /* Инициализация ролей */
     private void initRoles() {
         List<Role> roles = Arrays.asList(
                 Role.builder().code(STUDENT.name()).name("Студенты").description("Студенты").build(),
@@ -96,6 +98,7 @@ public class DataInitializer {
         System.out.printf("  → Создано %d ролей%n", roles.size());
     }
 
+    /* Инициализация направлений */
     private void initDirections() {
         List<Direction> directions = Arrays.asList(
                 Direction.builder().code("java").name("Java").build(),
@@ -108,6 +111,7 @@ public class DataInitializer {
         System.out.printf("  → Создано %d направлений%n", directions.size());
     }
 
+    /* Инициализация пользователей */
     private void initUsers() {
         // Получаем роли по имени
         Role studentRole = roleRepository.findByCode(STUDENT.name())
@@ -142,6 +146,7 @@ public class DataInitializer {
         System.out.printf("  → Создано %d пользователей%n", users.size());
     }
 
+    /* Инициализация экспертов */
     private void initExperts() {
         Role lcExpertRole = roleRepository.findByCode(LC_EXPERT.name())
                 .orElseThrow(() -> new RuntimeException("Роль 'LC_EXPERT' не найдена"));
@@ -154,6 +159,7 @@ public class DataInitializer {
         System.out.printf("  → Создано %d экспертов'%n", experts.size());
     }
 
+    /* Инициализация логов согласий на обработку ПД */
     private void initPdConsentLog() {
         Random random = new Random();
         List<ConsentStatus> statuses = Arrays.stream(ConsentStatus.values()).toList();
@@ -176,6 +182,7 @@ public class DataInitializer {
         System.out.printf("  → Создано %d записей согласия на обработку ПД%n", logs.size());
     }
 
+    /* Инициализация кураторов */
     private void initTutors() {
         List<Tutor> tutors = Arrays.asList(
                 Tutor.builder().userName("Сергей Иванов").firstName("Сергей").lastName("Иванов").phone("+79991234567").email("test1@example.org").tgId("@tg_id_1020").build(),
@@ -197,6 +204,7 @@ public class DataInitializer {
         System.out.printf("  → Создано %d кураторов%n", tutors.size());
     }
 
+    /* Инициализация вопросов пользователей */
     private void initQuestions() {
         Random random = new Random();
 
@@ -226,6 +234,7 @@ public class DataInitializer {
         System.out.printf("  → Создано %d вопросов%n", questions.size());
     }
 
+    /* Инициализация ответов пользователей */
     private void initAnswers() {
         Random random = new Random();
 
@@ -243,6 +252,7 @@ public class DataInitializer {
         System.out.printf("  → Создано %d ответов%n", answers.size());
     }
 
+    /* Инициализация рассылок */
     private void initBroadcasts() {
         Random random = new Random();
         List<MailingStatus> statuses = Arrays.stream(MailingStatus.values()).toList();
@@ -275,6 +285,7 @@ public class DataInitializer {
         System.out.printf("  → Создано %d рассылок%n", broadcasts.size());
     }
 
+    /* Инициализация шаблонов писем */
     private void initTemplates() {
         List<MailTemplate> templates = new ArrayList<>();
         for (int i = 1; i <= 100; i++) {
@@ -288,6 +299,7 @@ public class DataInitializer {
         System.out.printf("  → Создано %d шаблонов%n", templates.size());
     }
 
+    /* Инициализация диалогов */
     private void initDialogs() {
         List<User> users = userRepository.findAll();
         List<UserQuestion> allQuestions = questionRepository.findAllWithAnswers();
@@ -314,6 +326,7 @@ public class DataInitializer {
         System.out.println("  → Созданы диалоги, включая с сегодняшней датой");
     }
 
+    /* Вспомогательный метод для создания диалога с сообщениями для пользователя */
     private void createDialogForUser(User user, List<UserQuestion> allQuestions, Random random, boolean forceToday) {
         Dialog dialog = new Dialog();
         dialog.setUser(user);

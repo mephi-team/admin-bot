@@ -19,28 +19,61 @@ import java.util.Optional;
 @Repository
 @SuppressWarnings("unused")
 public interface TutorRepository extends JpaRepository<Tutor, Long> {
-
+    /**
+     * Поиск всех репетиторов с их направлениями и назначенными студентами, соответствующих заданному запросу.
+     *
+     * @param query    строка запроса для поиска по имени или фамилии репетитора
+     * @param pageable объект Pageable для пагинации результатов
+     * @return список репетиторов с их направлениями и назначенными студентами
+     */
     @Query("SELECT t FROM Tutor t LEFT JOIN FETCH t.studentAssignments sa LEFT JOIN FETCH t.directions LEFT JOIN FETCH sa.student WHERE LOWER(t.lastName) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(t.firstName) LIKE LOWER(CONCAT('%', :query, '%'))")
     List<Tutor> findAllWithDirectionsAndStudents(String query, Pageable pageable);
 
+    /**
+     * Подсчет количества репетиторов, соответствующих заданному запросу по имени или фамилии.
+     *
+     * @param query строка запроса для поиска по имени или фамилии репетитора
+     * @return количество репетиторов, соответствующих критериям поиска
+     */
     @Query("SELECT count(t) FROM Tutor t WHERE LOWER(t.firstName) LIKE LOWER(CONCAT('%', :query, '%')) or LOWER(t.lastName) LIKE LOWER(CONCAT('%', :query, '%'))")
     Integer countByName(String query);
 
+    /**
+     * Логическое удаление репетитора по его идентификатору.
+     *
+     * @param id идентификатор репетитора
+     */
     @Query("update Tutor t set t.deleted = FUNCTION('NOT', t.deleted) WHERE t.id = :id")
     @Transactional
     @Modifying
     void deleteById(@NonNull Long id);
 
+    /**
+     * Логическое удаление нескольких репетиторов по их идентификаторам.
+     *
+     * @param ids коллекция идентификаторов репетиторов
+     */
     @Query("update Tutor t set t.deleted = FUNCTION('NOT', t.deleted) WHERE t.id IN :ids")
     @Transactional
     @Modifying
     void deleteAllById(@Param("ids") @NonNull Iterable<? extends Long> ids);
 
+    /**
+     * Блокировка нескольких репетиторов по их идентификаторам.
+     *
+     * @param ids коллекция идентификаторов репетиторов
+     */
     @Query("update Tutor t set t.deleted = FUNCTION('NOT', t.deleted) WHERE t.id IN :ids")
     @Transactional
     @Modifying
     void blockAllById(@Param("ids") Iterable<? extends Long> ids);
 
+    /**
+     * Поиск репетитора по его идентификатору вместе с назначенными студентами.
+     *
+     * @param id идентификатор репетитора
+     * @return опциональный репетитор с назначенными студентами
+     */
     @Query("SELECT t FROM Tutor t LEFT JOIN FETCH t.studentAssignments sa LEFT JOIN FETCH sa.student WHERE t.id = :id")
     Optional<Tutor> findByIdWithStudent(@NonNull Long id);
 }

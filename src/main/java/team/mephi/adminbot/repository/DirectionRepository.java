@@ -12,5 +12,11 @@ import java.util.Optional;
 @Repository
 @SuppressWarnings("unused")
 public interface DirectionRepository extends JpaRepository<Direction, Long> {
+    /**
+     * Находит направление по его названию.
+     *
+     * @param name Название направления.
+     * @return Опциональное направление.
+     */
     Optional<Direction> findByName(String name);
 }

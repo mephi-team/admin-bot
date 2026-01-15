@@ -18,6 +18,7 @@ import java.util.Optional;
 public interface DialogRepository extends JpaRepository<Dialog, Long> {
     long countByLastMessageAtAfter(Instant dateTime);
 
+    // Загружаем диалоги с сообщениями за последнюю неделю
     @Query("SELECT d FROM Dialog d WHERE d.lastMessageAt >= :oneWeekAgo")
     List<Dialog> findLastWeekDialogs(Instant oneWeekAgo);
 
@@ -29,6 +30,7 @@ public interface DialogRepository extends JpaRepository<Dialog, Long> {
     @Query("SELECT d FROM Dialog d LEFT JOIN FETCH d.user u WHERE LOWER(COALESCE(u.userName, '')) LIKE LOWER(CONCAT('%', :query, '%'))")
     List<Dialog> searchByUserName(String query);
 
+    // Поиск по имени пользователя или содержимому сообщений с использованием нативного SQL
     @Query(value = """
             SELECT 
                 d.id AS dialogId,
@@ -59,6 +61,7 @@ public interface DialogRepository extends JpaRepository<Dialog, Long> {
             """, nativeQuery = true)
     List<DialogWithLastMessageDto> findDialogsWithLastMessageNative(String query, Optional<Long> user);
 
+    // Подсчёт количества диалогов по поисковому запросу с использованием нативного SQL
     @Query(value = """
             SELECT 
                 count(1)
@@ -68,9 +71,11 @@ public interface DialogRepository extends JpaRepository<Dialog, Long> {
             """, nativeQuery = true)
     Integer countDialogsWithLastMessageNative(String query, Optional<Long> user);
 
+    // Подсчёт общего количества непрочитанных сообщений во всех диалогах
     @Query("SELECT sum(d.unreadCount) FROM Dialog d")
     Integer unreadCount();
 
+    // Загрузка диалога вместе с пользователем и его ролью по идентификатору диалога
     @Query("SELECT d FROM Dialog d JOIN FETCH d.user JOIN FETCH d.user.role JOIN FETCH d.direction WHERE d.id = :id")
     Optional<Dialog> findByIdWithUser(Long id);
 }
