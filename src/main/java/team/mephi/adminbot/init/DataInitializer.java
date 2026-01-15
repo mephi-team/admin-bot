@@ -153,7 +153,8 @@ public class DataInitializer {
 
         List<Expert> experts = Arrays.asList(
                 Expert.builder().tgId("@tg_1012").tgName("tg_name_1012").email("expert1@example.com").userName("Сергей Смирнов").firstName("Сергей").lastName("Смирнов").role(lcExpertRole).status(UserStatus.ACTIVE).isActive(true).build(),
-                Expert.builder().tgId("@tg_1013").tgName("tg_name_1013").email("admin1@example.com").userName("Admin").firstName("Admin").lastName("Admin").role(lcExpertRole).status(UserStatus.ACTIVE).isActive(true).build()
+                Expert.builder().tgId("@tg_1013").tgName("tg_name_1013").email("expert2@example.com").userName("Петр Смирнов").firstName("Петр").lastName("Смирнов").role(lcExpertRole).status(UserStatus.ACTIVE).isActive(true).build(),
+                Expert.builder().tgId("@tg_1014").tgName("tg_name_1014").email("admin1@example.com").userName("Admin").firstName("Admin").lastName("Admin").role(lcExpertRole).status(UserStatus.ACTIVE).isActive(true).build()
         );
         expertRepository.saveAll(experts);
         System.out.printf("  → Создано %d экспертов'%n", experts.size());
