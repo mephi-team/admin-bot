@@ -13,6 +13,7 @@ public class CohortDto {
     private String id;
     private String name;
     private Boolean current;
+
     /**
      * Получает отображаемое имя когорты, добавляя пометку "текущая", если это актуальная когорта.
      *

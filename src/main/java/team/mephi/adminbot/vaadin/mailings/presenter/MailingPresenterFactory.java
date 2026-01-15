@@ -27,9 +27,9 @@ public class MailingPresenterFactory {
     /**
      * Конструктор фабрики презентеров рассылок.
      *
-     * @param mailingService     сервис для работы с рассылками
-     * @param templateService    сервис для работы с шаблонами
-     * @param dialogService      сервис для отображения диалогов
+     * @param mailingService      сервис для работы с рассылками
+     * @param templateService     сервис для работы с шаблонами
+     * @param dialogService       сервис для отображения диалогов
      * @param notificationService сервис для отображения уведомлений
      */
     public MailingPresenterFactory(

@@ -17,7 +17,7 @@
 //import static org.mockito.Mockito.mock;
 //import static org.mockito.Mockito.verify;
 //
-///**
+/// **
 // * Юнит-тесты для NotificationServiceImpl.
 // * Покрывают: выбор вариантов оформления уведомлений.
 // */

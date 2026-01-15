@@ -23,6 +23,7 @@ public class PreorderForm extends FormLayout {
 
     /**
      * Создает форму предзаказов с настройками по умолчанию.
+     *
      * @param cohortService Сервис для получения информации о когортах.
      */
     public PreorderForm(CohortService cohortService) {
@@ -53,6 +54,7 @@ public class PreorderForm extends FormLayout {
 
     /**
      * Изменяет режим выбора даты в зависимости от выбранного интервала.
+     *
      * @param interval Выбранный интервал активности.
      */
     private void changeDatePicker(ActivityIntervals interval) {

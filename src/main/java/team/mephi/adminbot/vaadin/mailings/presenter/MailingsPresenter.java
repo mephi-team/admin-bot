@@ -21,8 +21,8 @@ public class MailingsPresenter extends CRUDPresenter<SimpleMailing> implements M
     /**
      * Конструктор презентера рассылок.
      *
-     * @param dataProvider      провайдер данных для рассылок
-     * @param dialogService     сервис для отображения диалогов
+     * @param dataProvider        провайдер данных для рассылок
+     * @param dialogService       сервис для отображения диалогов
      * @param notificationService сервис для отображения уведомлений
      */
     public MailingsPresenter(CRUDDataProvider<SimpleMailing> dataProvider, DialogService<SimpleMailing> dialogService, NotificationService notificationService) {

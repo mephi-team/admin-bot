@@ -15,7 +15,8 @@ public enum ActivityType {
 
     /**
      * Конструктор для типа активности.
-     * @param id Идентификатор типа активности.
+     *
+     * @param id       Идентификатор типа активности.
      * @param labelKey Ключ для локализации метки типа активности.
      */
     ActivityType(String id, String labelKey) {
@@ -25,6 +26,7 @@ public enum ActivityType {
 
     /**
      * Преобразует тип активности в строковое представление.
+     *
      * @return Идентификатор типа активности.
      */
     @Override

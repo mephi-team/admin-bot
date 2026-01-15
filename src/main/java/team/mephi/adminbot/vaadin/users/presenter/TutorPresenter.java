@@ -23,8 +23,8 @@ public class TutorPresenter extends CRUDPresenter<SimpleTutor> implements TutorA
     /**
      * Конструктор презентера для преподавателей.
      *
-     * @param dataProvider      Провайдер данных преподавателей.
-     * @param dialogService     Сервис для отображения диалогов.
+     * @param dataProvider        Провайдер данных преподавателей.
+     * @param dialogService       Сервис для отображения диалогов.
      * @param notificationService Сервис для отображения уведомлений.
      */
     public TutorPresenter(TutorDataProvider dataProvider, DialogService<SimpleTutor> dialogService, NotificationService notificationService) {

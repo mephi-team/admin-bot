@@ -46,6 +46,7 @@ public abstract class AbstractGridView<T> extends VerticalLayout {
 
     /**
      * Настройка представления грида на основе переданной конфигурации.
+     *
      * @param config конфигурация грида
      */
     protected final void setup(GridViewConfig<T> config) {
@@ -109,12 +110,14 @@ public abstract class AbstractGridView<T> extends VerticalLayout {
 
     /**
      * Настройка колонок грида — реализует подкласс
+     *
      * @param grid грид для настройки колонок
      */
     protected abstract void configureColumns(Grid<T> grid);
 
     /**
      * Настройка колонки действий — реализует подкласс
+     *
      * @param grid грид для настройки колонки действий
      */
     protected abstract void configureActionColumn(Grid<T> grid);

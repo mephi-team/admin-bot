@@ -26,16 +26,16 @@ public class DialogWithLastMessageDto {
     /**
      * Конструктор для создания объекта передачи данных диалога с информацией о последнем сообщении.
      *
-     * @param dialogId               Идентификатор диалога.
-     * @param userLastName           Фамилия пользователя.
-     * @param userFirstName          Имя пользователя.
-     * @param userRoleDescription    Описание роли пользователя.
-     * @param userExternalId         Внешний идентификатор пользователя.
-     * @param lastMessageAtRaw       Время последнего сообщения (может быть разных типов).
-     * @param unreadCount            Количество непрочитанных сообщений.
-     * @param lastMessageText        Текст последнего сообщения.
-     * @param lastMessageSenderType  Тип отправителя последнего сообщения.
-     * @param lastMessageSenderName  Имя отправителя последнего сообщения.
+     * @param dialogId              Идентификатор диалога.
+     * @param userLastName          Фамилия пользователя.
+     * @param userFirstName         Имя пользователя.
+     * @param userRoleDescription   Описание роли пользователя.
+     * @param userExternalId        Внешний идентификатор пользователя.
+     * @param lastMessageAtRaw      Время последнего сообщения (может быть разных типов).
+     * @param unreadCount           Количество непрочитанных сообщений.
+     * @param lastMessageText       Текст последнего сообщения.
+     * @param lastMessageSenderType Тип отправителя последнего сообщения.
+     * @param lastMessageSenderName Имя отправителя последнего сообщения.
      */
     public DialogWithLastMessageDto(
             Long dialogId,

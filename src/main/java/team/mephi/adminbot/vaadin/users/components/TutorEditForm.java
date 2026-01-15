@@ -45,10 +45,10 @@ public class TutorEditForm extends FormLayout {
     /**
      * Конструктор формы редактирования куратора.
      *
-     * @param roleService    сервис для работы с ролями
-     * @param cohortService  сервис для работы с когорты
+     * @param roleService      сервис для работы с ролями
+     * @param cohortService    сервис для работы с когорты
      * @param directionService сервис для работы с направлениями
-     * @param userService    сервис для работы с пользователями
+     * @param userService      сервис для работы с пользователями
      */
     public TutorEditForm(RoleService roleService, CohortService cohortService, DirectionService directionService, UserService userService) {
         var studentsProvider = new CallbackDataProvider<SimpleUser, String>(

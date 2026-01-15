@@ -25,6 +25,7 @@ public class UtmForm extends FormLayout {
 
     /**
      * Создает форму UTM с настройками по умолчанию.
+     *
      * @param cohortService Сервис для получения информации о когортах.
      */
     public UtmForm(CohortService cohortService) {
@@ -61,6 +62,7 @@ public class UtmForm extends FormLayout {
 
     /**
      * Изменяет режим выбора даты в зависимости от выбранного интервала.
+     *
      * @param interval Выбранный интервал активности.
      */
     private void changeDatePicker(ActivityIntervals interval) {

@@ -21,8 +21,8 @@ public class StudentPresenter extends UsersPresenter implements StudentActions {
     /**
      * Конструктор презентера для студентов.
      *
-     * @param dataProvider      Провайдер данных пользователей.
-     * @param dialogService     Сервис для отображения диалогов.
+     * @param dataProvider        Провайдер данных пользователей.
+     * @param dialogService       Сервис для отображения диалогов.
      * @param notificationService Сервис для отображения уведомлений.
      */
     public StudentPresenter(UserDataProvider dataProvider, DialogService<SimpleUser> dialogService, NotificationService notificationService) {

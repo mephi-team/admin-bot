@@ -28,10 +28,10 @@ public class UsersPresenterFactory {
     /**
      * Конструктор фабрики презентеров пользователей.
      *
-     * @param tutorService      Сервис для управления преподавателями.
-     * @param userService       Сервис для управления пользователями.
-     * @param expertService     Сервис для управления экспертами.
-     * @param dialogService     Сервис для отображения диалогов.
+     * @param tutorService        Сервис для управления преподавателями.
+     * @param userService         Сервис для управления пользователями.
+     * @param expertService       Сервис для управления экспертами.
+     * @param dialogService       Сервис для отображения диалогов.
      * @param notificationService Сервис для отображения уведомлений.
      */
     public UsersPresenterFactory(TutorService tutorService, UserService userService, ExpertService expertService, DialogService<SimpleUser> dialogService, NotificationService notificationService) {

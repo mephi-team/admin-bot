@@ -10,9 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import team.mephi.adminbot.vaadin.DialogWithTitle;
 import team.mephi.adminbot.vaadin.components.dialogs.SimpleConfirmDialog;
 
-import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * Юнит-тесты для DialogServiceImpl.

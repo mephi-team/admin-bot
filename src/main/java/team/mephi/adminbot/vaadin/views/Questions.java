@@ -49,10 +49,10 @@ public class Questions extends AbstractGridView<SimpleQuestion> {
     /**
      * Конструктор для создания представления страницы вопросов.
      *
-     * @param providerFactory   фабрика для создания провайдера данных вопросов.
-     * @param dialogService     сервис для отображения диалогов.
+     * @param providerFactory     фабрика для создания провайдера данных вопросов.
+     * @param dialogService       сервис для отображения диалогов.
      * @param notificationService сервис для отображения уведомлений.
-     * @param authService       сервис для аутентификации и авторизации пользователей.
+     * @param authService         сервис для аутентификации и авторизации пользователей.
      */
     public Questions(QuestionDataProviderFactory providerFactory, DialogService<?> dialogService, NotificationService notificationService, AuthService authService) {
         this.provider = providerFactory.createDataProvider();

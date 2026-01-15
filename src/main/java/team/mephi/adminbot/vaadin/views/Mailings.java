@@ -39,8 +39,8 @@ public class Mailings extends VerticalLayout {
     /**
      * Конструктор для создания представления страницы рассылок.
      *
-     * @param tabProviders       список провайдеров вкладок рассылок.
-     * @param presenterFactory   фабрика для создания презентеров рассылок.
+     * @param tabProviders        список провайдеров вкладок рассылок.
+     * @param presenterFactory    фабрика для создания презентеров рассылок.
      * @param mailingCountService сервис для получения количества рассылок по типам.
      */
     public Mailings(

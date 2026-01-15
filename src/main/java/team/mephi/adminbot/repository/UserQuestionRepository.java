@@ -26,6 +26,7 @@ public interface UserQuestionRepository extends JpaRepository<UserQuestion, Long
 
     @Query("SELECT q FROM UserQuestion q JOIN FETCH q.user LEFT JOIN FETCH q.direction LEFT JOIN FETCH q.answers WHERE LOWER(q.text) LIKE LOWER(CONCAT('%', :query, '%'))")
     List<UserQuestion> findAllByText(String query, Pageable pageable);
+
     /**
      * Подсчет количества пользовательских вопросов, соответствующих заданному запросу по тексту.
      *
@@ -35,6 +36,7 @@ public interface UserQuestionRepository extends JpaRepository<UserQuestion, Long
 
     @Query("SELECT count(q) FROM UserQuestion q WHERE LOWER(q.text) LIKE LOWER(CONCAT('%', :query, '%'))")
     Integer countByText(String query);
+
     /**
      * Поиск всех пользовательских вопросов вместе с их ответами.
      *

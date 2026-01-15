@@ -50,6 +50,7 @@ public class ActivityForm extends FormLayout {
 
     /**
      * Изменяет режим выбора даты в зависимости от выбранного интервала.
+     *
      * @param interval
      */
     private void changeDatePicker(ActivityIntervals interval) {

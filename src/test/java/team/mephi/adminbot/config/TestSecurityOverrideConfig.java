@@ -15,8 +15,8 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
  * Тестовая security-конфигурация, которая:
  * 1) Полностью "перехватывает" /api/** (чтобы Vaadin security туда не лез)
  * 2) Для /api/** даёт:
- *    - без аутентификации -> 401 (без редиректов)
- *    - с аутентификацией -> роли проверяются через @PreAuthorize
+ * - без аутентификации -> 401 (без редиректов)
+ * - с аутентификацией -> роли проверяются через @PreAuthorize
  * 3) Для всего остального -> permitAll (чтобы не триггерить VaadinContext Lookup)
  */
 @TestConfiguration

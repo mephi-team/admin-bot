@@ -20,10 +20,10 @@ public class TutorEditorDialogFactory {
     /**
      * Конструктор фабрики диалогов редактирования кураторов.
      *
-     * @param roleService    сервис для работы с ролями
-     * @param cohortService  сервис для работы с когорты
+     * @param roleService      сервис для работы с ролями
+     * @param cohortService    сервис для работы с когорты
      * @param directionService сервис для работы с направлениями
-     * @param userService    сервис для работы с пользователями
+     * @param userService      сервис для работы с пользователями
      */
     public TutorEditorDialogFactory(RoleService roleService, CohortService cohortService, DirectionService directionService, UserService userService) {
         this.roleService = roleService;

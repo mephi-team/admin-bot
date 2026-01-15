@@ -24,7 +24,8 @@ import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UserApiController.class)
 @Import(TestSecurityConfig.class)
@@ -37,6 +38,25 @@ class UserApiControllerTest {
     private UserRepository userRepository;
 
     // ===== /api/user/profile =====
+
+    private static Authentication jwtAuth(String sub, Map<String, Object> claims, String... authorities) {
+        Jwt.Builder builder = Jwt.withTokenValue("test-token")
+                .header("alg", "none")
+                .issuedAt(Instant.now())
+                .expiresAt(Instant.now().plusSeconds(3600))
+                .subject(sub);
+
+        claims.forEach(builder::claim);
+
+        Jwt jwt = builder.build();
+
+        List<SimpleGrantedAuthority> auths = List.of(authorities).stream()
+                .map(SimpleGrantedAuthority::new)
+                .toList();
+
+        // principal = Jwt (важно для UserApiController)
+        return new UsernamePasswordAuthenticationToken(jwt, "n/a", auths);
+    }
 
     @Test
     void Given_validJwtAndUserExistsInDb_When_getProfile_Then_returnsJwtFieldsPlusDbFields() throws Exception {
@@ -139,14 +159,14 @@ class UserApiControllerTest {
         verifyNoMoreInteractions(userRepository);
     }
 
+    // ===== /api/user/me =====
+
     @Test
     void Given_noAuthentication_When_getProfile_Then_returns401() throws Exception {
         mockMvc.perform(get("/api/user/profile"))
                 .andExpect(status().isUnauthorized());
         verifyNoInteractions(userRepository);
     }
-
-    // ===== /api/user/me =====
 
     @Test
     void Given_validJwt_When_getMe_Then_returnsBasicJwtInfoAndAuthorities() throws Exception {
@@ -175,6 +195,8 @@ class UserApiControllerTest {
         verifyNoInteractions(userRepository);
     }
 
+    // ===== /api/user/check =====
+
     @Test
     void Given_noAuthentication_When_getMe_Then_returns401() throws Exception {
         mockMvc.perform(get("/api/user/me"))
@@ -182,7 +204,7 @@ class UserApiControllerTest {
         verifyNoInteractions(userRepository);
     }
 
-    // ===== /api/user/check =====
+    // ===== helpers =====
 
     @Test
     void Given_noAuthentication_When_check_Then_returnsOkBecausePermitted() throws Exception {
@@ -192,26 +214,5 @@ class UserApiControllerTest {
                 .andExpect(jsonPath("$.message").value("User is authenticated"));
 
         verifyNoInteractions(userRepository);
-    }
-
-    // ===== helpers =====
-
-    private static Authentication jwtAuth(String sub, Map<String, Object> claims, String... authorities) {
-        Jwt.Builder builder = Jwt.withTokenValue("test-token")
-                .header("alg", "none")
-                .issuedAt(Instant.now())
-                .expiresAt(Instant.now().plusSeconds(3600))
-                .subject(sub);
-
-        claims.forEach(builder::claim);
-
-        Jwt jwt = builder.build();
-
-        List<SimpleGrantedAuthority> auths = List.of(authorities).stream()
-                .map(SimpleGrantedAuthority::new)
-                .toList();
-
-        // principal = Jwt (важно для UserApiController)
-        return new UsernamePasswordAuthenticationToken(jwt, "n/a", auths);
     }
 }

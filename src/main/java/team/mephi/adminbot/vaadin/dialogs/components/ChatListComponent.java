@@ -68,6 +68,7 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
 
     /**
      * Рендерит элемент списка чата в зависимости от его типа (заголовок даты или сообщение).
+     *
      * @param item элемент списка чата.
      * @return отрендеренный компонент Div.
      */
@@ -80,6 +81,7 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
 
     /**
      * Рендерит сообщение в чате с соответствующим стилем в зависимости от отправителя.
+     *
      * @param item элемент списка чата, содержащий сообщение.
      * @return отрендеренное сообщение в компоненте Div.
      */
@@ -106,6 +108,7 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
 
     /**
      * Рендерит заголовок даты для разделения сообщений по датам.
+     *
      * @param label текст заголовка даты.
      * @return отрендеренный заголовок в компоненте Div.
      */

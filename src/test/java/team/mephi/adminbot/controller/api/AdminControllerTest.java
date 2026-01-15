@@ -19,10 +19,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static org.mockito.Mockito.*;
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = AdminController.class)
 @Import(TestSecurityConfig.class)
@@ -33,6 +34,15 @@ class AdminControllerTest {
 
     @MockitoBean
     private UserRepository userRepository;
+
+    private static Stream<Arguments> adminEndpoints() {
+        return Stream.of(
+                Arguments.of(HttpMethod.GET, "/api/admin/users"),
+                Arguments.of(HttpMethod.GET, "/api/admin/users/1"),
+                Arguments.of(HttpMethod.DELETE, "/api/admin/users/2"),
+                Arguments.of(HttpMethod.GET, "/api/admin/stats")
+        );
+    }
 
     @Test
     @WithMockUser(roles = "ADMIN")
@@ -152,14 +162,5 @@ class AdminControllerTest {
                 .andExpect(status().isUnauthorized());
 
         verifyNoInteractions(userRepository);
-    }
-
-    private static Stream<Arguments> adminEndpoints() {
-        return Stream.of(
-                Arguments.of(HttpMethod.GET, "/api/admin/users"),
-                Arguments.of(HttpMethod.GET, "/api/admin/users/1"),
-                Arguments.of(HttpMethod.DELETE, "/api/admin/users/2"),
-                Arguments.of(HttpMethod.GET, "/api/admin/stats")
-        );
     }
 }

@@ -15,7 +15,7 @@ public class DashboardDataProviderFactory {
     /**
      * Конструктор класса DashboardDataProviderFactory.
      *
-     * @param messageService сервис для работы с сообщениями
+     * @param messageService  сервис для работы с сообщениями
      * @param questionService сервис для работы с вопросами
      */
     public DashboardDataProviderFactory(MessageService messageService, QuestionService questionService) {

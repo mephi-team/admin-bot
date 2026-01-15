@@ -28,7 +28,8 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * API-тесты для ExpertController.
@@ -43,6 +44,40 @@ class ExpertControllerTest {
 
     @MockitoBean
     private UserQuestionRepository questionRepository;
+
+    /**
+     * ВАЖНО: для PUT обязательно отдаём body, иначе до проверки @PreAuthorize
+     * не дойдёт (упадёт на биндинге @RequestBody) и получишь 500.
+     */
+    private static Stream<Arguments> expertEndpoints() {
+        return Stream.of(
+                Arguments.of(HttpMethod.GET, "/api/expert/questions", null),
+                Arguments.of(HttpMethod.GET, "/api/expert/questions/1", null),
+                Arguments.of(HttpMethod.PUT, "/api/expert/questions/1", """
+                        { "text": "any" }
+                        """),
+                Arguments.of(HttpMethod.GET, "/api/expert/stats", null)
+        );
+    }
+
+    private static MockHttpServletRequestBuilder withBodyIfNeeded(MockHttpServletRequestBuilder builder, String body) {
+        if (body == null) {
+            return builder;
+        }
+        return builder.contentType(MediaType.APPLICATION_JSON).content(body);
+    }
+
+    /**
+     * Без JwtAuthenticationToken / oauth2-resource-server классов.
+     * Нам важно только наличие authorities для @PreAuthorize.
+     */
+    private static AbstractAuthenticationToken expertAuth() {
+        return new SimpleAuthToken(List.of(new SimpleGrantedAuthority("ROLE_LC_EXPERT")));
+    }
+
+    private static AbstractAuthenticationToken userAuth() {
+        return new SimpleAuthToken(List.of(new SimpleGrantedAuthority("ROLE_USER")));
+    }
 
     @Test
     void Given_expertRole_When_getAllQuestions_Then_returnsOkAndList() throws Exception {
@@ -197,40 +232,6 @@ class ExpertControllerTest {
                 .andExpect(status().isUnauthorized());
 
         verifyNoInteractions(questionRepository);
-    }
-
-    /**
-     * ВАЖНО: для PUT обязательно отдаём body, иначе до проверки @PreAuthorize
-     * не дойдёт (упадёт на биндинге @RequestBody) и получишь 500.
-     */
-    private static Stream<Arguments> expertEndpoints() {
-        return Stream.of(
-                Arguments.of(HttpMethod.GET, "/api/expert/questions", null),
-                Arguments.of(HttpMethod.GET, "/api/expert/questions/1", null),
-                Arguments.of(HttpMethod.PUT, "/api/expert/questions/1", """
-                        { "text": "any" }
-                        """),
-                Arguments.of(HttpMethod.GET, "/api/expert/stats", null)
-        );
-    }
-
-    private static MockHttpServletRequestBuilder withBodyIfNeeded(MockHttpServletRequestBuilder builder, String body) {
-        if (body == null) {
-            return builder;
-        }
-        return builder.contentType(MediaType.APPLICATION_JSON).content(body);
-    }
-
-    /**
-     * Без JwtAuthenticationToken / oauth2-resource-server классов.
-     * Нам важно только наличие authorities для @PreAuthorize.
-     */
-    private static AbstractAuthenticationToken expertAuth() {
-        return new SimpleAuthToken(List.of(new SimpleGrantedAuthority("ROLE_LC_EXPERT")));
-    }
-
-    private static AbstractAuthenticationToken userAuth() {
-        return new SimpleAuthToken(List.of(new SimpleGrantedAuthority("ROLE_USER")));
     }
 
     private static final class SimpleAuthToken extends AbstractAuthenticationToken {

@@ -21,8 +21,8 @@ public class UsersPresenter extends BlockingPresenter implements UserActions {
     /**
      * Конструктор презентера для пользователей.
      *
-     * @param dataProvider      Провайдер данных пользователей.
-     * @param dialogService     Сервис для отображения диалогов.
+     * @param dataProvider        Провайдер данных пользователей.
+     * @param dialogService       Сервис для отображения диалогов.
      * @param notificationService Сервис для отображения уведомлений.
      */
     public UsersPresenter(UserDataProvider dataProvider, DialogService<SimpleUser> dialogService, NotificationService notificationService) {

@@ -15,6 +15,7 @@ public enum OrderStatus {
 
     /**
      * Конструктор для статуса заказа.
+     *
      * @param translationKey Ключ для локализации метки статуса заказа.
      */
     OrderStatus(String translationKey) {

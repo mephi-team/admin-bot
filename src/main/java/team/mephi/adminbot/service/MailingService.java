@@ -23,7 +23,7 @@ public interface MailingService {
     /**
      * Находит рассылки по id.
      *
-     * @param id       рассылки.
+     * @param id рассылки.
      * @return поток рассылок, соответствующих критериям поиска и пагинации.
      */
     Optional<SimpleMailing> findById(Long id);
