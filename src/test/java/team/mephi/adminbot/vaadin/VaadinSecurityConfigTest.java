@@ -42,6 +42,8 @@ class VaadinSecurityConfigTest {
     void Given_nullAuthentication_When_onLogoutSuccess_Then_redirectsWithoutIdTokenHint() throws Exception {
         // Arrange
         VaadinSecurityConfig config = new VaadinSecurityConfig();
+        config.keycloakLogoutUrl = "http://localhost:8081/realms/mephi-realm/protocol/openid-connect/logout";
+        config.postLogoutRedirectUri = "http://localhost:8080";
         LogoutSuccessHandler handler = invokeOidcLogoutSuccessHandler(config);
         ArgumentCaptor<String> urlCaptor = ArgumentCaptor.forClass(String.class);
 
@@ -63,6 +65,8 @@ class VaadinSecurityConfigTest {
     void Given_oidcPrincipal_When_onLogoutSuccess_Then_redirectsWithIdTokenHint() throws Exception {
         // Arrange
         VaadinSecurityConfig config = new VaadinSecurityConfig();
+        config.keycloakLogoutUrl = "http://localhost:8081/realms/mephi-realm/protocol/openid-connect/logout";
+        config.postLogoutRedirectUri = "http://localhost:8080";
         LogoutSuccessHandler handler = invokeOidcLogoutSuccessHandler(config);
 
         DefaultOidcUser oidcUser = org.mockito.Mockito.mock(DefaultOidcUser.class);
@@ -89,6 +93,8 @@ class VaadinSecurityConfigTest {
     void Given_nonOidcPrincipal_When_onLogoutSuccess_Then_redirectsWithoutIdTokenHint() throws Exception {
         // Arrange
         VaadinSecurityConfig config = new VaadinSecurityConfig();
+        config.keycloakLogoutUrl = "http://localhost:8081/realms/mephi-realm/protocol/openid-connect/logout";
+        config.postLogoutRedirectUri = "http://localhost:8080";
         LogoutSuccessHandler handler = invokeOidcLogoutSuccessHandler(config);
         when(authentication.getPrincipal()).thenReturn("user");
 
