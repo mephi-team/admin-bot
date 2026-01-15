@@ -16,6 +16,9 @@ import java.util.stream.Collectors;
 
 import static team.mephi.adminbot.vaadin.users.tabs.UserTabType.LC_EXPERT;
 
+/**
+ * Провайдер данных для пользователей с ролью "Эксперт".
+ */
 public class ExpertDataProvider extends BaseUserDataProvider {
 
     private final ExpertService expertService;

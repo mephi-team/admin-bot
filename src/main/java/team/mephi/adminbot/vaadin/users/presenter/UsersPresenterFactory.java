@@ -13,6 +13,10 @@ import team.mephi.adminbot.vaadin.service.NotificationService;
 import team.mephi.adminbot.vaadin.users.dataproviders.*;
 import team.mephi.adminbot.vaadin.users.tabs.UserTabType;
 
+/**
+ * Фабрика для создания презентеров пользователей в зависимости от их роли.
+ * Использует соответствующие провайдеры данных и сервисы для инициализации презентеров.
+ */
 @SpringComponent
 public class UsersPresenterFactory {
     private final TutorService tutorService;

@@ -10,6 +10,9 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.util.Arrays;
 
+/**
+ * Компонент для выбора диапазона дат с двумя DatePicker'ами.
+ */
 public class DateRangePicker extends CustomField<DateRangePicker.LocalDateRange> {
 
     private final DatePicker start;

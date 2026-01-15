@@ -4,6 +4,9 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.popover.Popover;
 import com.vaadin.flow.component.popover.PopoverPosition;
 
+/**
+ * Всплывающая подсказка, открывающаяся при наведении на компонент.
+ */
 public class PdPopover extends Popover {
     public PdPopover(Component... components) {
         super(components);

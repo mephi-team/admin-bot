@@ -4,6 +4,11 @@ import team.mephi.adminbot.vaadin.service.DialogType;
 
 import java.util.List;
 
+/**
+ * Интерфейс для действий CRUD (Создание, Чтение, Обновление, Удаление) над сущностями типа T.
+ *
+ * @param <T> Тип сущности, над которой выполняются действия CRUD.
+ */
 public interface CRUDActions<T> {
     void onCreate(Object item, DialogType type, Object... param);
 

@@ -16,6 +16,11 @@ import team.mephi.adminbot.vaadin.components.fields.FullNameField;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/**
+ * Форма для создания и редактирования пользователей.
+ * Содержит поля для ввода информации о пользователе, такие как роль, полное имя, email, Telegram ID, номер телефона,
+ * когорты, направления, город и куратор.
+ */
 public class UserForm extends FormLayout {
     @Getter
     private final ComboBox<RoleDto> roles = new ComboBox<>();

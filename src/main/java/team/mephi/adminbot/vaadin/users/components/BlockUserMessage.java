@@ -5,6 +5,9 @@ import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.textfield.TextArea;
 import lombok.Getter;
 
+/**
+ * Форма для отображения последнего сообщения пользователя при блокировке.
+ */
 public class BlockUserMessage extends FormLayout {
     @Getter
     private final TextArea message = new TextArea();

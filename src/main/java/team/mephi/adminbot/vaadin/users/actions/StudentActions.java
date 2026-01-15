@@ -4,6 +4,9 @@ import team.mephi.adminbot.vaadin.service.DialogType;
 
 import java.util.List;
 
+/**
+ * Интерфейс для действий, связанных со студентами.
+ */
 public interface StudentActions extends UserActions {
     void onExpel(List<Long> ids, DialogType type, Object... params);
 }

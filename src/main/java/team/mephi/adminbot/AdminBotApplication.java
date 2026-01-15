@@ -24,6 +24,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import software.xdev.vaadin.chartjs.ChartContainer;
 import team.mephi.adminbot.vaadin.components.fields.FullNameField;
 
+/**
+ * Главный класс приложения AdminBot.
+ */
 @SpringBootApplication
 //@PWA(name = "Project Base for Vaadin with Spring", shortName = "Project Base")
 @Theme(value = "neoflex", variant = Lumo.LIGHT)

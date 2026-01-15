@@ -9,6 +9,9 @@ import team.mephi.adminbot.repository.DialogRepository;
 
 import java.util.Optional;
 
+/**
+ * Провайдер данных для списка диалогов с последними сообщениями.
+ */
 public class DialogListDataProvider {
 
     private final DialogRepository dialogRepository;

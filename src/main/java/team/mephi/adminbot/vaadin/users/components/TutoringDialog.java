@@ -18,6 +18,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Objects;
 
+/**
+ * Диалог для просмотра и редактирования информации о кураторе и его подопечных.
+ */
 public class TutoringDialog extends Dialog implements DialogWithTitle {
     private final BeanValidationBinder<SimpleTutor> binder = new BeanValidationBinder<>(SimpleTutor.class);
     private SerializableConsumer<SimpleTutor> onSaveCallback;

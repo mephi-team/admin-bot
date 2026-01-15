@@ -2,6 +2,9 @@ package team.mephi.adminbot.vaadin.mailings.tabs;
 
 import lombok.Getter;
 
+/**
+ * Типы вкладок для управления рассылками.
+ */
 public enum MailingTabType {
     SENT,
     TEMPLATES,

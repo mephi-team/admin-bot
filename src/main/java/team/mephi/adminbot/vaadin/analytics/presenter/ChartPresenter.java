@@ -4,6 +4,11 @@ import com.vaadin.flow.data.provider.Query;
 import team.mephi.adminbot.vaadin.HasDataProvider;
 import team.mephi.adminbot.vaadin.analytics.dataproviders.ChartDataProvider;
 
+/**
+ * Презентер для обработки действий с графиками на странице аналитики.
+ *
+ * @param <T> тип фильтра, используемого для обновления графиков
+ */
 public class ChartPresenter<T> implements ChartActions<T>, HasDataProvider<ChartDataProvider<T>> {
 
     private final ChartDataProvider<T> dataProvider;

@@ -22,6 +22,10 @@ import team.mephi.adminbot.vaadin.views.Dialogs;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Представление для отображения студентов в системе.
+ * Расширяет абстрактный класс AbstractGridView для работы с сущностями SimpleUser.
+ */
 public class StudentView extends AbstractGridView<SimpleUser> {
 
     private final StudentPresenter actions;

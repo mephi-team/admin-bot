@@ -3,6 +3,9 @@ package team.mephi.adminbot.vaadin.mailings.components;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import team.mephi.adminbot.service.*;
 
+/**
+ * Фабрика для создания экземпляров MailingEditorDialog с внедрением зависимостей.
+ */
 @SpringComponent
 public class MailingEditorDialogFactory {
     private final UserService userService;

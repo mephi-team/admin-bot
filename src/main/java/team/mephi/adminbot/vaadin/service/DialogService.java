@@ -3,6 +3,9 @@ package team.mephi.adminbot.vaadin.service;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.function.SerializableConsumer;
 
+/**
+ * Сервис для отображения диалогов различных типов.
+ */
 public interface DialogService<T> {
     void showDialog(Object user, DialogType type, SerializableConsumer<T> callback);
 

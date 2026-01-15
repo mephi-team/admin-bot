@@ -10,6 +10,9 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Простой диалог подтверждения с настраиваемым заголовком, текстом и действием.
+ */
 public class SimpleConfirmDialog extends ConfirmDialog {
     private final String header;
     private final String text;

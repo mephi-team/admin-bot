@@ -10,6 +10,9 @@ import lombok.Getter;
 import team.mephi.adminbot.dto.SimpleTemplate;
 import team.mephi.adminbot.service.TemplateService;
 
+/**
+ * Вкладка формы для создания и редактирования шаблонов рассылок.
+ */
 public class TemplateFormTab extends FormLayout {
     @Getter
     private final TextField name1 = new TextField();

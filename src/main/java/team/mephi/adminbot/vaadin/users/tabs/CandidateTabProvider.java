@@ -8,6 +8,9 @@ import team.mephi.adminbot.vaadin.users.views.CandidateView;
 
 import static team.mephi.adminbot.vaadin.users.tabs.UserTabType.CANDIDATE;
 
+/**
+ * Провайдер вкладки для кандидатов в пользователи.
+ */
 @SpringComponent
 public class CandidateTabProvider implements UserTabProvider {
     @Override

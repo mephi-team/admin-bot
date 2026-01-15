@@ -21,6 +21,9 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Диалоговое окно для создания и редактирования рассылок.
+ */
 public class MailingEditorDialog extends Dialog implements DialogWithTitle {
     private final BeanValidationBinder<SimpleMailing> binder = new BeanValidationBinder<>(SimpleMailing.class);
     private final TabSheet tabSheet = new TabSheet();

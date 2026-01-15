@@ -4,6 +4,9 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import team.mephi.adminbot.service.AuthService;
 import team.mephi.adminbot.service.FileService;
 
+/**
+ * Фабрика для создания диалогов загрузки файлов.
+ */
 @SpringComponent
 public class FileUploadDialogFactory {
 

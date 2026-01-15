@@ -8,6 +8,9 @@ import team.mephi.adminbot.vaadin.mailings.views.DraftView;
 
 import static team.mephi.adminbot.vaadin.mailings.tabs.MailingTabType.DRAFT;
 
+/**
+ * Провайдер вкладки для рассылок в статусе "Черновик".
+ */
 @SpringComponent
 public class DraftTabProvider implements MailingTabProvider {
     @Override

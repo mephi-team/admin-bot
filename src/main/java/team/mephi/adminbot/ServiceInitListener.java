@@ -5,6 +5,9 @@ import com.vaadin.flow.server.VaadinServiceInitListener;
 
 import java.util.Locale;
 
+/**
+ * Слушатель инициализации сервиса Vaadin, который устанавливает предпочтительный язык пользователя при инициализации сессии.
+ */
 public class ServiceInitListener implements VaadinServiceInitListener {
     @Override
     public void serviceInit(ServiceInitEvent event) {

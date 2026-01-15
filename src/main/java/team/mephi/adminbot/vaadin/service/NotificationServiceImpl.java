@@ -5,6 +5,9 @@ import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.i18n.I18NProvider;
 import org.springframework.stereotype.Service;
 
+/**
+ * Реализация сервиса для отображения уведомлений различных типов.
+ */
 @Service
 public class NotificationServiceImpl implements NotificationService {
     @Override

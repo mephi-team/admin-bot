@@ -12,6 +12,9 @@ import com.vaadin.flow.function.SerializableRunnable;
 import com.vaadin.flow.function.SerializableSupplier;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
+/**
+ * Правый драйвер с формой.
+ */
 @SuppressWarnings("unused")
 public class RightDrawer extends Section {
 

@@ -8,6 +8,11 @@ import team.mephi.adminbot.vaadin.components.GridSelectActions;
 import java.util.Set;
 import java.util.function.Consumer;
 
+/**
+ * Конфигурация для представления грида.
+ *
+ * @param <T> тип элементов грида
+ */
 @Builder
 @Getter
 public final class GridViewConfig<T> {

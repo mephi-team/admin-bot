@@ -21,6 +21,10 @@ import team.mephi.adminbot.vaadin.views.Dialogs;
 
 import java.util.Set;
 
+/**
+ * Представление для отображения кураторов в системе.
+ * Расширяет абстрактный класс AbstractGridView для работы с сущностями SimpleTutor.
+ */
 public class TutorView extends AbstractGridView<SimpleTutor> {
 
     private final TutorPresenter actions;

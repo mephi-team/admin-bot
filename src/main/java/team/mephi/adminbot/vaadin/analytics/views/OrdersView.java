@@ -13,6 +13,9 @@ import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * Представление для отображения заказов.
+ */
 public class OrdersView extends AbstractChartView<OrdersView.OrderFilterData> {
 
     public OrdersView(ChartPresenter<OrderFilterData> presenter, CohortService cohortService) {

@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Базовый класс для провайдеров данных рассылок с поддержкой фильтрации и пагинации.
+ */
 public abstract class BaseMailingDataProvider implements CRUDDataProvider<SimpleMailing> {
     private final MailingService mailingService;
     private ConfigurableFilterDataProvider<SimpleMailing, Void, String> provider;

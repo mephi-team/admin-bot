@@ -4,6 +4,9 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import team.mephi.adminbot.service.MessageService;
 import team.mephi.adminbot.service.QuestionService;
 
+/**
+ * Фабрика для создания экземпляров DashboardDataProvider.
+ */
 @SpringComponent
 public class DashboardDataProviderFactory {
     private final MessageService messageService;

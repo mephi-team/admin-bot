@@ -8,6 +8,9 @@ import team.mephi.adminbot.vaadin.analytics.views.ActivityView;
 
 import static team.mephi.adminbot.vaadin.analytics.tabs.AnalyticsTabType.ACTIVITY;
 
+/**
+ * Провайдер вкладки "Активность" в разделе аналитики.
+ */
 @SpringComponent
 public class ActivityTabProvider implements AnalyticsTabProvider {
     @Override

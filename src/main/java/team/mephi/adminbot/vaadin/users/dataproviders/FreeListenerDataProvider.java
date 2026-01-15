@@ -4,6 +4,9 @@ import team.mephi.adminbot.service.UserService;
 
 import static team.mephi.adminbot.vaadin.users.tabs.UserTabType.FREE_LISTENER;
 
+/**
+ * Провайдер данных для пользователей с ролью "Слушатель".
+ */
 public class FreeListenerDataProvider extends BaseUserDataProvider {
 
     public FreeListenerDataProvider(UserService userService) {

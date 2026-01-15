@@ -22,6 +22,9 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 
 import java.util.*;
 
+/**
+ * Конфигурация безопасности Vaadin с использованием OAuth2 и OIDC (например, Keycloak).
+ */
 @Configuration
 @EnableWebSecurity
 @Import(VaadinAwareSecurityContextHolderStrategyConfiguration.class)

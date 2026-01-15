@@ -14,6 +14,9 @@ import team.mephi.adminbot.vaadin.mailings.tabs.MailingTabType;
 import team.mephi.adminbot.vaadin.service.DialogService;
 import team.mephi.adminbot.vaadin.service.NotificationService;
 
+/**
+ * Фабрика для создания презентеров рассылок в зависимости от типа вкладки.
+ */
 @SpringComponent
 public class MailingPresenterFactory {
     private final MailingService mailingService;

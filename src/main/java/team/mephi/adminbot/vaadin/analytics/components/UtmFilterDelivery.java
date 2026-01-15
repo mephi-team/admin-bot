@@ -5,6 +5,9 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
+/**
+ * Форма для выбора параметров доставки на странице аналитики.
+ */
 public class UtmFilterDelivery extends HorizontalLayout {
     public UtmFilterDelivery() {
         setWidthFull();

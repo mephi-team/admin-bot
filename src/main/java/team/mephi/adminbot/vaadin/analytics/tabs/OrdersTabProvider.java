@@ -9,6 +9,9 @@ import team.mephi.adminbot.vaadin.analytics.views.OrdersView;
 
 import static team.mephi.adminbot.vaadin.analytics.tabs.AnalyticsTabType.ORDERS;
 
+/**
+ * Провайдер вкладки "Заказы" в разделе аналитики.
+ */
 @SpringComponent
 public class OrdersTabProvider implements AnalyticsTabProvider {
 

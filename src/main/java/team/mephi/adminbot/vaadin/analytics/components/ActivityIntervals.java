@@ -2,6 +2,9 @@ package team.mephi.adminbot.vaadin.analytics.components;
 
 import lombok.Getter;
 
+/**
+ * Интервалы активности для выбора на странице аналитики.
+ */
 public enum ActivityIntervals {
     MONTH,
     DAY,

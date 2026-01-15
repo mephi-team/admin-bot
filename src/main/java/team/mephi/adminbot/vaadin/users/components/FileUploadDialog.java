@@ -18,6 +18,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Диалог для загрузки файлов.
+ */
 public class FileUploadDialog extends Dialog {
     private final Button addButton = new PrimaryButton(getTranslation("dialog_users_file_upload_action"));
     private final Map<String, SimpleFile> fileList = new HashMap<>();

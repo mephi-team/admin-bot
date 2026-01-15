@@ -8,6 +8,9 @@ import team.mephi.adminbot.vaadin.components.fields.DateRangePicker;
 
 import java.time.LocalDate;
 
+/**
+ * Форма для выбора параметров активности на странице аналитики.
+ */
 public class ActivityForm extends FormLayout {
     @Getter
     private final ComboBox<ActivityType> type;

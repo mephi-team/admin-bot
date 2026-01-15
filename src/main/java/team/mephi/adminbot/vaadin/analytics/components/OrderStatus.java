@@ -2,6 +2,9 @@ package team.mephi.adminbot.vaadin.analytics.components;
 
 import lombok.Getter;
 
+/**
+ * Статусы заказов для выбора на странице аналитики.
+ */
 @Getter
 public enum OrderStatus {
     ALL("page_analytics_form_activity_status_all"),

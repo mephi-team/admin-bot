@@ -6,6 +6,9 @@ import team.mephi.adminbot.service.DirectionService;
 import team.mephi.adminbot.service.RoleService;
 import team.mephi.adminbot.service.UserService;
 
+/**
+ * Фабрика для создания диалогов редактирования кураторов.
+ */
 @SpringComponent
 public class TutorEditorDialogFactory {
 

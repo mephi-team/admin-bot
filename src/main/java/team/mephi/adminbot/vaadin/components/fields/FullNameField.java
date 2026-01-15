@@ -7,6 +7,9 @@ import com.vaadin.flow.theme.lumo.LumoUtility;
 
 import java.util.Objects;
 
+/**
+ * Компонент для ввода полного имени с полями для имени и фамилии.
+ */
 public class FullNameField extends CustomField<FullNameField.FullName> {
     private final TextField firstName = new TextField();
     private final TextField lastName = new TextField();

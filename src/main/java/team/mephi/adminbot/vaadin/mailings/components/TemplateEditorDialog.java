@@ -10,6 +10,9 @@ import team.mephi.adminbot.vaadin.components.buttons.PrimaryButton;
 
 import java.util.Objects;
 
+/**
+ * Диалоговое окно для создания и редактирования шаблонов.
+ */
 public class TemplateEditorDialog extends Dialog implements DialogWithTitle {
     private final BeanValidationBinder<SimpleTemplate> binder = new BeanValidationBinder<>(SimpleTemplate.class);
     private SerializableConsumer<SimpleTemplate> onSaveCallback;

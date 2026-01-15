@@ -10,6 +10,10 @@ import team.mephi.adminbot.vaadin.users.actions.BlockingActions;
 
 import java.util.List;
 
+/**
+ * Презентер для управления блокировкой пользователей.
+ * Расширяет общий CRUD-презентер и реализует действия по блокировке пользователей.
+ */
 public class BlockingPresenter extends CRUDPresenter<SimpleUser> implements BlockingActions<SimpleUser> {
     private final UserDataProvider dataProvider;
     private final DialogService<SimpleUser> dialogService;

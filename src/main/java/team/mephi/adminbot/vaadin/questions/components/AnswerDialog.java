@@ -9,6 +9,9 @@ import team.mephi.adminbot.dto.SimpleQuestion;
 import team.mephi.adminbot.vaadin.DialogWithTitle;
 import team.mephi.adminbot.vaadin.components.buttons.PrimaryButton;
 
+/**
+ * Диалог для ответа на вопрос.
+ */
 public class AnswerDialog extends Dialog implements DialogWithTitle {
     private final BeanValidationBinder<SimpleQuestion> binder = new BeanValidationBinder<>(SimpleQuestion.class);
     private SerializableConsumer<SimpleQuestion> onSaveCallback;

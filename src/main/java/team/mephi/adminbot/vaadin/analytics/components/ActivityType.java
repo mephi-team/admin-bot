@@ -2,6 +2,9 @@ package team.mephi.adminbot.vaadin.analytics.components;
 
 import lombok.Getter;
 
+/**
+ * Типы активности для выбора на странице аналитики.
+ */
 @Getter
 public enum ActivityType {
     VISITS("visits", "page_analytics_form_activity_type_visits"),

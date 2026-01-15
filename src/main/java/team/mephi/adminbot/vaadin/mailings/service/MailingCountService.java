@@ -5,6 +5,9 @@ import team.mephi.adminbot.repository.MailingRepository;
 
 import java.util.Map;
 
+/**
+ * Сервис для получения количества рассылок по статусам.
+ */
 @Service
 public class MailingCountService {
     private final MailingRepository mailingRepository;

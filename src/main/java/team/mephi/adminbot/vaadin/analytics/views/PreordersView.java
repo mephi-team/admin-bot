@@ -11,6 +11,9 @@ import team.mephi.adminbot.vaadin.components.fields.DateRangePicker;
 import java.time.LocalDate;
 import java.util.Objects;
 
+/**
+ * Представление для отображения предзаказов.
+ */
 public class PreordersView extends AbstractChartView<PreordersView.PreorderFilterData> {
 
     public PreordersView(ChartPresenter<PreorderFilterData> presenter, CohortService cohortService) {

@@ -4,6 +4,9 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import team.mephi.adminbot.service.DirectionService;
 import team.mephi.adminbot.service.UserService;
 
+/**
+ * Фабрика для создания экземпляров TutoringDialog с необходимыми зависимостями.
+ */
 @SpringComponent
 public class TutoringDialogFactory {
     private final UserService userService;

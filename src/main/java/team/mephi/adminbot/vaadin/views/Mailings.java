@@ -23,6 +23,10 @@ import team.mephi.adminbot.vaadin.service.DialogType;
 
 import java.util.*;
 
+/**
+ * Представление страницы рассылок с вкладками для различных типов рассылок.
+ * Доступно только пользователям с ролью ADMIN.
+ */
 @Route(value = "/mailings", layout = DialogsLayout.class)
 @RolesAllowed("ADMIN")
 public class Mailings extends VerticalLayout {

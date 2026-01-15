@@ -8,6 +8,9 @@ import team.mephi.adminbot.vaadin.users.views.MiddleCandidateView;
 
 import static team.mephi.adminbot.vaadin.users.tabs.UserTabType.MIDDLE_CANDIDATE;
 
+/**
+ * Провайдер вкладки для миддл-кандидатов.
+ */
 @SpringComponent
 public class MiddleCandidateTabProvider implements UserTabProvider {
     @Override

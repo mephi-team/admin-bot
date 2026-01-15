@@ -13,6 +13,9 @@ import team.mephi.adminbot.vaadin.components.fields.DateRangePicker;
 
 import java.time.LocalDate;
 
+/**
+ * Форма для выбора параметров заказов на странице аналитики.
+ */
 public class OrderFrom extends FormLayout {
     @Getter
     private final ComboBox<CohortDto> cohort;

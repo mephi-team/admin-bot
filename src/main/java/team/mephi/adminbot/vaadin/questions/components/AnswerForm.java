@@ -6,6 +6,9 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import lombok.Getter;
 
+/**
+ * Форма для ответа на вопрос.
+ */
 public class AnswerForm extends FormLayout {
     @Getter
     private final TextField author = new TextField();

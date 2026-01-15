@@ -3,6 +3,9 @@ package team.mephi.adminbot.vaadin.dialogs.dataproviders;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import team.mephi.adminbot.repository.DialogRepository;
 
+/**
+ * Фабрика для создания экземпляров DialogListDataProvider.
+ */
 @SpringComponent
 public class DialogListDataProviderFactory {
 

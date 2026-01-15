@@ -15,6 +15,9 @@ import team.mephi.adminbot.vaadin.components.fields.FullNameField;
 
 import java.util.Objects;
 
+/**
+ * Форма для отображения информации о кураторе и его подопечных.
+ */
 public class TutorForm extends FormLayout {
     @Getter
     private final FullNameField fullNameField = new FullNameField();

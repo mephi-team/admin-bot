@@ -8,6 +8,9 @@ import team.mephi.adminbot.vaadin.users.views.StudentView;
 
 import static team.mephi.adminbot.vaadin.users.tabs.UserTabType.STUDENT;
 
+/**
+ * Провайдер вкладки для студентов.
+ */
 @SpringComponent
 public class StudentTabProvider implements UserTabProvider {
     @Override

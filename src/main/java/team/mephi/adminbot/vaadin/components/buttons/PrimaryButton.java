@@ -6,6 +6,9 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 
+/**
+ * Основная кнопка приложения с предустановленным стилем.
+ */
 public class PrimaryButton extends Button {
 
     public PrimaryButton(String text) {

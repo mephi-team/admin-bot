@@ -9,6 +9,9 @@ import team.mephi.adminbot.vaadin.analytics.views.PreordersView;
 
 import static team.mephi.adminbot.vaadin.analytics.tabs.AnalyticsTabType.PREORDERS;
 
+/**
+ * Провайдер вкладки "Предзаказы" в разделе аналитики.
+ */
 @SpringComponent
 public class PreordersTabProvider implements AnalyticsTabProvider {
 

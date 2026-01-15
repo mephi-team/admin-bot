@@ -17,6 +17,10 @@ import team.mephi.adminbot.vaadin.users.presenter.BlockingPresenter;
 
 import java.util.Set;
 
+/**
+ * Представление для отображения гостей в системе.
+ * Расширяет абстрактный класс AbstractGridView для работы с сущностями SimpleUser.
+ */
 public class GuestsView extends AbstractGridView<SimpleUser> {
 
     private final BlockingPresenter actions;

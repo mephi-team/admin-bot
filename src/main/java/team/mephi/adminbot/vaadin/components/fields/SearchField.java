@@ -4,6 +4,9 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 
+/**
+ * Компонент текстового поля для поиска с иконкой и возможностью очистки.
+ */
 public class SearchField extends TextField {
     public SearchField(String placeholder) {
         setWidth("50%");

@@ -8,6 +8,9 @@ import team.mephi.adminbot.vaadin.components.Logo;
 import team.mephi.adminbot.vaadin.components.TopMenu;
 import team.mephi.adminbot.vaadin.components.UserMenu;
 
+/**
+ * Основной макет приложения с навигацией и меню.
+ */
 @Layout
 @PermitAll
 @SuppressWarnings("unused")

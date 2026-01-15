@@ -2,6 +2,9 @@ package team.mephi.adminbot.vaadin.service;
 
 import lombok.Getter;
 
+/**
+ * Перечисление типов диалогов с соответствующими ключами для заголовков и уведомлений.
+ */
 public enum DialogType {
     USERS_CREATED,
     TUTORS_CREATED,

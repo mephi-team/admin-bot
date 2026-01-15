@@ -7,6 +7,9 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
+/**
+ * Текстовая кнопка с предустановленным стилем.
+ */
 public class TextButton extends Button {
     public TextButton(String text, ComponentEventListener<ClickEvent<Button>> clickListener) {
         super(text, clickListener);

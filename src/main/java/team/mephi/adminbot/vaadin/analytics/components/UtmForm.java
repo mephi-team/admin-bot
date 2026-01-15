@@ -12,6 +12,9 @@ import team.mephi.adminbot.vaadin.components.fields.DateRangePicker;
 
 import java.time.LocalDate;
 
+/**
+ * Форма для выбора параметров UTM на странице аналитики.
+ */
 public class UtmForm extends FormLayout {
     @Getter
     private final ComboBox<CohortDto> cohort;

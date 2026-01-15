@@ -13,6 +13,9 @@ import team.mephi.adminbot.vaadin.components.buttons.IconButton;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * Меню пользователя с отображением имени и кнопкой выхода.
+ */
 public class UserMenu extends HorizontalLayout {
     public UserMenu(AuthService authService) {
         addClassNames(LumoUtility.AlignItems.CENTER);

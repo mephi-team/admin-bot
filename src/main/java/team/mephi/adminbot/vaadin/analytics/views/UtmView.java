@@ -11,6 +11,9 @@ import team.mephi.adminbot.vaadin.components.fields.DateRangePicker;
 import java.time.LocalDate;
 import java.util.Objects;
 
+/**
+ * Представление для отображения UTM-меток.
+ */
 public class UtmView extends AbstractChartView<UtmView.UtmFilterData> {
 
     public UtmView(ChartPresenter<UtmFilterData> presenter, CohortService cohortService) {

@@ -10,6 +10,9 @@ import team.mephi.adminbot.vaadin.mailings.views.TemplateView;
 
 import static team.mephi.adminbot.vaadin.mailings.tabs.MailingTabType.TEMPLATES;
 
+/**
+ * Провайдер вкладки для управления шаблонами рассылок.
+ */
 @SpringComponent
 @UIScope
 public class TemplateTabProvider implements MailingTabProvider {

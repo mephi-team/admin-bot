@@ -20,6 +20,9 @@ import team.mephi.adminbot.service.*;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * Форма для создания и редактирования рассылок.
+ */
 public class MailingForm extends FormLayout {
     @Getter
     private final CheckboxGroup<String> channels = new CheckboxGroup<>();

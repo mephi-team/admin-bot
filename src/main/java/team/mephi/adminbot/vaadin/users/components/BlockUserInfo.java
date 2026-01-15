@@ -4,6 +4,9 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import lombok.Getter;
 
+/**
+ * Форма для отображения информации о пользователе при блокировке.
+ */
 public class BlockUserInfo extends FormLayout {
     @Getter
     private final TextField firstName = new TextField();

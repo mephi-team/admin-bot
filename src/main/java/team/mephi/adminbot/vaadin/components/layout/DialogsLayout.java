@@ -9,6 +9,9 @@ import team.mephi.adminbot.vaadin.components.TopMenu;
 import team.mephi.adminbot.vaadin.components.UserMenu;
 import team.mephi.adminbot.vaadin.components.buttons.MenuButton;
 
+/**
+ * Макет приложения с навигацией, меню и левым драйвером.
+ */
 @PermitAll
 public class DialogsLayout extends AppLayout {
     private boolean minimized = true;

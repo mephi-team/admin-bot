@@ -8,6 +8,9 @@ import team.mephi.adminbot.vaadin.users.views.GuestsView;
 
 import static team.mephi.adminbot.vaadin.users.tabs.UserTabType.VISITOR;
 
+/**
+ * Провайдер вкладки для гостей.
+ */
 @SpringComponent
 public class GuestsTabProvider implements UserTabProvider {
     @Override

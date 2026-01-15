@@ -12,6 +12,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Провайдер данных для пользователей с ролью "Куратор".
+ * Предоставляет функциональность фильтрации и пагинации.
+ */
 public class TutorDataProviderImpl implements TutorDataProvider {
 
     private final TutorService tutorService;

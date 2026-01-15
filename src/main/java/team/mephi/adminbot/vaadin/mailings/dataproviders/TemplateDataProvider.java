@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Провайдер данных для шаблонов с поддержкой фильтрации и пагинации.
+ */
 public class TemplateDataProvider implements CRUDDataProvider<SimpleTemplate> {
     private final TemplateService templateService;
     private ConfigurableFilterDataProvider<SimpleTemplate, Void, String> provider;

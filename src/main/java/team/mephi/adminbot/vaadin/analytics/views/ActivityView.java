@@ -10,6 +10,9 @@ import team.mephi.adminbot.vaadin.components.fields.DateRangePicker;
 import java.time.LocalDate;
 import java.util.Objects;
 
+/**
+ * Представление для отображения активности пользователей.
+ */
 public class ActivityView extends AbstractChartView<ActivityView.ActivityFilterData> {
 
     public ActivityView(ChartPresenter<ActivityFilterData> presenter) {

@@ -8,6 +8,10 @@ import team.mephi.adminbot.service.MessageService;
 
 import java.util.Optional;
 
+/**
+ * Провайдер данных для списка чата.
+ * Предоставляет методы для получения и сохранения сообщений в диалогах.
+ */
 public class ChatListDataProvider {
     private final MessageService messageService;
     private ConfigurableFilterDataProvider<ChatListItem, Void, Long> provider;

@@ -11,6 +11,11 @@ import team.mephi.adminbot.vaadin.analytics.views.UtmView;
 
 import java.util.stream.Stream;
 
+/**
+ * Поставщик данных для диаграмм на странице аналитики.
+ *
+ * @param <T> тип фильтра
+ */
 public class ChartDataProvider<T> extends AbstractDataProvider<BarData, T> {
     private final ChartDataService chartDataService;
 

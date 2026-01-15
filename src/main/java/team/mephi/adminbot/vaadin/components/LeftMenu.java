@@ -8,6 +8,9 @@ import team.mephi.adminbot.vaadin.views.Dialogs;
 import team.mephi.adminbot.vaadin.views.Mailings;
 import team.mephi.adminbot.vaadin.views.Questions;
 
+/**
+ * Левое меню навигации.
+ */
 public class LeftMenu extends SideNav {
     public LeftMenu(AuthService authService) {
 

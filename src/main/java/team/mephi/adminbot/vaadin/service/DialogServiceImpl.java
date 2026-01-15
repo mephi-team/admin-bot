@@ -4,6 +4,9 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.function.SerializableConsumer;
 import org.springframework.stereotype.Service;
 
+/**
+ * Реализация сервиса для отображения диалогов различных типов.
+ */
 @Service
 public class DialogServiceImpl<T> implements DialogService<T> {
 

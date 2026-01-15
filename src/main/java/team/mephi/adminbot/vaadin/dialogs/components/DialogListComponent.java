@@ -25,6 +25,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Компонент для отображения списка диалогов с возможностью поиска.
+ */
 @AnonymousAllowed
 public class DialogListComponent extends VerticalLayout implements AfterNavigationObserver, BeforeEnterObserver {
     private final Instant today;

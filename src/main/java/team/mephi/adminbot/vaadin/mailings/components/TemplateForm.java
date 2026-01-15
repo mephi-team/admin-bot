@@ -5,6 +5,9 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import lombok.Getter;
 
+/**
+ * Форма для создания и редактирования шаблонов рассылок.
+ */
 public class TemplateForm extends FormLayout {
     @Getter
     private final TextField name = new TextField();

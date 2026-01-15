@@ -10,6 +10,10 @@ import team.mephi.adminbot.vaadin.users.actions.StudentActions;
 
 import java.util.List;
 
+/**
+ * Презентер для управления студентами.
+ * Расширяет общий презентер пользователей и реализует действия, специфичные для студентов.
+ */
 public class StudentPresenter extends UsersPresenter implements StudentActions {
     private final DialogService<?> dialogService;
     private final NotificationService notificationService;

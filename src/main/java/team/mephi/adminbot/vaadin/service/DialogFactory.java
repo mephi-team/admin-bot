@@ -4,6 +4,9 @@ import com.vaadin.flow.component.icon.Icon;
 import team.mephi.adminbot.vaadin.DialogWithTitle;
 import team.mephi.adminbot.vaadin.components.dialogs.SimpleConfirmDialog;
 
+/**
+ * Фабрика для создания диалогов различных типов.
+ */
 public interface DialogFactory {
     DialogWithTitle getDialog(DialogType type);
 

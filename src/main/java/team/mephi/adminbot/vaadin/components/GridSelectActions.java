@@ -5,6 +5,9 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
+/**
+ * Компоненты действий для выбранных элементов в таблице.
+ */
 public class GridSelectActions extends HorizontalLayout {
     Span countControl;
     private Integer selectedCount = 0;

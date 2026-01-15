@@ -6,6 +6,9 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
+/**
+ * Кнопка, отображающая только иконку.
+ */
 public class IconButton extends Button {
 
     public IconButton(Component icon) {

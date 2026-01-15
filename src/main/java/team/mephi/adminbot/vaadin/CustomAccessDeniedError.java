@@ -12,6 +12,9 @@ import team.mephi.adminbot.vaadin.components.Logo;
 import team.mephi.adminbot.vaadin.components.TopMenu;
 import team.mephi.adminbot.vaadin.components.UserMenu;
 
+/**
+ * Кастомная страница ошибки доступа запрещен.
+ */
 @PermitAll
 @SuppressWarnings("unused")
 public class CustomAccessDeniedError extends AppLayout

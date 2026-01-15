@@ -10,6 +10,9 @@ import team.mephi.adminbot.vaadin.components.fields.DateRangePicker;
 
 import java.time.LocalDate;
 
+/**
+ * Форма для выбора параметров предзаказов на странице аналитики.
+ */
 public class PreorderForm extends FormLayout {
     @Getter
     private final DateRangePicker period;

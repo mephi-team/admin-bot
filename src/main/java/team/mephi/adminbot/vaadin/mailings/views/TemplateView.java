@@ -19,6 +19,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Представление для управления шаблонами рассылок.
+ */
 public class TemplateView extends AbstractGridView<SimpleTemplate> {
 
     private final CRUDPresenter<SimpleTemplate> actions;

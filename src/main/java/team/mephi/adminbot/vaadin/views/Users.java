@@ -30,6 +30,10 @@ import team.mephi.adminbot.vaadin.users.tabs.UserTabType;
 
 import java.util.*;
 
+/**
+ * Представление страницы пользователей с вкладками для различных ролей пользователей.
+ * Доступно только пользователям с ролью ADMIN.
+ */
 @Route("/users")
 @RolesAllowed("ADMIN")
 public class Users extends VerticalLayout implements BeforeEnterObserver {

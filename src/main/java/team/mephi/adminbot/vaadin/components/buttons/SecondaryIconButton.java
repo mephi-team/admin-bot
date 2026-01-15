@@ -7,6 +7,9 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
+/**
+ * Второстепенная кнопка, отображающая только иконку.
+ */
 public class SecondaryIconButton extends Button {
 
     public SecondaryIconButton(Component icon, ComponentEventListener<ClickEvent<Button>> clickListener) {

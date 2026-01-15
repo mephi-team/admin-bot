@@ -17,6 +17,10 @@ import team.mephi.adminbot.vaadin.components.fields.FullNameField;
 
 import java.util.Objects;
 
+/**
+ * Диалоговое окно для создания и редактирования пользователей.
+ * Использует форму UserForm для ввода данных пользователя и биндер для валидации и связывания данных.
+ */
 public class UserEditorDialog extends Dialog implements DialogWithTitle {
     private final BeanValidationBinder<SimpleUser> binder = new BeanValidationBinder<>(SimpleUser.class);
     private SerializableConsumer<SimpleUser> onSaveCallback;

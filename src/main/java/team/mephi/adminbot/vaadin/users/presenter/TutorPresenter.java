@@ -11,6 +11,10 @@ import team.mephi.adminbot.vaadin.users.actions.TutorActions;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Презентер для управления преподавателями.
+ * Расширяет общий CRUD-презентер и реализует действия, специфичные для преподавателей.
+ */
 public class TutorPresenter extends CRUDPresenter<SimpleTutor> implements TutorActions {
     private final TutorDataProvider dataProvider;
     private final DialogService<SimpleTutor> dialogService;

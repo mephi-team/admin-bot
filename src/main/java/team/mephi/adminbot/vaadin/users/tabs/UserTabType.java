@@ -2,6 +2,9 @@ package team.mephi.adminbot.vaadin.users.tabs;
 
 import lombok.Getter;
 
+/**
+ * Типы вкладок пользователей.
+ */
 public enum UserTabType {
     VISITOR,
     CANDIDATE,

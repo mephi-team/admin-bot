@@ -21,6 +21,9 @@ import team.mephi.adminbot.vaadin.components.fields.FullNameField;
 
 import java.util.Objects;
 
+/**
+ * Форма для редактирования данных куратора.
+ */
 public class TutorEditForm extends FormLayout {
     @Getter
     private final ComboBox<RoleDto> roles = new ComboBox<>();

@@ -4,6 +4,9 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 
+/**
+ * Фрагмент поиска с двумя компонентами, выровненными по горизонтали.
+ */
 public class SearchFragment extends HorizontalLayout {
     public SearchFragment(Component left, Component right) {
         add(left, right);

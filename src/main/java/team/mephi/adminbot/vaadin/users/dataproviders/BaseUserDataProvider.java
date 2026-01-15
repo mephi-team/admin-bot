@@ -12,6 +12,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Базовый класс для провайдеров данных пользователей с определенной ролью.
+ * Предоставляет функциональность фильтрации и пагинации.
+ */
 public abstract class BaseUserDataProvider implements UserDataProvider {
     private final UserService userService;
 

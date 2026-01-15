@@ -17,6 +17,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
+/**
+ * Абстрактный класс для создания представлений с гридом.
+ *
+ * @param <T> тип элементов грида
+ */
 public abstract class AbstractGridView<T> extends VerticalLayout {
     protected final Grid<T> grid;
     protected List<Long> selectedIds;

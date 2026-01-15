@@ -2,6 +2,9 @@ package team.mephi.adminbot.vaadin.analytics.tabs;
 
 import lombok.Getter;
 
+/**
+ * Типы вкладок в разделе аналитики.
+ */
 public enum AnalyticsTabType {
     ACTIVITY,
     PREORDERS,

@@ -18,6 +18,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
+/**
+ * Реализация фабрики для создания диалогов различных типов.
+ */
 @Service
 public class DialogFactoryImpl implements DialogFactory {
     private final Map<DialogType, Supplier<DialogWithTitle>> registry = new HashMap<>();

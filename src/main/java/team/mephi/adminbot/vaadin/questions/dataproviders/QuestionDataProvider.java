@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Провайдер данных для сущностей SimpleQuestion с поддержкой фильтрации и сортировки.
+ */
 public class QuestionDataProvider {
     private final QuestionService questionService;
     private ConfigurableFilterDataProvider<SimpleQuestion, Void, String> provider;

@@ -14,6 +14,10 @@ import team.mephi.adminbot.vaadin.analytics.tabs.AnalyticsTabProvider;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Представление страницы аналитики с вкладками для различных отчетов.
+ * Доступно только пользователям с ролью ADMIN.
+ */
 @Route("/analytics")
 @RolesAllowed("ADMIN")
 public class Analytics extends VerticalLayout {

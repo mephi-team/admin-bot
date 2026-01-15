@@ -9,6 +9,11 @@ import com.vaadin.flow.function.SerializableConsumer;
 import team.mephi.adminbot.vaadin.DialogWithTitle;
 import team.mephi.adminbot.vaadin.components.buttons.SecondaryButton;
 
+/**
+ * Диалоговое окно для блокировки пользователя с информацией и предупреждением.
+ *
+ * @param <T> тип объекта, связанного с блокировкой
+ */
 public class BlockDialog<T> extends Dialog implements DialogWithTitle {
     private final BeanValidationBinder<T> binder;
     private final Tabs tabs = new Tabs();

@@ -8,6 +8,11 @@ import team.mephi.adminbot.vaadin.service.NotificationType;
 
 import java.util.List;
 
+/**
+ * Класс CRUDPresenter реализует интерфейсы CRUDActions и HasDataProvider для управления операциями CRUD над сущностями типа T.
+ *
+ * @param <T> Тип сущности, над которой выполняются операции CRUD.
+ */
 public class CRUDPresenter<T> implements CRUDActions<T>, HasDataProvider<CRUDDataProvider<T>> {
     private final CRUDDataProvider<T> dataProvider;
     private final DialogService<T> dialogService;

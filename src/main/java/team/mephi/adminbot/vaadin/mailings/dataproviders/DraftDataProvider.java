@@ -5,6 +5,9 @@ import team.mephi.adminbot.service.MailingService;
 
 import java.util.List;
 
+/**
+ * Провайдер данных для рассылок в статусе "Черновик".
+ */
 public class DraftDataProvider extends BaseMailingDataProvider {
 
     public DraftDataProvider(MailingService mailingService) {

@@ -6,6 +6,9 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
+/**
+ * Второстепенная кнопка приложения с предустановленным стилем.
+ */
 public class SecondaryButton extends Button {
 
     public SecondaryButton(String text) {

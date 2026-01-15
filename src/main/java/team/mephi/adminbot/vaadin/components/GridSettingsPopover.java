@@ -13,6 +13,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Поповер для настройки видимости колонок в таблице.
+ */
 public class GridSettingsPopover extends Popover {
     public GridSettingsPopover(Grid<?> grid, Set<String> disabled, Set<String> exclude) {
         setModal(true);

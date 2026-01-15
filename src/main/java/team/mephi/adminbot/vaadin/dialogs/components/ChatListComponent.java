@@ -19,6 +19,9 @@ import team.mephi.adminbot.vaadin.dialogs.dataproviders.ChatListDataProviderFact
 
 import java.util.Optional;
 
+/**
+ * Компонент для отображения списка чата и ввода сообщений.
+ */
 public class ChatListComponent extends VerticalLayout implements AfterNavigationObserver {
     private final ChatListDataProvider provider;
     private final MessageInput chatInput;

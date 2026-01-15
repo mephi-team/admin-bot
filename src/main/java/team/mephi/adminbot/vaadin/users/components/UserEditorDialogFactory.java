@@ -3,6 +3,9 @@ package team.mephi.adminbot.vaadin.users.components;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import team.mephi.adminbot.service.*;
 
+/**
+ * Фабрика для создания экземпляров UserEditorDialog с необходимыми зависимостями.
+ */
 @SpringComponent
 public class UserEditorDialogFactory {
 

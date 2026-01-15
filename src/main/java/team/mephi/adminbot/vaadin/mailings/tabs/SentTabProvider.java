@@ -8,6 +8,9 @@ import team.mephi.adminbot.vaadin.mailings.views.SentView;
 
 import static team.mephi.adminbot.vaadin.mailings.tabs.MailingTabType.SENT;
 
+/**
+ * Провайдер вкладки для рассылок в статусе "Отправлено".
+ */
 @SpringComponent
 public class SentTabProvider implements MailingTabProvider {
     @Override

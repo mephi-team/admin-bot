@@ -11,6 +11,10 @@ import team.mephi.adminbot.vaadin.dialogs.components.DialogListComponent;
 import team.mephi.adminbot.vaadin.dialogs.dataproviders.ChatListDataProviderFactory;
 import team.mephi.adminbot.vaadin.dialogs.dataproviders.DialogListDataProviderFactory;
 
+/**
+ * Представление страницы диалогов с разделением на список диалогов и чат.
+ * Доступно только пользователям с ролью ADMIN.
+ */
 @Route(value = "/dialogs/:dialogId?", layout = DialogsLayout.class)
 @RolesAllowed("ADMIN")
 public class Dialogs extends VerticalLayout {

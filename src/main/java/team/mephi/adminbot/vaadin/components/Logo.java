@@ -5,6 +5,9 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.RouterLink;
 import team.mephi.adminbot.vaadin.views.Dashboard;
 
+/**
+ * Логотип приложения с ссылкой на главную страницу.
+ */
 public class Logo extends HorizontalLayout {
     public Logo(String text) {
         setPadding(false);

@@ -8,6 +8,9 @@ import team.mephi.adminbot.vaadin.users.views.ExpertView;
 
 import static team.mephi.adminbot.vaadin.users.tabs.UserTabType.LC_EXPERT;
 
+/**
+ * Провайдер вкладки для экспертов.
+ */
 @SpringComponent
 public class ExpertTabProvider implements UserTabProvider {
     @Override

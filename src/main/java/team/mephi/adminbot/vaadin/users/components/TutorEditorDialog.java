@@ -19,6 +19,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Диалог для создания и редактирования куратора.
+ */
 public class TutorEditorDialog extends Dialog implements DialogWithTitle {
     private final BeanValidationBinder<SimpleTutor> binder = new BeanValidationBinder<>(SimpleTutor.class);
     private SerializableConsumer<SimpleTutor> onSaveCallback;

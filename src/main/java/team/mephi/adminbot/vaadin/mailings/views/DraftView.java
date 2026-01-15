@@ -22,6 +22,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Представление для рассылок в статусе "Черновик".
+ */
 public class DraftView extends AbstractGridView<SimpleMailing> {
     private static final SerializableBiConsumer<Span, SimpleMailing> statusComponentUpdater = (
             span, person) -> {

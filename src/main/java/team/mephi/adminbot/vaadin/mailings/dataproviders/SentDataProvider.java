@@ -6,6 +6,9 @@ import team.mephi.adminbot.service.MailingService;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Провайдер данных для отправленных рассылок (все статусы, кроме "Черновик").
+ */
 public class SentDataProvider extends BaseMailingDataProvider {
 
     public SentDataProvider(MailingService mailingService) {

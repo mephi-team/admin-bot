@@ -4,6 +4,9 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import lombok.Getter;
 
+/**
+ * Форма для ввода причины блокировки пользователя.
+ */
 public class BlockForm extends FormLayout {
     @Getter
     private final TextArea blockReason = new TextArea();

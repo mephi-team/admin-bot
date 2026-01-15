@@ -9,6 +9,9 @@ import team.mephi.adminbot.vaadin.analytics.views.UtmView;
 
 import static team.mephi.adminbot.vaadin.analytics.tabs.AnalyticsTabType.UTM;
 
+/**
+ * Провайдер вкладки "UTM" в разделе аналитики.
+ */
 @SpringComponent
 public class UtmTabProvider implements AnalyticsTabProvider {
 

@@ -12,6 +12,9 @@ import team.mephi.adminbot.vaadin.users.components.PdPopover;
 
 import java.util.Collection;
 
+/**
+ * Класс, содержащий различные рендереры для отображения информации о пользователях в таблицах.
+ */
 public class MyRenderers {
     public static ComponentRenderer<Span, SimpleUser> createPdRenderer() {
         return new ComponentRenderer<>(user -> {

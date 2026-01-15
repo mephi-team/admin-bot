@@ -23,6 +23,10 @@ import team.mephi.adminbot.vaadin.views.Dialogs;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Представление для отображения кандидатов среднего уровня в системе.
+ * Расширяет абстрактный класс AbstractGridView для работы с сущностями SimpleUser.
+ */
 public class MiddleCandidateView extends AbstractGridView<SimpleUser> {
 
     private final UsersPresenter actions;

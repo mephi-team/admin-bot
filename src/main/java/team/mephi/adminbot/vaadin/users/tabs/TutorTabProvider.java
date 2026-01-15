@@ -8,6 +8,9 @@ import team.mephi.adminbot.vaadin.users.views.TutorView;
 
 import static team.mephi.adminbot.vaadin.users.tabs.UserTabType.TUTOR;
 
+/**
+ * Провайдер вкладки для кураторов.
+ */
 @SpringComponent
 public class TutorTabProvider implements UserTabProvider {
     @Override

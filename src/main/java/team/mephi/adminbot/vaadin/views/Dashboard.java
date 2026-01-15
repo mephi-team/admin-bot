@@ -16,6 +16,11 @@ import jakarta.annotation.security.PermitAll;
 import team.mephi.adminbot.service.AuthService;
 import team.mephi.adminbot.vaadin.dashboard.dataproviders.DashboardDataProviderFactory;
 
+/**
+ * Представление главной панели управления.
+ * Отображает различные карточки с навигацией к разделам приложения.
+ * Доступно всем аутентифицированным пользователям.
+ */
 @Route("/")
 @PermitAll
 public class Dashboard extends VerticalLayout {

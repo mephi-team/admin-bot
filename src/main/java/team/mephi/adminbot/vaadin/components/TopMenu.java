@@ -9,6 +9,9 @@ import team.mephi.adminbot.vaadin.views.Analytics;
 import team.mephi.adminbot.vaadin.views.Dialogs;
 import team.mephi.adminbot.vaadin.views.Users;
 
+/**
+ * Верхнее меню навигации.
+ */
 public class TopMenu extends HorizontalLayout {
     public TopMenu(AuthService authService) {
         getElement().getStyle().set("gap", "64px");

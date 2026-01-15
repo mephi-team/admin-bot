@@ -8,6 +8,9 @@ import team.mephi.adminbot.vaadin.users.views.FreeListenerView;
 
 import static team.mephi.adminbot.vaadin.users.tabs.UserTabType.FREE_LISTENER;
 
+/**
+ * Провайдер вкладки для слушателей.
+ */
 @SpringComponent
 public class FreeListenerTabProvider implements UserTabProvider {
     @Override

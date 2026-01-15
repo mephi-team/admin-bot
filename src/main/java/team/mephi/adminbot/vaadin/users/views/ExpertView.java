@@ -22,6 +22,10 @@ import team.mephi.adminbot.vaadin.views.Dialogs;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Представление для отображения экспертов в системе.
+ * Расширяет абстрактный класс AbstractGridView для работы с сущностями SimpleUser.
+ */
 public class ExpertView extends AbstractGridView<SimpleUser> {
 
     private final UsersPresenter actions;

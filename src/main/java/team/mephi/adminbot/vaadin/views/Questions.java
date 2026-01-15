@@ -33,6 +33,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * Представление страницы вопросов с возможностью отвечать на вопросы и удалять их.
+ * Доступно всем аутентифицированным пользователям.
+ */
 @Route(value = "/questions", layout = DialogsLayout.class)
 @PermitAll
 public class Questions extends AbstractGridView<SimpleQuestion> {

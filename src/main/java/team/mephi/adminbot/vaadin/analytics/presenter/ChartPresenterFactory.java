@@ -4,6 +4,9 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import team.mephi.adminbot.service.ChartDataService;
 import team.mephi.adminbot.vaadin.analytics.dataproviders.ChartDataProvider;
 
+/**
+ * Фабрика для создания презентеров графиков на странице аналитики.
+ */
 @SpringComponent
 public class ChartPresenterFactory {
 

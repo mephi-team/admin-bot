@@ -10,6 +10,10 @@ import team.mephi.adminbot.vaadin.users.actions.UserActions;
 
 import java.util.List;
 
+/**
+ * Презентер для управления пользователями.
+ * Расширяет общий презентер блокировки и реализует общие действия для пользователей.
+ */
 public class UsersPresenter extends BlockingPresenter implements UserActions {
     private final DialogService<?> dialogService;
     private final NotificationService notificationService;

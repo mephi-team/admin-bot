@@ -7,6 +7,9 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
+/**
+ * Основная кнопка, отображающая только иконку.
+ */
 public class PrimaryIconButton extends Button {
 
     public PrimaryIconButton(Component icon, ComponentEventListener<ClickEvent<Button>> clickListener) {
