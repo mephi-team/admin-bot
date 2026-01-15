@@ -2,24 +2,18 @@ package team.mephi.adminbot.vaadin.users.views;
 
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.grid.GridMultiSelectionModel;
-import com.vaadin.flow.component.grid.GridVariant;
-import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.QueryParameters;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.model.enums.UserStatus;
 import team.mephi.adminbot.vaadin.components.ButtonGroup;
 import team.mephi.adminbot.vaadin.components.GridSelectActions;
-import team.mephi.adminbot.vaadin.components.GridSettingsPopover;
-import team.mephi.adminbot.vaadin.components.SearchFragment;
 import team.mephi.adminbot.vaadin.components.buttons.IconButton;
 import team.mephi.adminbot.vaadin.components.buttons.SecondaryButton;
 import team.mephi.adminbot.vaadin.components.buttons.TextButton;
-import team.mephi.adminbot.vaadin.components.fields.SearchField;
+import team.mephi.adminbot.vaadin.components.grid.AbstractGridView;
+import team.mephi.adminbot.vaadin.components.grid.GridViewConfig;
 import team.mephi.adminbot.vaadin.service.DialogType;
 import team.mephi.adminbot.vaadin.users.dataproviders.ExpertDataProvider;
 import team.mephi.adminbot.vaadin.users.presenter.UsersPresenter;
@@ -28,10 +22,15 @@ import team.mephi.adminbot.vaadin.views.Dialogs;
 import java.util.List;
 import java.util.Set;
 
-public class ExpertView extends VerticalLayout {
-    private List<Long> selectedIds;
+public class ExpertView extends AbstractGridView<SimpleUser> {
+
+    private final UsersPresenter actions;
 
     public ExpertView(UsersPresenter actions) {
+        super();
+
+        this.actions = actions;
+
         ExpertDataProvider provider = (ExpertDataProvider) actions.getDataProvider();
         var gsa = new GridSelectActions(getTranslation("grid_users_actions_label"),
                 new SecondaryButton(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), e -> {
@@ -40,17 +39,36 @@ public class ExpertView extends VerticalLayout {
                 })
         );
 
-        setSizeFull();
-        setPadding(false);
+        var config = GridViewConfig.<SimpleUser>builder()
+                .gsa(gsa)
+                .dataProvider(provider.getDataProvider())
+                .filterSetter(s -> provider.getFilterableProvider().setFilter(s))
+                .searchPlaceholder(getTranslation("grid_expert_search_placeholder"))
+                .emptyLabel(getTranslation("grid_expert_empty_label"))
+                .visibleColumns(Set.of())
+                .hiddenColumns(Set.of("actions"))
+                .build();
 
-        var grid = new Grid<>(SimpleUser.class, false);
+        setup(config);
+    }
+
+    @Override
+    protected Class<SimpleUser> getItemClass() {
+        return SimpleUser.class;
+    }
+
+    @Override
+    protected void configureColumns(com.vaadin.flow.component.grid.Grid<SimpleUser> grid) {
         grid.addColumn(SimpleUser::getFullName).setHeader(getTranslation("grid_expert_header_name_label")).setSortable(true).setResizable(true).setFrozen(true)
                 .setAutoWidth(true).setFlexGrow(0).setKey("lastName");
         grid.addColumn(SimpleUser::getEmail).setHeader(getTranslation("grid_expert_header_email_label")).setSortable(true).setResizable(true).setKey("email");
         grid.addColumn(SimpleUser::getTgId).setHeader(getTranslation("grid_expert_header_telegram_label")).setSortable(true).setResizable(true).setKey("tgId");
         grid.addColumn(SimpleUser::getCohort).setHeader(getTranslation("grid_expert_header_cohort_label")).setSortable(true).setResizable(true).setKey("cohort");
         grid.addColumn(MyRenderers.createUserDirections()).setHeader(getTranslation("grid_expert_header_direction_label")).setSortable(true).setResizable(true).setKey("direction");
+    }
 
+    @Override
+    protected void configureActionColumn(com.vaadin.flow.component.grid.Grid<SimpleUser> grid) {
         grid.addComponentColumn(item -> {
             Button dropButton = new TextButton(getTranslation("grid_expert_action_delete_label"), VaadinIcon.CLOSE.create(), e -> actions.onDelete(List.of(item.getId()), DialogType.DELETE_USERS));
             Button viewButton = new IconButton(VaadinIcon.EYE.create(), e -> actions.onView(item, DialogType.USERS_VIEW));
@@ -64,28 +82,10 @@ public class ExpertView extends VerticalLayout {
             }
             return new ButtonGroup(dropButton, viewButton, chatButton, editButton, blockButton);
         }).setHeader(getTranslation("grid_header_actions_label")).setWidth("303px").setFlexGrow(0).setKey("actions");
+    }
 
-        grid.setDataProvider(provider.getDataProvider());
-        GridMultiSelectionModel<SimpleUser> selectionModel = (GridMultiSelectionModel<SimpleUser>) grid.setSelectionMode(Grid.SelectionMode.MULTI);
-        selectionModel.setSelectionColumnFrozen(true);
-        grid.setSizeFull();
-        grid.addSelectionListener(sel -> {
-            selectedIds = sel.getAllSelectedItems().stream().map(SimpleUser::getId).toList();
-            gsa.setCount(selectedIds.size());
-        });
-        grid.setEmptyStateText(getTranslation("grid_expert_empty_label"));
-        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
-
-        var searchField = new SearchField(getTranslation("grid_expert_search_placeholder"));
-        searchField.addValueChangeListener(e -> provider.getFilterableProvider().setFilter(e.getValue()));
-
-        var settingsBtn = new IconButton(VaadinIcon.COG_O.create());
-        var settingsPopover = new GridSettingsPopover(grid, Set.of(), Set.of("actions"));
-        settingsPopover.setTarget(settingsBtn);
-
-        var downloadBtn = new IconButton(VaadinIcon.DOWNLOAD_ALT.create(), e -> {
-        });
-
-        add(new SearchFragment(searchField, new Span(settingsBtn, downloadBtn)), gsa, grid);
+    @Override
+    protected Long extractId(SimpleUser item) {
+        return item.getId();
     }
 }
