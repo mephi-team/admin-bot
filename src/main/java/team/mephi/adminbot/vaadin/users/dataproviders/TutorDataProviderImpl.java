@@ -22,6 +22,11 @@ public class TutorDataProviderImpl implements TutorDataProvider {
 
     private ConfigurableFilterDataProvider<SimpleTutor, Void, String> provider;
 
+    /**
+     * Конструктор провайдера данных для кураторов.
+     *
+     * @param tutorService сервис для работы с кураторами.
+     */
     public TutorDataProviderImpl(TutorService tutorService) {
         this.tutorService = tutorService;
     }

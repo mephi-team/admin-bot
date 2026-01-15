@@ -62,6 +62,9 @@ public class FullNameField extends CustomField<FullNameField.FullName> {
         lastName.setInvalid(invalid);
     }
 
+    /**
+     * Класс, представляющий полное имя с именем и фамилией.
+     */
     public record FullName(String firstName, String lastName) {
     }
 }

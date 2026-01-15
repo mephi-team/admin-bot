@@ -33,6 +33,13 @@ public class TopMenu extends HorizontalLayout {
         setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
     }
 
+    /**
+     * Создает ссылку для верхнего меню.
+     *
+     * @param text             Текст ссылки.
+     * @param navigationTarget Целевой класс для навигации.
+     * @return Созданная ссылка.
+     */
     private RouterLink createLink(String text, Class<? extends com.vaadin.flow.component.Component> navigationTarget) {
         var link = new RouterLink(text, navigationTarget);
         link.addClassNames(LumoUtility.TextColor.BODY);

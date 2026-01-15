@@ -22,11 +22,19 @@ public class DialogsLayout extends AppLayout {
         setDrawerMinimized(true);
     }
 
+    /**
+     * Переключает режим драйвера между свернутым и развернутым.
+     */
     private void toggleDrawerMode() {
         minimized = !minimized;
         setDrawerMinimized(minimized);
     }
 
+    /**
+     * Устанавливает режим драйвера.
+     *
+     * @param minimize true - свернуть драйвер, false - развернуть драйвер
+     */
     private void setDrawerMinimized(boolean minimize) {
         if (minimize) {
             getElement().setAttribute("mini-variant", true);

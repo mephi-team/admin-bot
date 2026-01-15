@@ -40,6 +40,15 @@ public class MailingForm extends FormLayout {
     private final MultiSelectListBox<SimpleUser> listBox = new MultiSelectListBox<>();
     private final Span counter = new Span("(0)");
 
+    /**
+     * Конструктор формы рассылки.
+     *
+     * @param userService      сервис для работы с пользователями
+     * @param roleService      сервис для работы с ролями
+     * @param cohortService    сервис для работы с когортами
+     * @param directionService сервис для работы с направлениями
+     * @param cityService      сервис для работы с городами
+     */
     public MailingForm(UserService userService, RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService) {
         var provider = new CallbackDataProvider<SimpleUser, String>(
                 query -> {

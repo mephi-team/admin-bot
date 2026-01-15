@@ -18,6 +18,13 @@ public class MailingsPresenter extends CRUDPresenter<SimpleMailing> implements M
     private final DialogService<SimpleMailing> dialogService;
     private final NotificationService notificationService;
 
+    /**
+     * Конструктор презентера рассылок.
+     *
+     * @param dataProvider      провайдер данных для рассылок
+     * @param dialogService     сервис для отображения диалогов
+     * @param notificationService сервис для отображения уведомлений
+     */
     public MailingsPresenter(CRUDDataProvider<SimpleMailing> dataProvider, DialogService<SimpleMailing> dialogService, NotificationService notificationService) {
         super(dataProvider, dialogService, notificationService);
         this.dataProvider = dataProvider;

@@ -50,6 +50,11 @@ public class DateRangePicker extends CustomField<DateRangePicker.LocalDateRange>
         end.setI18n(i18n);
     }
 
+    /**
+     * Создает i18n настройки для русского языка.
+     *
+     * @return объект DatePickerI18n с русскими настройками.
+     */
     private DatePicker.DatePickerI18n createRussianI18n() {
         return new DatePicker.DatePickerI18n()
                 .setMonthNames(Arrays.asList(
@@ -86,6 +91,11 @@ public class DateRangePicker extends CustomField<DateRangePicker.LocalDateRange>
                 .setFirstDayOfWeek(1);
     }
 
+    /**
+     * Изменяет режим отображения компонента.
+     *
+     * @param mode новый режим (DAY или INTERVAL).
+     */
     public void changeMode(Mode mode) {
         this.mode = mode;
         end.setVisible(mode != Mode.DAY);
@@ -114,11 +124,17 @@ public class DateRangePicker extends CustomField<DateRangePicker.LocalDateRange>
         end.setInvalid(invalid);
     }
 
+    /**
+     * Режимы отображения компонента DateRangePicker.
+     */
     public enum Mode {
         DAY,
         INTERVAL
     }
 
+    /**
+     * Класс, представляющий диапазон дат с начальной и конечной датами.
+     */
     public static class LocalDateRange {
         @Getter
         @Setter

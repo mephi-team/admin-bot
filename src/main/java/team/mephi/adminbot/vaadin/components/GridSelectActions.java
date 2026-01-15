@@ -23,6 +23,11 @@ public class GridSelectActions extends HorizontalLayout {
         setVisible(false);
     }
 
+    /**
+     * Устанавливает количество выбранных элементов и обновляет отображение.
+     *
+     * @param count количество выбранных элементов
+     */
     public void setCount(Integer count) {
         selectedCount = count;
         countControl.setText(String.valueOf(selectedCount));

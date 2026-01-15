@@ -19,6 +19,12 @@ import team.mephi.adminbot.vaadin.dialogs.dataproviders.DialogListDataProviderFa
 @RolesAllowed("ADMIN")
 public class Dialogs extends VerticalLayout {
 
+    /**
+     * Конструктор для создания представления страницы диалогов.
+     *
+     * @param dialogListDataProviderFactory фабрика для создания провайдера данных списка диалогов.
+     * @param chatListDataProviderFactory   фабрика для создания провайдера данных чата.
+     */
     public Dialogs(DialogListDataProviderFactory dialogListDataProviderFactory, ChatListDataProviderFactory chatListDataProviderFactory) {
         setSizeFull();
         getElement().getStyle().set("padding-inline", "53px 120px");

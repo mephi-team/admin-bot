@@ -41,6 +41,11 @@ public class SentView extends AbstractGridView<SimpleMailing> {
 
     private final MailingsPresenter actions;
 
+    /**
+     * Конструктор представления отправленных рассылок.
+     *
+     * @param actions презентер для обработки действий пользователя
+     */
     public SentView(MailingsPresenter actions) {
         super();
 
@@ -68,6 +73,11 @@ public class SentView extends AbstractGridView<SimpleMailing> {
         setup(config);
     }
 
+    /**
+     * Создает рендерер компонента для отображения статуса рассылки.
+     *
+     * @return компонентный рендерер для статуса
+     */
     private static ComponentRenderer<Span, SimpleMailing> createStatusComponentRenderer() {
         return new ComponentRenderer<>(Span::new, statusComponentUpdater);
     }

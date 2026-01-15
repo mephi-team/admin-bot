@@ -9,6 +9,11 @@ import static team.mephi.adminbot.vaadin.users.tabs.UserTabType.VISITOR;
  */
 public class GuestsDataProvider extends BaseUserDataProvider {
 
+    /**
+     * Конструктор провайдера данных для гостей.
+     *
+     * @param userService сервис для работы с пользователями.
+     */
     public GuestsDataProvider(UserService userService) {
         super(userService);
     }

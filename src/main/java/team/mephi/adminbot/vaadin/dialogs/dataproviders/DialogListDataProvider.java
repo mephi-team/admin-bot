@@ -20,10 +20,20 @@ public class DialogListDataProvider {
     private Long currentUserId;
     private ConfigurableFilterDataProvider<DialogWithLastMessageDto, Void, String> provider;
 
+    /**
+     * Конструктор провайдера данных с внедрением зависимости DialogRepository.
+     *
+     * @param dialogRepository репозиторий для работы с диалогами
+     */
     public DialogListDataProvider(DialogRepository dialogRepository) {
         this.dialogRepository = dialogRepository;
     }
 
+    /**
+     * Возвращает конфигурируемый провайдер данных для диалогов с последними сообщениями.
+     *
+     * @return конфигурируемый провайдер данных
+     */
     public ConfigurableFilterDataProvider<DialogWithLastMessageDto, Void, String> getFilterableProvider() {
         if (provider == null) {
             provider = new CallbackDataProvider<DialogWithLastMessageDto, String>(

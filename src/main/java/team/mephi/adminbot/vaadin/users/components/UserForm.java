@@ -41,6 +41,15 @@ public class UserForm extends FormLayout {
     @Getter
     private final ComboBox<SimpleTutor> tutor = new ComboBox<>();
 
+    /**
+     * Конструктор формы пользователя.
+     *
+     * @param roleService      сервис для работы с ролями пользователей.
+     * @param cohortService    сервис для работы с когортами.
+     * @param directionService сервис для работы с направлениями.
+     * @param cityService      сервис для работы с городами.
+     * @param tutorService     сервис для работы с кураторами.
+     */
     public UserForm(RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService, TutorService tutorService) {
         var tutorProvider = new CallbackDataProvider<SimpleTutor, String>(
                 query -> {

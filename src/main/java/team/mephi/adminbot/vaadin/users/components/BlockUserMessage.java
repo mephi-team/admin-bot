@@ -12,6 +12,9 @@ public class BlockUserMessage extends FormLayout {
     @Getter
     private final TextArea message = new TextArea();
 
+    /**
+     * Конструктор формы последнего сообщения пользователя.
+     */
     public BlockUserMessage() {
         setAutoResponsive(true);
         setLabelsAside(true);

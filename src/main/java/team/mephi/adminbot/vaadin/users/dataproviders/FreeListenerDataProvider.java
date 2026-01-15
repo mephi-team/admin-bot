@@ -9,6 +9,11 @@ import static team.mephi.adminbot.vaadin.users.tabs.UserTabType.FREE_LISTENER;
  */
 public class FreeListenerDataProvider extends BaseUserDataProvider {
 
+    /**
+     * Конструктор провайдера данных для слушателей.
+     *
+     * @param userService сервис для работы с пользователями.
+     */
     public FreeListenerDataProvider(UserService userService) {
         super(userService);
     }

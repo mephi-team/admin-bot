@@ -11,6 +11,11 @@ import java.util.List;
  */
 public class SentDataProvider extends BaseMailingDataProvider {
 
+    /**
+     * Конструктор провайдера данных для отправленных рассылок.
+     *
+     * @param mailingService сервис для работы с рассылками
+     */
     public SentDataProvider(MailingService mailingService) {
         super(mailingService);
     }

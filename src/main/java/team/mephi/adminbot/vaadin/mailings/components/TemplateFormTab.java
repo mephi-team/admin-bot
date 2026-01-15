@@ -19,6 +19,11 @@ public class TemplateFormTab extends FormLayout {
     @Getter
     private final TextArea text1 = new TextArea();
 
+    /**
+     * Конструктор вкладки формы шаблона.
+     *
+     * @param templateService сервис для работы с шаблонами
+     */
     public TemplateFormTab(TemplateService templateService) {
         setAutoResponsive(true);
         setLabelsAside(true);

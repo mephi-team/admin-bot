@@ -12,6 +12,11 @@ public class UserCountBadge extends Span {
         addClassNames(LumoUtility.Margin.Left.XSMALL);
     }
 
+    /**
+     * Устанавливает количество пользователей и обновляет отображение.
+     *
+     * @param value количество пользователей
+     */
     public void setCount(Long value) {
         setText(String.format("(%d)", value));
     }

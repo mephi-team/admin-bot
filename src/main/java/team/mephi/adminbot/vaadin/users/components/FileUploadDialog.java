@@ -25,6 +25,12 @@ public class FileUploadDialog extends Dialog {
     private final Button addButton = new PrimaryButton(getTranslation("dialog_users_file_upload_action"));
     private final Map<String, SimpleFile> fileList = new HashMap<>();
 
+    /**
+     * Конструктор диалога загрузки файлов.
+     *
+     * @param authService сервис аутентификации
+     * @param fileService сервис работы с файлами
+     */
     public FileUploadDialog(AuthService authService, FileService fileService) {
         setHeaderTitle(getTranslation("dialog_users_file_upload_title"));
 
@@ -46,6 +52,11 @@ public class FileUploadDialog extends Dialog {
         getFooter().add(addButton);
     }
 
+    /**
+     * Создает компонент загрузки файлов с поддержкой перетаскивания.
+     *
+     * @return компонент загрузки файлов
+     */
     private @NonNull Upload getUpload() {
         Upload dropEnabledUpload = new Upload();
 

@@ -25,6 +25,17 @@ import java.util.function.Supplier;
 public class DialogFactoryImpl implements DialogFactory {
     private final Map<DialogType, Supplier<DialogWithTitle>> registry = new HashMap<>();
 
+    /**
+     * Конструктор фабрики диалогов, регистрирующий различные типы диалогов.
+     *
+     * @param userEditorDialogFactory    Фабрика для создания диалогов редактирования пользователей.
+     * @param tutorEditorDialogFactory   Фабрика для создания диалогов редактирования тьюторов.
+     * @param blockDialogFactory         Фабрика для создания диалогов блокировки.
+     * @param tutoringDialogFactory      Фабрика для создания диалогов обновления тьюторов.
+     * @param mailingDialogFactory       Фабрика для создания диалогов рассылок.
+     * @param templateDialogFactory      Фабрика для создания диалогов шаблонов.
+     * @param answerDialogFactory        Фабрика для создания диалогов ответов.
+     */
     public DialogFactoryImpl(
             UserEditorDialogFactory userEditorDialogFactory,
             TutorEditorDialogFactory tutorEditorDialogFactory,

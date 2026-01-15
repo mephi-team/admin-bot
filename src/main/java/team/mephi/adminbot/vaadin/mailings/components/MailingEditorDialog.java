@@ -36,6 +36,16 @@ public class MailingEditorDialog extends Dialog implements DialogWithTitle {
     private SimpleMailing mailing;
     private final Button saveButton = new PrimaryButton(getTranslation("save_button"), ignoredEvent -> onSave());
 
+    /**
+     * Конструктор диалогового окна рассылки.
+     *
+     * @param userService      сервис для работы с пользователями
+     * @param roleService      сервис для работы с ролями
+     * @param cohortService    сервис для работы с когортами
+     * @param directionService сервис для работы с направлениями
+     * @param cityService      сервис для работы с городами
+     * @param templateService  сервис для работы с шаблонами
+     */
     public MailingEditorDialog(UserService userService, RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService, TemplateService templateService) {
         var form1 = new MailingForm(userService, roleService, cohortService, directionService, cityService);
         var form2 = new TemplateFormTab(templateService);
@@ -145,6 +155,9 @@ public class MailingEditorDialog extends Dialog implements DialogWithTitle {
         open();
     }
 
+    /**
+     * Обработчик сохранения рассылки.
+     */
     private void onSave() {
         if (binder.validate().isOk()) {
             if (onSaveCallback != null) {

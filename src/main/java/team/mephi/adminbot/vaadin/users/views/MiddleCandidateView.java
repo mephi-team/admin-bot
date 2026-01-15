@@ -31,6 +31,11 @@ public class MiddleCandidateView extends AbstractGridView<SimpleUser> {
 
     private final UsersPresenter actions;
 
+    /**
+     * Конструктор для создания представления кандидатов среднего уровня.
+     *
+     * @param actions презентер с действиями для пользователей.
+     */
     public MiddleCandidateView(UsersPresenter actions) {
         super();
 

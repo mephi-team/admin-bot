@@ -30,6 +30,11 @@ public class FreeListenerView extends AbstractGridView<SimpleUser> {
 
     private final StudentPresenter actions;
 
+    /**
+     * Конструктор для создания представления слушателей.
+     *
+     * @param actions презентер с действиями для пользователей.
+     */
     public FreeListenerView(StudentPresenter actions) {
         super();
 

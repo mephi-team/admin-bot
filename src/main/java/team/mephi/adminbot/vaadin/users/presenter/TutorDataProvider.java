@@ -8,5 +8,10 @@ import team.mephi.adminbot.vaadin.CRUDDataProvider;
  * Расширяет общий CRUD-провайдер и добавляет метод для блокировки нескольких преподавателей по их идентификаторам.
  */
 public interface TutorDataProvider extends CRUDDataProvider<SimpleTutor> {
+    /**
+     * Блокирует всех преподавателей с указанными идентификаторами.
+     *
+     * @param ids Идентификаторы преподавателей для блокировки.
+     */
     void blockAllById(Iterable<Long> ids);
 }

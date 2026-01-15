@@ -28,6 +28,12 @@ public class TutorForm extends FormLayout {
     @Getter
     private final MultiSelectComboBox<SimpleUser> students = new MultiSelectComboBox<>();
 
+    /**
+     * Конструктор формы кураторов.
+     *
+     * @param userService      сервис для работы с пользователями.
+     * @param directionService сервис для работы с направлениями.
+     */
     public TutorForm(UserService userService, DirectionService directionService) {
         var directionsProvider = new CallbackDataProvider<SimpleDirection, String>(
                 query -> {

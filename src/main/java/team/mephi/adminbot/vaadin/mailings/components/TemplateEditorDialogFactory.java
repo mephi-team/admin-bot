@@ -7,9 +7,17 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
  */
 @SpringComponent
 public class TemplateEditorDialogFactory {
+    /**
+     * Конструктор фабрики.
+     */
     public TemplateEditorDialogFactory() {
     }
 
+    /**
+     * Создает новый экземпляр TemplateEditorDialog.
+     *
+     * @return новый экземпляр TemplateEditorDialog
+     */
     public TemplateEditorDialog create() {
         return new TemplateEditorDialog();
     }

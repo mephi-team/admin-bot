@@ -18,6 +18,9 @@ public class AnswerDialog extends Dialog implements DialogWithTitle {
     private SimpleQuestion question;
     private final Button answerButton = new PrimaryButton(getTranslation("dialog_answer_button"), VaadinIcon.PAPERPLANE_O.create(), ignoredEvent -> onAnswer());
 
+    /**
+     * Конструктор диалога для ответа на вопрос.
+     */
     public AnswerDialog() {
         var form = new AnswerForm();
         binder.bindInstanceFields(form);
@@ -34,6 +37,9 @@ public class AnswerDialog extends Dialog implements DialogWithTitle {
                 answerButton.setEnabled(e.getBinder().isValid()));
     }
 
+    /**
+     * Обработчик нажатия кнопки ответа.
+     */
     private void onAnswer() {
         if (binder.validate().isOk()) {
             if (onSaveCallback != null) {

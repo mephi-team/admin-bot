@@ -15,6 +15,16 @@ public class MailingEditorDialogFactory {
     private final CityService cityService;
     private final TemplateService templateService;
 
+    /**
+     * Конструктор фабрики с внедрением необходимых сервисов.
+     *
+     * @param userService      сервис для работы с пользователями
+     * @param roleService      сервис для работы с ролями
+     * @param cohortService    сервис для работы с когортами
+     * @param directionService сервис для работы с направлениями
+     * @param cityService      сервис для работы с городами
+     * @param templateService  сервис для работы с шаблонами
+     */
     public MailingEditorDialogFactory(UserService userService, RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService, TemplateService templateService) {
         this.userService = userService;
         this.roleService = roleService;
@@ -24,6 +34,11 @@ public class MailingEditorDialogFactory {
         this.templateService = templateService;
     }
 
+    /**
+     * Создает новый экземпляр MailingEditorDialog с внедренными зависимостями.
+     *
+     * @return новый экземпляр MailingEditorDialog
+     */
     public MailingEditorDialog create() {
         return new MailingEditorDialog(userService, roleService, cohortService, directionService, cityService, templateService);
     }

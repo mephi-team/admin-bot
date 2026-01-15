@@ -34,6 +34,9 @@ public class DialogListComponent extends VerticalLayout implements AfterNavigati
     protected DialogListDataProvider provider;
     private Long activeDialogId;
 
+    /**
+     * Рендерер для отображения карточки диалога.
+     */
     ComponentRenderer<RouterLink, DialogWithLastMessageDto> cardRenderer = new ComponentRenderer<>(item -> {
         RouterLink link = new RouterLink();
         link.setHighlightCondition((ignoredLink, ignoredEvent) -> false);
@@ -108,6 +111,11 @@ public class DialogListComponent extends VerticalLayout implements AfterNavigati
         return link;
     });
 
+    /**
+     * Конструктор компонента списка диалогов.
+     *
+     * @param dataProviderFactory фабрика для создания провайдера данных.
+     */
     public DialogListComponent(DialogListDataProviderFactory dataProviderFactory) {
         this.today = Instant.now();
 
@@ -128,6 +136,7 @@ public class DialogListComponent extends VerticalLayout implements AfterNavigati
         add(searchField, list);
     }
 
+    // Форматирует дату в зависимости от того, является ли она сегодняшней.
     private Span formatDate(Instant dateTime) {
         Span date = new Span();
         if (dateTime == null) return date;

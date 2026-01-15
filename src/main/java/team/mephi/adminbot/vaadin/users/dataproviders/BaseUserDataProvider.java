@@ -21,10 +21,20 @@ public abstract class BaseUserDataProvider implements UserDataProvider {
 
     private ConfigurableFilterDataProvider<SimpleUser, Void, String> provider;
 
+    /**
+     * Конструктор базового провайдера данных пользователей.
+     *
+     * @param userService сервис для работы с пользователями.
+     */
     public BaseUserDataProvider(UserService userService) {
         this.userService = userService;
     }
 
+    /**
+     * Получает провайдер данных с возможностью фильтрации по имени пользователя и определенной роли.
+     *
+     * @return провайдер данных с фильтрацией.
+     */
     public ConfigurableFilterDataProvider<SimpleUser, Void, String> getFilterableProvider() {
         if (provider == null) {
             CallbackDataProvider<SimpleUser, String> base = new CallbackDataProvider<>(
@@ -75,5 +85,10 @@ public abstract class BaseUserDataProvider implements UserDataProvider {
         userService.blockAllById(ids);
     }
 
+    /**
+     * Получает роль пользователей, для которых предназначен этот провайдер данных.
+     *
+     * @return роль пользователя в виде строки.
+     */
     protected abstract String getRole();
 }

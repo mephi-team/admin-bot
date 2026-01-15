@@ -25,6 +25,12 @@ public class ExpertDataProvider extends BaseUserDataProvider {
 
     private ConfigurableFilterDataProvider<SimpleUser, Void, String> provider;
 
+    /**
+     * Конструктор провайдера данных для экспертов.
+     *
+     * @param userService   сервис для работы с пользователями.
+     * @param expertService сервис для работы с экспертами.
+     */
     public ExpertDataProvider(UserService userService, ExpertService expertService) {
         super(userService);
         this.expertService = expertService;

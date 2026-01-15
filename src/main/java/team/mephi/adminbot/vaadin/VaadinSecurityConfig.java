@@ -29,6 +29,13 @@ import java.util.*;
 @EnableWebSecurity
 @Import(VaadinAwareSecurityContextHolderStrategyConfiguration.class)
 public class VaadinSecurityConfig {
+    /**
+     * Настраивает цепочку фильтров безопасности для Vaadin с поддержкой OAuth2 и OIDC.
+     *
+     * @param http объект HttpSecurity для настройки безопасности
+     * @return настроенная цепочка фильтров безопасности
+     * @throws Exception в случае ошибки настройки
+     */
     @Bean
     SecurityFilterChain vaddinSecurityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -51,6 +58,12 @@ public class VaadinSecurityConfig {
         return http.build();
     }
 
+    /**
+     * Обработчик успешного выхода из системы для OIDC.
+     * Перенаправляет пользователя на страницу выхода Keycloak с указанием URL для возврата после выхода.
+     *
+     * @return обработчик успешного выхода
+     */
     private LogoutSuccessHandler oidcLogoutSuccessHandler() {
         return (ignoredRequest, response, authentication) -> {
             // 1. Базовый URL логаута в Keycloak (внешний адрес для браузера)
@@ -73,6 +86,11 @@ public class VaadinSecurityConfig {
         };
     }
 
+    /**
+     * Настраивает сервис для получения информации о пользователе OIDC и его ролях из токена доступа.
+     *
+     * @return настроенный сервис для получения информации о пользователе OIDC
+     */
     @SuppressWarnings("unchecked")
     private OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService() {
         final OidcUserService delegate = new OidcUserService();

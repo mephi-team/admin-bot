@@ -25,6 +25,11 @@ public class GuestsView extends AbstractGridView<SimpleUser> {
 
     private final BlockingPresenter actions;
 
+    /**
+     * Конструктор для создания представления гостей.
+     *
+     * @param actions презентер с действиями для пользователей.
+     */
     public GuestsView(BlockingPresenter actions) {
         super();
 

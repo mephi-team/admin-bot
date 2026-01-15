@@ -11,10 +11,20 @@ public class DialogListDataProviderFactory {
 
     private final DialogRepository dialogRepository;
 
+    /**
+     * Конструктор фабрики с внедрением зависимости DialogRepository.
+     *
+     * @param dialogRepository репозиторий для работы с диалогами
+     */
     public DialogListDataProviderFactory(DialogRepository dialogRepository) {
         this.dialogRepository = dialogRepository;
     }
 
+    /**
+     * Создает новый экземпляр DialogListDataProvider.
+     *
+     * @return новый экземпляр DialogListDataProvider
+     */
     public DialogListDataProvider createDataProvider() {
         return new DialogListDataProvider(dialogRepository);
     }

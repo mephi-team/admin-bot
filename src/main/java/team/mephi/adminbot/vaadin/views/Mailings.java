@@ -36,6 +36,13 @@ public class Mailings extends VerticalLayout {
     private final List<MailingTabType> rolesInOrder = new ArrayList<>();
     private final Map<MailingTabType, CRUDActions<?>> actions = new HashMap<>();
 
+    /**
+     * Конструктор для создания представления страницы рассылок.
+     *
+     * @param tabProviders       список провайдеров вкладок рассылок.
+     * @param presenterFactory   фабрика для создания презентеров рассылок.
+     * @param mailingCountService сервис для получения количества рассылок по типам.
+     */
     public Mailings(
             List<MailingTabProvider> tabProviders,
             MailingPresenterFactory presenterFactory,
@@ -71,6 +78,7 @@ public class Mailings extends VerticalLayout {
         });
     }
 
+    // Создание заголовка страницы с кнопкой создания рассылки
     private HorizontalLayout createHeader() {
         HorizontalLayout top = new HorizontalLayout();
         top.setWidthFull();
@@ -81,6 +89,7 @@ public class Mailings extends VerticalLayout {
         return top;
     }
 
+    // Получение текущей роли на основе выбранной вкладки
     private MailingTabType getCurrentRole() {
         var selectedTab = tabSheet.getSelectedIndex();
         if (selectedTab > -1) {
@@ -89,6 +98,7 @@ public class Mailings extends VerticalLayout {
         return MailingTabType.SENT;
     }
 
+    // Определение типа диалога для создания рассылки на основе текущей роли
     private DialogType getCreateDialogType() {
         MailingTabType role = getCurrentRole();
         // Простой маппинг ролей табов в DialogType; при необходимости расширить
@@ -99,6 +109,7 @@ public class Mailings extends VerticalLayout {
         };
     }
 
+    // Получение текущего действия CRUD на основе выбранной роли
     private CRUDActions<?> getCurrentAction() {
         return actions.get(getCurrentRole());
     }

@@ -55,6 +55,12 @@ public class SimpleConfirmDialog extends ConfirmDialog {
         });
     }
 
+    /**
+     * Показать диалог с указанным количеством для перевода.
+     *
+     * @param count     количество для перевода в заголовке и тексте.
+     * @param onConfirm действие, выполняемое при подтверждении.
+     */
     public void showForConfirm(Object count, Runnable onConfirm) {
         headerText.setText(getTranslation(this.header, count));
         setText(getTranslation(this.text, count));

@@ -12,6 +12,10 @@ public class WarningForm extends FormLayout {
     @Getter
     private final TextArea warningReason = new TextArea();
 
+    /**
+     * Конструктор формы предупреждения.
+     * Инициализирует форму с настройками и добавляет поле для ввода причины предупреждения.
+     */
     public WarningForm() {
         setAutoResponsive(true);
         setLabelsAside(true);

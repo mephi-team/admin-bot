@@ -41,6 +41,9 @@ public enum DialogType {
     @Getter
     private final String notificationKey;
 
+    /**
+     * Конструктор перечисления, инициализирующий ключи для заголовков и уведомлений.
+     */
     DialogType() {
         this.dialogTitleKey = "dialog_" + name().toLowerCase() + "_title";
         this.notificationKey = "notification_" + name().toLowerCase();

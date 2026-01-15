@@ -28,6 +28,14 @@ public class TutorEditorDialog extends Dialog implements DialogWithTitle {
     private SimpleTutor user;
     private final Button saveButton = new PrimaryButton(getTranslation("save_button"), ignoredEvent -> onSave());
 
+    /**
+     * Конструктор диалога редактирования куратора.
+     *
+     * @param roleService      сервис для работы с ролями
+     * @param cohortService    сервис для работы с когорты
+     * @param directionService сервис для работы с направлениями
+     * @param userService      сервис для работы с пользователями
+     */
     public TutorEditorDialog(RoleService roleService, CohortService cohortService, DirectionService directionService, UserService userService) {
         var form = new TutorEditForm(roleService, cohortService, directionService, userService);
         binder.forField(form.getRoles())
@@ -97,6 +105,9 @@ public class TutorEditorDialog extends Dialog implements DialogWithTitle {
         open();
     }
 
+    /**
+     * Обработчик сохранения изменений.
+     */
     private void onSave() {
         if (binder.validate().isOk()) {
             if (onSaveCallback != null) {

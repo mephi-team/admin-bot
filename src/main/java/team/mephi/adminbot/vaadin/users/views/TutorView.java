@@ -29,6 +29,11 @@ public class TutorView extends AbstractGridView<SimpleTutor> {
 
     private final TutorPresenter actions;
 
+    /**
+     * Конструктор для создания представления кураторов.
+     *
+     * @param actions презентер с действиями для пользователей.
+     */
     public TutorView(TutorPresenter actions) {
         super();
 

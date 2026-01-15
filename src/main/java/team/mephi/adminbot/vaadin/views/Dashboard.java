@@ -24,6 +24,12 @@ import team.mephi.adminbot.vaadin.dashboard.dataproviders.DashboardDataProviderF
 @Route("/")
 @PermitAll
 public class Dashboard extends VerticalLayout {
+    /**
+     * Конструктор для создания представления главной панели управления.
+     *
+     * @param factory     фабрика для создания провайдера данных панели управления.
+     * @param authService сервис аутентификации для проверки ролей пользователя.
+     */
     public Dashboard(DashboardDataProviderFactory factory, AuthService authService) {
         var provider = factory.create();
         setAlignItems(Alignment.CENTER);
@@ -46,6 +52,7 @@ public class Dashboard extends VerticalLayout {
             add(buildCardArea(card3));
     }
 
+    // Создает горизонтальный макет для размещения карточек на панели управления.
     private HorizontalLayout buildCardArea(Component... components) {
         HorizontalLayout layout = new HorizontalLayout(components);
         layout.setPadding(false);
@@ -57,6 +64,7 @@ public class Dashboard extends VerticalLayout {
         return layout;
     }
 
+    // Создает бейдж с количеством новых элементов и соответствующим текстом.
     private Span createBadge(Integer count, String key, String empty) {
         Span newDialogs = new Span(count.toString());
         newDialogs.getElement().getThemeList().add("badge success");
@@ -66,6 +74,7 @@ public class Dashboard extends VerticalLayout {
             return new Span(getTranslation(empty));
     }
 
+    // Создает карточку с заданным заголовком, иконкой и целью навигации.
     private Card createCard(String key, Icon icon, Class<? extends com.vaadin.flow.component.Component> navigationTarget) {
         Card card = new Card();
         card.setMinHeight("136px");

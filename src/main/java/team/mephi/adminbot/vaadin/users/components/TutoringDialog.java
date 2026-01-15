@@ -27,6 +27,12 @@ public class TutoringDialog extends Dialog implements DialogWithTitle {
     private SimpleTutor user;
     private final Button saveButton = new PrimaryButton(getTranslation("save_button"), ignoredEvent -> onSave());
 
+    /**
+     * Конструктор диалога кураторства.
+     *
+     * @param userService      сервис для работы с пользователями.
+     * @param directionService сервис для работы с направлениями.
+     */
     public TutoringDialog(UserService userService, DirectionService directionService) {
         var form = new TutorForm(userService, directionService);
         setHeaderTitle("dialog_tutor_curatorship_title");
@@ -70,6 +76,9 @@ public class TutoringDialog extends Dialog implements DialogWithTitle {
         open();
     }
 
+    /**
+     * Обработчик сохранения изменений.
+     */
     private void onSave() {
         if (binder.validate().isOk()) {
             if (onSaveCallback != null) {

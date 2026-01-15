@@ -20,6 +20,11 @@ import team.mephi.adminbot.vaadin.components.UserMenu;
 public class CustomAccessDeniedError extends AppLayout
         implements HasErrorParameter<AccessDeniedException> {
 
+    /**
+     * Конструктор для создания страницы ошибки доступа запрещен.
+     *
+     * @param authService сервис аутентификации для отображения пользовательского меню.
+     */
     public CustomAccessDeniedError(AuthService authService) {
         addToNavbar(new Logo("Neoflex"), new TopMenu(authService), new UserMenu(authService));
     }

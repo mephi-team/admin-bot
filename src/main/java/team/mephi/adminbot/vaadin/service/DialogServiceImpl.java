@@ -12,6 +12,11 @@ public class DialogServiceImpl<T> implements DialogService<T> {
 
     private final DialogFactory dialogFactory;
 
+    /**
+     * Конструктор сервиса диалогов.
+     *
+     * @param dialogFactory Фабрика для создания диалогов.
+     */
     public DialogServiceImpl(DialogFactory dialogFactory) {
         this.dialogFactory = dialogFactory;
     }

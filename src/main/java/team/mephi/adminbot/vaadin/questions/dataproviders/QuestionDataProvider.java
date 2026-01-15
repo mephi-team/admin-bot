@@ -18,10 +18,20 @@ public class QuestionDataProvider {
     private final QuestionService questionService;
     private ConfigurableFilterDataProvider<SimpleQuestion, Void, String> provider;
 
+    /**
+     * Конструктор провайдера данных для вопросов.
+     *
+     * @param questionService сервис для работы с вопросами
+     */
     public QuestionDataProvider(QuestionService questionService) {
         this.questionService = questionService;
     }
 
+    /**
+     * Получает провайдер данных с поддержкой фильтрации по тексту вопроса.
+     *
+     * @return провайдер данных с фильтрацией
+     */
     public ConfigurableFilterDataProvider<SimpleQuestion, Void, String> getFilterableProvider() {
         if (provider == null) {
             provider = new CallbackDataProvider<SimpleQuestion, String>(
@@ -47,18 +57,40 @@ public class QuestionDataProvider {
         return provider;
     }
 
+    /**
+     * Получает провайдер данных для использования в компонентах Vaadin.
+     *
+     * @return провайдер данных
+     */
     public DataProvider<SimpleQuestion, ?> getDataProvider() {
         return getFilterableProvider();
     }
 
+    /**
+     * Находит вопрос по его идентификатору.
+     *
+     * @param id идентификатор вопроса
+     * @return опциональный вопрос
+     */
     public Optional<SimpleQuestion> findById(Long id) {
         return questionService.findByIdWithDeps(id);
     }
 
+    /**
+     * Удаляет вопрос по его идентификатору.
+     *
+     * @param ids идентификатор вопроса
+     */
     public void deleteAllById(Iterable<Long> ids) {
         questionService.deleteAllById(ids);
     }
 
+    /**
+     * Сохраняет ответ на вопрос.
+     *
+     * @param question вопрос с ответом
+     * @return сохраненный вопрос
+     */
     public SimpleQuestion saveAnswer(SimpleQuestion question) {
         return questionService.saveAnswer(question);
     }

@@ -27,6 +27,15 @@ public class UserEditorDialog extends Dialog implements DialogWithTitle {
     private SimpleUser user;
     private final Button saveButton = new PrimaryButton(getTranslation("save_button"), ignoredEvent -> onSave());
 
+    /**
+     * Конструктор диалогового окна редактора пользователя.
+     *
+     * @param roleService      сервис для работы с ролями пользователей.
+     * @param cohortService    сервис для работы с когортами.
+     * @param directionService сервис для работы с направлениями.
+     * @param cityService      сервис для работы с городами.
+     * @param tutorService     сервис для работы с кураторами.
+     */
     public UserEditorDialog(RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService, TutorService tutorService) {
         var form = new UserForm(roleService, cohortService, directionService, cityService, tutorService);
         binder.forField(form.getRoles())
@@ -103,6 +112,9 @@ public class UserEditorDialog extends Dialog implements DialogWithTitle {
         open();
     }
 
+    /**
+     * Обработчик сохранения изменений.
+     */
     private void onSave() {
         if (binder.validate().isOk()) {
             if (onSaveCallback != null) {

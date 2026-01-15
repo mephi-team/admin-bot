@@ -11,6 +11,9 @@ public class BlockForm extends FormLayout {
     @Getter
     private final TextArea blockReason = new TextArea();
 
+    /**
+     * Конструктор формы блокировки пользователя.
+     */
     public BlockForm() {
         setAutoResponsive(true);
         setLabelsAside(true);

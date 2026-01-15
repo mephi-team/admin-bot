@@ -10,6 +10,11 @@ import java.util.List;
  */
 public class DraftDataProvider extends BaseMailingDataProvider {
 
+    /**
+     * Конструктор провайдера данных для черновиков.
+     *
+     * @param mailingService сервис для работы с рассылками
+     */
     public DraftDataProvider(MailingService mailingService) {
         super(mailingService);
     }

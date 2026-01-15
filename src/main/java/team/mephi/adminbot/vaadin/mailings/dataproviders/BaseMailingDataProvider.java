@@ -21,10 +21,20 @@ public abstract class BaseMailingDataProvider implements CRUDDataProvider<Simple
     private final MailingService mailingService;
     private ConfigurableFilterDataProvider<SimpleMailing, Void, String> provider;
 
+    /**
+     * Конструктор базового провайдера данных рассылок.
+     *
+     * @param mailingService сервис для работы с рассылками
+     */
     public BaseMailingDataProvider(MailingService mailingService) {
         this.mailingService = mailingService;
     }
 
+    /**
+     * Возвращает провайдер данных с поддержкой фильтрации по имени рассылки и статусам.
+     *
+     * @return провайдер данных с фильтрацией
+     */
     public ConfigurableFilterDataProvider<SimpleMailing, Void, String> getFilterableProvider() {
         if (provider == null) {
             provider = new CallbackDataProvider<SimpleMailing, String>(
@@ -73,5 +83,10 @@ public abstract class BaseMailingDataProvider implements CRUDDataProvider<Simple
         mailingService.deleteAllById(ids);
     }
 
+    /**
+     * Абстрактный метод для получения списка статусов рассылок для фильтрации.
+     *
+     * @return список статусов рассылок
+     */
     protected abstract List<MailingStatus> getStatuses();
 }

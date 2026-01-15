@@ -18,6 +18,13 @@ public class CRUDPresenter<T> implements CRUDActions<T>, HasDataProvider<CRUDDat
     private final DialogService<T> dialogService;
     private final NotificationService notificationService;
 
+    /**
+     * Конструктор для создания экземпляра CRUDPresenter.
+     *
+     * @param dataProvider      Провайдер данных для операций CRUD.
+     * @param dialogService     Сервис для отображения диалогов.
+     * @param notificationService Сервис для отображения уведомлений.
+     */
     public CRUDPresenter(CRUDDataProvider<T> dataProvider, DialogService<T> dialogService, NotificationService notificationService) {
         this.dataProvider = dataProvider;
         this.dialogService = dialogService;

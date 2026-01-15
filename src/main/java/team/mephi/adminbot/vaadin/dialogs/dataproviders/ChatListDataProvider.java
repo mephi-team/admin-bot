@@ -36,10 +36,22 @@ public class ChatListDataProvider {
         return provider;
     }
 
+    /**
+     * Находит диалог по его идентификатору.
+     *
+     * @param id идентификатор диалога
+     * @return опциональный объект SimpleDialog, если диалог найден
+     */
     public Optional<SimpleDialog> findById(Long id) {
         return messageService.findById(id);
     }
 
+    /**
+     * Сохраняет сообщение в указанном диалоге.
+     *
+     * @param dialogId    идентификатор диалога
+     * @param messageText текст сообщения
+     */
     public void save(Long dialogId, String messageText) {
         messageService.send(dialogId, messageText);
     }

@@ -7,10 +7,18 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
  */
 @SpringComponent
 public class AnswerDialogFactory {
-    public AnswerDialogFactory() {
 
+    /**
+     * Конструктор фабрики диалогов ответа на вопрос.
+     */
+    public AnswerDialogFactory() {
     }
 
+    /**
+     * Создает новый диалог для ответа на вопрос.
+     *
+     * @return новый экземпляр AnswerDialog
+     */
     public AnswerDialog create() {
         return new AnswerDialog();
     }

@@ -21,6 +21,12 @@ import java.util.List;
 @Route("/analytics")
 @RolesAllowed("ADMIN")
 public class Analytics extends VerticalLayout {
+    /**
+     * Конструктор для создания представления страницы аналитики.
+     *
+     * @param tabProviders    список провайдеров вкладок аналитики.
+     * @param presenterFactory фабрика для создания презентеров диаграмм.
+     */
     public Analytics(List<AnalyticsTabProvider> tabProviders, ChartPresenterFactory presenterFactory) {
         setSizeFull();
         getElement().getStyle().set("padding-inline", "120px");

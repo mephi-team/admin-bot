@@ -45,6 +45,14 @@ public class Users extends VerticalLayout implements BeforeEnterObserver {
 
     private UserTabType currentTab;
 
+    /**
+     * Конструктор для создания представления страницы пользователей.
+     *
+     * @param tabProviders     список провайдеров вкладок пользователей.
+     * @param presenterFactory фабрика для создания презентеров пользователей.
+     * @param uploaderFactory  фабрика для создания диалогов загрузки файлов.
+     * @param userService      сервис для работы с пользователями.
+     */
     public Users(
             List<UserTabProvider> tabProviders,
             UsersPresenterFactory presenterFactory,
@@ -83,6 +91,7 @@ public class Users extends VerticalLayout implements BeforeEnterObserver {
         });
     }
 
+    // Создание заголовка страницы с кнопкой создания пользователя
     private HorizontalLayout createHeader() {
         HorizontalLayout top = new HorizontalLayout();
         top.setWidthFull();
@@ -96,10 +105,12 @@ public class Users extends VerticalLayout implements BeforeEnterObserver {
         return top;
     }
 
+    // Получение текущей роли на основе выбранной вкладки
     private UserTabType getCurrentRole() {
         return currentTab;
     }
 
+    // Получение типа диалога для создания пользователя на основе текущей роли
     private DialogType getCreateDialogType() {
         UserTabType role = getCurrentRole();
         // Простой маппинг ролей табов в DialogType; при необходимости расширить
@@ -109,6 +120,7 @@ public class Users extends VerticalLayout implements BeforeEnterObserver {
         };
     }
 
+    // Получение текущего действия CRUD на основе выбранной роли
     private CRUDActions<?> getCurrentAction() {
         return actions.get(getCurrentRole());
     }

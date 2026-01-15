@@ -20,6 +20,13 @@ public class TutorPresenter extends CRUDPresenter<SimpleTutor> implements TutorA
     private final DialogService<SimpleTutor> dialogService;
     private final NotificationService notificationService;
 
+    /**
+     * Конструктор презентера для преподавателей.
+     *
+     * @param dataProvider      Провайдер данных преподавателей.
+     * @param dialogService     Сервис для отображения диалогов.
+     * @param notificationService Сервис для отображения уведомлений.
+     */
     public TutorPresenter(TutorDataProvider dataProvider, DialogService<SimpleTutor> dialogService, NotificationService notificationService) {
         super(dataProvider, dialogService, notificationService);
         this.dataProvider = dataProvider;

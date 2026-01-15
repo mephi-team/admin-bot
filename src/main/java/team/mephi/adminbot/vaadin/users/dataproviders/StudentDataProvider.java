@@ -9,6 +9,11 @@ import static team.mephi.adminbot.vaadin.users.tabs.UserTabType.STUDENT;
  */
 public class StudentDataProvider extends BaseUserDataProvider {
 
+    /**
+     * Конструктор провайдера данных для студентов.
+     *
+     * @param userService сервис для работы с пользователями.
+     */
     public StudentDataProvider(UserService userService) {
         super(userService);
     }

@@ -8,6 +8,11 @@ import com.vaadin.flow.component.popover.PopoverPosition;
  * Всплывающая подсказка, открывающаяся при наведении на компонент.
  */
 public class PdPopover extends Popover {
+    /**
+     * Конструктор всплывающей подсказки.
+     *
+     * @param components компоненты, которые будут отображаться внутри подсказки
+     */
     public PdPopover(Component... components) {
         super(components);
         setPosition(PopoverPosition.BOTTOM_START);

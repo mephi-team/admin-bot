@@ -30,6 +30,11 @@ public class StudentView extends AbstractGridView<SimpleUser> {
 
     private final StudentPresenter actions;
 
+    /**
+     * Конструктор для создания представления студентов.
+     *
+     * @param actions презентер с действиями для пользователей.
+     */
     public StudentView(StudentPresenter actions) {
         super();
 

@@ -14,6 +14,9 @@ public class TemplateForm extends FormLayout {
     @Getter
     private final TextArea text = new TextArea();
 
+    /**
+     * Конструктор формы шаблона.
+     */
     public TemplateForm() {
         setAutoResponsive(true);
         setLabelsAside(true);

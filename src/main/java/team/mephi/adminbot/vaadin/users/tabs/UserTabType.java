@@ -14,6 +14,9 @@ public enum UserTabType {
     LC_EXPERT,
     TUTOR;
 
+    /**
+     * Ключ для локализации метки вкладки.
+     */
     @Getter
     private final String tabLabelKey = "page_users_tab_" + name().toLowerCase() + "_label";
 }

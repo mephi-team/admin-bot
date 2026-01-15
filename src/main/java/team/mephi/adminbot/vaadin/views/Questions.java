@@ -46,6 +46,14 @@ public class Questions extends AbstractGridView<SimpleQuestion> {
 
     private final QuestionDataProvider provider;
 
+    /**
+     * Конструктор для создания представления страницы вопросов.
+     *
+     * @param providerFactory   фабрика для создания провайдера данных вопросов.
+     * @param dialogService     сервис для отображения диалогов.
+     * @param notificationService сервис для отображения уведомлений.
+     * @param authService       сервис для аутентификации и авторизации пользователей.
+     */
     public Questions(QuestionDataProviderFactory providerFactory, DialogService<?> dialogService, NotificationService notificationService, AuthService authService) {
         this.provider = providerFactory.createDataProvider();
         this.dialogService = dialogService;
@@ -77,6 +85,7 @@ public class Questions extends AbstractGridView<SimpleQuestion> {
         setup(config);
     }
 
+    // Обработка ответа на вопрос
     private void onAnswer(SimpleQuestion question) {
         dialogService.showDialog(question, DialogType.ANSWER_SEND, (editedItem) -> {
             if (editedItem != null) {
@@ -87,6 +96,7 @@ public class Questions extends AbstractGridView<SimpleQuestion> {
         });
     }
 
+    // Обработка удаления вопросов
     private void onDelete(List<Long> selectedIds) {
         dialogService.showConfirmDialog(selectedIds.size(), selectedIds.size() > 1 ? DialogType.DELETE_QUESTION_ALL : DialogType.DELETE_QUESTION, VaadinIcon.TRASH.create(), (ignore) -> {
             provider.deleteAllById(selectedIds);

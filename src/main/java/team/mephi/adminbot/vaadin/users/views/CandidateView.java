@@ -31,6 +31,11 @@ public class CandidateView extends AbstractGridView<SimpleUser> {
 
     private final UsersPresenter actions;
 
+    /**
+     * Конструктор для создания представления кандидатов.
+     *
+     * @param actions презентер с действиями для пользователей.
+     */
     public CandidateView(UsersPresenter actions) {
         super();
 

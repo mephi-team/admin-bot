@@ -18,6 +18,9 @@ public class TemplateEditorDialog extends Dialog implements DialogWithTitle {
     private SerializableConsumer<SimpleTemplate> onSaveCallback;
     private SimpleTemplate template;
 
+    /**
+     * Конструктор диалогового окна шаблона.
+     */
     public TemplateEditorDialog() {
         var form = new TemplateForm();
 
@@ -40,6 +43,9 @@ public class TemplateEditorDialog extends Dialog implements DialogWithTitle {
         open();
     }
 
+    /**
+     * Обрабатывает сохранение шаблона.
+     */
     private void onSave() {
         if (binder.validate().isOk()) {
             if (onSaveCallback != null) {

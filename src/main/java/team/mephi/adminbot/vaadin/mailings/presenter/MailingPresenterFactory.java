@@ -24,6 +24,14 @@ public class MailingPresenterFactory {
     private final DialogService dialogService;
     private final NotificationService notificationService;
 
+    /**
+     * Конструктор фабрики презентеров рассылок.
+     *
+     * @param mailingService     сервис для работы с рассылками
+     * @param templateService    сервис для работы с шаблонами
+     * @param dialogService      сервис для отображения диалогов
+     * @param notificationService сервис для отображения уведомлений
+     */
     public MailingPresenterFactory(
             MailingService mailingService,
             TemplateService templateService,
@@ -35,6 +43,12 @@ public class MailingPresenterFactory {
         this.notificationService = notificationService;
     }
 
+    /**
+     * Создает провайдер данных в зависимости от типа вкладки рассылок.
+     *
+     * @param role тип вкладки рассылок
+     * @return соответствующий провайдер данных
+     */
     private CRUDDataProvider<?> createDataProvider(MailingTabType role) {
         return switch (role) {
             case SENT -> new SentDataProvider(mailingService);
@@ -43,6 +57,12 @@ public class MailingPresenterFactory {
         };
     }
 
+    /**
+     * Создает презентер в зависимости от типа вкладки рассылок.
+     *
+     * @param role тип вкладки рассылок
+     * @return соответствующий презентер
+     */
     @SuppressWarnings("unchecked")
     public CRUDPresenter<?> createPresenter(MailingTabType role) {
         CRUDDataProvider<?> dataProvider = createDataProvider(role);

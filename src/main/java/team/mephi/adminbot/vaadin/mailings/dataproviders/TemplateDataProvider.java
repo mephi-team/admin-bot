@@ -19,10 +19,20 @@ public class TemplateDataProvider implements CRUDDataProvider<SimpleTemplate> {
     private final TemplateService templateService;
     private ConfigurableFilterDataProvider<SimpleTemplate, Void, String> provider;
 
+    /**
+     * Конструктор провайдера данных для шаблонов.
+     *
+     * @param templateService сервис для работы с шаблонами
+     */
     public TemplateDataProvider(TemplateService templateService) {
         this.templateService = templateService;
     }
 
+    /**
+     * Возвращает провайдер данных с поддержкой фильтрации по имени шаблона.
+     *
+     * @return провайдер данных с фильтрацией
+     */
     public ConfigurableFilterDataProvider<SimpleTemplate, Void, String> getFilterableProvider() {
         if (provider == null) {
             provider = new CallbackDataProvider<SimpleTemplate, String>(

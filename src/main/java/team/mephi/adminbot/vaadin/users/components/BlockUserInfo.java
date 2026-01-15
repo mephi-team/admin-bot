@@ -15,6 +15,9 @@ public class BlockUserInfo extends FormLayout {
     @Getter
     private final TextField tgId = new TextField();
 
+    /**
+     * Конструктор формы информации о пользователе.
+     */
     public BlockUserInfo() {
         setAutoResponsive(true);
         setLabelsAside(true);

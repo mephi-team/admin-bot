@@ -19,6 +19,13 @@ public class BlockingPresenter extends CRUDPresenter<SimpleUser> implements Bloc
     private final DialogService<SimpleUser> dialogService;
     private final NotificationService notificationService;
 
+    /**
+     * Конструктор презентера для блокировки пользователей.
+     *
+     * @param dataProvider      Провайдер данных пользователей.
+     * @param dialogService     Сервис для отображения диалогов.
+     * @param notificationService Сервис для отображения уведомлений.
+     */
     public BlockingPresenter(UserDataProvider dataProvider, DialogService<SimpleUser> dialogService, NotificationService notificationService) {
         super(dataProvider, dialogService, notificationService);
         this.dataProvider = dataProvider;

@@ -30,6 +30,11 @@ public class ExpertView extends AbstractGridView<SimpleUser> {
 
     private final UsersPresenter actions;
 
+    /**
+     * Конструктор для создания представления экспертов.
+     *
+     * @param actions презентер с действиями для пользователей.
+     */
     public ExpertView(UsersPresenter actions) {
         super();
 

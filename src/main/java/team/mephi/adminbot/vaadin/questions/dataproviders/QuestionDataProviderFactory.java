@@ -10,10 +10,20 @@ import team.mephi.adminbot.service.QuestionService;
 public class QuestionDataProviderFactory {
     private final QuestionService questionService;
 
+    /**
+     * Конструктор фабрики провайдеров данных вопросов.
+     *
+     * @param questionService сервис для работы с вопросами
+     */
     public QuestionDataProviderFactory(QuestionService questionService) {
         this.questionService = questionService;
     }
 
+    /**
+     * Создает новый провайдер данных для вопросов.
+     *
+     * @return новый экземпляр QuestionDataProvider
+     */
     public QuestionDataProvider createDataProvider() {
         return new QuestionDataProvider(questionService);
     }

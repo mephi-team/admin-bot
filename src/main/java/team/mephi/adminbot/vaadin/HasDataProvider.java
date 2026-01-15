@@ -6,5 +6,10 @@ package team.mephi.adminbot.vaadin;
  * @param <T> Тип провайдера данных.
  */
 public interface HasDataProvider<T> {
+    /**
+     * Получает провайдер данных.
+     *
+     * @return Провайдер данных.
+     */
     T getDataProvider();
 }

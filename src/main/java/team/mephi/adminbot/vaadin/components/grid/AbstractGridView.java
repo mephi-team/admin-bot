@@ -32,6 +32,9 @@ public abstract class AbstractGridView<T> extends VerticalLayout {
     protected Set<String> visibleColumns;
     protected Set<String> hiddenColumns;
 
+    /**
+     * Конструктор абстрактного представления с гридом.
+     */
     protected AbstractGridView() {
         setSizeFull();
         setPadding(false);
@@ -41,6 +44,10 @@ public abstract class AbstractGridView<T> extends VerticalLayout {
         grid.setSizeFull();
     }
 
+    /**
+     * Настройка представления грида на основе переданной конфигурации.
+     * @param config конфигурация грида
+     */
     protected final void setup(GridViewConfig<T> config) {
         this.gsa = config.getGsa();
         this.filterSetter = config.getFilterSetter();
@@ -54,6 +61,9 @@ public abstract class AbstractGridView<T> extends VerticalLayout {
         init();
     }
 
+    /**
+     * Инициализация грида и его компонентов.
+     */
     private void init() {
         GridMultiSelectionModel<T> selectionModel = (GridMultiSelectionModel<T>) grid.setSelectionMode(Grid.SelectionMode.MULTI);
         selectionModel.setSelectionColumnFrozen(true);

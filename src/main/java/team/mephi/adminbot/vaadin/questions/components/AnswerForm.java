@@ -21,6 +21,9 @@ public class AnswerForm extends FormLayout {
     @Getter
     private final TextArea answer = new TextArea();
 
+    /**
+     * Конструктор формы для ответа на вопрос.
+     */
     public AnswerForm() {
         setAutoResponsive(true);
         setLabelsAside(true);

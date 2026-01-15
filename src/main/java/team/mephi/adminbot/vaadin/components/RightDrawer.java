@@ -47,12 +47,18 @@ public class RightDrawer extends Section {
         setVisible(false);
     }
 
+    /**
+     * Открывает драйвер.
+     */
     private void save(ClickEvent<Button> buttonClickEvent) {
         if (onSaveCallback.get()) {
             setVisible(false);
         }
     }
 
+    /**
+     * Закрывает драйвер.
+     */
     private void close(ClickEvent<Button> buttonClickEvent) {
         onCloseCallback.run();
         setVisible(false);

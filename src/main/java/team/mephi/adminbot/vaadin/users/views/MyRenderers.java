@@ -16,6 +16,11 @@ import java.util.Collection;
  * Класс, содержащий различные рендереры для отображения информации о пользователях в таблицах.
  */
 public class MyRenderers {
+    /**
+     * Создает рендерер для отображения информации о согласиях на обработку персональных данных пользователя.
+     *
+     * @return ComponentRenderer для отображения информации о согласиях на обработку персональных данных.
+     */
     public static ComponentRenderer<Span, SimpleUser> createPdRenderer() {
         return new ComponentRenderer<>(user -> {
             Span span = new Span();
@@ -38,6 +43,11 @@ public class MyRenderers {
         });
     }
 
+    /**
+     * Создает рендерер для отображения статуса пользователя.
+     *
+     * @return ComponentRenderer для отображения статуса пользователя.
+     */
     public static ComponentRenderer<Span, SimpleUser> createStatusRenderer() {
         return new ComponentRenderer<>(user -> {
             Span span = new Span();
@@ -54,6 +64,11 @@ public class MyRenderers {
         });
     }
 
+    /**
+     * Создает рендерер для отображения информации о кураторстве пользователя.
+     *
+     * @return ComponentRenderer для отображения информации о кураторстве.
+     */
     public static ComponentRenderer<Span, SimpleTutor> createCuratorshipRenderer() {
         return new ComponentRenderer<>(user -> {
             Span span = new Span();
@@ -77,14 +92,30 @@ public class MyRenderers {
         });
     }
 
+    /**
+     * Создает рендерер для отображения направлений пользователя.
+     *
+     * @return ComponentRenderer для отображения направлений пользователя.
+     */
     public static ComponentRenderer<Div, SimpleUser> createUserDirections() {
         return new ComponentRenderer<>(user -> renderList(user.getDirection()));
     }
 
+    /**
+     * Создает рендерер для отображения направлений куратора.
+     *
+     * @return ComponentRenderer для отображения направлений куратора.
+     */
     public static ComponentRenderer<Div, SimpleTutor> createTutorDirections() {
         return new ComponentRenderer<>(user -> renderList(user.getDirections()));
     }
 
+    /**
+     * Вспомогательный метод для рендеринга списка направлений.
+     *
+     * @param directions коллекция направлений.
+     * @return Div, содержащий отрендеренные направления.
+     */
     private static Div renderList(Collection<SimpleDirection> directions) {
         var res = new Div();
         res.addClassNames(LumoUtility.Display.FLEX, LumoUtility.FlexDirection.COLUMN, LumoUtility.Gap.XSMALL);

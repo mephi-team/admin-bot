@@ -25,6 +25,15 @@ public class UsersPresenterFactory {
     private final DialogService<?> dialogService;
     private final NotificationService notificationService;
 
+    /**
+     * Конструктор фабрики презентеров пользователей.
+     *
+     * @param tutorService      Сервис для управления преподавателями.
+     * @param userService       Сервис для управления пользователями.
+     * @param expertService     Сервис для управления экспертами.
+     * @param dialogService     Сервис для отображения диалогов.
+     * @param notificationService Сервис для отображения уведомлений.
+     */
     public UsersPresenterFactory(TutorService tutorService, UserService userService, ExpertService expertService, DialogService<SimpleUser> dialogService, NotificationService notificationService) {
         this.tutorService = tutorService;
         this.userService = userService;
@@ -33,6 +42,12 @@ public class UsersPresenterFactory {
         this.notificationService = notificationService;
     }
 
+    /**
+     * Создает провайдер данных в зависимости от роли пользователя.
+     *
+     * @param role Роль пользователя.
+     * @return Провайдер данных для указанной роли.
+     */
     private CRUDDataProvider<?> createDataProvider(UserTabType role) {
         return switch (role) {
             case CANDIDATE -> new CandidateDataProvider(userService);
@@ -45,6 +60,12 @@ public class UsersPresenterFactory {
         };
     }
 
+    /**
+     * Создает презентер в зависимости от роли пользователя.
+     *
+     * @param role Роль пользователя.
+     * @return Презентер для указанной роли.
+     */
     @SuppressWarnings("unchecked")
     public CRUDPresenter<?> createPresenter(UserTabType role) {
         CRUDDataProvider<?> dataProvider = createDataProvider(role);

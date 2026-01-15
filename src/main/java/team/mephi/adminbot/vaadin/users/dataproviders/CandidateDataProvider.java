@@ -9,6 +9,11 @@ import static team.mephi.adminbot.vaadin.users.tabs.UserTabType.CANDIDATE;
  */
 public class CandidateDataProvider extends BaseUserDataProvider {
 
+    /**
+     * Конструктор провайдера данных для кандидатов.
+     *
+     * @param userService сервис для работы с пользователями.
+     */
     public CandidateDataProvider(UserService userService) {
         super(userService);
     }

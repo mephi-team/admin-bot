@@ -10,6 +10,9 @@ public enum MailingTabType {
     TEMPLATES,
     DRAFT;
 
+    /**
+     * Ключ для локализации метки вкладки.
+     */
     @Getter
     private final String tabLabelKey = "page_mailing_tab_" + name().toLowerCase() + "_label";
 }

@@ -23,6 +23,11 @@ public class BlockDialog<T> extends Dialog implements DialogWithTitle {
     private SerializableConsumer<T> onSaveCallback;
     private final Button saveButton = new Button(getTranslation("save_button"), ignoredEvent -> onSave());
 
+    /**
+     * Конструктор диалогового окна блокировки пользователя.
+     *
+     * @param beanType класс типа объекта, связанного с блокировкой
+     */
     public BlockDialog(Class<T> beanType) {
         this.beanType = beanType;
         this.binder = new BeanValidationBinder<>(beanType);
@@ -64,6 +69,9 @@ public class BlockDialog<T> extends Dialog implements DialogWithTitle {
         open();
     }
 
+    /**
+     * Обработчик сохранения данных при нажатии кнопки "Сохранить".
+     */
     private void onSave() {
         if (binder.validate().isOk()) {
             if (onSaveCallback != null) {

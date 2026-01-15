@@ -26,6 +26,11 @@ public class TemplateView extends AbstractGridView<SimpleTemplate> {
 
     private final CRUDPresenter<SimpleTemplate> actions;
 
+    /**
+     * Конструктор представления шаблонов рассылок.
+     *
+     * @param actions презентер для обработки действий пользователя
+     */
     public TemplateView(CRUDPresenter<SimpleTemplate> actions) {
         super();
 

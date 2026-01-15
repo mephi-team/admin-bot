@@ -31,6 +31,11 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
 
     private Long dialogId;
 
+    /**
+     * Конструктор компонента ChatListComponent.
+     *
+     * @param dataProviderFactory фабрика для создания поставщика данных списка чата.
+     */
     public ChatListComponent(ChatListDataProviderFactory dataProviderFactory) {
         this.provider = dataProviderFactory.createDataProvider();
         setHeightFull();
@@ -52,10 +57,16 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
         add(buildChatArea(header, chatList, emptyMessage), chatInput);
     }
 
+    /**
+     * Создает рендерер компонентов для элементов списка чата.
+     *
+     * @return рендерер компонентов.
+     */
     private ComponentRenderer<Div, ChatListItem> createMessageRenderer() {
         return new ComponentRenderer<>(this::renderChatItem);
     }
 
+    // Рендерит элемент чата в зависимости от его типа (заголовок даты или сообщение).
     private Div renderChatItem(ChatListItem item) {
         if (item.isHeader()) {
             return renderDateHeader(item.getDateLabel());
@@ -63,6 +74,7 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
         return renderMessage(item);
     }
 
+    // Рендерит сообщение в чате с соответствующим стилем.
     private Div renderMessage(ChatListItem item) {
         Div message = new Div(item.getMessage().getText());
         String date = item.getMessage().getDate().toString(); // Z означает UTC
@@ -84,6 +96,7 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
         return message;
     }
 
+    // Рендерит заголовок даты для разделения сообщений по датам.
     private Div renderDateHeader(String label) {
         Div header = new Div(label);
         header.addClassNames(LumoUtility.TextAlignment.CENTER, LumoUtility.FontSize.XXSMALL, LumoUtility.FontWeight.SEMIBOLD);
@@ -91,6 +104,7 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
         return header;
     }
 
+    // Строит область чата с заданными компонентами.
     private VerticalLayout buildChatArea(Component... components) {
         var container = new VerticalLayout(components);
         container.setHeightFull();
@@ -100,6 +114,7 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
         return container;
     }
 
+    // Создает компонент ввода сообщений для чата.
     private MessageInput createChatInput() {
         var input = new MessageInput();
         var i18n = new MessageInputI18n();
@@ -111,6 +126,7 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
         return input;
     }
 
+    // Обрабатывает отправку сообщения в чат.
     private void onMessage(String message) {
         if (dialogId == null) return;
         provider.save(dialogId, message);
@@ -118,6 +134,7 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
         chatList.scrollToEnd();
     }
 
+    // Обновляет видимость компонентов в зависимости от наличия выбранного диалога.
     private void updateVisibility(boolean hasDialog) {
         header.setVisible(hasDialog);
         chatInput.setVisible(hasDialog);
@@ -125,6 +142,7 @@ public class ChatListComponent extends VerticalLayout implements AfterNavigation
         emptyMessage.setVisible(!hasDialog);
     }
 
+    // Рендерит заголовок с информацией о пользователе и его роли.
     private void renderHeader(SimpleDialog dialog) {
         Span user = new Span(dialog.getUserName());
         user.addClassNames(LumoUtility.FontWeight.BOLD);

@@ -9,6 +9,11 @@ import static team.mephi.adminbot.vaadin.users.tabs.UserTabType.MIDDLE_CANDIDATE
  */
 public class MiddleCandidateDataProvider extends BaseUserDataProvider {
 
+    /**
+     * Конструктор провайдера данных для миддл-кандидатов.
+     *
+     * @param userService сервис для работы с пользователями.
+     */
     public MiddleCandidateDataProvider(UserService userService) {
         super(userService);
     }

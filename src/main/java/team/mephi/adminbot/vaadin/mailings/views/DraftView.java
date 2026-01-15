@@ -41,6 +41,11 @@ public class DraftView extends AbstractGridView<SimpleMailing> {
 
     private final MailingsPresenter actions;
 
+    /**
+     * Конструктор представления черновиков рассылок.
+     *
+     * @param actions презентер для обработки действий пользователя
+     */
     public DraftView(MailingsPresenter actions) {
         super();
 
@@ -68,6 +73,11 @@ public class DraftView extends AbstractGridView<SimpleMailing> {
         setup(config);
     }
 
+    /**
+     * Создает рендерер компонента для отображения статуса рассылки.
+     *
+     * @return рендерер компонента для статуса
+     */
     private static ComponentRenderer<Span, SimpleMailing> createStatusComponentRenderer() {
         return new ComponentRenderer<>(Span::new, statusComponentUpdater);
     }
