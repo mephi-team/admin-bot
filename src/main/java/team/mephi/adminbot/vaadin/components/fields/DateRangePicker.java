@@ -36,10 +36,10 @@ public class DateRangePicker extends CustomField<DateRangePicker.LocalDateRange>
         container.setWidthFull();
         container.setAlignItems(FlexComponent.Alignment.CENTER);
 
-        start.setWidthFull();
         container.add(start, end);
 
         container.setFlexGrow(1.0, start);
+        container.setFlexGrow(1.0, end);
 
         add(container);
     }
@@ -90,17 +90,7 @@ public class DateRangePicker extends CustomField<DateRangePicker.LocalDateRange>
 
     public void changeMode(Mode mode) {
         this.mode = mode;
-        if (mode == Mode.DAY) {
-            end.setVisible(false);
-            // гарантировать, что start занимает всё пространство
-            start.setWidthFull();
-            container.setFlexGrow(1.0, start);
-        } else {
-            end.setVisible(true);
-            // вернуть стандартное поведение (start всё ещё может быть гибким)
-            start.setWidthFull();
-            container.setFlexGrow(1.0, start);
-        }
+        end.setVisible(mode != Mode.DAY);
     }
 
     @Override
