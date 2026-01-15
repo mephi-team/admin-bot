@@ -31,6 +31,14 @@ public class MessageServiceImpl implements MessageService {
     private final DialogRepository dialogRepository;
     private final UserRepository userRepository;
 
+    /**
+     * Конструктор для внедрения зависимостей.
+     *
+     * @param authService       сервис для аутентификации и авторизации пользователей.
+     * @param messageRepository репозиторий для управления сообщениями.
+     * @param dialogRepository  репозиторий для управления диалогами.
+     * @param userRepository    репозиторий для управления пользователями.
+     */
     public MessageServiceImpl(AuthService authService, MessageRepository messageRepository, DialogRepository dialogRepository, UserRepository userRepository) {
         this.authService = authService;
         this.messageRepository = messageRepository;
@@ -106,6 +114,12 @@ public class MessageServiceImpl implements MessageService {
         return dialogRepository.unreadCount();
     }
 
+    /**
+     * Форматирует дату для отображения в заголовке.
+     *
+     * @param date дата для форматирования
+     * @return отформатированная строка даты
+     */
     private String formatDate(LocalDate date) {
         if (date == null) return "";
 

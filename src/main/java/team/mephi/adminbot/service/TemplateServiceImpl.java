@@ -19,6 +19,11 @@ public class TemplateServiceImpl implements TemplateService {
 
     private final MailTemplateRepository mailTemplateRepository;
 
+    /**
+     * Конструктор для внедрения зависимостей.
+     *
+     * @param mailTemplateRepository репозиторий для управления шаблонами.
+     */
     public TemplateServiceImpl(MailTemplateRepository mailTemplateRepository) {
         this.mailTemplateRepository = mailTemplateRepository;
     }
@@ -75,6 +80,12 @@ public class TemplateServiceImpl implements TemplateService {
         mailTemplateRepository.deleteAllById(ids);
     }
 
+    /**
+     * Преобразует объект MailTemplate в SimpleTemplate.
+     *
+     * @param template объект MailTemplate для преобразования.
+     * @return преобразованный объект SimpleTemplate.
+     */
     private SimpleTemplate mapToSimple(MailTemplate template) {
         return SimpleTemplate.builder()
                 .id(template.getId())

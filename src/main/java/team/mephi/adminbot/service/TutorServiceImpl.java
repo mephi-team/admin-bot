@@ -32,6 +32,13 @@ public class TutorServiceImpl implements TutorService {
     private final StudentTutorRepository studentTutorRepository;
     private final UserRepository userRepository;
 
+    /**
+     * Конструктор для внедрения зависимостей.
+     *
+     * @param tutorRepository        репозиторий для управления репетиторами.
+     * @param studentTutorRepository репозиторий для управления назначениями студентов репетиторам.
+     * @param userRepository         репозиторий для управления пользователями.
+     */
     public TutorServiceImpl(TutorRepository tutorRepository, StudentTutorRepository studentTutorRepository, UserRepository userRepository) {
         this.tutorRepository = tutorRepository;
         this.studentTutorRepository = studentTutorRepository;
@@ -76,6 +83,12 @@ public class TutorServiceImpl implements TutorService {
         }
     }
 
+    /**
+     * Подготовка назначений студентов репетитору.
+     * @param students список студентов.
+     * @param tutorId идентификатор репетитора.
+     * @return набор назначений студентов репетитору.
+     */
     private Set<StudentTutor> prepareStudentTutor(List<SimpleUser> students, Long tutorId) {
         return students.stream().map(
                 u -> StudentTutor.builder()
@@ -113,6 +126,12 @@ public class TutorServiceImpl implements TutorService {
         return tutorRepository.countByName(name);
     }
 
+    /**
+     * Преобразует объект Tutor в SimpleTutor.
+     *
+     * @param tutor объект Tutor для преобразования.
+     * @return преобразованный объект SimpleTutor.
+     */
     private SimpleTutor mapToSimpleUser(Tutor tutor) {
         return SimpleTutor.builder()
                 .id(tutor.getId())

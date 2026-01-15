@@ -26,6 +26,14 @@ public class QuestionServiceImpl implements QuestionService {
     private final UserQuestionRepository questionRepository;
     private final UserAnswerRepository answerRepository;
 
+    /**
+     * Конструктор для внедрения зависимостей.
+     *
+     * @param authService       сервис для аутентификации и авторизации пользователей.
+     * @param userRepository    репозиторий для управления пользователями.
+     * @param questionRepository репозиторий для управления вопросами пользователей.
+     * @param answerRepository  репозиторий для управления ответами пользователей.
+     */
     public QuestionServiceImpl(AuthService authService, UserRepository userRepository, UserQuestionRepository questionRepository, UserAnswerRepository answerRepository) {
         this.authService = authService;
         this.userRepository = userRepository;
@@ -77,6 +85,12 @@ public class QuestionServiceImpl implements QuestionService {
         return questionRepository.countNewQuestion();
     }
 
+    /**
+     * Преобразует объект UserQuestion в SimpleQuestion.
+     *
+     * @param userQuestion объект UserQuestion для преобразования.
+     * @return преобразованный объект SimpleQuestion.
+     */
     private SimpleQuestion mapToSimple(UserQuestion userQuestion) {
         return SimpleQuestion.builder()
                 .id(userQuestion.getId())

@@ -23,6 +23,11 @@ public class ExpertServiceImpl implements ExpertService {
 
     private final ExpertRepository expertRepository;
 
+    /**
+     * Конструктор для внедрения зависимостей.
+     *
+     * @param expertRepository репозиторий для управления экспертами.
+     */
     public ExpertServiceImpl(ExpertRepository expertRepository) {
         this.expertRepository = expertRepository;
     }
@@ -76,6 +81,12 @@ public class ExpertServiceImpl implements ExpertService {
         expertRepository.deleteAllById(ids);
     }
 
+    /**
+     * Преобразование сущности Expert в DTO SimpleUser.
+     *
+     * @param user сущность Expert
+     * @return DTO SimpleUser
+     */
     private SimpleUser mapToSimple(Expert user) {
         var tutor = user.getTutorAssignments().stream().filter(StudentTutor::getIsActive).findAny().orElseGet(() -> StudentTutor.builder().tutor(Tutor.builder().userName("").firstName("").lastName("").build()).build()).getTutor();
         return SimpleUser.builder()

@@ -30,6 +30,12 @@ public class ChartDataServiceImpl implements ChartDataService {
     private static final Locale RU = Locale.of("ru");
     private final java.util.Random random = new java.util.Random();
 
+    /** Генерация меток для указанного интервала и данных фильтра.
+     *
+     * @param interval   интервал активности (час, день, месяц).
+     * @param filterData данные фильтра для извлечения диапазона дат.
+     * @return массив строковых меток для диаграммы.
+     */
     private String[] labelsForInterval(ActivityIntervals interval, Object filterData) {
         try {
             switch (interval) {
@@ -62,7 +68,10 @@ public class ChartDataServiceImpl implements ChartDataService {
         }
     }
 
-    // Генерация часов: последние `hours` часов до текущего часа (включительно)
+    /** Генерация часовых меток за последние 24 часа
+     *
+     * @return массив строковых меток для каждого часа.
+     */
     private String[] generateHourLabels() {
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("HH:00");
         LocalDateTime now = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
@@ -73,7 +82,12 @@ public class ChartDataServiceImpl implements ChartDataService {
         return labels;
     }
 
-    // Генерация дней: start + count-1 дней
+    /** Генерация дней: start + count-1 дней
+     *
+     * @param count количество дней.
+     * @param start дата начала.
+     * @return массив строковых меток для каждого дня.
+     */
     private String[] generateDayLabels(int count, LocalDate start) {
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         String[] labels = new String[count];
@@ -83,7 +97,12 @@ public class ChartDataServiceImpl implements ChartDataService {
         return labels;
     }
 
-    // Генерация месяцев: startYearMonth + count-1 месяцев
+    /** Генерация месяцев: startYm + count-1 месяцев
+     *
+     * @param count   количество месяцев.
+     * @param startYm год-месяц начала.
+     * @return массив строковых меток для каждого месяца.
+     */
     private String[] generateMonthLabels(int count, YearMonth startYm) {
         String[] labels = new String[count];
         for (int i = 0; i < count; i++) {
@@ -94,12 +113,21 @@ public class ChartDataServiceImpl implements ChartDataService {
         return labels;
     }
 
-    // Вспомог.: вычисляет количество месяцев между двумя YearMonth включительно
+    /** Подсчет количества месяцев между двумя датами включительно
+     *
+     * @param from дата начала.
+     * @param to   дата окончания.
+     * @return количество месяцев между датами.
+     */
     private int monthsBetweenInclusive(LocalDate from, LocalDate to) {
         return (int) (ChronoUnit.MONTHS.between(from, to) + 1);
     }
 
-    // Попытка извлечь диапазон дат из объекта фильтра через reflection
+    /** Извлечение диапазона дат из объекта фильтра
+     *
+     * @param filter объект фильтра с методами получения дат.
+     * @return диапазон дат или null, если не удалось извлечь.
+     */
     private DateRange extractDateRange(Object filter) {
         if (filter == null) return null;
         try {
@@ -127,7 +155,12 @@ public class ChartDataServiceImpl implements ChartDataService {
         return null;
     }
 
-    // Попытка вызвать метод по имени и привести результат к LocalDate
+    /** Попытка вызова метода объекта и преобразование результата в LocalDate
+     *
+     * @param obj        объект с методом.
+     * @param methodName имя метода для вызова.
+     * @return результат преобразования в LocalDate или null.
+     */
     private LocalDate tryGetAsLocalDate(Object obj, String methodName) {
         try {
             Method m = obj.getClass().getMethod(methodName);
@@ -138,7 +171,11 @@ public class ChartDataServiceImpl implements ChartDataService {
         return null;
     }
 
-    // Преобразование возможных типов в LocalDate
+    /** Преобразование объекта в LocalDate
+     *
+     * @param val объект для преобразования.
+     * @return LocalDate или null, если преобразование невозможно.
+     */
     private LocalDate toLocalDate(Object val) {
         if (val == null) return null;
         if (val instanceof LocalDate) return (LocalDate) val;
@@ -168,6 +205,13 @@ public class ChartDataServiceImpl implements ChartDataService {
         return null;
     }
 
+    /** Создание набора данных для диаграммы
+     *
+     * @param label           метка набора данных.
+     * @param backgroundColor цвет фона набора данных.
+     * @param labels          метки для данных.
+     * @return созданный набор данных.
+     */
     private BarDataset createDataset(String label, String backgroundColor, String[] labels) {
         BarDataset dataset = new BarDataset().setLabel(label);
         if (backgroundColor != null) {
@@ -179,6 +223,12 @@ public class ChartDataServiceImpl implements ChartDataService {
         return dataset;
     }
 
+    /** Создание данных диаграммы с несколькими наборами данных
+     *
+     * @param labels метки для диаграммы.
+     * @param specs  спецификации наборов данных.
+     * @return созданные данные диаграммы.
+     */
     private BarData createBarData(String[] labels, DatasetSpec... specs) {
         BarData barData = new BarData().addLabels(labels);
         for (DatasetSpec spec : specs) {
@@ -224,16 +274,29 @@ public class ChartDataServiceImpl implements ChartDataService {
         return createBarData(labels, new DatasetSpec("UTM", DEFAULT_BLUE));
     }
 
+    /**
+     * Вспомогательный класс для хранения диапазона дат.
+     */
     private static final class DateRange {
         final LocalDate start;
         final LocalDate end;
 
+        /** Конструктор диапазона дат.
+         *
+         * @param s дата начала.
+         * @param e дата окончания.
+         */
         DateRange(LocalDate s, LocalDate e) {
             this.start = s;
             this.end = e;
         }
     }
 
+    /**
+     * Спецификация набора данных для диаграммы.
+     * @param label метка набора данных.
+     * @param color цвет набора данных.
+     */
     private record DatasetSpec(String label, String color) {
     }
 }

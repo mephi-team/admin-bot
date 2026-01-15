@@ -19,12 +19,20 @@ public class RoleServiceImpl implements RoleService {
     private final RoleRepository roleRepository;
     private final List<RoleDto> roles = new ArrayList<>(List.of(RoleDto.builder().code(null).name("Все").build()));
 
+    /**
+     * Конструктор для внедрения зависимостей.
+     *
+     * @param roleRepository репозиторий для управления ролями.
+     */
     public RoleServiceImpl(RoleRepository roleRepository) {
         this.roleRepository = roleRepository;
         init();
     }
 
-    void init() {
+    /**
+     * Инициализирует список ролей из репозитория.
+     */
+    private void init() {
         this.roles.addAll(roleRepository.findAll().stream()
                 .map(r -> new RoleDto(r.getCode(), r.getName()))
                 .toList());

@@ -25,6 +25,12 @@ public class FileServiceImpl implements FileService {
     private final UserRepository userRepository;
     private final Path storage = Paths.get("storage");
 
+    /**
+     * Конструктор сервиса файлов.
+     *
+     * @param fileRepository репозиторий файлов.
+     * @param userRepository репозиторий пользователей.
+     */
     public FileServiceImpl(FileRepository fileRepository, UserRepository userRepository) {
         this.fileRepository = fileRepository;
         this.userRepository = userRepository;

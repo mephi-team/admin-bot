@@ -27,6 +27,13 @@ public class MailingServiceImpl implements MailingService {
     private final MailingRepository mailingRepository;
     private final UserRepository userRepository;
 
+    /**
+     * Конструктор для внедрения зависимостей.
+     *
+     * @param authService       сервис для аутентификации и авторизации пользователей.
+     * @param mailingRepository репозиторий для управления рассылками.
+     * @param userRepository    репозиторий для управления пользователями.
+     */
     public MailingServiceImpl(AuthService authService, MailingRepository mailingRepository, UserRepository userRepository) {
         this.authService = authService;
         this.mailingRepository = mailingRepository;
@@ -76,6 +83,12 @@ public class MailingServiceImpl implements MailingService {
         mailingRepository.deleteAllById(ids);
     }
 
+    /**
+     * Преобразует объект Mailing в SimpleMailing.
+     *
+     * @param mailing объект Mailing для преобразования.
+     * @return преобразованный объект SimpleMailing.
+     */
     private SimpleMailing mapToSimple(Mailing mailing) {
         return SimpleMailing.builder()
                 .id(mailing.getId())

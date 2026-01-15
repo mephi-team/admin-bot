@@ -14,6 +14,11 @@ public class AuthServiceImpl implements AuthService {
 
     private final AuthenticationContext authContext;
 
+    /**
+     * Конструктор сервиса аутентификации.
+     *
+     * @param authContext контекст аутентификации.
+     */
     public AuthServiceImpl(AuthenticationContext authContext) {
         this.authContext = authContext;
     }

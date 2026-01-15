@@ -24,6 +24,12 @@ public class UserServiceImpl implements UserService {
 
     private final List<UserDto> curators = new ArrayList<>(List.of(UserDto.builder().userName("Все").build()));
 
+    /**
+     * Конструктор для внедрения зависимостей.
+     *
+     * @param userRepository  репозиторий для управления пользователями.
+     * @param tutorRepository репозиторий для управления репетиторами.
+     */
     public UserServiceImpl(UserRepository userRepository, TutorRepository tutorRepository) {
         this.userRepository = userRepository;
         this.tutorRepository = tutorRepository;
@@ -175,6 +181,9 @@ public class UserServiceImpl implements UserService {
         return count > 0 ? count : 1;
     }
 
+    /**
+     * Инициализация списка кураторов.
+     */
     private void initCurators() {
         curators.addAll(tutorRepository.findAll().stream().map(u -> UserDto.builder()
                 .id(u.getId())
@@ -182,6 +191,12 @@ public class UserServiceImpl implements UserService {
                 .build()).toList());
     }
 
+    /**
+     * Преобразует объект User в SimpleUser.
+     *
+     * @param user объект User для преобразования.
+     * @return преобразованный объект SimpleUser.
+     */
     private SimpleUser mapToSimple(User user) {
         var tutor = user.getTutorAssignments().stream().filter(StudentTutor::getIsActive).findAny().orElseGet(() -> StudentTutor.builder().tutor(Tutor.builder().userName("").firstName("").lastName("").build()).build()).getTutor();
         return SimpleUser.builder()
