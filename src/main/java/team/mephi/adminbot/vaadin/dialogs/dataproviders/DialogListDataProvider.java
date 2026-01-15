@@ -24,12 +24,10 @@ public class DialogListDataProvider {
     public ConfigurableFilterDataProvider<DialogWithLastMessageDto, Void, String> getFilterableProvider() {
         if (provider == null) {
             provider = new CallbackDataProvider<DialogWithLastMessageDto, String>(
-                    query -> {
-                        return dialogRepository.findDialogsWithLastMessageNative(query.getFilter().orElse(""), Optional.ofNullable(getCurrentUserId()))
-                                .stream()
-                                .skip(query.getOffset())
-                                .limit(query.getLimit());
-                    },
+                    query -> dialogRepository.findDialogsWithLastMessageNative(query.getFilter().orElse(""), Optional.ofNullable(getCurrentUserId()))
+                            .stream()
+                            .skip(query.getOffset())
+                            .limit(query.getLimit()),
                     query -> dialogRepository.countDialogsWithLastMessageNative(query.getFilter().orElse(""), Optional.ofNullable(getCurrentUserId())),
                     DialogWithLastMessageDto::getDialogId
             ).withConfigurableFilter();

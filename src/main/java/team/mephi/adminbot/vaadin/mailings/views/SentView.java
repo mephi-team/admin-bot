@@ -45,7 +45,7 @@ public class SentView extends AbstractGridView<SimpleMailing> {
 
         SentDataProvider provider = (SentDataProvider) actions.getDataProvider();
         var gsa = new GridSelectActions(getTranslation("grid_mailing_actions_label"),
-                new SecondaryButton(getTranslation("grid_mailing_actions_delete_label"), VaadinIcon.TRASH.create(), e -> {
+                new SecondaryButton(getTranslation("grid_mailing_actions_delete_label"), VaadinIcon.TRASH.create(), ignoredEvent -> {
                     if (!selectedIds.isEmpty()) {
                         actions.onDelete(selectedIds, selectedIds.size() > 1 ? DialogType.DELETE_MAILING_ALL : DialogType.DELETE_MAILING, String.valueOf(selectedIds.size()));
                     }
@@ -94,11 +94,11 @@ public class SentView extends AbstractGridView<SimpleMailing> {
     @Override
     protected void configureActionColumn(com.vaadin.flow.component.grid.Grid<SimpleMailing> grid) {
         grid.addComponentColumn(item -> {
-            Button retryButton = new IconButton(VaadinIcon.ROTATE_RIGHT.create(), e -> actions.onRetry(item, DialogType.RETRY_MAILING));
+            Button retryButton = new IconButton(VaadinIcon.ROTATE_RIGHT.create(), ignoredEvent -> actions.onRetry(item, DialogType.RETRY_MAILING));
             retryButton.setVisible(item.getStatus().equals("PAUSED") || item.getStatus().equals("ERROR"));
-            Button cancelButton = new IconButton(VaadinIcon.CLOSE_CIRCLE_O.create(), e -> actions.onCancel(item, DialogType.CANCEL_MAILING));
+            Button cancelButton = new IconButton(VaadinIcon.CLOSE_CIRCLE_O.create(), ignoredEvent -> actions.onCancel(item, DialogType.CANCEL_MAILING));
             cancelButton.setVisible(item.getStatus().equals("ACTIVE"));
-            Button deleteButton = new IconButton(VaadinIcon.TRASH.create(), e -> actions.onDelete(List.of(item.getId()), DialogType.DELETE_MAILING));
+            Button deleteButton = new IconButton(VaadinIcon.TRASH.create(), ignoredEvent -> actions.onDelete(List.of(item.getId()), DialogType.DELETE_MAILING));
             return new ButtonGroup(retryButton, cancelButton, deleteButton);
         }).setHeader(getTranslation("grid_header_actions_label")).setWidth("120px").setFlexGrow(0).setKey("actions");
     }

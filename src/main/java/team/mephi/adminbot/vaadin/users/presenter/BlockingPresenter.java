@@ -24,7 +24,7 @@ public class BlockingPresenter extends CRUDPresenter<SimpleUser> implements Bloc
 
     @Override
     public void onBlock(SimpleUser m, DialogType type, Object... params) {
-        dialogService.showDialog(m, type, (callback) -> {
+        dialogService.showDialog(m, type, (ignoredCallback) -> {
             dataProvider.blockAllById(List.of(m.getId()));
             dataProvider.getDataProvider().refreshAll();
             notificationService.showNotification(NotificationType.DELETE, type.getNotificationKey(), params);

@@ -40,6 +40,7 @@ public class MailingPresenterFactory {
         };
     }
 
+    @SuppressWarnings("unchecked")
     public CRUDPresenter<?> createPresenter(MailingTabType role) {
         CRUDDataProvider<?> dataProvider = createDataProvider(role);
 

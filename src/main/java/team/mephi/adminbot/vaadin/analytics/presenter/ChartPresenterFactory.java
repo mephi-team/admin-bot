@@ -14,6 +14,6 @@ public class ChartPresenterFactory {
     }
 
     public ChartActions<?> createPresenter() {
-        return new ChartPresenter(new ChartDataProvider(chartDataService));
+        return new ChartPresenter<>(new ChartDataProvider<ChartDataService>(chartDataService));
     }
 }

@@ -1,7 +1,6 @@
 package team.mephi.adminbot.vaadin.analytics.presenter;
 
 import com.vaadin.flow.data.provider.Query;
-import software.xdev.chartjs.model.data.BarData;
 import team.mephi.adminbot.vaadin.HasDataProvider;
 import team.mephi.adminbot.vaadin.analytics.dataproviders.ChartDataProvider;
 
@@ -15,7 +14,7 @@ public class ChartPresenter<T> implements ChartActions<T>, HasDataProvider<Chart
 
     @Override
     public void onUpdateFilter(T filter) {
-        var item = dataProvider.fetch(new Query<BarData, T>(filter));
+        var item = dataProvider.fetch(new Query<>(filter));
         dataProvider.refreshItem(item.findFirst().orElse(null));
     }
 

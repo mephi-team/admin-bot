@@ -34,15 +34,15 @@ public class MiddleCandidateView extends AbstractGridView<SimpleUser> {
 
         MiddleCandidateDataProvider provider = (MiddleCandidateDataProvider) actions.getDataProvider();
         var gsa = new GridSelectActions(getTranslation("grid_users_actions_label"),
-                new SecondaryButton(getTranslation("grid_middle_candidate_actions_accept_label"), VaadinIcon.CHECK.create(), e -> {
+                new SecondaryButton(getTranslation("grid_middle_candidate_actions_accept_label"), VaadinIcon.CHECK.create(), ignoredEvent -> {
                     if (!selectedIds.isEmpty())
                         actions.onAccept(selectedIds, selectedIds.size() > 1 ? DialogType.ACCEPT_USERS_ALL : DialogType.ACCEPT_USERS, "" + selectedIds.size());
                 }),
-                new SecondaryButton(getTranslation("grid_middle_candidate_actions_reject_label"), VaadinIcon.CLOSE.create(), e -> {
+                new SecondaryButton(getTranslation("grid_middle_candidate_actions_reject_label"), VaadinIcon.CLOSE.create(), ignoredEvent -> {
                     if (!selectedIds.isEmpty())
                         actions.onReject(selectedIds, selectedIds.size() > 1 ? DialogType.REJECT_USERS_ALL : DialogType.REJECT_USERS, "" + selectedIds.size());
                 }),
-                new SecondaryButton(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), e -> {
+                new SecondaryButton(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), ignoredEvent -> {
                     if (!selectedIds.isEmpty())
                         actions.onDelete(selectedIds, DialogType.DELETE_USERS);
                 })
@@ -83,12 +83,12 @@ public class MiddleCandidateView extends AbstractGridView<SimpleUser> {
     @Override
     protected void configureActionColumn(com.vaadin.flow.component.grid.Grid<SimpleUser> grid) {
         grid.addComponentColumn(item -> {
-            Button rejectButton = new SecondaryIconButton(VaadinIcon.CLOSE.create(), e -> actions.onReject(List.of(item.getId()), DialogType.REJECT_USERS));
-            Button confirmButton = new PrimaryIconButton(VaadinIcon.CHECK.create(), e -> actions.onAccept(List.of(item.getId()), DialogType.ACCEPT_USERS));
-            Button viewButton = new IconButton(VaadinIcon.EYE.create(), e -> actions.onView(item, DialogType.USERS_VIEW));
-            Button chatButton = new IconButton(VaadinIcon.CHAT.create(), e -> UI.getCurrent().navigate(Dialogs.class, QueryParameters.of("userId", item.getId().toString())));
-            Button editButton = new IconButton(VaadinIcon.PENCIL.create(), e -> actions.onEdit(item, DialogType.USERS_EDIT));
-            Button blockButton = new IconButton(VaadinIcon.BAN.create(), e -> actions.onBlock(item, DialogType.USERS_BLOCKED));
+            Button rejectButton = new SecondaryIconButton(VaadinIcon.CLOSE.create(), ignoredEvent -> actions.onReject(List.of(item.getId()), DialogType.REJECT_USERS));
+            Button confirmButton = new PrimaryIconButton(VaadinIcon.CHECK.create(), ignoredEvent -> actions.onAccept(List.of(item.getId()), DialogType.ACCEPT_USERS));
+            Button viewButton = new IconButton(VaadinIcon.EYE.create(), ignoredEvent -> actions.onView(item, DialogType.USERS_VIEW));
+            Button chatButton = new IconButton(VaadinIcon.CHAT.create(), ignoredEvent -> UI.getCurrent().navigate(Dialogs.class, QueryParameters.of("userId", item.getId().toString())));
+            Button editButton = new IconButton(VaadinIcon.PENCIL.create(), ignoredEvent -> actions.onEdit(item, DialogType.USERS_EDIT));
+            Button blockButton = new IconButton(VaadinIcon.BAN.create(), ignoredEvent -> actions.onBlock(item, DialogType.USERS_BLOCKED));
             if (UserStatus.BLOCKED.name().equals(item.getStatus())) {
                 blockButton.addClassNames(LumoUtility.TextColor.ERROR);
             } else {

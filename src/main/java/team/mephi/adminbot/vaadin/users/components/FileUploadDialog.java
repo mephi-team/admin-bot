@@ -28,7 +28,7 @@ public class FileUploadDialog extends Dialog {
         add(getUpload());
 
         addButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        addButton.addClickListener(e -> {
+        addButton.addClickListener(ignoredEvent -> {
             try {
                 fileService.uploadAll(fileList.values().stream().toList(), authService.getUserInfo().getEmail());
                 fileList.clear();
@@ -72,7 +72,7 @@ public class FileUploadDialog extends Dialog {
                 .setSize(Arrays.asList("B", "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")));
 
         dropEnabledUpload.setI18n(i18n);
-        dropEnabledUpload.addAllFinishedListener(e -> addButton.setEnabled(!fileList.isEmpty()));
+        dropEnabledUpload.addAllFinishedListener(ignoredEvent -> addButton.setEnabled(!fileList.isEmpty()));
         dropEnabledUpload.addFileRemovedListener(e -> {
             fileList.remove(e.getFileName());
             addButton.setEnabled(!fileList.isEmpty());

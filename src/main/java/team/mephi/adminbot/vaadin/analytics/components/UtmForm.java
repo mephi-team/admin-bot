@@ -42,9 +42,7 @@ public class UtmForm extends FormLayout {
         interval.setItems(ActivityIntervals.values());
         interval.setValue(ActivityIntervals.MONTH);
         interval.setItemLabelGenerator(l -> getTranslation(l.getTabLabelKey()));
-        interval.addValueChangeListener(e -> {
-            changeDatePicker(e.getValue());
-        });
+        interval.addValueChangeListener(e -> changeDatePicker(e.getValue()));
         addFormItem(interval, getTranslation("page_analytics_form_activity_interval_label"));
 
         TabSheet tabSheet = new TabSheet();

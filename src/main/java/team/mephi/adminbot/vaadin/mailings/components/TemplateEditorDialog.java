@@ -14,7 +14,6 @@ public class TemplateEditorDialog extends Dialog implements DialogWithTitle {
     private final BeanValidationBinder<SimpleTemplate> binder = new BeanValidationBinder<>(SimpleTemplate.class);
     private SerializableConsumer<SimpleTemplate> onSaveCallback;
     private SimpleTemplate template;
-    private final Button saveButton = new PrimaryButton(getTranslation("save_button"), e -> onSave());
 
     public TemplateEditorDialog() {
         var form = new TemplateForm();
@@ -23,9 +22,12 @@ public class TemplateEditorDialog extends Dialog implements DialogWithTitle {
 
         setHeaderTitle("dialog_template_new_title");
         add(form);
+        Button saveButton = new PrimaryButton(getTranslation("save_button"), ignoredEvent -> onSave());
         getFooter().add(saveButton);
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
     public void showDialog(Object template, SerializableConsumer<?> callback) {
         this.template = Objects.isNull(template) ? new SimpleTemplate() : (SimpleTemplate) template;
         this.onSaveCallback = (SerializableConsumer<SimpleTemplate>) callback;

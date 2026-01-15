@@ -44,7 +44,7 @@ public class TemplateFormTab extends FormLayout {
 
         addFormItem(radioGroup, getTranslation("form_mailing_message_label"));
         FormItem templateItem = addFormItem(templates, getTranslation("form_mailing_template_label"));
-        FormItem textItem = addFormItem(text1, getTranslation("form_template_text_label"));
+        addFormItem(text1, getTranslation("form_template_text_label"));
         FormItem createLinkItem = addFormItem(createLink, getTranslation("form_mailing_create_meeting_label"));
         FormItem linkItem = addFormItem(link, getTranslation("form_mailing_meeting_link_label"));
         FormItem saveItem = addFormItem(saveTemplate, getTranslation("form_mailing_save_as_new_label"));

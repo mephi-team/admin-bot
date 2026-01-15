@@ -12,16 +12,11 @@ import java.util.Arrays;
 
 public class DateRangePicker extends CustomField<DateRangePicker.LocalDateRange> {
 
-    private DatePicker start;
-    private DatePicker end;
+    private final DatePicker start;
+    private final DatePicker end;
 
+    @Getter
     private Mode mode = Mode.INTERVAL;
-    private HorizontalLayout container;
-
-    public DateRangePicker(String label) {
-        this();
-        setLabel(label);
-    }
 
     public DateRangePicker() {
         start = new DatePicker();
@@ -32,7 +27,7 @@ public class DateRangePicker extends CustomField<DateRangePicker.LocalDateRange>
         start.setManualValidation(true);
         end.setManualValidation(true);
 
-        container = new HorizontalLayout();
+        HorizontalLayout container = new HorizontalLayout();
         container.setWidthFull();
         container.setAlignItems(FlexComponent.Alignment.CENTER);
 

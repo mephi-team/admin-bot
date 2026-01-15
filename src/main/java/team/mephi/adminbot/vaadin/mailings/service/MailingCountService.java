@@ -7,7 +7,7 @@ import java.util.Map;
 
 @Service
 public class MailingCountService {
-    private MailingRepository mailingRepository;
+    private final MailingRepository mailingRepository;
 
     public MailingCountService(MailingRepository mailingRepository) {
         this.mailingRepository = mailingRepository;

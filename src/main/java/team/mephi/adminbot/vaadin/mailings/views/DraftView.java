@@ -45,7 +45,7 @@ public class DraftView extends AbstractGridView<SimpleMailing> {
 
         DraftDataProvider provider = (DraftDataProvider) actions.getDataProvider();
         var gsa = new GridSelectActions(getTranslation("grid_mailing_actions_label"),
-                new SecondaryButton(getTranslation("grid_mailing_actions_delete_label"), VaadinIcon.TRASH.create(), e -> {
+                new SecondaryButton(getTranslation("grid_mailing_actions_delete_label"), VaadinIcon.TRASH.create(), ignoredEvent -> {
                     if (!selectedIds.isEmpty()) {
                         actions.onDelete(selectedIds, selectedIds.size() > 1 ? DialogType.DELETE_MAILING_ALL : DialogType.DELETE_MAILING, selectedIds.size());
                     }
@@ -94,8 +94,8 @@ public class DraftView extends AbstractGridView<SimpleMailing> {
     @Override
     protected void configureActionColumn(com.vaadin.flow.component.grid.Grid<SimpleMailing> grid) {
         grid.addComponentColumn(item -> {
-            Button editButton = new IconButton(VaadinIcon.EDIT.create(), e -> actions.onEdit(item, DialogType.MAILING_SAVED));
-            Button deleteButton = new IconButton(VaadinIcon.TRASH.create(), e -> actions.onDelete(List.of(item.getId()), DialogType.DELETE_MAILING));
+            Button editButton = new IconButton(VaadinIcon.EDIT.create(), ignoredEvent -> actions.onEdit(item, DialogType.MAILING_SAVED));
+            Button deleteButton = new IconButton(VaadinIcon.TRASH.create(), ignoredEvent -> actions.onDelete(List.of(item.getId()), DialogType.DELETE_MAILING));
             return new ButtonGroup(editButton, deleteButton);
         }).setHeader(getTranslation("grid_header_actions_label")).setWidth("120px").setFlexGrow(0).setKey("actions");
     }

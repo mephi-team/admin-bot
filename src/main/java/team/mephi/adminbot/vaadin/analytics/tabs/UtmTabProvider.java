@@ -29,8 +29,9 @@ public class UtmTabProvider implements AnalyticsTabProvider {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Component createTabContent(ChartActions<?> actions) {
-        return new UtmView((ChartPresenter) actions, cohortService);
+        return new UtmView((ChartPresenter<UtmView.UtmFilterData>) actions, cohortService);
     }
 
     @Override

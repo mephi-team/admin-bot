@@ -21,8 +21,9 @@ public class ActivityTabProvider implements AnalyticsTabProvider {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Component createTabContent(ChartActions<?> actions) {
-        return new ActivityView((ChartPresenter) actions);
+        return new ActivityView((ChartPresenter<ActivityView.ActivityFilterData>) actions);
     }
 
     @Override

@@ -19,6 +19,7 @@ public class DialogServiceImpl<T> implements DialogService<T> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void showConfirmDialog(Object item, DialogType type, Icon icon, SerializableConsumer<T> callback) {
         dialogFactory.getConfirmDialog(type, icon).showForConfirm(item, () -> callback.accept((T) item));
     }

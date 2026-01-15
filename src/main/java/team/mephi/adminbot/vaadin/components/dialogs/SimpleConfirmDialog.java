@@ -23,7 +23,7 @@ public class SimpleConfirmDialog extends ConfirmDialog {
         this.text = text;
         this.onConfirm = onConfirm;
 
-        var closeButton = new Button(VaadinIcon.CLOSE_BIG.create(), e -> close());
+        var closeButton = new Button(VaadinIcon.CLOSE_BIG.create(), ignoredEvent -> close());
         closeButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
         closeButton.addClassNames(LumoUtility.AlignSelf.END, LumoUtility.Background.TINT, LumoUtility.TextColor.BODY);
         headerText.addClassNames(LumoUtility.FontWeight.BOLD);
@@ -45,11 +45,9 @@ public class SimpleConfirmDialog extends ConfirmDialog {
         cancelButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY, ButtonVariant.LUMO_SMALL);
         cancelButton.addClassNames(LumoUtility.BorderRadius.FULL, LumoUtility.Border.ALL, LumoUtility.BorderColor.PRIMARY);
         setCancelButton(cancelButton);
-        addCancelListener(event -> {
-            close();
-        });
+        addCancelListener(ignoredEvent -> close());
 
-        addConfirmListener(e -> {
+        addConfirmListener(ignoredEvent -> {
             if (getOnConfirm() != null) getOnConfirm().run();
         });
     }

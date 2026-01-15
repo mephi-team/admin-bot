@@ -32,7 +32,7 @@ public class TutorView extends AbstractGridView<SimpleTutor> {
 
         TutorDataProviderImpl provider = (TutorDataProviderImpl) actions.getDataProvider();
         var gsa = new GridSelectActions(getTranslation("grid_users_actions_label"),
-                new SecondaryButton(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), e -> {
+                new SecondaryButton(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), ignoredEvent -> {
                     if (!selectedIds.isEmpty())
                         actions.onDelete(selectedIds, DialogType.DELETE_USERS);
                 })
@@ -70,11 +70,11 @@ public class TutorView extends AbstractGridView<SimpleTutor> {
     @Override
     protected void configureActionColumn(com.vaadin.flow.component.grid.Grid<SimpleTutor> grid) {
         grid.addComponentColumn(item -> {
-            Button dropButton = new TextButton(getTranslation("grid_tutor_action_curatorship_label"), e -> actions.onTutoring(item, DialogType.TUTORS_UPDATED));
-            Button viewButton = new IconButton(VaadinIcon.EYE.create(), e -> actions.onView(item, DialogType.TUTORS_VIEW));
-            Button chatButton = new IconButton(VaadinIcon.CHAT.create(), e -> UI.getCurrent().navigate(Dialogs.class, QueryParameters.of("userId", item.getId().toString())));
-            Button editButton = new IconButton(VaadinIcon.PENCIL.create(), e -> actions.onEdit(item, DialogType.TUTORS_EDIT));
-            Button blockButton = new IconButton(VaadinIcon.BAN.create(), e -> actions.onBlock(item, DialogType.TUTORS_BLOCKED));
+            Button dropButton = new TextButton(getTranslation("grid_tutor_action_curatorship_label"), ignoredEvent -> actions.onTutoring(item, DialogType.TUTORS_UPDATED));
+            Button viewButton = new IconButton(VaadinIcon.EYE.create(), ignoredEvent -> actions.onView(item, DialogType.TUTORS_VIEW));
+            Button chatButton = new IconButton(VaadinIcon.CHAT.create(), ignoredEvent -> UI.getCurrent().navigate(Dialogs.class, QueryParameters.of("userId", item.getId().toString())));
+            Button editButton = new IconButton(VaadinIcon.PENCIL.create(), ignoredEvent -> actions.onEdit(item, DialogType.TUTORS_EDIT));
+            Button blockButton = new IconButton(VaadinIcon.BAN.create(), ignoredEvent -> actions.onBlock(item, DialogType.TUTORS_BLOCKED));
             if (UserStatus.BLOCKED.name().equals(item.getStatus())) {
                 blockButton.addClassNames(LumoUtility.TextColor.ERROR);
             } else {

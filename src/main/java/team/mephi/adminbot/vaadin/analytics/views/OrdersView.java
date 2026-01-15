@@ -20,7 +20,6 @@ public class OrdersView extends AbstractChartView<OrdersView.OrderFilterData> {
 
         OrderFrom form = new OrderFrom(cohortService);
 
-        // Биндинг полей — остаётся в дочернем классе, т.к. формы разные
         binder.forField(form.getCohort())
                 .withConverter(CohortDto::getId, cohort -> cohortService.getById(cohort).orElse(cohortService.getAllCohorts().getFirst()))
                 .bind(OrderFilterData::getCohort, OrderFilterData::setCohort);
@@ -37,7 +36,7 @@ public class OrdersView extends AbstractChartView<OrdersView.OrderFilterData> {
                 .bind(OrderFilterData::getDetailed, OrderFilterData::setDetailed);
         binder.forField(form.getStatuses())
                 .bind(OrderFilterData::getStatuses, OrderFilterData::setStatuses);
-        binder.addValueChangeListener(e -> {
+        binder.addValueChangeListener(ignoredEvent -> {
             var s = new OrderFilterData();
             binder.writeBeanIfValid(s);
             presenter.onUpdateFilter(s);

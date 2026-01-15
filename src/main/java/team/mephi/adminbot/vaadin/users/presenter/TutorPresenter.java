@@ -36,7 +36,7 @@ public class TutorPresenter extends CRUDPresenter<SimpleTutor> implements TutorA
 
     @Override
     public void onBlock(SimpleTutor item, DialogType type, Object... params) {
-        dialogService.showDialog(item, type, (callback) -> {
+        dialogService.showDialog(item, type, (ignoredCallback) -> {
             dataProvider.blockAllById(List.of(item.getId()));
             dataProvider.getDataProvider().refreshAll();
             notificationService.showNotification(NotificationType.DELETE, type.getNotificationKey(), params);

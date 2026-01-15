@@ -70,7 +70,7 @@ public class Users extends VerticalLayout implements BeforeEnterObserver {
             var tab = new Tab(tabContent);
             tabSheet.add(tab, content, provider.getPosition());
         }
-        tabSheet.addSelectedChangeListener(e -> {
+        tabSheet.addSelectedChangeListener(ignoredEvent -> {
             var selectedTab = tabSheet.getSelectedIndex();
             if (selectedTab > -1) {
                 currentTab = rolesInOrder.get(selectedTab);
@@ -84,12 +84,8 @@ public class Users extends VerticalLayout implements BeforeEnterObserver {
         top.setWidthFull();
         top.addToStart(new H1(getTranslation("page_users_title")));
 
-        var secondaryButton = new SecondaryButton(getTranslation("page_users_create_from_file_button"), VaadinIcon.FILE_ADD.create(), e -> {
-            fileUploadDialog.open();
-        });
-        var primaryButton = new PrimaryButton(getTranslation("page_users_create_user_button"), VaadinIcon.PLUS.create(), e -> {
-            getCurrentAction().onCreate(getCurrentRole().name(), getCreateDialogType());
-        });
+        var secondaryButton = new SecondaryButton(getTranslation("page_users_create_from_file_button"), VaadinIcon.FILE_ADD.create(), ignoredEvent -> fileUploadDialog.open());
+        var primaryButton = new PrimaryButton(getTranslation("page_users_create_user_button"), VaadinIcon.PLUS.create(), ignoredEvent -> getCurrentAction().onCreate(getCurrentRole().name(), getCreateDialogType()));
         Div buttons = new Div(secondaryButton, primaryButton);
         buttons.addClassNames(LumoUtility.Display.FLEX, LumoUtility.Gap.MEDIUM);
         top.addToEnd(buttons);

@@ -4,12 +4,18 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
+import lombok.Getter;
 
 public class AnswerForm extends FormLayout {
+    @Getter
     private final TextField author = new TextField();
+    @Getter
     private final TextField role = new TextField();
+    @Getter
     private final TextField direction = new TextField();
+    @Getter
     private final TextField text = new TextField();
+    @Getter
     private final TextArea answer = new TextArea();
 
     public AnswerForm() {

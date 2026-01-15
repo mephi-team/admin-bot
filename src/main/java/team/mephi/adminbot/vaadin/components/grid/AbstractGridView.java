@@ -77,14 +77,12 @@ public abstract class AbstractGridView<T> extends VerticalLayout {
         settingsPopover.setTarget(settingsBtn);
 
         // кнопка скачивания (повесить действие в подклассе при необходимости)
-        var downloadBtn = new IconButton(VaadinIcon.DOWNLOAD_ALT.create(), e -> {
+        var downloadBtn = new IconButton(VaadinIcon.DOWNLOAD_ALT.create(), ignoredEvent -> {
         });
 
         add(new SearchFragment(searchField, new Span(settingsBtn, downloadBtn)), gsa, grid);
 
-        grid.getDataProvider().addDataProviderListener(e -> {
-            grid.deselectAll();
-        });
+        grid.getDataProvider().addDataProviderListener(ignoredEvent -> grid.deselectAll());
     }
 
     // подкласс указывает реальный класс элементов грида

@@ -30,7 +30,7 @@ public class TemplateView extends AbstractGridView<SimpleTemplate> {
 
         TemplateDataProvider provider = (TemplateDataProvider) actions.getDataProvider();
         var gsa = new GridSelectActions(getTranslation("grid_template_actions_label"),
-                new SecondaryButton(getTranslation("grid_template_actions_delete_label"), VaadinIcon.TRASH.create(), e -> {
+                new SecondaryButton(getTranslation("grid_template_actions_delete_label"), VaadinIcon.TRASH.create(), ignoredEvent -> {
                     if (!selectedIds.isEmpty()) {
                         actions.onDelete(selectedIds, selectedIds.size() > 1 ? DialogType.DELETE_TEMPLATE_ALL : DialogType.DELETE_TEMPLATE, "" + selectedIds.size());
                     }
@@ -70,8 +70,8 @@ public class TemplateView extends AbstractGridView<SimpleTemplate> {
     @Override
     protected void configureActionColumn(com.vaadin.flow.component.grid.Grid<SimpleTemplate> grid) {
         grid.addComponentColumn(item -> {
-            Button editButton = new IconButton(VaadinIcon.EDIT.create(), e -> actions.onEdit(item, DialogType.TEMPLATE_SAVED));
-            Button deleteButton = new IconButton(VaadinIcon.TRASH.create(), e -> actions.onDelete(List.of(item.getId()), DialogType.DELETE_TEMPLATE));
+            Button editButton = new IconButton(VaadinIcon.EDIT.create(), ignoredEvent -> actions.onEdit(item, DialogType.TEMPLATE_SAVED));
+            Button deleteButton = new IconButton(VaadinIcon.TRASH.create(), ignoredEvent -> actions.onDelete(List.of(item.getId()), DialogType.DELETE_TEMPLATE));
             return new ButtonGroup(editButton, deleteButton);
         }).setHeader(getTranslation("grid_header_actions_label")).setWidth("120px").setFlexGrow(0).setKey("actions");
     }

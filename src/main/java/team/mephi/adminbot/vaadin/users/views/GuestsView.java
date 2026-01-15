@@ -29,7 +29,7 @@ public class GuestsView extends AbstractGridView<SimpleUser> {
         GuestsDataProvider provider = (GuestsDataProvider) actions.getDataProvider();
 
         var gsa = new GridSelectActions(getTranslation("grid_users_actions_label"),
-                new SecondaryButton(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), e -> {
+                new SecondaryButton(getTranslation("grid_users_actions_block_label"), VaadinIcon.BAN.create(), ignoredEvent -> {
                     if (!selectedIds.isEmpty())
                         actions.onDelete(selectedIds, DialogType.DELETE_USERS);
                 })
@@ -68,8 +68,8 @@ public class GuestsView extends AbstractGridView<SimpleUser> {
     @Override
     protected void configureActionColumn(com.vaadin.flow.component.grid.Grid<SimpleUser> grid) {
         grid.addComponentColumn(item -> {
-            Button viewButton = new IconButton(VaadinIcon.EYE.create(), e -> actions.onView(item, DialogType.USERS_VIEW));
-            Button blockButton = new IconButton(VaadinIcon.BAN.create(), e -> actions.onBlock(item, DialogType.USERS_BLOCKED));
+            Button viewButton = new IconButton(VaadinIcon.EYE.create(), ignoredEvent -> actions.onView(item, DialogType.USERS_VIEW));
+            Button blockButton = new IconButton(VaadinIcon.BAN.create(), ignoredEvent -> actions.onBlock(item, DialogType.USERS_BLOCKED));
             if (UserStatus.BLOCKED.name().equals(item.getStatus())) {
                 blockButton.addClassNames(LumoUtility.TextColor.ERROR);
             } else {

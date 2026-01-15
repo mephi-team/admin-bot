@@ -22,8 +22,6 @@ public class StudentPresenter extends UsersPresenter implements StudentActions {
 
     @Override
     public void onExpel(List<Long> ids, DialogType type, Object... params) {
-        dialogService.showConfirmDialog(ids.size(), type, VaadinIcon.CLOSE.create(), (ignore) -> {
-            notificationService.showNotification(NotificationType.EDIT, type.getNotificationKey(), params);
-        });
+        dialogService.showConfirmDialog(ids.size(), type, VaadinIcon.CLOSE.create(), (ignore) -> notificationService.showNotification(NotificationType.EDIT, type.getNotificationKey(), params));
     }
 }

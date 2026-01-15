@@ -16,7 +16,7 @@ public class BlockDialog<T> extends Dialog implements DialogWithTitle {
     private final Tab tab2 = new Tab(getTranslation("dialog_user_block_tab_block_label"));
     private final Class<T> beanType;
     private SerializableConsumer<T> onSaveCallback;
-    private final Button saveButton = new Button(getTranslation("save_button"), e -> onSave());
+    private final Button saveButton = new Button(getTranslation("save_button"), ignoredEvent -> onSave());
 
     public BlockDialog(Class<T> beanType) {
         this.beanType = beanType;
@@ -32,7 +32,7 @@ public class BlockDialog<T> extends Dialog implements DialogWithTitle {
             if (e.getSelectedTab().equals(tab1)) {
                 form1.setVisible(true);
                 form2.setVisible(false);
-            } else {
+            } else if (e.getSelectedTab().equals(tab2)) {
                 form1.setVisible(false);
                 form2.setVisible(true);
             }
@@ -45,7 +45,7 @@ public class BlockDialog<T> extends Dialog implements DialogWithTitle {
         add(tabs, form, form1, form2, form3);
         setWidth("100%");
         setMaxWidth("500px");
-        getFooter().add(new SecondaryButton(getTranslation("cancel_button"), e -> close()), saveButton);
+        getFooter().add(new SecondaryButton(getTranslation("cancel_button"), ignoredEvent -> close()), saveButton);
     }
 
     @Override
