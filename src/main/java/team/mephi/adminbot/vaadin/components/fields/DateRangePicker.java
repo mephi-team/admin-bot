@@ -26,7 +26,11 @@ public class DateRangePicker extends CustomField<DateRangePicker.LocalDateRange>
      */
     public DateRangePicker() {
         start = new DatePicker();
+        start.setMinWidth("1px");
+        start.addClassName("first");
         end = new DatePicker();
+        end.setMinWidth("1px");
+        end.addClassName("second");
 
         setI18n(createRussianI18n());
 
@@ -38,7 +42,7 @@ public class DateRangePicker extends CustomField<DateRangePicker.LocalDateRange>
         container.setAlignItems(FlexComponent.Alignment.CENTER);
 
         container.add(start, end);
-
+        container.getElement().getStyle().set("gap", "0");
         container.setFlexGrow(1.0, start);
         container.setFlexGrow(1.0, end);
 
@@ -101,7 +105,13 @@ public class DateRangePicker extends CustomField<DateRangePicker.LocalDateRange>
      */
     public void changeMode(Mode mode) {
         this.mode = mode;
-        end.setVisible(mode != Mode.DAY);
+        if (mode != Mode.DAY) {
+            start.addClassName("first");
+            end.setVisible(true);
+        } else {
+            start.removeClassName("first");
+            end.setVisible(false);
+        }
     }
 
     @Override

@@ -154,6 +154,16 @@ vaadin-multi-select-combo-box::part(input-field) {
     /*margin: 3px;*/
 }
 
+vaadin-date-picker.first::part(input-field) {
+    border-start-end-radius: 0;
+    border-end-end-radius: 0;
+}
+
+vaadin-date-picker.second::part(input-field) {
+    border-start-start-radius: 0;
+    border-end-start-radius: 0;
+}
+
 vaadin-multi-select-combo-box vaadin-multi-select-combo-box-chip {
     background: #fff;
     border: 1px solid var(--lumo-contrast-20pct);
