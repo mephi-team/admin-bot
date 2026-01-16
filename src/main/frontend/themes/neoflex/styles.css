@@ -349,3 +349,9 @@ vaadin-dialog-overlay[theme~="right-drawer"][closing]::part(overlay) {
         transform: translateX(100%);
     }
 }
+
+[theme~='badge'][theme~='status'] {
+    border-radius: 24px;
+    padding: 4px 16px;
+    height: 32px;
+}

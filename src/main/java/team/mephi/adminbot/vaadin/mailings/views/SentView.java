@@ -6,6 +6,7 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
 import com.vaadin.flow.function.SerializableBiConsumer;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 import team.mephi.adminbot.dto.SimpleMailing;
 import team.mephi.adminbot.vaadin.components.ButtonGroup;
 import team.mephi.adminbot.vaadin.components.GridSelectActions;
@@ -32,14 +33,17 @@ public class SentView extends AbstractGridView<SimpleMailing> {
     private static final SerializableBiConsumer<Span, SimpleMailing> statusComponentUpdater = (
             span, person) -> {
         String theme = switch (person.getStatus()) {
-            case "ACTIVE" -> "badge";
-            case "DRAFT" -> String.format("badge %s", "contrast");
-            case "PAUSED" -> String.format("badge %s", "warning");
-            case "FINISHED" -> String.format("badge %s", "success");
-            default -> String.format("badge %s", "error");
+            case "ACTIVE" -> "status badge";
+            case "DRAFT" -> String.format("status badge %s", "contrast");
+            case "PAUSED" -> String.format("status badge %s", "warning");
+            case "FINISHED" -> String.format("status badge %s", "success");
+            default -> String.format("status badge %s", "error");
         };
         span.getElement().setAttribute("theme", theme);
-        span.setText(span.getTranslation("mailing_status_" + person.getStatus().toLowerCase() + "_label"));
+        span.addClassNames(LumoUtility.Display.INLINE_FLEX, LumoUtility.Gap.SMALL);
+        var icon =  Statuses.valueOf(person.getStatus()).createIcon();
+        icon.setSize("12px");
+        span.add(icon, new Span(span.getTranslation("mailing_status_" + person.getStatus().toLowerCase() + "_label")));
     };
 
     private final MailingsPresenter actions;
