@@ -70,7 +70,10 @@ public class MailingEditorDialog extends RightDrawer implements DialogWithTitle 
                 .withConverter(CityDto::getName, user -> cityService.getByName(user).orElse(null))
                 .bind(SimpleMailing::getCity, SimpleMailing::setCity);
         binder.forField(form1.getCurator())
-                .withConverter(UserDto::getUserName, user -> userService.findCuratorByUserName(user).orElse(UserDto.builder().userName("").build()))
+                .withConverter(
+                        dto -> dto != null ? dto.getUserName() : null,
+                        userName -> userName != null ? userService.findCuratorByUserName(userName).orElse(null) : null
+                )
                 .bind(SimpleMailing::getCurator, SimpleMailing::setCurator);
         binder.forField(form1.getListBox())
                 .withValidator(s -> !s.isEmpty(), getTranslation("form_mailing_first_name_last_name_validation_message"))
@@ -122,6 +125,7 @@ public class MailingEditorDialog extends RightDrawer implements DialogWithTitle 
         binder.addStatusChangeListener(e -> {
             next.setEnabled(e.getBinder().isValid());
             saveButton.setEnabled(e.getBinder().isValid());
+            tab2.setEnabled(e.getBinder().isValid());
         });
 
         tabSheet.addSelectedChangeListener(ignoredEvent -> {

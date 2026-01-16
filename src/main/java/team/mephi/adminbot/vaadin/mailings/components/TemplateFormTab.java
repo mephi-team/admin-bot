@@ -3,9 +3,11 @@ package team.mephi.adminbot.vaadin.mailings.components;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
+import com.vaadin.flow.component.tabs.Tab;
+import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 import lombok.Getter;
 import team.mephi.adminbot.dto.SimpleTemplate;
 import team.mephi.adminbot.service.TemplateService;
@@ -30,12 +32,12 @@ public class TemplateFormTab extends FormLayout {
         setExpandFields(true);
         setExpandColumns(true);
 
-        RadioButtonGroup<TemplateMessage> radioGroup = new RadioButtonGroup<>();
-        var newMessage = new TemplateMessage(getTranslation("form_mailing_message_new_message_label"), "new");
-        var fromTemplate = new TemplateMessage(getTranslation("form_mailing_message_from_template_label"), "template");
-        radioGroup.setItems(newMessage, fromTemplate);
-        radioGroup.setValue(newMessage);
-        radioGroup.setItemLabelGenerator(TemplateMessage::getName);
+        Tabs group = new Tabs();
+        group.addClassNames(LumoUtility.Margin.Vertical.SMALL);
+        group.addThemeNames("button-group");
+        var newMessage = new Tab(getTranslation("form_mailing_message_new_message_label"));
+        var fromTemplate = new Tab(getTranslation("form_mailing_message_from_template_label"));
+        group.add(newMessage, fromTemplate);
 
         ComboBox<SimpleTemplate> templates = new ComboBox<>();
         templates.setItemsPageable(templateService::findAll);
@@ -51,7 +53,7 @@ public class TemplateFormTab extends FormLayout {
         text1.setRequiredIndicatorVisible(true);
         text1.setAutofocus(true);
 
-        addFormItem(radioGroup, getTranslation("form_mailing_message_label"));
+        addFormItem(group, getTranslation("form_mailing_message_label"));
         FormItem templateItem = addFormItem(templates, getTranslation("form_mailing_template_label"));
         addFormItem(text1, getTranslation("form_template_text_label"));
         FormItem createLinkItem = addFormItem(createLink, getTranslation("form_mailing_create_meeting_label"));
@@ -72,11 +74,13 @@ public class TemplateFormTab extends FormLayout {
         createLink.addValueChangeListener(v -> linkItem.setVisible(v.getValue()));
         saveTemplate.addValueChangeListener(v -> nameItem.setVisible(v.getValue()));
 
-        radioGroup.addValueChangeListener(v -> {
-            if (v.getValue().value.equals("new")) {
+        group.addSelectedChangeListener(v -> {
+            if (v.getSelectedTab().equals(newMessage)) {
                 templateItem.setVisible(false);
                 createLinkItem.setVisible(true);
-                linkItem.setVisible(true);
+                if (createLink.getValue()) {
+                    linkItem.setVisible(true);
+                }
                 saveItem.setVisible(true);
                 if (saveTemplate.getValue()) {
                     nameItem.setVisible(true);
@@ -91,16 +95,5 @@ public class TemplateFormTab extends FormLayout {
                 text1.setReadOnly(true);
             }
         });
-    }
-
-    @Getter
-    private static class TemplateMessage {
-        private final String name;
-        private final String value;
-
-        public TemplateMessage(String name, String value) {
-            this.name = name;
-            this.value = value;
-        }
     }
 }
