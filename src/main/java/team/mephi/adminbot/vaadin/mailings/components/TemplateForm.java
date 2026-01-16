@@ -20,6 +20,8 @@ public class TemplateForm extends FormLayout {
     public TemplateForm() {
         setAutoResponsive(true);
         setLabelsAside(true);
+        setExpandFields(true);
+        setExpandColumns(true);
 
         addFormItem(name, getTranslation("form_template_name_label"));
         addFormItem(text, getTranslation("form_template_text_label"));

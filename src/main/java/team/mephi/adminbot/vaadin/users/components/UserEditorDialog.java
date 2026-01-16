@@ -1,7 +1,6 @@
 package team.mephi.adminbot.vaadin.users.components;
 
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.ValidationResult;
 import com.vaadin.flow.function.SerializableConsumer;
@@ -10,6 +9,7 @@ import team.mephi.adminbot.dto.CohortDto;
 import team.mephi.adminbot.dto.RoleDto;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.service.*;
+import team.mephi.adminbot.vaadin.components.RightDrawer;
 import team.mephi.adminbot.vaadin.components.buttons.PrimaryButton;
 import team.mephi.adminbot.vaadin.components.buttons.SecondaryButton;
 import team.mephi.adminbot.vaadin.components.fields.FullNameField;
@@ -21,7 +21,7 @@ import java.util.Objects;
  * Диалоговое окно для создания и редактирования пользователей.
  * Использует форму UserForm для ввода данных пользователя и биндер для валидации и связывания данных.
  */
-public class UserEditorDialog extends Dialog implements DialogWithTitle {
+public class UserEditorDialog extends RightDrawer implements DialogWithTitle {
     private final BeanValidationBinder<SimpleUser> binder = new BeanValidationBinder<>(SimpleUser.class);
     private SerializableConsumer<SimpleUser> onSaveCallback;
     private SimpleUser user;
@@ -89,8 +89,6 @@ public class UserEditorDialog extends Dialog implements DialogWithTitle {
 
         setHeaderTitle("dialog_users_created_title");
         add(form);
-        setWidth("100%");
-        setMaxWidth("500px");
         getFooter().add(new SecondaryButton(getTranslation("cancel_button"), ignoredEvent -> close()), saveButton);
 
         binder.addStatusChangeListener(e ->

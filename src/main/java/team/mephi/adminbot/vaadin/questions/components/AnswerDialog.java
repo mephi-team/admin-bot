@@ -1,18 +1,18 @@
 package team.mephi.adminbot.vaadin.questions.components;
 
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.function.SerializableConsumer;
 import team.mephi.adminbot.dto.SimpleQuestion;
+import team.mephi.adminbot.vaadin.components.RightDrawer;
 import team.mephi.adminbot.vaadin.components.buttons.PrimaryButton;
 import team.mephi.adminbot.vaadin.core.DialogWithTitle;
 
 /**
  * Диалог для ответа на вопрос.
  */
-public class AnswerDialog extends Dialog implements DialogWithTitle {
+public class AnswerDialog extends RightDrawer implements DialogWithTitle {
     private final BeanValidationBinder<SimpleQuestion> binder = new BeanValidationBinder<>(SimpleQuestion.class);
     private SerializableConsumer<SimpleQuestion> onSaveCallback;
     private SimpleQuestion question;
@@ -29,8 +29,6 @@ public class AnswerDialog extends Dialog implements DialogWithTitle {
 
         setHeaderTitle("dialog_answer_title");
         add(form);
-        setWidth("100%");
-        setMaxWidth("500px");
         getFooter().add(answerButton);
 
         binder.addStatusChangeListener(e ->

@@ -1,11 +1,11 @@
 package team.mephi.adminbot.vaadin.users.components;
 
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.function.SerializableConsumer;
+import team.mephi.adminbot.vaadin.components.RightDrawer;
 import team.mephi.adminbot.vaadin.components.buttons.SecondaryButton;
 import team.mephi.adminbot.vaadin.core.DialogWithTitle;
 
@@ -14,7 +14,7 @@ import team.mephi.adminbot.vaadin.core.DialogWithTitle;
  *
  * @param <T> тип объекта, связанного с блокировкой
  */
-public class BlockDialog<T> extends Dialog implements DialogWithTitle {
+public class BlockDialog<T> extends RightDrawer implements DialogWithTitle {
     private final BeanValidationBinder<T> binder;
     private final Tabs tabs = new Tabs();
     private final Tab tab1 = new Tab(getTranslation("dialog_user_block_tab_warning_label"));

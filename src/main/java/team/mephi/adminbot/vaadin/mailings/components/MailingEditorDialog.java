@@ -2,7 +2,6 @@ package team.mephi.adminbot.vaadin.mailings.components;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.TabSheet;
@@ -12,6 +11,7 @@ import com.vaadin.flow.function.SerializableConsumer;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import team.mephi.adminbot.dto.*;
 import team.mephi.adminbot.service.*;
+import team.mephi.adminbot.vaadin.components.RightDrawer;
 import team.mephi.adminbot.vaadin.components.buttons.PrimaryButton;
 import team.mephi.adminbot.vaadin.components.buttons.SecondaryButton;
 import team.mephi.adminbot.vaadin.core.DialogWithTitle;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 /**
  * Диалоговое окно для создания и редактирования рассылок.
  */
-public class MailingEditorDialog extends Dialog implements DialogWithTitle {
+public class MailingEditorDialog extends RightDrawer implements DialogWithTitle {
     private final BeanValidationBinder<SimpleMailing> binder = new BeanValidationBinder<>(SimpleMailing.class);
     private final TabSheet tabSheet = new TabSheet();
     private final Tab tab1;
@@ -102,8 +102,6 @@ public class MailingEditorDialog extends Dialog implements DialogWithTitle {
 
         setHeaderTitle("dialog_mailing_new_title");
         add(tabSheet);
-        setWidth("100%");
-        setMaxWidth("500px");
 
         saveButton.setVisible(false);
         saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);

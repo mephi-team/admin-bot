@@ -2,7 +2,6 @@ package team.mephi.adminbot.vaadin.users.components;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.UploadI18N;
 import com.vaadin.flow.server.streams.UploadHandler;
@@ -10,6 +9,7 @@ import org.jspecify.annotations.NonNull;
 import team.mephi.adminbot.dto.SimpleFile;
 import team.mephi.adminbot.service.AuthService;
 import team.mephi.adminbot.service.FileService;
+import team.mephi.adminbot.vaadin.components.RightDrawer;
 import team.mephi.adminbot.vaadin.components.buttons.PrimaryButton;
 import team.mephi.adminbot.vaadin.components.buttons.SecondaryButton;
 
@@ -21,7 +21,7 @@ import java.util.Map;
 /**
  * Диалог для загрузки файлов.
  */
-public class FileUploadDialog extends Dialog {
+public class FileUploadDialog extends RightDrawer {
     private final Button addButton = new PrimaryButton(getTranslation("dialog_users_file_upload_action"));
     private final Map<String, SimpleFile> fileList = new HashMap<>();
 

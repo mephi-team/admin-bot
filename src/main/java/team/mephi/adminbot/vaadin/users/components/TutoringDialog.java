@@ -1,7 +1,6 @@
 package team.mephi.adminbot.vaadin.users.components;
 
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.function.SerializableConsumer;
 import team.mephi.adminbot.dto.SimpleDirection;
@@ -9,6 +8,7 @@ import team.mephi.adminbot.dto.SimpleTutor;
 import team.mephi.adminbot.dto.SimpleUser;
 import team.mephi.adminbot.service.DirectionService;
 import team.mephi.adminbot.service.UserService;
+import team.mephi.adminbot.vaadin.components.RightDrawer;
 import team.mephi.adminbot.vaadin.components.buttons.PrimaryButton;
 import team.mephi.adminbot.vaadin.components.buttons.SecondaryButton;
 import team.mephi.adminbot.vaadin.components.fields.FullNameField;
@@ -21,7 +21,7 @@ import java.util.Objects;
 /**
  * Диалог для просмотра и редактирования информации о кураторе и его подопечных.
  */
-public class TutoringDialog extends Dialog implements DialogWithTitle {
+public class TutoringDialog extends RightDrawer implements DialogWithTitle {
     private final BeanValidationBinder<SimpleTutor> binder = new BeanValidationBinder<>(SimpleTutor.class);
     private SerializableConsumer<SimpleTutor> onSaveCallback;
     private SimpleTutor user;
@@ -37,8 +37,6 @@ public class TutoringDialog extends Dialog implements DialogWithTitle {
         var form = new TutorForm(userService, directionService);
         setHeaderTitle("dialog_tutor_curatorship_title");
         add(form);
-        setWidth("100%");
-        setMaxWidth("500px");
         getFooter().add(new SecondaryButton(getTranslation("cancel_button"), ignoredEvent -> close()), saveButton);
         binder.forField(form.getFullNameField())
                 .bind(s -> new FullNameField.FullName(s.getFirstName(), s.getLastName()),
