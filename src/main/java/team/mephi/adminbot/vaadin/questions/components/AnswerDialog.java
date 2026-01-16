@@ -31,8 +31,8 @@ public class AnswerDialog extends RightDrawer implements DialogWithTitle {
         add(form);
         getFooter().add(answerButton);
 
-        binder.addStatusChangeListener(e ->
-                answerButton.setEnabled(e.getBinder().isValid()));
+//        binder.addStatusChangeListener(e ->
+//                answerButton.setEnabled(e.getBinder().isValid()));
     }
 
     /**

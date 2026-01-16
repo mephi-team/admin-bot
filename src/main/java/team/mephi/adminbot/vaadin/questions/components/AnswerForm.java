@@ -31,10 +31,15 @@ public class AnswerForm extends FormLayout {
         setExpandColumns(true);
 
         author.setReadOnly(true);
+        author.setTabIndex(-1);
         role.setReadOnly(true);
+        role.setTabIndex(-1);
         direction.setReadOnly(true);
+        direction.setTabIndex(-1);
         text.setReadOnly(true);
-        answer.setMinRows(4);
+        text.setTabIndex(-1);
+        answer.setMinRows(10);
+        answer.setAutofocus(true);
 
         addFormItem(author, getTranslation("dialog_answer_author_label"));
         addFormItem(role, getTranslation("dialog_answer_role_label"));

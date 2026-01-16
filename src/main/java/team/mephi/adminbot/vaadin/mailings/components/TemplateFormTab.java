@@ -49,6 +49,7 @@ public class TemplateFormTab extends FormLayout {
 
         text1.setMinRows(10);
         text1.setRequiredIndicatorVisible(true);
+        text1.setAutofocus(true);
 
         addFormItem(radioGroup, getTranslation("form_mailing_message_label"));
         FormItem templateItem = addFormItem(templates, getTranslation("form_mailing_template_label"));

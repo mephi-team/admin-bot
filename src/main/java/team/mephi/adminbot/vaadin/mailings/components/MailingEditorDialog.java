@@ -105,6 +105,7 @@ public class MailingEditorDialog extends RightDrawer implements DialogWithTitle 
 
         saveButton.setVisible(false);
         saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        saveButton.setTabIndex(1);
         next.setIconAfterText(true);
         next.addClassNames(LumoUtility.Margin.Right.AUTO);
         next.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
@@ -112,6 +113,7 @@ public class MailingEditorDialog extends RightDrawer implements DialogWithTitle 
         prev.addClassNames(LumoUtility.Margin.Right.AUTO);
         prev.addClickListener(ignoredEvent -> tabSheet.setSelectedTab(tab1));
         prev.setVisible(false);
+        prev.setTabIndex(2);
         getFooter().add(
                 next,
                 prev,

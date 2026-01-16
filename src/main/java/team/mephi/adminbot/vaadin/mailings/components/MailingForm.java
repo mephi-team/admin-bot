@@ -75,6 +75,7 @@ public class MailingForm extends FormLayout {
         users.setItemsPageable(roleService::getAllRoles);
         users.setItemLabelGenerator(RoleDto::getName);
         users.addValueChangeListener(ignoredEvent -> provider.refreshAll());
+        users.setAutofocus(true);
 
         cohort.setItemsPageable(cohortService::getAllCohorts);
         cohort.setItemLabelGenerator(c -> c.getName() + (c.getCurrent() ? " (текущий)" : ""));
