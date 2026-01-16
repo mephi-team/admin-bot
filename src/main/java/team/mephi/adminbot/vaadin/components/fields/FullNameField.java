@@ -18,9 +18,6 @@ public class FullNameField extends CustomField<FullNameField.FullName> {
      * Конструктор для создания компонента FullNameField.
      */
     public FullNameField() {
-        firstName.setMaxWidth("50%");
-        lastName.setMaxWidth("50%");
-
         lastName.addClassName("first");
         firstName.addClassName("last");
 
@@ -35,6 +32,10 @@ public class FullNameField extends CustomField<FullNameField.FullName> {
         content.addClassNames(LumoUtility.Display.FLEX);
 
         add(content);
+    }
+
+    public void setAutofocus(boolean autofocus) {
+        lastName.setAutofocus(autofocus);
     }
 
     @Override
