@@ -1,6 +1,7 @@
 package team.mephi.adminbot.vaadin.users.components;
 
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.textfield.TextArea;
 import lombok.Getter;
 
@@ -21,7 +22,7 @@ public class BlockForm extends FormLayout {
         setExpandFields(true);
         setExpandColumns(true);
 
-        TextArea blockReason = new TextArea();
+        add(new Hr());
         addFormItem(blockReason, getTranslation("form_user_block_block_reason_label"));
     }
 }

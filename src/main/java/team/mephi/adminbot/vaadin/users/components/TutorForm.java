@@ -67,6 +67,7 @@ public class TutorForm extends FormLayout {
         students.setItems(studentsProvider);
         students.setItemLabelGenerator(u -> u.getFullName() + (Objects.nonNull(u.getTgId()) ? " " + u.getTgId() : ""));
         students.setAutoExpand(MultiSelectComboBox.AutoExpandMode.VERTICAL);
+        students.setAutofocus(true);
         students.addSelectionListener(e -> {
             var selectedItems = e.getAddedSelection();
             boolean hasInvalid = selectedItems.removeIf(item -> Objects.isNull(item.getId()));

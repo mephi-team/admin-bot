@@ -82,7 +82,10 @@ public class TutorEditorDialog extends RightDrawer implements DialogWithTitle {
 
         setHeaderTitle("dialog_users_created_title");
         add(form);
-        getFooter().add(new SecondaryButton(getTranslation("cancel_button"), ignoredEvent -> close()), saveButton);
+        var cancelButton = new SecondaryButton(getTranslation("cancel_button"), ignoredEvent -> close());
+        cancelButton.setTabIndex(2);
+        saveButton.setTabIndex(1);
+        getFooter().add(cancelButton, saveButton);
 
         binder.addStatusChangeListener(e ->
                 saveButton.setEnabled(e.getBinder().isValid()));

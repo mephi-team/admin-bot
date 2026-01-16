@@ -2,6 +2,7 @@ package team.mephi.adminbot.vaadin.questions.components;
 
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H4;
+import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import lombok.Getter;
@@ -46,7 +47,7 @@ public class AnswerForm extends FormLayout {
         addFormItem(direction, getTranslation("dialog_answer_direction_label"));
         addFormItem(text, getTranslation("dialog_answer_text_label"));
 
-        add(new H4(getTranslation("dialog_answer_text_title")));
+        add(new H4(getTranslation("dialog_answer_text_title")), new Hr());
         add(answer);
     }
 }

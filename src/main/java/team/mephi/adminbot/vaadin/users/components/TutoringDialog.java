@@ -37,7 +37,10 @@ public class TutoringDialog extends RightDrawer implements DialogWithTitle {
         var form = new TutorForm(userService, directionService);
         setHeaderTitle("dialog_tutor_curatorship_title");
         add(form);
-        getFooter().add(new SecondaryButton(getTranslation("cancel_button"), ignoredEvent -> close()), saveButton);
+        var cancelButton = new SecondaryButton(getTranslation("cancel_button"), ignoredEvent -> close());
+        cancelButton.setTabIndex(2);
+        saveButton.setTabIndex(1);
+        getFooter().add(cancelButton, saveButton);
         binder.forField(form.getFullNameField())
                 .bind(s -> new FullNameField.FullName(s.getFirstName(), s.getLastName()),
                         (s, t) -> {

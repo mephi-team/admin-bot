@@ -3,6 +3,7 @@ package team.mephi.adminbot.vaadin.users.components;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
+import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.function.SerializableConsumer;
 import team.mephi.adminbot.vaadin.components.RightDrawer;
@@ -38,6 +39,7 @@ public class BlockDialog<T> extends RightDrawer implements DialogWithTitle {
         var form3 = new BlockUserMessage();
         form2.setVisible(false);
         tabs.add(tab1, tab2);
+        tabs.addThemeVariants(TabsVariant.LUMO_SMALL);
         tabs.addSelectedChangeListener(e -> {
             if (e.getSelectedTab().equals(tab1)) {
                 form1.setVisible(true);

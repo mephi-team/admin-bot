@@ -1,6 +1,8 @@
 package team.mephi.adminbot.vaadin.mailings.components;
 
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.H4;
+import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import lombok.Getter;
@@ -23,7 +25,11 @@ public class TemplateForm extends FormLayout {
         setExpandFields(true);
         setExpandColumns(true);
 
+        name.setAutofocus(true);
+        text.setMinRows(10);
+
         addFormItem(name, getTranslation("form_template_name_label"));
-        addFormItem(text, getTranslation("form_template_text_label"));
+        add(new H4(getTranslation("form_template_text_label")), new Hr());
+        add(text);
     }
 }

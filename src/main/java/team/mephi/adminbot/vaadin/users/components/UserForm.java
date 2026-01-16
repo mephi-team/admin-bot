@@ -64,6 +64,8 @@ public class UserForm extends FormLayout {
         setExpandFields(true);
         setExpandColumns(true);
 
+        fullNameField.setAutofocus(true);
+
         roles.setItemsPageable(roleService::getAllRoles);
         roles.setItemLabelGenerator(RoleDto::getName);
 
