@@ -7,9 +7,6 @@ import com.vaadin.flow.component.dialog.Dialog;
  */
 public class RightDrawer extends Dialog {
     public RightDrawer() {
-        setWidth("100%");
-        setHeight("100%");
-        setMaxWidth("500px");
         setThemeName("right-drawer");
     }
 }

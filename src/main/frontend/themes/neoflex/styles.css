@@ -245,11 +245,20 @@ vaadin-dialog-overlay[theme~="right-drawer"] {
 
 vaadin-dialog-overlay[theme~="right-drawer"]::part(overlay) {
     border-radius: 0;
+    height: 100%;
+    width: 100%;
+    max-width: 600px;
+}
+
+
+vaadin-dialog-overlay[theme~="right-drawer"]::part(header),
+vaadin-dialog-overlay[theme~="right-drawer"]::part(content),
+vaadin-dialog-overlay[theme~="right-drawer"]::part(footer) {
+    padding-inline: 32px;
 }
 
 vaadin-dialog-overlay[theme~="right-drawer"]::part(footer) {
     justify-content: flex-start;
-    /*padding-inline: 32px;*/
 }
 
 /* Анимация при открытии */
