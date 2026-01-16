@@ -15,7 +15,7 @@ import java.util.Collection;
 /**
  * Класс, содержащий различные рендереры для отображения информации о пользователях в таблицах.
  */
-public class MyRenderers {
+public class UserRenderers {
     /**
      * Создает рендерер для отображения информации о согласиях на обработку персональных данных пользователя.
      *
@@ -52,14 +52,17 @@ public class MyRenderers {
         return new ComponentRenderer<>(user -> {
             Span span = new Span();
             String theme = switch (user.getStatus()) {
-                case "ACTIVE" -> String.format("badge %s", "success");
-                case "INACTIVE" -> String.format("badge %s", "contrast");
-                case "BLOCKED" -> String.format("badge %s", "warning");
-                case "PENDING" -> "badge";
-                default -> String.format("badge %s", "error");
+                case "ACTIVE" -> String.format("status badge %s", "success");
+                case "INACTIVE" -> String.format("status badge %s", "contrast");
+                case "BLOCKED" -> String.format("status badge %s", "warning");
+                case "PENDING" -> "status badge";
+                default -> String.format("status badge %s", "error");
             };
             span.getElement().setAttribute("theme", theme);
-            span.setText(span.getTranslation("user_status_" + user.getStatus().toLowerCase() + "_label"));
+            span.addClassNames(LumoUtility.Display.INLINE_FLEX, LumoUtility.Gap.SMALL);
+            var icon =  Statuses.valueOf(user.getStatus()).createIcon();
+            icon.setSize("12px");
+            span.add(icon, new Span(span.getTranslation("user_status_" + user.getStatus().toLowerCase() + "_label")));
             return span;
         });
     }

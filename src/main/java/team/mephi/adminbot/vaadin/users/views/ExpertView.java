@@ -73,7 +73,7 @@ public class ExpertView extends AbstractGridView<SimpleUser> {
         grid.addColumn(SimpleUser::getEmail).setHeader(getTranslation("grid_expert_header_email_label")).setSortable(true).setResizable(true).setKey("email");
         grid.addColumn(SimpleUser::getTgId).setHeader(getTranslation("grid_expert_header_telegram_label")).setSortable(true).setResizable(true).setKey("tgId");
         grid.addColumn(SimpleUser::getCohort).setHeader(getTranslation("grid_expert_header_cohort_label")).setSortable(true).setResizable(true).setKey("cohort");
-        grid.addColumn(MyRenderers.createUserDirections()).setHeader(getTranslation("grid_expert_header_direction_label")).setSortable(true).setResizable(true).setKey("direction");
+        grid.addColumn(UserRenderers.createUserDirections()).setHeader(getTranslation("grid_expert_header_direction_label")).setSortable(true).setResizable(true).setKey("direction");
     }
 
     @Override

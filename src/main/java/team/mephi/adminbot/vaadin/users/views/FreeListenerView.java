@@ -74,7 +74,7 @@ public class FreeListenerView extends AbstractGridView<SimpleUser> {
         grid.addColumn(SimpleUser::getTgId).setHeader(getTranslation("grid_free_listener_header_telegram_label")).setSortable(true).setResizable(true).setKey("tgId");
         grid.addColumn(SimpleUser::getPhoneNumber).setHeader(getTranslation("grid_free_listener_header_phone_label")).setSortable(true).setResizable(true).setKey("phoneNumber");
         grid.addColumn(SimpleUser::getCohort).setHeader(getTranslation("grid_free_listener_header_cohort_label")).setSortable(true).setResizable(true).setKey("cohort");
-        grid.addColumn(MyRenderers.createUserDirections()).setHeader(getTranslation("grid_free_listener_header_direction_label")).setSortable(true).setResizable(true).setKey("direction");
+        grid.addColumn(UserRenderers.createUserDirections()).setHeader(getTranslation("grid_free_listener_header_direction_label")).setSortable(true).setResizable(true).setKey("direction");
         grid.addColumn(SimpleUser::getCity).setHeader(getTranslation("grid_free_listener_header_city_label")).setSortable(true).setResizable(true).setKey("city");
     }
 

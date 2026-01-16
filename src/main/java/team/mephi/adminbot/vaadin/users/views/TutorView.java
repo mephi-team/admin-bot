@@ -72,8 +72,8 @@ public class TutorView extends AbstractGridView<SimpleTutor> {
         grid.addColumn(SimpleTutor::getCompetenceCenter).setHeader(getTranslation("grid_tutor_header_competence_center_label")).setSortable(true).setResizable(true).setKey("competenceCenter");
         grid.addColumn(SimpleTutor::getEmail).setHeader(getTranslation("grid_tutor_header_email_label")).setSortable(true).setResizable(true).setKey("email");
         grid.addColumn(SimpleTutor::getTgId).setHeader(getTranslation("grid_tutor_header_telegram_label")).setSortable(true).setResizable(true).setKey("tgId");
-        grid.addColumn(MyRenderers.createTutorDirections()).setHeader(getTranslation("grid_tutor_header_direction_label")).setResizable(true).setKey("direction");
-        grid.addColumn(MyRenderers.createCuratorshipRenderer()).setHeader(getTranslation("grid_tutor_header_curatorship_label")).setResizable(true).setKey("curatorship");
+        grid.addColumn(UserRenderers.createTutorDirections()).setHeader(getTranslation("grid_tutor_header_direction_label")).setResizable(true).setKey("direction");
+        grid.addColumn(UserRenderers.createCuratorshipRenderer()).setHeader(getTranslation("grid_tutor_header_curatorship_label")).setResizable(true).setKey("curatorship");
     }
 
     @Override
