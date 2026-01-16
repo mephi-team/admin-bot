@@ -6,7 +6,9 @@ import com.vaadin.flow.component.accordion.AccordionPanel;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.listbox.MultiSelectListBox;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.CallbackDataProvider;
@@ -102,8 +104,11 @@ public class MailingForm extends FormLayout {
 
         Accordion accordion = new Accordion();
 
-        Span name = new Span(getTranslation("form_mailing_accordion_description_label"));
-        name.addClassNames(LumoUtility.FontSize.SMALL);
+        var icon = VaadinIcon.EXCLAMATION_CIRCLE_O.create();
+        icon.setColor("var(--lumo-contrast-50pct)");
+        icon.setSize("15px");
+        Span name = new Span(icon, new Span(" "), new Span(getTranslation("form_mailing_accordion_description_label")));
+        name.addClassNames(LumoUtility.FontSize.SMALL, LumoUtility.Display.INLINE_FLEX, LumoUtility.AlignItems.CENTER, LumoUtility.Gap.XSMALL);
 
         listBox.setWidthFull();
         listBox.addClassNames(LumoUtility.FontSize.SMALL);
@@ -113,7 +118,7 @@ public class MailingForm extends FormLayout {
         FormItem box = addFormItem(listBox, getTranslation("form_mailing_first_name_last_name_label"));
         box.addClassNames(LumoUtility.Width.FULL);
 
-        VerticalLayout personalInformationLayout = new VerticalLayout(name, box);
+        VerticalLayout personalInformationLayout = new VerticalLayout(new Hr(), name, box);
         personalInformationLayout.setSpacing(false);
         personalInformationLayout.setPadding(false);
 
