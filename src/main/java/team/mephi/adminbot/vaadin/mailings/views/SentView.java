@@ -1,12 +1,8 @@
 package team.mephi.adminbot.vaadin.mailings.views;
 
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
-import com.vaadin.flow.function.SerializableBiConsumer;
-import com.vaadin.flow.theme.lumo.LumoUtility;
 import team.mephi.adminbot.dto.SimpleMailing;
 import team.mephi.adminbot.vaadin.components.ButtonGroup;
 import team.mephi.adminbot.vaadin.components.GridSelectActions;
@@ -27,25 +23,6 @@ import java.util.Set;
  * Представление для рассылок
  */
 public class SentView extends AbstractGridView<SimpleMailing> {
-    /**
-     * Обновляет компонент статуса рассылки.
-     */
-    private static final SerializableBiConsumer<Span, SimpleMailing> statusComponentUpdater = (
-            span, person) -> {
-        String theme = switch (person.getStatus()) {
-            case "ACTIVE" -> "status badge";
-            case "DRAFT" -> String.format("status badge %s", "contrast");
-            case "PAUSED" -> String.format("status badge %s", "warning");
-            case "FINISHED" -> String.format("status badge %s", "success");
-            default -> String.format("status badge %s", "error");
-        };
-        span.getElement().setAttribute("theme", theme);
-        span.addClassNames(LumoUtility.Display.INLINE_FLEX, LumoUtility.Gap.SMALL);
-        var icon =  Statuses.valueOf(person.getStatus()).createIcon();
-        icon.setSize("12px");
-        span.add(icon, new Span(span.getTranslation("mailing_status_" + person.getStatus().toLowerCase() + "_label")));
-    };
-
     private final MailingsPresenter actions;
 
     /**
@@ -80,15 +57,6 @@ public class SentView extends AbstractGridView<SimpleMailing> {
         setup(config);
     }
 
-    /**
-     * Создает рендерер компонента для отображения статуса рассылки.
-     *
-     * @return компонентный рендерер для статуса
-     */
-    private static ComponentRenderer<Span, SimpleMailing> createStatusComponentRenderer() {
-        return new ComponentRenderer<>(Span::new, statusComponentUpdater);
-    }
-
     @Override
     protected Class<SimpleMailing> getItemClass() {
         return SimpleMailing.class;
@@ -108,7 +76,7 @@ public class SentView extends AbstractGridView<SimpleMailing> {
         grid.addColumn(SimpleMailing::getCurator).setHeader(getTranslation("grid_mailing_header_curator_label")).setSortable(true).setResizable(true).setKey("filters->>'curator'");
         grid.addColumn(SimpleMailing::getCity).setHeader(getTranslation("grid_mailing_header_city_label")).setSortable(true).setResizable(true).setKey("filters->>'city'");
         grid.addColumn(SimpleMailing::getText).setHeader(getTranslation("grid_mailing_header_text_label")).setTooltipGenerator(SimpleMailing::getText).setSortable(true).setResizable(true).setKey("description");
-        grid.addColumn(createStatusComponentRenderer()).setHeader(getTranslation("grid_mailing_header_status_label")).setSortable(true).setResizable(true).setWidth("110px").setKey("status");
+        grid.addColumn(MailingRenderers.createStatusRenderer()).setHeader(getTranslation("grid_mailing_header_status_label")).setSortable(true).setResizable(true).setWidth("110px").setKey("status");
     }
 
     @Override

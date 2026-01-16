@@ -1,11 +1,8 @@
 package team.mephi.adminbot.vaadin.mailings.views;
 
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
-import com.vaadin.flow.function.SerializableBiConsumer;
 import team.mephi.adminbot.dto.SimpleMailing;
 import team.mephi.adminbot.vaadin.components.ButtonGroup;
 import team.mephi.adminbot.vaadin.components.GridSelectActions;
@@ -26,22 +23,6 @@ import java.util.Set;
  * Представление для рассылок в статусе "Черновик".
  */
 public class DraftView extends AbstractGridView<SimpleMailing> {
-    /**
-     * Обновляет компонент статуса рассылки.
-     */
-    private static final SerializableBiConsumer<Span, SimpleMailing> statusComponentUpdater = (
-            span, person) -> {
-        String theme = switch (person.getStatus()) {
-            case "ACTIVE" -> "badge";
-            case "DRAFT" -> String.format("badge %s", "contrast");
-            case "PAUSED" -> String.format("badge %s", "warning");
-            case "FINISHED" -> String.format("badge %s", "success");
-            default -> String.format("badge %s", "error");
-        };
-        span.getElement().setAttribute("theme", theme);
-        span.setText(span.getTranslation("mailing_status_" + person.getStatus().toLowerCase() + "_label"));
-    };
-
     private final MailingsPresenter actions;
 
     /**
@@ -69,20 +50,11 @@ public class DraftView extends AbstractGridView<SimpleMailing> {
                 .filterSetter(s -> provider.getFilterableProvider().setFilter(s))
                 .searchPlaceholder(getTranslation("grid_mailing_search_placeholder"))
                 .emptyLabel(getTranslation("grid_mailing_empty_label"))
-                .visibleColumns(Set.of())
+                .visibleColumns(Set.of("status"))
                 .hiddenColumns(Set.of("actions"))
                 .build();
 
         setup(config);
-    }
-
-    /**
-     * Создает рендерер компонента для отображения статуса рассылки.
-     *
-     * @return рендерер компонента для статуса
-     */
-    private static ComponentRenderer<Span, SimpleMailing> createStatusComponentRenderer() {
-        return new ComponentRenderer<>(Span::new, statusComponentUpdater);
     }
 
     @Override
@@ -104,7 +76,7 @@ public class DraftView extends AbstractGridView<SimpleMailing> {
         grid.addColumn(SimpleMailing::getCurator).setHeader(getTranslation("grid_mailing_header_curator_label")).setSortable(true).setResizable(true).setKey("filters->>'curator'");
         grid.addColumn(SimpleMailing::getCity).setHeader(getTranslation("grid_mailing_header_city_label")).setSortable(true).setResizable(true).setKey("filters->>'city'");
         grid.addColumn(SimpleMailing::getText).setHeader(getTranslation("grid_mailing_header_text_label")).setTooltipGenerator(SimpleMailing::getText).setSortable(true).setResizable(true).setKey("description");
-        grid.addColumn(createStatusComponentRenderer()).setHeader(getTranslation("grid_mailing_header_status_label")).setSortable(true).setResizable(true).setKey("status");
+        grid.addColumn(MailingRenderers.createStatusRenderer()).setHeader(getTranslation("grid_mailing_header_status_label")).setSortable(true).setResizable(true).setKey("status");
     }
 
     @Override
