@@ -55,7 +55,7 @@ public class UtmForm extends FormLayout {
         addFormItem(interval, getTranslation("page_analytics_form_activity_interval_label"));
 
         TabSheet tabSheet = new TabSheet();
-        tabSheet.addThemeVariants(TabSheetVariant.LUMO_TABS_EQUAL_WIDTH_TABS);
+        tabSheet.addThemeNames(TabSheetVariant.LUMO_TABS_EQUAL_WIDTH_TABS.getVariantName(), "button-group");
         tabSheet.add(getTranslation("page_analytics_form_activity_tabs_source_label"), new UtmFilterSource());
         tabSheet.add(getTranslation("page_analytics_form_activity_tabs_delivery_label"), new UtmFilterDelivery());
         add(tabSheet);

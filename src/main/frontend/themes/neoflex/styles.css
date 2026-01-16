@@ -133,6 +133,30 @@ vaadin-tab[selected]:before {
     height: 1px;
 }
 
+vaadin-tabs[theme~="button-group"] {
+    margin-block-start: 10px;
+    min-height: 30px;
+    border: 1px solid var(--lumo-primary-color);
+    border-radius: 9px;
+    overflow: hidden;
+}
+
+vaadin-tabs[theme~="button-group"] vaadin-tab {
+    padding: 0;
+    height: 30px;
+    white-space: nowrap;
+    color: var(--lumo-primary-color);;
+}
+
+vaadin-tabs[theme~="button-group"] vaadin-tab[selected] {
+    background-color: var(--lumo-primary-color);
+    color: var(--lumo-primary-contrast-color);
+}
+
+vaadin-tabs[theme~="button-group"]::part(tabs) {
+    margin-inline: 0;
+}
+
 vaadin-tabsheet::part(tabs-container) {
     border-bottom: none;
     box-shadow: none;
