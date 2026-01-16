@@ -47,6 +47,7 @@ public class UtmForm extends FormLayout {
         addFormItem(period, getTranslation("page_analytics_form_activity_period_label"));
 
         interval = new RadioButtonGroup<>();
+        interval.addThemeName("chip");
         interval.setItems(ActivityIntervals.values());
         interval.setValue(ActivityIntervals.MONTH);
         interval.setItemLabelGenerator(l -> getTranslation(l.getTabLabelKey()));

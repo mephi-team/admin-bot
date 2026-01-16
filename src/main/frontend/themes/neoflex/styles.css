@@ -197,6 +197,32 @@ vaadin-radio-group vaadin-radio-button {
     --vaadin-radio-button-background-hover: var(--lumo-primary-color-10pct);
 }
 
+vaadin-radio-group[theme~="chip"] vaadin-radio-button {
+    padding-inline: 15px;
+    --vaadin-input-field-border-width: 0;
+    --vaadin-radio-button-dot-size: 0;
+    --vaadin-radio-button-background-hover: transparent;
+    border: 1px solid var(--lumo-contrast-20pct);
+    border-radius: 8px;
+    padding-inline-start: 4px;
+    flex-grow: 1;
+}
+
+vaadin-radio-group[theme~="chip"]::part(group-field) {
+    gap: 12px;
+    justify-content: space-between;
+}
+
+vaadin-radio-group[theme~="chip"] vaadin-radio-button[checked] {
+    background-color: var(--lumo-primary-color);
+    color: var(--lumo-base-color);
+}
+
+vaadin-radio-group[theme~="chip"] vaadin-radio-button::part(radio) {
+    width: 0;
+    height: 0;
+}
+
 vaadin-checkbox-group[theme~="error"] vaadin-checkbox {
     --vaadin-input-field-border-color: var(--lumo-error-color);
 }
