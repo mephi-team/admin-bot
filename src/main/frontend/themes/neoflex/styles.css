@@ -108,7 +108,7 @@ vaadin-text-field.last::part(input-field) {
     min-height: 40px
 }
 
-vaadin-tab {
+vaadin-tab[theme~="nav"] {
     border-radius: 16px;
     margin: 4px 8px;
     padding: 0 12px;
@@ -118,7 +118,7 @@ vaadin-tab {
     font-size: var(--lumo-font-size-s);
 }
 
-vaadin-tab[selected] {
+vaadin-tab[theme~="nav"][selected] {
     background-color: var(--lumo-primary-color);
     color: var(--lumo-primary-contrast-color);
 }

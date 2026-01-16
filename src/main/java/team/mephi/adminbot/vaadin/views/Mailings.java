@@ -67,6 +67,7 @@ public class Mailings extends VerticalLayout {
             var userCount = mailingCountService.getAllCounts().getOrDefault(provider.getTabId().name(), 0L);
             Span tabContent = new Span(new Span(getTranslation(provider.getTabLabel())), new UserCountBadge(userCount));
             var tab = new Tab(tabContent);
+            tab.addThemeName("nav");
             tabSheet.add(tab, content, provider.getPosition());
         }
         tabSheet.addSelectedChangeListener(ignoredEvent -> {

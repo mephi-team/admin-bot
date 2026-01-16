@@ -43,6 +43,7 @@ public class Analytics extends VerticalLayout {
 
             Span tabContent = new Span(getTranslation(provider.getTabLabel()));
             var tab = new Tab(tabContent);
+            tab.addThemeName("nav");
             tabSheet.add(tab, content, provider.getPosition());
         }
 
