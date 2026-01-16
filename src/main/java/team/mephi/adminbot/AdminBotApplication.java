@@ -17,6 +17,7 @@ import com.vaadin.flow.component.popover.Popover;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 import org.springframework.boot.SpringApplication;
@@ -28,7 +29,7 @@ import team.mephi.adminbot.vaadin.components.fields.FullNameField;
  * Главный класс приложения AdminBot.
  */
 @SpringBootApplication
-//@PWA(name = "Project Base for Vaadin with Spring", shortName = "Project Base")
+@PWA(name = "Neoflex bot administration application", shortName = "AdminBot")
 @Theme(value = "neoflex", variant = Lumo.LIGHT)
 @Uses(ComboBox.class)
 @Uses(FullNameField.class)
