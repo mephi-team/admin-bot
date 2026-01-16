@@ -22,6 +22,8 @@ public class BlockUserMessage extends FormLayout {
         setExpandFields(true);
         setExpandColumns(true);
 
+        message.setMinRows(6);
+
         add(new H4(getTranslation("form_user_block_last_message_label")), new Hr(), message);
     }
 }
