@@ -51,6 +51,7 @@ public class Mailings extends VerticalLayout {
         setHeightFull();
         getElement().getStyle().set("padding-inline", "53px 120px");
         tabSheet.setSizeFull();
+        tabSheet.addThemeName("nav");
         tabSheet.addThemeVariants(TabSheetVariant.LUMO_TABS_MINIMAL);
         add(createHeader(), tabSheet);
 
@@ -67,7 +68,6 @@ public class Mailings extends VerticalLayout {
             var userCount = mailingCountService.getAllCounts().getOrDefault(provider.getTabId().name(), 0L);
             Span tabContent = new Span(new Span(getTranslation(provider.getTabLabel())), new UserCountBadge(userCount));
             var tab = new Tab(tabContent);
-            tab.addThemeName("nav");
             tabSheet.add(tab, content, provider.getPosition());
         }
         tabSheet.addSelectedChangeListener(ignoredEvent -> {

@@ -63,6 +63,7 @@ public class Users extends VerticalLayout implements BeforeEnterObserver {
         getElement().getStyle().set("padding-inline", "120px");
         setSizeFull();
         tabSheet.setSizeFull();
+        tabSheet.addThemeName("nav");
         tabSheet.addThemeVariants(TabSheetVariant.LUMO_TABS_MINIMAL);
         add(createHeader(), tabSheet);
 
@@ -80,7 +81,6 @@ public class Users extends VerticalLayout implements BeforeEnterObserver {
             var userCount = userService.getAllCounts().getOrDefault(provider.getTabId().name(), 0L);
             Span tabContent = new Span(new Span(getTranslation(provider.getTabLabel())), new UserCountBadge(userCount));
             var tab = new Tab(tabContent);
-            tab.addThemeName("nav");
             tabSheet.add(tab, content, provider.getPosition());
         }
         tabSheet.addSelectedChangeListener(ignoredEvent -> {

@@ -113,7 +113,12 @@ vaadin-text-field.last::part(input-field) {
     min-height: 40px
 }
 
-vaadin-tab[theme~="nav"] {
+vaadin-tabsheet[theme~="nav"]::part(tabs-container) {
+    border-bottom: none;
+    box-shadow: none;
+}
+
+vaadin-tabs[theme~="nav"] vaadin-tab {
     border-radius: 16px;
     margin: 4px 8px;
     padding: 0 12px;
@@ -123,7 +128,7 @@ vaadin-tab[theme~="nav"] {
     font-size: var(--lumo-font-size-s);
 }
 
-vaadin-tab[theme~="nav"][selected] {
+vaadin-tabs[theme~="nav"] vaadin-tab[selected] {
     background-color: var(--lumo-primary-color);
     color: var(--lumo-primary-contrast-color);
 }
@@ -155,11 +160,6 @@ vaadin-tabs[theme~="button-group"] vaadin-tab[selected] {
 
 vaadin-tabs[theme~="button-group"]::part(tabs) {
     margin-inline: 0;
-}
-
-vaadin-tabsheet::part(tabs-container) {
-    border-bottom: none;
-    box-shadow: none;
 }
 
 vaadin-date-picker::part(input-field),

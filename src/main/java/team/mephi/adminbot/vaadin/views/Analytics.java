@@ -34,6 +34,7 @@ public class Analytics extends VerticalLayout {
 
         TabSheet tabSheet = new TabSheet();
         tabSheet.setSizeFull();
+        tabSheet.addThemeName("nav");
         tabSheet.addThemeVariants(TabSheetVariant.LUMO_TABS_MINIMAL);
 
         tabProviders.sort(Comparator.comparingInt(AnalyticsTabProvider::getPosition));
@@ -43,7 +44,6 @@ public class Analytics extends VerticalLayout {
 
             Span tabContent = new Span(getTranslation(provider.getTabLabel()));
             var tab = new Tab(tabContent);
-            tab.addThemeName("nav");
             tabSheet.add(tab, content, provider.getPosition());
         }
 
