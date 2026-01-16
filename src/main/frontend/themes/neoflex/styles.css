@@ -227,3 +227,37 @@ vaadin-message-input > vaadin-text-area::part(input-field) {
 vaadin-message-input > vaadin-text-area::part(input-field):hover {
     background-color: var(--lumo-primary-color-10pct);
 }
+
+vaadin-dialog-overlay[theme~="right-drawer"] {
+    inset: 0;
+    align-items: end;
+}
+
+vaadin-dialog-overlay[theme~="right-drawer"]::part(overlay) {
+    border-radius: 0;
+}
+
+vaadin-dialog-overlay[theme~="right-drawer"]::part(footer) {
+    justify-content: flex-start;
+    /*padding-inline: 32px;*/
+}
+
+/* Анимация при открытии */
+vaadin-dialog-overlay[theme~="right-drawer"][opening]::part(overlay) {
+    animation: slide-in-right 0.3s ease-out;
+}
+
+/* Анимация при закрытии */
+vaadin-dialog-overlay[theme~="right-drawer"][closing]::part(overlay) {
+    animation: slide-out-right 0.2s ease-in;
+}
+
+@keyframes slide-in-right {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+}
+
+@keyframes slide-out-right {
+    from { transform: translateX(0); }
+    to { transform: translateX(100%); }
+}
