@@ -150,7 +150,8 @@ vaadin-tabs[theme~="button-group"] vaadin-tab {
     padding: 0;
     height: 30px;
     white-space: nowrap;
-    color: var(--lumo-primary-color);;
+    color: var(--lumo-primary-color);
+    flex-grow: 1;
 }
 
 vaadin-tabs[theme~="button-group"] vaadin-tab[selected] {
