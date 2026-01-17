@@ -33,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * API-тесты для ExpertController.
- * Покрывают: доступ по ролям (LC_EXPERT), статус-коды, базовые ответы и частичное обновление вопроса.
+ * Проверяют доступ по ролям (ROLE_LC_EXPERT), статус-коды и базовые ответы контроллера.
  */
 @WebMvcTest(controllers = ExpertController.class)
 @Import(TestSecurityConfig.class)
@@ -47,7 +47,7 @@ class ExpertControllerTest {
 
     /**
      * ВАЖНО: для PUT обязательно отдаём body, иначе до проверки @PreAuthorize
-     * не дойдёт (упадёт на биндинге @RequestBody) и получишь 500.
+     * не дойдёт (упадёт на биндинге @RequestBody) и получится 500.
      */
     private static Stream<Arguments> expertEndpoints() {
         return Stream.of(
@@ -68,17 +68,22 @@ class ExpertControllerTest {
     }
 
     /**
-     * Без JwtAuthenticationToken / oauth2-resource-server классов.
-     * Нам важно только наличие authorities для @PreAuthorize.
+     * Аутентификация эксперта (достаточно authorities для @PreAuthorize).
      */
     private static AbstractAuthenticationToken expertAuth() {
         return new SimpleAuthToken(List.of(new SimpleGrantedAuthority("ROLE_LC_EXPERT")));
     }
 
+    /**
+     * Аутентификация обычного пользователя (ROLE_USER).
+     */
     private static AbstractAuthenticationToken userAuth() {
         return new SimpleAuthToken(List.of(new SimpleGrantedAuthority("ROLE_USER")));
     }
 
+    /**
+     * Проверяет: эксперт может получить список вопросов (200 OK).
+     */
     @Test
     void Given_expertRole_When_getAllQuestions_Then_returnsOkAndList() throws Exception {
         // Arrange
@@ -103,6 +108,9 @@ class ExpertControllerTest {
         verifyNoMoreInteractions(questionRepository);
     }
 
+    /**
+     * Проверяет: при существующем вопросе возвращается 200 OK.
+     */
     @Test
     void Given_existingQuestion_When_getQuestionById_Then_returnsOk() throws Exception {
         // Arrange
@@ -128,6 +136,9 @@ class ExpertControllerTest {
         verifyNoMoreInteractions(questionRepository);
     }
 
+    /**
+     * Проверяет: при отсутствии вопроса возвращается 404 Not Found.
+     */
     @Test
     void Given_missingQuestion_When_getQuestionById_Then_returnsNotFound() throws Exception {
         // Arrange
@@ -143,6 +154,9 @@ class ExpertControllerTest {
         verifyNoMoreInteractions(questionRepository);
     }
 
+    /**
+     * Проверяет: эксперт может обновить только текст вопроса (PATCH-подобное поведение через PUT).
+     */
     @Test
     void Given_existingQuestion_When_updateQuestionWithNewText_Then_updatesOnlyTextAndReturnsOk() throws Exception {
         // Arrange
@@ -177,6 +191,9 @@ class ExpertControllerTest {
         verifyNoMoreInteractions(questionRepository);
     }
 
+    /**
+     * Проверяет: при отсутствии вопроса обновление возвращает 404 Not Found.
+     */
     @Test
     void Given_missingQuestion_When_updateQuestion_Then_returnsNotFound() throws Exception {
         // Arrange
@@ -199,6 +216,9 @@ class ExpertControllerTest {
         verifyNoMoreInteractions(questionRepository);
     }
 
+    /**
+     * Проверяет: статистика эксперта возвращает 200 OK и нужные поля.
+     */
     @Test
     void Given_expertRole_When_getExpertStats_Then_returnsOkAndTotalQuestionsAndTimestamp() throws Exception {
         // Arrange
@@ -215,6 +235,9 @@ class ExpertControllerTest {
         verifyNoMoreInteractions(questionRepository);
     }
 
+    /**
+     * Проверяет: пользователь с ролью USER получает 403 Forbidden на экспертных эндпоинтах.
+     */
     @ParameterizedTest
     @MethodSource("expertEndpoints")
     void Given_userRole_When_requestingExpertEndpoints_Then_returnsForbidden(HttpMethod method, String uri, String body) throws Exception {
@@ -225,6 +248,9 @@ class ExpertControllerTest {
         verifyNoInteractions(questionRepository);
     }
 
+    /**
+     * Проверяет: без аутентификации возвращается 401 Unauthorized на экспертных эндпоинтах.
+     */
     @ParameterizedTest
     @MethodSource("expertEndpoints")
     void Given_noAuthentication_When_requestingExpertEndpoints_Then_returnsUnauthorized(HttpMethod method, String uri, String body) throws Exception {
@@ -234,6 +260,10 @@ class ExpertControllerTest {
         verifyNoInteractions(questionRepository);
     }
 
+    /**
+     * Простейшая реализация AuthenticationToken для тестов:
+     * важны только authorities для @PreAuthorize.
+     */
     private static final class SimpleAuthToken extends AbstractAuthenticationToken {
         private final Object principal = "test-user";
 

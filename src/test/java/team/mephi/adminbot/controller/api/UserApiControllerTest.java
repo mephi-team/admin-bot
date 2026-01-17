@@ -27,6 +27,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/**
+ * API-тесты для UserApiController.
+ * Проверяют обработку JWT и ответы для профиля пользователя.
+ */
 @WebMvcTest(UserApiController.class)
 @Import(TestSecurityConfig.class)
 class UserApiControllerTest {
@@ -37,8 +41,9 @@ class UserApiControllerTest {
     @MockitoBean
     private UserRepository userRepository;
 
-    // ===== /api/user/profile =====
-
+    /**
+     * Хелпер: создаёт Authentication, где principal = Jwt (важно для логики контроллера).
+     */
     private static Authentication jwtAuth(String sub, Map<String, Object> claims, String... authorities) {
         Jwt.Builder builder = Jwt.withTokenValue("test-token")
                 .header("alg", "none")
@@ -54,10 +59,13 @@ class UserApiControllerTest {
                 .map(SimpleGrantedAuthority::new)
                 .toList();
 
-        // principal = Jwt (важно для UserApiController)
         return new UsernamePasswordAuthenticationToken(jwt, "n/a", auths);
     }
 
+    /**
+     * Проверяет: при валидном JWT и наличии пользователя в БД
+     * возвращаются JWT-поля + поля из БД.
+     */
     @Test
     void Given_validJwtAndUserExistsInDb_When_getProfile_Then_returnsJwtFieldsPlusDbFields() throws Exception {
         // Arrange
@@ -100,6 +108,10 @@ class UserApiControllerTest {
         verifyNoMoreInteractions(userRepository);
     }
 
+    /**
+     * Проверяет: если email отсутствует в JWT, контроллер не обращается к БД
+     * и возвращает только поля из JWT.
+     */
     @Test
     void Given_validJwtButEmailMissing_When_getProfile_Then_returnsOnlyJwtFieldsAndDoesNotQueryDb() throws Exception {
         // Arrange
@@ -117,7 +129,7 @@ class UserApiControllerTest {
                         .with(SecurityMockMvcRequestPostProcessors.authentication(auth)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.keycloakUserId").value("kc-sub-456"))
-                .andExpect(jsonPath("$.email").doesNotExist()) // claim отсутствует => null, Jackson обычно не сериализует null
+                .andExpect(jsonPath("$.email").doesNotExist())
                 .andExpect(jsonPath("$.name").value("No Email"))
                 .andExpect(jsonPath("$.preferredUsername").value("noemail"))
                 .andExpect(jsonPath("$.userId").doesNotExist())
@@ -127,6 +139,9 @@ class UserApiControllerTest {
         verifyNoInteractions(userRepository);
     }
 
+    /**
+     * Проверяет: если пользователя нет в БД, возвращаются только поля из JWT.
+     */
     @Test
     void Given_validJwtAndUserMissingInDb_When_getProfile_Then_returnsJwtFieldsOnly() throws Exception {
         // Arrange
@@ -159,8 +174,9 @@ class UserApiControllerTest {
         verifyNoMoreInteractions(userRepository);
     }
 
-    // ===== /api/user/me =====
-
+    /**
+     * Проверяет: без аутентификации профиль недоступен (401 Unauthorized).
+     */
     @Test
     void Given_noAuthentication_When_getProfile_Then_returns401() throws Exception {
         mockMvc.perform(get("/api/user/profile"))
@@ -168,6 +184,9 @@ class UserApiControllerTest {
         verifyNoInteractions(userRepository);
     }
 
+    /**
+     * Проверяет: /api/user/me возвращает базовые поля JWT и список authorities.
+     */
     @Test
     void Given_validJwt_When_getMe_Then_returnsBasicJwtInfoAndAuthorities() throws Exception {
         // Arrange
@@ -195,8 +214,9 @@ class UserApiControllerTest {
         verifyNoInteractions(userRepository);
     }
 
-    // ===== /api/user/check =====
-
+    /**
+     * Проверяет: без аутентификации /api/user/me недоступен (401 Unauthorized).
+     */
     @Test
     void Given_noAuthentication_When_getMe_Then_returns401() throws Exception {
         mockMvc.perform(get("/api/user/me"))
@@ -204,8 +224,9 @@ class UserApiControllerTest {
         verifyNoInteractions(userRepository);
     }
 
-    // ===== helpers =====
-
+    /**
+     * Проверяет: эндпоинт /api/user/check доступен без аутентификации (permitAll).
+     */
     @Test
     void Given_noAuthentication_When_check_Then_returnsOkBecausePermitted() throws Exception {
         mockMvc.perform(get("/api/user/check"))
