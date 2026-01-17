@@ -35,21 +35,21 @@ public class Dashboard extends VerticalLayout {
         setAlignItems(Alignment.CENTER);
         add(new H1(getTranslation("page_dashboard_title")));
 
-        Card card1 = createCard("page_dashboard_mailing_card_title", VaadinIcon.ENVELOPE_O.create(), Mailings.class);
+        Card mailingCard = createCard("page_dashboard_mailing_card_title", VaadinIcon.ENVELOPE.create(), Mailings.class);
 
-        Card card2 = createCard("page_dashboard_dialogs_card_title", VaadinIcon.CHAT.create(), Dialogs.class);
-        card2.add(createBadge(provider.unreadCount(), "page_dashboard_dialogs_card_new_messages", "page_dashboard_dialogs_card_empty_messages"));
+        Card dialogsCard = createCard("page_dashboard_dialogs_card_title", VaadinIcon.COMMENT.create(), Dialogs.class);
+        dialogsCard.add(createBadge(provider.unreadCount(), "page_dashboard_dialogs_card_new_messages", "page_dashboard_dialogs_card_empty_messages"));
 
-        Card card3 = createCard("page_dashboard_questions_card_title", VaadinIcon.QUESTION.create(), Questions.class);
-        card3.add(createBadge(provider.countNewQuestion(), "page_dashboard_questions_card_new_questions", "page_dashboard_questions_card_empty_questions"));
+        Card questionsCard = createCard("page_dashboard_questions_card_title", VaadinIcon.COMMENTS.create(), Questions.class);
+        questionsCard.add(createBadge(provider.countNewQuestion(), "page_dashboard_questions_card_new_questions", "page_dashboard_questions_card_empty_questions"));
 
-        Card card4 = createCard("page_dashboard_users_card_title", VaadinIcon.USERS.create(), Users.class);
-        Card card5 = createCard("page_dashboard_analytics_card_title", VaadinIcon.BAR_CHART.create(), Analytics.class);
+        Card usersCard = createCard("page_dashboard_users_card_title", VaadinIcon.USERS.create(), Users.class);
+        Card analyticsCard = createCard("page_dashboard_analytics_card_title", VaadinIcon.BAR_CHART.create(), Analytics.class);
 
         if (authService.isAdmin())
-            add(buildCardArea(card1, card2, card3, card4, card5));
+            add(buildCardArea(mailingCard, dialogsCard, questionsCard, usersCard, analyticsCard));
         else
-            add(buildCardArea(card3));
+            add(buildCardArea(questionsCard));
     }
 
     /**
