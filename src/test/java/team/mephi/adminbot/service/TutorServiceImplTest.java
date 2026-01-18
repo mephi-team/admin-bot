@@ -47,7 +47,7 @@ class TutorServiceImplTest {
     @Test
     void Given_newTutor_When_save_Then_createsAssignments() {
         // Arrange
-        Tutor savedTutor = Tutor.builder().id(10L).firstName("Anna").lastName("Fox").build();
+        Tutor savedTutor = Tutor.builder().id(10L).firstName("Anna").lastName("Fox").blocked(false).build();
         when(tutorRepository.save(any(Tutor.class))).thenReturn(savedTutor);
         when(userRepository.countByIdWithTutorAssignment(eq(5L))).thenReturn(0);
         SimpleTutor dto = SimpleTutor.builder()
@@ -80,6 +80,7 @@ class TutorServiceImplTest {
                 .lastName("Doe")
                 .directions(new HashSet<>(Set.of(Direction.builder().id(1L).build())))
                 .studentAssignments(new HashSet<>(Set.of()))
+                .blocked(false)
                 .build();
         when(tutorRepository.findById(eq(2L))).thenReturn(Optional.of(tutor));
         when(tutorRepository.save(eq(tutor))).thenReturn(tutor);
@@ -107,7 +108,7 @@ class TutorServiceImplTest {
     @Test
     void Given_id_When_findById_Then_mapsTutor() {
         // Arrange
-        Tutor tutor = Tutor.builder().id(4L).firstName("Olga").lastName("Nova").build();
+        Tutor tutor = Tutor.builder().id(4L).firstName("Olga").lastName("Nova").blocked(false).build();
         when(tutorRepository.findByIdWithStudent(eq(4L))).thenReturn(Optional.of(tutor));
         TutorServiceImpl service = new TutorServiceImpl(tutorRepository, studentTutorRepository, userRepository);
 
@@ -157,7 +158,7 @@ class TutorServiceImplTest {
     @Test
     void Given_name_When_findAllByName_Then_mapsStream() {
         // Arrange
-        Tutor tutor = Tutor.builder().id(6L).firstName("Alex").lastName("Ray").build();
+        Tutor tutor = Tutor.builder().id(6L).firstName("Alex").lastName("Ray").blocked(false).build();
         when(tutorRepository.findAllByNameWithDirectionsAndStudents(eq("Al"), eq(PageRequest.of(0, 1))))
                 .thenReturn(List.of(tutor));
         TutorServiceImpl service = new TutorServiceImpl(tutorRepository, studentTutorRepository, userRepository);

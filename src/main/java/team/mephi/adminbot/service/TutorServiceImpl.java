@@ -104,7 +104,7 @@ public class TutorServiceImpl implements TutorService {
 
     @Override
     public Optional<SimpleTutor> findById(Long id) {
-        return tutorRepository.findById(id).map(this::mapToSimpleUser);
+        return tutorRepository.findByIdWithStudent(id).map(this::mapToSimpleUser);
     }
 
     @Override
