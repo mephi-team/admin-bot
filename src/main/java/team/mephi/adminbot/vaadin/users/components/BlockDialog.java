@@ -7,7 +7,7 @@ import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.function.SerializableConsumer;
 import team.mephi.adminbot.vaadin.components.RightDrawer;
-import team.mephi.adminbot.vaadin.components.buttons.SecondaryButton;
+import team.mephi.adminbot.vaadin.components.buttons.PrimaryButton;
 import team.mephi.adminbot.vaadin.core.DialogWithTitle;
 
 /**
@@ -22,7 +22,8 @@ public class BlockDialog<T> extends RightDrawer implements DialogWithTitle {
     private final Tab tab2 = new Tab(getTranslation("dialog_user_block_tab_block_label"));
     private final Class<T> beanType;
     private SerializableConsumer<T> onSaveCallback;
-    private final Button saveButton = new Button(getTranslation("save_button"), ignoredEvent -> onSave());
+    private final Button blockButton = new PrimaryButton(getTranslation("block_button"), ignoredEvent -> onSave());
+    private final Button warningButton = new PrimaryButton(getTranslation("warning_button"), ignoredEvent -> onSave());
 
     /**
      * Конструктор диалогового окна блокировки пользователя.
@@ -44,9 +45,13 @@ public class BlockDialog<T> extends RightDrawer implements DialogWithTitle {
             if (e.getSelectedTab().equals(tab1)) {
                 form1.setVisible(true);
                 form2.setVisible(false);
+                warningButton.setVisible(true);
+                blockButton.setVisible(false);
             } else if (e.getSelectedTab().equals(tab2)) {
                 form1.setVisible(false);
                 form2.setVisible(true);
+                warningButton.setVisible(false);
+                blockButton.setVisible(true);
             }
         });
         binder.bindInstanceFields(form);
@@ -57,7 +62,7 @@ public class BlockDialog<T> extends RightDrawer implements DialogWithTitle {
         add(tabs, form, form1, form2, form3);
         setWidth("100%");
         setMaxWidth("500px");
-        getFooter().add(new SecondaryButton(getTranslation("cancel_button"), ignoredEvent -> close()), saveButton);
+        getFooter().add(blockButton, warningButton);
     }
 
     @Override
@@ -66,7 +71,7 @@ public class BlockDialog<T> extends RightDrawer implements DialogWithTitle {
         this.onSaveCallback = (SerializableConsumer<T>) callback;
         binder.readBean(beanType.cast(item));
         binder.setReadOnly(true);
-        saveButton.setVisible(false);
+        blockButton.setVisible(false);
         tabs.setSelectedTab(tab1);
         open();
     }
