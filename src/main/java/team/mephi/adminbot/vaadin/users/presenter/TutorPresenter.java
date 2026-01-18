@@ -1,6 +1,7 @@
 package team.mephi.adminbot.vaadin.users.presenter;
 
 import team.mephi.adminbot.dto.SimpleTutor;
+import team.mephi.adminbot.model.enums.UserStatus;
 import team.mephi.adminbot.vaadin.core.CRUDPresenter;
 import team.mephi.adminbot.vaadin.service.DialogService;
 import team.mephi.adminbot.vaadin.service.DialogType;
@@ -48,7 +49,11 @@ public class TutorPresenter extends CRUDPresenter<SimpleTutor> implements TutorA
     @Override
     public void onBlock(SimpleTutor item, DialogType type, Object... params) {
         dialogService.showDialog(item, type, (ignoredCallback) -> {
-            dataProvider.blockAllById(List.of(item.getId()));
+            if (UserStatus.BLOCKED.name().equals(item.getStatus())) {
+                dataProvider.unblockAllById(List.of(item.getId()));
+            } else {
+                dataProvider.blockAllById(List.of(item.getId()));
+            }
             dataProvider.getDataProvider().refreshAll();
             notificationService.showNotification(NotificationType.DELETE, type.getNotificationKey(), params);
         });

@@ -14,4 +14,11 @@ public interface TutorDataProvider extends CRUDDataProvider<SimpleTutor> {
      * @param ids Идентификаторы преподавателей для блокировки.
      */
     void blockAllById(Iterable<Long> ids);
+
+    /**
+     * Разблокирует всех преподавателей с указанными идентификаторами.
+     *
+     * @param ids Идентификаторы преподавателей для разблокировки.
+     */
+    void unblockAllById(Iterable<Long> ids);
 }

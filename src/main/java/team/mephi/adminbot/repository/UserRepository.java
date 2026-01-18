@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import team.mephi.adminbot.model.User;
+import team.mephi.adminbot.model.enums.UserStatus;
 
 import java.util.List;
 import java.util.Map;
@@ -69,7 +70,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * <p>
      * Поиск нечувствителен к регистру.
      */
-    @Query("SELECT u FROM User u JOIN fetch u.role LEFT JOIN FETCH u.direction LEFT JOIN FETCH u.tutorAssignments ta LEFT JOIN FETCH ta.tutor LEFT JOIN FETCH u.pdConsentLogs WHERE NOT u.deleted AND u.role.code = :role AND (" +
+    @Query("SELECT u FROM User u JOIN fetch u.role LEFT JOIN FETCH u.direction LEFT JOIN FETCH u.tutorAssignments ta LEFT JOIN FETCH ta.tutor LEFT JOIN FETCH u.pdConsentLogs WHERE u.deleted = false AND u.role.code = :role AND (" +
             "LOWER(COALESCE(u.userName, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
             "LOWER(COALESCE(u.name, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
             "LOWER(COALESCE(u.firstName, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
@@ -111,7 +112,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * <p>
      * Поиск нечувствителен к регистру.
      */
-    @Query("SELECT count(u) FROM User u JOIN u.role WHERE NOT u.deleted AND u.role.code = :role AND (" +
+    @Query("SELECT count(u) FROM User u JOIN u.role WHERE u.deleted = false AND u.role.code = :role AND (" +
             "LOWER(COALESCE(u.userName, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
             "LOWER(COALESCE(u.name, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
             "LOWER(COALESCE(u.firstName, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
@@ -128,7 +129,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * <p>
      * Меняет значение поля deleted на противоположное.
      */
-    @Query("update User u set u.deleted = FUNCTION('NOT', u.deleted) WHERE u.id IN :ids")
+    @Query("update User u set u.deleted = true WHERE u.id IN :ids")
     @Transactional
     @Modifying
     void deleteAllById(@Param("ids") @NonNull Iterable<? extends Long> ids);
@@ -138,15 +139,15 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * <p>
      * Устанавливает значение поля status в BLOCKED.
      */
-    @Query("update User u set u.status = team.mephi.adminbot.model.enums.UserStatus.BLOCKED WHERE u.id IN :ids")
+    @Query("update User u set u.status = :status WHERE u.id IN :ids")
     @Transactional
     @Modifying
-    void blockAllById(@Param("ids") Iterable<? extends Long> ids);
+    void changeStatusById(UserStatus status, @Param("ids") Iterable<? extends Long> ids);
 
     /**
      * Подсчитать количество пользователей по каждой роли.
      */
-    @Query("SELECT u.role.code, count(u) FROM User u WHERE NOT u.deleted AND u.role.code != 'LC_EXPERT' GROUP BY u.role.code UNION ALL SELECT 'LC_EXPERT', count(e) FROM Expert e WHERE e.isActive UNION ALL SELECT 'TUTOR', count(t) FROM Tutor t")
+    @Query("SELECT u.role.code, count(u) FROM User u WHERE u.deleted = false AND u.role.code != 'LC_EXPERT' GROUP BY u.role.code UNION ALL SELECT 'LC_EXPERT', count(e) FROM Expert e WHERE e.isActive UNION ALL SELECT 'TUTOR', count(t) FROM Tutor t")
     List<Tuple> countsByRoleTuples();
 
     /**
@@ -163,7 +164,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     /**
      * Найти пользователя по идентификатору вместе с его ролью и направлением.
      */
-    @Query("SELECT u FROM User u JOIN FETCH u.role JOIN FETCH u.direction LEFT JOIN FETCH u.tutorAssignments LEFT JOIN FETCH u.pdConsentLogs WHERE u.id = :id AND NOT u.deleted")
+    @Query("SELECT u FROM User u JOIN FETCH u.role JOIN FETCH u.direction LEFT JOIN FETCH u.tutorAssignments LEFT JOIN FETCH u.pdConsentLogs WHERE u.id = :id AND u.deleted = false")
     Optional<User> findByIdWithRoleAndDirection(@NonNull Long id);
 
     /**
@@ -179,7 +180,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * Ищет совпадения по полю lastName.
      * Поиск нечувствителен к регистру.
      */
-    @Query("SELECT u FROM User u WHERE NOT u.deleted AND LOWER(u.lastName) LIKE LOWER(CONCAT('%', :query, '%')) AND (u.tutorAssignments IS EMPTY OR NOT EXISTS (SELECT 1 FROM StudentTutor st WHERE st.student = u AND st.isActive = true)) AND u.role.code = :role")
+    @Query("SELECT u FROM User u WHERE u.deleted = false AND LOWER(u.lastName) LIKE LOWER(CONCAT('%', :query, '%')) AND (u.tutorAssignments IS EMPTY OR NOT EXISTS (SELECT 1 FROM StudentTutor st WHERE st.student = u AND st.isActive = true)) AND u.role.code = :role")
     List<User> findAllStudentsWithTutorAssignments(String query, String role, Pageable pageable);
 
     /**
@@ -189,7 +190,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * Ищет совпадения по полю lastName.
      * Поиск нечувствителен к регистру.
      */
-    @Query("SELECT count(u) FROM User u WHERE NOT u.deleted AND LOWER(u.lastName) LIKE LOWER(CONCAT('%', :query, '%')) AND (u.tutorAssignments IS EMPTY OR NOT EXISTS (SELECT 1 FROM StudentTutor st WHERE st.student = u AND st.isActive = true)) AND u.role.code = :role")
+    @Query("SELECT count(u) FROM User u WHERE u.deleted = false AND LOWER(u.lastName) LIKE LOWER(CONCAT('%', :query, '%')) AND (u.tutorAssignments IS EMPTY OR NOT EXISTS (SELECT 1 FROM StudentTutor st WHERE st.student = u AND st.isActive = true)) AND u.role.code = :role")
     Integer countAllStudentsWithTutorAssignments(String query, String role);
 
     /**
@@ -203,7 +204,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * Найти всех пользователей вместе с их направлениями,
      * логами согласий на обработку персональных данных и активными кураторами.
      */
-    @Query("SELECT u FROM User u JOIN FETCH u.direction LEFT JOIN FETCH u.pdConsentLogs LEFT JOIN FETCH u.tutorAssignments ta LEFT JOIN FETCH ta.tutor WHERE NOT u.deleted")
+    @Query("SELECT u FROM User u JOIN FETCH u.direction LEFT JOIN FETCH u.pdConsentLogs LEFT JOIN FETCH u.tutorAssignments ta LEFT JOIN FETCH ta.tutor WHERE u.deleted = false")
     List<User> findAllWithDirection();
 
     /**

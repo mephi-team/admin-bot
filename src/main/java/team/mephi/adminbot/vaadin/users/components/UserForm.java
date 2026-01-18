@@ -54,9 +54,9 @@ public class UserForm extends FormLayout {
         var tutorProvider = new CallbackDataProvider<TutorDto, String>(
                 query -> {
                     Pageable pageable = PageRequest.of(query.getOffset() / query.getLimit(), query.getLimit());
-                    return tutorService.findAllByName(query.getFilter().orElse(""), pageable);
+                    return tutorService.findAllByNameNotBlocked(query.getFilter().orElse(""), pageable);
                 },
-                query -> tutorService.countByName(query.getFilter().orElse(""))
+                query -> tutorService.countAllByNameNotBlocked(query.getFilter().orElse(""))
         );
 
         setAutoResponsive(true);

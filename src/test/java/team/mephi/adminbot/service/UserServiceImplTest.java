@@ -243,7 +243,7 @@ class UserServiceImplTest {
         service.blockAllById(ids);
 
         // Assert
-        verify(userRepository).blockAllById(eq(ids));
+        verify(userRepository).changeStatusById(eq(UserStatus.BLOCKED), eq(ids));
     }
 
     /**

@@ -75,8 +75,13 @@ public class Tutor {
     @Column(name = "notes")
     private String notes;
 
-    @Column(name = "deleted")
-    private Boolean deleted;
+    /**
+     * Флаг блокировки тьютора.
+     * <p>
+     * Если true, тьютор считается заблокированным и неактивным.
+     */
+    @Column(name = "blocked")
+    private Boolean blocked;
 
     // ===== Связи с другими сущностями =====
 
@@ -106,7 +111,7 @@ public class Tutor {
 
     @PrePersist
     protected void onCreate() {
-        this.deleted = false;
+        this.blocked = false;
     }
     // ===== equals() и hashCode() =====
 

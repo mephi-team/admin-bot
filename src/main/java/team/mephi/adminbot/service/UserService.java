@@ -75,6 +75,13 @@ public interface UserService {
     void blockAllById(Iterable<Long> ids);
 
     /**
+     * Разблокирует всех пользователей по их идентификаторам.
+     *
+     * @param ids коллекция идентификаторов пользователей для разблокировки.
+     */
+    void unblockAllById(Iterable<Long> ids);
+
+    /**
      * Находит пользователей по роли и имени с пагинацией.
      *
      * @param role     роль пользователя.

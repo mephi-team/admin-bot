@@ -14,4 +14,11 @@ public interface UserDataProvider extends CRUDDataProvider<SimpleUser> {
      * @param ids Идентификаторы пользователей для блокировки.
      */
     void blockAllById(Iterable<Long> ids);
+
+    /**
+     * Разблокирует всех пользователей с указанными идентификаторами.
+     *
+     * @param ids Идентификаторы пользователей для разблокировки.
+     */
+    void unblockAllById(Iterable<Long> ids);
 }

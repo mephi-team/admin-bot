@@ -85,4 +85,9 @@ public class TutorDataProviderImpl implements TutorDataProvider {
     public void blockAllById(Iterable<Long> ids) {
         tutorService.blockAllById(ids);
     }
+
+    @Override
+    public void unblockAllById(Iterable<Long> ids) {
+        tutorService.unblockAllById(ids);
+    }
 }

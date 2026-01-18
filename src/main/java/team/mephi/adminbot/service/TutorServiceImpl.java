@@ -12,6 +12,7 @@ import team.mephi.adminbot.model.StudentTutor;
 import team.mephi.adminbot.model.Tutor;
 import team.mephi.adminbot.model.User;
 import team.mephi.adminbot.model.enums.StudentTutorMode;
+import team.mephi.adminbot.model.enums.UserStatus;
 import team.mephi.adminbot.repository.StudentTutorRepository;
 import team.mephi.adminbot.repository.TutorRepository;
 import team.mephi.adminbot.repository.UserRepository;
@@ -103,7 +104,7 @@ public class TutorServiceImpl implements TutorService {
 
     @Override
     public Optional<SimpleTutor> findById(Long id) {
-        return tutorRepository.findByIdWithStudent(id).map(this::mapToSimpleUser);
+        return tutorRepository.findById(id).map(this::mapToSimpleUser);
     }
 
     @Override
@@ -113,19 +114,24 @@ public class TutorServiceImpl implements TutorService {
 
     @Override
     public void blockAllById(Iterable<Long> ids) {
-        tutorRepository.blockAllById(ids);
+        tutorRepository.changeBlockAllById(true, ids);
     }
 
     @Override
-    public Stream<TutorDto> findAllByName(String name, Pageable pageable) {
-        return tutorRepository.findAllByName(name, pageable)
+    public void unblockAllById(Iterable<Long> ids) {
+        tutorRepository.changeBlockAllById(false, ids);
+    }
+
+    @Override
+    public Stream<TutorDto> findAllByNameNotBlocked(String name, Pageable pageable) {
+        return tutorRepository.findAllByNameNotBlocked(name, pageable)
                 .stream()
                 .map(this::mapToTutorDto);
     }
 
     @Override
     public Stream<SimpleTutor> findAllWithDirectionsAndStudents(String name, Pageable pageable) {
-        return tutorRepository.findAllWithDirectionsAndStudents(name, pageable)
+        return tutorRepository.findAllByNameWithDirectionsAndStudents(name, pageable)
                 .stream()
                 .map(this::mapToSimpleUser);
     }
@@ -133,6 +139,11 @@ public class TutorServiceImpl implements TutorService {
     @Override
     public Integer countByName(String name) {
         return tutorRepository.countByName(name);
+    }
+
+    @Override
+    public Integer countAllByNameNotBlocked(String name) {
+        return tutorRepository.countAllByNameNotBlocked(name);
     }
 
     /**
@@ -154,7 +165,7 @@ public class TutorServiceImpl implements TutorService {
                 .studentCount(tutor.getStudentAssignments().stream().filter(StudentTutor::getIsActive).toList().size())
                 .students(tutor.getStudentAssignments().stream().filter(StudentTutor::getIsActive).map(s -> SimpleUser.builder().id(s.getStudent().getId()).fullName(s.getStudent().getUserName()).tgId(s.getStudent().getTgId()).build()).toList())
                 .directions(tutor.getDirections().stream().map(d -> SimpleDirection.builder().id(d.getId()).name(d.getName()).build()).collect(Collectors.toList()))
-                .status("ACTIVE")
+                .status(tutor.getBlocked() ? UserStatus.BLOCKED.name() : UserStatus.ACTIVE.name())
                 .build();
     }
 

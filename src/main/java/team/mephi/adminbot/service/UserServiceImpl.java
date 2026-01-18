@@ -120,7 +120,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void blockAllById(Iterable<Long> ids) {
-        userRepository.blockAllById(ids);
+        userRepository.changeStatusById(UserStatus.BLOCKED, ids);
+    }
+
+    @Override
+    public void unblockAllById(Iterable<Long> ids) {
+        userRepository.changeStatusById(UserStatus.ACTIVE, ids);
     }
 
     @Override

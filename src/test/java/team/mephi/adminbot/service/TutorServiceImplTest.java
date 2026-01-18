@@ -148,7 +148,7 @@ class TutorServiceImplTest {
         service.blockAllById(ids);
 
         // Assert
-        verify(tutorRepository).blockAllById(eq(ids));
+        verify(tutorRepository).changeBlockAllById(eq(true), eq(ids));
     }
 
     /**
@@ -158,7 +158,7 @@ class TutorServiceImplTest {
     void Given_name_When_findAllByName_Then_mapsStream() {
         // Arrange
         Tutor tutor = Tutor.builder().id(6L).firstName("Alex").lastName("Ray").build();
-        when(tutorRepository.findAllWithDirectionsAndStudents(eq("Al"), eq(PageRequest.of(0, 1))))
+        when(tutorRepository.findAllByNameWithDirectionsAndStudents(eq("Al"), eq(PageRequest.of(0, 1))))
                 .thenReturn(List.of(tutor));
         TutorServiceImpl service = new TutorServiceImpl(tutorRepository, studentTutorRepository, userRepository);
 

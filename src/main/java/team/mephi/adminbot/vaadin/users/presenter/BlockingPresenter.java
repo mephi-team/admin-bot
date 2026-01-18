@@ -1,6 +1,7 @@
 package team.mephi.adminbot.vaadin.users.presenter;
 
 import team.mephi.adminbot.dto.SimpleUser;
+import team.mephi.adminbot.model.enums.UserStatus;
 import team.mephi.adminbot.vaadin.core.CRUDPresenter;
 import team.mephi.adminbot.vaadin.service.DialogService;
 import team.mephi.adminbot.vaadin.service.DialogType;
@@ -36,7 +37,11 @@ public class BlockingPresenter extends CRUDPresenter<SimpleUser> implements Bloc
     @Override
     public void onBlock(SimpleUser m, DialogType type, Object... params) {
         dialogService.showDialog(m, type, (ignoredCallback) -> {
-            dataProvider.blockAllById(List.of(m.getId()));
+            if (UserStatus.BLOCKED.name().equals(m.getStatus())) {
+                dataProvider.unblockAllById(List.of(m.getId()));
+            } else {
+                dataProvider.blockAllById(List.of(m.getId()));
+            }
             dataProvider.getDataProvider().refreshAll();
             notificationService.showNotification(NotificationType.DELETE, type.getNotificationKey(), params);
         });

@@ -12,19 +12,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class TutorTest {
 
     /**
-     * Проверяет установку флага удаления при создании.
+     * Проверяет установку флага блокировки при создании.
      */
     @Test
-    void Given_newTutor_When_onCreate_Then_setsDeletedFalse() {
+    void Given_newTutor_When_onCreate_Then_setsBlockedFalse() {
         // Arrange
         Tutor tutor = Tutor.builder().build();
-        tutor.setDeleted(true);
+        tutor.setBlocked(true);
 
         // Act
         tutor.onCreate();
 
         // Assert
-        assertFalse(tutor.getDeleted());
+        assertFalse(tutor.getBlocked());
     }
 
     /**

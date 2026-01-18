@@ -42,13 +42,20 @@ public interface TutorService {
     void blockAllById(Iterable<Long> ids);
 
     /**
+     * Разблокирует всех кураторов по их идентификаторам.
+     *
+     * @param ids коллекция идентификаторов кураторов для разблокировки.
+     */
+    void unblockAllById(Iterable<Long> ids);
+
+    /**
      * Находит кураторов по имени с пагинацией.
      *
      * @param name     имя куратора.
      * @param pageable объект Pageable для пагинации результатов.
      * @return поток кураторов, соответствующих критериям поиска и пагинации.
      */
-    Stream<TutorDto> findAllByName(String name, Pageable pageable);
+    Stream<TutorDto> findAllByNameNotBlocked(String name, Pageable pageable);
 
     /**
      * Подсчитывает количество кураторов по имени.
@@ -57,6 +64,14 @@ public interface TutorService {
      * @return количество кураторов, соответствующих критериям поиска.
      */
     Integer countByName(String name);
+
+    /**
+     * Подсчитывает общее количество кураторов по имени.
+     *
+     * @param name имя куратора.
+     * @return общее количество кураторов, соответствующих критериям поиска.
+     */
+    Integer countAllByNameNotBlocked(String name);
 
     /**
      * Находит всех кураторов с их направлениями и назначенными студентами, соответствующих заданному имени.

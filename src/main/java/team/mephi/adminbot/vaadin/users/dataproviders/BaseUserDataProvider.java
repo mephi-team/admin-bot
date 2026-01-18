@@ -85,6 +85,11 @@ public abstract class BaseUserDataProvider implements UserDataProvider {
         userService.blockAllById(ids);
     }
 
+    @Override
+    public void unblockAllById(Iterable<Long> ids) {
+        userService.unblockAllById(ids);
+    }
+
     /**
      * Получает роль пользователей, для которых предназначен этот провайдер данных.
      *
