@@ -75,6 +75,7 @@
       "clientAuthenticatorType": "client-secret",
       "secret": "zxEweBxQCpBH6B5Pfv37wEE6DH17mzdM",
       "redirectUris": [
+        "https://oauth.pstmn.io/v1/browser-callback",
         "http://localhost:8080/login/oauth2/code/keycloak",
         "http://localhost:8080"
       ],
