@@ -2,12 +2,16 @@ package team.mephi.adminbot.config;
 
 import com.vaadin.flow.spring.security.VaadinAwareSecurityContextHolderStrategyConfiguration;
 import com.vaadin.flow.spring.security.VaadinSecurityConfigurer;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
@@ -18,6 +22,7 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
@@ -37,6 +42,62 @@ public class VaadinSecurityConfig {
     @Value("${app.redirect-url}")
     String postLogoutRedirectUri;
 
+    @Value("${keycloak.client-id}")
+    private String clientId;
+
+    @Value("${spring.security.oauth2.client.provider.keycloak.jwk-set-uri}")
+    String jwkSetUri;
+
+    /**
+     * Настраивает цепочку фильтров безопасности для API с поддержкой JWT.
+     *
+     * @param http объект HttpSecurity для настройки безопасности
+     * @return настроенная цепочка фильтров безопасности
+     * @throws Exception в случае ошибки настройки
+     */
+    @Bean
+    @Order(1)
+    public SecurityFilterChain apiSecurityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .securityMatcher("/api/**")
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .anyRequest().authenticated()
+                )
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt
+                                .jwtAuthenticationConverter(jwtAuthenticationConverter())
+                        )
+                )
+                .oauth2Login(AbstractHttpConfigurer::disable)
+                .formLogin(AbstractHttpConfigurer::disable)
+                // Возвращаем 401 вместо редиректа
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint((ignoredRequest, res, ignoredException) ->
+                                res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized"))
+                );
+        return http.build();
+    }
+
+    /**
+     * Конвертер для преобразования JWT в JwtAuthenticationToken с учетом clientId.
+     *
+     * @return настроенный конвертер JWT
+     */
+    @Bean
+    public Converter<Jwt, JwtAuthenticationToken> jwtAuthenticationConverter() {
+        return new JwtAuthenticationConverter(clientId);
+    }
+
+    /**
+     * Настраивает декодер JWT с использованием JWK Set URI.
+     *
+     * @return настроенный декодер JWT
+     */
+    @Bean
+    JwtDecoder jwtDecoder() {
+        return NimbusJwtDecoder.withJwkSetUri(jwkSetUri).build();
+    }
+
     /**
      * Настраивает цепочку фильтров безопасности для Vaadin с поддержкой OAuth2 и OIDC.
      *
@@ -45,6 +106,7 @@ public class VaadinSecurityConfig {
      * @throws Exception в случае ошибки настройки
      */
     @Bean
+    @Order(2)
     SecurityFilterChain vaddinSecurityFilterChain(HttpSecurity http) throws Exception {
         http
                 .oauth2Login(oauth2Login ->
