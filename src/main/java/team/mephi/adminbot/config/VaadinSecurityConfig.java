@@ -70,6 +70,7 @@ public class VaadinSecurityConfig {
                 )
                 .oauth2Login(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable)
                 // Возвращаем 401 вместо редиректа
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint((ignoredRequest, res, ignoredException) ->
