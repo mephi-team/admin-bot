@@ -148,7 +148,7 @@ public class User {
      * Дата и время, когда пользователь дал согласие
      * на обработку персональных данных.
      */
-    @Column(name = "pd_consent_at")
+    @Column(name = "pd_consent_date")
     private Instant pdConsentAt;
 
     /**
