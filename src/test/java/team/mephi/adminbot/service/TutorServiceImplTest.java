@@ -20,7 +20,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -164,7 +163,7 @@ class TutorServiceImplTest {
         TutorServiceImpl service = new TutorServiceImpl(tutorRepository, studentTutorRepository, userRepository);
 
         // Act
-        List<SimpleTutor> result = service.findAllByName("Al", PageRequest.of(0, 1)).collect(Collectors.toList());
+        List<SimpleTutor> result = service.findAllWithDirectionsAndStudents("Al", PageRequest.of(0, 1)).toList();
 
         // Assert
         assertEquals(1, result.size());

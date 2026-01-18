@@ -4,11 +4,11 @@ import com.vaadin.flow.spring.security.VaadinAwareSecurityContextHolderStrategyC
 import com.vaadin.flow.spring.security.VaadinSecurityConfigurer;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.Order;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -42,11 +42,11 @@ public class VaadinSecurityConfig {
     @Value("${app.redirect-url}")
     String postLogoutRedirectUri;
 
-    @Value("${keycloak.client-id}")
-    private String clientId;
-
     @Value("${spring.security.oauth2.client.provider.keycloak.jwk-set-uri}")
     String jwkSetUri;
+
+    @Value("${keycloak.client-id}")
+    private String clientId;
 
     /**
      * Настраивает цепочку фильтров безопасности для API с поддержкой JWT.

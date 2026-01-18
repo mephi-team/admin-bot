@@ -181,6 +181,21 @@ public class UserServiceImpl implements UserService {
         return count > 0 ? count : 1;
     }
 
+    @Override
+    public Boolean existsById(Long id) {
+        return userRepository.existsByIdAndDeletedIsFalse(id);
+    }
+
+    @Override
+    public List<SimpleUser> findAll() {
+        return userRepository.findAllWithDirection().stream().map(this::mapToSimple).toList();
+    }
+
+    @Override
+    public Long countAllUsers() {
+        return userRepository.countByDeletedIsFalse();
+    }
+
     /**
      * Инициализация списка кураторов.
      */
@@ -216,7 +231,7 @@ public class UserServiceImpl implements UserService {
                 .city(user.getCity())
                 .direction(Objects.nonNull(user.getDirection()) ? Set.of(SimpleDirection.builder().id(user.getDirection().getId()).name(user.getDirection().getName()).build()) : null)
                 .cohort(user.getCohort())
-                .tutor(Objects.isNull(tutor) ? SimpleTutor.builder().build() : SimpleTutor.builder().id(tutor.getId()).fullName(tutor.getLastName() + " " + tutor.getFirstName()).build())
+                .tutor((tutor == null || tutor.getId() == null) ? null : TutorDto.builder().id(tutor.getId()).fullName(tutor.getLastName() + " " + tutor.getFirstName()).build())
                 .build();
     }
 }

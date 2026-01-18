@@ -12,8 +12,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import team.mephi.adminbot.config.TestSecurityConfig;
-import team.mephi.adminbot.model.User;
-import team.mephi.adminbot.repository.UserRepository;
+import team.mephi.adminbot.dto.SimpleUser;
+import team.mephi.adminbot.service.UserService;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,7 +33,7 @@ class AdminControllerTest {
     private MockMvc mockMvc;
 
     @MockitoBean
-    private UserRepository userRepository;
+    private UserService userService;
 
     private static Stream<Arguments> adminEndpoints() {
         return Stream.of(
@@ -48,22 +48,22 @@ class AdminControllerTest {
     @WithMockUser(roles = "ADMIN")
     void Given_adminRole_When_getAllUsers_Then_returnsOkAndList() throws Exception {
         // Arrange
-        User u1 = new User();
+        SimpleUser u1 = new SimpleUser();
         u1.setId(10L);
-        u1.setUserName("Admin List User");
+        u1.setFullName("Admin List User");
         u1.setEmail("admin-list-user@example.com");
 
-        when(userRepository.findAll()).thenReturn(List.of(u1));
+        when(userService.findAll()).thenReturn(List.of(u1));
 
         // Act + Assert
         mockMvc.perform(get("/api/admin/users"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].id").value(10))
-                .andExpect(jsonPath("$[0].userName").value("Admin List User"));
+                .andExpect(jsonPath("$[0].fullName").value("Admin List User"));
 
-        verify(userRepository).findAll();
-        verifyNoMoreInteractions(userRepository);
+        verify(userService).findAll();
+        verifyNoMoreInteractions(userService);
     }
 
     @Test
@@ -71,78 +71,78 @@ class AdminControllerTest {
     void Given_existingUser_When_getUserById_Then_returnsOk() throws Exception {
         // Arrange
         long id = 5L;
-        User user = new User();
+        SimpleUser user = new SimpleUser();
         user.setId(id);
-        user.setUserName("User Name");
+        user.setFullName("Full Name");
         user.setEmail("user-id@example.com");
 
-        when(userRepository.findById(id)).thenReturn(Optional.of(user));
+        when(userService.findById(id)).thenReturn(Optional.of(user));
 
         // Act + Assert
         mockMvc.perform(get("/api/admin/users/{id}", id))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(5))
-                .andExpect(jsonPath("$.userName").value("User Name"));
+                .andExpect(jsonPath("$.fullName").value("Full Name"));
 
-        verify(userRepository).findById(id);
-        verifyNoMoreInteractions(userRepository);
+        verify(userService).findById(id);
+        verifyNoMoreInteractions(userService);
     }
 
     @Test
     @WithMockUser(roles = "ADMIN")
     void Given_missingUser_When_getUserById_Then_returnsNotFound() throws Exception {
         long id = 999_999L;
-        when(userRepository.findById(id)).thenReturn(Optional.empty());
+        when(userService.findById(id)).thenReturn(Optional.empty());
 
         mockMvc.perform(get("/api/admin/users/{id}", id))
                 .andExpect(status().isNotFound());
 
-        verify(userRepository).findById(id);
-        verifyNoMoreInteractions(userRepository);
+        verify(userService).findById(id);
+        verifyNoMoreInteractions(userService);
     }
 
     @Test
     @WithMockUser(roles = "ADMIN")
     void Given_existingUser_When_deleteUser_Then_returnsOkAndMessage() throws Exception {
         long id = 7L;
-        when(userRepository.existsById(id)).thenReturn(true);
+        when(userService.existsById(id)).thenReturn(true);
 
         mockMvc.perform(delete("/api/admin/users/{id}", id))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("User deleted successfully"))
                 .andExpect(jsonPath("$.id").value("7"));
 
-        verify(userRepository).existsById(id);
-        verify(userRepository).deleteById(id);
-        verifyNoMoreInteractions(userRepository);
+        verify(userService).existsById(id);
+        verify(userService).deleteAllById(List.of(id));
+        verifyNoMoreInteractions(userService);
     }
 
     @Test
     @WithMockUser(roles = "ADMIN")
     void Given_missingUser_When_deleteUser_Then_returnsNotFound() throws Exception {
         long id = 888_888L;
-        when(userRepository.existsById(id)).thenReturn(false);
+        when(userService.existsById(id)).thenReturn(false);
 
         mockMvc.perform(delete("/api/admin/users/{id}", id))
                 .andExpect(status().isNotFound());
 
-        verify(userRepository).existsById(id);
-        verify(userRepository, never()).deleteById(anyLong());
-        verifyNoMoreInteractions(userRepository);
+        verify(userService).existsById(id);
+        verify(userService, never()).deleteAllById(List.of(anyLong()));
+        verifyNoMoreInteractions(userService);
     }
 
     @Test
     @WithMockUser(roles = "ADMIN")
     void Given_adminRole_When_getAdminStats_Then_returnsOkAndFields() throws Exception {
-        when(userRepository.count()).thenReturn(42L);
+        when(userService.countAllUsers()).thenReturn(42L);
 
         mockMvc.perform(get("/api/admin/stats"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.totalUsers").value(42))
                 .andExpect(jsonPath("$.timestamp").isNumber());
 
-        verify(userRepository).count();
-        verifyNoMoreInteractions(userRepository);
+        verify(userService).countAllUsers();
+        verifyNoMoreInteractions(userService);
     }
 
     @ParameterizedTest
@@ -152,7 +152,7 @@ class AdminControllerTest {
         mockMvc.perform(request(method, uri))
                 .andExpect(status().isForbidden());
 
-        verifyNoInteractions(userRepository);
+        verifyNoInteractions(userService);
     }
 
     @ParameterizedTest
@@ -161,6 +161,6 @@ class AdminControllerTest {
         mockMvc.perform(request(method, uri))
                 .andExpect(status().isUnauthorized());
 
-        verifyNoInteractions(userRepository);
+        verifyNoInteractions(userService);
     }
 }

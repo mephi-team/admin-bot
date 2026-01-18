@@ -18,7 +18,7 @@ public class MailingRenderers {
             };
             span.getElement().setAttribute("theme", theme);
             span.addClassNames(LumoUtility.Display.INLINE_FLEX, LumoUtility.Gap.SMALL);
-            var icon =  Statuses.valueOf(mailing.getStatus()).createIcon();
+            var icon = Statuses.valueOf(mailing.getStatus()).createIcon();
             icon.setSize("12px");
             span.add(icon, new Span(span.getTranslation("mailing_status_" + mailing.getStatus().toLowerCase() + "_label")));
             return span;

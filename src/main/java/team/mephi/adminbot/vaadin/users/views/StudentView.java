@@ -79,7 +79,7 @@ public class StudentView extends AbstractGridView<SimpleUser> {
         grid.addColumn(SimpleUser::getCohort).setHeader(getTranslation("grid_student_header_cohort_label")).setSortable(true).setResizable(true).setKey("cohort");
         grid.addColumn(UserRenderers.createUserDirections()).setHeader(getTranslation("grid_student_header_direction_label")).setSortable(true).setResizable(true).setKey("direction");
         grid.addColumn(SimpleUser::getCity).setHeader(getTranslation("grid_student_header_city_label")).setSortable(true).setResizable(true).setKey("city");
-        grid.addColumn(t -> t.getTutor().getFullName()).setHeader(getTranslation("grid_student_header_tutor_label")).setResizable(true).setKey("tutor");
+        grid.addColumn(t -> t.getTutor() != null ? t.getTutor().getFullName() : null).setHeader(getTranslation("grid_student_header_tutor_label")).setResizable(true).setKey("tutor");
     }
 
     @Override

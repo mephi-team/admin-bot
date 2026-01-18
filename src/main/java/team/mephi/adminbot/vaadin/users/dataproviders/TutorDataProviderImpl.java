@@ -51,7 +51,7 @@ public class TutorDataProviderImpl implements TutorDataProvider {
                                 query.getLimit(),
                                 sort.isUnsorted() ? Sort.by("id").descending() : sort
                         );
-                        return tutorService.findAllByName(query.getFilter().orElse(""), pageable);
+                        return tutorService.findAllWithDirectionsAndStudents(query.getFilter().orElse(""), pageable);
                     },
                     query -> tutorService.countByName(query.getFilter().orElse("")),
                     SimpleTutor::getId

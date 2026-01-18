@@ -210,7 +210,7 @@ public class DataInitializer {
         Random random = new Random();
 
         Role student = roleRepository.findByCode(STUDENT.name()).orElseThrow();
-        List<User> students = userRepository.findAllByRole(student.getCode());
+        List<User> students = userRepository.findAllByRoleCode(student.getCode());
 
         List<UserQuestion> questions = Arrays.asList(
                 UserQuestion.builder().status(QuestionStatus.NEW).role(student.getName()).direction(students.get(random.nextInt(students.size())).getDirection()).user(students.get(random.nextInt(students.size()))).text("Как поступить в Flexiq?").build(),
@@ -240,7 +240,7 @@ public class DataInitializer {
         Random random = new Random();
 
         String expert = roleRepository.findByCode(LC_EXPERT.name()).orElseThrow().getCode();
-        List<User> experts = userRepository.findAllByRole(expert);
+        List<User> experts = userRepository.findAllByRoleCode(expert);
 
         List<UserAnswer> answers = Arrays.asList(
                 UserAnswer.builder().status(AnswerStatus.SENT).answeredAt(Instant.now()).answeredBy(experts.get(random.nextInt(0, experts.size()))).question(questionRepository.findById(1L).orElseThrow()).answerText("Подайте заявку на сайте и пройдите техническое тестирование.").build(),

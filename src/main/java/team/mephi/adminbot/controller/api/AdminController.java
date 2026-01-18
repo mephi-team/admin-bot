@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import team.mephi.adminbot.model.User;
-import team.mephi.adminbot.repository.UserRepository;
+import team.mephi.adminbot.dto.SimpleUser;
+import team.mephi.adminbot.service.UserService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +26,7 @@ import java.util.Map;
 public class AdminController {
 
     // Репозиторий для работы с пользователями в базе данных
-    private UserRepository userRepository;
+    private UserService userService;
 
     /**
      * GET /api/admin/users
@@ -35,9 +35,9 @@ public class AdminController {
      * Доступно только администратору.
      */
     @GetMapping("/users")
-    public ResponseEntity<List<User>> getAllUsers() {
+    public ResponseEntity<List<SimpleUser>> getAllUsers() {
         // Получаем всех пользователей из базы
-        List<User> users = userRepository.findAll();
+        List<SimpleUser> users = userService.findAll();
 
         // Отдаём список пользователей клиенту
         return ResponseEntity.ok(users);
@@ -51,8 +51,8 @@ public class AdminController {
      * Доступно только администратору.
      */
     @GetMapping("/users/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        return userRepository.findById(id)
+    public ResponseEntity<SimpleUser> getUserById(@PathVariable Long id) {
+        return userService.findById(id)
                 // Если пользователь найден — возвращаем его
                 .map(ResponseEntity::ok)
                 // Если нет — отдаём 404 Not Found
@@ -70,10 +70,10 @@ public class AdminController {
     @DeleteMapping("/users/{id}")
     public ResponseEntity<Map<String, String>> deleteUser(@PathVariable Long id) {
         // Проверяем, существует ли пользователь с таким ID
-        if (userRepository.existsById(id)) {
+        if (userService.existsById(id)) {
 
             // Удаляем пользователя из базы
-            userRepository.deleteById(id);
+            userService.deleteAllById(List.of(id));
 
             // Формируем простой ответ с результатом операции
             Map<String, String> response = new HashMap<>();
@@ -101,7 +101,7 @@ public class AdminController {
         Map<String, Object> stats = new HashMap<>();
 
         // Общее количество пользователей в системе
-        stats.put("totalUsers", userRepository.count());
+        stats.put("totalUsers", userService.countAllUsers());
 
         // Текущее время в миллисекундах (можно использовать для логов или дашборда)
         stats.put("timestamp", System.currentTimeMillis());

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import team.mephi.adminbot.dto.SimpleDirection;
 import team.mephi.adminbot.dto.SimpleTutor;
 import team.mephi.adminbot.dto.SimpleUser;
+import team.mephi.adminbot.dto.TutorDto;
 import team.mephi.adminbot.model.Direction;
 import team.mephi.adminbot.model.StudentTutor;
 import team.mephi.adminbot.model.Tutor;
@@ -116,7 +117,14 @@ public class TutorServiceImpl implements TutorService {
     }
 
     @Override
-    public Stream<SimpleTutor> findAllByName(String name, Pageable pageable) {
+    public Stream<TutorDto> findAllByName(String name, Pageable pageable) {
+        return tutorRepository.findAllByName(name, pageable)
+                .stream()
+                .map(this::mapToTutorDto);
+    }
+
+    @Override
+    public Stream<SimpleTutor> findAllWithDirectionsAndStudents(String name, Pageable pageable) {
         return tutorRepository.findAllWithDirectionsAndStudents(name, pageable)
                 .stream()
                 .map(this::mapToSimpleUser);
@@ -147,6 +155,19 @@ public class TutorServiceImpl implements TutorService {
                 .students(tutor.getStudentAssignments().stream().filter(StudentTutor::getIsActive).map(s -> SimpleUser.builder().id(s.getStudent().getId()).fullName(s.getStudent().getUserName()).tgId(s.getStudent().getTgId()).build()).toList())
                 .directions(tutor.getDirections().stream().map(d -> SimpleDirection.builder().id(d.getId()).name(d.getName()).build()).collect(Collectors.toList()))
                 .status("ACTIVE")
+                .build();
+    }
+
+    /**
+     * Преобразует объект Tutor в TutorDto.
+     *
+     * @param tutor объект Tutor для преобразования.
+     * @return преобразованный объект TutorDto.
+     */
+    private TutorDto mapToTutorDto(Tutor tutor) {
+        return TutorDto.builder()
+                .id(tutor.getId())
+                .fullName(tutor.getLastName() + " " + tutor.getFirstName())
                 .build();
     }
 }

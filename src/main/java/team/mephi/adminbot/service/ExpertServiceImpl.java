@@ -5,8 +5,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import team.mephi.adminbot.dto.SimpleDirection;
 import team.mephi.adminbot.dto.SimplePd;
-import team.mephi.adminbot.dto.SimpleTutor;
 import team.mephi.adminbot.dto.SimpleUser;
+import team.mephi.adminbot.dto.TutorDto;
 import team.mephi.adminbot.model.*;
 import team.mephi.adminbot.model.enums.UserStatus;
 import team.mephi.adminbot.repository.ExpertRepository;
@@ -106,7 +106,7 @@ public class ExpertServiceImpl implements ExpertService {
                 .city(user.getCity())
                 .direction(Objects.nonNull(user.getDirections()) ? user.getDirections().stream().map(d -> SimpleDirection.builder().id(d.getId()).name(d.getName()).build()).collect(Collectors.toSet()) : null)
                 .cohort(user.getCohort())
-                .tutor(Objects.isNull(tutor) ? SimpleTutor.builder().build() : SimpleTutor.builder().id(tutor.getId()).fullName(tutor.getLastName() + " " + tutor.getFirstName()).build())
+                .tutor(tutor == null ? null : TutorDto.builder().id(tutor.getId()).fullName(tutor.getLastName() + " " + tutor.getFirstName()).build())
                 .build();
     }
 }

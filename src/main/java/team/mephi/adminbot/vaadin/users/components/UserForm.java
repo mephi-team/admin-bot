@@ -39,7 +39,7 @@ public class UserForm extends FormLayout {
     @Getter
     private final ComboBox<CityDto> cities = new ComboBox<>();
     @Getter
-    private final ComboBox<SimpleTutor> tutor = new ComboBox<>();
+    private final ComboBox<TutorDto> tutor = new ComboBox<>();
 
     /**
      * Конструктор формы пользователя.
@@ -51,7 +51,7 @@ public class UserForm extends FormLayout {
      * @param tutorService     сервис для работы с кураторами.
      */
     public UserForm(RoleService roleService, CohortService cohortService, DirectionService directionService, CityService cityService, TutorService tutorService) {
-        var tutorProvider = new CallbackDataProvider<SimpleTutor, String>(
+        var tutorProvider = new CallbackDataProvider<TutorDto, String>(
                 query -> {
                     Pageable pageable = PageRequest.of(query.getOffset() / query.getLimit(), query.getLimit());
                     return tutorService.findAllByName(query.getFilter().orElse(""), pageable);
@@ -85,7 +85,7 @@ public class UserForm extends FormLayout {
         cities.setItemLabelGenerator(CityDto::getName);
 
         tutor.setItems(tutorProvider);
-        tutor.setItemLabelGenerator(SimpleTutor::getFullName);
+        tutor.setItemLabelGenerator(TutorDto::getFullName);
 
         addFormItem(roles, getTranslation("form_users_roles_label"));
         addFormItem(fullNameField, getTranslation("form_users_full_name_label"));

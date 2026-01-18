@@ -60,7 +60,7 @@ public class UserRenderers {
             };
             span.getElement().setAttribute("theme", theme);
             span.addClassNames(LumoUtility.Display.INLINE_FLEX, LumoUtility.Gap.SMALL);
-            var icon =  Statuses.valueOf(user.getStatus()).createIcon();
+            var icon = Statuses.valueOf(user.getStatus()).createIcon();
             icon.setSize("12px");
             span.add(icon, new Span(span.getTranslation("user_status_" + user.getStatus().toLowerCase() + "_label")));
             return span;

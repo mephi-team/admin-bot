@@ -2,6 +2,7 @@ package team.mephi.adminbot.service;
 
 import org.springframework.data.domain.Pageable;
 import team.mephi.adminbot.dto.SimpleTutor;
+import team.mephi.adminbot.dto.TutorDto;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -47,7 +48,7 @@ public interface TutorService {
      * @param pageable объект Pageable для пагинации результатов.
      * @return поток кураторов, соответствующих критериям поиска и пагинации.
      */
-    Stream<SimpleTutor> findAllByName(String name, Pageable pageable);
+    Stream<TutorDto> findAllByName(String name, Pageable pageable);
 
     /**
      * Подсчитывает количество кураторов по имени.
@@ -56,4 +57,13 @@ public interface TutorService {
      * @return количество кураторов, соответствующих критериям поиска.
      */
     Integer countByName(String name);
+
+    /**
+     * Находит всех кураторов с их направлениями и назначенными студентами, соответствующих заданному имени.
+     *
+     * @param name     имя куратора.
+     * @param pageable объект Pageable для пагинации результатов.
+     * @return поток кураторов с их направлениями и назначенными студентами.
+     */
+    Stream<SimpleTutor> findAllWithDirectionsAndStudents(String name, Pageable pageable);
 }

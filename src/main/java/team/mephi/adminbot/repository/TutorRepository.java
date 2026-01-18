@@ -76,4 +76,14 @@ public interface TutorRepository extends JpaRepository<Tutor, Long> {
      */
     @Query("SELECT t FROM Tutor t LEFT JOIN FETCH t.studentAssignments sa LEFT JOIN FETCH sa.student WHERE t.id = :id")
     Optional<Tutor> findByIdWithStudent(@NonNull Long id);
+
+    /**
+     * Поиск всех репетиторов по заданному запросу с пагинацией.
+     *
+     * @param query    строка запроса для поиска по имени или фамилии репетитора
+     * @param pageable объект Pageable для пагинации результатов
+     * @return список репетиторов, соответствующих критериям поиска
+     */
+    @Query("SELECT t FROM Tutor t WHERE LOWER(t.lastName) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(t.firstName) LIKE LOWER(CONCAT('%', :query, '%'))")
+    List<Tutor> findAllByName(String query, Pageable pageable);
 }

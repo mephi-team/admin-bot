@@ -6,8 +6,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
 import team.mephi.adminbot.dto.SimpleDirection;
-import team.mephi.adminbot.dto.SimpleTutor;
 import team.mephi.adminbot.dto.SimpleUser;
+import team.mephi.adminbot.dto.TutorDto;
 import team.mephi.adminbot.dto.UserDto;
 import team.mephi.adminbot.model.*;
 import team.mephi.adminbot.model.enums.ConsentStatus;
@@ -201,7 +201,7 @@ class UserServiceImplTest {
                 .lastName("Ivanova")
                 .role("STUDENT")
                 .direction(new HashSet<>(Set.of(SimpleDirection.builder().id(1L).name("Math").build())))
-                .tutor(SimpleTutor.builder().id(2L).build())
+                .tutor(TutorDto.builder().id(2L).build())
                 .build();
         UserServiceImpl service = new UserServiceImpl(userRepository, tutorRepository);
 
