@@ -48,14 +48,19 @@ public class TutorPresenter extends CRUDPresenter<SimpleTutor> implements TutorA
 
     @Override
     public void onBlock(SimpleTutor item, DialogType type, Object... params) {
-        dialogService.showDialog(item, type, (ignoredCallback) -> {
-            if (UserStatus.BLOCKED.name().equals(item.getStatus())) {
-                dataProvider.unblockAllById(List.of(item.getId()));
+        dialogService.showDialog(item, type, (tutor) -> {
+            if (!tutor.getBlockReason().isEmpty()) {
+                if (UserStatus.BLOCKED.name().equals(item.getStatus())) {
+                    dataProvider.unblockAllById(List.of(item.getId()));
+                    notificationService.showNotification(NotificationType.DELETE, type.getNotificationKey()+"_cancel", params);
+                } else {
+                    dataProvider.blockAllById(List.of(item.getId()));
+                    notificationService.showNotification(NotificationType.DELETE, type.getNotificationKey(), params);
+                }
+                dataProvider.getDataProvider().refreshAll();
             } else {
-                dataProvider.blockAllById(List.of(item.getId()));
+                notificationService.showNotification(NotificationType.DELETE, "notification_user_warning");
             }
-            dataProvider.getDataProvider().refreshAll();
-            notificationService.showNotification(NotificationType.DELETE, type.getNotificationKey(), params);
         });
     }
 }

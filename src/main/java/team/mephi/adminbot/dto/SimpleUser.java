@@ -32,4 +32,7 @@ public class SimpleUser {
     private Boolean pdConsent;
     private List<SimplePd> pdConsentLog;
     private TutorDto tutor;
+    private String blockReason;
+    private String warningReason;
+    private String messageForUser;
 }

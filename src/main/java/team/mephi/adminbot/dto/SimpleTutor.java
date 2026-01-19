@@ -31,4 +31,7 @@ public class SimpleTutor {
     private String city;
     private long studentCount;
     private List<SimpleUser> students;
+    private String blockReason;
+    private String warningReason;
+    private String messageForUser;
 }

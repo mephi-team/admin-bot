@@ -22,6 +22,7 @@ public class BlockDialog<T> extends RightDrawer implements DialogWithTitle {
     private final Tab tab2 = new Tab(getTranslation("dialog_user_block_tab_block_label"));
     private final Class<T> beanType;
     private SerializableConsumer<T> onSaveCallback;
+    private T item;
     private final Button blockButton = new PrimaryButton(getTranslation("block_button"), ignoredEvent -> onSave());
     private final Button warningButton = new PrimaryButton(getTranslation("warning_button"), ignoredEvent -> onSave());
 
@@ -38,6 +39,16 @@ public class BlockDialog<T> extends RightDrawer implements DialogWithTitle {
         var form1 = new WarningForm();
         var form2 = new BlockForm();
         var form3 = new BlockUserMessage();
+
+        var warningReason = binder.forField(form1.getWarningReason())
+                .asRequired()
+                .bind("warningReason");
+        var blockReason = binder.forField(form2.getBlockReason())
+                .asRequired()
+                .bind("blockReason");
+        blockReason.setValidatorsDisabled(true);
+        binder.forField(form3.getMessage()).bind("messageForUser");
+
         form2.setVisible(false);
         tabs.add(tab1, tab2);
         tabs.addThemeVariants(TabsVariant.LUMO_SMALL);
@@ -47,11 +58,13 @@ public class BlockDialog<T> extends RightDrawer implements DialogWithTitle {
                 form2.setVisible(false);
                 warningButton.setVisible(true);
                 blockButton.setVisible(false);
+                blockReason.setValidatorsDisabled(true);
             } else if (e.getSelectedTab().equals(tab2)) {
                 form1.setVisible(false);
                 form2.setVisible(true);
                 warningButton.setVisible(false);
                 blockButton.setVisible(true);
+                warningReason.setValidatorsDisabled(true);
             }
         });
         binder.bindInstanceFields(form);
@@ -60,8 +73,6 @@ public class BlockDialog<T> extends RightDrawer implements DialogWithTitle {
 
         setHeaderTitle("dialog_user_block_title");
         add(tabs, form, form1, form2, form3);
-        setWidth("100%");
-        setMaxWidth("500px");
         getFooter().add(blockButton, warningButton);
     }
 
@@ -69,8 +80,8 @@ public class BlockDialog<T> extends RightDrawer implements DialogWithTitle {
     @SuppressWarnings("unchecked")
     public void showDialog(Object item, SerializableConsumer<?> callback) {
         this.onSaveCallback = (SerializableConsumer<T>) callback;
+        this.item = beanType.cast(item);
         binder.readBean(beanType.cast(item));
-        binder.setReadOnly(true);
         blockButton.setVisible(false);
         tabs.setSelectedTab(tab1);
         open();
@@ -83,9 +94,8 @@ public class BlockDialog<T> extends RightDrawer implements DialogWithTitle {
         if (binder.validate().isOk()) {
             if (onSaveCallback != null) {
                 try {
-                    T user = beanType.getDeclaredConstructor().newInstance();
-                    binder.writeBeanIfValid(user);
-                    onSaveCallback.accept(user);
+                    binder.writeBeanIfValid(this.item);
+                    onSaveCallback.accept(this.item);
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);
                 }

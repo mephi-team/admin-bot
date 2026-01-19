@@ -25,8 +25,11 @@ public class BlockUserInfo extends FormLayout {
         setExpandColumns(true);
 
         firstName.setTabIndex(-1);
+        firstName.setReadOnly(true);
         lastName.setTabIndex(-1);
+        lastName.setReadOnly(true);
         tgId.setTabIndex(-1);
+        tgId.setReadOnly(true);
 
         addFormItem(firstName, getTranslation("form_user_block_first_name_label"));
         addFormItem(lastName, getTranslation("form_user_block_last_name_label"));
