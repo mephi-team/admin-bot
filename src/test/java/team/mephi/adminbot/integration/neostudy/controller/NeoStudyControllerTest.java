@@ -45,14 +45,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * Интеграционные API-тесты для NeoStudyController.
- * <p>
- * Цели:
- * - Security: 401 без редиректов, 403 для ROLE_USER, 200 для ROLE_ADMIN
- * - Бизнес-ветки контроллера/сервиса:
- * register/sync/syncCourses/enrollments/webhooks/health
- * <p>
- * В тестах используем oidcLogin() (Servlet), как в вашей модели oauth2Login/OIDC.
+ * Проверяют: доступ по ролям (ADMIN), статус-коды и базовые ответы
+ * для register/sync/syncCourses/enrollments/webhooks/health.
  */
+
 @Import(TestSecurityOverrideConfig.class)
 class NeoStudyControllerTest extends IntegrationTestBase {
 
@@ -213,6 +209,9 @@ class NeoStudyControllerTest extends IntegrationTestBase {
         }
     }
 
+    /**
+     * Проверяет 401 для всех NeoStudy endpoints без аутентификации.
+     */
     @ParameterizedTest
     @MethodSource("neostudyEndpoints")
     void Given_noAuthentication_When_requestingNeoStudyEndpoints_Then_returnsUnauthorized(
@@ -228,6 +227,9 @@ class NeoStudyControllerTest extends IntegrationTestBase {
     // sync courses
     // =========================
 
+    /**
+     * Проверяет 403 для ROLE_USER на всех NeoStudy endpoints.
+     */
     @ParameterizedTest
     @MethodSource("neostudyEndpoints")
     void Given_userRole_When_requestingNeoStudyEndpoints_Then_returnsForbidden(
@@ -240,6 +242,9 @@ class NeoStudyControllerTest extends IntegrationTestBase {
                 .andExpect(status().isForbidden());
     }
 
+    /**
+     * Проверяет успешную регистрацию пользователя через NeoStudy (200 + success=true).
+     */
     @Test
     void Given_existingUser_When_registerUser_Then_returnsOk() throws Exception {
         FAILURE_MODE.set(FailureMode.NONE);
@@ -258,6 +263,9 @@ class NeoStudyControllerTest extends IntegrationTestBase {
     // enrollments
     // =========================
 
+    /**
+     * Проверяет 404 при попытке регистрации отсутствующего пользователя.
+     */
     @Test
     void Given_missingUser_When_registerUser_Then_returnsNotFound() throws Exception {
         long missingId = 123_456L;
@@ -267,6 +275,9 @@ class NeoStudyControllerTest extends IntegrationTestBase {
                 .andExpect(status().isNotFound());
     }
 
+    /**
+     * Проверяет 500 и error в ответе при падении NeoStudy на этапе updateUser.
+     */
     @Test
     void Given_serviceFailure_When_registerUser_Then_returnsServerError() throws Exception {
         FAILURE_MODE.set(FailureMode.UPDATE_USER);
@@ -279,6 +290,9 @@ class NeoStudyControllerTest extends IntegrationTestBase {
                 .andExpect(jsonPath("$.error").exists());
     }
 
+    /**
+     * Проверяет успешную синхронизацию пользователя (200 + success=true).
+     */
     @Test
     void Given_existingUser_When_syncUser_Then_returnsOk() throws Exception {
         FAILURE_MODE.set(FailureMode.NONE);
@@ -300,6 +314,9 @@ class NeoStudyControllerTest extends IntegrationTestBase {
     // webhooks
     // =========================
 
+    /**
+     * Проверяет 404 при попытке синхронизации отсутствующего пользователя.
+     */
     @Test
     void Given_missingUser_When_syncUser_Then_returnsNotFound() throws Exception {
         long missingId = 654_321L;
@@ -313,6 +330,9 @@ class NeoStudyControllerTest extends IntegrationTestBase {
     // health
     // =========================
 
+    /**
+     * Проверяет 500 и error в ответе при падении NeoStudy на синхронизации пользователя.
+     */
     @Test
     void Given_serviceFailure_When_syncUser_Then_returnsServerError() throws Exception {
         FAILURE_MODE.set(FailureMode.UPDATE_USER);
@@ -332,6 +352,9 @@ class NeoStudyControllerTest extends IntegrationTestBase {
     // helpers
     // =========================
 
+    /**
+     * Проверяет успешную синхронизацию курсов из NeoStudy (200 + success=true + syncedCount).
+     */
     @Test
     void Given_adminRole_When_syncCourses_Then_returnsOk() throws Exception {
         FAILURE_MODE.set(FailureMode.NONE);
@@ -344,6 +367,9 @@ class NeoStudyControllerTest extends IntegrationTestBase {
                 .andExpect(jsonPath("$.directions[0].code").value("COURSE-1"));
     }
 
+    /**
+     * Проверяет 500 и error в ответе при падении NeoStudy на синхронизации курсов.
+     */
     @Test
     void Given_serviceFailure_When_syncCourses_Then_returnsServerError() throws Exception {
         FAILURE_MODE.set(FailureMode.SYNC_COURSES);
@@ -355,6 +381,9 @@ class NeoStudyControllerTest extends IntegrationTestBase {
                 .andExpect(jsonPath("$.error").exists());
     }
 
+    /**
+     * Проверяет успешное создание записи (enrollment) при валидных userId/directionId.
+     */
     @Test
     void Given_validEnrollmentRequest_When_createEnrollment_Then_returnsOk() throws Exception {
         FAILURE_MODE.set(FailureMode.NONE);
@@ -386,6 +415,9 @@ class NeoStudyControllerTest extends IntegrationTestBase {
                 .andExpect(jsonPath("$.progress").value(10));
     }
 
+    /**
+     * Проверяет 400 при отсутствии пользователя или направления в БД.
+     */
     @Test
     void Given_missingUserOrDirection_When_createEnrollment_Then_returnsBadRequest() throws Exception {
         Map<String, Object> payload = Map.of("userId", 12, "directionId", 15);
@@ -403,6 +435,9 @@ class NeoStudyControllerTest extends IntegrationTestBase {
     // mock NeoStudy HTTP server
     // =========================
 
+    /**
+     * Проверяет 500 и error в ответе при падении NeoStudy на создании enrollment.
+     */
     @Test
     void Given_serviceFailure_When_createEnrollment_Then_returnsServerError() throws Exception {
         FAILURE_MODE.set(FailureMode.CREATE_ENROLLMENT);
@@ -432,6 +467,9 @@ class NeoStudyControllerTest extends IntegrationTestBase {
                 .andExpect(jsonPath("$.error").exists());
     }
 
+    /**
+     * Проверяет успешный приём вебхука NeoStudy (200 + success=true).
+     */
     @Test
     void Given_validPayload_When_receiveWebhook_Then_returnsOk() throws Exception {
         NeoStudyWebhookPayload payload = NeoStudyWebhookPayload.builder()
@@ -449,6 +487,9 @@ class NeoStudyControllerTest extends IntegrationTestBase {
                 .andExpect(jsonPath("$.message").value("Вебхук успешно обработан"));
     }
 
+    /**
+     * Проверяет health endpoint для ADMIN (200 + status=UP).
+     */
     @Test
     void Given_authenticatedAdmin_When_health_Then_returnsOk() throws Exception {
         mockMvc.perform(get("/api/neostudy/health")
@@ -483,6 +524,9 @@ class NeoStudyControllerTest extends IntegrationTestBase {
                 .build());
     }
 
+    /**
+     * Режимы отказов mock NeoStudy API для проверки обработки ошибок (500).
+     */
     private enum FailureMode {
         NONE,
         UPDATE_USER,
