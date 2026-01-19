@@ -69,6 +69,7 @@ public class Users extends VerticalLayout implements BeforeEnterObserver {
 
         tabProviders.sort(Comparator.comparingInt(UserTabProvider::getPosition));
 
+        var allCounts = userService.getAllCounts();
         // Создаём вкладки
         for (var provider : tabProviders) {
             var tabId = provider.getTabId();
@@ -78,7 +79,7 @@ public class Users extends VerticalLayout implements BeforeEnterObserver {
             rolesInOrder.add(tabId);
             actions.put(tabId, presenter);
 
-            var userCount = userService.getAllCounts().getOrDefault(provider.getTabId().name(), 0L);
+            var userCount = allCounts.getOrDefault(provider.getTabId().name(), 0L);
             Span tabContent = new Span(new Span(getTranslation(provider.getTabLabel())), new UserCountBadge(userCount));
             var tab = new Tab(tabContent);
             tabSheet.add(tab, content, provider.getPosition());
