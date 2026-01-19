@@ -1,0 +1,52 @@
+@startuml EditStudentSequence
+
+actor Admin as A
+participant "StudentView (Grid)" as SV
+participant "StudentPresenter" as SP
+participant "DialogService" as DS
+participant "DialogFactory" as DF
+participant "UserEditorDialog" as UED
+participant "UserForm" as UF
+participant "DataProvider" as DP
+participant "UserService" as US
+participant "UserRepository" as UR
+participant "NotificationService" as NS
+
+title Edit Student Flow (MVP + Dialog)
+
+A -> SV : click "Редактировать пользователя"
+SV -> SP : onEdit(student)
+
+SP -> DS : showDialog(student, callback)
+
+DS -> DF : getUserEditorDialog()
+DF --> DS : UserEditorDialog instance
+
+DS -> UED : showDialog(student, callback)
+
+UED -> UF : bindData(student)
+UED -> UF : show()
+
+A -> UED : edit fields\nand click "Сохранить"
+
+UED -> UED : Save button event
+UED -> UF : validateAndGetData()
+UF --> UED : updatedStudent
+
+UED -> SP : callback(updatedStudent)
+
+SP -> DP : save(updatedStudent)
+DP -> US : save(updatedStudent)
+US -> UR : save(updatedStudent)
+UR --> US : entity persisted
+US --> DP : savedStudent
+DP --> SP : savedStudent
+
+SP -> DP : refreshItem(savedStudent)
+DP -> SV : refreshGrid(savedStudent)
+SV -> A : show updated grid
+
+SP -> NS : showNotification("Пользователь сохранён")
+NS -> A : display notification
+
+@enduml

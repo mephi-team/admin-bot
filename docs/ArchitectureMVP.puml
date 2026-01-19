@@ -1,0 +1,99 @@
+@startuml MVP_Architecture
+!theme plain
+skinparam componentStyle rectangle
+skinparam backgroundColor white
+skinparam defaultFontSize 11
+
+' Определение цветов для слоёв
+skinparam component {
+  BackgroundColor<<Security>> #FFE4E1
+  BackgroundColor<<Presentation>> #E0F2F7
+  BackgroundColor<<Business>> #C8E6C9
+  BackgroundColor<<Data>> #FFE0B2
+}
+
+title Admin Bot MVP Architecture
+
+' ===== SECURITY LAYER =====
+package "Security Layer" #FFE4E1 {
+  component "SecurityConfig" as SC <<Security>>
+  component "Keycloak" as KC <<Security>>
+}
+
+' ===== PRESENTATION LAYER =====
+package "Presentation Layer (UI)" #E0F2F7 {
+  component "UsersPage" as UP <<Presentation>>
+  component "TabProvider" as TP <<Presentation>>
+  component "View" as V <<Presentation>>
+  component "AbstractGridView" as AGV <<Presentation>>
+  component "GuestView" as GV <<Presentation>>
+  component "UserEditDialog" as UED <<Presentation>>
+  component "UserForm" as UF <<Presentation>>
+}
+
+' ===== BUSINESS LOGIC LAYER =====
+package "Business Logic Layer" #C8E6C9 {
+  component "Presenter" as P <<Business>>
+  component "DialogService" as DS <<Business>>
+  component "DialogFactory" as DF <<Business>>
+  component "NotificationService" as NS <<Business>>
+  component "Provider" as PR <<Business>>
+}
+
+' ===== DATA LAYER =====
+package "Data Access Layer" #FFE0B2 {
+  component "UserService" as US <<Data>>
+  component "UserRepository" as UR <<Data>>
+  database "PostgreSQL" as DB
+}
+
+' ===== RELATIONSHIPS =====
+
+' Security Flow
+SC -down-> KC : "Аутентифицирует\nпользователя через"
+SC -down-> UP : "Передаёт данные о роли\nпользователя на"
+
+' Presentation Flow
+UP -down-> TP : "Получает доступные\nтабы через"
+TP -down-> V : "Конструирует\nконтент через"
+V -down-> AGV : "Создаёт базовые элементы\nтаблицы через"
+AGV -down-> GV : "Настраивает\nколонки через"
+GV -up-> P : "Вызывает действия\nчерез"
+
+' Presenter to Services
+P -right-> DS : "Отображает диалог через"
+DS -right-> DF : "Создаёт диалоги через"
+DF -down-> UED : "Передаёт ссылки на\nсервисы в"
+UED -down-> UF : "Биндит данные на"
+UED -down-> PR : "Получает\nданные для\nполей справочников\nчерез"
+
+P -down-> NS : "Отображает\nуведомление через"
+
+' Data Flow
+P -down-> PR : "Инициирует\nобновление через"
+PR -down-> US : "Получает и обновляет\nданные через"
+PR ..down..> GV : "Обновляет представление"
+US -down-> UR : "Обращается к базе\nданных через"
+UR -down-> DB
+
+' Callback Flow (dotted lines)
+UED ..up..> P : "Отдаёт данные с формы\nв функцию обратного\nвызова"
+
+' Reference Data Flow
+PR ..> US : "Получает данные для\nполей справочников\nчерез"
+
+' Notes
+note right of P
+  MVP Pattern:
+  - View (пассивный)
+  - Presenter (координатор)
+  - Model (Provider + Service)
+end note
+
+note bottom of DB
+  Tables: users, roles,
+  directions, tutor,
+  student_tutor, etc.
+end note
+
+@enduml
